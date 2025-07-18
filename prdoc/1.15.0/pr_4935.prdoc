@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Bridges V2 refactoring backport and `pallet_bridge_messages` simplifications"
 
@@ -33,11 +33,11 @@ crates:
     bump: major
   - name: bp-messages
     bump: major
-  - name: bp-polkadot-core
+  - name: bp-pezkuwi-core
     bump: patch
   - name: bp-bridge-hub-kusama
     bump: minor
-  - name: bp-bridge-hub-polkadot
+  - name: bp-bridge-hub-pezkuwi
     bump: minor
   - name: bp-bridge-hub-rococo
     bump: minor
@@ -45,9 +45,9 @@ crates:
     bump: minor
   - name: bp-kusama
     bump: minor
-  - name: bp-polkadot
+  - name: bp-pezkuwi
     bump: minor
-  - name: bp-polkadot-bulletin
+  - name: bp-pezkuwi-bulletin
     bump: minor
   - name: bp-rococo
     bump: minor

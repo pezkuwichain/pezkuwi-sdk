@@ -139,7 +139,7 @@
 //! `insecure_zero_ed` cargo feature is enabled. However this is not a configuration which is
 //! generally supported, nor will it be.
 //!
-//! [`frame_tokens`]: ../polkadot_sdk_docs/reference_docs/frame_tokens/index.html
+//! [`frame_tokens`]: ../pezkuwi_sdk_docs/reference_docs/frame_tokens/index.html
 
 #![cfg_attr(not(feature = "std"), no_std)]
 mod benchmarking;

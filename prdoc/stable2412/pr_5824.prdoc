@@ -7,11 +7,11 @@ doc:
       APIs.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: major
   - name: rococo-runtime
     bump: patch
   - name: westend-runtime
     bump: patch
-  - name: polkadot-test-runtime
+  - name: pezkuwi-test-runtime
     bump: patch

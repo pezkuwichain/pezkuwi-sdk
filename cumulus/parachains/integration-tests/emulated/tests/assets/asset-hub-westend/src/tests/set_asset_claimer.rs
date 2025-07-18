@@ -50,7 +50,7 @@ fn test_set_asset_claimer_within_a_chain() {
 		.build();
 
 	AssetHubWestend::execute_with(|| {
-		assert_ok!(RuntimeCall::PolkadotXcm(pallet_xcm::Call::execute {
+		assert_ok!(RuntimeCall::PezkuwiXcm(pallet_xcm::Call::execute {
 			message: bx!(VersionedXcm::from(asset_trap_xcm)),
 			max_weight: Weight::from_parts(4_000_000_000_000, 300_000),
 		})
@@ -68,7 +68,7 @@ fn test_set_asset_claimer_within_a_chain() {
 		.build();
 
 	AssetHubWestend::execute_with(|| {
-		assert_ok!(RuntimeCall::PolkadotXcm(pallet_xcm::Call::execute {
+		assert_ok!(RuntimeCall::PezkuwiXcm(pallet_xcm::Call::execute {
 			message: bx!(VersionedXcm::from(claim_xcm)),
 			max_weight: Weight::from_parts(4_000_000_000_000, 300_000),
 		})
@@ -122,7 +122,7 @@ fn test_set_asset_claimer_between_the_chains() {
 		.build();
 
 	BridgeHubWestend::execute_with(|| {
-		assert_ok!(RuntimeCall::PolkadotXcm(pallet_xcm::Call::execute {
+		assert_ok!(RuntimeCall::PezkuwiXcm(pallet_xcm::Call::execute {
 			message: bx!(VersionedXcm::from(trap_xcm)),
 			max_weight: Weight::from_parts(4_000_000_000_000, 700_000),
 		})
@@ -141,7 +141,7 @@ fn test_set_asset_claimer_between_the_chains() {
 		.build();
 	let bh_on_ah = AssetHubWestend::sibling_location_of(BridgeHubWestend::para_id()).into();
 	AssetHubWestend::execute_with(|| {
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::send(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::send(
 			AssetHubRuntimeOrigin::signed(alice.clone()),
 			bx!(bh_on_ah),
 			bx!(VersionedXcm::from(xcm_on_bh)),

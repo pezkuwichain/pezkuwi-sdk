@@ -2,7 +2,7 @@
 
 The parachains finality relay works with two chains - source relay chain and target chain (which may be standalone
 chain, relay chain or a parachain). The source chain must have the
-[`paras` pallet](https://github.com/paritytech/polkadot/tree/master/runtime/parachains/src/paras) deployed at its
+[`paras` pallet](https://github.com/paritytech/pezkuwi/tree/master/runtime/parachains/src/paras) deployed at its
 runtime. The target chain must have the [bridge parachains pallet](../../modules/parachains/) deployed at its runtime.
 
 The relay is configured to submit heads of one or several parachains. It pokes source chain periodically and compares
@@ -15,7 +15,7 @@ More: [Parachains Finality Relay Sequence Diagram](../../docs/parachains-finalit
 
 There are only two traits that need to be implemented. The [`SourceChain`](./src/parachains_loop.rs) implementation
 is supposed to connect to the source chain node. It must be able to read parachain heads from the `Heads` map of
-the [`paras` pallet](https://github.com/paritytech/polkadot/tree/master/runtime/parachains/src/paras).
+the [`paras` pallet](https://github.com/paritytech/pezkuwi/tree/master/runtime/parachains/src/paras).
 It also must create storage proofs of `Heads` map entries, when required.
 
 The [`TargetChain`](./src/parachains_loop.rs) implementation connects to the target chain node. It must be able
@@ -32,7 +32,7 @@ transaction.
 
 ## Parachain Finality Relay Metrics
 
-Every parachain in Polkadot is identified by the 32-bit number. All metrics, exposed by the parachains finality
+Every parachain in Pezkuwi is identified by the 32-bit number. All metrics, exposed by the parachains finality
 relay have the `parachain` label, which is set to the parachain id. And the metrics are prefixed with the prefix,
 that depends on the name of the source relay and target chains. The list below shows metrics names for
 Rococo (source relay chain) to BridgeHubWestend (target chain) parachains finality relay. For other chains, simply

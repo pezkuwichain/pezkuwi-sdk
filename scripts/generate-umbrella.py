@@ -1,6 +1,6 @@
 """
 
-Creates the Polkadot-SDK umbrella crate that re-exports all other crates.
+Creates the Pezkuwi-SDK umbrella crate that re-exports all other crates.
 
 This re-creates the `umbrella/` folder. Ensure that it does not contain any changes you want to keep.
 
@@ -24,7 +24,7 @@ Crate names that should be excluded from the umbrella crate.
 """
 def exclude(crate):
 	name = crate.name
-	if crate.metadata.get("polkadot-sdk.exclude-from-umbrella", False):
+	if crate.metadata.get("pezkuwi-sdk.exclude-from-umbrella", False):
 		return True
 
 	# No fuzzers or examples:
@@ -50,7 +50,7 @@ def main(path, version):
 	std_crates = [] # name -> path. use list for sorting
 	nostd_crates = []
 	for crate in workspace.crates:
-		if crate.name == 'polkadot-sdk':
+		if crate.name == 'pezkuwi-sdk':
 			continue
 		if not crate.publish:
 			print(f"Skipping {crate.name} as it is not published")
@@ -125,11 +125,11 @@ def main(path, version):
 
 	manifest = {
 		"package": {
-			"name": "polkadot-sdk",
+			"name": "pezkuwi-sdk",
 			"version": version,
 			"edition": { "workspace": True },
 			"authors": { "workspace": True },
-			"description": "Polkadot SDK umbrella crate.",
+			"description": "Pezkuwi SDK umbrella crate.",
 			"homepage": { "workspace": True },
 			"repository": { "workspace": True },
 			"license": "Apache-2.0",
@@ -159,10 +159,10 @@ def main(path, version):
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! Polkadot SDK umbrella crate re-exporting all other published crates.
+//! Pezkuwi SDK umbrella crate re-exporting all other published crates.
 //!
 //! This helps to set a single version number for all your dependencies. Docs are in the
-//! `polkadot-sdk-docs` crate.
+//! `pezkuwi-sdk-docs` crate.
 
 // This file is auto-generated and checked by the CI.  You can edit it manually, but it must be
 // exactly the way that the CI expects it.
@@ -211,9 +211,9 @@ def add_to_workspace(path):
 	os.system(f"taplo format --config .config/taplo.toml Cargo.toml umbrella/Cargo.toml")
 
 def parse_args():
-	parser = argparse.ArgumentParser(description="Create a polkadot-sdk crate")
-	parser.add_argument("--sdk", type=str, default="polkadot-sdk", help="Path to the polkadot-sdk crate")
-	parser.add_argument("--version", type=str, help="Version of the polkadot-sdk crate")
+	parser = argparse.ArgumentParser(description="Create a pezkuwi-sdk crate")
+	parser.add_argument("--sdk", type=str, default="pezkuwi-sdk", help="Path to the pezkuwi-sdk crate")
+	parser.add_argument("--version", type=str, help="Version of the pezkuwi-sdk crate")
 	return parser.parse_args()
 
 if __name__ == "__main__":

@@ -64,7 +64,7 @@ use log;
 use frame::prelude::*;
 
 pub use sp_mmr_primitives::{
-	self as primitives, utils, utils::NodesUtils, AncestryProof, Error, FullLeaf, LeafDataProvider,
+	self as primitives, utils, utils::NodesUtils, Error, FullLeaf, LeafDataProvider,
 	LeafIndex, LeafProof, NodeIndex, OnNewRoot,
 };
 
@@ -297,19 +297,6 @@ where
 	}
 }
 
-/// Stateless ancestry proof verification.
-pub fn verify_ancestry_proof<H, L>(
-	root: H::Output,
-	ancestry_proof: AncestryProof<H::Output>,
-) -> Result<H::Output, Error>
-where
-	H: Hash,
-	L: FullLeaf,
-{
-	mmr::verify_ancestry_proof::<H, L>(root, ancestry_proof)
-		.map_err(|_| Error::Verify.log_debug(("The ancestry proof is incorrect.", root)))
-}
-
 impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	/// Build offchain key from `parent_hash` of block that originally added node `pos` to MMR.
 	///
@@ -421,45 +408,5 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		} else {
 			Err(Error::Verify.log_debug("The proof is incorrect."))
 		}
-	}
-
-	pub fn generate_ancestry_proof(
-		prev_block_number: BlockNumberFor<T>,
-		best_known_block_number: Option<BlockNumberFor<T>>,
-	) -> Result<AncestryProof<HashOf<T, I>>, Error> {
-		// check whether best_known_block_number provided, else use current best block
-		let best_known_block_number =
-			best_known_block_number.unwrap_or_else(|| <frame_system::Pallet<T>>::block_number());
-
-		let leaf_count = Self::block_num_to_leaf_count(best_known_block_number)?;
-		let prev_leaf_count = Self::block_num_to_leaf_count(prev_block_number)?;
-
-		let mmr: ModuleMmr<mmr::storage::OffchainStorage, T, I> = mmr::Mmr::new(leaf_count);
-		mmr.generate_ancestry_proof(prev_leaf_count)
-	}
-
-	#[cfg(feature = "runtime-benchmarks")]
-	pub fn generate_mock_ancestry_proof() -> Result<AncestryProof<HashOf<T, I>>, Error> {
-		let leaf_count = Self::block_num_to_leaf_count(<frame_system::Pallet<T>>::block_number())?;
-		let mmr: ModuleMmr<mmr::storage::OffchainStorage, T, I> = mmr::Mmr::new(leaf_count);
-		mmr.generate_mock_ancestry_proof()
-	}
-
-	pub fn is_ancestry_proof_optimal(
-		ancestry_proof: &primitives::AncestryProof<HashOf<T, I>>,
-	) -> bool {
-		mmr::is_ancestry_proof_optimal::<HashingOf<T, I>>(ancestry_proof)
-	}
-
-	pub fn verify_ancestry_proof(
-		root: HashOf<T, I>,
-		ancestry_proof: AncestryProof<HashOf<T, I>>,
-	) -> Result<HashOf<T, I>, Error> {
-		verify_ancestry_proof::<HashingOf<T, I>, LeafOf<T, I>>(root, ancestry_proof)
-	}
-
-	/// Return the on-chain MMR root hash.
-	pub fn mmr_root() -> HashOf<T, I> {
-		RootHash::<T, I>::get()
 	}
 }

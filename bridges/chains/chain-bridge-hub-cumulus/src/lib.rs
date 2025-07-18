@@ -19,14 +19,14 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use bp_polkadot_core::{
+pub use bp_pezkuwi_core::{
 	AccountId, AccountInfoStorageMapKeyProvider, AccountPublic, Balance, BlockNumber, Hash, Hasher,
 	Hashing, Header, Nonce, Perbill, Signature, SignedBlock, UncheckedExtrinsic,
 	EXTRA_STORAGE_PROOF_SIZE, TX_EXTRA_BYTES,
 };
 
 use bp_messages::*;
-use bp_polkadot_core::SuffixedCommonTransactionExtension;
+use bp_pezkuwi_core::SuffixedCommonTransactionExtension;
 use bp_runtime::extensions::{
 	BridgeRejectObsoleteHeadersAndMessages, RefundBridgedParachainMessagesSchema,
 };
@@ -61,12 +61,12 @@ pub const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 /// This is a copy-paste from the cumulus repo's `parachains-common` crate.
 const MAXIMUM_BLOCK_WEIGHT: Weight = Weight::from_parts(constants::WEIGHT_REF_TIME_PER_SECOND, 0)
 	.saturating_div(2)
-	.set_proof_size(polkadot_primitives::MAX_POV_SIZE as u64);
+	.set_proof_size(pezkuwi_primitives::MAX_POV_SIZE as u64);
 
 /// We allow for 2 seconds of compute with a 6 second average block.
 const MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING: Weight = Weight::from_parts(
 	constants::WEIGHT_REF_TIME_PER_SECOND.saturating_mul(2),
-	polkadot_primitives::MAX_POV_SIZE as u64,
+	pezkuwi_primitives::MAX_POV_SIZE as u64,
 );
 
 /// All cumulus bridge hubs assume that about 5 percent of the block weight is consumed by

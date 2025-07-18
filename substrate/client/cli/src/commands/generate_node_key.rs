@@ -54,7 +54,7 @@ pub struct GenerateNodeKeyCmd {
 	pub common: GenerateKeyCmdCommon,
 	/// Specify the chain specification.
 	///
-	/// It can be any of the predefined chains like dev, local, staging, polkadot, kusama.
+	/// It can be any of the predefined chains like dev, local, staging, pezkuwi, kusama.
 	#[arg(long, value_name = "CHAIN_SPEC")]
 	pub chain: Option<String>,
 	/// A directory where the key should be saved. If a key already

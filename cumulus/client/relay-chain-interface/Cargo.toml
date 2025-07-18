@@ -14,8 +14,8 @@ workspace = true
 [dependencies]
 cumulus-primitives-core.default-features = true
 cumulus-primitives-core.workspace = true
-polkadot-overseer.default-features = true
-polkadot-overseer.workspace = true
+pezkuwi-overseer.default-features = true
+pezkuwi-overseer.workspace = true
 sc-client-api.default-features = true
 sc-client-api.workspace = true
 sp-api.default-features = true

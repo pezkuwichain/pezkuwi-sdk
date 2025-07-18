@@ -3,14 +3,14 @@
 
 use anyhow::anyhow;
 use codec::Decode;
-use polkadot_primitives::{vstaging::CandidateReceiptV2, Id as ParaId};
+use pezkuwi_primitives::{vstaging::CandidateReceiptV2, Id as ParaId};
 use std::{
 	collections::{HashMap, HashSet},
 	ops::Range,
 };
 use subxt::{
 	blocks::Block, events::Events, ext::scale_value::value, tx::DynamicPayload, utils::H256,
-	OnlineClient, PolkadotConfig,
+	OnlineClient, PezkuwiConfig,
 };
 use tokio::{
 	join,
@@ -41,7 +41,7 @@ pub fn create_assign_core_call(core_and_para: &[(u32, u32)]) -> DynamicPayload {
 
 /// Find an event in subxt `Events` and attempt to decode the fields fo the event.
 fn find_event_and_decode_fields<T: Decode>(
-	events: &Events<PolkadotConfig>,
+	events: &Events<PezkuwiConfig>,
 	pallet: &str,
 	variant: &str,
 ) -> Result<Vec<T>, anyhow::Error> {
@@ -60,7 +60,7 @@ fn find_event_and_decode_fields<T: Decode>(
 // a window of relay chain blocks), after the first session change.
 // Blocks with session changes are generally ignores.
 pub async fn assert_finalized_para_throughput(
-	relay_client: &OnlineClient<PolkadotConfig>,
+	relay_client: &OnlineClient<PezkuwiConfig>,
 	stop_after: u32,
 	expected_candidate_ranges: HashMap<ParaId, Range<u32>>,
 ) -> Result<(), anyhow::Error> {
@@ -132,7 +132,7 @@ pub async fn assert_finalized_para_throughput(
 // a window of relay chain blocks), after the first session change.
 // Blocks with session changes are generally ignores.
 pub async fn assert_para_throughput(
-	relay_client: &OnlineClient<PolkadotConfig>,
+	relay_client: &OnlineClient<PezkuwiConfig>,
 	stop_after: u32,
 	expected_candidate_ranges: HashMap<ParaId, Range<u32>>,
 ) -> Result<(), anyhow::Error> {
@@ -239,7 +239,7 @@ pub async fn assert_para_throughput(
 /// The session change is detected by inspecting the events in the block.
 pub async fn wait_for_first_session_change(
 	blocks_sub: &mut subxt::backend::StreamOfResults<
-		Block<PolkadotConfig, OnlineClient<PolkadotConfig>>,
+		Block<PezkuwiConfig, OnlineClient<PezkuwiConfig>>,
 	>,
 ) -> Result<(), anyhow::Error> {
 	let mut waited_block_num = 0;
@@ -268,7 +268,7 @@ pub async fn wait_for_first_session_change(
 
 // Helper function that asserts the maximum finality lag.
 pub async fn assert_finality_lag(
-	client: &OnlineClient<PolkadotConfig>,
+	client: &OnlineClient<PezkuwiConfig>,
 	maximum_lag: u32,
 ) -> Result<(), anyhow::Error> {
 	let mut best_stream = client.blocks().subscribe_best().await?;
@@ -283,7 +283,7 @@ pub async fn assert_finality_lag(
 
 /// Assert that finality has not stalled.
 pub async fn assert_blocks_are_being_finalized(
-	client: &OnlineClient<PolkadotConfig>,
+	client: &OnlineClient<PezkuwiConfig>,
 ) -> Result<(), anyhow::Error> {
 	let mut finalized_blocks = client.blocks().subscribe_finalized().await?;
 	let first_measurement = finalized_blocks

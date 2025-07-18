@@ -4,7 +4,7 @@
 //!
 //! Location helpers for dealing with Tokens and Agents
 
-pub use polkadot_parachain_primitives::primitives::{
+pub use pezkuwi_parachain_primitives::primitives::{
 	Id as ParaId, IsSystem, Sibling as SiblingParaId,
 };
 pub use sp_core::U256;
@@ -23,7 +23,7 @@ pub type AgentId = H256;
 
 /// Creates an AgentId from a Location. An AgentId is a unique mapping to an Agent contract on
 /// Ethereum which acts as the sovereign account for the Location.
-/// Resolves Polkadot locations (as seen by Ethereum) to unique `AgentId` identifiers.
+/// Resolves Pezkuwi locations (as seen by Ethereum) to unique `AgentId` identifiers.
 pub type AgentIdOf = HashedDescription<
 	AgentId,
 	(

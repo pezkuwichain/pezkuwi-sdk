@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/people-rococo-runtime/people_rococo_runtime.wasm
 // --pallet=pallet_utility
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/people/people-rococo/src/weights
 // --wasm-execution=compiled
 // --steps=50

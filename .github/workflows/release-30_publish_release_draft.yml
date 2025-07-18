@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: Tag matching the actual release candidate with the format polkadot-stableYYMM(-X)-rcX or polkadot-stableYYMM(-X)
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcX or pezkuwi-stableYYMM(-X)
         required: true
         type: string
 
@@ -43,7 +43,7 @@ jobs:
     needs: [ validate-inputs ]
     uses: "./.github/workflows/release-srtool.yml"
     with:
-       excluded_runtimes: "asset-hub-rococo bridge-hub-rococo coretime-rococo people-rococo rococo rococo-parachain substrate-test bp cumulus-test kitchensink minimal-template parachain-template penpal polkadot-test seedling shell frame-try sp solochain-template polkadot-sdk-docs-first"
+       excluded_runtimes: "asset-hub-rococo bridge-hub-rococo coretime-rococo people-rococo rococo rococo-parachain substrate-test bp cumulus-test kitchensink minimal-template parachain-template penpal pezkuwi-test seedling shell frame-try sp solochain-template pezkuwi-sdk-docs-first"
        build_opts: "--features on-chain-release-build"
        profile: production
     permissions:
@@ -115,10 +115,10 @@ jobs:
         id: generate_write_token
         uses: actions/create-github-app-token@v1
         with:
-            app-id: ${{ vars.POLKADOT_SDK_RELEASE_RW_APP_ID }}
-            private-key: ${{ secrets.POLKADOT_SDK_RELEASE_RW_APP_KEY }}
+            app-id: ${{ vars.PEZKUWI_SDK_RELEASE_RW_APP_ID }}
+            private-key: ${{ secrets.PEZKUWI_SDK_RELEASE_RW_APP_KEY }}
             owner: paritytech
-            repositories: polkadot-sdk
+            repositories: pezkuwi-sdk
 
       - name: Create draft release
         id: create-release
@@ -126,9 +126,9 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_write_token.outputs.token }}
         run: |
           gh release create ${{ env.REL_TAG }} \
-            --repo paritytech/polkadot-sdk \
+            --repo paritytech/pezkuwi-sdk \
             --draft \
-            --title "Polkadot ${{ env.REL_TAG }}" \
+            --title "Pezkuwi ${{ env.REL_TAG }}" \
             --notes-file ${{ github.workspace}}/scripts/release/RELEASE_DRAFT.md
 
   publish-runtimes:
@@ -157,10 +157,10 @@ jobs:
         id: generate_write_token
         uses: actions/create-github-app-token@v1
         with:
-            app-id: ${{ vars.POLKADOT_SDK_RELEASE_RW_APP_ID }}
-            private-key: ${{ secrets.POLKADOT_SDK_RELEASE_RW_APP_KEY }}
+            app-id: ${{ vars.PEZKUWI_SDK_RELEASE_RW_APP_ID }}
+            private-key: ${{ secrets.PEZKUWI_SDK_RELEASE_RW_APP_KEY }}
             owner: paritytech
-            repositories: polkadot-sdk
+            repositories: pezkuwi-sdk
 
       - name: Upload compressed ${{ matrix.chain }} v${{ env.SPEC }} wasm
         env:
@@ -170,7 +170,7 @@ jobs:
           mv "${{ env.ASSET }}" "$VERSIONED_ASSET"
 
           gh release upload ${{ needs.validate-inputs.outputs.release_tag }} \
-            --repo paritytech/polkadot-sdk "$VERSIONED_ASSET"
+            --repo paritytech/pezkuwi-sdk "$VERSIONED_ASSET"
 
   publish-release-artifacts:
     needs: [ validate-inputs, publish-release-draft ]
@@ -179,7 +179,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        binary: [ polkadot, polkadot-execute-worker, polkadot-prepare-worker, polkadot-parachain, polkadot-omni-node, frame-omni-bencher, chain-spec-builder ]
+        binary: [ pezkuwi, pezkuwi-execute-worker, pezkuwi-prepare-worker, pezkuwi-parachain, pezkuwi-omni-node, frame-omni-bencher, chain-spec-builder ]
         target: [ x86_64-unknown-linux-gnu, aarch64-apple-darwin ]
 
     steps:
@@ -209,10 +209,10 @@ jobs:
         id: generate_write_token
         uses: actions/create-github-app-token@v1
         with:
-            app-id: ${{ vars.POLKADOT_SDK_RELEASE_RW_APP_ID }}
-            private-key: ${{ secrets.POLKADOT_SDK_RELEASE_RW_APP_KEY }}
+            app-id: ${{ vars.PEZKUWI_SDK_RELEASE_RW_APP_ID }}
+            private-key: ${{ secrets.PEZKUWI_SDK_RELEASE_RW_APP_KEY }}
             owner: paritytech
-            repositories: polkadot-sdk
+            repositories: pezkuwi-sdk
 
       - name: Upload ${{ matrix.binary }} binary to release draft
         env:
@@ -221,13 +221,13 @@ jobs:
         run: |
           if [[ ${{ matrix.target }} == "aarch64-apple-darwin" ]]; then
             gh release upload ${{ needs.validate-inputs.outputs.release_tag }} \
-              --repo paritytech/polkadot-sdk \
+              --repo paritytech/pezkuwi-sdk \
               ${{ matrix.binary }}-aarch64-apple-darwin \
               ${{ matrix.binary }}-aarch64-apple-darwin.asc \
               ${{ matrix.binary }}-aarch64-apple-darwin.sha256
           else
             gh release upload ${{ needs.validate-inputs.outputs.release_tag }} \
-              --repo paritytech/polkadot-sdk \
+              --repo paritytech/pezkuwi-sdk \
               ${{ matrix.binary }} \
               ${{ matrix.binary }}.asc \
               ${{ matrix.binary }}.sha256
@@ -251,5 +251,5 @@ jobs:
           access_token: ${{ secrets.RELEASENOTES_MATRIX_V2_ACCESS_TOKEN }}
           server: m.parity.io
           message: |
-            **New version of polkadot tagged**: ${{ needs.validate-inputs.outputs.release_tag }}<br/>
-            And release draft is release created in [polkadot-sdk repo](https://github.com/paritytech/polkadot-sdk/releases)
+            **New version of pezkuwi tagged**: ${{ needs.validate-inputs.outputs.release_tag }}<br/>
+            And release draft is release created in [pezkuwi-sdk repo](https://github.com/paritytech/polkadot-sdk/releases)

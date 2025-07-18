@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/people-westend-runtime/people_westend_runtime.wasm
 // --pallet=pallet_identity
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/people/people-westend/src/weights
 // --wasm-execution=compiled
 // --steps=50
@@ -247,8 +247,8 @@ impl<T: frame_system::Config> pallet_identity::WeightInfo for WeightInfo<T> {
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `Identity::SuperOf` (r:0 w:100)
 	/// Proof: `Identity::SuperOf` (`max_values`: None, `max_size`: Some(114), added: 2589, mode: `MaxEncodedLen`)
 	/// The range of component `r` is `[1, 20]`.
@@ -481,8 +481,8 @@ impl<T: frame_system::Config> pallet_identity::WeightInfo for WeightInfo<T> {
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// The range of component `p` is `[0, 1]`.
 	fn kill_username(_p: u32, ) -> Weight {
 		// Proof Size summary in bytes:

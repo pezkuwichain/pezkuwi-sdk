@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "[xcm] runtime api for LocationToAccount conversions"
 
@@ -16,11 +16,11 @@ doc:
 crates:
   - name: xcm-runtime-apis
     bump: none
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: patch
   - name: pallet-xcm
     bump: patch
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
   - name: rococo-runtime
     bump: patch

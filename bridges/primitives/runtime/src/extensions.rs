@@ -81,7 +81,7 @@ pub type CheckWeight = GenericTransactionExtensionSchema<(), ()>;
 pub type ChargeTransactionPayment<Balance> =
 	GenericTransactionExtensionSchema<Compact<Balance>, ()>;
 
-/// The `TransactionExtensionSchema` for `polkadot-runtime-common::PrevalidateAttests`.
+/// The `TransactionExtensionSchema` for `pezkuwi-runtime-common::PrevalidateAttests`.
 pub type PrevalidateAttests = GenericTransactionExtensionSchema<(), ()>;
 
 /// The `TransactionExtensionSchema` for `BridgeRejectObsoleteHeadersAndMessages`.

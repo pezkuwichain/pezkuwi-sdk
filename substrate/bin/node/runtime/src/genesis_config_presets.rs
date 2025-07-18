@@ -17,7 +17,7 @@
 
 //! Genesis Presets for the Kitchensink Runtime
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use crate::{
 	constants::currency::*, frame_support::build_struct_json_patch, AccountId, AssetsConfig,

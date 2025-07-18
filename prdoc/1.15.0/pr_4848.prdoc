@@ -8,7 +8,7 @@ doc:
       gives us a 15% to 20% reduction in cpu usage.
 
 crates:
-- name: polkadot-approval-distribution
+- name: pezkuwi-approval-distribution
   bump: minor
-- name: polkadot-node-network-protocol
+- name: pezkuwi-node-network-protocol
   bump: minor

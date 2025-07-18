@@ -15,7 +15,7 @@
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
 use bp_header_chain::ChainWithGrandpa;
-use bp_polkadot_core::parachains::ParaId;
+use bp_pezkuwi_core::parachains::ParaId;
 use bp_runtime::{Chain, ChainId, Parachain};
 use frame_support::{
 	construct_runtime, derive_impl, parameter_types, traits::ConstU32, weights::Weight,
@@ -234,8 +234,8 @@ impl pallet_bridge_parachains::benchmarking::Config<()> for TestRuntime {
 	) -> (
 		crate::RelayBlockNumber,
 		crate::RelayBlockHash,
-		bp_polkadot_core::parachains::ParaHeadsProof,
-		Vec<(ParaId, bp_polkadot_core::parachains::ParaHash)>,
+		bp_pezkuwi_core::parachains::ParaHeadsProof,
+		Vec<(ParaId, bp_pezkuwi_core::parachains::ParaHash)>,
 	) {
 		// in mock run we only care about benchmarks correctness, not the benchmark results
 		// => ignore size related arguments

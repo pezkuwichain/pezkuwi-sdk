@@ -6,9 +6,9 @@ use anyhow::anyhow;
 use cumulus_zombienet_sdk_helpers::{
 	assert_finality_lag, assert_para_throughput, create_assign_core_call,
 };
-use polkadot_primitives::Id as ParaId;
+use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
-use subxt::{OnlineClient, PolkadotConfig};
+use subxt::{OnlineClient, PezkuwiConfig};
 use subxt_signer::sr25519::dev;
 use zombienet_sdk::{NetworkConfig, NetworkConfigBuilder};
 
@@ -33,7 +33,7 @@ async fn elastic_scaling_multiple_block_per_slot() -> Result<(), anyhow::Error> 
 	let relay_node = network.get_node("validator-0")?;
 	let para_node_elastic = network.get_node("collator-1")?;
 
-	let relay_client: OnlineClient<PolkadotConfig> = relay_node.wait_client().await?;
+	let relay_client: OnlineClient<PezkuwiConfig> = relay_node.wait_client().await?;
 	let alice = dev::alice();
 	assert_para_throughput(
 		&relay_client,
@@ -90,8 +90,8 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 		.with_relaychain(|r| {
 			let r = r
 				.with_chain("rococo-local")
-				.with_default_command("polkadot")
-				.with_default_image(images.polkadot.as_str())
+				.with_default_command("pezkuwi")
+				.with_default_image(images.pezkuwi.as_str())
 				.with_default_args(vec![("-lparachain=trace").into()])
 				.with_default_resources(|resources| {
 					resources.with_request_cpu(2).with_request_memory("2G")

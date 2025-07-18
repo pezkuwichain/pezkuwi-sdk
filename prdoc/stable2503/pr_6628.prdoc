@@ -6,7 +6,7 @@ doc:
       Remove unused message ReportCollator and test related to this message on the collator protocol validator side.
 
 crates:
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: patch
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: major

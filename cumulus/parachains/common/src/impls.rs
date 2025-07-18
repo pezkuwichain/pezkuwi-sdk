@@ -14,7 +14,7 @@
 // limitations under the License.
 
 //! Auxiliary struct/enums for parachain runtimes.
-//! Taken from polkadot/runtime/common (at a21cd64) and adapted for parachains.
+//! Taken from pezkuwi/runtime/common (at a21cd64) and adapted for parachains.
 
 use alloc::boxed::Box;
 use core::marker::PhantomData;
@@ -48,7 +48,7 @@ pub struct ToStakingPot<R>(PhantomData<R>);
 impl<R> OnUnbalanced<NegativeImbalance<R>> for ToStakingPot<R>
 where
 	R: pallet_balances::Config + pallet_collator_selection::Config,
-	AccountIdOf<R>: From<polkadot_primitives::AccountId> + Into<polkadot_primitives::AccountId>,
+	AccountIdOf<R>: From<pezkuwi_primitives::AccountId> + Into<pezkuwi_primitives::AccountId>,
 	<R as frame_system::Config>::RuntimeEvent: From<pallet_balances::Event<R>>,
 {
 	fn on_nonzero_unbalanced(amount: NegativeImbalance<R>) {
@@ -64,7 +64,7 @@ pub struct DealWithFees<R>(PhantomData<R>);
 impl<R> OnUnbalanced<fungible::Credit<R::AccountId, pallet_balances::Pallet<R>>> for DealWithFees<R>
 where
 	R: pallet_balances::Config + pallet_collator_selection::Config,
-	AccountIdOf<R>: From<polkadot_primitives::AccountId> + Into<polkadot_primitives::AccountId>,
+	AccountIdOf<R>: From<pezkuwi_primitives::AccountId> + Into<pezkuwi_primitives::AccountId>,
 	<R as frame_system::Config>::RuntimeEvent: From<pallet_balances::Event<R>>,
 {
 	fn on_unbalanceds(
@@ -88,7 +88,7 @@ impl<R, I> HandleCredit<AccountIdOf<R>, pallet_assets::Pallet<R, I>> for AssetsT
 where
 	I: 'static,
 	R: pallet_authorship::Config + pallet_assets::Config<I>,
-	AccountIdOf<R>: From<polkadot_primitives::AccountId> + Into<polkadot_primitives::AccountId>,
+	AccountIdOf<R>: From<pezkuwi_primitives::AccountId> + Into<pezkuwi_primitives::AccountId>,
 {
 	fn handle_credit(credit: fungibles::Credit<AccountIdOf<R>, pallet_assets::Pallet<R, I>>) {
 		use frame_support::traits::fungibles::Balanced;
@@ -202,7 +202,7 @@ mod tests {
 	};
 	use frame_system::{limits, EnsureRoot};
 	use pallet_collator_selection::IdentityCollator;
-	use polkadot_primitives::AccountId;
+	use pezkuwi_primitives::AccountId;
 	use sp_core::H256;
 	use sp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},

@@ -27,7 +27,7 @@
   after_script:
     - buildah logout --all
 
-build-push-image-polkadot-parachain-debug:
+build-push-image-pezkuwi-parachain-debug:
   stage: publish
   extends:
     - .kubernetes-env
@@ -37,8 +37,8 @@ build-push-image-polkadot-parachain-debug:
     - job: build-linux-stable-cumulus
       artifacts: true
   variables:
-    DOCKERFILE: "docker/dockerfiles/polkadot-parachain/polkadot-parachain-debug_unsigned_injected.Dockerfile"
-    IMAGE_NAME: "docker.io/paritypr/polkadot-parachain-debug"
+    DOCKERFILE: "docker/dockerfiles/pezkuwi-parachain/pezkuwi-parachain-debug_unsigned_injected.Dockerfile"
+    IMAGE_NAME: "docker.io/paritypr/pezkuwi-parachain-debug"
 
 build-push-image-test-parachain:
   stage: publish
@@ -53,7 +53,7 @@ build-push-image-test-parachain:
     DOCKERFILE: "docker/dockerfiles/test-parachain_injected.Dockerfile"
     IMAGE_NAME: "docker.io/paritypr/test-parachain"
 
-build-push-image-polkadot-debug:
+build-push-image-pezkuwi-debug:
   stage: publish
   extends:
     - .kubernetes-env
@@ -63,8 +63,8 @@ build-push-image-polkadot-debug:
     - job: build-linux-stable
       artifacts: true
   variables:
-    DOCKERFILE: "docker/dockerfiles/polkadot/polkadot_injected_debug.Dockerfile"
-    IMAGE_NAME: "docker.io/paritypr/polkadot-debug"
+    DOCKERFILE: "docker/dockerfiles/pezkuwi/pezkuwi_injected_debug.Dockerfile"
+    IMAGE_NAME: "docker.io/paritypr/pezkuwi-debug"
 
 build-push-image-colander:
   stage: publish
@@ -106,7 +106,7 @@ build-push-image-substrate-pr:
     IMAGE_NAME: "docker.io/paritypr/substrate"
 
 # unlike other images, bridges+zombienet image is based on Zombienet image that pulls required binaries
-# from other fresh images (polkadot and cumulus)
+# from other fresh images (pezkuwi and cumulus)
 build-push-image-bridges-zombienet-tests:
   stage: publish
   extends:

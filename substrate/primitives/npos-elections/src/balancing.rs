@@ -53,7 +53,7 @@ use sp_arithmetic::traits::Zero;
 /// - [A new approach to the maximum flow problem](https://dl.acm.org/doi/10.1145/48014.61051).
 /// - [Validator election in nominated proof-of-stake](https://arxiv.org/abs/2004.12990) (Appendix
 ///   A.)
-/// - [Computing a balanced solution](https://research.web3.foundation/en/latest/polkadot/NPoS/3.%20Balancing.html),
+/// - [Computing a balanced solution](https://research.web3.foundation/en/latest/pezkuwi/NPoS/3.%20Balancing.html),
 ///   which contains the details of the algorithm implementation.
 pub fn balance<AccountId: IdentifierT>(
 	voters: &mut Vec<Voter<AccountId>>,

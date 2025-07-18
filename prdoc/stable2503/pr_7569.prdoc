@@ -18,8 +18,8 @@ crates:
 - name: cumulus-pov-validator
   bump: none
   validate: false
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: major
-- name: polkadot
+- name: pezkuwi
   bump: none
   validate: false

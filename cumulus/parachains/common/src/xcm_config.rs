@@ -183,7 +183,7 @@ mod tests {
 		ConcreteAssetFromSystem, ContainsPair, GeneralIndex, Here, Location, PalletInstance,
 		Parachain, Parent,
 	};
-	use polkadot_primitives::LOWEST_PUBLIC_ID;
+	use pezkuwi_primitives::LOWEST_PUBLIC_ID;
 	use xcm::latest::prelude::*;
 
 	parameter_types! {

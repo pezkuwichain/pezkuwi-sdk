@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Fix algorithmic complexity of the on-demand scheduler.
 
@@ -14,4 +14,4 @@ doc:
       that economic backpressure will be applied.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains

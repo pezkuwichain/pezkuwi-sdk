@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/collectives-westend-runtime/collectives_westend_runtime.wasm
 // --pallet=pallet_ranked_collective
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/collectives/collectives-westend/src/weights
 // --wasm-execution=compiled
 // --steps=50

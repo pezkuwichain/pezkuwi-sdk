@@ -21,8 +21,8 @@ use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
 use sp_core::storage::Storage;
 use sp_keyring::Sr25519Keyring as Keyring;
 
-// Polkadot
-use polkadot_primitives::{AssignmentId, ValidatorId};
+// Pezkuwi
+use pezkuwi_primitives::{AssignmentId, ValidatorId};
 
 // Cumulus
 use emulated_integration_tests_common::{
@@ -87,7 +87,7 @@ pub fn genesis() -> Storage {
 		sudo: rococo_runtime::SudoConfig { key: Some(Keyring::Alice.to_account_id()) },
 		configuration: rococo_runtime::ConfigurationConfig { config: get_host_config() },
 		registrar: rococo_runtime::RegistrarConfig {
-			next_free_para_id: polkadot_primitives::LOWEST_PUBLIC_ID,
+			next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID,
 			..Default::default()
 		},
 		..Default::default()

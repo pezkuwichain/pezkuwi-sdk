@@ -22,7 +22,7 @@
 
 use crate::service::{create_extrinsic, FullClient};
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use kitchensink_runtime::{BalancesCall, SystemCall};
 use node_primitives::{AccountId, Balance};

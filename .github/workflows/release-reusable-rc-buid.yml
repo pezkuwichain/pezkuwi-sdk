@@ -6,16 +6,16 @@ on:
       binary:
         description: Binary to be build for the release
         required: true
-        default: polkadot
+        default: pezkuwi
         type: string
 
       package:
-        description: Package to be built, for now can be polkadot, polkadot-parachain-bin, or polkadot-omni-node
+        description: Package to be built, for now can be pezkuwi, pezkuwi-parachain-bin, or pezkuwi-omni-node
         required: true
         type: string
 
       release_tag:
-        description: Tag matching the actual release candidate with the format polkadot-stableYYMM(-rcX) or polkadot-stableYYMM-X(-rcX)
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-rcX) or pezkuwi-stableYYMM-X(-rcX)
         required: true
         type: string
 
@@ -251,8 +251,8 @@ jobs:
           name: ${{ matrix.binaries }}_${{ inputs.target }}
           path: ${{ env.ARTIFACTS_PATH }}
 
-  build-polkadot-deb-package:
-    if: ${{ inputs.package == 'polkadot' && inputs.target == 'x86_64-unknown-linux-gnu' }}
+  build-pezkuwi-deb-package:
+    if: ${{ inputs.package == 'pezkuwi' && inputs.target == 'x86_64-unknown-linux-gnu' }}
     needs: [build-rc]
     runs-on: ubuntu-latest
 
@@ -263,32 +263,32 @@ jobs:
         ref: ${{ inputs.release_tag }}
         fetch-depth: 0
 
-    - name: Download polkadot_x86_64-unknown-linux-gnu artifacts
+    - name: Download pezkuwi_x86_64-unknown-linux-gnu artifacts
       uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
-        name: polkadot_x86_64-unknown-linux-gnu
+        name: pezkuwi_x86_64-unknown-linux-gnu
         path: target/production
         merge-multiple: true
 
-    - name: Download polkadot-execute-worker_x86_64-unknown-linux-gnu artifacts
+    - name: Download pezkuwi-execute-worker_x86_64-unknown-linux-gnu artifacts
       uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
-        name: polkadot-execute-worker_x86_64-unknown-linux-gnu
+        name: pezkuwi-execute-worker_x86_64-unknown-linux-gnu
         path: target/production
         merge-multiple: true
 
-    - name: Download polkadot-prepare-worker_x86_64-unknown-linux-gnu artifacts
+    - name: Download pezkuwi-prepare-worker_x86_64-unknown-linux-gnu artifacts
       uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
-        name: polkadot-prepare-worker_x86_64-unknown-linux-gnu
+        name: pezkuwi-prepare-worker_x86_64-unknown-linux-gnu
         path: target/production
         merge-multiple: true
 
-    - name: Build polkadot deb package
+    - name: Build pezkuwi deb package
       shell: bash
       run: |
         . "${GITHUB_WORKSPACE}"/.github/scripts/common/lib.sh
-        VERSION=$(get_polkadot_node_version_from_code)
+        VERSION=$(get_pezkuwi_node_version_from_code)
         . "${GITHUB_WORKSPACE}"/.github/scripts/release/build-deb.sh ${{ inputs.package }} ${VERSION}
 
     - name: Generate artifact attestation
@@ -303,9 +303,9 @@ jobs:
         path: target/production
         overwrite: true
 
-  upload-polkadot-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot' && inputs.target == 'x86_64-unknown-linux-gnu' }}
-    needs: [build-polkadot-deb-package]
+  upload-pezkuwi-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi' && inputs.target == 'x86_64-unknown-linux-gnu' }}
+    needs: [build-pezkuwi-deb-package]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
       package: ${{ inputs.package }}
@@ -316,12 +316,12 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-parachain-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot-parachain-bin' && inputs.target == 'x86_64-unknown-linux-gnu' }}
+  upload-pezkuwi-parachain-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi-parachain-bin' && inputs.target == 'x86_64-unknown-linux-gnu' }}
     needs: [build-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
-      package: polkadot-parachain
+      package: pezkuwi-parachain
       release_tag: ${{ inputs.release_tag }}
       target: ${{ inputs.target }}
     secrets:
@@ -329,8 +329,8 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-omni-node-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot-omni-node' && inputs.target == 'x86_64-unknown-linux-gnu' }}
+  upload-pezkuwi-omni-node-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi-omni-node' && inputs.target == 'x86_64-unknown-linux-gnu' }}
     needs: [build-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
@@ -368,10 +368,10 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-macos-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot' && inputs.target == 'aarch64-apple-darwin' }}
-    # TODO: add and use a `build-polkadot-homebrew-package` which packs all `polkadot` binaries:
-    # `polkadot`, `polkadot-prepare-worker` and `polkadot-execute-worker`.
+  upload-pezkuwi-macos-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi' && inputs.target == 'aarch64-apple-darwin' }}
+    # TODO: add and use a `build-pezkuwi-homebrew-package` which packs all `pezkuwi` binaries:
+    # `pezkuwi`, `pezkuwi-prepare-worker` and `pezkuwi-execute-worker`.
     needs: [build-macos-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
@@ -383,12 +383,12 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-prepare-worker-macos-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot' && inputs.target == 'aarch64-apple-darwin' }}
+  upload-pezkuwi-prepare-worker-macos-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi' && inputs.target == 'aarch64-apple-darwin' }}
     needs: [build-macos-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
-      package: polkadot-prepare-worker
+      package: pezkuwi-prepare-worker
       release_tag: ${{ inputs.release_tag }}
       target: ${{ inputs.target }}
     secrets:
@@ -396,12 +396,12 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-execute-worker-macos-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot' && inputs.target == 'aarch64-apple-darwin' }}
+  upload-pezkuwi-execute-worker-macos-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi' && inputs.target == 'aarch64-apple-darwin' }}
     needs: [build-macos-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
-      package: polkadot-execute-worker
+      package: pezkuwi-execute-worker
       release_tag: ${{ inputs.release_tag }}
       target: ${{ inputs.target }}
     secrets:
@@ -409,8 +409,8 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-omni-node-macos-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot-omni-node' && inputs.target == 'aarch64-apple-darwin' }}
+  upload-pezkuwi-omni-node-macos-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi-omni-node' && inputs.target == 'aarch64-apple-darwin' }}
     needs: [build-macos-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
@@ -422,12 +422,12 @@ jobs:
       AWS_RELEASE_ACCESS_KEY_ID: ${{ secrets.AWS_RELEASE_ACCESS_KEY_ID }}
       AWS_RELEASE_SECRET_ACCESS_KEY: ${{ secrets.AWS_RELEASE_SECRET_ACCESS_KEY }}
 
-  upload-polkadot-parachain-macos-artifacts-to-s3:
-    if: ${{ inputs.package == 'polkadot-parachain-bin' && inputs.target == 'aarch64-apple-darwin' }}
+  upload-pezkuwi-parachain-macos-artifacts-to-s3:
+    if: ${{ inputs.package == 'pezkuwi-parachain-bin' && inputs.target == 'aarch64-apple-darwin' }}
     needs: [build-macos-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
-      package: polkadot-parachain
+      package: pezkuwi-parachain
       release_tag: ${{ inputs.release_tag }}
       target: ${{ inputs.target }}
     secrets:

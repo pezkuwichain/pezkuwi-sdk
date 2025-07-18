@@ -1,9 +1,9 @@
 use crate::{
-	AccountId, AllPalletsWithSystem, Balances, ParachainInfo, ParachainSystem, PolkadotXcm,
+	AccountId, AllPalletsWithSystem, Balances, ParachainInfo, ParachainSystem, PezkuwiXcm,
 	Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, WeightToFee, XcmpQueue,
 };
 
-use polkadot_sdk::{
+use pezkuwi_sdk::{
 	staging_xcm as xcm, staging_xcm_builder as xcm_builder, staging_xcm_executor as xcm_executor, *,
 };
 
@@ -14,10 +14,10 @@ use frame_support::{
 };
 use frame_system::EnsureRoot;
 use pallet_xcm::XcmPassthrough;
-use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_common::impls::ToAuthor;
-use polkadot_sdk::{
-	polkadot_sdk_frame::traits::Disabled,
+use pezkuwi_parachain_primitives::primitives::Sibling;
+use pezkuwi_runtime_common::impls::ToAuthor;
+use pezkuwi_sdk::{
+	pezkuwi_sdk_frame::traits::Disabled,
 	staging_xcm_builder::{DenyRecursively, DenyThenTry},
 };
 use xcm::latest::prelude::*;
@@ -123,7 +123,7 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
-	type XcmEventEmitter = PolkadotXcm;
+	type XcmEventEmitter = PezkuwiXcm;
 	// How to withdraw and deposit an asset.
 	type AssetTransactor = LocalAssetTransactor;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
@@ -134,10 +134,10 @@ impl xcm_executor::Config for XcmConfig {
 	type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
 	type Trader =
 		UsingComponents<WeightToFee, RelayLocation, AccountId, Balances, ToAuthor<Runtime>>;
-	type ResponseHandler = PolkadotXcm;
-	type AssetTrap = PolkadotXcm;
-	type AssetClaims = PolkadotXcm;
-	type SubscriptionService = PolkadotXcm;
+	type ResponseHandler = PezkuwiXcm;
+	type AssetTrap = PezkuwiXcm;
+	type AssetClaims = PezkuwiXcm;
+	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type AssetLocker = ();
@@ -152,7 +152,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
-	type XcmRecorder = PolkadotXcm;
+	type XcmRecorder = PezkuwiXcm;
 }
 
 /// Converts a local signed origin into an XCM location. Forms the basis for local origins

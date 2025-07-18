@@ -4,6 +4,6 @@ doc:
   description: |-
     Removed useless debug message
 crates:
-- name: polkadot-node-core-pvf
+- name: pezkuwi-node-core-pvf
   validate: false
   bump: none

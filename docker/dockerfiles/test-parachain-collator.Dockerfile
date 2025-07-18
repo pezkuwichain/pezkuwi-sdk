@@ -4,7 +4,7 @@ FROM docker.io/paritytech/ci-linux:production as builder
 WORKDIR /cumulus
 COPY . /cumulus
 
-RUN cargo build --release --locked -p polkadot-parachain
+RUN cargo build --release --locked -p pezkuwi-parachain
 
 # the collator stage is normally built once, cached, and then ignored, but can
 # be specified with the --target build flag. This adds some extra tooling to the
@@ -21,9 +21,9 @@ RUN apt-get update && apt-get install jq curl bash -y && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs && \
     npm install --global yarn && \
-    yarn global add @polkadot/api-cli@0.10.0-beta.14
+    yarn global add @pezkuwi/api-cli@0.10.0-beta.14
 COPY --from=builder \
-    /paritytech/cumulus/target/release/polkadot-parachain /usr/bin
+    /paritytech/cumulus/target/release/pezkuwi-parachain /usr/bin
 COPY ./docker/scripts/inject_bootnodes.sh /usr/bin
 CMD ["/usr/bin/inject_bootnodes.sh"]
 COPY ./docker/scripts/healthcheck.sh /usr/bin/
@@ -41,6 +41,6 @@ CMD ["cp", "-v", "/var/opt/cumulus_test_parachain_runtime.compact.wasm", "/runti
 
 FROM debian:buster-slim
 COPY --from=builder \
-    /paritytech/cumulus/target/release/polkadot-parachain /usr/bin
+    /paritytech/cumulus/target/release/pezkuwi-parachain /usr/bin
 
-CMD ["/usr/bin/polkadot-parachain"]
+CMD ["/usr/bin/pezkuwi-parachain"]

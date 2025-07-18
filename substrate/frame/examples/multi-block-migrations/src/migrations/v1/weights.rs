@@ -24,7 +24,7 @@
 //! WASM-EXECUTION: `Compiled`, CHAIN: `None`, DB CACHE: `1024`
 
 // Executed Command:
-// polkadot-omni-bencher
+// pezkuwi-omni-bencher
 // v1
 // benchmark
 // pallet

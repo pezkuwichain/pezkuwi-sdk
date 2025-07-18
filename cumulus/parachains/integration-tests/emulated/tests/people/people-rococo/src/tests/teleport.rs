@@ -62,7 +62,7 @@ fn para_origin_assertions(t: SystemParaToRelayTest) {
 }
 
 fn system_para_limited_teleport_assets(t: SystemParaToRelayTest) -> DispatchResult {
-	<PeopleRococo as PeopleRococoPallet>::PolkadotXcm::limited_teleport_assets(
+	<PeopleRococo as PeopleRococoPallet>::PezkuwiXcm::limited_teleport_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),

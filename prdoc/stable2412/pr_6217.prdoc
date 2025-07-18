@@ -12,13 +12,13 @@ crates:
   bump: patch
 - name: cumulus-primitives-core
   bump: major
-- name: polkadot-node-collation-generation
+- name: pezkuwi-node-collation-generation
   bump: major
-- name: polkadot-node-core-candidate-validation
+- name: pezkuwi-node-core-candidate-validation
   bump: patch
-- name: polkadot-node-subsystem-util
+- name: pezkuwi-node-subsystem-util
   bump: patch
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: major
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

@@ -474,7 +474,7 @@ mod per_and_fixed_examples {
 		// Demand: Cores being ordered per block
 		let price = FixedU64::from_rational(5u128, 10u128);
 
-		// 0.5 DOT per core
+		// 0.5 HEZ per core
 		assert_eq!(price, FixedU64::from_float(0.5));
 
 		// Now, the story has changed - lots of demand means we buy as many cores as there
@@ -486,7 +486,7 @@ mod per_and_fixed_examples {
 		// Demand: Cores being ordered per block
 		let price = FixedU64::from_rational(19u128, 10u128);
 
-		// 1.9 DOT per core
+		// 1.9 HEZ per core
 		assert_eq!(price, FixedU64::from_float(1.9));
 	}
 

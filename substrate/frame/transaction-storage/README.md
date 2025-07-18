@@ -49,15 +49,15 @@ To store data use the `transactionStorage.store` extrinsic. And IPFS CID can be 
 the data.
 
 ```js
-const util_crypto = require('@polkadot/util-crypto');
-const keyring_api = require('@polkadot/keyring');
-const polkadot_api = require('@polkadot/api');
+const util_crypto = require('@pezkuwi/util-crypto');
+const keyring_api = require('@pezkuwi/keyring');
+const pezkuwi_api = require('@pezkuwi/api');
 const fs = require('fs');
 const multihash = require('multihashes');
 const CID = require('cids')
 
-const wsProvider = new polkadot_api.WsProvider();
-const api = await polkadot_api.ApiPromise.create({ provider: wsProvider });
+const wsProvider = new pezkuwi_api.WsProvider();
+const api = await pezkuwi_api.ApiPromise.create({ provider: wsProvider });
 
 const keyring = new keyring_api.Keyring({ type: "sr25519" });
 const alice = keyring.addFromUri("//Alice");

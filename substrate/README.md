@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-GPL3%2FApache2-blue)](#LICENSE)
 [![GitLab
-Status](https://gitlab.parity.io/parity/mirrors/polkadot-sdk/badges/master/pipeline.svg)](https://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/pipelines)
+Status](https://gitlab.parity.io/parity/mirrors/pezkuwi-sdk/badges/master/pipeline.svg)](https://gitlab.parity.io/parity/mirrors/pezkuwi-sdk/-/pipelines)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](docs/contributor/CONTRIBUTING.md)
 [![Stack
 Exchange](https://img.shields.io/badge/Substrate-Community%20&%20Support-24CC85?logo=stackexchange)](https://substrate.stackexchange.com/)

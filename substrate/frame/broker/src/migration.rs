@@ -37,7 +37,7 @@ mod v1 {
 		pub end: Timeslice,
 		/// The owner of the Region.
 		pub owner: AccountId,
-		/// The amount paid to Polkadot for this Region, or `None` if renewal is not allowed.
+		/// The amount paid to Pezkuwi for this Region, or `None` if renewal is not allowed.
 		pub paid: Option<Balance>,
 	}
 

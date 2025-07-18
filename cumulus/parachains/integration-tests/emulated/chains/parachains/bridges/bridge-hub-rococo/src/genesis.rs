@@ -57,7 +57,7 @@ pub fn genesis() -> Storage {
 				.collect(),
 			..Default::default()
 		},
-		polkadot_xcm: bridge_hub_rococo_runtime::PolkadotXcmConfig {
+		pezkuwi_xcm: bridge_hub_rococo_runtime::PezkuwiXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},

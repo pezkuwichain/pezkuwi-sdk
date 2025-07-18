@@ -17,7 +17,7 @@
 
 //! Runtime API definition for assets.
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use alloc::vec::Vec;
 use codec::Codec;

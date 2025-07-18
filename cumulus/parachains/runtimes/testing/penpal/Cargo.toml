@@ -53,9 +53,9 @@ pallet-transaction-payment.workspace = true
 pallet-xcm.workspace = true
 parachain-info.workspace = true
 parachains-common.workspace = true
-polkadot-parachain-primitives.workspace = true
-polkadot-primitives.workspace = true
-polkadot-runtime-common.workspace = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.workspace = true
+pezkuwi-runtime-common.workspace = true
 scale-info = { features = ["derive"], workspace = true }
 smallvec = { workspace = true, default-features = true }
 snowbridge-inbound-queue-primitives.workspace = true
@@ -120,9 +120,9 @@ std = [
 	"pallet-xcm/std",
 	"parachain-info/std",
 	"parachains-common/std",
-	"polkadot-parachain-primitives/std",
-	"polkadot-primitives/std",
-	"polkadot-runtime-common/std",
+	"pezkuwi-parachain-primitives/std",
+	"pezkuwi-primitives/std",
+	"pezkuwi-runtime-common/std",
 	"primitive-types/std",
 	"scale-info/std",
 	"snowbridge-inbound-queue-primitives/std",
@@ -170,9 +170,9 @@ runtime-benchmarks = [
 	"pallet-transaction-payment/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
 	"parachains-common/runtime-benchmarks",
-	"polkadot-parachain-primitives/runtime-benchmarks",
-	"polkadot-primitives/runtime-benchmarks",
-	"polkadot-runtime-common/runtime-benchmarks",
+	"pezkuwi-parachain-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-common/runtime-benchmarks",
 	"snowbridge-inbound-queue-primitives/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
@@ -205,6 +205,6 @@ try-runtime = [
 	"pallet-transaction-payment/try-runtime",
 	"pallet-xcm/try-runtime",
 	"parachain-info/try-runtime",
-	"polkadot-runtime-common/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
 	"sp-runtime/try-runtime",
 ]

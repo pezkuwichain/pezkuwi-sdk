@@ -7,4 +7,4 @@ doc:
 
 crates:
   - name: asset-hub-rococo-runtime
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin

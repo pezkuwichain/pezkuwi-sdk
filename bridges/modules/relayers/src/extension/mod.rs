@@ -464,7 +464,7 @@ mod tests {
 		UnrewardedRelayerOccupation, UnrewardedRelayersState,
 	};
 	use bp_parachains::{BestParaHeadHash, ParaInfo, SubmitParachainHeadsInfo};
-	use bp_polkadot_core::parachains::{ParaHeadsProof, ParaId};
+	use bp_pezkuwi_core::parachains::{ParaHeadsProof, ParaId};
 	use bp_relayers::RuntimeWithUtilityPallet;
 	use bp_runtime::{BasicOperatingMode, HeaderId, Parachain};
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};

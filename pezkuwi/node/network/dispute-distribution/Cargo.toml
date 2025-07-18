@@ -1,0 +1,49 @@
+[package]
+name = "pezkuwi-dispute-distribution"
+version = "22.1.0"
+description = "Pezkuwi Dispute Distribution subsystem, which ensures all concerned validators are aware of a dispute and have the relevant votes."
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["std"], workspace = true, default-features = true }
+fatality = { workspace = true }
+futures = { workspace = true }
+futures-timer = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+indexmap = { workspace = true }
+pezkuwi-node-network-protocol.default-features = true
+pezkuwi-node-network-protocol.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sc-network.default-features = true
+sc-network.workspace = true
+sp-application-crypto.default-features = true
+sp-application-crypto.workspace = true
+sp-keystore.default-features = true
+sp-keystore.workspace = true
+thiserror = { workspace = true }
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+async-channel = { workspace = true }
+async-trait = { workspace = true }
+futures-timer = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+sc-keystore = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }
+sp-tracing = { default-features = true, workspace = true }

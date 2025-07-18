@@ -1,0 +1,35 @@
+[package]
+name = "pezkuwi-node-core-pvf-execute-worker"
+description = "Pezkuwi crate that contains the logic for executing PVFs. Used by the pezkuwi-execute-worker binary."
+version = "19.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+cfg-if = { workspace = true }
+cpu-time = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+libc = { workspace = true }
+nix = { features = ["process", "resource", "sched"], workspace = true }
+
+codec = { features = ["derive"], workspace = true }
+pezkuwi-node-core-pvf-common.default-features = true
+pezkuwi-node-core-pvf-common.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-parachain-primitives.default-features = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sp-maybe-compressed-blob.default-features = true
+sp-maybe-compressed-blob.workspace = true
+
+[features]
+builder = []

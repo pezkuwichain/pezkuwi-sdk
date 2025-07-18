@@ -1,6 +1,6 @@
 [relaychain]
 default_image = "{{RELAY_IMAGE}}"
-default_command = "polkadot"
+default_command = "pezkuwi"
 
 chain = "rococo-local"
 

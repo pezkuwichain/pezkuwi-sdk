@@ -22,9 +22,9 @@
 //! For that use case it's common to use some aggregated data structure (like MMR) to be
 //! used in conjunction with BEEFY, to be able to efficiently prove any past blockchain data.
 //!
-//! This module contains primitives used by Polkadot implementation of the BEEFY+MMR bridge,
-//! but we imagine they will be useful for other chains that either want to bridge with Polkadot
-//! or are completely standalone, but heavily inspired by Polkadot.
+//! This module contains primitives used by Pezkuwi implementation of the BEEFY+MMR bridge,
+//! but we imagine they will be useful for other chains that either want to bridge with Pezkuwi
+//! or are completely standalone, but heavily inspired by Pezkuwi.
 
 use crate::{ecdsa_crypto::AuthorityId, ConsensusLog, MmrRootHash, BEEFY_ENGINE_ID};
 use alloc::vec::Vec;

@@ -1,13 +1,13 @@
 <div align="center">
 
-# Polkadot SDK's Parachain Template
+# Pezkuwi SDK's Parachain Template
 
-<img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_White.png#gh-dark-mode-only"/>
-<img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
+<img height="70px" alt="Pezkuwi SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_White.png#gh-dark-mode-only"/>
+<img height="70px" alt="Pezkuwi SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
 
-> This is a template for creating a [parachain](https://wiki.polkadot.network/docs/learn-parachains) based on Polkadot SDK.
+> This is a template for creating a [parachain](https://wiki.pezkuwi.network/docs/learn-parachains) based on Pezkuwi SDK.
 >
-> This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
+> This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/paritytech/polkadot-sdk).
 
 </div>
 
@@ -24,7 +24,7 @@
   - [Omni Node](#omni-node-prerequisites)
   - [Zombienet setup with Omni Node](#zombienet-setup-with-omni-node)
   - [Parachain Template Node](#parachain-template-node)
-  - [Connect with the Polkadot-JS Apps Front-End](#connect-with-the-polkadot-js-apps-front-end)
+  - [Connect with the Pezkuwi-JS Apps Front-End](#connect-with-the-pezkuwi-js-apps-front-end)
   - [Takeaways](#takeaways)
 
 - [Runtime development](#runtime-development)
@@ -33,25 +33,25 @@
 
 ## Intro
 
-- ⏫ This template provides a starting point to build a [parachain](https://wiki.polkadot.network/docs/learn-parachains).
+- ⏫ This template provides a starting point to build a [parachain](https://wiki.pezkuwi.network/docs/learn-parachains).
 
 - ☁️ It is based on the
-  [Cumulus](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
+  [Cumulus](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/cumulus/index.html) framework.
 
 - 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
-  such as a [Balances pallet](https://paritytech.github.io/polkadot-sdk/master/pallet_balances/index.html).
+  such as a [Balances pallet](https://paritytech.github.io/pezkuwi-sdk/master/pallet_balances/index.html).
 
-- 👉 Learn more about parachains [here](https://wiki.polkadot.network/docs/learn-parachains)
+- 👉 Learn more about parachains [here](https://wiki.pezkuwi.network/docs/learn-parachains)
 
 ## Template Structure
 
-A Polkadot SDK based project such as this one consists of:
+A Pezkuwi SDK based project such as this one consists of:
 
 - 🧮 the [Runtime](./runtime/README.md) - the core logic of the parachain.
 - 🎨 the [Pallets](./pallets/README.md) - from which the runtime is constructed.
 - 💿 a [Node](./node/README.md) - the binary application, not part of the project default-members list and not compiled unless
   building the project with `--workspace` flag, which builds all workspace members, and is an alternative to
-  [Omni Node](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html).
+  [Omni Node](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/omni_node/index.html).
 
 ## Getting Started
 
@@ -81,13 +81,13 @@ any command or file referencing this placeholder with the value of the `PARACHAI
 
 ### Omni Node Prerequisites
 
-[Omni Node](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html) can
-be used to run the parachain template's runtime. `polkadot-omni-node` binary crate usage is described at a high-level
-[on crates.io](https://crates.io/crates/polkadot-omni-node).
+[Omni Node](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/omni_node/index.html) can
+be used to run the parachain template's runtime. `pezkuwi-omni-node` binary crate usage is described at a high-level
+[on crates.io](https://crates.io/crates/pezkuwi-omni-node).
 
-#### Install `polkadot-omni-node`
+#### Install `pezkuwi-omni-node`
 
-Please see the installation section at [`crates.io/omni-node`](https://crates.io/crates/polkadot-omni-node).
+Please see the installation section at [`crates.io/omni-node`](https://crates.io/crates/pezkuwi-omni-node).
 
 #### Build `parachain-template-runtime`
 
@@ -118,7 +118,7 @@ Start Omni Node with the generated chain spec. We'll start it in development mod
 and finalizing blocks based on manual seal, configured below to seal a block with each second.
 
 ```bash
-polkadot-omni-node --chain <path/to/chain_spec.json> --dev --dev-block-time 1000
+pezkuwi-omni-node --chain <path/to/chain_spec.json> --dev --dev-block-time 1000
 ```
 
 However, such a setup is not close to what would run in production, and for that we need to setup a local
@@ -135,8 +135,8 @@ We can install `zombienet` as described [here](https://paritytech.github.io/zomb
 
 #### Relay chain prerequisites
 
-Download the `polkadot` (and the accompanying `polkadot-prepare-worker` and `polkadot-execute-worker`) binaries from
-[Polkadot SDK releases](https://github.com/paritytech/polkadot-sdk/releases). Then expose them on `PATH` like so:
+Download the `pezkuwi` (and the accompanying `pezkuwi-prepare-worker` and `pezkuwi-execute-worker`) binaries from
+[Pezkuwi SDK releases](https://github.com/paritytech/polkadot-sdk/releases). Then expose them on `PATH` like so:
 
 ```sh
 export PATH="$PATH:<path/to/binaries>"
@@ -187,18 +187,18 @@ We're left just with starting the network:
 zombienet --provider native spawn zombienet.toml
 ```
 
-### Connect with the Polkadot-JS Apps Front-End
+### Connect with the Pezkuwi-JS Apps Front-End
 
 - 🌐 You can interact with your local node using the
-  hosted version of the Polkadot/Substrate Portal:
-  [relay chain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944)
-  and [parachain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9988).
+  hosted version of the Pezkuwi/Substrate Portal:
+  [relay chain](https://pezkuwi.js.org/apps/#/explorer?rpc=ws://localhost:9944)
+  and [parachain](https://pezkuwi.js.org/apps/#/explorer?rpc=ws://localhost:9988).
 
 - 🪐 A hosted version is also
   available on [IPFS](https://dotapps.io/).
 
 - 🧑‍🔧 You can also find the source code and instructions for hosting your own instance in the
-  [`polkadot-js/apps`](https://github.com/polkadot-js/apps) repository.
+  [`pezkuwi-js/apps`](https://github.com/pezkuwi-js/apps) repository.
 
 ### Takeaways
 
@@ -242,7 +242,7 @@ relay chain network (see [Parachain Template node](#parachain-template-node) set
 
 ## Contributing
 
-- 🔄 This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
+- 🔄 This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/paritytech/polkadot-sdk).
 
 - ➡️ Any pull requests should be directed to this [source](https://github.com/paritytech/polkadot-sdk/tree/master/templates/parachain).
 
@@ -252,12 +252,12 @@ relay chain network (see [Parachain Template node](#parachain-template-node) set
 
 ## Getting Help
 
-- 🧑‍🏫 To learn about Polkadot in general, [docs.Polkadot.com](https://docs.polkadot.com/) website is a good starting point.
+- 🧑‍🏫 To learn about Pezkuwi in general, [docs.Pezkuwi.com](https://docs.pezkuwi.com/) website is a good starting point.
 
 - 🧑‍🔧 For technical introduction, [here](https://github.com/paritytech/polkadot-sdk#-documentation) are
-  the Polkadot SDK documentation resources.
+  the Pezkuwi SDK documentation resources.
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/paritytech/polkadot-sdk/issues) and
   [Substrate StackExchange](https://substrate.stackexchange.com/).
-- 👥You can also reach out on the [Official Polkdot discord server](https://polkadot-discord.w3f.tools/)
+- 👥You can also reach out on the [Official Polkdot discord server](https://pezkuwi-discord.w3f.tools/)
 - 🧑Reach out on [Telegram](https://t.me/substratedevs) for more questions and discussions

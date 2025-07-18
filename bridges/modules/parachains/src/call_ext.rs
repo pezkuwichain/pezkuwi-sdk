@@ -263,7 +263,7 @@ mod tests {
 	};
 	use bp_header_chain::StoredHeaderData;
 	use bp_parachains::BestParaHeadHash;
-	use bp_polkadot_core::parachains::{ParaHash, ParaHeadsProof, ParaId};
+	use bp_pezkuwi_core::parachains::{ParaHash, ParaHeadsProof, ParaId};
 	use bp_runtime::BasicOperatingMode;
 
 	fn validate_submit_parachain_heads(

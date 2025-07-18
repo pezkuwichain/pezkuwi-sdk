@@ -18,9 +18,9 @@
 
 use clap::Parser;
 use codec::{Decode, Encode};
-use polkadot_node_primitives::{BlockData, PoV, POV_BOMB_LIMIT};
-use polkadot_parachain_primitives::primitives::ValidationParams;
-use polkadot_primitives::PersistedValidationData;
+use pezkuwi_node_primitives::{BlockData, PoV, POV_BOMB_LIMIT};
+use pezkuwi_parachain_primitives::primitives::ValidationParams;
+use pezkuwi_primitives::PersistedValidationData;
 use sc_executor::WasmExecutor;
 use sp_core::traits::{CallContext, CodeExecutor, RuntimeCode, WrappedRuntimeCode};
 use std::{fs, path::PathBuf, time::Instant};
@@ -42,7 +42,7 @@ struct Cli {
 
 	/// The path to the `PoV` to validate.
 	///
-	/// The `PoV`'s can be obtained by running `polkadot-parachains --collator --chain YOUR_CHAIN
+	/// The `PoV`'s can be obtained by running `pezkuwi-parachains --collator --chain YOUR_CHAIN
 	/// --export-pov-to-path PATH_TO_EXPORT` and then choose one of the exported `PoV`'s.
 	#[arg(long)]
 	pov: PathBuf,

@@ -53,10 +53,10 @@ use sp_api::RuntimeApiInfo;
 use sp_consensus::{BlockOrigin, BlockStatus, SyncOracle};
 use sp_runtime::traits::{Block as BlockT, Header as HeaderT, NumberFor};
 
-use polkadot_node_primitives::{PoV, POV_BOMB_LIMIT};
-use polkadot_node_subsystem::messages::{AvailabilityRecoveryMessage, RuntimeApiRequest};
-use polkadot_overseer::Handle as OverseerHandle;
-use polkadot_primitives::{
+use pezkuwi_node_primitives::{PoV, POV_BOMB_LIMIT};
+use pezkuwi_node_subsystem::messages::{AvailabilityRecoveryMessage, RuntimeApiRequest};
+use pezkuwi_overseer::Handle as OverseerHandle;
+use pezkuwi_primitives::{
 	vstaging::{
 		CandidateReceiptV2 as CandidateReceipt,
 		CommittedCandidateReceiptV2 as CommittedCandidateReceipt,
@@ -656,8 +656,8 @@ async fn pending_candidates(
 				.ok()?;
 			let parachain_host_runtime_api_version = runtime_api_version
 				.api_version(
-					&<dyn polkadot_primitives::runtime_api::ParachainHost<
-						polkadot_primitives::Block,
+					&<dyn pezkuwi_primitives::runtime_api::ParachainHost<
+						pezkuwi_primitives::Block,
 					>>::ID,
 				)
 				.unwrap_or_default();

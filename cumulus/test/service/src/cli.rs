@@ -16,7 +16,7 @@
 
 use clap::ValueEnum;
 use cumulus_client_cli::{ExportGenesisHeadCommand, ExportGenesisWasmCommand};
-use polkadot_service::{ChainSpec, ParaId, PrometheusConfig};
+use pezkuwi_service::{ChainSpec, ParaId, PrometheusConfig};
 use sc_cli::{
 	CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams, NetworkParams,
 	Result as CliResult, RpcEndpoint, SharedParams, SubstrateCli,
@@ -95,7 +95,7 @@ pub enum Subcommand {
 #[derive(Debug)]
 pub struct RelayChainCli {
 	/// The actual relay chain cli object.
-	pub base: polkadot_cli::RunCmd,
+	pub base: pezkuwi_cli::RunCmd,
 
 	/// Optional chain id that should be passed to the relay chain.
 	pub chain_id: Option<String>,
@@ -110,7 +110,7 @@ impl RelayChainCli {
 		para_config: &sc_service::Configuration,
 		relay_chain_args: impl Iterator<Item = &'a String>,
 	) -> Self {
-		let base_path = para_config.base_path.path().join("polkadot");
+		let base_path = para_config.base_path.path().join("pezkuwi");
 		Self {
 			base_path: Some(base_path),
 			chain_id: None,
@@ -164,7 +164,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 	where
 		F: FnOnce(&mut sc_cli::LoggerBuilder),
 	{
-		unreachable!("PolkadotCli is never initialized; qed");
+		unreachable!("PezkuwiCli is never initialized; qed");
 	}
 
 	fn chain_id(&self, is_dev: bool) -> CliResult<String> {
@@ -317,7 +317,7 @@ impl SubstrateCli for TestCollatorCli {
 
 impl SubstrateCli for RelayChainCli {
 	fn impl_name() -> String {
-		"Polkadot collator".into()
+		"Pezkuwi collator".into()
 	}
 
 	fn impl_version() -> String {
@@ -326,7 +326,7 @@ impl SubstrateCli for RelayChainCli {
 
 	fn description() -> String {
 		format!(
-			"Polkadot collator\n\nThe command-line arguments provided first will be \
+			"Pezkuwi collator\n\nThe command-line arguments provided first will be \
 		passed to the parachain node, while the arguments provided after -- will be passed \
 		to the relay chain node.\n\n\
 		{} [parachain-args] -- [relay_chain-args]",
@@ -347,7 +347,7 @@ impl SubstrateCli for RelayChainCli {
 	}
 
 	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
-		<polkadot_cli::Cli as SubstrateCli>::from_iter([RelayChainCli::executable_name()].iter())
+		<pezkuwi_cli::Cli as SubstrateCli>::from_iter([RelayChainCli::executable_name()].iter())
 			.load_spec(id)
 	}
 }

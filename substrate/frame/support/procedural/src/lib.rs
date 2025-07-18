@@ -681,9 +681,9 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
         "{}::macro_magic",
         match generate_access_from_frame_or_crate("frame-support") {
             Ok(path) => Ok(path),
-            Err(_) => generate_access_from_frame_or_crate("polkadot-sdk-frame"),
+            Err(_) => generate_access_from_frame_or_crate("pezkuwi-sdk-frame"),
         }
-        .expect("Failed to find either `frame-support` or `polkadot-sdk-frame` in `Cargo.toml` dependencies.")
+        .expect("Failed to find either `frame-support` or `pezkuwi-sdk-frame` in `Cargo.toml` dependencies.")
         .to_token_stream()
         .to_string()
     )
@@ -1233,9 +1233,9 @@ pub fn pallet_section(attr: TokenStream, tokens: TokenStream) -> TokenStream {
         "{}::macro_magic",
         match generate_access_from_frame_or_crate("frame-support") {
             Ok(path) => Ok(path),
-            Err(_) => generate_access_from_frame_or_crate("polkadot-sdk-frame"),
+            Err(_) => generate_access_from_frame_or_crate("pezkuwi-sdk-frame"),
         }
-        .expect("Failed to find either `frame-support` or `polkadot-sdk-frame` in `Cargo.toml` dependencies.")
+        .expect("Failed to find either `frame-support` or `pezkuwi-sdk-frame` in `Cargo.toml` dependencies.")
         .to_token_stream()
         .to_string()
     )

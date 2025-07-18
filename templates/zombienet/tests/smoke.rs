@@ -1,11 +1,11 @@
 //! This test is setup to run with the `native` provider and needs these binaries in your PATH
-//! `polkadot`, `polkadot-prepare-worker`, `polkadot-execute-worker`, `parachain-template-node`.
+//! `pezkuwi`, `pezkuwi-prepare-worker`, `pezkuwi-execute-worker`, `parachain-template-node`.
 //! You can follow these steps to compile and export the binaries:
-//! `cargo build --release -features fast-runtime --bin polkadot --bin polkadot-execute-worker --bin
-//! polkadot-prepare-worker`
+//! `cargo build --release -features fast-runtime --bin pezkuwi --bin pezkuwi-execute-worker --bin
+//! pezkuwi-prepare-worker`
 //! `cargo build --package parachain-template-node --release`
 //! `cargo build --package minimal-template-node --release`
-//! `export PATH=<path-to-polkadot-sdk-repo>/target/release:$PATH
+//! `export PATH=<path-to-pezkuwi-sdk-repo>/target/release:$PATH
 //!
 //! There are also some tests related to omni node which run basaed on pre-generated chain specs,
 //! so to be able to run them you would need to generate the right chain spec (just minimal and
@@ -53,7 +53,7 @@ mod smoke {
 	}
 
 	fn get_config(network_spec: NetworkSpec) -> Result<NetworkConfig, anyhow::Error> {
-		let chain = if network_spec.relaychain_cmd == "polkadot" { "rococo-local" } else { "dev" };
+		let chain = if network_spec.relaychain_cmd == "pezkuwi" { "rococo-local" } else { "dev" };
 		let config = NetworkConfigBuilder::new().with_relaychain(|r| {
 			let mut r = r.with_chain(chain).with_default_command(network_spec.relaychain_cmd);
 			if let Some(path) = network_spec.relaychain_spec_path {
@@ -93,7 +93,7 @@ mod smoke {
 		);
 
 		let config = get_config(NetworkSpec {
-			relaychain_cmd: "polkadot",
+			relaychain_cmd: "pezkuwi",
 			para_cmd: Some("parachain-template-node"),
 			..Default::default()
 		})?;
@@ -164,7 +164,7 @@ mod smoke {
 
 		let chain_spec_path = expect_env_var(CHAIN_SPECS_DIR_PATH) + "/minimal_chain_spec.json";
 		let config = get_config(NetworkSpec {
-			relaychain_cmd: "polkadot-omni-node",
+			relaychain_cmd: "pezkuwi-omni-node",
 			relaychain_cmd_args: Some(vec![("--dev-block-time", "1000")]),
 			relaychain_spec_path: Some(chain_spec_path.into()),
 			..Default::default()
@@ -190,8 +190,8 @@ mod smoke {
 		let chain_spec_path = expect_env_var(CHAIN_SPECS_DIR_PATH) + "/parachain_chain_spec.json";
 
 		let config = get_config(NetworkSpec {
-			relaychain_cmd: "polkadot",
-			para_cmd: Some("polkadot-omni-node"),
+			relaychain_cmd: "pezkuwi",
+			para_cmd: Some("pezkuwi-omni-node"),
 			// Leaking the `String` to be able to use it below as a static str,
 			// required by the `FromStr` implementation for zombienet-configuration
 			// `Arg` type, which is not exposed yet through `zombienet-sdk`.

@@ -1,6 +1,6 @@
 # Contributing
 
-The `Polkadot SDK` project is an **OPENISH Open Source Project**
+The `Pezkuwi SDK` project is an **OPENISH Open Source Project**
 
 ## What?
 
@@ -33,7 +33,7 @@ merged faster.
 
 ### Labels
 
-The set of labels and their description can be found [here](https://paritytech.github.io/labels/doc_polkadot-sdk.html).
+The set of labels and their description can be found [here](https://paritytech.github.io/labels/doc_pezkuwi-sdk.html).
 
 ### Process
 
@@ -79,7 +79,7 @@ All Pull Requests must contain proper title & description, as described in [Pull
 Template](./PULL_REQUEST_TEMPLATE.md). Moreover, all pull requests must have a proper `prdoc` file attached.
 
 Some Pull Requests can be exempt of `prdoc` documentation, those must be labelled with
-[`R0-silent`](https://github.com/paritytech/labels/blob/main/ruled_labels/specs_polkadot-sdk.yaml#L89-L91).
+[`R0-silent`](https://github.com/paritytech/labels/blob/main/ruled_labels/specs_pezkuwi-sdk.yaml#L89-L91).
 
 Non "silent" PRs must come with documentation in the form of a `.prdoc` file.
 
@@ -87,14 +87,14 @@ See more about `prdoc` [here](./prdoc.md)
 
 ## Crate Configuration `Cargo.toml`
 
-The Polkadot SDK uses many conventions when configuring a crate. Watch out for these things when you
+The Pezkuwi SDK uses many conventions when configuring a crate. Watch out for these things when you
 are creating a new crate.
 
 ### Is the Crate chain-specific?
 
 Chain-specific crates, for example
 [`bp-bridge-hub-rococo`](https://github.com/paritytech/polkadot-sdk/blob/4014b9bf2bf8f74862f63e7114e5c78009529be5/bridges/chains/chain-bridge-hub-rococo/Cargo.toml#L10-L11)
-, should not be released as part of the Polkadot-SDK umbrella crate. We have a custom metadata
+, should not be released as part of the Pezkuwi-SDK umbrella crate. We have a custom metadata
 attribute that is picked up by the [generate-umbrella.py](../../scripts/generate-umbrella.py)
 script, that should be applied to all chain-specific crates like such:
 
@@ -102,7 +102,7 @@ script, that should be applied to all chain-specific crates like such:
 [package]
 # Other stuff...
 
-[package.metadata.polkadot-sdk]
+[package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true
 
 # Other stuff...

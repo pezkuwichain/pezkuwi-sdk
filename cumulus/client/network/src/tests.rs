@@ -25,17 +25,17 @@ use cumulus_relay_chain_interface::{
 use cumulus_test_service::runtime::{Block, Hash, Header};
 use futures::{executor::block_on, poll, task::Poll, FutureExt, Stream, StreamExt};
 use parking_lot::Mutex;
-use polkadot_node_primitives::{SignedFullStatement, Statement};
-use polkadot_primitives::{
+use pezkuwi_node_primitives::{SignedFullStatement, Statement};
+use pezkuwi_primitives::{
 	vstaging::{CommittedCandidateReceiptV2, CoreState},
 	BlockNumber, CandidateCommitments, CandidateDescriptor, CollatorPair,
 	CommittedCandidateReceipt, Hash as PHash, HeadData, InboundDownwardMessage, InboundHrmpMessage,
 	OccupiedCoreAssumption, PersistedValidationData, SessionIndex, SigningContext,
 	ValidationCodeHash, ValidatorId,
 };
-use polkadot_test_client::{
+use pezkuwi_test_client::{
 	Client as PClient, ClientBlockImportExt, DefaultTestClientBuilderExt, FullBackend as PBackend,
-	InitPolkadotBlockBuilder, TestClientBuilder, TestClientBuilderExt,
+	InitPezkuwiBlockBuilder, TestClientBuilder, TestClientBuilderExt,
 };
 use rstest::rstest;
 use sc_client_api::{Backend, BlockchainEvents};
@@ -65,7 +65,7 @@ fn check_error(error: crate::BoxedError, check_error: impl Fn(&BlockAnnounceErro
 fn dummy_candidate() -> CommittedCandidateReceipt {
 	CommittedCandidateReceipt {
 		descriptor: CandidateDescriptor {
-			para_head: polkadot_parachain_primitives::primitives::HeadData(
+			para_head: pezkuwi_parachain_primitives::primitives::HeadData(
 				default_header().encode(),
 			)
 			.hash(),
@@ -315,7 +315,7 @@ impl RelayChainInterface for DummyRelayChainInterface {
 		let version = self.data.lock().runtime_version;
 
 		let apis = sp_version::create_apis_vec!([(
-			<dyn polkadot_primitives::runtime_api::ParachainHost<polkadot_primitives::Block>>::ID,
+			<dyn pezkuwi_primitives::runtime_api::ParachainHost<pezkuwi_primitives::Block>>::ID,
 			version
 		)])
 		.into_owned()
@@ -414,7 +414,7 @@ async fn make_gossip_message_and_header(
 			pov_hash: PHash::random(),
 			erasure_root: PHash::random(),
 			signature: sp_core::sr25519::Signature::default().into(),
-			para_head: polkadot_parachain_primitives::primitives::HeadData(header.encode()).hash(),
+			para_head: pezkuwi_parachain_primitives::primitives::HeadData(header.encode()).hash(),
 			validation_code_hash: ValidationCodeHash::from(PHash::random()),
 		},
 	};
@@ -640,7 +640,7 @@ fn relay_parent_not_imported_when_block_announce_is_processed() {
 		let (mut validator, api) = make_validator_and_api();
 
 		let client = api.relay_client.clone();
-		let block = client.init_polkadot_block_builder().build().expect("Build new block").block;
+		let block = client.init_pezkuwi_block_builder().build().expect("Build new block").block;
 
 		let (signal, header) = make_gossip_message_and_header(api, block.hash(), 0).await;
 

@@ -7,7 +7,7 @@ doc:
       to support more cores and validators.
 
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major
 - name: westend-runtime
   bump: minor

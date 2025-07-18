@@ -2,7 +2,7 @@
 
 XCM-Emulator is a tool to emulate XCM program execution using
 pre-configured runtimes, including those used to run on live
-networks, such as Kusama, Polkadot, Asset Hubs, et cetera.
+networks, such as Kusama, Pezkuwi, Asset Hubs, et cetera.
 This allows for testing cross-chain message passing and verifying
 outcomes, weights, and side-effects. It is faster than spinning up
 a zombienet and as all the chains are in one process debugging using Clion is easy.
@@ -19,5 +19,5 @@ in particular things like disputes, staking and iamonline events can't be tested
 ## Alternatives
 
 If you just wish to test execution of various XCM instructions
-against the XCM VM then the `xcm-simulator` (in the Polkadot
+against the XCM VM then the `xcm-simulator` (in the Pezkuwi
 repo) is the perfect tool for this.

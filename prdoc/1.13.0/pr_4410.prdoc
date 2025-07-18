@@ -15,7 +15,7 @@ crates:
     bump: minor
   - name: sc-cli
     bump: patch
-  - name: polkadot-test-service
+  - name: pezkuwi-test-service
     bump: major
   - name: sc-service-test
     bump: major
@@ -25,9 +25,9 @@ crates:
     bump: minor
   - name: solochain-template-node
     bump: minor
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
   - name: sc-consensus-grandpa
     bump: patch

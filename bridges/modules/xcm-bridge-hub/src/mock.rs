@@ -30,7 +30,7 @@ use frame_support::{
 	traits::{EnsureOrigin, Equals, Everything, Get, OriginTrait},
 	weights::RuntimeDbWeight,
 };
-use polkadot_parachain_primitives::primitives::Sibling;
+use pezkuwi_parachain_primitives::primitives::Sibling;
 use sp_core::H256;
 use sp_runtime::{
 	testing::Header as SubstrateHeader,

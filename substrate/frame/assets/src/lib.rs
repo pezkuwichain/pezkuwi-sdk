@@ -142,7 +142,7 @@
 //! * [`System`](../frame_system/index.html)
 //! * [`Support`](../frame_support/index.html)
 //!
-//! [`frame_tokens`]: ../polkadot_sdk_docs/reference_docs/frame_tokens/index.html
+//! [`frame_tokens`]: ../pezkuwi_sdk_docs/reference_docs/frame_tokens/index.html
 
 // This recursion limit is needed because we have too many benchmarks and benchmarking will fail if
 // we add more without this limit.

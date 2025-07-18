@@ -30,30 +30,30 @@ USER root
 
 # for native provider to work (TODO: fix in zn docker?)
 RUN apt-get update && apt-get install -y procps sudo
-RUN yarn global add @polkadot/api-cli
+RUN yarn global add @pezkuwi/api-cli
 
-# add polkadot binary to the docker image
-COPY ./artifacts/polkadot /usr/local/bin/
-COPY ./artifacts/polkadot-execute-worker /usr/local/bin/
-COPY ./artifacts/polkadot-prepare-worker /usr/local/bin/
-# add polkadot-parachain binary to the docker image
-COPY ./artifacts/polkadot-parachain /usr/local/bin
+# add pezkuwi binary to the docker image
+COPY ./artifacts/pezkuwi /usr/local/bin/
+COPY ./artifacts/pezkuwi-execute-worker /usr/local/bin/
+COPY ./artifacts/pezkuwi-prepare-worker /usr/local/bin/
+# add pezkuwi-parachain binary to the docker image
+COPY ./artifacts/pezkuwi-parachain /usr/local/bin
 # copy substrate-relay to the docker image
 COPY --from=relay-builder /home/user/substrate-relay /usr/local/bin/
 # we need bridges zombienet runner and tests
-RUN	mkdir -p /home/nonroot/bridges-polkadot-sdk
-COPY ./artifacts/bridges-polkadot-sdk /home/nonroot/bridges-polkadot-sdk
+RUN	mkdir -p /home/nonroot/bridges-pezkuwi-sdk
+COPY ./artifacts/bridges-pezkuwi-sdk /home/nonroot/bridges-pezkuwi-sdk
 # also prepare `generate_hex_encoded_call` for running
 RUN set -eux; \
-	cd /home/nonroot/bridges-polkadot-sdk/bridges/testing/framework/utils/generate_hex_encoded_call; \
+	cd /home/nonroot/bridges-pezkuwi-sdk/bridges/testing/framework/utils/generate_hex_encoded_call; \
 	npm install
 
 # use the non-root user
 USER node
 # check if executable works in this container
-RUN /usr/local/bin/polkadot --version
-RUN /usr/local/bin/polkadot-parachain --version
+RUN /usr/local/bin/pezkuwi --version
+RUN /usr/local/bin/pezkuwi-parachain --version
 RUN /usr/local/bin/substrate-relay --version
 
-# https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:{PORT}#/explorer
+# https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:{PORT}#/explorer
 EXPOSE 9942 9910 8943 9945 9010 8945

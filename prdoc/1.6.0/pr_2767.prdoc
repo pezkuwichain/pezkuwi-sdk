@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Extract PartialComponents into type alias `Service`
 
@@ -13,5 +13,5 @@ crates:
   - name: "node-template"
   - name: "minimal-node"
   - name: "cumulus-test-service"
-  - name: "polkadot-parachain-bin"
+  - name: "pezkuwi-parachain-bin"
   - name: "parachain-template-node"

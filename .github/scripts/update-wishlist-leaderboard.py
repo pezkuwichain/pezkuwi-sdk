@@ -73,7 +73,7 @@ new_content = re.sub(
     r"(\| Feature Request \|)(.*?)(> Last updated:)(.*?\n)",
     new_leaderboard,
     wishlist_issue.body,
-    flags=re.DOTALL,
+    flags=re.HEZALL,
 )
 
 wishlist_issue.edit(body=new_content)

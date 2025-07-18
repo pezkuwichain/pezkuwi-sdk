@@ -5,7 +5,7 @@ Weights generation is using self-hosted runner which is provided by Parity CI, t
 GitHub runners on `ubuntu-latest` or `ubuntu-20.04`.
 Self-hosted runner for benchmarks (`parity-weights`) is configured to meet requirements of reference
 hardware for running validators
-https://wiki.polkadot.network/docs/maintain-guides-how-to-validate-polkadot#reference-hardware
+https://wiki.pezkuwi.network/docs/maintain-guides-how-to-validate-pezkuwi#reference-hardware
 
 In a PR run the actions through comment:
 
@@ -27,7 +27,7 @@ so don't do it unless you really need it), run the following command:
 To generate weights for all pallets in a particular runtime(s), run the following command:
 
 ```sh
-/cmd bench --runtime kusama polkadot
+/cmd bench --runtime kusama pezkuwi
 ```
 
 For Substrate pallets (supports sub-modules too):
@@ -56,7 +56,7 @@ This way it runs all possible runtimes for the specified pallets, if it finds th
 If you want to run all specific pallet(s) for specific runtime(s), you can do it like this:
 
 ```sh
-/cmd bench --runtime bridge-hub-polkadot --pallet pallet_xcm_benchmarks::generic pallet_xcm_benchmarks::fungible
+/cmd bench --runtime bridge-hub-pezkuwi --pallet pallet_xcm_benchmarks::generic pallet_xcm_benchmarks::fungible
 ```
 
 > **💡Hint #1** : Sometimes when you run too many commands, or they keep failing and you're rerunning them again,
@@ -64,7 +64,7 @@ If you want to run all specific pallet(s) for specific runtime(s), you can do it
 > /cmd commands.
 
 ```sh
-/cmd bench --runtime kusama polkadot --pallet=pallet_balances --clean
+/cmd bench --runtime kusama pezkuwi --pallet=pallet_balances --clean
 ```
 
 > **💡Hint #2** : If you have questions or need help, feel free to tag @paritytech/opstooling (in github comments)

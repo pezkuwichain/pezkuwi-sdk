@@ -8,5 +8,5 @@ doc:
       code to include these changes.
 
 crates:
-- name: polkadot-collator-protocol
+- name: pezkuwi-collator-protocol
   bump: minor

@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Remove deprecated calls from treasury pallet
 
@@ -22,7 +22,7 @@ crates:
     bump: patch
   - name: pallet-bounties
     bump: patch
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: patch
   - name: rococo-runtime
     bump: patch

@@ -1,6 +1,6 @@
 [package]
-name = "polkadot-sdk-docs"
-description = "The one stop shop for developers of the polkadot-sdk"
+name = "pezkuwi-sdk-docs"
+description = "The one stop shop for developers of the pezkuwi-sdk"
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage = "paritytech.github.io"
 repository.workspace = true
@@ -106,9 +106,9 @@ parachain-info.default-features = true
 parachain-info.workspace = true
 parachain-template-runtime.default-features = true
 parachain-template-runtime.workspace = true
-polkadot-omni-node-lib.default-features = true
-polkadot-omni-node-lib.workspace = true
-polkadot-sdk = { features = ["runtime-full"], workspace = true, default-features = true }
+pezkuwi-omni-node-lib.default-features = true
+pezkuwi-omni-node-lib.workspace = true
+pezkuwi-sdk = { features = ["runtime-full"], workspace = true, default-features = true }
 sc-chain-spec.default-features = true
 sc-chain-spec.workspace = true
 sc-cli.default-features = true

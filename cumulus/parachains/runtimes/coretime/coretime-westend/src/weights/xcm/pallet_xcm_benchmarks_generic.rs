@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/coretime-westend-runtime/coretime_westend_runtime.wasm
 // --pallet=pallet_xcm_benchmarks::generic
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/coretime/coretime-westend/src/weights/xcm
 // --wasm-execution=compiled
 // --steps=50
@@ -52,8 +52,8 @@ pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo<T> {
 	// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -92,8 +92,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 		// Minimum execution time: 676_000 picoseconds.
 		Weight::from_parts(730_000, 0)
 	}
-	// Storage: `PolkadotXcm::Queries` (r:1 w:0)
-	// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::Queries` (r:1 w:0)
+	// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	pub fn query_response() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -160,8 +160,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	}
 	// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -175,8 +175,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(4))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
-	// Storage: `PolkadotXcm::AssetTraps` (r:1 w:1)
-	// Proof: `PolkadotXcm::AssetTraps` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::AssetTraps` (r:1 w:1)
+	// Proof: `PezkuwiXcm::AssetTraps` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	pub fn claim_asset() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `24`
@@ -193,10 +193,10 @@ impl<T: frame_system::Config> WeightInfo<T> {
 		// Minimum execution time: 621_000 picoseconds.
 		Weight::from_parts(675_000, 0)
 	}
-	// Storage: `PolkadotXcm::VersionNotifyTargets` (r:1 w:1)
-	// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:1 w:1)
+	// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -210,8 +210,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(4))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	// Storage: `PolkadotXcm::VersionNotifyTargets` (r:0 w:1)
-	// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:0 w:1)
+	// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	pub fn unsubscribe_version() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -257,8 +257,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	}
 	// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -281,8 +281,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	}
 	// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)

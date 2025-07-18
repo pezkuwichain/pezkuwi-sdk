@@ -31,7 +31,7 @@ use cumulus_primitives_core::{relay_chain::Hash as PHash, PersistedValidationDat
 
 use cumulus_primitives_core::relay_chain::HeadData;
 use futures::lock::Mutex;
-use polkadot_primitives::{BlockNumber as RBlockNumber, Hash as RHash};
+use pezkuwi_primitives::{BlockNumber as RBlockNumber, Hash as RHash};
 use sc_client_api::{backend::AuxStore, BlockOf};
 use sc_consensus::BlockImport;
 use sc_consensus_slots::{BackoffAuthoringBlocksStrategy, SimpleSlotWorker, SlotInfo};
@@ -60,7 +60,7 @@ use std::{
 mod import_queue;
 
 pub use import_queue::{build_verifier, import_queue, BuildVerifierParams, ImportQueueParams};
-use polkadot_node_primitives::PoV;
+use pezkuwi_node_primitives::PoV;
 pub use sc_consensus_aura::{
 	slot_duration, standalone::slot_duration_at, AuraVerifier, BuildAuraWorkerParams,
 	SlotProportion,

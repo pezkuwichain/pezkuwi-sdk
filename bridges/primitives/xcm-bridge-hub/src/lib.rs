@@ -370,7 +370,7 @@ mod tests {
 	use xcm::latest::ROCOCO_GENESIS_HASH;
 
 	const LOCAL_NETWORK: NetworkId = Kusama;
-	const REMOTE_NETWORK: NetworkId = Polkadot;
+	const REMOTE_NETWORK: NetworkId = Pezkuwi;
 	const UNREACHABLE_NETWORK: NetworkId = NetworkId::ByGenesis(ROCOCO_GENESIS_HASH);
 	const SIBLING_PARACHAIN: u32 = 1000;
 	const LOCAL_BRIDGE_HUB: u32 = 1001;

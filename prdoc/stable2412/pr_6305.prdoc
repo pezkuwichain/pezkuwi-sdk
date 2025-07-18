@@ -13,5 +13,5 @@ crates:
   bump: major
 - name: pallet-revive-eth-rpc
   bump: major
-- name: polkadot-sdk
+- name: pezkuwi-sdk
   bump: major

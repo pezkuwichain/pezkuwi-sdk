@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { exit } = require("process");
-const { WsProvider, ApiPromise } = require("@polkadot/api");
-const util = require("@polkadot/util");
+const { WsProvider, ApiPromise } = require("@pezkuwi/api");
+const util = require("@pezkuwi/util");
 
 // connect to a substrate chain and return the api object
 async function connect(endpoint, types = {}) {
@@ -110,7 +110,7 @@ function forceXcmVersion(endpoint, outputFile, dest, xcm_version) {
 	console.log(`Generating forceXcmVersion from RPC endpoint: ${endpoint} to outputFile: ${outputFile}, dest: ${dest}, xcm_version: ${xcm_version}`);
 	connect(endpoint)
 		.then((api) => {
-			const call = api.tx.polkadotXcm.forceXcmVersion(JSON.parse(dest), xcm_version);
+			const call = api.tx.pezkuwiXcm.forceXcmVersion(JSON.parse(dest), xcm_version);
 			writeHexEncodedBytesToOutput(call.method, outputFile);
 			exit(0);
 		})

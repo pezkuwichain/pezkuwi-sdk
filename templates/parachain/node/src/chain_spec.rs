@@ -1,4 +1,4 @@
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use parachain_template_runtime as runtime;
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};

@@ -16,7 +16,7 @@
 // along with Cumulus. If not, see <https://www.gnu.org/licenses/>.
 
 use codec::Decode;
-use polkadot_primitives::Hash as RelayHash;
+use pezkuwi_primitives::Hash as RelayHash;
 
 use cumulus_primitives_core::{
 	relay_chain::{BlockId as RBlockId, OccupiedCoreAssumption},

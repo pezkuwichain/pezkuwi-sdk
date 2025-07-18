@@ -1,0 +1,39 @@
+--- pallet-identity-kyc İÇİN KRİTİK NOTLAR VE UYARILAR ---
+
+1.  **Backend Public Key Yapılandırması (ÇOK KRİTİK):**
+    * `runtime/src/lib.rs` içinde `pallet_identity_kyc::Config` implementasyonundaki `BackendPublicKeyConstant` (veya benzeri isimdeki sabit) **kesinlikle ve kesinlikle** gerçek ve güvenli backend public key'i ile değiştirilmelidir. Placeholder (`[0u8; 32]`) **kullanılamaz**.
+    * Bu public key, zincirin hangi backend servisine güvendiğini tanımlar ve tüm KYC onay mekanizmasının temelini oluşturur. Yanlış veya güvensiz bir anahtar, sistemin güvenliğini tamamen tehlikeye atar.
+
+2.  **Backend Private Key Güvenliği:**
+    * KYC onaylarını imzalayan backend servisinin **özel anahtarı (private key)** son derece güvenli bir şekilde saklanmalı ve asla ifşa edilmemelidir. Bu anahtarın güvenliği ihlal edilirse, yetkisiz kişiler sahte KYC onayları oluşturabilir.
+
+3.  **Nonce Yönetimi ve Tekrar Oynatma Saldırıları:**
+    * `UsedBackendNonces` storage'ı ve `AttestationData` içindeki `nonce` alanı, aynı onayın tekrar kullanılmasını engellemek için kritiktir.
+    * Backend servisinin **her onay için benzersiz ve sıralı (veya en azından daha önce kullanılmamış) bir nonce** ürettiğinden emin olunmalıdır. Nonce yönetimindeki bir hata, tekrar oynatma saldırılarına yol açabilir.
+
+4.  **İmza Doğrulama ve Payload:**
+    * `register_identity` içindeki imza doğrulama (`backend_signature.verify(...)`) mantığının doğru çalıştığından emin olun.
+    * Backend tarafından imzalanan verinin (`attestation_payload`) `AttestationData` struct'ı ile tam olarak eşleştiği ve doğru şekilde decode edilebildiği kontrol edilmelidir.
+
+5.  **`pallet-nft` Entegrasyonu:**
+    * `register_identity` başarılı olduğunda `T::Nft::mint_citizen` fonksiyonunun çağrıldığı ve kullanıcı için doğru şekilde Welati NFT oluşturup KYC durumunu `Approved` yaptığı test edilmelidir.
+    * `revoke_kyc` çağrıldığında `T::Nft::set_kyc_status` fonksiyonunun durumu `Revoked` olarak güncellediği doğrulanmalıdır.
+    * `pallet-nft`'den dönebilecek potansiyel hataların (örn: `NftAlreadyExists` - gerçi bu kontrol `identity-kyc` içinde yapılıyor-, `NftNotFound`) nasıl ele alındığı gözden geçirilmelidir.
+
+6.  **`pallet-referral` Entegrasyonu (ReferralHook):**
+    * KYC onaylandığında `T::ReferralHook::on_kyc_approved` fonksiyonunun doğru şekilde çağrıldığından ve `pallet-referral`'daki beklenen mantığı (örn: bekleyen referansı onaylama, sayacı artırma) tetiklediğinden emin olunmalıdır. Bu entegrasyon test edilmelidir.
+
+7.  **`RevokeKycOrigin` Yapılandırması:**
+    * Runtime'da `RevokeKycOrigin`'in doğru yetkiye (Root, Meclis vb.) atandığı kontrol edilmelidir. Kimlerin KYC iptal edebileceği netleştirilmelidir.
+
+8.  **Test Kapsamı:**
+    * Mevcut testler yetersizdir. Aşağıdaki senaryolar mutlaka test edilmelidir:
+        * Geçersiz backend imzası ile `register_identity` çağrısı.
+        * Daha önce kullanılmış bir `nonce` ile `register_identity` çağrısı.
+        * Zaten KYC onayı almış bir kullanıcı için `register_identity` çağrısı.
+        * Başarılı `register_identity` sonrası NFT durumunun `Approved` olması ve `ReferralHook`'un tetiklenmesi.
+        * Başarılı `revoke_kyc` sonrası NFT durumunun `Revoked` olması.
+        * Yetkisiz bir origin'den `revoke_kyc` çağrısı.
+
+9.  **Ağırlıklar (Weights):**
+    * `weights.rs` dosyasındaki değerler placeholder'dır ve benchmark ile güncellenmelidir.

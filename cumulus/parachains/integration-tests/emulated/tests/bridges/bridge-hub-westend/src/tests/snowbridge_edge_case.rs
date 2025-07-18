@@ -64,7 +64,7 @@ fn user_send_message_directly_bypass_exporter_from_ah_will_fail() {
 			fun: Fungible(TOKEN_AMOUNT * 1_000_000_000),
 		};
 
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::send(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::send(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			bx!(VersionedLocation::from(bridge_hub())),
 			bx!(VersionedXcm::from(Xcm(vec![
@@ -84,7 +84,7 @@ fn user_send_message_directly_bypass_exporter_from_ah_will_fail() {
 
 		assert_expected_events!(
 			AssetHubWestend,
-			vec![RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent{ .. }) => {},]
+			vec![RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent{ .. }) => {},]
 		);
 	});
 
@@ -147,7 +147,7 @@ fn user_exploit_with_arbitrary_message_will_fail() {
 			fun: Fungible(TOKEN_AMOUNT * 1_000_000_000),
 		};
 
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			bx!(VersionedLocation::from(ethereum())),
 			bx!(assets),
@@ -168,7 +168,7 @@ fn user_exploit_with_arbitrary_message_will_fail() {
 
 		assert_expected_events!(
 			AssetHubWestend,
-			vec![RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent{ .. }) => {},]
+			vec![RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent{ .. }) => {},]
 		);
 	});
 
@@ -210,7 +210,7 @@ fn export_from_system_parachain_but_not_root_will_fail() {
 			fun: Fungible(TOKEN_AMOUNT * 1_000_000_000),
 		};
 
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::send(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::send(
 			RuntimeOrigin::root(),
 			bx!(VersionedLocation::from(bridge_hub())),
 			bx!(VersionedXcm::from(Xcm(vec![
@@ -231,7 +231,7 @@ fn export_from_system_parachain_but_not_root_will_fail() {
 
 		assert_expected_events!(
 			AssetHubWestend,
-			vec![RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent{ .. }) => {},]
+			vec![RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent{ .. }) => {},]
 		);
 	});
 
@@ -265,7 +265,7 @@ fn export_from_non_system_parachain_will_fail() {
 		let weth_asset =
 			Asset { id: AssetId(weth_location_reanchored.clone()), fun: Fungible(TOKEN_AMOUNT) };
 
-		assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::send(
+		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::send(
 			RuntimeOrigin::root(),
 			bx!(VersionedLocation::from(bridge_hub())),
 			bx!(VersionedXcm::from(Xcm(vec![
@@ -285,7 +285,7 @@ fn export_from_non_system_parachain_will_fail() {
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent{ .. }) => {},]
+			vec![RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent{ .. }) => {},]
 		);
 	});
 

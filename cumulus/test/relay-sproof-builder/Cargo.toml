@@ -14,7 +14,7 @@ workspace = true
 [dependencies]
 codec = { features = ["derive"], workspace = true }
 cumulus-primitives-core.workspace = true
-polkadot-primitives.workspace = true
+pezkuwi-primitives.workspace = true
 sp-runtime.workspace = true
 sp-state-machine.workspace = true
 sp-trie.workspace = true
@@ -24,7 +24,7 @@ default = ["std"]
 std = [
 	"codec/std",
 	"cumulus-primitives-core/std",
-	"polkadot-primitives/std",
+	"pezkuwi-primitives/std",
 	"sp-runtime/std",
 	"sp-state-machine/std",
 	"sp-trie/std",

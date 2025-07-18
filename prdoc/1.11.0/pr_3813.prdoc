@@ -1,14 +1,14 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
-title: Renames `frame` crate to `polkadot-sdk-frame`
+title: Renames `frame` crate to `pezkuwi-sdk-frame`
 
 doc:
   - audience: Runtime Dev
     description: |
-      This PR renames `frame` crate to `polkadot-sdk-frame` as `frame` is not available on crates.io. 
-      Please note that this crate can only be imported as `polkadot-sdk-frame` or `frame`.
+      This PR renames `frame` crate to `pezkuwi-sdk-frame` as `frame` is not available on crates.io. 
+      Please note that this crate can only be imported as `pezkuwi-sdk-frame` or `frame`.
 
 crates:
-  - name: polkadot-sdk-frame
+  - name: pezkuwi-sdk-frame
     bump: major

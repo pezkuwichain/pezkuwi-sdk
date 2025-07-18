@@ -1,0 +1,71 @@
+[package]
+name = "pallet-tiki"
+description = "PezkuwiChain Tiki (Role NFT) Management Pallet"
+version = "1.0.0"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { package = "parity-scale-codec", default-features = false, features = ["derive"], workspace = true }
+scale-info = { default-features = false, features = ["derive"], workspace = true }
+frame-support = { default-features = false, workspace = true }
+frame-system = { default-features = false, workspace = true }
+frame-benchmarking = { default-features = false, optional = true, workspace = true }
+log = { default-features = false, workspace = true }
+pallet-nfts = { default-features = false, workspace = true }
+sp-runtime = { default-features = false, workspace = true }
+strum = { version = "0.26", default-features = false, features = ["derive"] }
+strum_macros = { version = "0.26", default-features = false }
+# Aşağıdaki bağımlılıklar eklendi:
+sp-std = { default-features = false, path = "../../../substrate/primitives/std" } # Doğru yol (üç nokta)
+num-traits = { version = "0.2", default-features = false }
+num-derive = { version = "0.3", default-features = false }
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+[dev-dependencies]
+sp-core = { workspace = true }
+sp-io = { workspace = true }
+sp-runtime = { workspace = true }
+pallet-balances = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"frame-benchmarking?/std",
+	"frame-support/std",
+	"frame-system/std",
+	"log/std",
+	"pallet-balances/std",
+	"pallet-nfts/std",
+	"scale-info/std",
+	"sp-core/std",
+	"sp-io/std",
+	"sp-runtime/std",
+	"strum/std",
+	# Aşağıdaki feature'lar std bloğuna eklendi:
+	"sp-std/std",
+	"num-traits/std",
+	"serde/std",
+]
+runtime-benchmarks = [
+	"dep:frame-benchmarking",
+	"frame-benchmarking/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-nfts/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"frame-support/try-runtime",
+	"frame-system/try-runtime",
+	"pallet-balances/try-runtime",
+	"pallet-nfts/try-runtime",
+]

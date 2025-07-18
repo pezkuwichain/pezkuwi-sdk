@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Use maximum allowed response size for request/response protocols
 
@@ -15,7 +15,7 @@ crates:
     bump: patch
   - name: sc-network-sync
     bump: patch
-  - name: polkadot-node-network-protocol
+  - name: pezkuwi-node-network-protocol
     bump: patch
   - name: sc-network-transactions
     bump: patch

@@ -80,7 +80,7 @@ fn send_assets_from_penpal_westend_through_westend_ah_to_rococo_ah(
 		// send message over bridge
 		assert_ok!(PenpalB::execute_with(|| {
 			let signed_origin = <PenpalB as Chain>::RuntimeOrigin::signed(PenpalBSender::get());
-			<PenpalB as PenpalBPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+			<PenpalB as PenpalBPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 				signed_origin,
 				bx!(destination.into()),
 				bx!(assets.0.into()),
@@ -241,7 +241,7 @@ fn send_wnds_usdt_and_weth_from_asset_hub_westend_to_asset_hub_rococo() {
 		beneficiary: AccountId32Junction { network: None, id: receiver.clone().into() }.into(),
 	}]);
 	assert_ok!(AssetHubWestend::execute_with(|| {
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			<AssetHubWestend as Chain>::RuntimeOrigin::signed(sender.into()),
 			bx!(asset_hub_rococo_location().into()),
 			bx!(assets.into()),
@@ -950,7 +950,7 @@ fn send_back_rocs_from_penpal_westend_through_asset_hub_westend_to_asset_hub_roc
 			// send message over bridge
 			assert_ok!(PenpalB::execute_with(|| {
 				let signed_origin = <PenpalB as Chain>::RuntimeOrigin::signed(sender.clone());
-				<PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+				<PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 					signed_origin,
 					bx!(xcm::VersionedXcm::V5(xcm.into())),
 					Weight::MAX,
@@ -1137,7 +1137,7 @@ fn send_back_rocs_from_penpal_westend_through_asset_hub_westend_to_asset_hub_roc
 			// send message over bridge
 			assert_ok!(PenpalB::execute_with(|| {
 				let signed_origin = <PenpalB as Chain>::RuntimeOrigin::signed(sender.clone());
-				let result = <PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+				let result = <PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 					signed_origin,
 					bx!(xcm::VersionedXcm::V5(xcm.into())),
 					Weight::MAX,
@@ -1319,7 +1319,7 @@ fn do_send_pens_and_wnds_from_penpal_westend_via_ahw_to_asset_hub_rococo(
 				},
 			]);
 
-			let result = <PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+			let result = <PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 				signed_origin,
 				bx!(xcm::VersionedXcm::V5(xcm.into())),
 				Weight::MAX,
@@ -1373,7 +1373,7 @@ fn do_send_pens_and_wnds_from_penpal_westend_via_ahw_to_asset_hub_rococo(
 /// across 3 different chains)
 #[test]
 fn send_pens_and_wnds_from_penpal_westend_via_ahw_to_ahr() {
-	let penpal_check_account = <PenpalB as PenpalBPallet>::PolkadotXcm::check_account();
+	let penpal_check_account = <PenpalB as PenpalBPallet>::PezkuwiXcm::check_account();
 	let owner: AccountId = AssetHubRococo::account_id_of(ALICE);
 	let sender = PenpalBSender::get();
 	let amount = ASSET_HUB_WESTEND_ED * 10_000_000;

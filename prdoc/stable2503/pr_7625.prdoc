@@ -50,7 +50,7 @@ crates:
   bump: patch
 - name: penpal-runtime
   bump: patch
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: patch
 - name: rococo-runtime
   bump: patch
@@ -76,7 +76,7 @@ crates:
   bump: patch
 - name: bp-test-utils
   bump: patch
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch
 - name: sc-allocator
   bump: patch
@@ -90,7 +90,7 @@ crates:
   bump: patch
 - name: pallet-revive-fixtures
   bump: patch
-- name: polkadot-statement-distribution
+- name: pezkuwi-statement-distribution
   bump: patch
 - name: mmr-gadget
   bump: patch
@@ -106,9 +106,9 @@ crates:
   bump: patch
 - name: pallet-statement
   bump: patch
-- name: polkadot-overseer
+- name: pezkuwi-overseer
   bump: patch
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: patch
 - name: pallet-lottery
   bump: patch

@@ -75,7 +75,7 @@ fn transfer_and_transact_in_same_xcm(
 			remote_xcm: xcm_on_dest,
 		},
 	]);
-	<BridgeHubWestend as BridgeHubWestendPallet>::PolkadotXcm::send(
+	<BridgeHubWestend as BridgeHubWestendPallet>::PezkuwiXcm::send(
 		signed_origin,
 		bx!(asset_hub_location.into()),
 		bx!(xcm::VersionedXcm::from(xcm_to_ah.into())),

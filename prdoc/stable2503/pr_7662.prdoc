@@ -4,7 +4,7 @@ doc:
   description: |-
     ## Motivation
 
-    Internal auditors recommended to not truncate Polkadot Addresses when deriving Ethereum addresses from it. Reasoning is that they are raw public keys where truncating could lead to collisions when weaknesses in those curves are discovered in the future. Additionally,  some pallets generate account addresses in a way where only the suffix we were truncating contains any entropy. The changes in this PR act as a safe guard against those two points.
+    Internal auditors recommended to not truncate Pezkuwi Addresses when deriving Ethereum addresses from it. Reasoning is that they are raw public keys where truncating could lead to collisions when weaknesses in those curves are discovered in the future. Additionally,  some pallets generate account addresses in a way where only the suffix we were truncating contains any entropy. The changes in this PR act as a safe guard against those two points.
 
     ## Changes made
 

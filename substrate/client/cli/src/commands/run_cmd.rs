@@ -403,7 +403,7 @@ mod tests {
 			"very very long names are really not very cool for the ui at all, really they're not"
 		)
 		.is_err());
-		assert!(is_node_name_valid("Dots.not.Ok").is_err());
+		assert!(is_node_name_valid("Hezs.not.Ok").is_err());
 		// NOTE: the urls below don't include a domain otherwise
 		// they'd get filtered for including a `.`
 		assert!(is_node_name_valid("http://visitme").is_err());

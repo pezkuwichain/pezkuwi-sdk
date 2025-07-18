@@ -16,8 +16,8 @@
 
 //! Bridge definitions used on BridgeHubRococo for bridging to Rococo Bulletin.
 //!
-//! Rococo Bulletin chain will be the 1:1 copy of the Polkadot Bulletin, so we
-//! are reusing Polkadot Bulletin chain primitives everywhere here.
+//! Rococo Bulletin chain will be the 1:1 copy of the Pezkuwi Bulletin, so we
+//! are reusing Pezkuwi Bulletin chain primitives everywhere here.
 
 use crate::{
 	bridge_common_config::RelayersForPermissionlessLanesInstance, weights,
@@ -40,7 +40,7 @@ use pallet_bridge_relayers::extension::{
 	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
 };
 use pallet_xcm_bridge_hub::XcmAsPlainPayload;
-use polkadot_parachain_primitives::primitives::Sibling;
+use pezkuwi_parachain_primitives::primitives::Sibling;
 use testnet_parachains_constants::rococo::currency::UNITS as ROC;
 use xcm::{
 	latest::prelude::*,
@@ -55,7 +55,7 @@ parameter_types! {
 		PalletInstance(<BridgeRococoBulletinMessages as PalletInfoAccess>::index() as u8)
 	].into();
 	/// Rococo Bulletin Network identifier.
-	pub RococoBulletinGlobalConsensusNetwork: NetworkId = NetworkId::PolkadotBulletin;
+	pub RococoBulletinGlobalConsensusNetwork: NetworkId = NetworkId::PezkuwiBulletin;
 	/// Relative location of the Rococo Bulletin chain.
 	pub RococoBulletinGlobalConsensusNetworkLocation: Location = Location::new(
 		2,
@@ -80,10 +80,10 @@ parameter_types! {
 
 /// Proof of messages, coming from Rococo Bulletin chain.
 pub type FromRococoBulletinMessagesProof<MI> =
-	FromBridgedChainMessagesProof<bp_polkadot_bulletin::Hash, LaneIdOf<Runtime, MI>>;
+	FromBridgedChainMessagesProof<bp_pezkuwi_bulletin::Hash, LaneIdOf<Runtime, MI>>;
 /// Messages delivery proof for Rococo Bridge Hub -> Rococo Bulletin messages.
 pub type ToRococoBulletinMessagesDeliveryProof<MI> =
-	FromBridgedChainMessagesDeliveryProof<bp_polkadot_bulletin::Hash, LaneIdOf<Runtime, MI>>;
+	FromBridgedChainMessagesDeliveryProof<bp_pezkuwi_bulletin::Hash, LaneIdOf<Runtime, MI>>;
 
 /// Dispatches received XCM messages from other bridge.
 type FromRococoBulletinMessageBlobDispatcher = BridgeBlobDispatcher<
@@ -114,7 +114,7 @@ impl pallet_bridge_messages::Config<WithRococoBulletinMessagesInstance> for Runt
 		weights::pallet_bridge_messages_rococo_to_rococo_bulletin::WeightInfo<Runtime>;
 
 	type ThisChain = bp_bridge_hub_rococo::BridgeHubRococo;
-	type BridgedChain = bp_polkadot_bulletin::PolkadotBulletin;
+	type BridgedChain = bp_pezkuwi_bulletin::PezkuwiBulletin;
 	type BridgedHeaderChain = BridgeRococoBulletinGrandpa;
 
 	type OutboundPayload = XcmAsPlainPayload;
@@ -129,8 +129,8 @@ impl pallet_bridge_messages::Config<WithRococoBulletinMessagesInstance> for Runt
 }
 
 /// Add support for the export and dispatch of XCM programs.
-pub type XcmOverPolkadotBulletinInstance = pallet_xcm_bridge_hub::Instance2;
-impl pallet_xcm_bridge_hub::Config<XcmOverPolkadotBulletinInstance> for Runtime {
+pub type XcmOverPezkuwiBulletinInstance = pallet_xcm_bridge_hub::Instance2;
+impl pallet_xcm_bridge_hub::Config<XcmOverPezkuwiBulletinInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 
 	type UniversalLocation = UniversalLocation;
@@ -188,7 +188,7 @@ mod tests {
 			Runtime,
 			WithRococoBulletinMessagesInstance,
 		>(
-			bp_polkadot_bulletin::EXTRA_STORAGE_PROOF_SIZE,
+			bp_pezkuwi_bulletin::EXTRA_STORAGE_PROOF_SIZE,
 			bp_bridge_hub_rococo::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
 			bp_bridge_hub_rococo::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 			true,
@@ -201,13 +201,13 @@ mod tests {
 			runtime: Runtime,
 			with_bridged_chain_messages_instance: WithRococoBulletinMessagesInstance,
 			this_chain: bp_bridge_hub_rococo::BridgeHubRococo,
-			bridged_chain: bp_polkadot_bulletin::PolkadotBulletin,
+			bridged_chain: bp_pezkuwi_bulletin::PezkuwiBulletin,
 			expected_payload_type: XcmAsPlainPayload,
 		);
 
 		// we can't use `assert_complete_bridge_constants` here, because there's a trick with
-		// Bulletin chain - it has the same (almost) runtime for Polkadot Bulletin and Rococo
-		// Bulletin, so we have to adhere Polkadot names here
+		// Bulletin chain - it has the same (almost) runtime for Pezkuwi Bulletin and Rococo
+		// Bulletin, so we have to adhere Pezkuwi names here
 
 		pallet_bridge_relayers::extension::per_relay_header::ensure_priority_boost_is_sane::<
 			Runtime,

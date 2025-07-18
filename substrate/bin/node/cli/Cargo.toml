@@ -24,8 +24,8 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [badges]
 maintenance = { status = "actively-developed" }
-is-it-maintained-issue-resolution = { repository = "paritytech/polkadot-sdk" }
-is-it-maintained-open-issues = { repository = "paritytech/polkadot-sdk" }
+is-it-maintained-issue-resolution = { repository = "paritytech/pezkuwi-sdk" }
+is-it-maintained-open-issues = { repository = "paritytech/pezkuwi-sdk" }
 
 [[bin]]
 name = "substrate-node"
@@ -48,7 +48,7 @@ node-inspect = { optional = true, workspace = true, default-features = true }
 node-primitives.default-features = true
 node-primitives.workspace = true
 node-rpc.workspace = true
-polkadot-sdk = { features = ["fork-tree", "frame-benchmarking-cli", "frame-remote-externalities", "frame-support-procedural-tools", "generate-bags", "mmr-gadget", "mmr-rpc", "pallet-transaction-payment-rpc", "sc-allocator", "sc-authority-discovery", "sc-basic-authorship", "sc-block-builder", "sc-chain-spec", "sc-cli", "sc-client-api", "sc-client-db", "sc-consensus", "sc-consensus-aura", "sc-consensus-babe", "sc-consensus-babe-rpc", "sc-consensus-beefy", "sc-consensus-beefy-rpc", "sc-consensus-epochs", "sc-consensus-grandpa", "sc-consensus-grandpa-rpc", "sc-consensus-manual-seal", "sc-consensus-pow", "sc-consensus-slots", "sc-executor", "sc-executor-common", "sc-executor-polkavm", "sc-executor-wasmtime", "sc-informant", "sc-keystore", "sc-mixnet", "sc-network", "sc-network-common", "sc-network-gossip", "sc-network-light", "sc-network-statement", "sc-network-sync", "sc-network-transactions", "sc-network-types", "sc-offchain", "sc-proposer-metrics", "sc-rpc", "sc-rpc-api", "sc-rpc-server", "sc-rpc-spec-v2", "sc-service", "sc-state-db", "sc-statement-store", "sc-storage-monitor", "sc-sync-state-rpc", "sc-sysinfo", "sc-telemetry", "sc-tracing", "sc-transaction-pool", "sc-transaction-pool-api", "sc-utils", "sp-blockchain", "sp-consensus", "sp-core-hashing", "sp-core-hashing-proc-macro", "sp-database", "sp-maybe-compressed-blob", "sp-panic-handler", "sp-rpc", "staging-chain-spec-builder", "staging-node-inspect", "staging-tracking-allocator", "std", "subkey", "substrate-build-script-utils", "substrate-frame-rpc-support", "substrate-frame-rpc-system", "substrate-prometheus-endpoint", "substrate-rpc-client", "substrate-state-trie-migration-rpc", "substrate-wasm-builder", "tracing-gum"], workspace = true, default-features = true }
+pezkuwi-sdk = { features = ["fork-tree", "frame-benchmarking-cli", "frame-remote-externalities", "frame-support-procedural-tools", "generate-bags", "mmr-gadget", "mmr-rpc", "pallet-transaction-payment-rpc", "sc-allocator", "sc-authority-discovery", "sc-basic-authorship", "sc-block-builder", "sc-chain-spec", "sc-cli", "sc-client-api", "sc-client-db", "sc-consensus", "sc-consensus-aura", "sc-consensus-babe", "sc-consensus-babe-rpc", "sc-consensus-beefy", "sc-consensus-beefy-rpc", "sc-consensus-epochs", "sc-consensus-grandpa", "sc-consensus-grandpa-rpc", "sc-consensus-manual-seal", "sc-consensus-pow", "sc-consensus-slots", "sc-executor", "sc-executor-common", "sc-executor-polkavm", "sc-executor-wasmtime", "sc-informant", "sc-keystore", "sc-mixnet", "sc-network", "sc-network-common", "sc-network-gossip", "sc-network-light", "sc-network-statement", "sc-network-sync", "sc-network-transactions", "sc-network-types", "sc-offchain", "sc-proposer-metrics", "sc-rpc", "sc-rpc-api", "sc-rpc-server", "sc-rpc-spec-v2", "sc-service", "sc-state-db", "sc-statement-store", "sc-storage-monitor", "sc-sync-state-rpc", "sc-sysinfo", "sc-telemetry", "sc-tracing", "sc-transaction-pool", "sc-transaction-pool-api", "sc-utils", "sp-blockchain", "sp-consensus", "sp-core-hashing", "sp-core-hashing-proc-macro", "sp-database", "sp-maybe-compressed-blob", "sp-panic-handler", "sp-rpc", "staging-chain-spec-builder", "staging-node-inspect", "staging-tracking-allocator", "std", "subkey", "substrate-build-script-utils", "substrate-frame-rpc-support", "substrate-frame-rpc-system", "substrate-prometheus-endpoint", "substrate-rpc-client", "substrate-state-trie-migration-rpc", "substrate-wasm-builder", "tracing-gum"], workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 serde = { features = ["derive"], workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
@@ -70,7 +70,7 @@ tokio = { features = ["macros", "parking_lot", "time"], workspace = true, defaul
 tokio-util = { features = ["compat"], workspace = true }
 wat = { workspace = true }
 
-# These testing-only dependencies are not exported by the Polkadot-SDK crate:
+# These testing-only dependencies are not exported by the Pezkuwi-SDK crate:
 node-testing = { workspace = true }
 sc-service-test = { workspace = true }
 substrate-cli-test-utils = { workspace = true }
@@ -79,19 +79,19 @@ substrate-cli-test-utils = { workspace = true }
 clap = { optional = true, workspace = true }
 clap_complete = { optional = true, workspace = true }
 node-inspect = { optional = true, workspace = true, default-features = true }
-polkadot-sdk = { features = ["frame-benchmarking-cli", "sc-cli", "sc-storage-monitor", "substrate-build-script-utils"], optional = true, workspace = true, default-features = true }
+pezkuwi-sdk = { features = ["frame-benchmarking-cli", "sc-cli", "sc-storage-monitor", "substrate-build-script-utils"], optional = true, workspace = true, default-features = true }
 
 [features]
 default = ["cli"]
-cli = ["clap", "clap_complete", "node-inspect", "polkadot-sdk"]
+cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
 runtime-benchmarks = [
 	"kitchensink-runtime/runtime-benchmarks",
 	"node-inspect?/runtime-benchmarks",
-	"polkadot-sdk/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
 ]
 try-runtime = [
 	"kitchensink-runtime/try-runtime",
-	"polkadot-sdk/try-runtime",
+	"pezkuwi-sdk/try-runtime",
 	"substrate-cli-test-utils/try-runtime",
 ]
 

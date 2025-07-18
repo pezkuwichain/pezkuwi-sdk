@@ -1,8 +1,8 @@
 # High-Level Bridge Documentation
 
 This document gives a brief, abstract description of main components that may be found in this repository. If you want
-to see how we're using them to build Rococo <> Westend (Kusama <> Polkadot) bridge, please refer to the [Polkadot <>
-Kusama Bridge](./polkadot-kusama-bridge-overview.md).
+to see how we're using them to build Rococo <> Westend (Kusama <> Pezkuwi) bridge, please refer to the [Pezkuwi <>
+Kusama Bridge](./pezkuwi-kusama-bridge-overview.md).
 
 ## Purpose
 
@@ -11,7 +11,7 @@ using GRANDPA finality, their parachains or any combination of those. On top of 
 pallet that provides means to organize messages exchange.
 
 On top of that layered infrastructure, anyone may build their own bridge applications - e.g. [XCM
-messaging](./polkadot-kusama-bridge-overview.md), [encoded calls
+messaging](./pezkuwi-kusama-bridge-overview.md), [encoded calls
 messaging](https://github.com/paritytech/parity-bridges-common/releases/tag/encoded-calls-messaging) and so on.
 
 ## Terminology
@@ -48,14 +48,14 @@ More: [pallet level documentation and code](../modules/grandpa/).
 Parachains are not supposed to have their own finality, so we can't use bridge GRANDPA pallet to verify their finality
 proofs. Instead, they rely on their relay chain finality. The parachain header is considered final, when it is accepted
 by the [`paras`
-pallet](https://github.com/paritytech/polkadot/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras)
+pallet](https://github.com/paritytech/pezkuwi/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras)
 at its relay chain. Obviously, the relay chain block, where it is accepted, must also be finalized by the relay chain
 GRANDPA gadget.
 
 That said, the bridge parachains pallet accepts storage proof of one or several parachain heads, inserted to the
-[`Heads`](https://github.com/paritytech/polkadot/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
+[`Heads`](https://github.com/paritytech/pezkuwi/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
 map of the [`paras`
-pallet](https://github.com/paritytech/polkadot/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras).
+pallet](https://github.com/paritytech/pezkuwi/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras).
 To verify this storage proof, the pallet uses relay chain header, imported earlier by the bridge GRANDPA pallet.
 
 The pallet may track multiple parachains at once and those parachains may use different primitives. So the parachain
@@ -90,7 +90,7 @@ Many things are abstracted by the pallet:
 Outside of the messaging pallet, we have a set of adapters, where messages and delivery proofs are regular storage
 proofs. The proofs are generated at the bridged chain and require bridged chain finality. So messages pallet, in this
 case, depends on one of the finality pallets. The messages are XCM messages and we are using XCM executor to dispatch
-them on receival. You may find more info in [Polkadot <> Kusama Bridge](./polkadot-kusama-bridge-overview.md) document.
+them on receival. You may find more info in [Pezkuwi <> Kusama Bridge](./pezkuwi-kusama-bridge-overview.md) document.
 
 More: [pallet level documentation and code](../modules/messages/).
 
@@ -122,9 +122,9 @@ code](../relays/finality/).
 
 The relay connects to the source _relay_ chain and the target chain nodes. It doesn't need to connect to the tracked
 parachain nodes. The relay looks at the
-[`Heads`](https://github.com/paritytech/polkadot/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
+[`Heads`](https://github.com/paritytech/pezkuwi/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
 map of the [`paras`
-pallet](https://github.com/paritytech/polkadot/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras)
+pallet](https://github.com/paritytech/pezkuwi/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras)
 in source chain, and compares the value with the best parachain head, stored in the bridge parachains pallet at the
 target chain. If new parachain head appears at the relay chain block `B`, the relay process **waits** until header `B`
 or one of its ancestors appears at the target chain. Once it is available, the storage proof of the map entry is

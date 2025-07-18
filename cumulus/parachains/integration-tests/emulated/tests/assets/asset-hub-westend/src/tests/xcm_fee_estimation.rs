@@ -85,7 +85,7 @@ fn transfer_assets_para_to_para_through_ah_call(
 		assets: Wild(AllCounted(test.args.assets.len() as u32)),
 		beneficiary: test.args.beneficiary,
 	}]);
-	RuntimeCall::PolkadotXcm(pallet_xcm::Call::transfer_assets_using_type_and_then {
+	RuntimeCall::PezkuwiXcm(pallet_xcm::Call::transfer_assets_using_type_and_then {
 		dest: bx!(test.args.dest.into()),
 		assets: bx!(test.args.assets.clone().into()),
 		assets_transfer_type: bx!(TransferType::RemoteReserve(asset_hub_location.clone().into())),

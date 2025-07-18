@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "PVF: drop backing jobs if it is too late"
 
@@ -9,17 +9,17 @@ doc:
       Introduces the removal of backing jobs that have been back pressured for longer than `allowedAncestryLen`, as these candidates are no longer viable.
 
 crates:
-  - name: polkadot-overseer
+  - name: pezkuwi-overseer
     bump: major
-  - name: polkadot-node-core-pvf
+  - name: pezkuwi-node-core-pvf
     bump: major
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: major
-  - name: polkadot-node-core-approval-voting
+  - name: pezkuwi-node-core-approval-voting
     bump: patch
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
     bump: patch
-  - name: polkadot-node-core-candidate-validation
+  - name: pezkuwi-node-core-candidate-validation
     bump: patch
-  - name: polkadot-node-core-dispute-coordinator
+  - name: pezkuwi-node-core-dispute-coordinator
     bump: patch

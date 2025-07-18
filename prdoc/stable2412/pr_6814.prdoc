@@ -4,7 +4,7 @@ doc:
   description: |-
     `InitiateTransfer`, the new instruction introduced in XCMv5, allows preserving the origin after a cross-chain transfer via the usage of the `AliasOrigin` instruction. The receiving chain needs to be configured to allow such this instruction to have its intended effect and not just throw an error.
 
-    In this PR, I add the alias rules specified in the [RFC for origin preservation](https://github.com/polkadot-fellows/RFCs/blob/main/text/0122-alias-origin-on-asset-transfers.md) to westend chains so we can test these scenarios in the testnet.
+    In this PR, I add the alias rules specified in the [RFC for origin preservation](https://github.com/pezkuwi-fellows/RFCs/blob/main/text/0122-alias-origin-on-asset-transfers.md) to westend chains so we can test these scenarios in the testnet.
 
     The new scenarios include:
     - Sending a cross-chain transfer from one system chain to another and doing a Transact on the same message (1 hop)

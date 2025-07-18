@@ -22,16 +22,16 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use polkadot_parachain_primitives::primitives::HeadData;
+use pezkuwi_parachain_primitives::primitives::HeadData;
 use scale_info::TypeInfo;
 use sp_runtime::RuntimeDebug;
 
-pub use polkadot_core_primitives::InboundDownwardMessage;
-pub use polkadot_parachain_primitives::primitives::{
+pub use pezkuwi_core_primitives::InboundDownwardMessage;
+pub use pezkuwi_parachain_primitives::primitives::{
 	DmpMessageHandler, Id as ParaId, IsSystem, UpwardMessage, ValidationParams, XcmpMessageFormat,
 	XcmpMessageHandler,
 };
-pub use polkadot_primitives::{
+pub use pezkuwi_primitives::{
 	vstaging::{ClaimQueueOffset, CoreSelector},
 	AbridgedHostConfiguration, AbridgedHrmpChannel, PersistedValidationData,
 };
@@ -46,15 +46,15 @@ pub use xcm::latest::prelude::*;
 
 /// A module that re-exports relevant relay chain definitions.
 pub mod relay_chain {
-	pub use polkadot_core_primitives::*;
-	pub use polkadot_primitives::*;
+	pub use pezkuwi_core_primitives::*;
+	pub use pezkuwi_primitives::*;
 }
 
 /// An inbound HRMP message.
-pub type InboundHrmpMessage = polkadot_primitives::InboundHrmpMessage<relay_chain::BlockNumber>;
+pub type InboundHrmpMessage = pezkuwi_primitives::InboundHrmpMessage<relay_chain::BlockNumber>;
 
 /// And outbound HRMP message
-pub type OutboundHrmpMessage = polkadot_primitives::OutboundHrmpMessage<ParaId>;
+pub type OutboundHrmpMessage = pezkuwi_primitives::OutboundHrmpMessage<ParaId>;
 
 /// Error description of a message send failure.
 #[derive(Eq, PartialEq, Copy, Clone, RuntimeDebug, Encode, Decode)]
@@ -290,7 +290,7 @@ pub fn extract_relay_parent(digest: &Digest) -> Option<relay_chain::Hash> {
 ///
 /// This is not intended to be part of the public API, as it is a workaround for
 /// <https://github.com/paritytech/cumulus/issues/303> via
-/// <https://github.com/paritytech/polkadot/issues/7191>.
+/// <https://github.com/paritytech/pezkuwi/issues/7191>.
 ///
 /// Runtimes using the parachain-system pallet are expected to produce this digest item,
 /// but will stop as soon as they are able to provide the relay-parent hash directly.

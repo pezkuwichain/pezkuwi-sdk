@@ -20,7 +20,7 @@ use crate::test_cases::{bridges_prelude::*, run_test, RuntimeHelper};
 
 use asset_test_utils::BasicParachainRuntime;
 use bp_messages::MessageNonce;
-use bp_polkadot_core::parachains::{ParaHash, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaId};
 use bp_runtime::Chain;
 use codec::Decode;
 use core::marker::PhantomData;

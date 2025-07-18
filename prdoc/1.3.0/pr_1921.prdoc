@@ -11,4 +11,4 @@ migrations:
       description: Non-critical fixup for `MigrateToV1`.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains

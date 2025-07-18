@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+action="$1"
+config_file="/etc/default/pezkuwi"
+
+if [ "$action" = "configure" ]; then
+  # Make user and group
+  getent group pezkuwi >/dev/null 2>&1 || addgroup --system pezkuwi
+  getent passwd pezkuwi >/dev/null 2>&1 ||
+    adduser --system --home /home/pezkuwi --disabled-password \
+    --ingroup pezkuwi pezkuwi
+  if [ ! -e "$config_file" ]; then
+    echo 'PEZKUWI_CLI_ARGS=""' > /etc/default/pezkuwi
+  fi
+fi

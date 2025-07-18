@@ -17,8 +17,8 @@
 
 use sp_runtime::traits::Block as BlockT;
 
-use polkadot_node_primitives::PoV;
-use polkadot_node_subsystem::messages::AvailabilityRecoveryMessage;
+use pezkuwi_node_primitives::PoV;
+use pezkuwi_node_subsystem::messages::AvailabilityRecoveryMessage;
 
 use futures::{channel::oneshot, stream::FuturesUnordered, Future, FutureExt, StreamExt};
 

@@ -54,8 +54,8 @@ where
 			log::info!(target: "bridge", "Read `tokenDecimals` for {}: {}", C::NAME, token_decimals);
 		})
 		.unwrap_or_else(|| {
-			// turns out it is normal not to have this property - e.g. when polkadot binary is
-			// started using `polkadot-local` chain. Let's use minimal nominal here
+			// turns out it is normal not to have this property - e.g. when pezkuwi binary is
+			// started using `pezkuwi-local` chain. Let's use minimal nominal here
 			log::info!(target: "bridge", "Using default (zero) `tokenDecimals` value for {}", C::NAME);
 			0
 		});

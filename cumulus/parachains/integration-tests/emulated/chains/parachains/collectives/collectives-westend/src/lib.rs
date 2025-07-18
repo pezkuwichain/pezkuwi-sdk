@@ -41,7 +41,7 @@ decl_test_parachains! {
 			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
 		},
 		pallets = {
-			PolkadotXcm: collectives_westend_runtime::PolkadotXcm,
+			PezkuwiXcm: collectives_westend_runtime::PezkuwiXcm,
 			Balances: collectives_westend_runtime::Balances,
 			FellowshipTreasury: collectives_westend_runtime::FellowshipTreasury,
 			AssetRate: collectives_westend_runtime::AssetRate,

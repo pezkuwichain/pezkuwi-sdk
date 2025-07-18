@@ -23,7 +23,7 @@ para_id=$2
 
 echo "Generating chain spec for runtime: $rt_path and para_id: $para_id"
 
-binary="./target/release/polkadot-parachain"
+binary="./target/release/pezkuwi-parachain"
 
 # build the chain spec we'll manipulate
 $binary build-spec --chain people-westend-local > chain-spec-plain.json

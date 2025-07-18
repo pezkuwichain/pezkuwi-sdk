@@ -39,7 +39,7 @@ rlp = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true, default-features = false }
 
-# Polkadot SDK Dependencies
+# Pezkuwi SDK Dependencies
 bn = { workspace = true }
 frame-benchmarking = { optional = true, workspace = true }
 frame-support.workspace = true
@@ -68,7 +68,7 @@ pretty_assertions = { workspace = true }
 secp256k1 = { workspace = true, features = ["recovery"] }
 serde_json = { workspace = true }
 
-# Polkadot SDK Dependencies
+# Pezkuwi SDK Dependencies
 pallet-balances = { default-features = true, workspace = true }
 pallet-proxy = { default-features = true, workspace = true }
 pallet-revive-fixtures = { default-features = true, workspace = true }

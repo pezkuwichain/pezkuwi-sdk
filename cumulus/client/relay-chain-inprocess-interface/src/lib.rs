@@ -34,7 +34,7 @@ use cumulus_primitives_core::{
 };
 use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use futures::{FutureExt, Stream, StreamExt};
-use polkadot_service::{
+use pezkuwi_service::{
 	CollatorPair, Configuration, FullBackend, FullClient, Handle, NewFull, TaskManager,
 };
 use sc_cli::{RuntimeVersion, SubstrateCli};
@@ -347,24 +347,24 @@ pub fn check_block_in_chain(
 	Ok(BlockCheckStatus::Unknown(listener))
 }
 
-/// Build the Polkadot full node using the given `config`.
+/// Build the Pezkuwi full node using the given `config`.
 #[sc_tracing::logging::prefix_logs_with("Relaychain")]
-fn build_polkadot_full_node(
+fn build_pezkuwi_full_node(
 	config: Configuration,
 	parachain_config: &Configuration,
 	telemetry_worker_handle: Option<TelemetryWorkerHandle>,
 	hwbench: Option<sc_sysinfo::HwBench>,
-) -> Result<(NewFull, Option<CollatorPair>), polkadot_service::Error> {
+) -> Result<(NewFull, Option<CollatorPair>), pezkuwi_service::Error> {
 	let (is_parachain_node, maybe_collator_key) = if parachain_config.role.is_authority() {
 		let collator_key = CollatorPair::generate().0;
-		(polkadot_service::IsParachainNode::Collator(collator_key.clone()), Some(collator_key))
+		(pezkuwi_service::IsParachainNode::Collator(collator_key.clone()), Some(collator_key))
 	} else {
-		(polkadot_service::IsParachainNode::FullNode, None)
+		(pezkuwi_service::IsParachainNode::FullNode, None)
 	};
 
-	let relay_chain_full_node = polkadot_service::build_full(
+	let relay_chain_full_node = pezkuwi_service::build_full(
 		config,
-		polkadot_service::NewFullParams {
+		pezkuwi_service::NewFullParams {
 			is_parachain_node,
 			// Disable BEEFY. It should not be required by the internal relay chain node.
 			enable_beefy: false,
@@ -377,7 +377,7 @@ fn build_polkadot_full_node(
 			workers_path: None,
 			workers_names: None,
 
-			overseer_gen: polkadot_service::CollatorOverseerGen,
+			overseer_gen: pezkuwi_service::CollatorOverseerGen,
 			overseer_message_channel_capacity_override: None,
 			malus_finality_delay: None,
 			hwbench,
@@ -394,7 +394,7 @@ fn build_polkadot_full_node(
 
 /// Builds a relay chain interface by constructing a full relay chain node
 pub fn build_inprocess_relay_chain(
-	mut polkadot_config: Configuration,
+	mut pezkuwi_config: Configuration,
 	parachain_config: &Configuration,
 	telemetry_worker_handle: Option<TelemetryWorkerHandle>,
 	task_manager: &mut TaskManager,
@@ -402,11 +402,11 @@ pub fn build_inprocess_relay_chain(
 ) -> RelayChainResult<(Arc<(dyn RelayChainInterface + 'static)>, Option<CollatorPair>)> {
 	// This is essentially a hack, but we want to ensure that we send the correct node version
 	// to the telemetry.
-	polkadot_config.impl_version = polkadot_cli::Cli::impl_version();
-	polkadot_config.impl_name = polkadot_cli::Cli::impl_name();
+	pezkuwi_config.impl_version = pezkuwi_cli::Cli::impl_version();
+	pezkuwi_config.impl_name = pezkuwi_cli::Cli::impl_name();
 
-	let (full_node, collator_key) = build_polkadot_full_node(
-		polkadot_config,
+	let (full_node, collator_key) = build_pezkuwi_full_node(
+		pezkuwi_config,
 		parachain_config,
 		telemetry_worker_handle,
 		hwbench,
@@ -431,10 +431,10 @@ pub fn build_inprocess_relay_chain(
 mod tests {
 	use super::*;
 
-	use polkadot_primitives::Block as PBlock;
-	use polkadot_test_client::{
+	use pezkuwi_primitives::Block as PBlock;
+	use pezkuwi_test_client::{
 		construct_transfer_extrinsic, BlockBuilderExt, Client, ClientBlockImportExt,
-		DefaultTestClientBuilderExt, InitPolkadotBlockBuilder, TestClientBuilder,
+		DefaultTestClientBuilderExt, InitPezkuwiBlockBuilder, TestClientBuilder,
 		TestClientBuilderExt,
 	};
 	use sp_consensus::{BlockOrigin, SyncOracle};
@@ -460,7 +460,7 @@ mod tests {
 		let backend = builder.backend();
 		let client = Arc::new(builder.build());
 
-		let block_builder = client.init_polkadot_block_builder();
+		let block_builder = client.init_pezkuwi_block_builder();
 		let block = block_builder.build().expect("Finalizes the block").block;
 		let dummy_network: Arc<dyn SyncOracle + Sync + Send> = Arc::new(DummyNetwork {});
 
@@ -529,9 +529,9 @@ mod tests {
 			sp_keyring::Sr25519Keyring::Bob,
 			1000,
 		);
-		let mut block_builder = client.init_polkadot_block_builder();
+		let mut block_builder = client.init_pezkuwi_block_builder();
 		// Push an extrinsic to get a different block hash.
-		block_builder.push_polkadot_extrinsic(ext).expect("Push extrinsic");
+		block_builder.push_pezkuwi_extrinsic(ext).expect("Push extrinsic");
 		let block2 = block_builder.build().expect("Build second block").block;
 		let hash2 = block2.hash();
 

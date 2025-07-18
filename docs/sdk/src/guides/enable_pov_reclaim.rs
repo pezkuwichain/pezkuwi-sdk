@@ -2,11 +2,11 @@
 //!
 //! This guide will teach you how to enable storage weight reclaiming for a parachain. The
 //! explanations in this guide assume a project structure similar to the one detailed in
-//! the [substrate documentation](crate::polkadot_sdk::substrate#anatomy-of-a-binary-crate). Full
+//! the [substrate documentation](crate::pezkuwi_sdk::substrate#anatomy-of-a-binary-crate). Full
 //! technical details are available in the original [pull request](https://github.com/paritytech/polkadot-sdk/pull/3002).
 //!
 //! # What is PoV reclaim?
-//! When a parachain submits a block to a relay chain like Polkadot or Kusama, it sends the block
+//! When a parachain submits a block to a relay chain like Pezkuwi or Kusama, it sends the block
 //! itself and a storage proof. Together they form the Proof-of-Validity (PoV). The PoV allows the
 //! relay chain to validate the parachain block by re-executing it. Relay chain
 //! validators distribute this PoV among themselves over the network. This distribution is costly

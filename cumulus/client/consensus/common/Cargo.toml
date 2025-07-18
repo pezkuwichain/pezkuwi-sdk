@@ -23,8 +23,8 @@ cumulus-relay-chain-interface.workspace = true
 dyn-clone = { workspace = true }
 futures = { workspace = true }
 log = { workspace = true, default-features = true }
-polkadot-primitives.default-features = true
-polkadot-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
 prometheus-endpoint.default-features = true
 prometheus-endpoint.workspace = true
 sc-client-api.default-features = true

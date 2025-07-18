@@ -210,7 +210,7 @@ impl WasmBuilder {
 	///
 	/// This will compile the runtime once, fetch the metadata, build the metadata hash and
 	/// then compile again with the env `RUNTIME_METADATA_HASH` set. For more information
-	/// about the metadata hash see [RFC78](https://polkadot-fellows.github.io/RFCs/approved/0078-merkleized-metadata.html).
+	/// about the metadata hash see [RFC78](https://pezkuwi-fellows.github.io/RFCs/approved/0078-merkleized-metadata.html).
 	///
 	/// - `token_symbol`: The symbol of the main native token of the chain.
 	/// - `decimals`: The number of decimals of the main native token.

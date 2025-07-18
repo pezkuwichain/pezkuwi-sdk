@@ -20,7 +20,7 @@ mod imports {
 	pub use frame_support::{assert_err, assert_ok, pallet_prelude::DispatchResult, BoundedVec};
 	pub use sp_runtime::DispatchError;
 
-	// Polkadot
+	// Pezkuwi
 	pub use xcm::{
 		latest::{ParentThen, ROCOCO_GENESIS_HASH, WESTEND_GENESIS_HASH},
 		prelude::{AccountId32 as AccountId32Junction, *},

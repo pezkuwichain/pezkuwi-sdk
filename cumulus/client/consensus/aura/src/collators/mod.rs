@@ -27,9 +27,9 @@ use cumulus_client_consensus_common::{self as consensus_common, ParentSearchPara
 use cumulus_primitives_aura::{AuraUnincludedSegmentApi, Slot};
 use cumulus_primitives_core::{relay_chain::Hash as ParaHash, BlockT, ClaimQueueOffset};
 use cumulus_relay_chain_interface::RelayChainInterface;
-use polkadot_node_subsystem::messages::RuntimeApiRequest;
-use polkadot_node_subsystem_util::runtime::ClaimQueueSnapshot;
-use polkadot_primitives::{
+use pezkuwi_node_subsystem::messages::RuntimeApiRequest;
+use pezkuwi_node_subsystem_util::runtime::ClaimQueueSnapshot;
+use pezkuwi_primitives::{
 	CoreIndex, Hash as RelayHash, Id as ParaId, OccupiedCoreAssumption, ValidationCodeHash,
 	DEFAULT_SCHEDULING_LOOKAHEAD,
 };
@@ -121,7 +121,7 @@ async fn scheduling_lookahead(
 
 	let parachain_host_runtime_api_version = runtime_api_version
 		.api_version(
-			&<dyn polkadot_primitives::runtime_api::ParachainHost<polkadot_primitives::Block>>::ID,
+			&<dyn pezkuwi_primitives::runtime_api::ParachainHost<pezkuwi_primitives::Block>>::ID,
 		)
 		.unwrap_or_default();
 
@@ -283,7 +283,7 @@ mod tests {
 		TestClientBuilderExt,
 	};
 	use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-	use polkadot_primitives::HeadData;
+	use pezkuwi_primitives::HeadData;
 	use sc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};
 	use sp_consensus::BlockOrigin;
 	use sp_keystore::{Keystore, KeystorePtr};

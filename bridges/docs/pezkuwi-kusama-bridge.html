@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Pezkuwi &lt;&gt; Kusama Bridge</title>
+	</head>
+	<body>
+		<h1>Pezkuwi &lt;&gt; Kusama Bridge</h1>
+		<p>
+			Our bridge connects two parachains - Kusama Bridge Hub and Pezkuwi Bridge Hub. Messages that
+			are sent over bridge have XCM format and we are using existing architecture to dispatch them.
+			Since both Pezkuwi, Kusama and their parachains already have means to exchange XCM messages
+			within the same consensus system (HRMP, VMP, ...), it means that we are able to connect all those
+			chains with our bridge.
+		</p>
+		<p>
+			In our architecture, the lane that is used to relay messages over the bridge is determined by
+			the XCM source and destinations. So e.g. bridge between Asset Hubs Pezkuwi and Kusama (and opposite direction)
+			will use the lane 00000000, bridge between some other Pezkuwi Parachain and some other Kusama Parachain
+			will use the lane 00000001 and so on.
+		</p>
+		<div class="mermaid">
+			flowchart LR
+				subgraph Pezkuwi Consensus
+					pezkuwi(((Pezkuwi)))
+					asset_hub_pezkuwi(((Pezkuwi Asset Hub)))
+					pezkuwi_bh(((Pezkuwi Bridge Hub)))
+
+					pezkuwi---asset_hub_pezkuwi
+					pezkuwi---pezkuwi_bh
+
+					asset_hub_pezkuwi-->|Send Message Using HRMP|pezkuwi_bh
+
+					pezkuwi_bh-->|Send Message Using HRMP|asset_hub_pezkuwi
+					asset_hub_pezkuwi-->|Dispatch the Message|asset_hub_pezkuwi
+				end
+				subgraph Kusama Consensus
+					kusama_bh(((Kusama Bridge Hub)))
+					asset_hub_kusama(((Kusama Asset Hub)))
+					kusama(((Kusama)))
+
+					kusama---asset_hub_kusama
+					kusama---kusama_bh
+
+					kusama_bh-->|Send Message Using HRMP|asset_hub_kusama
+					asset_hub_kusama-->|Dispatch the Message|asset_hub_kusama
+
+					asset_hub_kusama-->|Send Message Using HRMP|kusama_bh
+				end
+
+				pezkuwi_bh&lt;===&gt;|Message is relayed to the Bridged Chain using lane 00000000|kusama_bh
+		
+				linkStyle 2 stroke:red
+				linkStyle 7 stroke:red
+				linkStyle 8 stroke:red
+
+				linkStyle 3 stroke:green
+				linkStyle 4 stroke:green
+				linkStyle 9 stroke:green
+		</div>
+		<script type="module">
+			import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.esm.min.mjs';
+			mermaid.initialize({ startOnLoad: true });
+		</script>
+	</body>
+</html>

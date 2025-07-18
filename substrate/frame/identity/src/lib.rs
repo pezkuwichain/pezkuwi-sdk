@@ -1545,7 +1545,7 @@ impl<T: Config> Pallet<T> {
 	/// Return type is a tuple of the number of registrars, `IdentityInfo` bytes, and sub accounts,
 	/// respectively.
 	///
-	/// NOTE: This function is here temporarily for migration of Identity info from the Polkadot
+	/// NOTE: This function is here temporarily for migration of Identity info from the Pezkuwi
 	/// Relay Chain into a system parachain. It will be removed after the migration.
 	pub fn reap_identity(who: &T::AccountId) -> Result<(u32, u32, u32), DispatchError> {
 		// `take` any storage items keyed by `target`
@@ -1575,7 +1575,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Return type is a tuple of the new Identity and Subs deposits, respectively.
 	///
-	/// NOTE: This function is here temporarily for migration of Identity info from the Polkadot
+	/// NOTE: This function is here temporarily for migration of Identity info from the Pezkuwi
 	/// Relay Chain into a system parachain. It will be removed after the migration.
 	pub fn poke_deposit(
 		target: &T::AccountId,

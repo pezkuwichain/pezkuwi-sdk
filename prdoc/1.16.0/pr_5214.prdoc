@@ -1,11 +1,11 @@
-title: make polkadot-parachain startup errors pretty
+title: make pezkuwi-parachain startup errors pretty
 
 doc:
   - audience: Node Operator
     description: |
-      Changed the format of how polkadot-parachain prints the startup errors to include
+      Changed the format of how pezkuwi-parachain prints the startup errors to include
       the full displayable context.
 
 crates:
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: minor

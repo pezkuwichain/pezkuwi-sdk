@@ -20,14 +20,14 @@ futures = { features = ["thread-pool"], workspace = true }
 futures-timer = { workspace = true }
 jsonrpsee = { features = ["server"], workspace = true }
 minimal-template-runtime.workspace = true
-polkadot-sdk = { workspace = true, features = ["experimental", "node"] }
+pezkuwi-sdk = { workspace = true, features = ["experimental", "node"] }
 
 [build-dependencies]
-polkadot-sdk = { workspace = true, features = ["substrate-build-script-utils"] }
+pezkuwi-sdk = { workspace = true, features = ["substrate-build-script-utils"] }
 
 [features]
 default = ["std"]
 std = [
 	"minimal-template-runtime/std",
-	"polkadot-sdk/std",
+	"pezkuwi-sdk/std",
 ]

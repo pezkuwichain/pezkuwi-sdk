@@ -19,18 +19,18 @@ mock_runtimes_matrix = [
     {
         "name": "westend",
         "package": "westend-runtime",
-        "path": "polkadot/runtime/westend",
-        "header": "polkadot/file_header.txt",
-        "template": "polkadot/xcm/pallet-xcm-benchmarks/template.hbs",
+        "path": "pezkuwi/runtime/westend",
+        "header": "pezkuwi/file_header.txt",
+        "template": "pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs",
         "bench_features": "runtime-benchmarks",
         "bench_flags": "--flag3 --flag4"
     },
     {
         "name": "rococo",
         "package": "rococo-runtime",
-        "path": "polkadot/runtime/rococo",
-        "header": "polkadot/file_header.txt",
-        "template": "polkadot/xcm/pallet-xcm-benchmarks/template.hbs",
+        "path": "pezkuwi/runtime/rococo",
+        "header": "pezkuwi/file_header.txt",
+        "template": "pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs",
         "bench_features": "runtime-benchmarks",
         "bench_flags": ""
     },
@@ -133,8 +133,8 @@ class TestCmd(unittest.TestCase):
                 call(get_mock_bench_output(
                     runtime='westend',
                     pallets='pallet_balances',
-                    output_path='./polkadot/runtime/westend/src/weights',
-                    header=os.path.abspath('polkadot/file_header.txt'),
+                    output_path='./pezkuwi/runtime/westend/src/weights',
+                    header=os.path.abspath('pezkuwi/file_header.txt'),
                     bench_flags='--flag3 --flag4'
                 )),
                 # skips rococo benchmark
@@ -158,7 +158,7 @@ class TestCmd(unittest.TestCase):
             clean=False,
             image=None
         ), [])
-        header_path = os.path.abspath('polkadot/file_header.txt')
+        header_path = os.path.abspath('pezkuwi/file_header.txt')
         self.mock_popen.return_value.read.side_effect = [
             "pallet_balances\npallet_staking\npallet_something\n",  # Output for westend runtime
         ]
@@ -176,14 +176,14 @@ class TestCmd(unittest.TestCase):
                 call(get_mock_bench_output(
                     runtime='westend',
                     pallets='pallet_balances',
-                    output_path='./polkadot/runtime/westend/src/weights',
+                    output_path='./pezkuwi/runtime/westend/src/weights',
                     header=header_path,
                     bench_flags='--flag3 --flag4'
                 )),
                 call(get_mock_bench_output(
                     runtime='westend',
                     pallets='pallet_staking',
-                    output_path='./polkadot/runtime/westend/src/weights',
+                    output_path='./pezkuwi/runtime/westend/src/weights',
                     header=header_path,
                     bench_flags='--flag3 --flag4'
                 )),
@@ -201,7 +201,7 @@ class TestCmd(unittest.TestCase):
             clean=False,
             image=None
         ), [])
-        header_path = os.path.abspath('polkadot/file_header.txt')
+        header_path = os.path.abspath('pezkuwi/file_header.txt')
         self.mock_popen.return_value.read.side_effect = [
             "pallet_balances\npallet_staking\npallet_something\npallet_xcm_benchmarks::generic\n",  # Output for westend runtime
         ]
@@ -219,10 +219,10 @@ class TestCmd(unittest.TestCase):
                 call(get_mock_bench_output(
                     runtime='westend',
                     pallets='pallet_xcm_benchmarks::generic',
-                    output_path='./polkadot/runtime/westend/src/weights/xcm',
+                    output_path='./pezkuwi/runtime/westend/src/weights/xcm',
                     header=header_path,
                     bench_flags='--flag3 --flag4',
-                    template="polkadot/xcm/pallet-xcm-benchmarks/template.hbs"
+                    template="pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs"
                 )),
             ]
             self.mock_system.assert_has_calls(expected_calls, any_order=True)
@@ -246,7 +246,7 @@ class TestCmd(unittest.TestCase):
             import cmd
             cmd.main()
             mock_exit.assert_not_called()
-            header_path = os.path.abspath('polkadot/file_header.txt')
+            header_path = os.path.abspath('pezkuwi/file_header.txt')
 
             expected_calls = [
                 # Build calls
@@ -256,14 +256,14 @@ class TestCmd(unittest.TestCase):
                 call(get_mock_bench_output(
                     runtime='westend',
                     pallets='pallet_staking',
-                    output_path='./polkadot/runtime/westend/src/weights',
+                    output_path='./pezkuwi/runtime/westend/src/weights',
                     header=header_path,
                     bench_flags='--flag3 --flag4'
                 )),
                 call(get_mock_bench_output(
                     runtime='westend',
                     pallets='pallet_balances',
-                    output_path='./polkadot/runtime/westend/src/weights',
+                    output_path='./pezkuwi/runtime/westend/src/weights',
                     header=header_path,
                     bench_flags='--flag3 --flag4'
                 )),
@@ -271,14 +271,14 @@ class TestCmd(unittest.TestCase):
                 call(get_mock_bench_output(
                     runtime='rococo',
                     pallets='pallet_staking',
-                    output_path='./polkadot/runtime/rococo/src/weights',
+                    output_path='./pezkuwi/runtime/rococo/src/weights',
                     header=header_path,
                     bench_flags=''
                 )),
                 call(get_mock_bench_output(
                     runtime='rococo',
                     pallets='pallet_balances',
-                    output_path='./polkadot/runtime/rococo/src/weights',
+                    output_path='./pezkuwi/runtime/rococo/src/weights',
                     header=header_path,
                     bench_flags=''
                 )),

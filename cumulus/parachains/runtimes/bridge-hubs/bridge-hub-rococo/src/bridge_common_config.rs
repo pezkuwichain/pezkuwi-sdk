@@ -116,7 +116,7 @@ impl pallet_bridge_relayers::Config<RelayersForPermissionlessLanesInstance> for 
 pub type BridgeGrandpaRococoBulletinInstance = pallet_bridge_grandpa::Instance4;
 impl pallet_bridge_grandpa::Config<BridgeGrandpaRococoBulletinInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type BridgedChain = bp_polkadot_bulletin::PolkadotBulletin;
+	type BridgedChain = bp_pezkuwi_bulletin::PezkuwiBulletin;
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<5>;
 	type HeadersToKeep = RelayChainHeadersToKeep;

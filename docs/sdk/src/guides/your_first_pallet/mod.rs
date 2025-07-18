@@ -1,7 +1,7 @@
 //! # Currency Pallet
 //!
 //! By the end of this guide, you will have written a small FRAME pallet (see
-//! [`crate::polkadot_sdk::frame_runtime`]) that is capable of handling a simple crypto-currency.
+//! [`crate::pezkuwi_sdk::frame_runtime`]) that is capable of handling a simple crypto-currency.
 //! This pallet will:
 //!
 //! 1. Allow anyone to mint new tokens into accounts (which is obviously not a great idea for a real
@@ -16,8 +16,8 @@
 //!
 //! ## Writing Your First Pallet
 //!
-//! To get started, clone one of the templates mentioned in [`crate::polkadot_sdk::templates`]. We
-//! recommend using the `polkadot-sdk-minimal-template`. You might need to change small parts of
+//! To get started, clone one of the templates mentioned in [`crate::pezkuwi_sdk::templates`]. We
+//! recommend using the `pezkuwi-sdk-minimal-template`. You might need to change small parts of
 //! this guide, namely the crate/package names, based on which template you use.
 //!
 //! > Be aware that you can read the entire source code backing this tutorial by clicking on the
@@ -27,7 +27,7 @@
 //!
 //! - [`crate::reference_docs::blockchain_state_machines`]
 //! - [`crate::reference_docs::trait_based_programming`]
-//! - [`crate::polkadot_sdk::frame_runtime`]
+//! - [`crate::pezkuwi_sdk::frame_runtime`]
 //!
 //! ## Topics Covered
 //!
@@ -141,7 +141,7 @@
 //! ```
 //!
 //! Next, we create a "test runtime" in order to test our pallet. Recall from
-//! [`crate::polkadot_sdk::frame_runtime`] that a runtime is a collection of pallets, expressed
+//! [`crate::pezkuwi_sdk::frame_runtime`] that a runtime is a collection of pallets, expressed
 //! through [`frame::runtime::prelude::construct_runtime`]. All runtimes also have to include
 //! [`frame::prelude::frame_system`]. So we expect to see a runtime with two pallet, `frame_system`
 //! and the one we just wrote.
@@ -200,8 +200,8 @@
 //!
 //! Idiomatic FRAME pallets often use Builder pattern to define their initial state.
 //!
-//! > The Polkadot Blockchain Academy's Rust entrance exam has a
-//! > [section](https://github.com/Polkadot-Blockchain-Academy/pba-qualifier-exam/blob/main/src/m_builder.rs)
+//! > The Pezkuwi Blockchain Academy's Rust entrance exam has a
+//! > [section](https://github.com/Pezkuwi-Blockchain-Academy/pba-qualifier-exam/blob/main/src/m_builder.rs)
 //! > on this that you can use to learn the Builder Pattern.
 //!
 //! Let's see how we can implement a better test setup using this pattern. First, we define a

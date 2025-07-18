@@ -1,0 +1,65 @@
+[package]
+name = "pezkuwi-statement-distribution"
+description = "Statement Distribution Subsystem"
+version = "22.0.1"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+arrayvec = { workspace = true }
+bitvec = { workspace = true, default-features = true }
+codec = { features = ["derive"], workspace = true }
+fatality = { workspace = true }
+futures = { workspace = true }
+futures-timer = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+indexmap = { workspace = true }
+pezkuwi-node-network-protocol.default-features = true
+pezkuwi-node-network-protocol.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sp-keystore.default-features = true
+sp-keystore.workspace = true
+sp-staking.workspace = true
+thiserror = { workspace = true }
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+async-channel = { workspace = true }
+futures-timer = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives = { features = ["test"], default-features = false, workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+pezkuwi-subsystem-bench = { workspace = true }
+rand_chacha = { workspace = true, default-features = true }
+rstest = { workspace = true }
+sc-keystore = { default-features = true, workspace = true }
+sc-network = { default-features = true, workspace = true }
+sp-application-crypto = { default-features = true, workspace = true }
+sp-authority-discovery = { default-features = true, workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }
+sp-keystore = { default-features = true, workspace = true }
+sp-tracing = { default-features = true, workspace = true }
+
+[[bench]]
+name = "statement-distribution-regression-bench"
+path = "benches/statement-distribution-regression-bench.rs"
+harness = false
+required-features = ["subsystem-benchmarks"]
+
+[features]
+subsystem-benchmarks = []

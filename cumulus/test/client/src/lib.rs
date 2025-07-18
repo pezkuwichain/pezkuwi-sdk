@@ -21,7 +21,7 @@ pub use block_builder::*;
 use codec::{Decode, Encode};
 pub use cumulus_test_runtime as runtime;
 use cumulus_test_runtime::AuraId;
-pub use polkadot_parachain_primitives::primitives::{
+pub use pezkuwi_parachain_primitives::primitives::{
 	BlockData, HeadData, ValidationParams, ValidationResult,
 };
 use runtime::{

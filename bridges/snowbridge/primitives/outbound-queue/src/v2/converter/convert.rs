@@ -150,8 +150,8 @@ where
 		Ok(commands)
 	}
 
-	/// Extract polkadot native assets
-	fn extract_polkadot_native_assets(
+	/// Extract pezkuwi native assets
+	fn extract_pezkuwi_native_assets(
 		&mut self,
 		pnas: &Assets,
 		deposit_assets: &AssetFilter,
@@ -185,7 +185,7 @@ where
 	/// Convert the XCM into an outbound message which can be dispatched to
 	/// the Gateway contract on Ethereum
 	///
-	/// Assets being transferred can either be Polkadot-native assets (PNA)
+	/// Assets being transferred can either be Pezkuwi-native assets (PNA)
 	/// or Ethereum-native assets (ENA).
 	///
 	/// The XCM is evaluated in Ethereum context.
@@ -274,7 +274,7 @@ where
 
 		// PNA transfer commands
 		if let Some(pnas) = pnas {
-			commands.append(&mut self.extract_polkadot_native_assets(
+			commands.append(&mut self.extract_pezkuwi_native_assets(
 				pnas,
 				deposit_assets,
 				recipient,

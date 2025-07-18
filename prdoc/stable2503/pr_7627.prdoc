@@ -1,10 +1,10 @@
-title: Derive `DecodeWithMemTracking` for cumulus pallets and for `polkadot-sdk` runtimes
+title: Derive `DecodeWithMemTracking` for cumulus pallets and for `pezkuwi-sdk` runtimes
 doc:
 - audience: Runtime Dev
   description: |-
     Related to https://github.com/paritytech/polkadot-sdk/issues/7360
 
-    Derive `DecodeWithMemTracking` for the structures in the cumulus pallets and for the structures in the `polkadot-sdk` runtimes.
+    Derive `DecodeWithMemTracking` for the structures in the cumulus pallets and for the structures in the `pezkuwi-sdk` runtimes.
 
     The PR contains no functional changes and no manual implementation. Just deriving `DecodeWithMemTracking`.
 crates:
@@ -24,15 +24,15 @@ crates:
   bump: minor
 - name: cumulus-primitives-parachain-inherent
   bump: minor
-- name: polkadot-core-primitives
+- name: pezkuwi-core-primitives
   bump: minor
-- name: polkadot-parachain-primitives
+- name: pezkuwi-parachain-primitives
   bump: minor
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: minor
 - name: sp-runtime
   bump: minor

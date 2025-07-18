@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "pallet-xcm: deprecate execute and send in favor of execute_blob and send_blob"
 
@@ -22,8 +22,8 @@ doc:
       These are meant to be used instead of `execute` and `send`, which are now deprecated
       and will be removed eventually.
       These new extrinsics just require you to input the encoded XCM.
-      There's a new utility in PolkadotJS Apps for encoding XCMs you can use:
-      https://polkadot.js.org/apps/#/utilities/xcm
+      There's a new utility in PezkuwiJS Apps for encoding XCMs you can use:
+      https://pezkuwi.js.org/apps/#/utilities/xcm
       Just pass in the encoded XCM to the new extrinsics and you're done.
 
       pallet-contracts takes the XCM encoded now as well. It follows the same API as

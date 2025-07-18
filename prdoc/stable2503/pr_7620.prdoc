@@ -20,7 +20,7 @@ crates:
   bump: minor
 - name: bp-messages
   bump: minor
-- name: bp-polkadot-core
+- name: bp-pezkuwi-core
   bump: minor
 - name: bp-relayers
   bump: minor

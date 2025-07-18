@@ -1,7 +1,7 @@
 //! # Template Pallet
 //!
 //! A pallet with minimal functionality to help developers understand the essential components of
-//! writing a FRAME pallet. It is typically used in beginner tutorials or in Polkadot SDK template
+//! writing a FRAME pallet. It is typically used in beginner tutorials or in Pezkuwi SDK template
 //! as a starting point for creating a new pallet and **not meant to be used in production**.
 //!
 //! ## Overview
@@ -19,13 +19,13 @@
 //!
 //! To get started with pallet development, consider using this tutorial:
 //!
-//! <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html>
+//! <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/your_first_pallet/index.html>
 //!
 //! And reading the main documentation of the `frame` crate:
 //!
-//! <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html>
+//! <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/frame_runtime/index.html>
 //!
-//! And looking at the frame [`kitchen-sink`](https://paritytech.github.io/polkadot-sdk/master/pallet_example_kitchensink/index.html)
+//! And looking at the frame [`kitchen-sink`](https://paritytech.github.io/pezkuwi-sdk/master/pallet_example_kitchensink/index.html)
 //! pallet, a showcase of all pallet macros.
 //!
 //! ### Pallet Sections
@@ -60,12 +60,12 @@ pub mod weights;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html>
-// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html>
+// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/frame_runtime/index.html>
+// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/your_first_pallet/index.html>
 //
 // To see a full list of `pallet` macros and their use cases, see:
-// <https://paritytech.github.io/polkadot-sdk/master/pallet_example_kitchensink/index.html>
-// <https://paritytech.github.io/polkadot-sdk/master/frame_support/pallet_macros/index.html>
+// <https://paritytech.github.io/pezkuwi-sdk/master/pallet_example_kitchensink/index.html>
+// <https://paritytech.github.io/pezkuwi-sdk/master/frame_support/pallet_macros/index.html>
 #[frame::pallet]
 pub mod pallet {
 	use frame::prelude::*;
@@ -83,7 +83,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	/// A struct to store a single block-number. Has all the right derives to store it in storage.
-	/// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/frame_storage_derives/index.html>
+	/// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/frame_storage_derives/index.html>
 	#[derive(
 		Encode, Decode, MaxEncodedLen, TypeInfo, CloneNoBound, PartialEqNoBound, DefaultNoBound,
 	)]
@@ -94,13 +94,13 @@ pub mod pallet {
 	}
 
 	/// The pallet's storage items.
-	/// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#storage>
-	/// <https://paritytech.github.io/polkadot-sdk/master/frame_support/pallet_macros/attr.storage.html>
+	/// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/your_first_pallet/index.html#storage>
+	/// <https://paritytech.github.io/pezkuwi-sdk/master/frame_support/pallet_macros/attr.storage.html>
 	#[pallet::storage]
 	pub type Something<T: Config> = StorageValue<_, CompositeStruct<T>>;
 
 	/// Pallets use events to inform users when important changes are made.
-	/// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#event-and-error>
+	/// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/your_first_pallet/index.html#event-and-error>
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
@@ -109,7 +109,7 @@ pub mod pallet {
 	}
 
 	/// Errors inform users that something went wrong.
-	/// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#event-and-error>
+	/// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/your_first_pallet/index.html#event-and-error>
 	#[pallet::error]
 	pub enum Error<T> {
 		/// Error names should be descriptive.
@@ -124,7 +124,7 @@ pub mod pallet {
 	/// Dispatchable functions allows users to interact with the pallet and invoke state changes.
 	/// These functions materialize as "extrinsics", which are often compared to transactions.
 	/// Dispatchable functions must be annotated with a weight and must return a DispatchResult.
-	/// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#dispatchables>
+	/// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/your_first_pallet/index.html#dispatchables>
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		/// An example dispatchable that takes a singles value as a parameter, writes the value to
@@ -134,7 +134,7 @@ pub mod pallet {
 		pub fn do_something(origin: OriginFor<T>, bn: u32) -> DispatchResultWithPostInfo {
 			// Check that the extrinsic was signed and get the signer.
 			// This function will return an error if the extrinsic is not signed.
-			// <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/frame_origin/index.html>
+			// <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/frame_origin/index.html>
 			let who = ensure_signed(origin)?;
 
 			// Convert the u32 into a block number. This is possible because the set of trait bounds

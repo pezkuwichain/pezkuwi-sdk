@@ -43,7 +43,7 @@
         "parachainInfo": {
           "parachainId": 1004
         },
-        "polkadotXcm": {
+        "pezkuwiXcm": {
           "safeXcmVersion": 3
         },
         "session": {

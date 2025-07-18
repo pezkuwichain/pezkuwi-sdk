@@ -49,7 +49,7 @@ crates:
   bump: major
 - name: cumulus-pov-validator
   bump: major
-- name: polkadot-sdk
+- name: pezkuwi-sdk
   bump: major
 - name: asset-hub-rococo-runtime
   bump: major
@@ -63,7 +63,7 @@ crates:
   bump: major
 - name: frame-benchmarking-cli
   bump: major
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: major
 - name: pallet-elections-phragmen
   bump: major

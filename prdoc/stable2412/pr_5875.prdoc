@@ -1,4 +1,4 @@
-title: "Remove jaeger from polkadot"
+title: "Remove jaeger from pezkuwi"
 
 doc:
   - audience: [ Node Dev, Node Operator ]
@@ -7,41 +7,41 @@ doc:
       and it did not help with the debugging.
 
 crates:
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: patch
-  - name: polkadot-overseer
+  - name: pezkuwi-overseer
     bump: major
-  - name: polkadot-node-subsystem
+  - name: pezkuwi-node-subsystem
     bump: patch
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: major
-  - name: polkadot-node-network-protocol
+  - name: pezkuwi-node-network-protocol
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
-  - name: polkadot-availability-distribution
+  - name: pezkuwi-availability-distribution
     bump: patch
-  - name: polkadot-availability-recovery
+  - name: pezkuwi-availability-recovery
     bump: patch
-  - name: polkadot-node-core-av-store
+  - name: pezkuwi-node-core-av-store
     bump: patch
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: patch
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: patch
-  - name: polkadot-availability-bitfield-distribution
+  - name: pezkuwi-availability-bitfield-distribution
     bump: patch
-  - name: polkadot-network-bridge
+  - name: pezkuwi-network-bridge
     bump: patch
-  - name: polkadot-node-collation-generation
+  - name: pezkuwi-node-collation-generation
     bump: patch
-  - name: polkadot-node-core-bitfield-signing
+  - name: pezkuwi-node-core-bitfield-signing
     bump: patch
-  - name: polkadot-node-core-candidate-validation
+  - name: pezkuwi-node-core-candidate-validation
     bump: patch
-  - name: polkadot-node-core-provisioner
+  - name: pezkuwi-node-core-provisioner
     bump: patch
   - name: cumulus-relay-chain-inprocess-interface
     bump: patch
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: major

@@ -35,7 +35,7 @@ pub mod pallet_transaction_payment;
 pub mod pallet_utility;
 pub mod pallet_xcm;
 pub mod paritydb_weights;
-pub mod polkadot_runtime_common_identity_migrator;
+pub mod pezkuwi_runtime_common_identity_migrator;
 pub mod rocksdb_weights;
 pub mod xcm;
 

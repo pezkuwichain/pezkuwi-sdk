@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # This is used to build our binaries:
-# - polkadot
-# - polkadot-parachain
-# - polkadot-omni-node
+# - pezkuwi
+# - pezkuwi-parachain
+# - pezkuwi-omni-node
 # set -e
 
 BIN=$1

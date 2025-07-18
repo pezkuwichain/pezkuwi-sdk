@@ -9,7 +9,7 @@ on:
         type: string
 
       node_version:
-        description: Version of the polkadot node in the format X.XX.X (e.g. 1.15.0)
+        description: Version of the pezkuwi node in the format X.XX.X (e.g. 1.15.0)
         required: true
 
 jobs:
@@ -93,18 +93,18 @@ jobs:
 
           NODE_VERSION="${{ needs.prepare-tooling.outputs.node_version }}"
           NODE_VERSION_PATTERN="\(NODE_VERSION[^=]*= \)\".*\""
-          set_version "$NODE_VERSION_PATTERN" $NODE_VERSION "polkadot/node/primitives/src/lib.rs"
-          commit_with_message "Bump node version to $NODE_VERSION in polkadot-cli"
-          set_version "$NODE_VERSION_PATTERN" $NODE_VERSION "cumulus/polkadot-omni-node/lib/src/nodes/mod.rs"
-          commit_with_message "Bump node version to $NODE_VERSION in polkadot-omni-node-lib"
+          set_version "$NODE_VERSION_PATTERN" $NODE_VERSION "pezkuwi/node/primitives/src/lib.rs"
+          commit_with_message "Bump node version to $NODE_VERSION in pezkuwi-cli"
+          set_version "$NODE_VERSION_PATTERN" $NODE_VERSION "cumulus/pezkuwi-omni-node/lib/src/nodes/mod.rs"
+          commit_with_message "Bump node version to $NODE_VERSION in pezkuwi-omni-node-lib"
 
           SPEC_VERSION=$(get_spec_version $NODE_VERSION)
           runtimes_list=$(get_filtered_runtimes_list)
           set_spec_versions $SPEC_VERSION "${runtimes_list[@]}"
 
-          # TODO: clarify what to do with the polkadot-parachain binary
-          # Set new version for polkadot-parachain binary to match the polkadot node binary
-          # set_polkadot_parachain_binary_version $NODE_VERSION "cumulus/polkadot-parachain/Cargo.toml"
+          # TODO: clarify what to do with the pezkuwi-parachain binary
+          # Set new version for pezkuwi-parachain binary to match the pezkuwi node binary
+          # set_pezkuwi_parachain_binary_version $NODE_VERSION "cumulus/pezkuwi-parachain/Cargo.toml"
 
           reorder_prdocs $STABLE_BRANCH_NAME
 

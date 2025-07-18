@@ -28,10 +28,10 @@ on:
         description: |
           True iff there are changes in cumulus directory or the current workflow
 
-      changes_polkadot:
-        value: ${{ jobs.preflight.outputs.changes_polkadot }}
+      changes_pezkuwi:
+        value: ${{ jobs.preflight.outputs.changes_pezkuwi }}
         description: |
-          True iff there are changes in polkadot directory or the current workflow
+          True iff there are changes in pezkuwi directory or the current workflow
 
       changes_bridges:
         value: ${{ jobs.preflight.outputs.changes_bridges }}
@@ -104,7 +104,7 @@ jobs:
     outputs:
       changes_substrate: true
       changes_cumulus: true
-      changes_polkadot: true
+      changes_pezkuwi: true
       changes_bridges: true
       changes_templates: true
 
@@ -149,8 +149,8 @@ jobs:
       #        - 'substrate/**/*'
       #      cumulus:
       #        - 'cumulus/**/*'
-      #      polkadot:
-      #        - 'polkadot/**/*'
+      #      pezkuwi:
+      #        - 'pezkuwi/**/*'
       #      bridges:
       #        - 'bridges/**/*'
       #      templates:

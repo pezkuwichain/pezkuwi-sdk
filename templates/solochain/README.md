@@ -2,10 +2,10 @@
 
 A fresh [Substrate](https://substrate.io/) node, ready for hacking :rocket:
 
-A standalone version of this template is available for each release of Polkadot
+A standalone version of this template is available for each release of Pezkuwi
 in the [Substrate Developer Hub Parachain
 Template](https://github.com/substrate-developer-hub/substrate-node-template/)
-repository. The parachain template is generated directly at each Polkadot
+repository. The parachain template is generated directly at each Pezkuwi
 release branch from the [Solochain Template in
 Substrate](https://github.com/paritytech/polkadot-sdk/tree/master/templates/solochain)
 upstream
@@ -105,15 +105,15 @@ $ ls ./my-chain-state/chains/dev
 db keystore network
 ```
 
-### Connect with Polkadot-JS Apps Front-End
+### Connect with Pezkuwi-JS Apps Front-End
 
 After you start the node template locally, you can interact with it using the
-hosted version of the [Polkadot/Substrate
-Portal](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944)
+hosted version of the [Pezkuwi/Substrate
+Portal](https://pezkuwi.js.org/apps/#/explorer?rpc=ws://localhost:9944)
 front-end by connecting to the local node endpoint. A hosted version is also
 available on [IPFS](https://dotapps.io/). You can
 also find the source code and instructions for hosting your own instance in the
-[`polkadot-js/apps`](https://github.com/polkadot-js/apps) repository.
+[`pezkuwi-js/apps`](https://github.com/pezkuwi-js/apps) repository.
 
 ### Multi-Node Local Testnet
 
@@ -138,7 +138,7 @@ capabilities:
   the network. Substrate makes it possible to supply custom consensus engines
   and also ships with several consensus mechanisms that have been built on top
   of [Web3 Foundation
-  research](https://research.web3.foundation/Polkadot/protocols/NPoS).
+  research](https://research.web3.foundation/Pezkuwi/protocols/NPoS).
 - RPC Server: A remote procedure call (RPC) server is used to interact with
   Substrate nodes.
 
@@ -185,7 +185,7 @@ template and note the following:
   configuration is defined by a code block that begins with `impl
   $PALLET_NAME::Config for Runtime`.
 - The pallets are composed into a single runtime by way of the
-  [#[runtime]](https://paritytech.github.io/polkadot-sdk/master/frame_support/attr.runtime.html)
+  [#[runtime]](https://paritytech.github.io/pezkuwi-sdk/master/frame_support/attr.runtime.html)
   macro, which is part of the [core FRAME pallet
   library](https://docs.substrate.io/reference/frame-pallets/#system-pallets).
 

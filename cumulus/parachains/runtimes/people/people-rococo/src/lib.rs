@@ -52,7 +52,7 @@ use parachains_common::{
 	AccountId, Balance, BlockNumber, Hash, Header, Nonce, Signature, AVERAGE_ON_INITIALIZE_RATIO,
 	NORMAL_DISPATCH_RATIO,
 };
-use polkadot_runtime_common::{identity_migrator, BlockHashCount, SlowAdjustingFeeUpdate};
+use pezkuwi_runtime_common::{identity_migrator, BlockHashCount, SlowAdjustingFeeUpdate};
 use sp_api::impl_runtime_apis;
 pub use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -332,7 +332,7 @@ pub type RootOrFellows = EitherOfDiverse<
 impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = ParachainSystem;
-	type VersionWrapper = PolkadotXcm;
+	type VersionWrapper = PezkuwiXcm;
 	type XcmpQueue = TransformOrigin<MessageQueue, AggregateMessageOrigin, ParaId, ParaIdToSibling>;
 	type MaxInboundSuspended = ConstU32<1_000>;
 	type MaxActiveOutboundChannels = ConstU32<128>;
@@ -550,7 +550,7 @@ impl identity_migrator::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Reaper = EnsureRoot<AccountId>;
 	type ReapIdentityHandler = ();
-	type WeightInfo = weights::polkadot_runtime_common_identity_migrator::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezkuwi_runtime_common_identity_migrator::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -596,7 +596,7 @@ construct_runtime!(
 
 		// XCM & related
 		XcmpQueue: cumulus_pallet_xcmp_queue = 30,
-		PolkadotXcm: pallet_xcm = 31,
+		PezkuwiXcm: pallet_xcm = 31,
 		CumulusXcm: cumulus_pallet_xcm = 32,
 		MessageQueue: pallet_message_queue = 34,
 
@@ -631,8 +631,8 @@ mod benches {
 		[pallet_timestamp, Timestamp]
 		[pallet_migrations, MultiBlockMigrations]
 		[pallet_transaction_payment, TransactionPayment]
-		// Polkadot
-		[polkadot_runtime_common::identity_migrator, IdentityMigrator]
+		// Pezkuwi
+		[pezkuwi_runtime_common::identity_migrator, IdentityMigrator]
 		// Cumulus
 		[cumulus_pallet_parachain_system, ParachainSystem]
 		[cumulus_pallet_xcmp_queue, XcmpQueue]
@@ -795,7 +795,7 @@ impl_runtime_apis! {
 	impl xcm_runtime_apis::fees::XcmPaymentApi<Block> for Runtime {
 		fn query_acceptable_payment_assets(xcm_version: xcm::Version) -> Result<Vec<VersionedAssetId>, XcmPaymentApiError> {
 			let acceptable_assets = vec![AssetId(xcm_config::RelayLocation::get())];
-			PolkadotXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
+			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
 		}
 
 		fn query_weight_to_asset_fee(weight: Weight, asset: VersionedAssetId) -> Result<u128, XcmPaymentApiError> {
@@ -817,21 +817,21 @@ impl_runtime_apis! {
 		}
 
 		fn query_xcm_weight(message: VersionedXcm<()>) -> Result<Weight, XcmPaymentApiError> {
-			PolkadotXcm::query_xcm_weight(message)
+			PezkuwiXcm::query_xcm_weight(message)
 		}
 
 		fn query_delivery_fees(destination: VersionedLocation, message: VersionedXcm<()>) -> Result<VersionedAssets, XcmPaymentApiError> {
-			PolkadotXcm::query_delivery_fees(destination, message)
+			PezkuwiXcm::query_delivery_fees(destination, message)
 		}
 	}
 
 	impl xcm_runtime_apis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
 		fn dry_run_call(origin: OriginCaller, call: RuntimeCall, result_xcms_version: XcmVersion) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			PolkadotXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
+			PezkuwiXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
 
 		fn dry_run_xcm(origin_location: VersionedLocation, xcm: VersionedXcm<RuntimeCall>) -> Result<XcmDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			PolkadotXcm::dry_run_xcm::<Runtime, xcm_config::XcmRouter, RuntimeCall, xcm_config::XcmConfig>(origin_location, xcm)
+			PezkuwiXcm::dry_run_xcm::<Runtime, xcm_config::XcmRouter, RuntimeCall, xcm_config::XcmConfig>(origin_location, xcm)
 		}
 	}
 
@@ -1099,10 +1099,10 @@ impl_runtime_apis! {
 
 	impl xcm_runtime_apis::trusted_query::TrustedQueryApi<Block> for Runtime {
 		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
-			PolkadotXcm::is_trusted_reserve(asset, location)
+			PezkuwiXcm::is_trusted_reserve(asset, location)
 		}
 		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
-			PolkadotXcm::is_trusted_teleporter(asset, location)
+			PezkuwiXcm::is_trusted_teleporter(asset, location)
 		}
 	}
 }

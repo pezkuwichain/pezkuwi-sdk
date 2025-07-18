@@ -34,7 +34,7 @@ crates:
   bump: minor
 - name: coretime-rococo-runtime
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: minor
 - name: asset-hub-rococo-runtime
   bump: minor

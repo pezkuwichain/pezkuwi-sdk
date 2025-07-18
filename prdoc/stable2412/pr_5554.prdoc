@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Identity Decouple usernames from identities
 
@@ -25,7 +25,7 @@ crates:
     bump: major
   - name: people-westend-runtime
     bump: major
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: major
   - name: kitchensink-runtime
     bump: major

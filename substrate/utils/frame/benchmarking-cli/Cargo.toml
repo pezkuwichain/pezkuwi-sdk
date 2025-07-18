@@ -37,10 +37,10 @@ handlebars = { workspace = true }
 itertools = { workspace = true }
 linked-hash-map = { workspace = true }
 log = { workspace = true, default-features = true }
-polkadot-parachain-primitives.default-features = true
-polkadot-parachain-primitives.workspace = true
-polkadot-primitives.default-features = true
-polkadot-primitives.workspace = true
+pezkuwi-parachain-primitives.default-features = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
 rand = { features = ["small_rng"], workspace = true, default-features = true }
 rand_pcg = { workspace = true }
 sc-block-builder.default-features = true
@@ -114,8 +114,8 @@ runtime-benchmarks = [
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
-	"polkadot-parachain-primitives/runtime-benchmarks",
-	"polkadot-primitives/runtime-benchmarks",
+	"pezkuwi-parachain-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-client-db/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",

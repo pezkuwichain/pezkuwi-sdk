@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Rate-limiting of statement distribution v2 requests to 1 per peer
 
@@ -19,7 +19,7 @@ doc:
       better load-balance statement distribution.
 
 crates: 
-  - name: polkadot-test-malus
+  - name: pezkuwi-test-malus
     bump: minor
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: minor

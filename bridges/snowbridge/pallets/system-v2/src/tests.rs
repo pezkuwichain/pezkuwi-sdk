@@ -97,16 +97,16 @@ fn set_operating_mode() {
 }
 
 pub struct RegisterTokenTestCase {
-	/// Input: Location of Polkadot-native token relative to BH
+	/// Input: Location of Pezkuwi-native token relative to BH
 	pub native: Location,
 }
 
 #[test]
 fn register_all_tokens_succeeds() {
 	let test_cases = vec![
-		// DOT
+		// HEZ
 		RegisterTokenTestCase { native: Location::parent() },
-		// GLMR (Some Polkadot parachain currency)
+		// GLMR (Some Pezkuwi parachain currency)
 		RegisterTokenTestCase { native: Location::new(1, [Parachain(2004)]) },
 		// USDT
 		RegisterTokenTestCase {

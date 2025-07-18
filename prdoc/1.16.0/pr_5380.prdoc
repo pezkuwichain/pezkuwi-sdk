@@ -11,5 +11,5 @@ crates:
     bump: patch
   - name: westend-runtime
     bump: major
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: patch

@@ -4,27 +4,27 @@ doc:
   - audience: Node Dev
     description: |
       This PR removes unnecessary runtime API version checks for APIs supported
-      by Polkadot (the most recent network to upgrade). Specifically, it applies
+      by Pezkuwi (the most recent network to upgrade). Specifically, it applies
       to the `DisabledValidators`, `MinimumBackingVotes` and `NodeFeatures` APIs.
 
 crates:
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: major
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: major
-  - name: polkadot-availability-distribution
+  - name: pezkuwi-availability-distribution
     bump: patch
-  - name: polkadot-availability-recovery
+  - name: pezkuwi-availability-recovery
     bump: patch
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: patch
-  - name: polkadot-node-collation-generation
+  - name: pezkuwi-node-collation-generation
     bump: patch
-  - name: polkadot-node-core-av-store
+  - name: pezkuwi-node-core-av-store
     bump: patch
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
     bump: patch
-  - name: polkadot-node-core-dispute-coordinator
+  - name: pezkuwi-node-core-dispute-coordinator
     bump: patch
-  - name: polkadot-node-core-provisioner
+  - name: pezkuwi-node-core-provisioner
     bump: patch

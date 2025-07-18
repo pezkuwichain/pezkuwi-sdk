@@ -109,7 +109,7 @@ impl TypeId for LegacyLaneId {
 /// concatenation (separated by some binary data). I.e.:
 ///
 /// ```nocompile
-/// let endpoint1 = X2(GlobalConsensus(NetworkId::Polkadot), Parachain(42));
+/// let endpoint1 = X2(GlobalConsensus(NetworkId::Pezkuwi), Parachain(42));
 /// let endpoint2 = X2(GlobalConsensus(NetworkId::Kusama), Parachain(777));
 ///
 /// let final_lane_key = if endpoint1 < endpoint2 {

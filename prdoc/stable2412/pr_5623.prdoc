@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Generic slashing side-effects
 
@@ -83,7 +83,7 @@ crates:
   - name: staging-xcm-builder
     bump: minor
 
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor
 
 

@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Add omni-node checks for runtime parachain compatibility 
 
@@ -11,9 +11,9 @@ doc:
       `frame-system` pallet storage `Number` type, and then uses it to configure AURA if `u32` or `u64`.
 
 crates:
-  - name: polkadot-omni-node-lib
+  - name: pezkuwi-omni-node-lib
     bump: minor
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor
   - name: sc-runtime-utilities
     bump: patch

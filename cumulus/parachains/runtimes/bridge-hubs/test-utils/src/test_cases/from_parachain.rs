@@ -26,7 +26,7 @@ use crate::{
 use alloc::{boxed::Box, vec};
 use bp_header_chain::ChainWithGrandpa;
 use bp_messages::UnrewardedRelayersState;
-use bp_polkadot_core::parachains::ParaHash;
+use bp_pezkuwi_core::parachains::ParaHash;
 use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use bp_runtime::{Chain, Parachain};
 use frame_support::traits::{OnFinalize, OnInitialize};
@@ -585,7 +585,7 @@ where
 			LaneIdOf::<RuntimeHelper::Runtime, RuntimeHelper::MPI>::default(),
 			vec![Instruction::<()>::ClearOrigin; 1_024].into(),
 			1,
-			[GlobalConsensus(Polkadot), Parachain(1_000)].into(),
+			[GlobalConsensus(Pezkuwi), Parachain(1_000)].into(),
 			1,
 			5,
 			1_000,
@@ -719,7 +719,7 @@ where
 			LaneIdOf::<RuntimeHelper::Runtime, RuntimeHelper::MPI>::default(),
 			vec![Instruction::<()>::ClearOrigin; 1_024].into(),
 			1,
-			[GlobalConsensus(Polkadot), Parachain(1_000)].into(),
+			[GlobalConsensus(Pezkuwi), Parachain(1_000)].into(),
 			1,
 			5,
 			1_000,

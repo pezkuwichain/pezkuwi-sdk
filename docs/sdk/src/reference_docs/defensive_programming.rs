@@ -20,7 +20,7 @@
 //! and for them to be handled gracefully, which is in line with the intended fault-tolerant and
 //! deterministic nature of blockchains.
 //!
-//! The Polkadot SDK is built to reflect these principles and to facilitate their usage accordingly.
+//! The Pezkuwi SDK is built to reflect these principles and to facilitate their usage accordingly.
 //!
 //! ## General Overview
 //!
@@ -151,7 +151,7 @@
 //! operations are the safest bet, presenting two predictable (and erroring) outcomes that can be
 //! handled accordingly (Some and None).
 //!
-//! The following conventions can be seen within the Polkadot SDK, where it is
+//! The following conventions can be seen within the Pezkuwi SDK, where it is
 //! handled in two ways:
 //!
 //! - As an [`Option`], using the `if let` / `if` or `match`
@@ -171,7 +171,7 @@
 //!
 //! #### Handling via Result - Less Verbose
 //!
-//! In the Polkadot SDK codebase, checked operations are handled as a `Result` via `ok_or`. This is
+//! In the Pezkuwi SDK codebase, checked operations are handled as a `Result` via `ok_or`. This is
 //! a less verbose way of expressing the above. This usage often boils down to the developer’s
 //! preference:
 #![doc = docify::embed!("./src/reference_docs/defensive_programming.rs", increase_balance_result)]
@@ -294,7 +294,7 @@
 //!
 //! ## Other Resources
 //!
-//! - [PBA Book - FRAME Tips & Tricks](https://polkadot-blockchain-academy.github.io/pba-book/substrate/tips-tricks/page.html?highlight=perthing#substrate-and-frame-tips-and-tricks)
+//! - [PBA Book - FRAME Tips & Tricks](https://pezkuwi-blockchain-academy.github.io/pba-book/substrate/tips-tricks/page.html?highlight=perthing#substrate-and-frame-tips-and-tricks)
 #![allow(dead_code)]
 #[allow(unused_variables)]
 mod fake_runtime_types {

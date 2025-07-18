@@ -30,5 +30,5 @@ crates:
   bump: major
 - name: cumulus-client-consensus-relay-chain
   bump: major
-- name: polkadot-parachain-bin
+- name: pezkuwi-parachain-bin
   validate: false

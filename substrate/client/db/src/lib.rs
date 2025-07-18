@@ -379,7 +379,7 @@ impl DatabaseSource {
 		match self {
 			// as per https://github.com/paritytech/substrate/pull/9500#discussion_r684312550
 			//
-			// IIUC this is needed for polkadot to create its own dbs, so until it can use parity db
+			// IIUC this is needed for pezkuwi to create its own dbs, so until it can use parity db
 			// I would think rocksdb, but later parity-db.
 			DatabaseSource::Auto { paritydb_path, .. } => Some(paritydb_path),
 			#[cfg(feature = "rocksdb")]

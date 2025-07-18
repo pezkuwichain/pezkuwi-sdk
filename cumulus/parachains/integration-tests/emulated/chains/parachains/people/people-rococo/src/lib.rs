@@ -40,7 +40,7 @@ decl_test_parachains! {
 			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
 		},
 		pallets = {
-			PolkadotXcm: people_rococo_runtime::PolkadotXcm,
+			PezkuwiXcm: people_rococo_runtime::PezkuwiXcm,
 			Balances: people_rococo_runtime::Balances,
 			Identity: people_rococo_runtime::Identity,
 			IdentityMigrator: people_rococo_runtime::IdentityMigrator,

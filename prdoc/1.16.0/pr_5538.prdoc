@@ -7,5 +7,5 @@ doc:
       to collations not being announced to a validator.
 
 crates:
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: patch

@@ -27,10 +27,10 @@ use sp_core::traits::SpawnNamed;
 use sp_runtime::traits::{Block as BlockT, Header as HeaderT};
 
 use cumulus_client_consensus_common::ParachainConsensus;
-use polkadot_node_primitives::{CollationGenerationConfig, CollationResult, MaybeCompressedPoV};
-use polkadot_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
-use polkadot_overseer::Handle as OverseerHandle;
-use polkadot_primitives::{CollatorPair, Id as ParaId};
+use pezkuwi_node_primitives::{CollationGenerationConfig, CollationResult, MaybeCompressedPoV};
+use pezkuwi_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
+use pezkuwi_overseer::Handle as OverseerHandle;
+use pezkuwi_primitives::{CollatorPair, Id as ParaId};
 
 use codec::{Decode, Encode};
 use futures::prelude::*;
@@ -156,10 +156,10 @@ pub mod relay_chain_driven {
 		channel::{mpsc, oneshot},
 		prelude::*,
 	};
-	use polkadot_node_primitives::{CollationGenerationConfig, CollationResult};
-	use polkadot_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
-	use polkadot_overseer::Handle as OverseerHandle;
-	use polkadot_primitives::{CollatorPair, Id as ParaId};
+	use pezkuwi_node_primitives::{CollationGenerationConfig, CollationResult};
+	use pezkuwi_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
+	use pezkuwi_overseer::Handle as OverseerHandle;
+	use pezkuwi_primitives::{CollatorPair, Id as ParaId};
 
 	use cumulus_primitives_core::{relay_chain::Hash as PHash, PersistedValidationData};
 
@@ -189,7 +189,7 @@ pub mod relay_chain_driven {
 		}
 	}
 
-	/// Initialize the collator with Polkadot's collation-generation
+	/// Initialize the collator with Pezkuwi's collation-generation
 	/// subsystem, returning a stream of collation requests to handle.
 	pub async fn init(
 		key: CollatorPair,
@@ -205,7 +205,7 @@ pub mod relay_chain_driven {
 			collator: Some(Box::new(move |relay_parent, validation_data| {
 				// Cloning the channel on each usage effectively makes the channel
 				// unbounded. The channel is actually bounded by the block production
-				// and consensus systems of Polkadot, which limits the amount of possible
+				// and consensus systems of Pezkuwi, which limits the amount of possible
 				// blocks.
 				let mut stream_tx = stream_tx.clone();
 				let validation_data = validation_data.clone();
@@ -346,11 +346,11 @@ mod tests {
 	use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 	use cumulus_test_runtime::{Block, Header};
 	use futures::{channel::mpsc, executor::block_on, StreamExt};
-	use polkadot_node_primitives::CollationGenerationConfig;
-	use polkadot_node_subsystem::messages::CollationGenerationMessage;
-	use polkadot_node_subsystem_test_helpers::ForwardSubsystem;
-	use polkadot_overseer::{dummy::dummy_overseer_builder, HeadSupportsParachains};
-	use polkadot_primitives::HeadData;
+	use pezkuwi_node_primitives::CollationGenerationConfig;
+	use pezkuwi_node_subsystem::messages::CollationGenerationMessage;
+	use pezkuwi_node_subsystem_test_helpers::ForwardSubsystem;
+	use pezkuwi_overseer::{dummy::dummy_overseer_builder, HeadSupportsParachains};
+	use pezkuwi_primitives::HeadData;
 	use sp_consensus::BlockOrigin;
 	use sp_core::{testing::TaskExecutor, Pair};
 	use sp_runtime::traits::BlakeTwo256;

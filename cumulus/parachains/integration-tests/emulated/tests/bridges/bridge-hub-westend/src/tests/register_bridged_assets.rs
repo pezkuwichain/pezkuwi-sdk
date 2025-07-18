@@ -91,7 +91,7 @@ fn register_asset_on_rah_from_wah(bridged_asset_at_rah: Location) {
 
 	let root_origin = <AssetHubWestend as Chain>::RuntimeOrigin::root();
 	AssetHubWestend::execute_with(|| {
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::send(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::send(
 			root_origin,
 			bx!(destination.into()),
 			bx!(xcm),

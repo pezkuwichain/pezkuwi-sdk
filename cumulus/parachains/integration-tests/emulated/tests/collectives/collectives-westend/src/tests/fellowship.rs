@@ -30,7 +30,7 @@ fn fellows_whitelist_call() {
 
 		let call_hash = [1u8; 32].into();
 
-		let whitelist_call = RuntimeCall::PolkadotXcm(pallet_xcm::Call::<Runtime>::send {
+		let whitelist_call = RuntimeCall::PezkuwiXcm(pallet_xcm::Call::<Runtime>::send {
 			dest: bx!(VersionedLocation::from(Location::parent())),
 			message: bx!(VersionedXcm::from(Xcm(vec![
 				UnpaidExecution { weight_limit: Unlimited, check_origin: None },
@@ -53,7 +53,7 @@ fn fellows_whitelist_call() {
 		assert_expected_events!(
 			CollectivesWestend,
 			vec![
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent { .. }) => {},
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent { .. }) => {},
 			]
 		);
 	});

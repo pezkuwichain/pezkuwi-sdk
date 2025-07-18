@@ -222,7 +222,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 					let held = maybe_held.unwrap_or_default();
 
 					// The `untouchable` balance of the asset account of `who`. This is described
-					// here: https://paritytech.github.io/polkadot-sdk/master/frame_support/traits/tokens/fungible/index.html#visualising-balance-components-together-
+					// here: https://paritytech.github.io/pezkuwi-sdk/master/frame_support/traits/tokens/fungible/index.html#visualising-balance-components-together-
 					let untouchable = frozen.saturating_sub(held).max(details.min_balance);
 					if rest < untouchable {
 						if !frozen.is_zero() {

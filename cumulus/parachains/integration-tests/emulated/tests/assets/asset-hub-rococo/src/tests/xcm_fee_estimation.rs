@@ -84,7 +84,7 @@ fn transfer_assets_para_to_para_through_ah_call(
 		assets: Wild(AllCounted(test.args.assets.len() as u32)),
 		beneficiary: test.args.beneficiary,
 	}]);
-	RuntimeCall::PolkadotXcm(pallet_xcm::Call::transfer_assets_using_type_and_then {
+	RuntimeCall::PezkuwiXcm(pallet_xcm::Call::transfer_assets_using_type_and_then {
 		dest: bx!(test.args.dest.into()),
 		assets: bx!(test.args.assets.clone().into()),
 		assets_transfer_type: bx!(TransferType::RemoteReserve(asset_hub_location.clone().into())),
@@ -96,7 +96,7 @@ fn transfer_assets_para_to_para_through_ah_call(
 }
 
 /// We are able to dry-run and estimate the fees for a multi-hop XCM journey.
-/// Scenario: Alice on PenpalA has some DOTs and wants to send them to PenpalB.
+/// Scenario: Alice on PenpalA has some HEZs and wants to send them to PenpalB.
 /// We want to know the fees using the `DryRunApi` and `XcmPaymentApi`.
 #[test]
 fn multi_hop_works() {

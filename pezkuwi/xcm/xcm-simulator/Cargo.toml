@@ -1,0 +1,39 @@
+[package]
+name = "xcm-simulator"
+description = "Test kit to simulate cross-chain message passing and XCM execution"
+version = "20.1.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { workspace = true, default-features = true }
+frame-support.default-features = true
+frame-support.workspace = true
+frame-system.default-features = true
+frame-system.workspace = true
+paste = { workspace = true, default-features = true }
+pezkuwi-core-primitives.default-features = true
+pezkuwi-core-primitives.workspace = true
+pezkuwi-parachain-primitives.default-features = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+pezkuwi-runtime-parachains.default-features = true
+pezkuwi-runtime-parachains.workspace = true
+scale-info = { workspace = true }
+sp-io.default-features = true
+sp-io.workspace = true
+sp-runtime.default-features = true
+sp-runtime.workspace = true
+xcm-builder.default-features = true
+xcm-builder.workspace = true
+xcm-executor.default-features = true
+xcm-executor.workspace = true
+xcm.default-features = true
+xcm.workspace = true

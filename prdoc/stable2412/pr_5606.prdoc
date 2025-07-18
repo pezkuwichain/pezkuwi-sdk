@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Fix PVF precompilation for Kusama
 
@@ -9,5 +9,5 @@ doc:
       Tweaks the PVF precompilation on Kusama to allow prepare PVFs when the node is an authority but not a validator.
 
 crates:
-  - name: polkadot-node-core-candidate-validation
+  - name: pezkuwi-node-core-candidate-validation
     bump: patch

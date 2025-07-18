@@ -8,9 +8,9 @@ doc:
       connected to an RPC node, due to the high number of runtime API calls, which were unneccessary for a collator.
 
 crates:
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: minor
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: minor
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: minor

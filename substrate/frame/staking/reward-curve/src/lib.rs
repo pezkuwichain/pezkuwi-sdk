@@ -28,7 +28,7 @@ use syn::parse::{Parse, ParseStream};
 
 /// Accepts a number of expressions to create a instance of PiecewiseLinear which represents the
 /// NPoS curve (as detailed
-/// [here](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics.html#inflation-model))
+/// [here](https://research.web3.foundation/en/latest/pezkuwi/overview/2-token-economics.html#inflation-model))
 /// for those parameters. Parameters are:
 /// - `min_inflation`: the minimal amount to be rewarded between validators, expressed as a fraction
 ///   of total issuance. Known as `I_0` in the literature. Expressed in millionth, must be between 0
@@ -88,9 +88,9 @@ pub fn build(input: TokenStream) -> TokenStream {
 			let ident = syn::Ident::new(&sp_runtime, Span::call_site());
 			quote!( #[doc(hidden)] pub use #ident as _sp_runtime; )
 		},
-		Err(e) => match crate_name("polkadot-sdk") {
-			Ok(FoundCrate::Name(polkadot_sdk)) => {
-				let ident = syn::Ident::new(&polkadot_sdk, Span::call_site());
+		Err(e) => match crate_name("pezkuwi-sdk") {
+			Ok(FoundCrate::Name(pezkuwi_sdk)) => {
+				let ident = syn::Ident::new(&pezkuwi_sdk, Span::call_site());
 				quote!( #[doc(hidden)] pub use #ident::sp_runtime as _sp_runtime; )
 			},
 			_ => syn::Error::new(Span::call_site(), e).to_compile_error(),

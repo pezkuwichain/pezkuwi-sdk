@@ -4,12 +4,12 @@ on:
   workflow_call:
     inputs:
       package:
-        description: Package to be built, for now is either polkadot or polkadot-parachain-bin
+        description: Package to be built, for now is either pezkuwi or pezkuwi-parachain-bin
         required: true
         type: string
 
       release_tag:
-        description: Tag matching the actual release candidate with the format polkadot-stableYYMM(-X)-rcX or polkadot-stableYYMM-rcX
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcX or pezkuwi-stableYYMM-rcX
         required: true
         type: string
 

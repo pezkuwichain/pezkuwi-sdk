@@ -12,8 +12,8 @@
   timeout: 60m
 
 include:
-  # polkadot tests
-  - .gitlab/pipeline/zombienet/polkadot.yml
+  # pezkuwi tests
+  - .gitlab/pipeline/zombienet/pezkuwi.yml
   # bridges tests
   - .gitlab/pipeline/zombienet/bridges.yml
   # parachain-template-node tests

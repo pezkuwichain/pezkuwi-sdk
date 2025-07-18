@@ -1,0 +1,65 @@
+[package]
+name = "pallet-hemwelati-odul"
+version = "0.1.0"
+description = "PezkuwiChain Pallet for distributing citizen rewards via Merkle Tree proofs."
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+# External
+codec = { package = "parity-scale-codec", version = "3.6.1", default-features = false, features = ["derive"] }
+scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
+
+# Substrate FRAME
+frame-support = { default-features = false, path = "../../../../frame/support" }
+frame-system = { default-features = false, path = "../../../../frame/system" }
+frame-benchmarking = { default-features = false, path = "../../../../frame/benchmarking", optional = true }
+
+# Substrate Primitives
+sp-core = { default-features = false, path = "../../../../primitives/core" }
+sp-runtime = { default-features = false, path = "../../../../primitives/runtime" }
+sp-std = { default-features = false, path = "../../../../primitives/std" }
+sp-io = { default-features = false, path = "../../../../primitives/io" }
+sp-trie = { default-features = false, path = "../../../../primitives/trie" }
+
+
+[dev-dependencies]
+pallet-balances = { default-features = false, path = "../../../../frame/balances" }
+sp-core = { default-features = false, path = "../../../../primitives/core" }
+sp-io = { default-features = false, path = "../../../../primitives/io" }
+sp-runtime = { default-features = false, path = "../../../../primitives/runtime" }
+frame-system = { default-features = false, path = "../../../../frame/system" }
+frame-support = { default-features = false, path = "../../../../frame/support" }
+
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"scale-info/std",
+	"frame-support/std",
+	"frame-system/std",
+	"frame-benchmarking?/std",
+	"sp-core/std",
+	"sp-runtime/std",
+	"sp-std/std",
+	"sp-io/std",
+	"sp-trie/std",
+]
+runtime-benchmarks = [
+	"frame-benchmarking/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"frame-support/try-runtime",
+	"frame-system/try-runtime",
+	"sp-runtime/try-runtime",
+]

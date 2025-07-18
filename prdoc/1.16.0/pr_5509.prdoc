@@ -4,7 +4,7 @@ doc:
   - audience: Runtime User
     description: |
       Proxies can now be used on `coretime-rococo`, `coretime-westend`, `people-rococo` and
-      `people-westend` in the same way as they can be on Kusama and Polkadot chains.
+      `people-westend` in the same way as they can be on Kusama and Pezkuwi chains.
 
 crates:
   - name: coretime-rococo-runtime

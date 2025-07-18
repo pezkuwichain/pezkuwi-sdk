@@ -7,7 +7,7 @@ doc:
       it did not prove to improve the debugging and it wasted precious cpu cycles.
 
 crates:
-  - name: polkadot-approval-distribution
+  - name: pezkuwi-approval-distribution
     bump: none
-  - name: polkadot-node-core-approval-voting
+  - name: pezkuwi-node-core-approval-voting
     bump: none

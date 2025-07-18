@@ -5,5 +5,5 @@ doc:
     When we send `QueueEvent::StartWork`, we have already completed the execution. Therefore, `QueueEvent::FinishWork` is a better match.
 
 crates:
-- name: polkadot-node-core-pvf
+- name: pezkuwi-node-core-pvf
   bump: patch

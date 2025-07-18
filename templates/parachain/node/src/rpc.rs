@@ -9,7 +9,7 @@ use std::sync::Arc;
 
 use parachain_template_runtime::{opaque::Block, AccountId, Balance, Nonce};
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::ProvideRuntimeApi;

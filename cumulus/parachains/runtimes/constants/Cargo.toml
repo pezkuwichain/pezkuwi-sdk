@@ -17,7 +17,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 cumulus-primitives-core.workspace = true
 frame-support.workspace = true
-polkadot-core-primitives.workspace = true
+pezkuwi-core-primitives.workspace = true
 rococo-runtime-constants = { optional = true, workspace = true }
 smallvec = { workspace = true, default-features = true }
 sp-runtime.workspace = true
@@ -29,7 +29,7 @@ default = ["std"]
 std = [
 	"cumulus-primitives-core/std",
 	"frame-support/std",
-	"polkadot-core-primitives/std",
+	"pezkuwi-core-primitives/std",
 	"rococo-runtime-constants?/std",
 	"sp-runtime/std",
 	"westend-runtime-constants?/std",

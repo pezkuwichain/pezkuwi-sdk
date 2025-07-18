@@ -4,8 +4,8 @@
 exclude = [
 	"bridges/testing/**",
 	"cumulus/zombienet/**",
-	"polkadot/node/malus/integrationtests/**",
-	"polkadot/zombienet_tests/**",
+	"pezkuwi/node/malus/integrationtests/**",
+	"pezkuwi/zombienet_tests/**",
 	"substrate/client/transaction-pool/tests/zombienet/**",
 	"substrate/zombienet/**",
 	"target/**",
@@ -21,7 +21,7 @@ indent_string = "	"         # tab
 
 # don't re-order order-dependent deb package metadata
 [[rule]]
-include = ["polkadot/Cargo.toml"]
+include = ["pezkuwi/Cargo.toml"]
 keys = ["package.metadata.deb"]
 
 [rule.formatting]

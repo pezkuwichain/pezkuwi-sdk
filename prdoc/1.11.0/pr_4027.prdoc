@@ -9,15 +9,15 @@ doc:
      `candidate_pending_availability` is now deprectated and will be removed in the future.
 
 crates:
-  - name: polkadot-node-core-runtime-api
+  - name: pezkuwi-node-core-runtime-api
     bump: minor
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: minor
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: minor
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: minor
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: minor
   - name: cumulus-relay-chain-rpc-interface
     bump: minor

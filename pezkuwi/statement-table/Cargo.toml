@@ -1,0 +1,19 @@
+[package]
+name = "pezkuwi-statement-table"
+version = "19.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Stores messages other authorities issue about candidates in Pezkuwi."
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+gum.default-features = true
+gum.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true

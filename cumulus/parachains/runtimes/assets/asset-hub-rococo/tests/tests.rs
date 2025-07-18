@@ -936,7 +936,7 @@ asset_test_utils::include_teleports_for_native_asset_works!(
 	ExistentialDeposit::get(),
 	Box::new(|runtime_event_encoded: Vec<u8>| {
 		match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-			Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+			Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 			_ => None,
 		}
 	}),
@@ -957,7 +957,7 @@ asset_test_utils::include_teleports_for_foreign_assets_works!(
 	ExistentialDeposit::get(),
 	Box::new(|runtime_event_encoded: Vec<u8>| {
 		match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-			Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+			Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 			_ => None,
 		}
 	}),
@@ -1067,7 +1067,7 @@ fn limited_reserve_transfer_assets_for_native_asset_over_bridge_works(
 		AccountId::from(ALICE),
 		Box::new(|runtime_event_encoded: Vec<u8>| {
 			match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-				Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+				Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 				_ => None,
 			}
 		}),
@@ -1086,12 +1086,12 @@ fn limited_reserve_transfer_assets_for_native_asset_over_bridge_works(
 
 mod asset_hub_rococo_tests {
 	use super::*;
-	use asset_hub_rococo_runtime::PolkadotXcm;
+	use asset_hub_rococo_runtime::PezkuwiXcm;
 	use xcm::latest::WESTEND_GENESIS_HASH;
 	use xcm_executor::traits::ConvertLocation;
 
 	fn bridging_to_asset_hub_westend() -> TestBridgingConfig {
-		let _ = PolkadotXcm::force_xcm_version(
+		let _ = PezkuwiXcm::force_xcm_version(
 			RuntimeOrigin::root(),
 			Box::new(bridging::to_westend::AssetHubWestend::get()),
 			XCM_VERSION,
@@ -1319,7 +1319,7 @@ mod asset_hub_rococo_tests {
 			AccountId::from(ALICE),
 			Box::new(|runtime_event_encoded: Vec<u8>| {
 				match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-					Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+					Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 					_ => None,
 				}
 			}),

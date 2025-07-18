@@ -48,7 +48,7 @@ doc:
         the account, `frozen` is more than `on_hold + ed`, the remaining amount after subtracting `frozen` to
         `on_hold + ed` is the amount you cannot spend from your `free` balance.
 
-        See [sdk docs](https://paritytech.github.io/polkadot-sdk/master/frame_support/traits/tokens/fungible/index.html#visualising-balance-components-together-)
+        See [sdk docs](https://paritytech.github.io/pezkuwi-sdk/master/frame_support/traits/tokens/fungible/index.html#visualising-balance-components-together-)
         to understand how to calculate the spendable balance of an asset account on the client side.
 
         ## Implementation of `InspectHold` and `MutateHold`
@@ -99,7 +99,7 @@ crates:
     bump: patch
   - name: rococo-parachain-runtime
     bump: patch
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor
   - name: staging-xcm-builder
     bump: patch

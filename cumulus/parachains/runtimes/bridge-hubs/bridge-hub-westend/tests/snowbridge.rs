@@ -18,7 +18,7 @@
 
 use bp_asset_hub_westend::ASSET_HUB_WESTEND_PARACHAIN_ID;
 use bp_bridge_hub_westend::BRIDGE_HUB_WESTEND_PARACHAIN_ID;
-use bp_polkadot_core::Signature;
+use bp_pezkuwi_core::Signature;
 use bridge_hub_westend_runtime::{
 	bridge_to_rococo_config, xcm_config::XcmConfig, AllPalletsWithoutSystem,
 	BridgeRejectObsoleteHeadersAndMessages, Executive, MessageQueueServiceWeight, Runtime,
@@ -131,8 +131,8 @@ fn ethereum_client_consensus_extrinsics_work() {
 }
 
 #[test]
-fn ethereum_to_polkadot_message_extrinsics_work() {
-	snowbridge_runtime_test_common::ethereum_to_polkadot_message_extrinsics_work(
+fn ethereum_to_pezkuwi_message_extrinsics_work() {
+	snowbridge_runtime_test_common::ethereum_to_pezkuwi_message_extrinsics_work(
 		collator_session_keys(),
 		BRIDGE_HUB_WESTEND_PARACHAIN_ID,
 		construct_and_apply_extrinsic,

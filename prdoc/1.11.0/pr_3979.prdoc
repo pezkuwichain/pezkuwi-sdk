@@ -1,7 +1,7 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
-title: Deprecate `para_id()` from `CoreState` in polkadot primitives
+title: Deprecate `para_id()` from `CoreState` in pezkuwi primitives
 
 doc:
   - audience: "Node Dev"
@@ -11,9 +11,9 @@ doc:
      scheduled on each core.
 
 crates:
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: minor
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: minor
   - name: cumulus-client-consensus-aura
     bump: minor

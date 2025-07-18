@@ -150,7 +150,7 @@
 //! For managing sets of tokens, see the [`fungibles`](`frame_support::traits::fungibles`) trait
 //! which is a wrapper around this trait but supporting multiple asset instances.
 //!
-//! [`frame_tokens`]: ../../../../polkadot_sdk_docs/reference_docs/frame_tokens/index.html
+//! [`frame_tokens`]: ../../../../pezkuwi_sdk_docs/reference_docs/frame_tokens/index.html
 
 pub mod conformance_tests;
 pub mod freeze;

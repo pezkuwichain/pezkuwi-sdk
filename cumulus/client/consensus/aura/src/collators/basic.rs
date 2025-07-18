@@ -32,9 +32,9 @@ use cumulus_client_consensus_proposer::ProposerInterface;
 use cumulus_primitives_core::{relay_chain::BlockId as RBlockId, CollectCollationInfo};
 use cumulus_relay_chain_interface::RelayChainInterface;
 
-use polkadot_node_primitives::CollationResult;
-use polkadot_overseer::Handle as OverseerHandle;
-use polkadot_primitives::{CollatorPair, Id as ParaId, ValidationCode};
+use pezkuwi_node_primitives::CollationResult;
+use pezkuwi_overseer::Handle as OverseerHandle;
+use pezkuwi_primitives::{CollatorPair, Id as ParaId, ValidationCode};
 
 use futures::{channel::mpsc::Receiver, prelude::*};
 use sc_client_api::{backend::AuxStore, BlockBackend, BlockOf};

@@ -42,7 +42,7 @@ pub use origins::{
 use pallet_ranked_collective::EnsureOfRank;
 use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use parachains_common::impls::ToParentTreasury;
-use polkadot_runtime_common::impls::{
+use pezkuwi_runtime_common::impls::{
 	ContainsParts, LocatableAssetConverter, VersionedLocatableAsset, VersionedLocationConverter,
 };
 use sp_arithmetic::Permill;
@@ -228,7 +228,7 @@ const USDT_UNITS: u128 = 1_000_000;
 pub type FellowshipSalaryPaymaster = PayOverXcm<
 	Interior,
 	crate::xcm_config::XcmRouter,
-	crate::PolkadotXcm,
+	crate::PezkuwiXcm,
 	ConstU32<{ 6 * HOURS }>,
 	AccountId,
 	(),
@@ -275,7 +275,7 @@ parameter_types! {
 pub type FellowshipTreasuryPaymaster = PayOverXcm<
 	FellowshipTreasuryInteriorLocation,
 	crate::xcm_config::XcmRouter,
-	crate::PolkadotXcm,
+	crate::PezkuwiXcm,
 	ConstU32<{ 6 * HOURS }>,
 	VersionedLocation,
 	VersionedLocatableAsset,
@@ -330,7 +330,7 @@ impl pallet_treasury::Config<FellowshipTreasuryInstance> for Runtime {
 	>;
 	type PayoutPeriod = ConstU32<{ 30 * DAYS }>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = polkadot_runtime_common::impls::benchmarks::TreasuryArguments<
+	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments<
 		sp_core::ConstU8<1>,
 		ConstU32<1000>,
 	>;

@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Add Authorize Upgrade Pattern to Frame System"
 
@@ -7,7 +7,7 @@ doc:
   - audience: Runtime User
     description: |
       Adds the `authorize_upgrade` -> `enact_authorized_upgrade` pattern to `frame-system`. This
-      will be useful for upgrading bridged chains that are under the governance of Polkadot without
+      will be useful for upgrading bridged chains that are under the governance of Pezkuwi without
       passing entire runtime Wasm blobs over a bridge.
       
       Notes:

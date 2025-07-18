@@ -26,8 +26,8 @@ use frame_system::EnsureRoot;
 use sp_core::{ConstU32, H256};
 use sp_runtime::traits::IdentityLookup;
 
-use polkadot_parachain_primitives::primitives::Id as ParaId;
-use polkadot_runtime_parachains::{configuration, origin, shared};
+use pezkuwi_parachain_primitives::primitives::Id as ParaId;
+use pezkuwi_runtime_parachains::{configuration, origin, shared};
 use xcm::latest::prelude::*;
 use xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowSubscriptionsFrom,

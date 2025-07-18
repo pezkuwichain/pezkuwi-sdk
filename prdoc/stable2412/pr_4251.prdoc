@@ -61,7 +61,7 @@ crates:
   bump: minor
 - name: penpal-runtime
   bump: minor
-- name: polkadot-parachain-bin
+- name: pezkuwi-parachain-bin
   bump: minor
 - name: rococo-runtime
   bump: minor

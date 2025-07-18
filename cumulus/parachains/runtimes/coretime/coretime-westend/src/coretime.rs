@@ -64,7 +64,7 @@ fn burn_at_relay(stash: &AccountId, value: Balance) -> Result<(), XcmError> {
 		.reanchored(&dest, &Here.into())
 		.defensive_map_err(|_| XcmError::ReanchorFailed)?;
 
-	PolkadotXcm::send_xcm(
+	PezkuwiXcm::send_xcm(
 		Here,
 		Location::parent(),
 		Xcm(vec![
@@ -146,7 +146,7 @@ impl CoretimeInterface for CoretimeAllocator {
 			},
 		]);
 
-		match PolkadotXcm::send_xcm(Here, Location::parent(), message.clone()) {
+		match PezkuwiXcm::send_xcm(Here, Location::parent(), message.clone()) {
 			Ok(_) => log::debug!(
 				target: "runtime::coretime",
 				"Request to update schedulable cores sent successfully."
@@ -176,7 +176,7 @@ impl CoretimeInterface for CoretimeAllocator {
 			},
 		]);
 
-		match PolkadotXcm::send_xcm(Here, Location::parent(), message.clone()) {
+		match PezkuwiXcm::send_xcm(Here, Location::parent(), message.clone()) {
 			Ok(_) => log::debug!(
 				target: "runtime::coretime",
 				"Request for revenue information sent successfully."
@@ -205,7 +205,7 @@ impl CoretimeInterface for CoretimeAllocator {
 			},
 		]);
 
-		match PolkadotXcm::send_xcm(Here, Location::parent(), message.clone()) {
+		match PezkuwiXcm::send_xcm(Here, Location::parent(), message.clone()) {
 			Ok(_) => log::debug!(
 				target: "runtime::coretime",
 				"Instruction to credit account sent successfully."
@@ -276,7 +276,7 @@ impl CoretimeInterface for CoretimeAllocator {
 			},
 		]);
 
-		match PolkadotXcm::send_xcm(Here, Location::parent(), message.clone()) {
+		match PezkuwiXcm::send_xcm(Here, Location::parent(), message.clone()) {
 			Ok(_) => log::debug!(
 				target: "runtime::coretime",
 				"Core assignment sent successfully."

@@ -33,7 +33,7 @@ crates:
   bump: major
 - name: parachains-runtimes-test-utils
   bump: major
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major
 - name: rococo-runtime
   bump: major

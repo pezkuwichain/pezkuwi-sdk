@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Remove runtime collator signature checks"
 
@@ -11,11 +11,11 @@ doc:
       `CandidateReceiptV2` node feature bit.
 
 crates: 
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
-- name: polkadot-node-subsystem-util
+- name: pezkuwi-node-subsystem-util
   bump: minor
-- name: polkadot-node-core-prospective-parachains
+- name: pezkuwi-node-core-prospective-parachains
   bump: patch
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

@@ -19,7 +19,7 @@
 use crate::{Config, GrandpaPalletOf, RelayBlockHash, RelayBlockHasher};
 use bp_header_chain::{HeaderChain, HeaderChainError};
 use bp_parachains::parachain_head_storage_key_at_source;
-use bp_polkadot_core::parachains::{ParaHead, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHead, ParaId};
 use bp_runtime::{RawStorageProof, StorageProofChecker, StorageProofError};
 use codec::Decode;
 use frame_support::traits::Get;

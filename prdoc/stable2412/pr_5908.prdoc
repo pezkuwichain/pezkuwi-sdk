@@ -3,12 +3,12 @@ title: "collation-generation: use v2 receipts"
 doc:
   - audience: Node Dev
     description: |
-      Implementation of [RFC 103](https://github.com/polkadot-fellows/RFCs/pull/103) for the collation-generation subsystem.
+      Implementation of [RFC 103](https://github.com/pezkuwi-fellows/RFCs/pull/103) for the collation-generation subsystem.
       Also removes the usage of AsyncBackingParams.
 
 crates:
-  - name: polkadot-node-collation-generation
+  - name: pezkuwi-node-collation-generation
     bump: major
     validate: false
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: minor

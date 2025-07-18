@@ -27,13 +27,13 @@ crates:
     bump: patch
   - name: sc-cli
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
   - name: cumulus-relay-chain-minimal-node
     bump: none
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: major
-  - name: polkadot-parachain-lib
+  - name: pezkuwi-parachain-lib
     bump: major
   - name: staging-node-inspect
     bump: major

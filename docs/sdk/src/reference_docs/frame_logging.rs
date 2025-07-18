@@ -103,7 +103,7 @@
 //!
 //! ## Log Target Prefixing
 //!
-//! Many [`crate::polkadot_sdk::frame_runtime`] pallets emit logs with log target `runtime::<name of
+//! Many [`crate::pezkuwi_sdk::frame_runtime`] pallets emit logs with log target `runtime::<name of
 //! pallet>`, for example `runtime::system`. This then allows one to run a node with a wasm blob
 //! compiled with `LOG_TARGET=runtime=debug`, which enables the log target of all pallets who's log
 //! target starts with `runtime`.

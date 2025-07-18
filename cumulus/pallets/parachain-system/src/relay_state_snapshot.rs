@@ -198,7 +198,7 @@ impl RelayChainStateProof {
 				.key,
 		);
 
-		// TODO paritytech/polkadot#6283: Remove all usages of `relay_dispatch_queue_size`
+		// TODO paritytech/pezkuwi#6283: Remove all usages of `relay_dispatch_queue_size`
 		//
 		// When the relay chain and all parachains support
 		// `relay_dispatch_queue_remaining_capacity`, this code here needs to be removed and above

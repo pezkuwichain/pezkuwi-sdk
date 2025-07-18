@@ -2,8 +2,8 @@
 timeout = 1500
 
 [relaychain]
-default_image = "parity/polkadot:latest"
-default_command = "polkadot"
+default_image = "parity/pezkuwi:latest"
+default_command = "pezkuwi"
 chain = "rococo-local"
 default_args = [
 	"--pool-kbytes 2048000",

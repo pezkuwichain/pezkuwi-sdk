@@ -15,14 +15,14 @@ workspace = true
 codec = { features = ["derive"], workspace = true, default-features = true }
 futures = { workspace = true }
 futures-timer = { workspace = true }
-polkadot-node-primitives.default-features = true
-polkadot-node-primitives.workspace = true
-polkadot-node-subsystem.default-features = true
-polkadot-node-subsystem.workspace = true
-polkadot-overseer.default-features = true
-polkadot-overseer.workspace = true
-polkadot-primitives.default-features = true
-polkadot-primitives.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-overseer.default-features = true
+pezkuwi-overseer.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
 rand = { workspace = true, default-features = true }
 sc-client-api.default-features = true
 sc-client-api.workspace = true

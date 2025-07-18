@@ -24,7 +24,7 @@ use cumulus_primitives_aura::AuraUnincludedSegmentApi;
 use cumulus_primitives_core::{GetCoreSelectorApi, PersistedValidationData};
 use cumulus_relay_chain_interface::RelayChainInterface;
 
-use polkadot_primitives::{Block as RelayBlock, Id as ParaId};
+use pezkuwi_primitives::{Block as RelayBlock, Id as ParaId};
 
 use super::CollatorMessage;
 use crate::{

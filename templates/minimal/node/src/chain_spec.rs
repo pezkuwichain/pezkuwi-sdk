@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use minimal_template_runtime::WASM_BINARY;
-use polkadot_sdk::{
+use pezkuwi_sdk::{
 	sc_service::{ChainType, Properties},
 	*,
 };

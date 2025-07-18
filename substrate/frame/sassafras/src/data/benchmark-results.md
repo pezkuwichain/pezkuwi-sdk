@@ -36,7 +36,7 @@
 - Verification doesn't depend on ring size as verification key is already constructed.
 - The call is fast as far as the max number of tickets which can be submitted in one shot
   is appropriately bounded.
-- Currently, the bound is set equal epoch length, which iirc for Polkadot is 3600.
+- Currently, the bound is set equal epoch length, which iirc for Pezkuwi is 3600.
   In this case if all the tickets are submitted in one shot timing is expected to be
   ~39 seconds, which is not acceptable. TODO: find a sensible bound
 

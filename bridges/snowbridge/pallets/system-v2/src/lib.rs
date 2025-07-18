@@ -9,7 +9,7 @@
 //! * [`Call::upgrade`]: Upgrade the Gateway contract on Ethereum.
 //! * [`Call::set_operating_mode`]: Set the operating mode of the Gateway contract
 //!
-//! ## Polkadot-native tokens on Ethereum
+//! ## Pezkuwi-native tokens on Ethereum
 //!
 //! Tokens deposited on AssetHub pallet can be bridged to Ethereum as wrapped ERC20 tokens. As a
 //! prerequisite, the token should be registered first.
@@ -90,11 +90,11 @@ pub mod pallet {
 		Upgrade { impl_address: H160, impl_code_hash: H256, initializer_params_hash: H256 },
 		/// An SetOperatingMode message was sent to the Gateway
 		SetOperatingMode { mode: OperatingMode },
-		/// Register Polkadot-native token as a wrapped ERC20 token on Ethereum
+		/// Register Pezkuwi-native token as a wrapped ERC20 token on Ethereum
 		RegisterToken {
-			/// Location of Polkadot-native token
+			/// Location of Pezkuwi-native token
 			location: VersionedLocation,
-			/// ID of Polkadot-native token on Ethereum
+			/// ID of Pezkuwi-native token on Ethereum
 			foreign_token_id: H256,
 		},
 	}
@@ -172,7 +172,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Registers a Polkadot-native token as a wrapped ERC20 token on Ethereum.
+		/// Registers a Pezkuwi-native token as a wrapped ERC20 token on Ethereum.
 		///
 		/// The system frontend pallet on AH proxies this call to BH.
 		///

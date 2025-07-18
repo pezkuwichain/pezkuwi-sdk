@@ -60,7 +60,7 @@ fn ah_to_para_transfer_assets(t: SystemParaToParaTest) -> DispatchResult {
 		assets: Wild(AllCounted(t.args.assets.len() as u32)),
 		beneficiary: t.args.beneficiary,
 	}]);
-	<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+	<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.assets.into()),
@@ -79,7 +79,7 @@ fn para_to_ah_transfer_assets(t: ParaToSystemParaTest) -> DispatchResult {
 		assets: Wild(AllCounted(t.args.assets.len() as u32)),
 		beneficiary: t.args.beneficiary,
 	}]);
-	<PenpalA as PenpalAPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.assets.into()),
@@ -99,7 +99,7 @@ fn para_to_para_transfer_assets_through_ah(t: ParaToParaThroughAHTest) -> Dispat
 		assets: Wild(AllCounted(t.args.assets.len() as u32)),
 		beneficiary: t.args.beneficiary,
 	}]);
-	<PenpalA as PenpalAPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.assets.into()),
@@ -118,7 +118,7 @@ fn para_to_asset_hub_teleport_foreign_assets(t: ParaToSystemParaTest) -> Dispatc
 		assets: Wild(AllCounted(t.args.assets.len() as u32)),
 		beneficiary: t.args.beneficiary,
 	}]);
-	<PenpalA as PenpalAPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.assets.into()),
@@ -137,7 +137,7 @@ fn asset_hub_to_para_teleport_foreign_assets(t: SystemParaToParaTest) -> Dispatc
 		assets: Wild(AllCounted(t.args.assets.len() as u32)),
 		beneficiary: t.args.beneficiary,
 	}]);
-	<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+	<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.assets.into()),
@@ -662,7 +662,7 @@ fn bidirectional_teleport_foreign_asset_between_para_and_asset_hub_using_explici
 // ===== Transfer - Native Asset - Relay->AssetHub->Parachain ====
 // ===============================================================
 /// Transfers of native asset Relay to Parachain (using AssetHub reserve). Parachains want to avoid
-/// managing SAs on all system chains, thus want all their DOT-in-reserve to be held in their
+/// managing SAs on all system chains, thus want all their HEZ-in-reserve to be held in their
 /// Sovereign Account on Asset Hub.
 #[test]
 fn transfer_native_asset_from_relay_to_para_through_asset_hub() {

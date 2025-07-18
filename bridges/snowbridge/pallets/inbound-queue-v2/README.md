@@ -1,6 +1,6 @@
 # Ethereum Inbound Queue V2
 
-Reads messages from Ethereum and sends them to intended destination on Polkadot, using XCM.
+Reads messages from Ethereum and sends them to intended destination on Pezkuwi, using XCM.
 
 ## Architecture Overview
 

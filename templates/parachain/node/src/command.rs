@@ -1,4 +1,4 @@
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use cumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
 use cumulus_primitives_core::ParaId;
@@ -94,7 +94,7 @@ impl SubstrateCli for RelayChainCli {
 	}
 
 	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
-		polkadot_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
+		pezkuwi_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
 	}
 }
 
@@ -147,19 +147,19 @@ pub fn run() -> Result<()> {
 			let runner = cli.create_runner(cmd)?;
 
 			runner.sync_run(|config| {
-				let polkadot_cli = RelayChainCli::new(
+				let pezkuwi_cli = RelayChainCli::new(
 					&config,
 					[RelayChainCli::executable_name()].iter().chain(cli.relay_chain_args.iter()),
 				);
 
-				let polkadot_config = SubstrateCli::create_configuration(
-					&polkadot_cli,
-					&polkadot_cli,
+				let pezkuwi_config = SubstrateCli::create_configuration(
+					&pezkuwi_cli,
+					&pezkuwi_cli,
 					config.tokio_handle.clone(),
 				)
 				.map_err(|err| format!("Relay chain argument error: {}", err))?;
 
-				cmd.run(config, polkadot_config)
+				cmd.run(config, pezkuwi_config)
 			})
 		},
 		Some(Subcommand::ExportGenesisHead(cmd)) => {
@@ -235,7 +235,7 @@ pub fn run() -> Result<()> {
 					.map(|e| e.para_id)
 					.ok_or("Could not find parachain ID in chain-spec.")?;
 
-				let polkadot_cli = RelayChainCli::new(
+				let pezkuwi_cli = RelayChainCli::new(
 					&config,
 					[RelayChainCli::executable_name()].iter().chain(cli.relay_chain_args.iter()),
 				);
@@ -243,15 +243,15 @@ pub fn run() -> Result<()> {
 				let id = ParaId::from(para_id);
 
 				let tokio_handle = config.tokio_handle.clone();
-				let polkadot_config =
-					SubstrateCli::create_configuration(&polkadot_cli, &polkadot_cli, tokio_handle)
+				let pezkuwi_config =
+					SubstrateCli::create_configuration(&pezkuwi_cli, &pezkuwi_cli, tokio_handle)
 						.map_err(|err| format!("Relay chain argument error: {}", err))?;
 
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
 				crate::service::start_parachain_node(
 					config,
-					polkadot_config,
+					pezkuwi_config,
 					collator_options,
 					id,
 					hwbench,
@@ -318,7 +318,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 	where
 		F: FnOnce(&mut sc_cli::LoggerBuilder),
 	{
-		unreachable!("PolkadotCli is never initialized; qed");
+		unreachable!("PezkuwiCli is never initialized; qed");
 	}
 
 	fn chain_id(&self, is_dev: bool) -> Result<String> {

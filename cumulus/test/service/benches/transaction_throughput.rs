@@ -26,7 +26,7 @@ use sp_runtime::OpaqueExtrinsic;
 
 use cumulus_primitives_core::ParaId;
 use cumulus_test_service::{construct_extrinsic, fetch_nonce, Client, Keyring::*, TransactionPool};
-use polkadot_primitives::HeadData;
+use pezkuwi_primitives::HeadData;
 
 fn create_accounts(num: usize) -> Vec<sr25519::Pair> {
 	(0..num)

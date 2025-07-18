@@ -29,10 +29,10 @@ use sp_core::traits::SpawnNamed;
 use sp_runtime::traits::{Block as BlockT, Header as HeaderT};
 
 use cumulus_relay_chain_interface::RelayChainInterface;
-use polkadot_node_primitives::{CollationSecondedSignal, Statement};
-use polkadot_node_subsystem::messages::RuntimeApiRequest;
-use polkadot_parachain_primitives::primitives::HeadData;
-use polkadot_primitives::{
+use pezkuwi_node_primitives::{CollationSecondedSignal, Statement};
+use pezkuwi_node_subsystem::messages::RuntimeApiRequest;
+use pezkuwi_parachain_primitives::primitives::HeadData;
+use pezkuwi_primitives::{
 	vstaging::CandidateReceiptV2 as CandidateReceipt, CompactStatement, Hash as PHash,
 	Id as ParaId, OccupiedCoreAssumption, SigningContext, UncheckedSigned,
 };
@@ -282,8 +282,8 @@ where
 		let parachain_host_runtime_api_version =
 			runtime_api_version
 				.api_version(
-					&<dyn polkadot_primitives::runtime_api::ParachainHost<
-						polkadot_primitives::Block,
+					&<dyn pezkuwi_primitives::runtime_api::ParachainHost<
+						pezkuwi_primitives::Block,
 					>>::ID,
 				)
 				.unwrap_or_default();

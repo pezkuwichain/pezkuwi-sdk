@@ -6,5 +6,5 @@ doc:
 
     Closes: https://github.com/paritytech/polkadot-sdk/issues/6745
 crates:
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: patch

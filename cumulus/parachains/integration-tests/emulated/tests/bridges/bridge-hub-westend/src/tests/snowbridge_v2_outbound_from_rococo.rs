@@ -240,7 +240,7 @@ fn send_roc_from_asset_hub_rococo_to_ethereum() {
 	]));
 
 	let _ = AssetHubRococo::execute_with(|| {
-		<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::execute(
+		<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::execute(
 			<AssetHubRococo as Chain>::RuntimeOrigin::signed(sender),
 			bx!(xcm),
 			Weight::from(EXECUTION_WEIGHT),
@@ -341,7 +341,7 @@ fn register_rococo_asset_on_ethereum_from_rah() {
 
 	let root_origin = <AssetHubRococo as Chain>::RuntimeOrigin::root();
 	AssetHubRococo::execute_with(|| {
-		assert_ok!(<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::send(
+		assert_ok!(<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::send(
 			root_origin,
 			bx!(destination.into()),
 			bx!(xcm),

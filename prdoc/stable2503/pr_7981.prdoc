@@ -6,9 +6,9 @@ doc:
     The `validation_code_bomb_limit` API remains at version 12.
     Bump all ParachainHost runtime to version 13 in all test runtimes.
 crates:
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: minor
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
 - name: rococo-runtime
   bump: minor

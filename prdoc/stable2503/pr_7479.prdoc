@@ -5,5 +5,5 @@ doc:
     Added support for offchain worker to omni-node-lib for both aura and manual seal nodes.
 
 crates:
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: patch

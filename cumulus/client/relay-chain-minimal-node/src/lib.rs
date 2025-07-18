@@ -20,18 +20,18 @@ use collator_overseer::NewMinimalNode;
 use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use cumulus_relay_chain_rpc_interface::{RelayChainRpcClient, RelayChainRpcInterface, Url};
 use network::build_collator_network;
-use polkadot_network_bridge::{peer_sets_info, IsAuthority};
-use polkadot_node_network_protocol::{
+use pezkuwi_network_bridge::{peer_sets_info, IsAuthority};
+use pezkuwi_node_network_protocol::{
 	peer_set::{PeerSet, PeerSetProtocolNames},
 	request_response::{
 		v1, v2, IncomingRequest, IncomingRequestReceiver, Protocol, ReqProtocolNames,
 	},
 };
 
-use polkadot_core_primitives::{Block as RelayBlock, Hash as RelayHash};
-use polkadot_node_subsystem_util::metrics::prometheus::Registry;
-use polkadot_primitives::CollatorPair;
-use polkadot_service::{overseer::OverseerGenArgs, IdentifyNetworkBackend, IsParachainNode};
+use pezkuwi_core_primitives::{Block as RelayBlock, Hash as RelayHash};
+use pezkuwi_node_subsystem_util::metrics::prometheus::Registry;
+use pezkuwi_primitives::CollatorPair;
+use pezkuwi_service::{overseer::OverseerGenArgs, IdentifyNetworkBackend, IsParachainNode};
 
 use sc_authority_discovery::Service as AuthorityDiscoveryService;
 use sc_network::{
@@ -92,7 +92,7 @@ fn build_authority_discovery_service<Block: BlockT>(
 }
 
 async fn build_interface(
-	polkadot_config: Configuration,
+	pezkuwi_config: Configuration,
 	task_manager: &mut TaskManager,
 	client: RelayChainRpcClient,
 ) -> RelayChainResult<(Arc<(dyn RelayChainInterface + 'static)>, Option<CollatorPair>)> {
@@ -100,20 +100,20 @@ async fn build_interface(
 	let blockchain_rpc_client = Arc::new(BlockChainRpcClient::new(client.clone()));
 
 	// If the network backend is unspecified, use the default for the given chain.
-	let default_backend = polkadot_config.chain_spec.network_backend();
-	let network_backend = polkadot_config.network.network_backend.unwrap_or(default_backend);
+	let default_backend = pezkuwi_config.chain_spec.network_backend();
+	let network_backend = pezkuwi_config.network.network_backend.unwrap_or(default_backend);
 
 	let collator_node = match network_backend {
 		sc_network::config::NetworkBackendType::Libp2p =>
 			new_minimal_relay_chain::<RelayBlock, sc_network::NetworkWorker<RelayBlock, RelayHash>>(
-				polkadot_config,
+				pezkuwi_config,
 				collator_pair.clone(),
 				blockchain_rpc_client,
 			)
 			.await?,
 		sc_network::config::NetworkBackendType::Litep2p =>
 			new_minimal_relay_chain::<RelayBlock, sc_network::Litep2pNetworkBackend>(
-				polkadot_config,
+				pezkuwi_config,
 				collator_pair.clone(),
 				blockchain_rpc_client,
 			)
@@ -143,17 +143,17 @@ pub async fn build_minimal_relay_chain_node_with_rpc(
 }
 
 pub async fn build_minimal_relay_chain_node_light_client(
-	polkadot_config: Configuration,
+	pezkuwi_config: Configuration,
 	task_manager: &mut TaskManager,
 ) -> RelayChainResult<(Arc<(dyn RelayChainInterface + 'static)>, Option<CollatorPair>)> {
 	tracing::info!(
 		target: LOG_TARGET,
-		chain_name = polkadot_config.chain_spec.name(),
-		chain_id = polkadot_config.chain_spec.id(),
+		chain_name = pezkuwi_config.chain_spec.name(),
+		chain_id = pezkuwi_config.chain_spec.id(),
 		"Initializing embedded light client with chain spec."
 	);
 
-	let spec = polkadot_config
+	let spec = pezkuwi_config
 		.chain_spec
 		.as_json(false)
 		.map_err(RelayChainError::GenericError)?;
@@ -164,7 +164,7 @@ pub async fn build_minimal_relay_chain_node_light_client(
 	)
 	.await?;
 
-	build_interface(polkadot_config, task_manager, client).await
+	build_interface(pezkuwi_config, task_manager, client).await
 }
 
 /// Builds a minimal relay chain node. Chain data is fetched

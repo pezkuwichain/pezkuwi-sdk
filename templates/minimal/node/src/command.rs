@@ -20,7 +20,7 @@ use crate::{
 	cli::{Cli, Subcommand},
 	service,
 };
-use polkadot_sdk::{sc_cli::SubstrateCli, sc_service::PartialComponents, *};
+use pezkuwi_sdk::{sc_cli::SubstrateCli, sc_service::PartialComponents, *};
 
 impl SubstrateCli for Cli {
 	fn impl_name() -> String {

@@ -24,7 +24,7 @@ Options:
   - `runtime_user`: Anyone using the runtime. Can be front-end devs reading the state, exchanges
     listening for events, libraries that have hard-coded pallet indices etc. Anything that would
     result in an observable change to the runtime behaviour must be marked with this.
-  - `node_dev`: Those who build around the client side code. Alternative client builders, SMOLDOT,
+  - `node_dev`: Those who build around the client side code. Alternative client builders, SMOLHEZ,
   those who consume RPCs. These are people who are oblivious to the runtime changes. They only care
   about the meta-protocol, not the protocol itself.
   - `node_operator`: People who run the node. Think of validators, exchanges, indexer services, CI

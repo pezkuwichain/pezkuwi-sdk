@@ -20,7 +20,7 @@
 use crate::collators::cores_scheduled_for_para;
 use cumulus_primitives_core::ClaimQueueOffset;
 use cumulus_relay_chain_interface::RelayChainInterface;
-use polkadot_primitives::{
+use pezkuwi_primitives::{
 	CoreIndex, Hash as RelayHash, Header as RelayHeader, Id as ParaId, OccupiedCoreAssumption,
 };
 use sp_runtime::generic::BlockId;

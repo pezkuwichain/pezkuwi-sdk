@@ -51,7 +51,7 @@ fn test_contract_location_with_network_converts_successfully() {
 
 #[test]
 fn test_contract_location_with_incorrect_location_fails_convert() {
-	let contract_location = Location::new(2, [GlobalConsensus(Polkadot), Parachain(1000)]);
+	let contract_location = Location::new(2, [GlobalConsensus(Pezkuwi), Parachain(1000)]);
 
 	assert_eq!(
 		EthereumLocationsConverterFor::<[u8; 32]>::convert_location(&contract_location),
@@ -63,12 +63,12 @@ fn test_contract_location_with_incorrect_location_fails_convert() {
 fn test_reanchor_all_assets() {
 	let ethereum_context: InteriorLocation = [GlobalConsensus(Ethereum { chain_id: 1 })].into();
 	let ethereum = Location::new(2, ethereum_context.clone());
-	let ah_context: InteriorLocation = [GlobalConsensus(Polkadot), Parachain(1000)].into();
+	let ah_context: InteriorLocation = [GlobalConsensus(Pezkuwi), Parachain(1000)].into();
 	let global_ah = Location::new(1, ah_context.clone());
 	let assets = vec![
-		// DOT
+		// HEZ
 		Location::new(1, []),
-		// GLMR (Some Polkadot parachain currency)
+		// GLMR (Some Pezkuwi parachain currency)
 		Location::new(1, [Parachain(2004)]),
 		// AH asset
 		Location::new(0, [PalletInstance(50), GeneralIndex(42)]),

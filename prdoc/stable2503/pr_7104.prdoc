@@ -19,5 +19,5 @@ doc:
       selector UMP signal when the parachain is using RFC103.
 
 crates:
-  - name: polkadot-node-collation-generation
+  - name: pezkuwi-node-collation-generation
     bump: patch

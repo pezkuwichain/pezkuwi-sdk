@@ -37,8 +37,8 @@ use cumulus_primitives_core::{
 };
 use cumulus_relay_chain_interface::RelayChainInterface;
 
-use polkadot_node_primitives::{Collation, MaybeCompressedPoV};
-use polkadot_primitives::{Header as PHeader, Id as ParaId};
+use pezkuwi_node_primitives::{Collation, MaybeCompressedPoV};
+use pezkuwi_primitives::{Header as PHeader, Id as ParaId};
 
 use futures::prelude::*;
 use sc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy, StateAction};

@@ -18,7 +18,7 @@
 
 use crate::{ParaHash, ParaId, RelayBlockHash, RelayBlockNumber};
 
-use bp_polkadot_core::parachains::ParaHeadsProof;
+use bp_pezkuwi_core::parachains::ParaHeadsProof;
 use bp_runtime::HeaderId;
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;

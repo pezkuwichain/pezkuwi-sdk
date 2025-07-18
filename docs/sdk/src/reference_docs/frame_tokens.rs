@@ -1,4 +1,4 @@
-// This file is part of polkadot-sdk.
+// This file is part of pezkuwi-sdk.
 //
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -31,7 +31,7 @@
 //! ## Getting Started
 //!
 //! The most ubiquitous way to add a token to a FRAME runtime is [`pallet_balances`]. Read
-//! more about pallets [here](crate::polkadot_sdk::frame_runtime#pallets).
+//! more about pallets [here](crate::pezkuwi_sdk::frame_runtime#pallets).
 //!
 //! You may then write custom pallets that interact with [`pallet_balances`]. The fastest way to
 //! get started with that is by
@@ -64,7 +64,7 @@
 //! [`fungible::Inspect`](`frame_support::traits::fungible::Inspect`) is not some arcane knowledge
 //! that you have to know by heart or memorize. One can simply look at the list of the implementors
 //! of any trait in the Rust Doc to find all implementors (e.g.
-//! [Mutate trait implementors](https://paritytech.github.io/polkadot-sdk/master/frame_support/traits/tokens/fungible/trait.Mutate.html#implementors)),
+//! [Mutate trait implementors](https://paritytech.github.io/pezkuwi-sdk/master/frame_support/traits/tokens/fungible/trait.Mutate.html#implementors)),
 //! or use the `rust-analyzer`'s `Implementations` action.
 //!
 //! The distinction between traits and trait implementations is helpful because it allows pallets

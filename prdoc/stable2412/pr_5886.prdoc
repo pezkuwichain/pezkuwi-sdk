@@ -14,5 +14,5 @@ crates:
   bump: patch
 - name: sp-runtime
   bump: patch
-- name: bp-polkadot-core
+- name: bp-pezkuwi-core
   bump: major

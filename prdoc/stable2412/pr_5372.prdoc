@@ -6,7 +6,7 @@ doc:
       Adds a runtime API for querying the core selector of a parachain.
       Also use the core selector API and the claim queue relay chain runtime API in the slot based collator (if available)
       to determine which cores to build on.
-      Part of implementing https://github.com/polkadot-fellows/RFCs/pull/103.
+      Part of implementing https://github.com/pezkuwi-fellows/RFCs/pull/103.
 
 crates:
   - name: cumulus-client-consensus-aura
@@ -53,7 +53,7 @@ crates:
     bump: patch
   - name: rococo-parachain-runtime
     bump: patch
-  - name: polkadot-parachain-lib
+  - name: pezkuwi-parachain-lib
     bump: major
     validate: false
   - name: cumulus-primitives-core

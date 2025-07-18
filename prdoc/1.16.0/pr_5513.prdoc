@@ -6,5 +6,5 @@ doc:
       `Debug` was derived on `AcceptanceCheckErr` to print the error. This PR adds more logs to trace the error.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: patch

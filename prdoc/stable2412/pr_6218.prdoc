@@ -5,5 +5,5 @@ doc:
     description: |
         Enable approval-voting-parallel by default on kusama
 crates:
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch

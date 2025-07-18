@@ -68,7 +68,7 @@ fn send_assets_from_penpal_rococo_through_rococo_ah_to_westend_ah(
 		// send message over bridge
 		assert_ok!(PenpalA::execute_with(|| {
 			let signed_origin = <PenpalA as Chain>::RuntimeOrigin::signed(PenpalASender::get());
-			<PenpalA as PenpalAPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+			<PenpalA as PenpalAPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 				signed_origin,
 				bx!(destination.into()),
 				bx!(assets.0.into()),
@@ -309,7 +309,7 @@ fn send_back_wnds_usdt_and_weth_from_asset_hub_rococo_to_asset_hub_westend() {
 		beneficiary: AccountId32Junction { network: None, id: receiver.clone().into() }.into(),
 	}]);
 	assert_ok!(AssetHubRococo::execute_with(|| {
-		<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			<AssetHubRococo as Chain>::RuntimeOrigin::signed(sender.into()),
 			bx!(asset_hub_westend_location().into()),
 			bx!(assets.into()),

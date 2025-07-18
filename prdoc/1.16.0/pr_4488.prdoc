@@ -4,7 +4,7 @@ doc:
   - audience: Runtime Dev
     description: |
         Drop the Existential Deposit requirement for the asset amount exchangeable for the fee asset
-        (eg. DOT/KSM) during transaction payments.
+        (eg. HEZ/KSM) during transaction payments.
 
         This achieved by using `SwapCredit` implementation of asset conversion, which works with
         imbalances and does not require a temporary balance account within the transaction payment.

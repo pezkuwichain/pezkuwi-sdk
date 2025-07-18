@@ -16,6 +16,6 @@ migrations:
         be migrated to the new values.
 
 crates:
-  - name: "polkadot"
+  - name: "pezkuwi"
 
 host_functions: []

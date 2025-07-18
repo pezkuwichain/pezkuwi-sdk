@@ -48,7 +48,7 @@ fn system_para_sets_relay_xcm_supported_version() {
 	// Init test variables
 	let parent_location = AssetHubRococo::parent_location();
 	let force_xcm_version_call =
-		<AssetHubRococo as Chain>::RuntimeCall::PolkadotXcm(pallet_xcm::Call::<
+		<AssetHubRococo as Chain>::RuntimeCall::PezkuwiXcm(pallet_xcm::Call::<
 			<AssetHubRococo as Chain>::Runtime,
 		>::force_xcm_version {
 			location: bx!(parent_location.clone()),
@@ -72,7 +72,7 @@ fn system_para_sets_relay_xcm_supported_version() {
 		assert_expected_events!(
 			AssetHubRococo,
 			vec![
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::SupportedVersionChanged {
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::SupportedVersionChanged {
 					location,
 					version: XCM_V3
 				}) => { location: *location == parent_location, },

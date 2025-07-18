@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "RFC-5: Add request revenue info"
 
@@ -13,7 +13,7 @@ doc:
       The revenue may be claimed by its provider on the Coretime chain.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: minor
   - name: rococo-runtime
     bump: minor

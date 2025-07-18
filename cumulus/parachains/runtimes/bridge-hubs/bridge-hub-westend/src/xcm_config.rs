@@ -16,7 +16,7 @@
 
 use super::{
 	AccountId, AllPalletsWithSystem, Balance, Balances, BaseDeliveryFee, FeeAssetId, ParachainInfo,
-	ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason,
+	ParachainSystem, PezkuwiXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeHoldReason,
 	RuntimeOrigin, TransactionByteFee, WeightToFee, XcmOverBridgeHubRococo, XcmpQueue,
 };
 use crate::bridge_to_ethereum_config::{AssetHubLocation, SnowbridgeFrontendLocation};
@@ -38,8 +38,8 @@ use parachains_common::{
 	},
 	TREASURY_PALLET_ID,
 };
-use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_common::xcm_sender::ExponentialPrice;
+use pezkuwi_parachain_primitives::primitives::Sibling;
+use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use snowbridge_runtime_common::XcmExportFeeToSibling;
 use sp_runtime::traits::AccountIdConversion;
 use sp_std::marker::PhantomData;
@@ -153,7 +153,7 @@ pub type Barrier = TrailingSetTopicAsId<
 			// Allow local users to buy weight credit.
 			TakeWeightCredit,
 			// Expected responses are OK.
-			AllowKnownQueryResponses<PolkadotXcm>,
+			AllowKnownQueryResponses<PezkuwiXcm>,
 			WithComputedOrigin<
 				(
 					// If the message is one that immediately attempts to pay for execution, then
@@ -201,7 +201,7 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
-	type XcmEventEmitter = PolkadotXcm;
+	type XcmEventEmitter = PezkuwiXcm;
 	type AssetTransactor = FungibleTransactor;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	// BridgeHub does not recognize a reserve location for any asset. Users must teleport Native
@@ -222,12 +222,12 @@ impl xcm_executor::Config for XcmConfig {
 		Balances,
 		ResolveTo<StakingPotAccountId<Runtime>, Balances>,
 	>;
-	type ResponseHandler = PolkadotXcm;
-	type AssetTrap = PolkadotXcm;
+	type ResponseHandler = PezkuwiXcm;
+	type AssetTrap = PezkuwiXcm;
 	type AssetLocker = ();
 	type AssetExchanger = ();
-	type AssetClaims = PolkadotXcm;
-	type SubscriptionService = PolkadotXcm;
+	type AssetClaims = PezkuwiXcm;
+	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type FeeManager = XcmFeeManagerFromComponentsBridgeHub<
@@ -257,7 +257,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
-	type XcmRecorder = PolkadotXcm;
+	type XcmRecorder = PezkuwiXcm;
 }
 
 pub type PriceForParentDelivery =
@@ -271,7 +271,7 @@ pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, R
 /// queues.
 pub type XcmRouter = WithUniqueTopic<(
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, PriceForParentDelivery>,
+	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PezkuwiXcm, PriceForParentDelivery>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 )>;
@@ -279,7 +279,7 @@ pub type XcmRouter = WithUniqueTopic<(
 parameter_types! {
 	pub const DepositPerItem: Balance = crate::deposit(1, 0);
 	pub const DepositPerByte: Balance = crate::deposit(0, 1);
-	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PolkadotXcm(pallet_xcm::HoldReason::AuthorizeAlias);
+	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PezkuwiXcm(pallet_xcm::HoldReason::AuthorizeAlias);
 }
 
 impl pallet_xcm::Config for Runtime {

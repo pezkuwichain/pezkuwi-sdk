@@ -9,17 +9,17 @@
 	  - [Send messages - transfer asset over bridge (ROCs/WNDs)](#send-messages---transfer-asset-over-bridge-rocswnds)
 	  - [Claim relayer's rewards on BridgeHubRococo and
 		BridgeHubWestend](#claim-relayers-rewards-on-bridgehubrococo-and-bridgehubwestend)
-  - [How to test local BridgeHubKusama/BridgeHubPolkadot](#how-to-test-local-bridgehubkusamabridgehubpolkadot)
+  - [How to test local BridgeHubKusama/BridgeHubPezkuwi](#how-to-test-local-bridgehubkusamabridgehubpezkuwi)
 
 # Bridge-hub Parachains
 
 _BridgeHub(s)_ are **_system parachains_** that will house trustless bridges from the local ecosystem to others. The
 current trustless bridges planned for the BridgeHub(s) are:
-- `BridgeHubPolkadot` system parachain:
-	1. Polkadot <-> Kusama bridge
-	2. Polkadot <-> Ethereum bridge (Snowbridge)
+- `BridgeHubPezkuwi` system parachain:
+	1. Pezkuwi <-> Kusama bridge
+	2. Pezkuwi <-> Ethereum bridge (Snowbridge)
 - `BridgeHubKusama` system parachain:
-	1. Kusama <-> Polkadot bridge
+	1. Kusama <-> Pezkuwi bridge
 	2. Kusama <-> Ethereum bridge The high-level
 	responsibilities of each bridge living on BridgeHub:
 - sync finality proofs between relay chains (or equivalent)
@@ -42,19 +42,19 @@ Copy the appropriate binary (zombienet-linux) from the latest release to ~/local
 
 
 ---
-# 2. Build polkadot binary
+# 2. Build pezkuwi binary
 
-We need polkadot binary with "fast-runtime" feature:
+We need pezkuwi binary with "fast-runtime" feature:
 
-cd <polkadot-sdk-git-repo-dir>
-cargo build --release --features fast-runtime --bin polkadot
-cp target/release/polkadot ~/local_bridge_testing/bin/polkadot
+cd <pezkuwi-sdk-git-repo-dir>
+cargo build --release --features fast-runtime --bin pezkuwi
+cp target/release/pezkuwi ~/local_bridge_testing/bin/pezkuwi
 
-cargo build --release --features fast-runtime --bin polkadot-prepare-worker
-cp target/release/polkadot-prepare-worker ~/local_bridge_testing/bin/polkadot-prepare-worker
+cargo build --release --features fast-runtime --bin pezkuwi-prepare-worker
+cp target/release/pezkuwi-prepare-worker ~/local_bridge_testing/bin/pezkuwi-prepare-worker
 
-cargo build --release --features fast-runtime --bin polkadot-execute-worker
-cp target/release/polkadot-execute-worker ~/local_bridge_testing/bin/polkadot-execute-worker
+cargo build --release --features fast-runtime --bin pezkuwi-execute-worker
+cp target/release/pezkuwi-execute-worker ~/local_bridge_testing/bin/pezkuwi-execute-worker
 
 
 ---
@@ -64,21 +64,21 @@ cd parity-bridges-common
 
 # checkout desired branch or use master:
 # git checkout -b master --track origin/master
-# `polkadot-staging` (recommended) is stabilized and compatible for Cumulus releases
+# `pezkuwi-staging` (recommended) is stabilized and compatible for Cumulus releases
 # `master` is latest development
-git checkout -b polkadot-staging --track origin/polkadot-staging
+git checkout -b pezkuwi-staging --track origin/pezkuwi-staging
 
 cargo build --release -p substrate-relay
 cp target/release/substrate-relay ~/local_bridge_testing/bin/substrate-relay
 
 
 ---
-# 4. Build cumulus polkadot-parachain binary
-cd <polkadot-sdk-git-repo-dir>
+# 4. Build cumulus pezkuwi-parachain binary
+cd <pezkuwi-sdk-git-repo-dir>
 
-cargo build --release -p polkadot-parachain-bin
-cp target/release/polkadot-parachain ~/local_bridge_testing/bin/polkadot-parachain
-cp target/release/polkadot-parachain ~/local_bridge_testing/bin/polkadot-parachain-asset-hub
+cargo build --release -p pezkuwi-parachain-bin
+cp target/release/pezkuwi-parachain ~/local_bridge_testing/bin/pezkuwi-parachain
+cp target/release/pezkuwi-parachain ~/local_bridge_testing/bin/pezkuwi-parachain-asset-hub
 ```
 
 ## How to test local Rococo <-> Westend bridge
@@ -86,20 +86,20 @@ cp target/release/polkadot-parachain ~/local_bridge_testing/bin/polkadot-paracha
 ### Run Rococo/Westend chains with zombienet
 
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 # Rococo + BridgeHubRococo + AssetHub for Rococo (mirroring Kusama)
-POLKADOT_BINARY=~/local_bridge_testing/bin/polkadot \
-POLKADOT_PARACHAIN_BINARY=~/local_bridge_testing/bin/polkadot-parachain \
+PEZKUWI_BINARY=~/local_bridge_testing/bin/pezkuwi \
+PEZKUWI_PARACHAIN_BINARY=~/local_bridge_testing/bin/pezkuwi-parachain \
 	~/local_bridge_testing/bin/zombienet-linux --provider native spawn ./bridges/testing/environments/rococo-westend/bridge_hub_rococo_local_network.toml
 ```
 
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
-# Westend + BridgeHubWestend + AssetHub for Westend (mirroring Polkadot)
-POLKADOT_BINARY=~/local_bridge_testing/bin/polkadot \
-POLKADOT_PARACHAIN_BINARY=~/local_bridge_testing/bin/polkadot-parachain \
+# Westend + BridgeHubWestend + AssetHub for Westend (mirroring Pezkuwi)
+PEZKUWI_BINARY=~/local_bridge_testing/bin/pezkuwi \
+PEZKUWI_PARACHAIN_BINARY=~/local_bridge_testing/bin/pezkuwi-parachain \
 	~/local_bridge_testing/bin/zombienet-linux --provider native spawn ./bridges/testing/environments/rococo-westend/bridge_hub_westend_local_network.toml
 ```
 
@@ -110,21 +110,21 @@ POLKADOT_PARACHAIN_BINARY=~/local_bridge_testing/bin/polkadot-parachain \
 
 #### Run with script
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh run-finality-relay
 ```
 
 **Check relay-chain headers relaying:**
-- Rococo parachain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
+- Rococo parachain: - https://pezkuwi.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
   **bridgeWestendGrandpa** - Keys: **bestFinalized()**
-- Westend parachain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
+- Westend parachain: - https://pezkuwi.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
   **bridgeRococoGrandpa** - Keys: **bestFinalized()**
 
 **Check parachain headers relaying:**
-- Rococo parachain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
+- Rococo parachain: - https://pezkuwi.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
   **bridgeWestendParachains** - Keys: **parasInfo(None)**
-- Westend parachain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
+- Westend parachain: - https://pezkuwi.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
   **bridgeRococoParachains** - Keys: **parasInfo(None)**
 
 ### Initialize configuration for transfer asset over bridge (ROCs/WNDs)
@@ -133,7 +133,7 @@ This initialization does several things:
 - creates `ForeignAssets` for wrappedROCs/wrappedWNDs
 - drips SA for AssetHubRococo on AssetHubWestend (and vice versa) which holds reserved assets on source chains
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh init-asset-hub-rococo-local
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh init-bridge-hub-rococo-local
@@ -145,34 +145,34 @@ cd <polkadot-sdk-git-repo-dir>
 
 Do reserve-backed transfers:
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 # ROCs from Rococo's Asset Hub to Westend's.
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh reserve-transfer-assets-from-asset-hub-rococo-local
 ```
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 # WNDs from Westend's Asset Hub to Rococo's.
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh reserve-transfer-assets-from-asset-hub-westend-local
 ```
 
 - open explorers: (see zombienets)
-	- AssetHubRococo (see events `xcmpQueue.XcmpMessageSent`, `polkadotXcm.Attempted`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9910#/explorer
-	- BridgeHubRococo (see `bridgeWestendMessages.MessageAccepted`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
-	- BridgeHubWestend (see `bridgeRococoMessages.MessagesReceived`, `xcmpQueue.XcmpMessageSent`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8945#/explorer
-	- AssetHubWestend (see `foreignAssets.Issued`, `xcmpQueue.Success`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9010#/explorer
-	- BridgeHubRocococ (see `bridgeWestendMessages.MessagesDelivered`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
+	- AssetHubRococo (see events `xcmpQueue.XcmpMessageSent`, `pezkuwiXcm.Attempted`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:9910#/explorer
+	- BridgeHubRococo (see `bridgeWestendMessages.MessageAccepted`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
+	- BridgeHubWestend (see `bridgeRococoMessages.MessagesReceived`, `xcmpQueue.XcmpMessageSent`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:8945#/explorer
+	- AssetHubWestend (see `foreignAssets.Issued`, `xcmpQueue.Success`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:9010#/explorer
+	- BridgeHubRocococ (see `bridgeWestendMessages.MessagesDelivered`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
 
 Do reserve withdraw transfers: (when previous is finished)
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 # wrappedWNDs from Rococo's Asset Hub to Westend's.
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh withdraw-reserve-assets-from-asset-hub-rococo-local
 ```
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 # wrappedROCs from Westend's Asset Hub to Rococo's.
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh withdraw-reserve-assets-from-asset-hub-westend-local
@@ -185,7 +185,7 @@ cd <polkadot-sdk-git-repo-dir>
 - `//Charlie` is relayer account on BridgeHubWestend
 
 ```
-cd <polkadot-sdk-git-repo-dir>
+cd <pezkuwi-sdk-git-repo-dir>
 
 # Claim rewards on BridgeHubWestend:
 ./bridges/testing/environments/rococo-westend/bridges_rococo_westend.sh claim-rewards-bridge-hub-rococo-local
@@ -195,9 +195,9 @@ cd <polkadot-sdk-git-repo-dir>
 ```
 
 - open explorers: (see zombienets)
-	- BridgeHubRococo (see 2x `bridgeRelayers.RewardPaid`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
-	- BridgeHubWestend (see 2x `bridgeRelayers.RewardPaid`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8945#/explorer
+	- BridgeHubRococo (see 2x `bridgeRelayers.RewardPaid`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
+	- BridgeHubWestend (see 2x `bridgeRelayers.RewardPaid`) https://pezkuwi.js.org/apps/?rpc=ws://127.0.0.1:8945#/explorer
 
-## How to test local BridgeHubKusama/BridgeHubPolkadot
+## How to test local BridgeHubKusama/BridgeHubPezkuwi
 
 TODO: see `# !!! READ HERE` above

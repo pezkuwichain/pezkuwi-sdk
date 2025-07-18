@@ -34,7 +34,7 @@ use sc_network_sync::{
 	engine::SyncingEngine,
 	service::network::NetworkServiceProvider,
 	state_request_handler::StateRequestHandler,
-	strategy::polkadot::{PolkadotSyncingStrategy, PolkadotSyncingStrategyConfig},
+	strategy::pezkuwi::{PezkuwiSyncingStrategy, PezkuwiSyncingStrategyConfig},
 };
 use sp_blockchain::HeaderBackend;
 use sp_runtime::traits::{Block as BlockT, Zero};
@@ -204,7 +204,7 @@ impl TestNetworkBuilder {
 		let peer_store_handle: Arc<dyn PeerStoreProvider> = Arc::new(peer_store.handle());
 		tokio::spawn(peer_store.run().boxed());
 
-		let syncing_config = PolkadotSyncingStrategyConfig {
+		let syncing_config = PezkuwiSyncingStrategyConfig {
 			mode: network_config.sync_mode,
 			max_parallel_downloads: network_config.max_parallel_downloads,
 			max_blocks_per_request: network_config.max_blocks_per_request,
@@ -214,7 +214,7 @@ impl TestNetworkBuilder {
 		};
 		// Initialize syncing strategy.
 		let syncing_strategy = Box::new(
-			PolkadotSyncingStrategy::new(syncing_config, client.clone(), None, None).unwrap(),
+			PezkuwiSyncingStrategy::new(syncing_config, client.clone(), None, None).unwrap(),
 		);
 
 		let (engine, chain_sync_service, block_announce_config) = SyncingEngine::new(

@@ -12,13 +12,13 @@ doc:
       support the elastic scaling of parachains.
 
 crates:
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: major
-  - name: polkadot-node-network-protocol
+  - name: pezkuwi-node-network-protocol
     bump: major
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: major
-  - name: polkadot-node-collation-generation
+  - name: pezkuwi-node-collation-generation
     bump: minor
-  - name: polkadot-node-core-prospective-parachains
+  - name: pezkuwi-node-core-prospective-parachains
     bump: minor

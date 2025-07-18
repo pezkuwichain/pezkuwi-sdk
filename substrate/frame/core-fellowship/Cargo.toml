@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "Logic as per the description of The Fellowship for core Polkadot technology"
+description = "Logic as per the description of The Fellowship for core Pezkuwi technology"
 readme = "README.md"
 
 [lints]

@@ -3,5 +3,5 @@ doc:
 - audience: Node Dev
   description: "Specified Hash type for BoundedHeader in NodeBlock, fixing possible internal compiler error"
 crates:
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: patch

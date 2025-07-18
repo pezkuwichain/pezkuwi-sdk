@@ -4,13 +4,13 @@ The whole benchmarking process in Substrate aims to predict the resource usage o
 measures how accurate this prediction was by executing a block and comparing the predicted weight to its actual resource
 usage. It can be used to measure the accuracy of the pallet benchmarking.
 
-In the following it will be explained once for Polkadot and once for Substrate.
+In the following it will be explained once for Pezkuwi and once for Substrate.
 
-## Polkadot # 1
+## Pezkuwi # 1
 <sup>(Also works for Kusama, Westend and Rococo)</sup>
 
 
-Suppose you either have a synced Polkadot node or downloaded a snapshot from [Polkachu]. This example uses a pruned
+Suppose you either have a synced Pezkuwi node or downloaded a snapshot from [Polkachu]. This example uses a pruned
 ParityDB snapshot from the 2022-4-19 with the last block being 9939462. For pruned snapshots you need to know the number
 of the last block (to be improved [here]). Pruned snapshots normally store the last 256 blocks, archive nodes can use
 any block range.
@@ -47,16 +47,16 @@ behind the chain and get slashed for missing deadlines. It is therefore importan
 
 In this example you can see an unexpected result; only < 5% of the weight was used! The measured blocks can be executed
 much faster than predicted. This means that the benchmarking process massively over-estimated the execution time. Since
-they are off by so much, it is an issue [`polkadot#5192`].
+they are off by so much, it is an issue [`pezkuwi#5192`].
 
 The ideal range for these results would be 85-100%.
 
-## Polkadot # 2
+## Pezkuwi # 2
 
 Let's take a more interesting example where the blocks use more of their predicted weight. Every day when validators pay
 out rewards, the blocks are nearly full. Using an archive node here is the easiest.
 
-The Polkadot blocks TODO-TODO for example contain large batch transactions for staking payout.
+The Pezkuwi blocks TODO-TODO for example contain large batch transactions for staking payout.
 
 ```sh
 cargo run --profile=production -- benchmark block --from TODO --to TODO --db paritydb
@@ -107,7 +107,7 @@ License: Apache-2.0
 
 [Polkachu]: https://polkachu.com/snapshots
 [here]: https://github.com/paritytech/substrate/issues/11141
-[polkadot#5192]: https://github.com/paritytech/polkadot/issues/5192
+[pezkuwi#5192]: https://github.com/paritytech/pezkuwi/issues/5192
 
 [`--db`]: ../shared/README.md#arguments
 [`--pruning`]: ../shared/README.md#arguments

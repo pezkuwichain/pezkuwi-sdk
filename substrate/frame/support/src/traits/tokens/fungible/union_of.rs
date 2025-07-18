@@ -49,7 +49,7 @@ where
 {
 	/// Represents the native asset of the current chain.
 	///
-	/// E.g., DOT for the Polkadot Asset Hub.
+	/// E.g., HEZ for the Pezkuwi Asset Hub.
 	#[default]
 	Native,
 	/// Represents an asset identified by its underlying `AssetId`.

@@ -7,29 +7,29 @@ doc:
     uncompressed code size as the maximum code size multiplied by a
     compression ratio of 10. 
 crates:
-- name: polkadot-node-primitives
+- name: pezkuwi-node-primitives
   bump: patch
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: major
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: minor
 - name: rococo-runtime
   bump: minor
 - name: westend-runtime
   bump: minor
-- name: polkadot-node-core-runtime-api
+- name: pezkuwi-node-core-runtime-api
   bump: patch
-- name: polkadot-node-subsystem-util
+- name: pezkuwi-node-subsystem-util
   bump: minor
-- name: polkadot-node-core-candidate-validation
+- name: pezkuwi-node-core-candidate-validation
   bump: patch
-- name: polkadot-node-core-pvf-common
+- name: pezkuwi-node-core-pvf-common
   bump: major
-- name: polkadot-node-core-pvf-prepare-worker
+- name: pezkuwi-node-core-pvf-prepare-worker
   bump: patch
-- name: polkadot-node-core-pvf
+- name: pezkuwi-node-core-pvf
   bump: patch
 - name: cumulus-relay-chain-minimal-node
   bump: minor

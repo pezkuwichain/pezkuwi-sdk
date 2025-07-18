@@ -1,0 +1,35 @@
+[package]
+name = "pezkuwi-node-core-prospective-parachains"
+version = "21.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "The Prospective Parachains subsystem. Tracks and handles prospective parachain fragments."
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+fatality = { workspace = true }
+futures = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+thiserror = { workspace = true }
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives = { features = ["test"], default-features = false, workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+rand = { workspace = true }
+rstest = { workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-tracing = { default-features = false, workspace = true }

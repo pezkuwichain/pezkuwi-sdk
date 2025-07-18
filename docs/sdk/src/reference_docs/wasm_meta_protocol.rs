@@ -1,6 +1,6 @@
 //! # WASM Meta Protocol
 //!
-//! All Substrate based chains adhere to a unique architectural design novel to the Polkadot
+//! All Substrate based chains adhere to a unique architectural design novel to the Pezkuwi
 //! ecosystem. We refer to this design as the "**WASM Meta Protocol**".
 //!
 //! Consider the fact that a traditional blockchain software is usually a monolithic artifact.
@@ -57,7 +57,7 @@
 //! evolve in time, and a blockchain node (typically) wishes to be capable of re-executing all the
 //! previous blocks, this means that a node must always maintain support for the old host functions.
 //! **This implies that adding a new host function is a big commitment and should be done with
-//! care**. This is why, for example, adding a new host function to Polkadot always requires an RFC.
+//! care**. This is why, for example, adding a new host function to Pezkuwi always requires an RFC.
 //! Learn how to add a new host function to your runtime in
 //! [`crate::reference_docs::custom_host_functions`].
 //!
@@ -154,5 +154,5 @@
 //!   match the one claimed in the block header.
 //!
 //! > Example taken from [this
-//! > lecture](https://polkadot-blockchain-academy.github.io/pba-book/substrate/wasm/page.html#example-2-block-import-9)
-//! > of the Polkadot Blockchain Academy.
+//! > lecture](https://pezkuwi-blockchain-academy.github.io/pba-book/substrate/wasm/page.html#example-2-block-import-9)
+//! > of the Pezkuwi Blockchain Academy.

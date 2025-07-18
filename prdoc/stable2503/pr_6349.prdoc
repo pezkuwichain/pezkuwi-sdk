@@ -39,6 +39,6 @@ crates:
   - name: parachain-template-runtime
     bump: patch
   
-  - name: polkadot-sdk-docs-first-runtime
+  - name: pezkuwi-sdk-docs-first-runtime
     bump: patch
 

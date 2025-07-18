@@ -3,13 +3,13 @@ title: "Umbrella crate: exclude chain-specific crates"
 doc:
   - audience: Runtime Dev
     description: |
-      The `polkadot-sdk` umbrella crate does now not contain chain-specific crates. The reasoning is
+      The `pezkuwi-sdk` umbrella crate does now not contain chain-specific crates. The reasoning is
       that the SDK should be mostly chain-agnostic. Please check out
       [psvm](https://github.com/paritytech/psvm) to select matching version numbers for chain-
       specific crates.
 
 crates:
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: major
   - name: rococo-runtime-constants
     bump: none
@@ -23,7 +23,7 @@ crates:
     bump: none
   - name: bp-bridge-hub-kusama
     bump: none
-  - name: bp-bridge-hub-polkadot
+  - name: bp-bridge-hub-pezkuwi
     bump: none
   - name: bp-bridge-hub-rococo
     bump: none
@@ -31,7 +31,7 @@ crates:
     bump: none
   - name: bp-kusama
     bump: none
-  - name: bp-polkadot-bulletin
+  - name: bp-pezkuwi-bulletin
     bump: none
   - name: bp-rococo
     bump: none

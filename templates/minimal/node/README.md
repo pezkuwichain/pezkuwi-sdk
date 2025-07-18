@@ -1,14 +1,14 @@
 # Node
 
-ℹ️ A node -  in Polkadot - is a binary executable, whose primary purpose is to execute the [runtime](../runtime/README.md).
+ℹ️ A node -  in Pezkuwi - is a binary executable, whose primary purpose is to execute the [runtime](../runtime/README.md).
 
 🔗 It communicates with other nodes in the network, and aims for
-[consensus](https://wiki.polkadot.network/docs/learn-consensus) among them.
+[consensus](https://wiki.pezkuwi.network/docs/learn-consensus) among them.
 
 ⚙️ It acts as a remote procedure call (RPC) server, allowing interaction with the blockchain.
 
 👉 Learn more about the architecture, and a difference between a node and a runtime
-[here](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/wasm_meta_protocol/index.html).
+[here](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/wasm_meta_protocol/index.html).
 
 👇 Here are the most important files in this node template:
 

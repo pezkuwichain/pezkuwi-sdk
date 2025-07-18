@@ -20,16 +20,16 @@ use frame_benchmarking_cli::{BenchmarkCmd, OpaqueBlock};
 use sc_cli::Result;
 use sp_runtime::traits::BlakeTwo256;
 
-/// # Polkadot Omni Benchmarking CLI
+/// # Pezkuwi Omni Benchmarking CLI
 ///
-/// The Polkadot Omni benchmarker allows to benchmark the extrinsics of any Polkadot runtime. It is
+/// The Pezkuwi Omni benchmarker allows to benchmark the extrinsics of any Pezkuwi runtime. It is
 /// meant to replace the current manual integration of the `benchmark pallet` into every parachain
 /// node. This reduces duplicate code and makes maintenance for builders easier. The CLI is
 /// currently only able to benchmark extrinsics. In the future it is planned to extend this to some
 /// other areas.
 ///
 /// General FRAME runtimes could also be used with this benchmarker, as long as they don't utilize
-/// any host functions that are not part of the Polkadot host specification.
+/// any host functions that are not part of the Pezkuwi host specification.
 ///
 /// ## Installation
 ///

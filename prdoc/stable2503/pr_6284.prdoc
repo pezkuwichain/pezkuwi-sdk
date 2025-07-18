@@ -18,5 +18,5 @@ doc:
       the session.
 
 crates:
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
     bump: patch

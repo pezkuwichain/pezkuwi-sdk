@@ -18,7 +18,7 @@
 
 use async_std::sync::Mutex;
 use async_trait::async_trait;
-use bp_polkadot_core::BlockNumber as RelayBlockNumber;
+use bp_pezkuwi_core::BlockNumber as RelayBlockNumber;
 use bp_runtime::HeaderIdProvider;
 use clap::Parser;
 use parachains_relay::parachains_loop::{AvailableHeader, SourceClient, TargetClient};

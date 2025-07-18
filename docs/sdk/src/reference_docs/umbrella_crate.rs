@@ -1,6 +1,6 @@
 //! # Umbrella Crate
 //!
-//! The Polkadot-SDK "umbrella" is a crate that re-exports all other published crates. This makes it
+//! The Pezkuwi-SDK "umbrella" is a crate that re-exports all other published crates. This makes it
 //! possible to have a very small `Cargo.toml` file that only has one dependency, the umbrella
 //! crate. This helps with selecting the right combination of crate versions, since otherwise 3rd
 //! party tools are needed to select a compatible set of versions.
@@ -47,17 +47,17 @@
 //!
 //! The umbrella crate can be added to your runtime crate like this:
 //!
-//! `polkadot-sdk = { path = "../../../../umbrella", features = ["runtime"], default-features =
+//! `pezkuwi-sdk = { path = "../../../../umbrella", features = ["runtime"], default-features =
 //! false }`
 //!
 //! or for a node:
 //!
-//! `polkadot-sdk = { path = "../../../../umbrella", features = ["node"], default-features = false
+//! `pezkuwi-sdk = { path = "../../../../umbrella", features = ["node"], default-features = false
 //! }`
 //!
 //! In the code, it is then possible to bring all dependencies into scope via:
 //!
-//! `use polkadot_sdk::*;`
+//! `use pezkuwi_sdk::*;`
 //!
 //! ### Known Issues
 //!
@@ -66,14 +66,14 @@
 //! need to be adjusted:
 //!
 //! ```rust
-//! use polkadot_sdk::*;
+//! use pezkuwi_sdk::*;
 //!
 //! mod foo {
 //!    // This does sadly not compile:
 //!    frame_support::parameter_types! { }
 //!
 //!    // Instead, we need to do this (or add an equivalent `use` statement):
-//!    polkadot_sdk::frame_support::parameter_types! { }
+//!    pezkuwi_sdk::frame_support::parameter_types! { }
 //! }
 //! ```
 //!

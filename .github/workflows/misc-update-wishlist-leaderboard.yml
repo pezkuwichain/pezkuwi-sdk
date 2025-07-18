@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   update-wishlist-leaderboard:
-    if: github.repository == 'paritytech/polkadot-sdk'
+    if: github.repository == 'paritytech/pezkuwi-sdk'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,12 +26,12 @@ jobs:
       - name: Update developer wishlist
         env:
           GH_TOKEN: ${{ github.token }}
-          WISHLIST_REPOSITORY: "paritytech/polkadot-sdk"
+          WISHLIST_REPOSITORY: "paritytech/pezkuwi-sdk"
           WISHLIST_ISSUE_NUMBER: "3900"
         run: python .github/scripts/update-wishlist-leaderboard.py
       - name: Update user wishlist
         env:
           GH_TOKEN: ${{ github.token }}
-          WISHLIST_REPOSITORY: "paritytech/polkadot-sdk"
+          WISHLIST_REPOSITORY: "paritytech/pezkuwi-sdk"
           WISHLIST_ISSUE_NUMBER: "3901"
         run: python .github/scripts/update-wishlist-leaderboard.py

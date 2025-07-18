@@ -16,7 +16,7 @@
 use super::{
 	AccountId, AllPalletsWithSystem, Assets, Authorship, Balance, Balances, BaseDeliveryFee,
 	CollatorSelection, FeeAssetId, ForeignAssets, ForeignAssetsInstance, ParachainInfo,
-	ParachainSystem, PolkadotXcm, PoolAssets, Runtime, RuntimeCall, RuntimeEvent,
+	ParachainSystem, PezkuwiXcm, PoolAssets, Runtime, RuntimeCall, RuntimeEvent,
 	RuntimeHoldReason, RuntimeOrigin, ToWestendXcmRouter, TransactionByteFee,
 	TrustBackedAssetsInstance, Uniques, WeightToFee, XcmpQueue,
 };
@@ -41,8 +41,8 @@ use parachains_common::{
 	},
 	TREASURY_PALLET_ID,
 };
-use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_common::xcm_sender::ExponentialPrice;
+use pezkuwi_parachain_primitives::primitives::Sibling;
+use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use sp_runtime::traits::{AccountIdConversion, ConvertInto, TryConvertInto};
 use testnet_parachains_constants::rococo::snowbridge::{
 	EthereumNetwork, INBOUND_QUEUE_PALLET_INDEX,
@@ -85,7 +85,7 @@ parameter_types! {
 		PalletInstance(<PoolAssets as PalletInfoAccess>::index() as u8).into();
 	pub UniquesPalletLocation: Location =
 		PalletInstance(<Uniques as PalletInfoAccess>::index() as u8).into();
-	pub CheckingAccount: AccountId = PolkadotXcm::check_account();
+	pub CheckingAccount: AccountId = PezkuwiXcm::check_account();
 	pub const GovernanceLocation: Location = Location::parent();
 	pub StakingPot: AccountId = CollatorSelection::account_id();
 	pub TreasuryAccount: AccountId = TREASURY_PALLET_ID.into_account_truncating();
@@ -268,7 +268,7 @@ pub type Barrier = TrailingSetTopicAsId<
 		(
 			TakeWeightCredit,
 			// Expected responses are OK.
-			AllowKnownQueryResponses<PolkadotXcm>,
+			AllowKnownQueryResponses<PezkuwiXcm>,
 			// Allow XCMs with some computed origins to pass through.
 			WithComputedOrigin<
 				(
@@ -361,7 +361,7 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
-	type XcmEventEmitter = PolkadotXcm;
+	type XcmEventEmitter = PezkuwiXcm;
 	type AssetTransactor = AssetTransactors;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	// Asset Hub trusts only particular, pre-configured bridged locations from a different consensus
@@ -432,10 +432,10 @@ impl xcm_executor::Config for XcmConfig {
 			>,
 		>,
 	);
-	type ResponseHandler = PolkadotXcm;
-	type AssetTrap = PolkadotXcm;
-	type AssetClaims = PolkadotXcm;
-	type SubscriptionService = PolkadotXcm;
+	type ResponseHandler = PezkuwiXcm;
+	type AssetTrap = PezkuwiXcm;
+	type AssetClaims = PezkuwiXcm;
+	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type AssetLocker = ();
@@ -455,7 +455,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
-	type XcmRecorder = PolkadotXcm;
+	type XcmRecorder = PezkuwiXcm;
 }
 
 /// Converts a local signed origin into an XCM location. Forms the basis for local origins
@@ -468,7 +468,7 @@ pub type PriceForParentDelivery =
 /// For routing XCM messages which do not cross local consensus boundary.
 type LocalXcmRouter = (
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, PriceForParentDelivery>,
+	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PezkuwiXcm, PriceForParentDelivery>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 );
@@ -488,7 +488,7 @@ pub type XcmRouter = WithUniqueTopic<(
 parameter_types! {
 	pub const DepositPerItem: Balance = crate::deposit(1, 0);
 	pub const DepositPerByte: Balance = crate::deposit(0, 1);
-	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PolkadotXcm(pallet_xcm::HoldReason::AuthorizeAlias);
+	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PezkuwiXcm(pallet_xcm::HoldReason::AuthorizeAlias);
 }
 
 impl pallet_xcm::Config for Runtime {
@@ -660,7 +660,7 @@ pub mod bridging {
 			/// User fee for ERC20 token transfer back to Ethereum.
 			/// (initially was calculated by test `OutboundQueue::calculate_fees` - ETH/ROC 1/400 and fee_per_gas 20 GWEI = 2200698000000 + *25%)
 			/// Needs to be more than fee calculated from DefaultFeeConfig FeeConfigRecord in snowbridge:parachain/pallets/outbound-queue/src/lib.rs
-			/// Polkadot uses 10 decimals, Kusama and Rococo 12 decimals.
+			/// Pezkuwi uses 10 decimals, Kusama and Rococo 12 decimals.
 			pub const DefaultBridgeHubEthereumBaseFee: Balance = 3_833_568_200_000;
 			pub storage BridgeHubEthereumBaseFee: Balance = DefaultBridgeHubEthereumBaseFee::get();
 			pub SiblingBridgeHubWithEthereumInboundQueueInstance: Location = Location::new(

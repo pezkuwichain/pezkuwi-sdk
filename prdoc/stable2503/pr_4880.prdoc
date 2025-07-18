@@ -23,9 +23,9 @@ doc:
          queue.
 
 crates:
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: patch
-  - name: polkadot
+  - name: pezkuwi
     bump: patch
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: minor

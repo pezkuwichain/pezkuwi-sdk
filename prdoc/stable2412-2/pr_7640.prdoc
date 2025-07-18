@@ -17,9 +17,9 @@ crates:
     bump: minor
   - name: sc-transaction-pool
     bump: minor
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: minor
-  - name: polkadot-dispute-distribution
+  - name: pezkuwi-dispute-distribution
     bump: minor
   - name: cumulus-relay-chain-rpc-interface
     bump: minor

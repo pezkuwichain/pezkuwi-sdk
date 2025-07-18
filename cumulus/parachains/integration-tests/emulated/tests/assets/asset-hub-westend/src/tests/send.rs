@@ -72,7 +72,7 @@ fn send_xcm_from_para_to_asset_hub_paying_fee_with_system_asset() {
 	)]);
 
 	PenpalA::execute_with(|| {
-		assert_ok!(<PenpalA as PenpalAPallet>::PolkadotXcm::send(
+		assert_ok!(<PenpalA as PenpalAPallet>::PezkuwiXcm::send(
 			root_origin,
 			bx!(system_para_destination),
 			bx!(xcm),
@@ -151,7 +151,7 @@ fn send_xcm_from_para_to_asset_hub_paying_fee_with_sufficient_asset() {
 	)]);
 
 	PenpalA::execute_with(|| {
-		assert_ok!(<PenpalA as PenpalAPallet>::PolkadotXcm::send(
+		assert_ok!(<PenpalA as PenpalAPallet>::PezkuwiXcm::send(
 			root_origin,
 			bx!(system_para_destination),
 			bx!(xcm),

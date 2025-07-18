@@ -13,7 +13,7 @@ workspace = true
 [dependencies]
 bp-header-chain.workspace = true
 bp-parachains.workspace = true
-bp-polkadot-core.workspace = true
+bp-pezkuwi-core.workspace = true
 bp-runtime.workspace = true
 codec = { workspace = true }
 frame-benchmarking = { optional = true, workspace = true }
@@ -36,7 +36,7 @@ default = ["std"]
 std = [
 	"bp-header-chain/std",
 	"bp-parachains/std",
-	"bp-polkadot-core/std",
+	"bp-pezkuwi-core/std",
 	"bp-runtime/std",
 	"codec/std",
 	"frame-benchmarking/std",

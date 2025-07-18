@@ -74,7 +74,7 @@ fn register_token_v2() {
 			nonce: 1,
 			origin,
 			assets: vec![],
-			xcm: XcmPayload::CreateAsset { token, network: Network::Polkadot },
+			xcm: XcmPayload::CreateAsset { token, network: Network::Pezkuwi },
 			claimer: Some(claimer_bytes),
 			// Used to pay the asset creation deposit.
 			value: 9_000_000_000_000u128,
@@ -126,7 +126,7 @@ fn register_token_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -250,7 +250,7 @@ fn send_token_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -353,7 +353,7 @@ fn send_weth_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -507,7 +507,7 @@ fn register_and_send_multiple_tokens_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -688,7 +688,7 @@ fn send_token_to_penpal_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -728,7 +728,7 @@ fn send_token_to_penpal_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped on Penpal, should not happen."
 		);
@@ -736,7 +736,7 @@ fn send_token_to_penpal_v2() {
 }
 
 #[test]
-fn send_foreign_erc20_token_back_to_polkadot() {
+fn send_foreign_erc20_token_back_to_pezkuwi() {
 	let relayer_account = BridgeHubWestendSender::get();
 	let relayer_reward = 1_500_000_000_000u128;
 
@@ -868,7 +868,7 @@ fn send_foreign_erc20_token_back_to_polkadot() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -939,7 +939,7 @@ fn invalid_xcm_traps_funds_on_ah() {
 		// Assets are trapped
 		assert_expected_events!(
 			AssetHubWestend,
-			vec![RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. }) => {},]
+			vec![RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. }) => {},]
 		);
 	});
 }
@@ -1031,7 +1031,7 @@ fn invalid_claimer_does_not_fail_the_message() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);

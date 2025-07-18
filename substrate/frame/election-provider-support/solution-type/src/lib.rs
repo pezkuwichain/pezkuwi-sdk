@@ -263,9 +263,9 @@ fn imports() -> Result<TokenStream2> {
 					use _feps::private as _fepsp;
 			))
 		},
-		Err(e) => match crate_name("polkadot-sdk") {
-			Ok(FoundCrate::Name(polkadot_sdk)) => {
-				let ident = syn::Ident::new(&polkadot_sdk, Span::call_site());
+		Err(e) => match crate_name("pezkuwi-sdk") {
+			Ok(FoundCrate::Name(pezkuwi_sdk)) => {
+				let ident = syn::Ident::new(&pezkuwi_sdk, Span::call_site());
 				Ok(quote!(
 					use #ident::frame_election_provider_support as _feps;
 					use _feps::private as _fepsp;

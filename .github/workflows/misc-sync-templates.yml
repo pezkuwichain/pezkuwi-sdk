@@ -98,7 +98,7 @@ jobs:
       matrix:
         template: ["minimal", "solochain", "parachain"]
     env:
-      template-path: "polkadot-sdk-${{ matrix.template }}-template"
+      template-path: "pezkuwi-sdk-${{ matrix.template }}-template"
     steps:
 
       # 1. Prerequisites.
@@ -106,10 +106,10 @@ jobs:
       - name: Configure git identity
         run: |
           git config --global user.name "Template Bot"
-          git config --global user.email "163342540+paritytech-polkadotsdk-templatebot[bot]@users.noreply.github.com"
+          git config --global user.email "163342540+paritytech-pezkuwisdk-templatebot[bot]@users.noreply.github.com"
       - uses: actions/checkout@v4
         with:
-          path: polkadot-sdk
+          path: pezkuwi-sdk
           ref: "${{ github.event.inputs.stable_release_branch }}"
       - name: Download template artifacts
         uses: actions/download-artifact@v4
@@ -122,17 +122,17 @@ jobs:
         uses: actions/create-github-app-token@v1.9.3
         with:
           owner: "paritytech"
-          repositories: "polkadot-sdk-${{ matrix.template }}-template"
+          repositories: "pezkuwi-sdk-${{ matrix.template }}-template"
           app-id: ${{ secrets.TEMPLATE_APP_ID }}
           private-key: ${{ secrets.TEMPLATE_APP_KEY }}
       - uses: actions/checkout@v4
         with:
-          repository: "paritytech/polkadot-sdk-${{ matrix.template }}-template"
+          repository: "paritytech/pezkuwi-sdk-${{ matrix.template }}-template"
           path: "${{ env.template-path }}"
           token: ${{ steps.app_token.outputs.token }}
       - name: Install toml-cli
         run: cargo install --git https://github.com/gnprice/toml-cli --rev ea69e9d2ca4f0f858110dc7a5ae28bcb918c07fb # v0.2.3
-      - name: Install Polkadot SDK Version Manager
+      - name: Install Pezkuwi SDK Version Manager
         run: cargo install --git https://github.com/paritytech/psvm psvm
       - name: Rust compilation prerequisites
         run: |
@@ -146,18 +146,18 @@ jobs:
 
       - name: Replace dev-dependencies path references with workspace references
         run: find . -type f -name 'Cargo.toml' -exec sed -i'' -E "s/path = \"\.\.\/.*\"/workspace = true/g" {} \; 
-        working-directory: polkadot-sdk/templates/${{ matrix.template }}/
+        working-directory: pezkuwi-sdk/templates/${{ matrix.template }}/
       - name: Create a new workspace Cargo.toml
         run: |
           # This replaces the existing Cargo.toml for parachain-template,
           # corresponding to the `parachain-template-docs` crate, so no need
-          # to delete that `Cargo.toml` after copying the `polkadot-sdk/templates/parachain/*`
-          # to the `polkadot-sdk-parachain-template` repo.
+          # to delete that `Cargo.toml` after copying the `pezkuwi-sdk/templates/parachain/*`
+          # to the `pezkuwi-sdk-parachain-template` repo.
           cat << EOF > Cargo.toml
           [workspace.package]
           license = "MIT-0"
           authors = ["Parity Technologies <admin@parity.io>"]
-          homepage = "https://paritytech.github.io/polkadot-sdk/"
+          homepage = "https://paritytech.github.io/pezkuwi-sdk/"
 
           [workspace]
           EOF
@@ -193,7 +193,7 @@ jobs:
           EOF
 
         shell: bash
-        working-directory: polkadot-sdk/templates/${{ matrix.template }}/
+        working-directory: pezkuwi-sdk/templates/${{ matrix.template }}/
       - name: Update workspace configuration
         run: |
           set -euo pipefail
@@ -205,19 +205,19 @@ jobs:
 
           toml set templates/${{ matrix.template }}/Cargo.toml 'workspace.package.edition' "$(toml get --raw Cargo.toml 'workspace.package.edition')" > Cargo.temp
           mv Cargo.temp ./templates/${{ matrix.template }}/Cargo.toml
-        working-directory: polkadot-sdk
+        working-directory: pezkuwi-sdk
 
       - name: Print the result Cargo.tomls for debugging
         if: ${{ github.event.inputs.debug }}
         run: find . -type f -name 'Cargo.toml' -exec cat {} \;
-        working-directory: polkadot-sdk/templates/${{ matrix.template }}/
+        working-directory: pezkuwi-sdk/templates/${{ matrix.template }}/
 
       - name: Clean the destination repository
         run: rm -rf ./*
         working-directory: "${{ env.template-path }}"
       - name: Copy over the new changes
         run: |
-          cp -r polkadot-sdk/templates/${{ matrix.template }}/* "${{ env.template-path }}/"
+          cp -r pezkuwi-sdk/templates/${{ matrix.template }}/* "${{ env.template-path }}/"
       - name: Remove unnecessary files from parachain template
         if: ${{ matrix.template == 'parachain' }}
         run: |
@@ -233,7 +233,7 @@ jobs:
             patch=""
           fi
           psvm -o -v "${{ github.event.inputs.stable_release_branch }}$patch" -p ./Cargo.toml
-        working-directory: polkadot-sdk/
+        working-directory: pezkuwi-sdk/
       - name: Copy over required workspace dependencies
         run: |
           set +e
@@ -242,14 +242,14 @@ jobs:
             # Get its name..
             missing_dep=$(cargo tree --depth 1 --prefix none --no-dedupe 2>&1 | grep 'was not found in `workspace.dependencies`' | sed -E 's/(.*)`dependency.(.*)` was not found in `workspace.dependencies`/\2/')
             # And copy the dependency from the monorepo.
-            toml get ../polkadot-sdk/Cargo.toml 'workspace.dependencies' --output-toml | grep "^${missing_dep} = " >> Cargo.toml
+            toml get ../pezkuwi-sdk/Cargo.toml 'workspace.dependencies' --output-toml | grep "^${missing_dep} = " >> Cargo.toml
           done;
         working-directory: "${{ env.template-path }}"
 
       - name: Print the result Cargo.tomls for debugging after copying required workspace dependencies
         if: ${{ github.event.inputs.debug }}
         run: find . -type f -name 'Cargo.toml' -exec cat {} \;
-        working-directory: polkadot-sdk/templates/${{ matrix.template }}/
+        working-directory: pezkuwi-sdk/templates/${{ matrix.template }}/
 
 
       # 3. Verify the build. Push the changes or create a PR.

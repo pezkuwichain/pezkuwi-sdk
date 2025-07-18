@@ -406,7 +406,7 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkBackend<B, H> for Litep2pNetworkBac
 		//
 		// pass the protocol configuration to `Litep2pConfigBuilder` and save the TX channel
 		// to the protocol's `Peerset` together with the protocol name to allow other subsystems
-		// of Polkadot SDK to control connectivity of the notification protocol
+		// of Pezkuwi SDK to control connectivity of the notification protocol
 		let block_announce_protocol = params.block_announce_config.protocol_name().clone();
 		let mut notif_protocols = HashMap::from_iter([(
 			params.block_announce_config.protocol_name().clone(),

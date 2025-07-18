@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Para registration deposit covering max code size
 
@@ -11,4 +11,4 @@ doc:
       to the maximum size at any point without additional cost.
 
 crates: 
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common

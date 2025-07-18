@@ -13,7 +13,7 @@ doc:
       different reserve/teleport trust configurations, users can use the newly added `transfer_assets()`
       extrinsic which is more flexible in allowing more complex scenarios.
       The new extrinsic enables, for example, a (non-system) parachain to teleport their `ForeignAssets`
-      assets to `AssetHub` while using (reserve-based) `DOT` to pay fees.
+      assets to `AssetHub` while using (reserve-based) `HEZ` to pay fees.
       notes:
         - Now `(limited_)reserve_transfer_assets()` only allow reserve-based transfers for all assets
           including fees, similarly `(limited_)teleport_assets()` only allows teleports for all assets

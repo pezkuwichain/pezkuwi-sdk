@@ -21,7 +21,7 @@ use crate::{
 	},
 };
 use asset_hub_westend_runtime::{
-	xcm_config::WestendLocation, Balances, ForeignAssets, PolkadotXcm, RuntimeOrigin,
+	xcm_config::WestendLocation, Balances, ForeignAssets, PezkuwiXcm, RuntimeOrigin,
 };
 use emulated_integration_tests_common::{accounts::ALICE, xcm_emulator::TestExt};
 use frame_support::{
@@ -107,7 +107,7 @@ fn test_exchange_asset(
 			DepositAsset { assets: Wild(All), beneficiary: alice.clone().into() },
 		]);
 
-		let result = PolkadotXcm::execute(origin, bx!(xcm::VersionedXcm::from(xcm)), Weight::MAX);
+		let result = PezkuwiXcm::execute(origin, bx!(xcm::VersionedXcm::from(xcm)), Weight::MAX);
 
 		let foreign_balance_after = ForeignAssets::balance(asset_location, &alice);
 		let wnd_balance_after = Balances::total_balance(&alice);

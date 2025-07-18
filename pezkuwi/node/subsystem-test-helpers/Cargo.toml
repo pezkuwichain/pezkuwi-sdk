@@ -1,0 +1,40 @@
+[package]
+name = "pezkuwi-node-subsystem-test-helpers"
+description = "Subsystem traits and message definitions"
+publish = false
+version = "1.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+futures = { workspace = true }
+parking_lot = { workspace = true, default-features = true }
+pezkuwi-erasure-coding.default-features = true
+pezkuwi-erasure-coding.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sc-client-api.default-features = true
+sc-client-api.workspace = true
+sc-keystore.default-features = true
+sc-keystore.workspace = true
+sc-utils.default-features = true
+sc-utils.workspace = true
+sp-application-crypto.default-features = true
+sp-application-crypto.workspace = true
+sp-core.default-features = true
+sp-core.workspace = true
+sp-keyring.default-features = true
+sp-keyring.workspace = true
+sp-keystore.default-features = true
+sp-keystore.workspace = true

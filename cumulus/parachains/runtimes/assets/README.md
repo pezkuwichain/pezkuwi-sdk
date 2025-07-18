@@ -1,14 +1,14 @@
 # Assets Parachain
 
-Implementation of Asset Hub, a blockchain to support generic assets in the Polkadot and Kusama
+Implementation of Asset Hub, a blockchain to support generic assets in the Pezkuwi and Kusama
 networks. Asset Hub was formerly known as "Statemint".
 
 Asset Hub allows users to:
 
-- Deploy promise-backed assets, both fungible and non-fungible, with a DOT/KSM deposit.
+- Deploy promise-backed assets, both fungible and non-fungible, with a HEZ/KSM deposit.
 - Set admin roles to manage assets and asset classes.
 - Register assets as "self-sufficient" if the Relay Chain agrees, i.e. gain the ability for an
-  asset to justify the existence of accounts sans DOT/KSM.
+  asset to justify the existence of accounts sans HEZ/KSM.
 - Pay transaction fees using sufficient assets.
 - Transfer (and approve transfer) assets.
 - Interact with the chain via its transactional API or XCM.
@@ -17,9 +17,9 @@ Asset Hub must stay fully aligned with the Relay Chain it is connected to. As su
 the Relay Chain's governance origins as its own.
 
 See
-[the article on Asset Hub as common good parachain](https://www.parity.io/blog/statemint-generic-assets-chain-proposing-a-common-good-parachain-to-polkadot-governance/)
+[the article on Asset Hub as common good parachain](https://www.parity.io/blog/statemint-generic-assets-chain-proposing-a-common-good-parachain-to-pezkuwi-governance/)
 for a higher level description.
 
 Wallets, custodians, etc. should see
-[the Polkadot Wiki's Integration Guide](https://wiki.polkadot.network/docs/build-integrate-assets)
+[the Pezkuwi Wiki's Integration Guide](https://wiki.pezkuwi.network/docs/build-integrate-assets)
 for details about support.

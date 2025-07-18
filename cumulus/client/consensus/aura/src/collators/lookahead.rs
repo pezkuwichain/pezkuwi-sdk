@@ -40,10 +40,10 @@ use cumulus_primitives_aura::AuraUnincludedSegmentApi;
 use cumulus_primitives_core::{ClaimQueueOffset, CollectCollationInfo, PersistedValidationData};
 use cumulus_relay_chain_interface::RelayChainInterface;
 
-use polkadot_node_primitives::SubmitCollationParams;
-use polkadot_node_subsystem::messages::CollationGenerationMessage;
-use polkadot_overseer::Handle as OverseerHandle;
-use polkadot_primitives::{
+use pezkuwi_node_primitives::SubmitCollationParams;
+use pezkuwi_node_subsystem::messages::CollationGenerationMessage;
+use pezkuwi_overseer::Handle as OverseerHandle;
+use pezkuwi_primitives::{
 	vstaging::DEFAULT_CLAIM_QUEUE_OFFSET, CollatorPair, Id as ParaId, OccupiedCoreAssumption,
 };
 

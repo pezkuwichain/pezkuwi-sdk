@@ -54,7 +54,7 @@ fn register_penpal_a_asset_from_penpal_b_will_fail() {
 		type RuntimeOrigin = <PenpalB as Chain>::RuntimeOrigin;
 
 		let local_fee_asset_on_penpal =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset_on_ah =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -98,7 +98,7 @@ fn register_penpal_a_asset_from_penpal_b_will_fail() {
 			},
 		]));
 
-		assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::root(),
 			bx!(xcm.clone()),
 			Weight::from(EXECUTION_WEIGHT),
@@ -138,7 +138,7 @@ fn export_from_non_system_parachain_will_fail() {
 		let weth_asset =
 			Asset { id: AssetId(weth_location_reanchored.clone()), fun: Fungible(TOKEN_AMOUNT) };
 
-		assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::send(
+		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::send(
 			RuntimeOrigin::root(),
 			bx!(VersionedLocation::from(bridge_hub())),
 			bx!(VersionedXcm::from(Xcm(vec![
@@ -159,7 +159,7 @@ fn export_from_non_system_parachain_will_fail() {
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent{ .. }) => {},]
+			vec![RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent{ .. }) => {},]
 		);
 	});
 

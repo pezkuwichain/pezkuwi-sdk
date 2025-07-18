@@ -1,0 +1,31 @@
+[package]
+name = "pallet-staking-score"
+version = "1.0.0"
+description = "PezkuwiChain Staking Score Calculation Pallet"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[dependencies]
+codec = { package = "parity-scale-codec", default-features = false, features = ["derive"], workspace = true }
+scale-info = { default-features = false, features = ["derive"], workspace = true }
+frame-support = { default-features = false, workspace = true }
+frame-system = { default-features = false, workspace = true }
+sp-runtime = { default-features = false, workspace = true }
+
+# Projemizin özel tiplerini ve trait'lerini içeren kütüphane
+pezkuwi-primitives = { path = "../../primitives", default-features = false }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"frame-support/std",
+	"frame-system/std",
+	"scale-info/std",
+	"sp-runtime/std",
+    "pezkuwi-primitives/std",
+]

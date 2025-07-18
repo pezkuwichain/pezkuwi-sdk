@@ -14,14 +14,14 @@
 //!
 //! ## Substrate
 //! Substrate is a modular framework that enables the creation of purpose-specific blockchains. In
-//! the Polkadot ecosystem you can find two distinct approaches for on-chain code execution:
+//! the Pezkuwi ecosystem you can find two distinct approaches for on-chain code execution:
 //! [Runtime Development](#runtime-in-substrate) and [Smart Contracts](#smart-contracts).
 //!
 //! #### Smart Contracts in Substrate
 //! Smart Contracts are autonomous, programmable constructs deployed on the blockchain.
 //! In [FRAME](frame), Smart Contracts infrastructure is implemented by the
 //! [`pallet_contracts`] for WASM-based contracts or the
-//! [`pallet_evm`](https://github.com/polkadot-evm/frontier/tree/master/frame/evm) for EVM-compatible contracts. These pallets
+//! [`pallet_evm`](https://github.com/pezkuwi-evm/frontier/tree/master/frame/evm) for EVM-compatible contracts. These pallets
 //! enable Smart Contract developers to build applications and systems on top of a Substrate-based
 //! blockchain.
 //!

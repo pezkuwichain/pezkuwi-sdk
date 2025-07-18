@@ -9,4 +9,4 @@ doc:
       to build paras inherent data for elastic scaling.
 
 crates:
-  - name: polkadot-node-core-prospective-parachains
+  - name: pezkuwi-node-core-prospective-parachains

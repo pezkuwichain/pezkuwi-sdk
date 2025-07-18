@@ -9,5 +9,5 @@ doc:
                                             Post dispatch weight: Weight { ref_time: 5030321719, proof_size: 135395 }
     ```
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

@@ -23,7 +23,7 @@ use crate::messages_benchmarking::insert_header_to_grandpa_pallet;
 use bp_parachains::{
 	parachain_head_storage_key_at_source, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 };
-use bp_polkadot_core::parachains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
 use bp_runtime::{grow_storage_value, record_all_trie_keys, Chain, UnverifiedStorageProofParams};
 use codec::Encode;
 use frame_support::traits::Get;

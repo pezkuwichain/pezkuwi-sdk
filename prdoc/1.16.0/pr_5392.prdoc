@@ -7,5 +7,5 @@ doc:
         disputes as this will affect the approval process and thus finality.
 
 crates:
-  - name: polkadot-dispute-distribution
+  - name: pezkuwi-dispute-distribution
     bump: patch

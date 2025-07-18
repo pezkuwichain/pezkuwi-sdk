@@ -33,9 +33,9 @@ crates:
   bump: major
 - name: cumulus-client-service
   bump: major
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: major
-- name: polkadot-service
+- name: pezkuwi-service
   bump: major
 - name: sc-service
   bump: major

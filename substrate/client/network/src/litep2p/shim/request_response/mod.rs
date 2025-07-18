@@ -170,7 +170,7 @@ pub struct RequestResponseProtocol {
 	/// Handle to request-response protocol.
 	handle: RequestResponseHandle,
 
-	/// Inbound queue for sending received requests to protocol implementation in Polkadot SDK.
+	/// Inbound queue for sending received requests to protocol implementation in Pezkuwi SDK.
 	inbound_queue: Option<async_channel::Sender<IncomingRequest>>,
 
 	/// Handle to `Peerstore`.

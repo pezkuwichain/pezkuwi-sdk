@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/asset-hub-westend-runtime/asset_hub_westend_runtime.wasm
 // --pallet=pallet_xcm
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/assets/asset-hub-westend/src/weights
 // --wasm-execution=compiled
 // --steps=50
@@ -50,8 +50,8 @@ use core::marker::PhantomData;
 /// Weight functions for `pallet_xcm`.
 pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
-	/// Storage: `PolkadotXcm::AuthorizedAliases` (r:1 w:1)
-	/// Proof: `PolkadotXcm::AuthorizedAliases` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::AuthorizedAliases` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::AuthorizedAliases` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn add_authorized_alias() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `498`
@@ -61,8 +61,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
-	/// Storage: `PolkadotXcm::AuthorizedAliases` (r:1 w:1)
-	/// Proof: `PolkadotXcm::AuthorizedAliases` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::AuthorizedAliases` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::AuthorizedAliases` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn remove_authorized_alias() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `537`
@@ -74,8 +74,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 	}
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	/// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -92,12 +92,12 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 	}
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `System::Account` (r:1 w:1)
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
@@ -116,14 +116,14 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 	}
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `System::Account` (r:2 w:2)
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	/// Storage: `XcmpQueue::DeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `XcmpQueue::DeliveryFeeFactor` (`max_values`: None, `max_size`: Some(28), added: 2503, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::RelevantMessagingState` (r:1 w:0)
 	/// Proof: `ParachainSystem::RelevantMessagingState` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `XcmpQueue::OutboundXcmpStatus` (r:1 w:1)
@@ -142,8 +142,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 	}
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `Assets::Asset` (r:1 w:1)
 	/// Proof: `Assets::Asset` (`max_values`: None, `max_size`: Some(210), added: 2685, mode: `MaxEncodedLen`)
 	/// Storage: `Assets::Account` (r:2 w:2)
@@ -154,8 +154,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	/// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -170,8 +170,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(12))
 			.saturating_add(T::DbWeight::get().writes(6))
 	}
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	fn execute() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -181,8 +181,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 1485))
 			.saturating_add(T::DbWeight::get().reads(1))
 	}
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:0 w:1)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn force_xcm_version() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -200,20 +200,20 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 		Weight::from_parts(2_575_000, 0)
 			.saturating_add(Weight::from_parts(0, 0))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifiers` (r:1 w:1)
-	/// Proof: `PolkadotXcm::VersionNotifiers` (`max_values`: None, `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::QueryCounter` (r:1 w:1)
-	/// Proof: `PolkadotXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifiers` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::VersionNotifiers` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::QueryCounter` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	/// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
 	/// Proof: `ParachainSystem::PendingUpwardMessages` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::Queries` (r:0 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn force_subscribe_version_notify() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `42`
@@ -224,18 +224,18 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(6))
 			.saturating_add(T::DbWeight::get().writes(4))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifiers` (r:1 w:1)
-	/// Proof: `PolkadotXcm::VersionNotifiers` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifiers` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::VersionNotifiers` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	/// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
 	/// Proof: `ParachainSystem::PendingUpwardMessages` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::Queries` (r:0 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn force_unsubscribe_version_notify() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `136`
@@ -246,8 +246,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(5))
 			.saturating_add(T::DbWeight::get().writes(3))
 	}
-	/// Storage: `PolkadotXcm::XcmExecutionSuspended` (r:0 w:1)
-	/// Proof: `PolkadotXcm::XcmExecutionSuspended` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::XcmExecutionSuspended` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::XcmExecutionSuspended` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	fn force_suspension() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -257,8 +257,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 0))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:6 w:2)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:6 w:2)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn migrate_supported_version() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `22`
@@ -269,8 +269,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(6))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifiers` (r:6 w:2)
-	/// Proof: `PolkadotXcm::VersionNotifiers` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifiers` (r:6 w:2)
+	/// Proof: `PezkuwiXcm::VersionNotifiers` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn migrate_version_notifiers() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `26`
@@ -281,8 +281,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(6))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifyTargets` (r:7 w:0)
-	/// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:7 w:0)
+	/// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn already_notified_target() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `36`
@@ -292,12 +292,12 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 18351))
 			.saturating_add(T::DbWeight::get().reads(7))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifyTargets` (r:2 w:1)
-	/// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:2 w:1)
+	/// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	/// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -312,8 +312,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(6))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifyTargets` (r:5 w:0)
-	/// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:5 w:0)
+	/// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn notify_target_migration_fail() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `39`
@@ -323,8 +323,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 13404))
 			.saturating_add(T::DbWeight::get().reads(5))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifyTargets` (r:6 w:2)
-	/// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:6 w:2)
+	/// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn migrate_version_notify_targets() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `33`
@@ -335,12 +335,12 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(6))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	/// Storage: `PolkadotXcm::VersionNotifyTargets` (r:6 w:2)
-	/// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:6 w:2)
+	/// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	/// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -355,10 +355,10 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(10))
 			.saturating_add(T::DbWeight::get().writes(3))
 	}
-	/// Storage: `PolkadotXcm::QueryCounter` (r:1 w:1)
-	/// Proof: `PolkadotXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::Queries` (r:0 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::QueryCounter` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn new_query() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -369,8 +369,8 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	/// Storage: `PolkadotXcm::Queries` (r:1 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn take_response() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `7576`
@@ -381,10 +381,10 @@ impl<T: frame_system::Config> pallet_xcm::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
-	/// Storage: `PolkadotXcm::ShouldRecordXcm` (r:1 w:0)
-	/// Proof: `PolkadotXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	/// Storage: `PolkadotXcm::AssetTraps` (r:1 w:1)
-	/// Proof: `PolkadotXcm::AssetTraps` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::ShouldRecordXcm` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::ShouldRecordXcm` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::AssetTraps` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::AssetTraps` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `Assets::Asset` (r:1 w:1)
 	/// Proof: `Assets::Asset` (`max_values`: None, `max_size`: Some(210), added: 2685, mode: `MaxEncodedLen`)
 	/// Storage: `Assets::Account` (r:1 w:1)

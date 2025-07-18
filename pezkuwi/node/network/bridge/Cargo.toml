@@ -1,0 +1,47 @@
+[package]
+name = "pezkuwi-network-bridge"
+version = "22.0.0"
+description = "The Network Bridge Subsystem — protocol multiplexer for Pezkuwi."
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+always-assert = { workspace = true }
+async-trait = { workspace = true }
+bytes = { workspace = true, default-features = true }
+codec = { features = ["derive"], workspace = true }
+fatality = { workspace = true }
+futures = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+parking_lot = { workspace = true, default-features = true }
+pezkuwi-node-metrics.default-features = true
+pezkuwi-node-metrics.workspace = true
+pezkuwi-node-network-protocol.default-features = true
+pezkuwi-node-network-protocol.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-overseer.default-features = true
+pezkuwi-overseer.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sc-network.default-features = true
+sc-network.workspace = true
+sp-consensus.default-features = true
+sp-consensus.workspace = true
+thiserror = { workspace = true }
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+futures-timer = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-node-subsystem-util = { default-features = true, workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }

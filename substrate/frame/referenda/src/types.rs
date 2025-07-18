@@ -121,7 +121,7 @@ pub const DEFAULT_MAX_TRACK_NAME_LEN: usize = 25;
 /// Helper structure to treat a `[u8; N]` array as a string.
 ///
 /// This is a temporary fix (see [#7671](https://github.com/paritytech/polkadot-sdk/pull/7671)) in
-/// order to stop `polkadot.js` apps to fail when trying to decode the `name` field in `TrackInfo`.
+/// order to stop `pezkuwi.js` apps to fail when trying to decode the `name` field in `TrackInfo`.
 #[derive(Clone, Eq, DecodeWithMemTracking, PartialEq, Debug)]
 pub struct StringLike<const N: usize>(pub [u8; N]);
 

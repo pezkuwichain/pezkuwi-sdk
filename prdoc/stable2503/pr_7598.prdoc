@@ -44,7 +44,7 @@ crates:
   bump: minor
 - name: pallet-democracy
   bump: minor
-- name: polkadot-sdk-frame
+- name: pezkuwi-sdk-frame
   bump: minor
 - name: pallet-election-provider-multi-phase
   bump: minor

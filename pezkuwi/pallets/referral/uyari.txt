@@ -1,0 +1,29 @@
+--- pallet-referral İÇİN NOTLAR VE UYARILAR ---
+
+1.  **`refer` Extrinsic'indeki KYC Kontrolü:**
+    * Mevcut kodda (`lib.rs`), bir kullanıcıya referans girilirken o kullanıcının *zaten* KYC onaylı olup olmadığı kontrol edilmiyor (bu kontrol önceki versiyonlarda olabilir ancak şu an yok).
+    * **Potansiyel Sorun:** Eğer bir kullanıcı, kendisine referans girilmeden *önce* KYC onayı alırsa, daha sonra girilen referans `PendingReferrals` storage'ında kalıcı olarak kalabilir ve referans veren (`referrer`) bu referans için hiçbir zaman kredi (`ReferralCount`) alamaz.
+    * **Karar Gerekli:** Bu durumun kabul edilebilir olup olmadığına karar verilmeli. Eğer kabul edilemezse, `refer` extrinsic'ine tekrar bir KYC durum kontrolü (muhtemelen `pallet-identity-kyc`'den bilgi alarak) eklenmelidir.
+
+2.  **`ReferralHook` (`on_kyc_approved`) Testi (KRİTİK):**
+    * Bu paletin ana işlevselliği, `pallet-identity-kyc`'den gelen `on_kyc_approved` çağrısıyla tetiklenir.
+    * Bu hook fonksiyonunun mantığı **mutlaka kapsamlı bir şekilde test edilmelidir**. Testler şunları kapsamalıdır:
+        * `PendingReferrals`'dan doğru kaydın bulunup silinmesi.
+        * Doğru `referrer` hesabının `ReferralCount`'unun 1 artırılması.
+        * Referans bulunamadığında ne olduğu (loglama kontrolü).
+    * Bu testler için `pallet-identity-kyc`'den gelen çağrının mock'lanması (taklit edilmesi) gerekecektir.
+
+3.  **`pallet-trust` Entegrasyonu:**
+    * `TrustReferralProvider` trait'inin implementasyonu (`get_referral_count`) basit görünse de, `pallet-trust`'ın bu fonksiyonu çağırdığında doğru referans sayısını aldığından entegrasyon testleri ile emin olunmalıdır.
+
+4.  **Referans Limitleri ve Kuralları:**
+    * Mevcut implementasyonda bir kullanıcının yapabileceği referans sayısı veya referansın geçerlilik süresi gibi limitler bulunmamaktadır. Eğer bu tür kurallara ihtiyaç varsa, eklenmeleri gerekir.
+
+5.  **Doğrudan Ödül Mekanizması Yok:**
+    * Palet, başarılı referansları sadece sayar (`ReferralCount`). Doğrudan bir token ödülü dağıtmaz. Ödüllendirme tamamen `pallet-trust` üzerinden güven skoruna etki şeklinde gerçekleşmektedir. Bu tasarımın hedeflenen modelle uyumlu olduğu teyit edilmelidir.
+
+6.  **Test Kapsamı:**
+    * Mevcut testler (`tests.rs`) yetersizdir. Yukarıda belirtilen hook testi ve entegrasyon testlerine ek olarak, bir kullanıcıya birden fazla referans girilmeye çalışılması, zaten bekleyen birinin tekrar referans edilmesi gibi kenar durumlar test edilmelidir.
+
+7.  **Ağırlıklar (Weights):**
+    * `refer` extrinsic'i ve özellikle `on_kyc_approved` hook'unun ağırlıkları (`weights.rs`) benchmark ile belirlenmelidir. Hook'un ağırlığı, referans bulunup bulunmamasına göre değişebilir.

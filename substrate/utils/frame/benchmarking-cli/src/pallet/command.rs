@@ -61,7 +61,7 @@ use std::{
 };
 
 /// Logging target
-const LOG_TARGET: &'static str = "polkadot_sdk_frame::benchmark::pallet";
+const LOG_TARGET: &'static str = "pezkuwi_sdk_frame::benchmark::pallet";
 
 type SubstrateAndExtraHF<T> =
 	(sp_io::SubstrateHostFunctions, frame_benchmarking::benchmarking::HostFunctions, T);

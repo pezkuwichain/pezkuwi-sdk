@@ -1,14 +1,14 @@
 //! # Development Environment Advice
 //!
 //! Large Rust projects are known for sometimes long compile times and sluggish dev tooling, and
-//! polkadot-sdk is no exception.
+//! pezkuwi-sdk is no exception.
 //!
 //! This page contains some advice to improve your workflow when using common tooling.
 //!
 //! ## Rust Analyzer Configuration
 //!
 //! [Rust Analyzer](https://rust-analyzer.github.io/) is the defacto [LSP](https://langserver.org/) for Rust. Its default
-//! settings are fine for smaller projects, but not well optimised for polkadot-sdk.
+//! settings are fine for smaller projects, but not well optimised for pezkuwi-sdk.
 //!
 //! Below is a suggested configuration for VSCode:
 //!
@@ -37,8 +37,8 @@
 //!     "async-std": ["async_std"]
 //!   },
 //!   // Use nightly formatting.
-//!   // See the polkadot-sdk CI job that checks formatting for the current version used in
-//!   // polkadot-sdk.
+//!   // See the pezkuwi-sdk CI job that checks formatting for the current version used in
+//!   // pezkuwi-sdk.
 //!   "rust-analyzer.rustfmt.extraArgs": ["+nightly-2024-04-10"],
 //! }
 //! ```
@@ -78,8 +78,8 @@
 //!   },
 //!   rustfmt = {
 //!     # Use nightly formatting.
-//!     # See the polkadot-sdk CI job that checks formatting for the current version used in
-//!     # polkadot-sdk.
+//!     # See the pezkuwi-sdk CI job that checks formatting for the current version used in
+//!     # pezkuwi-sdk.
 //!     extraArgs = { "+nightly-2024-04-10" },
 //!   },
 //! },
@@ -91,7 +91,7 @@
 //!
 //! ### Using `--package` (a.k.a. `-p`)
 //!
-//! polkadot-sdk is a monorepo containing many crates. When you run a cargo command without
+//! pezkuwi-sdk is a monorepo containing many crates. When you run a cargo command without
 //! `-p`, you will almost certainly compile crates outside of the scope you are working.
 //!
 //! Instead, you should identify the name of the crate you are working on by checking the `name`

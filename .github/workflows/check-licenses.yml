@@ -31,13 +31,13 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@paritytech"
 
-      - name: Check the licenses in Polkadot
+      - name: Check the licenses in Pezkuwi
         run: |
           shopt -s globstar
           npx @paritytech/license-scanner scan \
             --ensure-licenses ${{ env.LICENSES }} \
             --file-extensions '.rs' \
-            -- ./polkadot
+            -- ./pezkuwi
 
       - name: Check the licenses in Cumulus
         run: |
@@ -69,13 +69,13 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@paritytech"
 
-      - name: Check the product references in Polkadot
+      - name: Check the product references in Pezkuwi
         run: |
           shopt -s globstar
           npx @paritytech/license-scanner scan \
-            --ensure-product 'Polkadot' \
+            --ensure-product 'Pezkuwi' \
             --file-extensions '.rs' \
-            -- ./polkadot
+            -- ./pezkuwi
 
       - name: Check the product references in Cumulus
         run: |

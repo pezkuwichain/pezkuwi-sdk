@@ -16,7 +16,7 @@
 
 use super::{
 	AccountId, AllPalletsWithSystem, Balances, BaseDeliveryFee, Broker, FeeAssetId, ParachainInfo,
-	ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
+	ParachainSystem, PezkuwiXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
 	TransactionByteFee, WeightToFee, XcmpQueue,
 };
 use frame_support::{
@@ -36,8 +36,8 @@ use parachains_common::{
 	},
 	TREASURY_PALLET_ID,
 };
-use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_common::xcm_sender::ExponentialPrice;
+use pezkuwi_parachain_primitives::primitives::Sibling;
+use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use sp_runtime::traits::AccountIdConversion;
 use xcm::latest::{prelude::*, ROCOCO_GENESIS_HASH};
 use xcm_builder::{
@@ -152,7 +152,7 @@ pub type Barrier = TrailingSetTopicAsId<
 			// Allow local users to buy weight credit.
 			TakeWeightCredit,
 			// Expected responses are OK.
-			AllowKnownQueryResponses<PolkadotXcm>,
+			AllowKnownQueryResponses<PezkuwiXcm>,
 			WithComputedOrigin<
 				(
 					// If the message is one that immediately attempts to pay for execution, then
@@ -193,7 +193,7 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
-	type XcmEventEmitter = PolkadotXcm;
+	type XcmEventEmitter = PezkuwiXcm;
 	type AssetTransactor = AssetTransactors;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	// Coretime chain does not recognize a reserve location for any asset. Users must teleport ROC
@@ -214,10 +214,10 @@ impl xcm_executor::Config for XcmConfig {
 		Balances,
 		ResolveTo<StakingPotAccountId<Runtime>, Balances>,
 	>;
-	type ResponseHandler = PolkadotXcm;
-	type AssetTrap = PolkadotXcm;
-	type AssetClaims = PolkadotXcm;
-	type SubscriptionService = PolkadotXcm;
+	type ResponseHandler = PezkuwiXcm;
+	type AssetTrap = PezkuwiXcm;
+	type AssetClaims = PezkuwiXcm;
+	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type AssetLocker = ();
@@ -235,7 +235,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
-	type XcmRecorder = PolkadotXcm;
+	type XcmRecorder = PezkuwiXcm;
 }
 
 /// Converts a local signed origin into an XCM location. Forms the basis for local origins
@@ -249,7 +249,7 @@ pub type PriceForParentDelivery =
 /// queues.
 pub type XcmRouter = WithUniqueTopic<(
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, ()>,
+	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PezkuwiXcm, ()>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 )>;

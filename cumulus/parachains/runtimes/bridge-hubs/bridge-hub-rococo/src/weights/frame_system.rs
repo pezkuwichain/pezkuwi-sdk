@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/bridge-hub-rococo-runtime/bridge_hub_rococo_runtime.wasm
 // --pallet=frame_system
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/bridge-hubs/bridge-hub-rococo/src/weights
 // --wasm-execution=compiled
 // --steps=50

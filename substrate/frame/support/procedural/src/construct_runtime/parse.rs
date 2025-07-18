@@ -642,7 +642,7 @@ enum PalletsConversion {
 	///
 	/// `System: frame_system::{Pallet, Call}`
 	///
-	/// However, for backwards compatibility with Polkadot/Kusama
+	/// However, for backwards compatibility with Pezkuwi/Kusama
 	/// we must propagate some other parts to the pallet by default.
 	Explicit(Vec<Pallet>),
 	/// Pallets explicitly declare parts that are fully expanded.

@@ -7,9 +7,9 @@ doc:
     `para_backing_state`.
 
 crates:
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: minor
 - name: rococo-runtime
   bump: minor
@@ -17,13 +17,13 @@ crates:
   bump: minor
 - name: cumulus-relay-chain-rpc-interface
   bump: minor
-- name: polkadot-node-core-prospective-parachains
+- name: pezkuwi-node-core-prospective-parachains
   bump: patch
-- name: polkadot-node-core-runtime-api
+- name: pezkuwi-node-core-runtime-api
   bump: minor
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: major
-- name: polkadot-node-subsystem-util
+- name: pezkuwi-node-subsystem-util
   bump: major
 - name: cumulus-relay-chain-minimal-node
   bump: minor

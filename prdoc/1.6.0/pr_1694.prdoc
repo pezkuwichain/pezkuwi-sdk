@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Agile Coretime Base Relaychain Functionality
 
@@ -13,7 +13,7 @@ doc:
 migrations: 
   db: []
   runtime: 
-    - reference: polkadot-runtime-parachains
+    - reference: pezkuwi-runtime-parachains
       description: |
         Claim queue in scheduler now no longer contains Option values and
         assignments now contain information necessary to accomodate for coretime
@@ -21,4 +21,4 @@ migrations:
         assignments.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains

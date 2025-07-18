@@ -4,18 +4,18 @@
 
 This repository contains both the Cumulus SDK and also specific chains implemented on top of this SDK.
 
-If you only want to run a **Polkadot Parachain Node**, check out our [container section](../docs/contributor/container.md).
+If you only want to run a **Pezkuwi Parachain Node**, check out our [container section](../docs/contributor/container.md).
 
 ## Cumulus SDK
 
-A set of tools for writing [Substrate](https://substrate.io/)-based [Polkadot](https://wiki.polkadot.network/en/)
-[parachains](https://wiki.polkadot.network/docs/en/learn-parachains). Refer to the included [overview](docs/overview.md)
+A set of tools for writing [Substrate](https://substrate.io/)-based [Pezkuwi](https://wiki.pezkuwi.network/en/)
+[parachains](https://wiki.pezkuwi.network/docs/en/learn-parachains). Refer to the included [overview](docs/overview.md)
 for architectural details, and the [Connect to a relay chain how-to
 guide](https://docs.substrate.io/reference/how-to-guides/parachains/connect-to-a-relay-chain/) for a guided walk-through
 of using these tools.
 
 It's easy to write blockchains using Substrate, and the overhead of writing parachains' distribution, p2p, database, and
-synchronization layers should be just as low. This project aims to make it easy to write parachains for Polkadot by
+synchronization layers should be just as low. This project aims to make it easy to write parachains for Pezkuwi by
 leveraging the power of Substrate.
 
 Cumulus clouds are shaped sort of like dots; together they form a system that is intricate, beautiful and functional.
@@ -23,17 +23,17 @@ Cumulus clouds are shaped sort of like dots; together they form a system that is
 ### Consensus
 
 [`parachain-consensus`](https://github.com/paritytech/polkadot-sdk/blob/master/cumulus/client/consensus/common/src/parachain_consensus.rs)
-is a [consensus engine](https://docs.substrate.io/v3/advanced/consensus) for Substrate that follows a Polkadot [relay
-chain](https://wiki.polkadot.network/docs/en/learn-architecture#relay-chain). This will run a Polkadot node internally,
+is a [consensus engine](https://docs.substrate.io/v3/advanced/consensus) for Substrate that follows a Pezkuwi [relay
+chain](https://wiki.pezkuwi.network/docs/en/learn-architecture#relay-chain). This will run a Pezkuwi node internally,
 and dictate to the client and synchronization algorithms which chain to follow,
-[finalize](https://wiki.polkadot.network/docs/en/learn-consensus#probabilistic-vs-provable-finality), and treat as best.
+[finalize](https://wiki.pezkuwi.network/docs/en/learn-consensus#probabilistic-vs-provable-finality), and treat as best.
 
 ### Collator
 
-A Polkadot [collator](https://wiki.polkadot.network/docs/en/learn-collator) for the parachain is implemented by the
-`polkadot-parachain` binary (previously called `polkadot-collator`).
+A Pezkuwi [collator](https://wiki.pezkuwi.network/docs/en/learn-collator) for the parachain is implemented by the
+`pezkuwi-parachain` binary (previously called `pezkuwi-collator`).
 
-You may run `polkadot-parachain` locally after building it or using one of the container option described
+You may run `pezkuwi-parachain` locally after building it or using one of the container option described
 [here](../docs/contributor/container.md).
 
 ### Relay Chain Interaction
@@ -47,12 +47,12 @@ three ways:
 If an external relay chain node is not specified (default behavior), then a full relay chain node is spawned within the
 same process.
 
-This node has all of the typical components of a regular Polkadot node and will have to fully sync with the relay chain
+This node has all of the typical components of a regular Pezkuwi node and will have to fully sync with the relay chain
 to work.
 
 ##### Example command
 ```bash
-polkadot-parachain \
+pezkuwi-parachain \
 	--chain parachain-chainspec.json \
 	--tmp \
 	-- \
@@ -68,13 +68,13 @@ Parachain nodes using this feature won't have to fully sync with the relay chain
 fewer system resources.
 
 **Note:** At this time, any parachain nodes using this feature will still spawn a significantly cut-down relay chain
-node in-process. Even though they lack the majority of normal Polkadot subsystems, they will still need to connect
+node in-process. Even though they lack the majority of normal Pezkuwi subsystems, they will still need to connect
 directly to the relay chain network.
 
 ##### Example command
 
 ```bash
-polkadot-parachain \
+pezkuwi-parachain \
 	--chain parachain-chainspec.json \
 	--tmp \
 	--relay-chain-rpc-urls \
@@ -92,13 +92,13 @@ To specify which chain the light client should connect to, users need to supply 
 relay chain arguments.
 
 **Note:** At this time, any parachain nodes using this feature will still spawn a significantly cut-down relay chain
-node in-process. Even though they lack the majority of normal Polkadot subsystems, they will still need to connect
+node in-process. Even though they lack the majority of normal Pezkuwi subsystems, they will still need to connect
 directly to the relay chain network.
 
 
 ##### Example command
 ```bash
-polkadot-parachain \
+pezkuwi-parachain \
 	--chain parachain-chainspec.json \
 	--tmp \
 	--relay-chain-light-client \
@@ -131,7 +131,7 @@ To run the example network, use the following commands:
 # Podman provider
 zombienet --provider podman spawn ./zombienet/examples/small_network.toml
 
-# Native provider, assumes polkadot and polkadot-parachains binary in $PATH
+# Native provider, assumes pezkuwi and pezkuwi-parachains binary in $PATH
 zombienet --provider native spawn ./zombienet/examples/small_network.toml
 ```
 
@@ -142,41 +142,41 @@ zombienet --provider native spawn ./zombienet/examples/small_network.toml
 # Clone
 git clone https://github.com/paritytech/polkadot-sdk
 
-# Compile Polkadot's required binaries
-cargo build --release -p polkadot
+# Compile Pezkuwi's required binaries
+cargo build --release -p pezkuwi
 
 # Generate a raw chain spec
-./target/release/polkadot build-spec --chain rococo-local --disable-default-bootnode --raw > rococo-local-cfde.json
+./target/release/pezkuwi build-spec --chain rococo-local --disable-default-bootnode --raw > rococo-local-cfde.json
 
 # Alice
-./target/release/polkadot --chain rococo-local-cfde.json --alice --tmp
+./target/release/pezkuwi --chain rococo-local-cfde.json --alice --tmp
 
 # Bob (In a separate terminal)
-./target/release/polkadot --chain rococo-local-cfde.json --bob --tmp --port 30334
+./target/release/pezkuwi --chain rococo-local-cfde.json --bob --tmp --port 30334
 ```
 
 #### Launch the Parachain
 
 ```bash
 # Compile
-cargo build --release -p polkadot-parachain-bin
+cargo build --release -p pezkuwi-parachain-bin
 
 # Export genesis state
-./target/release/polkadot-parachain export-genesis-state > genesis-state
+./target/release/pezkuwi-parachain export-genesis-state > genesis-state
 
 # Export genesis wasm
-./target/release/polkadot-parachain export-genesis-wasm > genesis-wasm
+./target/release/pezkuwi-parachain export-genesis-wasm > genesis-wasm
 
 # Collator1
-./target/release/polkadot-parachain --collator --alice --force-authoring \
+./target/release/pezkuwi-parachain --collator --alice --force-authoring \
   --tmp --port 40335 --rpc-port 9946 -- --chain rococo-local-cfde.json --port 30335
 
 # Collator2
-./target/release/polkadot-parachain --collator --bob --force-authoring \
+./target/release/pezkuwi-parachain --collator --bob --force-authoring \
   --tmp --port 40336 --rpc-port 9947 -- --chain rococo-local-cfde.json --port 30336
 
 # Parachain Full Node 1
-./target/release/polkadot-parachain --tmp --port 40337 --rpc-port 9948 -- \
+./target/release/pezkuwi-parachain --tmp --port 40337 --rpc-port 9948 -- \
   --chain rococo-local-cfde.json --port 30337
 ```
 
@@ -188,21 +188,21 @@ cargo build --release -p polkadot-parachain-bin
 ## Asset Hub 🪙
 
 This repository also contains the Asset Hub runtimes. Asset Hub is a system parachain providing an asset store for the
-Polkadot ecosystem.
+Pezkuwi ecosystem.
 
 ### Build & Launch a Node
 
-To run an Asset Hub node, you will need to compile the `polkadot-parachain` binary:
+To run an Asset Hub node, you will need to compile the `pezkuwi-parachain` binary:
 
 ```bash
-cargo build --release --locked --bin polkadot-parachain
+cargo build --release --locked --bin pezkuwi-parachain
 ```
 
 Once the executable is built, launch the parachain node via:
 
 ```bash
 CHAIN=asset-hub-westend # or asset-hub-kusama
-./target/release/polkadot-parachain --chain $CHAIN
+./target/release/pezkuwi-parachain --chain $CHAIN
 ```
 
 Refer to the [setup instructions](#manual-setup) to run a local network for development.
@@ -215,22 +215,22 @@ See [the `bridge-hubs` readme](parachains/runtimes/bridge-hubs/README.md) for de
 
 ### Paseo
 
-[Paseo](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.rpc.amforc.com#/explorer) is the newest testnet for Polkadot,
+[Paseo](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.rpc.amforc.com#/explorer) is the newest testnet for Pezkuwi,
 replacing Rococo as a decentralised, community run, stable testnet for Parachain teams and dapp developers to build on.
 For more information, check the [Paseo repo](https://github.com/paseo-network).
 
 ### Westend
 
-[Westend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.polkadot.io#/explorer)
-is a long running testnet for Polkadot,
+[Westend](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2Fwestend-rpc.pezkuwi.io#/explorer)
+is a long running testnet for Pezkuwi,
 primarily intended to provide a testing environment for Parity to test the latest changes in the SDK.
 
 ### Testnet Parachains
 
 A few testnet parachain instances:
 
-- [Asset Hub Westend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-asset-hub-rpc.polkadot.io#/explorer)
-- [Frequency Paseo](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2F0.rpc.testnet.amplica.io#/explorer)
+- [Asset Hub Westend](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2Fwestend-asset-hub-rpc.pezkuwi.io#/explorer)
+- [Frequency Paseo](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2F0.rpc.testnet.amplica.io#/explorer)
 
 The network uses horizontal message passing (HRMP) to enable communication between parachains and the relay chain and,
 in turn, between parachains. This means that every message is sent to the relay chain, and from the relay chain to its

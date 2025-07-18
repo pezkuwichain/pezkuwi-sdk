@@ -12,6 +12,6 @@ migrations:
   runtime: []
 
 crates:
-  - name: polkadot-node-core-pvf
+  - name: pezkuwi-node-core-pvf
 
 host_functions: []

@@ -1,9 +1,9 @@
-title: "Transfer polkadot native assets to Ethereum through snowbridge"
+title: "Transfer pezkuwi native assets to Ethereum through snowbridge"
 
 doc:
   - audience: Runtime Dev
     description: |
-      Transfer polkadot native asset to Ethereum through snowbridge.
+      Transfer pezkuwi native asset to Ethereum through snowbridge.
 
 crates:
   - name: snowbridge-pallet-inbound-queue

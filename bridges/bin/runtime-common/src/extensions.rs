@@ -377,7 +377,7 @@ mod tests {
 	use bp_header_chain::StoredHeaderDataBuilder;
 	use bp_messages::{InboundLaneData, MessageNonce, OutboundLaneData};
 	use bp_parachains::{BestParaHeadHash, ParaInfo};
-	use bp_polkadot_core::parachains::{ParaHeadsProof, ParaId};
+	use bp_pezkuwi_core::parachains::{ParaHeadsProof, ParaId};
 	use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 	use bp_runtime::HeaderId;
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};

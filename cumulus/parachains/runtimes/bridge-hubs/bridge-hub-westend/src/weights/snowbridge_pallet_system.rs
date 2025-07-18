@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/bridge-hub-westend-runtime/bridge_hub_westend_runtime.wasm
 // --pallet=snowbridge_pallet_system
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/bridge-hubs/bridge-hub-westend/src/weights
 // --wasm-execution=compiled
 // --steps=50

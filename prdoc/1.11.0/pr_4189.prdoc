@@ -1,4 +1,4 @@
-title: "polkadot_runtime_parachains::coretime: Expose `MaxXcmTransactWeight`"
+title: "pezkuwi_runtime_parachains::coretime: Expose `MaxXcmTransactWeight`"
 
 doc:
   - audience: Runtime Dev
@@ -12,5 +12,5 @@ doc:
       chain can be dispatched.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: major

@@ -10,11 +10,11 @@ doc:
       the minimal relay chain.
 
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major
 - name: westend-runtime
   bump: patch
 - name: rococo-runtime
   bump: patch
-- name: polkadot-node-core-pvf-common
+- name: pezkuwi-node-core-pvf-common
   bump: none

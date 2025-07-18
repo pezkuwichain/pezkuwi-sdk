@@ -16,7 +16,7 @@ crates:
   bump: patch
 - name: pallet-transaction-payment
   bump: patch
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: patch
 - name: pallet-sudo
   bump: patch

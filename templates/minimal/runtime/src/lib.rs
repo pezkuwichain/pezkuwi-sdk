@@ -27,8 +27,8 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use pallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
-use polkadot_sdk::{
-	polkadot_sdk_frame::{
+use pezkuwi_sdk::{
+	pezkuwi_sdk_frame::{
 		self as frame,
 		deps::sp_genesis_builder,
 		runtime::{apis, prelude::*},
@@ -337,7 +337,7 @@ impl_runtime_apis! {
 // https://github.com/paritytech/substrate/issues/10579#issuecomment-1600537558
 pub mod interface {
 	use super::Runtime;
-	use polkadot_sdk::{polkadot_sdk_frame as frame, *};
+	use pezkuwi_sdk::{pezkuwi_sdk_frame as frame, *};
 
 	pub type Block = super::Block;
 	pub use frame::runtime::types_common::OpaqueBlock;

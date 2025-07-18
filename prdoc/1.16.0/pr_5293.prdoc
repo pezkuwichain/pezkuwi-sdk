@@ -8,7 +8,7 @@ doc:
      pallet in production, yet. It is work in progress.
 
 crates:
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor
   - name: pallet-revive
     bump: minor

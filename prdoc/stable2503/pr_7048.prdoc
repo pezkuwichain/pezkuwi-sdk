@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: '[pallet-salary] Migrate to using frame umbrella crate'
 
@@ -13,5 +13,5 @@ doc:
 crates:
   - name: pallet-salary
     bump: minor
-  - name: polkadot-sdk-frame
+  - name: pezkuwi-sdk-frame
     bump: minor

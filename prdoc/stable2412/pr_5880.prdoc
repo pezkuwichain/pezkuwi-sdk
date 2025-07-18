@@ -7,5 +7,5 @@ doc:
         Resolves https://github.com/paritytech/polkadot-sdk/issues/5617.
 
 crates:
-  - name: polkadot-node-core-prospective-parachains
+  - name: pezkuwi-node-core-prospective-parachains
     bump: none

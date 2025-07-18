@@ -28,9 +28,9 @@ use pallet_asset_rate::AssetKindFactory;
 #[cfg(feature = "runtime-benchmarks")]
 use pallet_treasury::ArgumentsFactory;
 #[cfg(feature = "runtime-benchmarks")]
-use polkadot_sdk::sp_core::crypto::FromEntropy;
+use pezkuwi_sdk::sp_core::crypto::FromEntropy;
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
@@ -2636,7 +2636,7 @@ mod runtime {
 	pub type Beefy = pallet_beefy::Pallet<Runtime>;
 
 	// MMR leaf construction must be after session in order to have a leaf's next_auth_set
-	// refer to block<N>. See issue polkadot-fellows/runtimes#160 for details.
+	// refer to block<N>. See issue pezkuwi-fellows/runtimes#160 for details.
 	#[runtime::pallet_index(42)]
 	pub type Mmr = pallet_mmr::Pallet<Runtime>;
 
@@ -2960,7 +2960,7 @@ impl
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benches {
-	polkadot_sdk::frame_benchmarking::define_benchmarks!(
+	pezkuwi_sdk::frame_benchmarking::define_benchmarks!(
 		[frame_benchmarking, BaselineBench::<Runtime>]
 		[frame_benchmarking_pallet_pov, Pov]
 		[pallet_alliance, Alliance]

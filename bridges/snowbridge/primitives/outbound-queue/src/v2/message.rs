@@ -159,7 +159,7 @@ pub enum Command {
 		/// The amount of tokens to transfer
 		amount: u128,
 	},
-	/// Register foreign token from Polkadot
+	/// Register foreign token from Pezkuwi
 	RegisterForeignToken {
 		/// ID for the token
 		token_id: H256,
@@ -170,7 +170,7 @@ pub enum Command {
 		/// Number of decimal places
 		decimals: u8,
 	},
-	/// Mint foreign token from Polkadot
+	/// Mint foreign token from Pezkuwi
 	MintForeignToken {
 		/// ID for the token
 		token_id: H256,

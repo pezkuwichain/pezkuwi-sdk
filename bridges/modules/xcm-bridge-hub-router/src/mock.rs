@@ -47,7 +47,7 @@ construct_runtime! {
 }
 
 parameter_types! {
-	pub ThisNetworkId: NetworkId = Polkadot;
+	pub ThisNetworkId: NetworkId = Pezkuwi;
 	pub BridgedNetworkId: NetworkId = Kusama;
 	pub UniversalLocation: InteriorLocation = [GlobalConsensus(ThisNetworkId::get()), Parachain(1000)].into();
 	pub SiblingBridgeHubLocation: Location = ParentThen([Parachain(1002)].into()).into();

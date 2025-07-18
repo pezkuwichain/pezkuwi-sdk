@@ -238,7 +238,7 @@ parameter_types! {
 pub type AmbassadorSalaryPaymaster = PayOverXcm<
 	AmbassadorSalaryLocation,
 	crate::xcm_config::XcmRouter,
-	crate::PolkadotXcm,
+	crate::PezkuwiXcm,
 	ConstU32<{ 6 * HOURS }>,
 	AccountId,
 	(),

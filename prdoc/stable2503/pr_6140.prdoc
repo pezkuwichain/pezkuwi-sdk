@@ -39,7 +39,7 @@ crates:
   bump: minor
 - name: sp-runtime
   bump: patch
-- name: polkadot-sdk
+- name: pezkuwi-sdk
   bump: minor
 - name: asset-hub-rococo-runtime
   bump: major
@@ -73,7 +73,7 @@ crates:
   bump: patch
 - name: cumulus-pallet-weight-reclaim
   bump: major
-- name: polkadot-service
+- name: pezkuwi-service
   bump: major
 - name: westend-runtime
   bump: major
@@ -81,7 +81,7 @@ crates:
   bump: patch
 - name: frame-system-benchmarking
   bump: major
-- name: polkadot-sdk-frame
+- name: pezkuwi-sdk-frame
   bump: major
 - name: rococo-runtime
   bump: major

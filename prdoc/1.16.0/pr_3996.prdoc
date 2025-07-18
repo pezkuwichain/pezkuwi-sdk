@@ -16,5 +16,5 @@ crates:
     bump: minor
   - name: asset-hub-rococo-runtime
     bump: minor
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: minor

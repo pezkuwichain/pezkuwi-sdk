@@ -22,7 +22,7 @@ doc:
 
     Fix the crate to be built without rocksdb, not intended to solve #3793.
 crates:
-- name: polkadot-node-metrics
+- name: pezkuwi-node-metrics
   bump: patch
 - name: frame-benchmarking-cli
   bump: patch

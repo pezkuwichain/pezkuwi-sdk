@@ -2,7 +2,7 @@
 
 #![warn(missing_docs)]
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 mod chain_spec;
 mod cli;

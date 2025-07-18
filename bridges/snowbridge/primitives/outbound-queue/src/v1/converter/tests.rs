@@ -14,7 +14,7 @@ use xcm::{
 
 parameter_types! {
 	const MaxMessageSize: u32 = u32::MAX;
-	const RelayNetwork: NetworkId = Polkadot;
+	const RelayNetwork: NetworkId = Pezkuwi;
 	UniversalLocation: InteriorLocation = [GlobalConsensus(RelayNetwork::get()), Parachain(1013)].into();
 	const BridgedNetwork: NetworkId =  Ethereum{ chain_id: 1 };
 	const NonBridgedNetwork: NetworkId =  Ethereum{ chain_id: 2 };
@@ -212,7 +212,7 @@ fn exporter_validate_with_remote_universal_source_yields_not_applicable() {
 fn exporter_validate_without_para_id_in_source_yields_not_applicable() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
-	let mut universal_source: Option<InteriorLocation> = Some(GlobalConsensus(Polkadot).into());
+	let mut universal_source: Option<InteriorLocation> = Some(GlobalConsensus(Pezkuwi).into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 
@@ -232,7 +232,7 @@ fn exporter_validate_complex_para_id_in_source_yields_not_applicable() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000), PalletInstance(12)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000), PalletInstance(12)].into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 
@@ -252,7 +252,7 @@ fn exporter_validate_without_xcm_message_yields_missing_argument() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 
@@ -273,7 +273,7 @@ fn exporter_validate_with_max_target_fee_yields_unroutable() {
 	let mut destination: Option<InteriorLocation> = Here.into();
 
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 
 	let token_address: [u8; 20] = hex!("1000000000000000000000000000000000000000");
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
@@ -321,7 +321,7 @@ fn exporter_validate_with_unparsable_xcm_yields_unroutable() {
 	let mut destination: Option<InteriorLocation> = Here.into();
 
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 
 	let channel: u32 = 0;
 	let fee = Asset { id: AssetId(Here.into()), fun: Fungible(1000) };
@@ -348,7 +348,7 @@ fn exporter_validate_xcm_success_case_1() {
 	let mut destination: Option<InteriorLocation> = Here.into();
 
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 
 	let token_address: [u8; 20] = hex!("1000000000000000000000000000000000000000");
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
@@ -942,7 +942,7 @@ fn xcm_converter_convert_non_ethereum_asset_yields_asset_resolution_failed() {
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
 
 	let assets: Assets = vec![Asset {
-		id: AssetId([GlobalConsensus(Polkadot), Parachain(1000), GeneralIndex(0)].into()),
+		id: AssetId([GlobalConsensus(Pezkuwi), Parachain(1000), GeneralIndex(0)].into()),
 		fun: Fungible(1000),
 	}]
 	.into();
@@ -1056,9 +1056,9 @@ fn xcm_converter_convert_with_non_ethereum_beneficiary_yields_beneficiary_resolu
 		DepositAsset {
 			assets: filter,
 			beneficiary: [
-				GlobalConsensus(Polkadot),
+				GlobalConsensus(Pezkuwi),
 				Parachain(1000),
-				AccountId32 { network: Some(Polkadot), id: beneficiary_address },
+				AccountId32 { network: Some(Pezkuwi), id: beneficiary_address },
 			]
 			.into(),
 		},
@@ -1203,7 +1203,7 @@ fn exporter_validate_with_invalid_dest_does_not_alter_destination() {
 	let network = BridgedNetwork::get();
 	let destination: InteriorLocation = Parachain(1000).into();
 
-	let universal_source: InteriorLocation = [GlobalConsensus(Polkadot), Parachain(1000)].into();
+	let universal_source: InteriorLocation = [GlobalConsensus(Pezkuwi), Parachain(1000)].into();
 
 	let token_address: [u8; 20] = hex!("1000000000000000000000000000000000000000");
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");

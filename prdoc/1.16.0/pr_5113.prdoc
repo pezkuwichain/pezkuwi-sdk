@@ -10,5 +10,5 @@ doc:
       Prospective-parachains is already doing this check but it's also needed in the runtime.
 
 crates: 
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

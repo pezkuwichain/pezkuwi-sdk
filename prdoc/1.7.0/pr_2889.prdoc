@@ -7,4 +7,4 @@ doc:
       that no votes from disabled validators are included in a block during execution
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains

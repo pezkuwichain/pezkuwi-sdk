@@ -21,13 +21,13 @@ crates:
     bump: major
   - name: frame-benchmarking-cli
     bump: major
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: patch
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: patch
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: patch
   - name: rococo-runtime
     bump: patch

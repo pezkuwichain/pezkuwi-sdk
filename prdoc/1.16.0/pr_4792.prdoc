@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "rpc: bind to `ipv6` if available and add `CLI --experimental-rpc-endpoint` to specify listen addr"
 
@@ -20,7 +20,7 @@ doc:
 
       So for instance it's now possible to start up three RPC endpoints as follows:
       ```
-      $ polkadot --experimental-rpc-endpoint "listen-addr=127.0.0.1:9944,methods=unsafe" --experimental-rpc-endpoint "listen-addr=0.0.0.0:9945,methods=safe,rate-limit=100" --experimental-rpc-endpoint "listen-addr=[::1]:9944,optional=true"
+      $ pezkuwi --experimental-rpc-endpoint "listen-addr=127.0.0.1:9944,methods=unsafe" --experimental-rpc-endpoint "listen-addr=0.0.0.0:9945,methods=safe,rate-limit=100" --experimental-rpc-endpoint "listen-addr=[::1]:9944,optional=true"
       ```
 
 crates:
@@ -34,9 +34,9 @@ crates:
     bump: major
   - name: sc-rpc-api
     bump: patch
-  - name: polkadot-dispute-distribution
+  - name: pezkuwi-dispute-distribution
     bump: patch
-  - name: polkadot-parachain-lib
+  - name: pezkuwi-parachain-lib
     bump: patch
   - name: substrate-frame-rpc-system
     bump: major
@@ -54,9 +54,9 @@ crates:
   - name: sc-consensus-babe-rpc
     bump: major
     validate: false
-  - name: polkadot-rpc
+  - name: pezkuwi-rpc
     bump: major
     validate: false
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
     validate: false

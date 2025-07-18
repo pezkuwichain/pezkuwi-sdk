@@ -23,7 +23,7 @@ use bp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, MessagePayload,
 };
-use bp_polkadot_core::parachains::ParaHash;
+use bp_pezkuwi_core::parachains::ParaHash;
 use bp_runtime::{AccountIdOf, Chain, HashOf, Parachain};
 use codec::Encode;
 use frame_support::weights::Weight;
@@ -278,7 +278,7 @@ where
 	(bridged_block_number, bridged_header_hash)
 }
 
-/// Returns callback which generates `BridgeMessage` from Polkadot XCM builder based on
+/// Returns callback which generates `BridgeMessage` from Pezkuwi XCM builder based on
 /// `expected_message_size` for benchmark.
 pub fn generate_xcm_builder_bridge_message_sample(
 	destination: InteriorLocation,
@@ -317,7 +317,7 @@ pub fn generate_xcm_builder_bridge_message_sample(
 			min_crate_minor: 0,
 		}]));
 
-		// this is the `BridgeMessage` from polkadot xcm builder, but it has no constructor
+		// this is the `BridgeMessage` from pezkuwi xcm builder, but it has no constructor
 		// or public fields, so just tuple
 		// (double encoding, because `.encode()` is called on original Xcm BLOB when it is pushed
 		// to the storage)

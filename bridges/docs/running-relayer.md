@@ -24,7 +24,7 @@ of details behind that simple phrase - you could find more info in the
 [High-Level Bridge Overview](./high-level-overview.md) document.
 
 Reward that is paid to relayer has two parts. The first part static and is controlled by the governance.
-It is rather small initially - e.g. you need to deliver `10_000` Kusama -> Polkadot messages to gain single
+It is rather small initially - e.g. you need to deliver `10_000` Kusama -> Pezkuwi messages to gain single
 KSM token.
 
 The other reward part is dynamic. So to deliver an XCM message from one BridgeHub to another, we'll need to
@@ -45,7 +45,7 @@ information on how to deploy this software on your own node.
 ## Relayers Concurrency
 
 As it has been said above, we are not compensating cost of transactions that are not **useful**. For
-example, if message `100` has already been delivered from Kusama Bridge Hub to Polkadot Bridge Hub, then another
+example, if message `100` has already been delivered from Kusama Bridge Hub to Pezkuwi Bridge Hub, then another
 transaction that delivers the same message `100` won't be **useful**. Hence, no compensation to relayer that
 has submitted that second transaction.
 
@@ -74,8 +74,8 @@ That is planned for the future version of bridge and the progress is
 
 ## Prerequisites
 
-Let's focus on the bridge between Polkadot and Kusama Bridge Hubs. Let's also assume that we want to start
-a relayer that "serves" an initial lane [`0x00000001`](https://github.com/polkadot-fellows/runtimes/blob/9ce1bbbbcd7843b3c76ba4d43c036bc311959e9f/system-parachains/bridge-hubs/bridge-hub-kusama/src/bridge_to_polkadot_config.rs#L54).
+Let's focus on the bridge between Pezkuwi and Kusama Bridge Hubs. Let's also assume that we want to start
+a relayer that "serves" an initial lane [`0x00000001`](https://github.com/pezkuwi-fellows/runtimes/blob/9ce1bbbbcd7843b3c76ba4d43c036bc311959e9f/system-parachains/bridge-hubs/bridge-hub-kusama/src/bridge_to_pezkuwi_config.rs#L54).
 
 <details>
 <summary>Lane?</summary>
@@ -93,15 +93,15 @@ So to start your relayer instance, you'll need to prepare:
 
 - an address of ws/wss RPC endpoint of the Kusama relay chain;
 
-- an address of ws/wss RPC endpoint of the Polkadot relay chain;
+- an address of ws/wss RPC endpoint of the Pezkuwi relay chain;
 
 - an address of ws/wss RPC endpoint of the Kusama Bridge Hub chain;
 
-- an address of ws/wss RPC endpoint of the Polkadot Bridge Hub chain;
+- an address of ws/wss RPC endpoint of the Pezkuwi Bridge Hub chain;
 
 - an account on Kusama Bridge Hub;
 
-- an account on Polkadot Bridge Hub.
+- an account on Pezkuwi Bridge Hub.
 
 For RPC endpoints, you could start your own nodes, or use some public community nodes. Nodes are not meant to be
 archive or provide access to insecure RPC calls.
@@ -127,10 +127,10 @@ for his operations.
 Before registering, you should know several things about your funds:
 
 - to register, you need to hold significant amount of funds on your relayer account. As of now, it is
-  [100 KSM](https://github.com/polkadot-fellows/runtimes/blob/9ce1bbbbcd7843b3c76ba4d43c036bc311959e9f/system-parachains/bridge-hubs/bridge-hub-kusama/src/bridge_to_polkadot_config.rs#L71C14-L71C43)
+  [100 KSM](https://github.com/pezkuwi-fellows/runtimes/blob/9ce1bbbbcd7843b3c76ba4d43c036bc311959e9f/system-parachains/bridge-hubs/bridge-hub-kusama/src/bridge_to_pezkuwi_config.rs#L71C14-L71C43)
   for registration on Kusama Bridge Hub and
-  [500 DOT](https://github.com/polkadot-fellows/runtimes/blob/9ce1bbbbcd7843b3c76ba4d43c036bc311959e9f/system-parachains/bridge-hubs/bridge-hub-polkadot/src/bridge_to_kusama_config.rs#L71C14-L71C43)
-  for registration on Polkadot Bridge Hub;
+  [500 HEZ](https://github.com/pezkuwi-fellows/runtimes/blob/9ce1bbbbcd7843b3c76ba4d43c036bc311959e9f/system-parachains/bridge-hubs/bridge-hub-pezkuwi/src/bridge_to_kusama_config.rs#L71C14-L71C43)
+  for registration on Pezkuwi Bridge Hub;
 
 - when you are registered, those funds are reserved on relayer account and you can't transfer them.
 
@@ -161,9 +161,9 @@ than the `LEASE`.
 </details>
 
 So once you have enough funds on your account and have selected the `validTill` parameter value, you
-could use the Polkadot JS apps to submit an extrinsic. If you want priority boost for your transactions
+could use the Pezkuwi JS apps to submit an extrinsic. If you want priority boost for your transactions
 on the Kusama Bridge Hub, open the
-[Polkadot JS Apps](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/extrinsics)
+[Pezkuwi JS Apps](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.pezkuwi.io#/extrinsics)
 and submit the `register` extrinsic from the `bridgeRelayers` pallet:
 
 ![Register Extrinsic](./bridge-relayers-register.png)
@@ -202,13 +202,13 @@ this data.
 </details>
 
 To deliver and get reward for a single message, the relayer needs to submit two transactions. One
-at the source Bridge Hub and one at the target Bridge Hub. Below are costs for Polkadot <> Kusama
+at the source Bridge Hub and one at the target Bridge Hub. Below are costs for Pezkuwi <> Kusama
 messages (as of today):
 
-- to deliver a single Polkadot -> Kusama message, you would need to pay around `0.06 KSM` at Kusama
-  Bridge Hub and around `1.62 DOT` at Polkadot Bridge Hub;
+- to deliver a single Pezkuwi -> Kusama message, you would need to pay around `0.06 KSM` at Kusama
+  Bridge Hub and around `1.62 HEZ` at Pezkuwi Bridge Hub;
 
-- to deliver a single Kusama -> Polkadot message, you would need to pay around `1.70 DOT` at Polkadot
+- to deliver a single Kusama -> Pezkuwi message, you would need to pay around `1.70 HEZ` at Pezkuwi
   Bridge Hub and around `0.05 KSM` at Kusama Bridge Hub.
 
 Those values are not constants - they depend on call weights (that may change from release to release),
@@ -222,7 +222,7 @@ This requires submitting several transactions. But first, let's check that you a
 claim. For that, let's check the state of the pallet that tracks all rewards.
 
 To check your rewards at the Kusama Bridge Hub, go to the
-[Polkadot JS Apps](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/chainstate)
+[Pezkuwi JS Apps](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.pezkuwi.io#/chainstate)
 targeting Kusama Bridge Hub, select the `bridgeRelayers` pallet, choose `relayerRewards` map and
 your relayer account. Then:
 
@@ -235,12 +235,12 @@ your relayer account. Then:
 
 If check shows that you have some rewards, you can craft the claim transaction, with similar parameters.
 For that, go to `Extrinsics` tab of the
-[Polkadot JS Apps](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/extrinsics)
+[Pezkuwi JS Apps](https://pezkuwi.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.pezkuwi.io#/extrinsics)
 and submit the following transaction (make sure to change `owner` before):
 
 ![Claim Rewards Extrinsic](./bridge-relayers-claim-rewards.png)
 
-To claim rewards on Polkadot Bridge Hub you can follow the same process. The only difference is that you
+To claim rewards on Pezkuwi Bridge Hub you can follow the same process. The only difference is that you
 need to set value of the `bridgedChainId` to `bhks`.
 
 ## Starting your Relayer
@@ -308,7 +308,7 @@ docker run \
     --lane 00000002
 ```
 
-### Starting your Polkadot <> Kusama Relayer
+### Starting your Pezkuwi <> Kusama Relayer
 
 *Work in progress, coming soon*
 
@@ -332,12 +332,12 @@ docker run \
 ```
 
 You can find more info on configuring Prometheus and Grafana in the
-[Monitor your node](https://wiki.polkadot.network/docs/maintain-guides-how-to-monitor-your-node)
-guide from Polkadot wiki.
+[Monitor your node](https://wiki.pezkuwi.network/docs/maintain-guides-how-to-monitor-your-node)
+guide from Pezkuwi wiki.
 
 We have our own set of Grafana dashboards and alerts. You may use them for inspiration.
 Please find them in this folder:
 
 - for Rococo <> Westend bridge: [rococo-westend](https://github.com/paritytech/parity-bridges-common/tree/master/deployments/bridges/rococo-westend).
 
-- for Polkadot <> Kusama bridge: *work in progress, coming soon*
+- for Pezkuwi <> Kusama bridge: *work in progress, coming soon*

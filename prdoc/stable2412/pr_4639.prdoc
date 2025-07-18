@@ -59,11 +59,11 @@ crates:
     bump: minor
   - name: solochain-template-node
     bump: minor
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
   - name: cumulus-client-service
     bump: patch
   - name: cumulus-test-service
     bump: major
-  - name: polkadot-omni-node-lib
+  - name: pezkuwi-omni-node-lib
     bump: patch

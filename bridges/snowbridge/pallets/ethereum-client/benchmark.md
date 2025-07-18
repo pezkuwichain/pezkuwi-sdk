@@ -33,7 +33,7 @@ Subfunction of `bls_fast_aggregate_verify` which verify the prepared signature o
 ## hardware spec
 Run benchmark in a EC2 instance
 ```
-cargo run --release --bin polkadot-parachain --features runtime-benchmarks -- benchmark machine --base-path /mnt/scratch/benchmark
+cargo run --release --bin pezkuwi-parachain --features runtime-benchmarks -- benchmark machine --base-path /mnt/scratch/benchmark
 
 +----------+----------------+-------------+-------------+-------------------+
 | Category | Function       | Score       | Minimum     | Result            |
@@ -53,7 +53,7 @@ cargo run --release --bin polkadot-parachain --features runtime-benchmarks -- be
 ## benchmark
 
 ```
-cargo run --release --bin polkadot-parachain \
+cargo run --release --bin pezkuwi-parachain \
 --features runtime-benchmarks \
 -- \
 benchmark pallet \

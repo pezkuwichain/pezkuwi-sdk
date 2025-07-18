@@ -17,7 +17,7 @@ extern crate alloc;
 use alloc::vec::Vec;
 use smallvec::smallvec;
 
-use polkadot_sdk::{staging_parachain_info as parachain_info, *};
+use pezkuwi_sdk::{staging_parachain_info as parachain_info, *};
 
 use sp_runtime::{
 	generic, impl_opaque_keys,
@@ -143,8 +143,8 @@ impl WeightToFeePolynomial for WeightToFee {
 /// to even the core data structures.
 pub mod opaque {
 	use super::*;
-	pub use polkadot_sdk::sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
-	use polkadot_sdk::sp_runtime::{
+	pub use pezkuwi_sdk::sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
+	use pezkuwi_sdk::sp_runtime::{
 		generic,
 		traits::{BlakeTwo256, Hash as HashT},
 	};
@@ -304,7 +304,7 @@ mod runtime {
 	#[runtime::pallet_index(30)]
 	pub type XcmpQueue = cumulus_pallet_xcmp_queue;
 	#[runtime::pallet_index(31)]
-	pub type PolkadotXcm = pallet_xcm;
+	pub type PezkuwiXcm = pallet_xcm;
 	#[runtime::pallet_index(32)]
 	pub type CumulusXcm = cumulus_pallet_xcm;
 	#[runtime::pallet_index(33)]

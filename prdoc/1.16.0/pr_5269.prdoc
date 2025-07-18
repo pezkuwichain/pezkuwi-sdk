@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Added the possibility to build a parachain node with block number u64
 
@@ -9,7 +9,7 @@ doc:
       Added the possibility to build a parachain node with block number u64.
 
 crates:
-  - name: polkadot-parachain-lib
+  - name: pezkuwi-parachain-lib
     bump: minor
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch

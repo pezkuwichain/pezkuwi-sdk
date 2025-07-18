@@ -7,5 +7,5 @@ doc:
       This was caused by improper handling of finalized heads. More info in https://github.com/paritytech/polkadot-sdk/issues/5258
 
 crates:
-  - name: polkadot-availability-distribution
+  - name: pezkuwi-availability-distribution
     bump: patch

@@ -1,19 +1,19 @@
 version: '3.7'
 services:
   node_alice:
-    image: "polkadot:${BRANCH:-cumulus-branch}"
+    image: "pezkuwi:${BRANCH:-cumulus-branch}"
     ports:
       - "30333:30333"
       - "9933:9933"
       - "9944:9944"
     volumes:
-      - "polkadot-data-alice:/data"
+      - "pezkuwi-data-alice:/data"
       - type: bind
-        source: ./test/parachain/chain-specs/polkadot_chainspec.json
+        source: ./test/parachain/chain-specs/pezkuwi_chainspec.json
         target: /chainspec.json
         read_only: true
     command: >
-      polkadot
+      pezkuwi
       --chain=/chainspec.json
       --base-path=/data
       --port 30333
@@ -30,19 +30,19 @@ services:
           - alice
 
   node_bob:
-    image: "polkadot:${BRANCH:-cumulus-branch}"
+    image: "pezkuwi:${BRANCH:-cumulus-branch}"
     ports:
       - "30344:30333"
       - "9935:9933"
       - "9945:9944"
     volumes:
-      - "polkadot-data-bob:/data"
+      - "pezkuwi-data-bob:/data"
       - type: bind
-        source: ./test/parachain/chain-specs/polkadot_chainspec.json
+        source: ./test/parachain/chain-specs/pezkuwi_chainspec.json
         target: /chainspec.json
         read_only: true
     command: >
-      polkadot
+      pezkuwi
       --chain=/chainspec.json
       --base-path=/data
       --port 30333
@@ -66,7 +66,7 @@ services:
     volumes:
       - "genesis-state:/data"
     command: >
-      polkadot-parachain
+      pezkuwi-parachain
       export-genesis-state
       /data/genesis-state
 
@@ -114,8 +114,8 @@ services:
 
 
 volumes:
-  polkadot-data-alice:
-  polkadot-data-bob:
+  pezkuwi-data-alice:
+  pezkuwi-data-bob:
   collator-data:
   genesis-state:
   parachain-runtime:

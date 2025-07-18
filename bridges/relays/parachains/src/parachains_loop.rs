@@ -17,7 +17,7 @@
 use crate::{parachains_loop_metrics::ParachainsLoopMetrics, ParachainsPipeline};
 
 use async_trait::async_trait;
-use bp_polkadot_core::{
+use bp_pezkuwi_core::{
 	parachains::{ParaHash, ParaHeadsProof, ParaId},
 	BlockNumber as RelayBlockNumber,
 };

@@ -1,11 +1,11 @@
 const assert = require("assert");
-const polkadotApi = require("@polkadot/api");
-const utilCrypto = require("@polkadot/util-crypto");
+const pezkuwiApi = require("@pezkuwi/api");
+const utilCrypto = require("@pezkuwi/util-crypto");
 const fs = require("fs").promises;
 
 async function connect(apiUrl, types) {
-    const provider = new polkadotApi.WsProvider(apiUrl);
-    const api = new polkadotApi.ApiPromise({ provider, types });
+    const provider = new pezkuwiApi.WsProvider(apiUrl);
+    const api = new pezkuwiApi.ApiPromise({ provider, types });
     await api.isReady;
     return api;
 }
@@ -20,7 +20,7 @@ async function run(nodeName, networkInfo, args) {
     await utilCrypto.cryptoWaitReady();
 
     // account to submit tx
-    const keyring = new polkadotApi.Keyring({ type: "sr25519" });
+    const keyring = new pezkuwiApi.Keyring({ type: "sr25519" });
     const alice = keyring.addFromUri("//Alice");
 
     // get genesis to update

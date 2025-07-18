@@ -9,7 +9,7 @@ use parachain_template_runtime::{
 	opaque::{Block, Hash},
 };
 
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 
 // Cumulus Imports
 use cumulus_client_cli::CollatorOptions;
@@ -233,7 +233,7 @@ fn start_consensus(
 #[sc_tracing::logging::prefix_logs_with("Parachain")]
 pub async fn start_parachain_node(
 	parachain_config: Configuration,
-	polkadot_config: Configuration,
+	pezkuwi_config: Configuration,
 	collator_options: CollatorOptions,
 	para_id: ParaId,
 	hwbench: Option<sc_sysinfo::HwBench>,
@@ -255,7 +255,7 @@ pub async fn start_parachain_node(
 	let mut task_manager = params.task_manager;
 
 	let (relay_chain_interface, collator_key) = build_relay_chain_interface(
-		polkadot_config,
+		pezkuwi_config,
 		&parachain_config,
 		telemetry_worker_handle,
 		&mut task_manager,

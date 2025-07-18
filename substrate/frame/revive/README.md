@@ -41,7 +41,7 @@ to handle that failure, either proceeding or reverting A's changes.
 ### Dispatchable functions
 
 Those are documented in the [reference
-documentation](https://paritytech.github.io/polkadot-sdk/master/pallet_revive/pallet/dispatchables/index.html).
+documentation](https://paritytech.github.io/pezkuwi-sdk/master/pallet_revive/pallet/dispatchables/index.html).
 
 ## Usage
 

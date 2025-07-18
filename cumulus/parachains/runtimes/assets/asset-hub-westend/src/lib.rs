@@ -15,7 +15,7 @@
 
 //! # Asset Hub Westend Runtime
 //!
-//! Testnet for Asset Hub Polkadot.
+//! Testnet for Asset Hub Pezkuwi.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![recursion_limit = "256"]
@@ -98,7 +98,7 @@ use assets_common::{
 	foreign_creators::ForeignCreators,
 	matching::{FromNetwork, FromSiblingParachain},
 };
-use polkadot_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
+use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
 use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 use xcm::{
 	latest::prelude::AssetId,
@@ -839,7 +839,7 @@ parameter_types! {
 	pub const BaseDeliveryFee: u128 = CENTS.saturating_mul(3);
 }
 
-pub type PriceForSiblingParachainDelivery = polkadot_runtime_common::xcm_sender::ExponentialPrice<
+pub type PriceForSiblingParachainDelivery = pezkuwi_runtime_common::xcm_sender::ExponentialPrice<
 	FeeAssetId,
 	BaseDeliveryFee,
 	TransactionByteFee,
@@ -849,7 +849,7 @@ pub type PriceForSiblingParachainDelivery = polkadot_runtime_common::xcm_sender:
 impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = ParachainSystem;
-	type VersionWrapper = PolkadotXcm;
+	type VersionWrapper = PezkuwiXcm;
 	// Enqueue XCMP messages from siblings for later processing.
 	type XcmpQueue = TransformOrigin<MessageQueue, AggregateMessageOrigin, ParaId, ParaIdToSibling>;
 	type MaxInboundSuspended = ConstU32<1_000>;
@@ -1048,7 +1048,7 @@ impl pallet_xcm_bridge_hub_router::Config<ToRococoXcmRouterInstance> for Runtime
 	type SiblingBridgeHubLocation = xcm_config::bridging::SiblingBridgeHub;
 	type BridgedNetworkId = xcm_config::bridging::to_rococo::RococoNetwork;
 	type Bridges = xcm_config::bridging::NetworkExportTable;
-	type DestinationVersion = PolkadotXcm;
+	type DestinationVersion = PezkuwiXcm;
 
 	type BridgeHubOrigin = frame_support::traits::EitherOfDiverse<
 		EnsureRoot<AccountId>,
@@ -1152,7 +1152,7 @@ construct_runtime!(
 
 		// XCM helpers.
 		XcmpQueue: cumulus_pallet_xcmp_queue = 30,
-		PolkadotXcm: pallet_xcm = 31,
+		PezkuwiXcm: pallet_xcm = 31,
 		CumulusXcm: cumulus_pallet_xcm = 32,
 		// Bridge utilities.
 		ToRococoXcmRouter: pallet_xcm_bridge_hub_router::<Instance1> = 34,
@@ -1354,8 +1354,8 @@ impl frame_support::traits::OnRuntimeUpgrade for InitStorageVersions {
 
 		let mut writes = 0;
 
-		if PolkadotXcm::on_chain_storage_version() == StorageVersion::new(0) {
-			PolkadotXcm::in_code_storage_version().put::<PolkadotXcm>();
+		if PezkuwiXcm::on_chain_storage_version() == StorageVersion::new(0) {
+			PezkuwiXcm::in_code_storage_version().put::<PezkuwiXcm>();
 			writes.saturating_inc();
 		}
 
@@ -1688,7 +1688,7 @@ impl_runtime_apis! {
 				assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
 				.map_err(|()| XcmPaymentApiError::VersionedConversionFailed)?
 			);
-			PolkadotXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
+			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
 		}
 
 		fn query_weight_to_asset_fee(weight: Weight, asset: VersionedAssetId) -> Result<u128, XcmPaymentApiError> {
@@ -1722,21 +1722,21 @@ impl_runtime_apis! {
 		}
 
 		fn query_xcm_weight(message: VersionedXcm<()>) -> Result<Weight, XcmPaymentApiError> {
-			PolkadotXcm::query_xcm_weight(message)
+			PezkuwiXcm::query_xcm_weight(message)
 		}
 
 		fn query_delivery_fees(destination: VersionedLocation, message: VersionedXcm<()>) -> Result<VersionedAssets, XcmPaymentApiError> {
-			PolkadotXcm::query_delivery_fees(destination, message)
+			PezkuwiXcm::query_delivery_fees(destination, message)
 		}
 	}
 
 	impl xcm_runtime_apis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
 		fn dry_run_call(origin: OriginCaller, call: RuntimeCall, result_xcms_version: XcmVersion) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			PolkadotXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
+			PezkuwiXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
 
 		fn dry_run_xcm(origin_location: VersionedLocation, xcm: VersionedXcm<RuntimeCall>) -> Result<XcmDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			PolkadotXcm::dry_run_xcm::<Runtime, xcm_config::XcmRouter, RuntimeCall, xcm_config::XcmConfig>(origin_location, xcm)
+			PezkuwiXcm::dry_run_xcm::<Runtime, xcm_config::XcmRouter, RuntimeCall, xcm_config::XcmConfig>(origin_location, xcm)
 		}
 	}
 
@@ -1754,10 +1754,10 @@ impl_runtime_apis! {
 
 	impl xcm_runtime_apis::trusted_query::TrustedQueryApi<Block> for Runtime {
 		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
-			PolkadotXcm::is_trusted_reserve(asset, location)
+			PezkuwiXcm::is_trusted_reserve(asset, location)
 		}
 		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
-			PolkadotXcm::is_trusted_teleporter(asset, location)
+			PezkuwiXcm::is_trusted_teleporter(asset, location)
 		}
 	}
 
@@ -1766,13 +1766,13 @@ impl_runtime_apis! {
 			Vec<xcm_runtime_apis::authorized_aliases::OriginAliaser>,
 			xcm_runtime_apis::authorized_aliases::Error
 		> {
-			PolkadotXcm::authorized_aliasers(target)
+			PezkuwiXcm::authorized_aliasers(target)
 		}
 		fn is_authorized_alias(origin: VersionedLocation, target: VersionedLocation) -> Result<
 			bool,
 			xcm_runtime_apis::authorized_aliases::Error
 		> {
-			PolkadotXcm::is_authorized_alias(origin, target)
+			PezkuwiXcm::is_authorized_alias(origin, target)
 		}
 	}
 
@@ -1953,7 +1953,7 @@ impl_runtime_apis! {
 						ExistentialDepositAsset,
 						xcm_config::PriceForParentDelivery,
 					>,
-					polkadot_runtime_common::xcm_sender::ToParachainDeliveryHelper<
+					pezkuwi_runtime_common::xcm_sender::ToParachainDeliveryHelper<
 						xcm_config::XcmConfig,
 						ExistentialDepositAsset,
 						PriceForSiblingParachainDelivery,
@@ -2079,7 +2079,7 @@ impl_runtime_apis! {
 						xcm_config::bridging::SiblingBridgeHubParaId::get().into()
 					);
 					let bridged_asset_hub = xcm_config::bridging::to_rococo::AssetHubRococo::get();
-					let _ = PolkadotXcm::force_xcm_version(
+					let _ = PezkuwiXcm::force_xcm_version(
 						RuntimeOrigin::root(),
 						alloc::boxed::Box::new(bridged_asset_hub.clone()),
 						XCM_VERSION,

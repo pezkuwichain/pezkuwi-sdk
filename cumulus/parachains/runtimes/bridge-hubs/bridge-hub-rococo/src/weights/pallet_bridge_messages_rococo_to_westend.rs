@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/bridge-hub-rococo-runtime/bridge_hub_rococo_runtime.wasm
 // --pallet=pallet_bridge_messages
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/bridge-hubs/bridge-hub-rococo/src/weights
 // --wasm-execution=compiled
 // --steps=50
@@ -248,8 +248,8 @@ impl<T: frame_system::Config> pallet_bridge_messages::WeightInfo for WeightInfo<
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	/// Storage: `XcmpQueue::DeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `XcmpQueue::DeliveryFeeFactor` (`max_values`: None, `max_size`: Some(28), added: 2503, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::RelevantMessagingState` (r:1 w:0)
 	/// Proof: `ParachainSystem::RelevantMessagingState` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `XcmpQueue::OutboundXcmpMessages` (r:0 w:1)

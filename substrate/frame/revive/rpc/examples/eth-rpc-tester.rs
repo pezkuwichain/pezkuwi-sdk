@@ -94,7 +94,7 @@ fn start_docker(docker_bin: &str, docker_image: &str) -> anyhow::Result<Child> {
 			"8545:8545",
 			&format!("docker.io/paritypr/{docker_image}"),
 			"--node-rpc-url",
-			"wss://westend-asset-hub-rpc.polkadot.io",
+			"wss://westend-asset-hub-rpc.pezkuwi.io",
 			"--rpc-cors",
 			"all",
 			"--unsafe-rpc-external",

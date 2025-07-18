@@ -16,7 +16,7 @@ crates:
   bump: patch
 - name: pallet-xcm
   bump: patch
-- name: polkadot-service
+- name: pezkuwi-service
   bump: patch
 - name: cumulus-pallet-xcmp-queue
   bump: patch

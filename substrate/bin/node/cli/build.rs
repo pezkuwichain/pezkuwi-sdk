@@ -27,7 +27,7 @@ mod cli {
 
 	use clap::{CommandFactory, ValueEnum};
 	use clap_complete::{generate_to, Shell};
-	use polkadot_sdk::substrate_build_script_utils::{
+	use pezkuwi_sdk::substrate_build_script_utils::{
 		generate_cargo_keys, rerun_if_git_head_changed,
 	};
 	use std::{env, fs, path::Path};

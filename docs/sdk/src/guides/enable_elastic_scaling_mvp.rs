@@ -1,12 +1,12 @@
 //! # Enable elastic scaling MVP for a parachain
 //!
 //! <div class="warning">This guide assumes full familiarity with Asynchronous Backing and its
-//! terminology, as defined in <a href="https://wiki.polkadot.network/docs/maintain-guides-async-backing">the Polkadot Wiki</a>.
+//! terminology, as defined in <a href="https://wiki.pezkuwi.network/docs/maintain-guides-async-backing">the Pezkuwi Wiki</a>.
 //! Furthermore, the parachain should have already been upgraded according to the guide.</div>
 //!
 //! ## Quick introduction to elastic scaling
 //!
-//! [Elastic scaling](https://polkadot.network/blog/elastic-scaling-streamling-growth-on-polkadot)
+//! [Elastic scaling](https://pezkuwi.network/blog/elastic-scaling-streamling-growth-on-pezkuwi)
 //! is a feature that will enable parachains to seamlessly scale up/down the number of used cores.
 //! This can be desirable in order to increase the compute or storage throughput of a parachain or
 //! to lower the latency between a transaction being submitted and it getting built in a parachain
@@ -46,7 +46,7 @@
 //! 3. **Trusted collator set.** The collator set needs to be trusted until there’s a mitigation
 //!    that would prevent or deter multiple collators from submitting the same collation to multiple
 //!    backing groups. A solution is being discussed
-//!    [here](https://github.com/polkadot-fellows/RFCs/issues/92).
+//!    [here](https://github.com/pezkuwi-fellows/RFCs/issues/92).
 //! 4. **Fixed scaling.** For true elasticity, the parachain must be able to seamlessly acquire or
 //!    sell coretime as the user demand grows and shrinks over time, in an automated manner. This is
 //!    currently lacking - a parachain can only scale up or down by “manually” acquiring coretime.
@@ -70,10 +70,10 @@
 //! - Ensure enough coretime is assigned to the parachain. For maximum throughput the upper bound is
 //!   3 cores.
 //!
-//! <div class="warning">Phase 1 is NOT needed if using the <code>polkadot-parachain</code> or
-//! <code>polkadot-omni-node</code> binary, or <code>polkadot-omni-node-lib</code> built from the
-//! latest polkadot-sdk release! Simply pass the <code>--authoring slot-based</code>
-//! ([`polkadot_omni_node_lib::cli::Cli::experimental_use_slot_based`]) parameter to the command
+//! <div class="warning">Phase 1 is NOT needed if using the <code>pezkuwi-parachain</code> or
+//! <code>pezkuwi-omni-node</code> binary, or <code>pezkuwi-omni-node-lib</code> built from the
+//! latest pezkuwi-sdk release! Simply pass the <code>--authoring slot-based</code>
+//! ([`pezkuwi_omni_node_lib::cli::Cli::experimental_use_slot_based`]) parameter to the command
 //! line and jump to Phase 2.</div>
 //!
 //! The following steps assume using the cumulus parachain template.
@@ -86,7 +86,7 @@
 //! This phase consists of plugging in the new slot-based collator.
 //!
 //! 1. In `node/src/service.rs` import the slot based collator instead of the lookahead collator.
-#![doc = docify::embed!("../../cumulus/polkadot-omni-node/lib/src/nodes/aura.rs", slot_based_colator_import)]
+#![doc = docify::embed!("../../cumulus/pezkuwi-omni-node/lib/src/nodes/aura.rs", slot_based_colator_import)]
 //!
 //! 2. In `start_consensus()`
 //!     - Remove the `overseer_handle` param (also remove the
@@ -95,7 +95,7 @@
 //!     `slot_offset` field with a   value of `Duration::from_secs(1)`.
 //!     - Replace the single future returned by `aura::run` with the two futures returned by it and
 //!     spawn them as separate tasks:
-#![doc = docify::embed!("../../cumulus/polkadot-omni-node/lib/src/nodes/aura.rs", launch_slot_based_collator)]
+#![doc = docify::embed!("../../cumulus/pezkuwi-omni-node/lib/src/nodes/aura.rs", launch_slot_based_collator)]
 //!
 //! 3. In `start_parachain_node()` remove the `overseer_handle` param passed to `start_consensus`.
 //!

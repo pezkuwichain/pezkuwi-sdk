@@ -31,7 +31,7 @@ use crate::{
 	},
 };
 use bp_parachains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};
-use bp_polkadot_core::parachains::ParaHash;
+use bp_pezkuwi_core::parachains::ParaHash;
 use relay_substrate_client::{
 	AccountIdOf, AccountKeyPairOf, Chain, ChainWithRuntimeVersion, ChainWithTransactions, Client,
 	Parachain,

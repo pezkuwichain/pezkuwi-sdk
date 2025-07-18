@@ -27,7 +27,7 @@ use async_trait::async_trait;
 use bp_parachains::{
 	ImportedParaHeadsKeyProvider, ParaInfo, ParaStoredHeaderData, ParasInfoKeyProvider,
 };
-use bp_polkadot_core::{
+use bp_pezkuwi_core::{
 	parachains::{ParaHash, ParaHeadsProof, ParaId},
 	BlockNumber as RelayBlockNumber,
 };

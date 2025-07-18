@@ -1,12 +1,12 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "network: Upgrade `litep2p` to v0.6.0"
 
 doc:
   - audience: Node Operator
     description: |
-      This PR brings the latest `litep2p` v0.6.0 to polkadot-sdk with stability improvements,
+      This PR brings the latest `litep2p` v0.6.0 to pezkuwi-sdk with stability improvements,
       security fixes, and performance optimizations.
 
       Specifically:

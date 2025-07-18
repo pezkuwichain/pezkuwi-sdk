@@ -11,7 +11,7 @@ BEEFY is a consensus protocol designed with efficient trustless bridging in mind
 that building a light client of BEEFY protocol should be optimized for restricted environments
 like Ethereum Smart Contracts or On-Chain State Transition Function (e.g. Substrate Runtime).
 Note that BEEFY is not a standalone protocol, it is meant to be running alongside GRANDPA, a
-finality gadget created for Substrate/Polkadot ecosystem. More details about GRANDPA can be found
+finality gadget created for Substrate/Pezkuwi ecosystem. More details about GRANDPA can be found
 in the [whitepaper](https://github.com/w3f/consensus/blob/master/pdf/grandpa.pdf).
 
 # Context
@@ -332,7 +332,7 @@ The current cryptographic scheme used by BEEFY is `ecdsa`. This is **different**
 schemes like `sr25519` and `ed25519` which are commonly used in Substrate configurations for
 other pallets (BABE, GRANDPA, AuRa, etc). The most noticeable difference is that an `ecdsa`
 public key is `33` bytes long, instead of `32` bytes for a `sr25519` based public key. So, a
-BEEFY key [sticks out](https://github.com/paritytech/polkadot/blob/25951e45b1907853f120c752aaa01631a0b3e783/node/service/src/chain_spec.rs#L738)
+BEEFY key [sticks out](https://github.com/paritytech/pezkuwi/blob/25951e45b1907853f120c752aaa01631a0b3e783/node/service/src/chain_spec.rs#L738)
 among the other public keys a bit.
 
 For other crypto (using the default Substrate configuration) the `AccountId` (32-bytes) matches

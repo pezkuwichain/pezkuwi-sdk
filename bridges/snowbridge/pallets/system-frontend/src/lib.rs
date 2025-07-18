@@ -7,7 +7,7 @@
 //!
 //! # Extrinsics
 //!
-//! * [`Call::register_token`]: Register Polkadot native asset as a wrapped ERC20 token on Ethereum.
+//! * [`Call::register_token`]: Register Pezkuwi native asset as a wrapped ERC20 token on Ethereum.
 #![cfg_attr(not(feature = "std"), no_std)]
 #[cfg(test)]
 mod mock;
@@ -180,7 +180,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Initiates the registration for a Polkadot-native token as a wrapped ERC20 token on
+		/// Initiates the registration for a Pezkuwi-native token as a wrapped ERC20 token on
 		/// Ethereum.
 		/// - `asset_id`: Location of the asset
 		/// - `metadata`: Metadata to include in the instantiated ERC20 contract on Ethereum

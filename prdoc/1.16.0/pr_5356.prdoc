@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Fix OurViewChange small race
 
@@ -14,5 +14,5 @@ doc:
       sending the messages in the right order.
 
 crates:
-  - name: polkadot-network-bridge
+  - name: pezkuwi-network-bridge
     bump: minor

@@ -193,7 +193,7 @@ fn send_token_to_rococo_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -237,7 +237,7 @@ fn send_token_to_rococo_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped on Rococo AssetHub, should not happen."
 		);
@@ -355,7 +355,7 @@ fn send_ether_to_rococo_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -388,7 +388,7 @@ fn send_ether_to_rococo_v2() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped on Rococo AssetHub, should not happen."
 		);
@@ -545,7 +545,7 @@ fn send_roc_from_ethereum_to_rococo() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped, should not happen."
 		);
@@ -584,7 +584,7 @@ fn send_roc_from_ethereum_to_rococo() {
 		assert!(
 			!events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::AssetsTrapped { .. })
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::AssetsTrapped { .. })
 			)),
 			"Assets were trapped on Rococo AssetHub, should not happen."
 		);

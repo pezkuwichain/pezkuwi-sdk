@@ -386,35 +386,35 @@ mod tests {
 		// Chains.
 		declare_chain_cli_schema!(Kusama, kusama);
 		declare_chain_cli_schema!(BridgeHubKusama, bridge_hub_kusama);
-		declare_chain_cli_schema!(Polkadot, polkadot);
-		declare_chain_cli_schema!(BridgeHubPolkadot, bridge_hub_polkadot);
+		declare_chain_cli_schema!(Pezkuwi, pezkuwi);
+		declare_chain_cli_schema!(BridgeHubPezkuwi, bridge_hub_pezkuwi);
 		// Means to override signers of different layer transactions.
 		declare_chain_cli_schema!(
-			KusamaHeadersToBridgeHubPolkadot,
-			kusama_headers_to_bridge_hub_polkadot
+			KusamaHeadersToBridgeHubPezkuwi,
+			kusama_headers_to_bridge_hub_pezkuwi
 		);
 		declare_chain_cli_schema!(
-			KusamaParachainsToBridgeHubPolkadot,
-			kusama_parachains_to_bridge_hub_polkadot
+			KusamaParachainsToBridgeHubPezkuwi,
+			kusama_parachains_to_bridge_hub_pezkuwi
 		);
 		declare_chain_cli_schema!(
-			PolkadotHeadersToBridgeHubKusama,
-			polkadot_headers_to_bridge_hub_kusama
+			PezkuwiHeadersToBridgeHubKusama,
+			pezkuwi_headers_to_bridge_hub_kusama
 		);
 		declare_chain_cli_schema!(
-			PolkadotParachainsToBridgeHubKusama,
-			polkadot_parachains_to_bridge_hub_kusama
+			PezkuwiParachainsToBridgeHubKusama,
+			pezkuwi_parachains_to_bridge_hub_kusama
 		);
 		// Bridges.
 		declare_parachain_to_parachain_bridge_schema!(
 			BridgeHubKusama,
 			Kusama,
-			BridgeHubPolkadot,
-			Polkadot
+			BridgeHubPezkuwi,
+			Pezkuwi
 		);
 
-		let res = BridgeHubKusamaBridgeHubPolkadotHeadersAndMessages::parse_from(vec![
-			"bridge-hub-kusama-bridge-hub-polkadot-headers-and-messages",
+		let res = BridgeHubKusamaBridgeHubPezkuwiHeadersAndMessages::parse_from(vec![
+			"bridge-hub-kusama-bridge-hub-pezkuwi-headers-and-messages",
 			"--bridge-hub-kusama-uri",
 			"ws://bridge-hub-kusama-node-collator1:9944",
 			"--bridge-hub-kusama-signer",
@@ -423,14 +423,14 @@ mod tests {
 			"64",
 			"--kusama-uri",
 			"ws://kusama-alice:9944",
-			"--bridge-hub-polkadot-uri",
-			"ws://bridge-hub-polkadot-collator1:9944",
-			"--bridge-hub-polkadot-signer",
+			"--bridge-hub-pezkuwi-uri",
+			"ws://bridge-hub-pezkuwi-collator1:9944",
+			"--bridge-hub-pezkuwi-signer",
 			"//George",
-			"--bridge-hub-polkadot-transactions-mortality",
+			"--bridge-hub-pezkuwi-transactions-mortality",
 			"64",
-			"--polkadot-uri",
-			"ws://polkadot-alice:9944",
+			"--pezkuwi-uri",
+			"ws://pezkuwi-alice:9944",
 			"--lane",
 			"0000000000000000000000000000000000000000000000000000000000000000",
 			"--prometheus-host",
@@ -440,7 +440,7 @@ mod tests {
 		// then
 		assert_eq!(
 			res,
-			BridgeHubKusamaBridgeHubPolkadotHeadersAndMessages {
+			BridgeHubKusamaBridgeHubPezkuwiHeadersAndMessages {
 				shared: HeadersAndMessagesSharedParams {
 					lane: vec![HexLaneId(vec![0x00u8; 32])],
 					only_mandatory_headers: false,
@@ -474,27 +474,27 @@ mod tests {
 						kusama_transaction_version: None,
 					},
 				},
-				right: BridgeHubPolkadotConnectionParams {
-					bridge_hub_polkadot_uri: "ws://bridge-hub-polkadot-collator1:9944".into(),
-					bridge_hub_polkadot_runtime_version: BridgeHubPolkadotRuntimeVersionParams {
-						bridge_hub_polkadot_version_mode: RuntimeVersionType::Bundle,
-						bridge_hub_polkadot_spec_version: None,
-						bridge_hub_polkadot_transaction_version: None,
+				right: BridgeHubPezkuwiConnectionParams {
+					bridge_hub_pezkuwi_uri: "ws://bridge-hub-pezkuwi-collator1:9944".into(),
+					bridge_hub_pezkuwi_runtime_version: BridgeHubPezkuwiRuntimeVersionParams {
+						bridge_hub_pezkuwi_version_mode: RuntimeVersionType::Bundle,
+						bridge_hub_pezkuwi_spec_version: None,
+						bridge_hub_pezkuwi_transaction_version: None,
 					},
 				},
-				right_sign: BridgeHubPolkadotSigningParams {
-					bridge_hub_polkadot_signer: Some("//George".into()),
-					bridge_hub_polkadot_signer_password: None,
-					bridge_hub_polkadot_signer_file: None,
-					bridge_hub_polkadot_signer_password_file: None,
-					bridge_hub_polkadot_transactions_mortality: Some(64),
+				right_sign: BridgeHubPezkuwiSigningParams {
+					bridge_hub_pezkuwi_signer: Some("//George".into()),
+					bridge_hub_pezkuwi_signer_password: None,
+					bridge_hub_pezkuwi_signer_file: None,
+					bridge_hub_pezkuwi_signer_password_file: None,
+					bridge_hub_pezkuwi_transactions_mortality: Some(64),
 				},
-				right_relay: PolkadotConnectionParams {
-					polkadot_uri: "ws://polkadot-alice:9944".into(),
-					polkadot_runtime_version: PolkadotRuntimeVersionParams {
-						polkadot_version_mode: RuntimeVersionType::Bundle,
-						polkadot_spec_version: None,
-						polkadot_transaction_version: None,
+				right_relay: PezkuwiConnectionParams {
+					pezkuwi_uri: "ws://pezkuwi-alice:9944".into(),
+					pezkuwi_runtime_version: PezkuwiRuntimeVersionParams {
+						pezkuwi_version_mode: RuntimeVersionType::Bundle,
+						pezkuwi_spec_version: None,
+						pezkuwi_transaction_version: None,
 					},
 				},
 			}

@@ -3,16 +3,16 @@ on:
   # TODO: Activate it and delete old branches patterns, when the release process from stable is settled
   #push:
     # branches:
-    #   # Catches release-polkadot-v1.2.3, release-v1.2.3-rc1, etc
+    #   # Catches release-pezkuwi-v1.2.3, release-v1.2.3-rc1, etc
     #   - release-v[0-9]+.[0-9]+.[0-9]+*
     #   - release-cumulus-v[0-9]+*
-    #   - release-polkadot-v[0-9]+*
+    #   - release-pezkuwi-v[0-9]+*
     #   - stable
 
   workflow_dispatch:
     inputs:
       version:
-        description: Current release/rc version in format polkadot-stableYYMM
+        description: Current release/rc version in format pezkuwi-stableYYMM
 
 jobs:
   tag_rc:
@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         channel:
-          - name: "RelEng: Polkadot Release Coordination"
+          - name: "RelEng: Pezkuwi Release Coordination"
             room: '!cqAmzdIcbOFwrdrubV:parity.io'
     environment: release
     env:
@@ -65,7 +65,7 @@ jobs:
           git config --global user.signingKey "D8018FBB3F534D866A45998293C5FB5F6A367B51"
 
       - name: Compute next rc tag
-        # if: ${{ steps.get_rel_product.outputs.product == 'polkadot' }}
+        # if: ${{ steps.get_rel_product.outputs.product == 'pezkuwi' }}
         id: compute_tag
         shell: bash
         run: |
@@ -73,14 +73,14 @@ jobs:
 
           # Get last rc tag if exists, else set it to {version}-rc1
           if [[ -z "${{ inputs.version }}" ]]; then
-            version=v$(get_polkadot_node_version_from_code)
+            version=v$(get_pezkuwi_node_version_from_code)
           else
             version=$(validate_stable_tag ${{ inputs.version }})
           fi
           echo "$version"
           echo "version=$version" >> $GITHUB_OUTPUT
 
-          last_rc=$(get_latest_rc_tag $version polkadot)
+          last_rc=$(get_latest_rc_tag $version pezkuwi)
 
           if [ -n "$last_rc" ]; then
             suffix=$(increment_rc_tag $last_rc)
@@ -107,4 +107,4 @@ jobs:
           access_token: ${{ secrets.RELEASENOTES_MATRIX_V2_ACCESS_TOKEN }}
           server: m.parity.io
           message: |
-            Release process for polkadot ${{ steps.compute_tag.outputs.new_tag }} has been started.<br/>
+            Release process for pezkuwi ${{ steps.compute_tag.outputs.new_tag }} has been started.<br/>

@@ -11,7 +11,7 @@ max_approval_coalesce_count = 5
 [relaychain]
 default_image = "{{RELAY_IMAGE}}"
 chain = "rococo-local"
-command = "polkadot"
+command = "pezkuwi"
 
 [[relaychain.nodes]]
 name = "alice"

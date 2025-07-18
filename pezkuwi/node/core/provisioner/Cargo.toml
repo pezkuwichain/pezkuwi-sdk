@@ -1,0 +1,36 @@
+[package]
+name = "pezkuwi-node-core-provisioner"
+version = "22.0.0"
+description = "Responsible for assembling a relay chain block from a set of available parachain candidates"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+bitvec = { features = ["alloc"], workspace = true }
+fatality = { workspace = true }
+futures = { workspace = true }
+futures-timer = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+thiserror = { workspace = true }
+
+[dev-dependencies]
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives = { features = ["test"], default-features = false, workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+sp-application-crypto = { default-features = true, workspace = true }
+sp-keystore = { default-features = true, workspace = true }

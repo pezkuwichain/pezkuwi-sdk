@@ -10,4 +10,4 @@ doc:
       slot duration into the block import pipeline.
 
 crates:
-  - name: "polkadot-parachain-bin"
+  - name: "pezkuwi-parachain-bin"

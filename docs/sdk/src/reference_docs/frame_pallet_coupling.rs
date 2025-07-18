@@ -2,7 +2,7 @@
 //!
 //! This reference document explains how FRAME pallets can be combined to interact together.
 //!
-//! It is suggested to re-read [`crate::polkadot_sdk::frame_runtime`], notably the information
+//! It is suggested to re-read [`crate::pezkuwi_sdk::frame_runtime`], notably the information
 //! around [`frame::pallet_macros::config`]. Recall that:
 //!
 //! > Configuration trait of a pallet: It allows a pallet to receive types at a later
@@ -11,7 +11,7 @@
 //!
 //! ## Context, Background
 //!
-//! FRAME pallets, as per described in [`crate::polkadot_sdk::frame_runtime`] are:
+//! FRAME pallets, as per described in [`crate::pezkuwi_sdk::frame_runtime`] are:
 //!
 //! > A pallet is a unit of encapsulated logic. It has a clearly defined responsibility and can be
 //! linked to other pallets.
@@ -114,7 +114,7 @@
 //! [`AuthorProvider`].
 #![doc = docify::embed!("./src/reference_docs/frame_pallet_coupling.rs", other_author_provider)]
 //!
-//! A common pattern in polkadot-sdk is to provide an implementation of such glu traits for the unit
+//! A common pattern in pezkuwi-sdk is to provide an implementation of such glu traits for the unit
 //! type as a "default/test behavior".
 #![doc = docify::embed!("./src/reference_docs/frame_pallet_coupling.rs", unit_author_provider)]
 //!
@@ -140,8 +140,8 @@
 //! * If a pallet needs a functionality provided by another pallet, but multiple implementations can
 //!   be foreseen, consider loosely coupling pallets.
 //!
-//! For example, all pallets in `polkadot-sdk` that needed to work with currencies could have been
-//! tightly coupled with [`pallet_balances`]. But, `polkadot-sdk` also provides [`pallet_assets`]
+//! For example, all pallets in `pezkuwi-sdk` that needed to work with currencies could have been
+//! tightly coupled with [`pallet_balances`]. But, `pezkuwi-sdk` also provides [`pallet_assets`]
 //! (and more implementations by the community), therefore all pallets use traits to loosely couple
 //! with balances or assets pallet. More on this in [`crate::reference_docs::frame_tokens`].
 //!

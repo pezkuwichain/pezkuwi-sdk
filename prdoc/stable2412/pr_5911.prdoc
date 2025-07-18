@@ -1,16 +1,16 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Removed the possibility to start a shell parachain node
 
 doc:
   - audience: Node Dev
     description: |
-      Removed the possibility to start a shell parachain node using the polkadot-parachain-lib or
-      polkadot-parachain-bin.
+      Removed the possibility to start a shell parachain node using the pezkuwi-parachain-lib or
+      pezkuwi-parachain-bin.
 
 crates:
-  - name: polkadot-parachain-lib
+  - name: pezkuwi-parachain-lib
     bump: minor
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: minor

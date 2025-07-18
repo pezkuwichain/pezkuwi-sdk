@@ -1,7 +1,7 @@
 title: Fix a potential cause of slow parachain blocks
 doc:
 - audience: Node Operator
-  description: This fix removes a needless reputation change, which might be causing the longer parachain block times on Polkadot.
+  description: This fix removes a needless reputation change, which might be causing the longer parachain block times on Pezkuwi.
 crates:
-- name: polkadot-dispute-distribution
+- name: pezkuwi-dispute-distribution
   bump: minor

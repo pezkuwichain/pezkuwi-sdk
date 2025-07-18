@@ -1,4 +1,4 @@
-//based on: https://polkadot.js.org/docs/api/examples/promise/transfer-events
+//based on: https://pezkuwi.js.org/docs/api/examples/promise/transfer-events
 
 const assert = require("assert");
 
@@ -8,8 +8,8 @@ async function run(nodeName, networkInfo, args) {
   var api = null;
   var keyring = null;
   if (zombie == null) {
-    const testKeyring = require('@polkadot/keyring/testing');
-    const { WsProvider, ApiPromise } = require('@polkadot/api');
+    const testKeyring = require('@pezkuwi/keyring/testing');
+    const { WsProvider, ApiPromise } = require('@pezkuwi/api');
     const provider = new WsProvider(wsUri);
     api = await ApiPromise.create({provider});
     // Construct the keyring after the API (crypto has an async init)

@@ -1,13 +1,13 @@
 # How to run locally
 
-As a prerequisite, the `test-parachain` and `polkadot` binaries need to be installed or available under `$PATH`.
+As a prerequisite, the `test-parachain` and `pezkuwi` binaries need to be installed or available under `$PATH`.
 
 The following commands need to be run from the repository root:
 ```
 # install test-parachain
 cargo install --path ./cumulus/test/service --locked
-# install polkadot
-cargo install --path ./polkadot --locked
+# install pezkuwi
+cargo install --path ./pezkuwi --locked
 ```
 
 The following command launches the tests:

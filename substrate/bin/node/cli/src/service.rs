@@ -20,7 +20,7 @@
 
 //! Service implementation. Specialized wrapper over substrate service.
 
-use polkadot_sdk::{
+use pezkuwi_sdk::{
 	sc_consensus_beefy as beefy, sc_consensus_grandpa as grandpa,
 	sp_consensus_beefy as beefy_primitives, *,
 };
@@ -862,7 +862,7 @@ mod tests {
 		Address, BalancesCall, RuntimeCall, TxExtension,
 	};
 	use node_primitives::{Block, DigestItem, Signature};
-	use polkadot_sdk::{sc_transaction_pool_api::MaintainedTransactionPool, *};
+	use pezkuwi_sdk::{sc_transaction_pool_api::MaintainedTransactionPool, *};
 	use sc_client_api::BlockBackend;
 	use sc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};
 	use sc_consensus_babe::{BabeIntermediate, CompatibleDigestItem, INTERMEDIATE_KEY};

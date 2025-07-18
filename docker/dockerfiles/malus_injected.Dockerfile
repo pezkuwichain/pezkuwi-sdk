@@ -8,7 +8,7 @@ ARG IMAGE_NAME
 LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
 	io.parity.image.title="${IMAGE_NAME}" \
-	io.parity.image.description="Malus - the nemesis of polkadot" \
+	io.parity.image.description="Malus - the nemesis of pezkuwi" \
 	io.parity.image.source="https://github.com/paritytech/polkadot-sdk/blob/${VCS_REF}/docker/dockerfiles/malus_injected.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
@@ -39,7 +39,7 @@ RUN apt-get update && \
 
 
 # add adder-collator binary to docker image
-COPY ./artifacts/malus ./artifacts/polkadot-execute-worker ./artifacts/polkadot-prepare-worker /usr/local/bin
+COPY ./artifacts/malus ./artifacts/pezkuwi-execute-worker ./artifacts/pezkuwi-prepare-worker /usr/local/bin
 
 USER nonroot
 

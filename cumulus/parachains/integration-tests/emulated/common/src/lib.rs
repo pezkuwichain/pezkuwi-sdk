@@ -32,14 +32,14 @@ use sp_core::storage::Storage;
 use sp_keyring::{Ed25519Keyring, Sr25519Keyring};
 use sp_runtime::{traits::AccountIdConversion, BuildStorage};
 
-// Polkadot
+// Pezkuwi
 use parachains_common::BlockNumber;
-use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_parachains::configuration::HostConfiguration;
+use pezkuwi_parachain_primitives::primitives::Sibling;
+use pezkuwi_runtime_parachains::configuration::HostConfiguration;
 
 // Cumulus
 use parachains_common::{AccountId, AuraId};
-use polkadot_primitives::{AssignmentId, ValidatorId};
+use pezkuwi_primitives::{AssignmentId, ValidatorId};
 
 pub const XCM_V2: u32 = 2;
 pub const XCM_V3: u32 = 3;

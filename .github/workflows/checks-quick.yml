@@ -161,7 +161,7 @@ jobs:
 
           python3 scripts/generate-umbrella.py --sdk . --version "$UMBRELLA_VERSION"
 
-          cargo +nightly fmt -p polkadot-sdk
+          cargo +nightly fmt -p pezkuwi-sdk
 
           if [ -n "$(git status --porcelain)" ]; then
             cat <<EOF

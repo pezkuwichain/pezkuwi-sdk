@@ -6,5 +6,5 @@ doc:
 crates:
 - name: pallet-revive-fixtures
   bump: major
-- name: polkadot-sdk
+- name: pezkuwi-sdk
   bump: major

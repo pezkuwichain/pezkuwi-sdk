@@ -28,7 +28,7 @@
 //! where a more abstract "Finality Gadget" term could be used, but there is no reason why BEEFY
 //! wouldn't run with some other finality scheme.
 //! BEEFY validator set is supposed to be tracking the Finality Gadget validator set, but note that
-//! it will use a different set of keys. For Polkadot use case we plan to use `secp256k1` for BEEFY,
+//! it will use a different set of keys. For Pezkuwi use case we plan to use `secp256k1` for BEEFY,
 //! while GRANDPA uses `ed25519`.
 
 extern crate alloc;

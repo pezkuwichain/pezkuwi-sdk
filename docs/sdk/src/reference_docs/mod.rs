@@ -1,7 +1,7 @@
-//! # Polkadot SDK Reference Docs.
+//! # Pezkuwi SDK Reference Docs.
 //!
 //! This is the entry point for all reference documents that enhance one's learning experience in
-//! the Polkadot SDK.
+//! the Pezkuwi SDK.
 //!
 //! Note that this module also contains the [glossary](crate::reference_docs::glossary).
 //!
@@ -103,13 +103,13 @@ pub mod frame_pallet_coupling;
 /// Learn about how to do logging in FRAME-based runtimes.
 pub mod frame_logging;
 
-/// Learn about the Polkadot Umbrella crate that re-exports all other crates.
+/// Learn about the Pezkuwi Umbrella crate that re-exports all other crates.
 pub mod umbrella_crate;
 
 /// Learn about how to create custom RPC endpoints and runtime APIs.
 pub mod custom_runtime_api_rpc;
 
-/// The [`polkadot-omni-node`](https://crates.io/crates/polkadot-omni-node) and its related binaries.
+/// The [`pezkuwi-omni-node`](https://crates.io/crates/pezkuwi-omni-node) and its related binaries.
 pub mod omni_node;
 
 /// Learn about the state in Substrate.

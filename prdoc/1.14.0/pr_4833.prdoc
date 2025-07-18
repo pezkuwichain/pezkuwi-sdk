@@ -8,5 +8,5 @@ doc:
       proposes that Reinitialize overrides the configuration regardless if there was one already set.
 
 crates:
-  - name: polkadot-node-collation-generation
+  - name: pezkuwi-node-collation-generation
     bump: minor

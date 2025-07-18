@@ -1,11 +1,11 @@
 //! # FRAME Benchmarking and Weights.
 //!
-//! This reference doc explores the concept of weights within Polkadot-SDK runtimes, and more
+//! This reference doc explores the concept of weights within Pezkuwi-SDK runtimes, and more
 //! specifically how FRAME-based runtimes handle it.
 //!
 //! ## Metering
 //!
-//! The existence of "weight" as a concept in Polkadot-SDK is a direct consequence of the usage of
+//! The existence of "weight" as a concept in Pezkuwi-SDK is a direct consequence of the usage of
 //! WASM as a virtual machine. Unlike a metered virtual machine like EVM, where every instruction
 //! can have a (fairly) deterministic "cost" (also known as "gas price") associated with it, WASM is
 //! a stack machine with more complex instruction set, and more unpredictable execution times. This
@@ -13,7 +13,7 @@
 //! system is one in which instructions are executed one by one, and the cost/gas is stored in an
 //! accumulator. The execution may then halt once a gas limit is reached.
 //!
-//! In Polkadot-SDK, the WASM runtime is not assumed to be metered.
+//! In Pezkuwi-SDK, the WASM runtime is not assumed to be metered.
 //!
 //! ## Trusted Code
 //!
@@ -22,7 +22,7 @@
 //! cases, metering is crucial, in order to ensure a malicious code cannot consume more gas than
 //! expected.
 //!
-//! This assumption does not hold about the runtime of Polkadot-SDK-based blockchains. The runtime
+//! This assumption does not hold about the runtime of Pezkuwi-SDK-based blockchains. The runtime
 //! is trusted code, and it is assumed to be written by the same team/developers who are running the
 //! blockchain itself. Therefore, this assumption of "untrusted foreign code" does not hold.
 //!
@@ -48,8 +48,8 @@
 //! and include the ones that are known to fit based on the worst case.
 //!
 //! The benchmarking code can be written as a part of FRAME pallet, using the macros provided in
-//! [`frame_benchmarking`]. See any of the existing pallets in `polkadot-sdk`, or the pallets in our
-//! [`crate::polkadot_sdk::templates`] for examples.
+//! [`frame_benchmarking`]. See any of the existing pallets in `pezkuwi-sdk`, or the pallets in our
+//! [`crate::pezkuwi_sdk::templates`] for examples.
 //!
 //! ## Weight
 //!
@@ -95,7 +95,7 @@
 //!
 //! Two ways exist to run the benchmarks of a runtime.
 //!
-//! 1. The old school way: Most Polkadot-SDK based nodes (such as the ones integrated in
+//! 1. The old school way: Most Pezkuwi-SDK based nodes (such as the ones integrated in
 //!    [`templates`]) have a `benchmark` subcommand integrated into themselves.
 //! 2. The more [`crate::reference_docs::omni_node`] compatible way of running the benchmarks would
 //!    be using [`frame-omni-bencher`] CLI, which only relies on a runtime.
@@ -112,21 +112,21 @@
 //!
 //! ## Summary
 //!
-//! Polkadot-SDK runtimes use a more performant VM, namely WASM, which does not have metering. In
+//! Pezkuwi-SDK runtimes use a more performant VM, namely WASM, which does not have metering. In
 //! return they have to be benchmarked to provide an upper bound on the resources they consume. This
 //! upper bound is represented as [`sp_weights::Weight`].
 //!
 //! ## Future: PolkaVM
 //!
-//! With the transition of Polkadot relay chain to [JAM], a set of new features are being
+//! With the transition of Pezkuwi relay chain to [JAM], a set of new features are being
 //! introduced, one of which being a new virtual machine named [PolkaVM] that is as flexible as
 //! WASM, but also capable of metering. This might alter the future of benchmarking in FRAME and
-//! Polkadot-SDK, rendering them not needed anymore once PolkaVM is fully integrated into
-//! Polkadot-sdk. For a basic explanation of JAM and PolkaVM, see [here](https://blog.kianenigma.com/posts/tech/demystifying-jam/#pvm).
+//! Pezkuwi-SDK, rendering them not needed anymore once PolkaVM is fully integrated into
+//! Pezkuwi-sdk. For a basic explanation of JAM and PolkaVM, see [here](https://blog.kianenigma.com/posts/tech/demystifying-jam/#pvm).
 //!
 //!
 //! [`frame-omni-bencher`]: https://crates.io/crates/frame-omni-bencher
-//! [`templates`]: crate::polkadot_sdk::templates
+//! [`templates`]: crate::pezkuwi_sdk::templates
 //! [PolkaVM]: https://github.com/koute/polkavm
 //! [JAM]: https://graypaper.com
 
@@ -195,7 +195,7 @@ pub mod pallet {
 			if destination_exists {
 				// simpler code path
 				// Note that need for .into(), to convert `()` to `PostDispatchInfo`
-				// See: https://paritytech.github.io/polkadot-sdk/master/frame_support/dispatch/struct.PostDispatchInfo.html#impl-From%3C()%3E-for-PostDispatchInfo
+				// See: https://paritytech.github.io/pezkuwi-sdk/master/frame_support/dispatch/struct.PostDispatchInfo.html#impl-From%3C()%3E-for-PostDispatchInfo
 				Ok(().into())
 			} else {
 				// more complex code path

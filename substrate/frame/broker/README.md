@@ -1,14 +1,14 @@
 # Pallet Broker
 
-Brokerage tool for managing Polkadot Core scheduling.
+Brokerage tool for managing Pezkuwi Core scheduling.
 
-Properly described in [RFC-0001 Agile Coretime](https://github.com/polkadot-fellows/RFCs/blob/main/text/0001-agile-coretime.md).
+Properly described in [RFC-0001 Agile Coretime](https://github.com/pezkuwi-fellows/RFCs/blob/main/text/0001-agile-coretime.md).
 
 ## Implementation Specifics
 
 ### Core Mask Bits
 
-This is 1/80th of a Polkadot Core per timeslice. Assuming timeslices are 80 blocks, then this
+This is 1/80th of a Pezkuwi Core per timeslice. Assuming timeslices are 80 blocks, then this
 indicates usage of a single core one time over a timeslice.
 
 ### The Sale

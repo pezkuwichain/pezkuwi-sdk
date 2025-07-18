@@ -3,10 +3,10 @@
   "id": "coretime-kusama",
   "chainType": "Live",
   "bootNodes": [
-    "/dns/kusama-coretime-connect-a-0.polkadot.io/tcp/30334/p2p/12D3KooWR7Biy6nPgQFhk2eYP62pAkcFA6he9RUFURTDh7ewTjpo",
-    "/dns/kusama-coretime-connect-a-1.polkadot.io/tcp/30334/p2p/12D3KooWAGFiMZDF9RxdacrkenzGdo8nhfSe9EXofHc5mHeJ9vGX",
-    "/dns/kusama-coretime-connect-a-0.polkadot.io/tcp/443/wss/p2p/12D3KooWR7Biy6nPgQFhk2eYP62pAkcFA6he9RUFURTDh7ewTjpo",
-    "/dns/kusama-coretime-connect-a-1.polkadot.io/tcp/443/wss/p2p/12D3KooWAGFiMZDF9RxdacrkenzGdo8nhfSe9EXofHc5mHeJ9vGX"
+    "/dns/kusama-coretime-connect-a-0.pezkuwi.io/tcp/30334/p2p/12D3KooWR7Biy6nPgQFhk2eYP62pAkcFA6he9RUFURTDh7ewTjpo",
+    "/dns/kusama-coretime-connect-a-1.pezkuwi.io/tcp/30334/p2p/12D3KooWAGFiMZDF9RxdacrkenzGdo8nhfSe9EXofHc5mHeJ9vGX",
+    "/dns/kusama-coretime-connect-a-0.pezkuwi.io/tcp/443/wss/p2p/12D3KooWR7Biy6nPgQFhk2eYP62pAkcFA6he9RUFURTDh7ewTjpo",
+    "/dns/kusama-coretime-connect-a-1.pezkuwi.io/tcp/443/wss/p2p/12D3KooWAGFiMZDF9RxdacrkenzGdo8nhfSe9EXofHc5mHeJ9vGX"
   ],
   "telemetryEndpoints": null,
   "protocolId": null,
@@ -42,7 +42,7 @@
         "parachainInfo": {
           "parachainId": 1005
         },
-        "polkadotXcm": {
+        "pezkuwiXcm": {
           "safeXcmVersion": 3
         },
         "session": {

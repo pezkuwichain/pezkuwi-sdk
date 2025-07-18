@@ -21,7 +21,7 @@ use crate::{
 	RelayBlockNumber,
 };
 
-use bp_polkadot_core::parachains::{ParaHash, ParaHeadsProof, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaHeadsProof, ParaId};
 use bp_runtime::UnverifiedStorageProofParams;
 use frame_benchmarking::{account, benchmarks_instance_pallet};
 use frame_system::RawOrigin;

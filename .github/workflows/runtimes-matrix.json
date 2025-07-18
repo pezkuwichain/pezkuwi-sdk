@@ -13,23 +13,23 @@
   {
     "name": "westend",
     "package": "westend-runtime",
-    "path": "polkadot/runtime/westend",
-    "header": "polkadot/file_header.txt",
-    "template": "polkadot/xcm/pallet-xcm-benchmarks/template.hbs",
+    "path": "pezkuwi/runtime/westend",
+    "header": "pezkuwi/file_header.txt",
+    "template": "pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs",
     "bench_flags": "",
     "bench_features": "runtime-benchmarks",
-    "uri": "wss://try-runtime-westend.polkadot.io:443",
+    "uri": "wss://try-runtime-westend.pezkuwi.io:443",
     "is_relay": true
   },
   {
     "name": "rococo",
     "package": "rococo-runtime",
-    "path": "polkadot/runtime/rococo",
-    "header": "polkadot/file_header.txt",
-    "template": "polkadot/xcm/pallet-xcm-benchmarks/template.hbs",
+    "path": "pezkuwi/runtime/rococo",
+    "header": "pezkuwi/file_header.txt",
+    "template": "pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://try-runtime-rococo.polkadot.io:443",
+    "uri": "wss://try-runtime-rococo.pezkuwi.io:443",
     "is_relay": true
   },
   {
@@ -40,7 +40,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://westend-asset-hub-rpc.polkadot.io:443",
+    "uri": "wss://westend-asset-hub-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -51,7 +51,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://rococo-asset-hub-rpc.polkadot.io:443",
+    "uri": "wss://rococo-asset-hub-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -62,7 +62,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://rococo-bridge-hub-rpc.polkadot.io:443",
+    "uri": "wss://rococo-bridge-hub-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -73,7 +73,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://westend-bridge-hub-rpc.polkadot.io:443",
+    "uri": "wss://westend-bridge-hub-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -84,7 +84,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://westend-collectives-rpc.polkadot.io:443",
+    "uri": "wss://westend-collectives-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -95,7 +95,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://rococo-coretime-rpc.polkadot.io:443",
+    "uri": "wss://rococo-coretime-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -106,7 +106,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://westend-coretime-rpc.polkadot.io:443",
+    "uri": "wss://westend-coretime-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -128,7 +128,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://rococo-people-rpc.polkadot.io:443",
+    "uri": "wss://rococo-people-rpc.pezkuwi.io:443",
     "is_relay": false
   },
   {
@@ -139,7 +139,7 @@
     "template": "cumulus/templates/xcm-bench-template.hbs",
     "bench_features": "runtime-benchmarks",
     "bench_flags": "",
-    "uri": "wss://westend-people-rpc.polkadot.io:443",
+    "uri": "wss://westend-people-rpc.pezkuwi.io:443",
     "is_relay": false
   }
 ]

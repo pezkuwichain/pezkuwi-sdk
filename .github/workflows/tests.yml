@@ -54,14 +54,14 @@ jobs:
       - name: script
         id: test
         run: |
-          forklift cargo build --locked --profile production --target x86_64-unknown-linux-musl --bin polkadot-execute-worker --bin polkadot-prepare-worker --quiet
-          cd polkadot/scripts/list-syscalls
-          ./list-syscalls.rb ../../../target/x86_64-unknown-linux-musl/production/polkadot-execute-worker --only-used-syscalls | diff -u execute-worker-syscalls -
-          ./list-syscalls.rb ../../../target/x86_64-unknown-linux-musl/production/polkadot-prepare-worker --only-used-syscalls | diff -u prepare-worker-syscalls -
+          forklift cargo build --locked --profile production --target x86_64-unknown-linux-musl --bin pezkuwi-execute-worker --bin pezkuwi-prepare-worker --quiet
+          cd pezkuwi/scripts/list-syscalls
+          ./list-syscalls.rb ../../../target/x86_64-unknown-linux-musl/production/pezkuwi-execute-worker --only-used-syscalls | diff -u execute-worker-syscalls -
+          ./list-syscalls.rb ../../../target/x86_64-unknown-linux-musl/production/pezkuwi-prepare-worker --only-used-syscalls | diff -u prepare-worker-syscalls -
       - name: on_failure
         if: failure() && steps.test.outcome == 'failure'
         run: |
-          echo "The x86_64 syscalls used by the worker binaries have changed. Please review if this is expected and update polkadot/scripts/list-syscalls/*-worker-syscalls as needed." >> $GITHUB_STEP_SUMMARY
+          echo "The x86_64 syscalls used by the worker binaries have changed. Please review if this is expected and update pezkuwi/scripts/list-syscalls/*-worker-syscalls as needed." >> $GITHUB_STEP_SUMMARY
 
   cargo-check-all-benches:
     needs: [preflight]

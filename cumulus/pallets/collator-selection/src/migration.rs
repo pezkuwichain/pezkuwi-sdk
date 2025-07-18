@@ -61,7 +61,7 @@ pub mod v2 {
 
 			// New candidates who have registered since the upgrade. Under normal circumstances,
 			// this should not exist because the migration should be applied when the upgrade
-			// happens. But in Polkadot/Kusama we messed this up, and people registered under
+			// happens. But in Pezkuwi/Kusama we messed this up, and people registered under
 			// `CandidateList` while their funds were locked in `Candidates`.
 			let new_candidate_list = CandidateList::<T>::get();
 			if new_candidate_list.len().is_zero() {

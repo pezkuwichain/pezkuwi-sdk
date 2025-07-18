@@ -32,7 +32,7 @@ use bp_parachains::{
 	ParaInfo, ParaStoredHeaderData, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 	SubmitParachainHeadsInfo,
 };
-use bp_polkadot_core::parachains::{ParaHash, ParaHeadsProof, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaHeadsProof, ParaId};
 use bp_runtime::{Chain, HashOf, HeaderId, HeaderIdOf, Parachain};
 use frame_support::{dispatch::PostDispatchInfo, DefaultNoBound};
 use pallet_bridge_grandpa::SubmitFinalityProofHelper;
@@ -213,7 +213,7 @@ pub mod pallet {
 		/// chain.
 		///
 		/// Please keep in mind that this should be the name of the `runtime_parachains::paras`
-		/// pallet from polkadot repository, not the `pallet-bridge-parachains`.
+		/// pallet from pezkuwi repository, not the `pallet-bridge-parachains`.
 		#[pallet::constant]
 		type ParasPalletName: Get<&'static str>;
 
@@ -326,7 +326,7 @@ pub mod pallet {
 		/// Submit proof of one or several parachain heads.
 		///
 		/// The proof is supposed to be proof of some `Heads` entries from the
-		/// `polkadot-runtime-parachains::paras` pallet instance, deployed at the bridged chain.
+		/// `pezkuwi-runtime-parachains::paras` pallet instance, deployed at the bridged chain.
 		/// The proof is supposed to be crafted at the `relay_header_hash` that must already be
 		/// imported by corresponding GRANDPA pallet at this chain.
 		///
@@ -384,7 +384,7 @@ pub mod pallet {
 		/// Submit proof of one or several parachain heads.
 		///
 		/// The proof is supposed to be proof of some `Heads` entries from the
-		/// `polkadot-runtime-parachains::paras` pallet instance, deployed at the bridged chain.
+		/// `pezkuwi-runtime-parachains::paras` pallet instance, deployed at the bridged chain.
 		/// The proof is supposed to be crafted at the `relay_header_hash` that must already be
 		/// imported by corresponding GRANDPA pallet at this chain.
 		///
@@ -789,7 +789,7 @@ impl<T: Config<I>, I: 'static, C: Parachain<Hash = ParaHash>> HeaderChain<C>
 pub fn initialize_for_benchmarks<T: Config<I>, I: 'static, PC: Parachain<Hash = ParaHash>>(
 	header: HeaderOf<PC>,
 ) {
-	use bp_polkadot_core::parachains::ParaHead;
+	use bp_pezkuwi_core::parachains::ParaHead;
 	use bp_runtime::HeaderIdProvider;
 	use sp_runtime::traits::Header;
 
@@ -833,7 +833,7 @@ pub(crate) mod tests {
 	use bp_parachains::{
 		BestParaHeadHash, BridgeParachainCall, ImportedParaHeadsKeyProvider, ParasInfoKeyProvider,
 	};
-	use bp_polkadot_core::parachains::ParaHead;
+	use bp_pezkuwi_core::parachains::ParaHead;
 	use bp_runtime::{
 		BasicOperatingMode, OwnedBridgeModuleError, StorageDoubleMapKeyProvider,
 		StorageMapKeyProvider, StorageProofError,

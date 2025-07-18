@@ -14,7 +14,7 @@
 // limitations under the License.
 
 pub mod currency {
-	use polkadot_core_primitives::Balance;
+	use pezkuwi_core_primitives::Balance;
 	use rococo_runtime_constants as constants;
 
 	/// The existential deposit. Set to 1/10 of its parent Relay Chain (v9010).
@@ -38,7 +38,7 @@ pub mod fee {
 			WeightToFeeCoefficients, WeightToFeePolynomial,
 		},
 	};
-	use polkadot_core_primitives::Balance;
+	use pezkuwi_core_primitives::Balance;
 	use smallvec::smallvec;
 	pub use sp_runtime::Perbill;
 
@@ -137,7 +137,7 @@ pub mod consensus {
 
 /// Time-related
 pub mod time {
-	use polkadot_core_primitives::BlockNumber;
+	use pezkuwi_core_primitives::BlockNumber;
 
 	// Time is measured by number of blocks.
 	pub const MINUTES: BlockNumber =

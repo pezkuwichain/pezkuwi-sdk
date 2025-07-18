@@ -8,5 +8,5 @@ doc:
       Enable supplying multiple backable candidates to the paras_inherent pallet for the same paraid.
 
 crates:
-  - name: polkadot-node-core-prospective-parachains
-  - name: polkadot-node-core-provisioner
+  - name: pezkuwi-node-core-prospective-parachains
+  - name: pezkuwi-node-core-provisioner

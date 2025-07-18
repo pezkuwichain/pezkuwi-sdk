@@ -1,5 +1,5 @@
 [package]
-name = "polkadot-sdk-frame"
+name = "pezkuwi-sdk-frame"
 version = "0.9.1"
 authors = ["Parity Technologies <admin@parity.io>"]
 edition.workspace = true

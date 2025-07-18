@@ -13,6 +13,6 @@ migrations:
   runtime: []
 
 crates:
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
 
 host_functions: []

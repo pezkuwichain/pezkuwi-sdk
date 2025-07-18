@@ -3,28 +3,28 @@ title: Elastic scaling - introduce new candidate receipt primitive
 doc:
   - audience: [Runtime Dev, Node Dev]
     description: |
-      Introduces `CandidateDescriptorV2` primitive as described in [RFC 103](https://github.com/polkadot-fellows/RFCs/pull/103).
+      Introduces `CandidateDescriptorV2` primitive as described in [RFC 103](https://github.com/pezkuwi-fellows/RFCs/pull/103).
       Updates parachains runtime, Westend, Rococo and test runtimes to use the new primitives. 
       This change does not implement the functionality of the new candidate receipts.
 
 crates: 
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
-- name: polkadot-primitives-test-helpers
+- name: pezkuwi-primitives-test-helpers
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major
 - name: rococo-runtime
   bump: major
 - name: westend-runtime
   bump: major
-- name: polkadot-test-runtime
+- name: pezkuwi-test-runtime
   bump: major
-- name: polkadot-service
+- name: pezkuwi-service
   bump: patch
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: patch
-- name: polkadot-test-client
+- name: pezkuwi-test-client
   bump: major
 - name: cumulus-relay-chain-inprocess-interface
   bump: patch

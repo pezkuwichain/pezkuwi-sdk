@@ -11,7 +11,7 @@ doc:
       more statements from disabled validators.
 
 crates:
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: patch
-  - name: polkadot
+  - name: pezkuwi
     bump: none

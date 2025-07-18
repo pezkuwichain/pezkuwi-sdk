@@ -67,7 +67,7 @@ fn register_rococo_asset_on_wah_from_rah() {
 
 	let root_origin = <AssetHubRococo as Chain>::RuntimeOrigin::root();
 	AssetHubRococo::execute_with(|| {
-		assert_ok!(<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::send(
+		assert_ok!(<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::send(
 			root_origin,
 			bx!(destination.into()),
 			bx!(xcm),

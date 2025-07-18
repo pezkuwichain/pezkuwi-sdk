@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Removed `pallet::getter` usage from pallet-grandpa
 
@@ -16,7 +16,7 @@ crates:
     bump: none
   - name: westend-runtime
     bump: none
-  - name: polkadot-test-runtime
+  - name: pezkuwi-test-runtime
     bump: none
   - name: rococo-runtime
     bump: none

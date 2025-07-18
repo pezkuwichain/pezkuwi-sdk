@@ -10,11 +10,11 @@ crates:
     bump: patch
   - name: sc-cli
     bump: patch
-  - name: polkadot-node-metrics
+  - name: pezkuwi-node-metrics
     bump: patch
   - name: frame-benchmarking-cli
     bump: patch
   - name: cumulus-relay-chain-inprocess-interface
     bump: patch
-  - name: polkadot-omni-node-lib
+  - name: pezkuwi-omni-node-lib
     bump: patch

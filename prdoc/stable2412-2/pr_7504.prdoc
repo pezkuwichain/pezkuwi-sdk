@@ -1,11 +1,11 @@
-title: Enable approval-voting-parallel by default on polkadot
+title: Enable approval-voting-parallel by default on pezkuwi
 
 doc:
   - audience: Node Dev
     description: |
-        Enable approval-voting-parallel by default on polkadot
+        Enable approval-voting-parallel by default on pezkuwi
 crates:
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: patch

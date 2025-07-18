@@ -9,7 +9,7 @@ on:
         type: string
 
       release_tag:
-        description: Tag matching the actual release candidate with the format polkadot-stableYYMM(-X)-rcX taht will be changed to final in form of polkadot-stableYYMM(-X)
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcX taht will be changed to final in form of pezkuwi-stableYYMM(-X)
         required: true
         type: string
 
@@ -56,14 +56,14 @@ jobs:
           . ./.github/scripts/common/lib.sh
 
           VERSION="$RELEASE_TAG"
-          if [[ "$PACKAGE" == 'polkadot' ]]; then
-            packages=(polkadot polkadot-prepare-worker polkadot-execute-worker)
+          if [[ "$PACKAGE" == 'pezkuwi' ]]; then
+            packages=(pezkuwi pezkuwi-prepare-worker pezkuwi-execute-worker)
             for package in "${packages[@]}"; do
               OUTPUT_DIR="./release-artifacts/$TARGET/${package}"
               fetch_release_artifacts_from_s3 "$package" "$TARGET"
             done
-            NODE_VERSION="$(get_polkadot_node_version_from_code)"
-            fetch_debian_package_from_s3 polkadot
+            NODE_VERSION="$(get_pezkuwi_node_version_from_code)"
+            fetch_debian_package_from_s3 pezkuwi
           else
             fetch_release_artifacts_from_s3 "$PACKAGE" "$TARGET"
           fi
@@ -79,8 +79,8 @@ jobs:
         run: |
           . ./.github/scripts/release/release_lib.sh
 
-          if [[ "$PACKAGE" == 'polkadot' ]]; then
-            packages=(polkadot polkadot-prepare-worker polkadot-execute-worker)
+          if [[ "$PACKAGE" == 'pezkuwi' ]]; then
+            packages=(pezkuwi pezkuwi-prepare-worker pezkuwi-execute-worker)
             for package in "${packages[@]}"; do
               upload_s3_release $package ${{ steps.prepare_final_tag.outputs.final_tag }} ${{ inputs.target }}
             done

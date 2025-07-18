@@ -13,7 +13,7 @@ use xcm_executor::traits::ConvertLocation;
 
 parameter_types! {
 	const MaxMessageSize: u32 = u32::MAX;
-	const RelayNetwork: NetworkId = Polkadot;
+	const RelayNetwork: NetworkId = Pezkuwi;
 	UniversalLocation: InteriorLocation = [GlobalConsensus(RelayNetwork::get()), Parachain(1013)].into();
 	pub const BridgedNetwork: NetworkId =  Ethereum{ chain_id: 1 };
 	pub const NonBridgedNetwork: NetworkId =  Ethereum{ chain_id: 2 };
@@ -212,7 +212,7 @@ fn exporter_validate_with_remote_universal_source_yields_not_applicable() {
 fn exporter_validate_without_para_id_in_source_yields_not_applicable() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
-	let mut universal_source: Option<InteriorLocation> = Some(GlobalConsensus(Polkadot).into());
+	let mut universal_source: Option<InteriorLocation> = Some(GlobalConsensus(Pezkuwi).into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 
@@ -232,7 +232,7 @@ fn exporter_validate_complex_para_id_in_source_yields_not_applicable() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000), PalletInstance(12)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000), PalletInstance(12)].into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 
@@ -252,7 +252,7 @@ fn exporter_validate_without_xcm_message_yields_missing_argument() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 
@@ -273,7 +273,7 @@ fn exporter_validate_with_max_target_fee_yields_unroutable() {
 	let mut destination: Option<InteriorLocation> = Here.into();
 
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 
 	let token_address: [u8; 20] = hex!("1000000000000000000000000000000000000000");
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
@@ -322,7 +322,7 @@ fn exporter_validate_with_unparsable_xcm_yields_unroutable() {
 	let mut destination: Option<InteriorLocation> = Here.into();
 
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 
 	let channel: u32 = 0;
 	let fee = Asset { id: AssetId(Here.into()), fun: Fungible(1000) };
@@ -349,7 +349,7 @@ fn exporter_validate_xcm_success_case_1() {
 	let mut destination: Option<InteriorLocation> = Here.into();
 
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Polkadot), Parachain(1000)].into());
+		Some([GlobalConsensus(Pezkuwi), Parachain(1000)].into());
 
 	let token_address: [u8; 20] = hex!("1000000000000000000000000000000000000000");
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
@@ -368,7 +368,7 @@ fn exporter_validate_xcm_success_case_1() {
 			WithdrawAsset(fee_asset.clone().into()),
 			PayFees { asset: fee_asset },
 			WithdrawAsset(assets.clone()),
-			AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+			AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 			DepositAsset {
 				assets: filter,
 				beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -407,7 +407,7 @@ fn exporter_validate_with_invalid_dest_does_not_alter_destination() {
 	let network = BridgedNetwork::get();
 	let destination: InteriorLocation = Parachain(1000).into();
 
-	let universal_source: InteriorLocation = [GlobalConsensus(Polkadot), Parachain(1000)].into();
+	let universal_source: InteriorLocation = [GlobalConsensus(Pezkuwi), Parachain(1000)].into();
 
 	let token_address: [u8; 20] = hex!("1000000000000000000000000000000000000000");
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
@@ -527,7 +527,7 @@ fn xcm_converter_convert_success() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -559,7 +559,7 @@ fn xcm_converter_convert_with_wildcard_all_asset_filter_succeeds() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -591,7 +591,7 @@ fn xcm_converter_convert_without_set_topic_yields_set_topic_expected() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -638,7 +638,7 @@ fn xcm_converter_with_different_fee_asset_fails() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -669,7 +669,7 @@ fn xcm_converter_with_fees_greater_than_reserve_will_fail() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -713,7 +713,7 @@ fn xcm_converter_convert_with_extra_instructions_yields_end_of_xcm_message_expec
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -776,7 +776,7 @@ fn xcm_converter_convert_without_withdraw_asset_yields_deposit_expected() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		SetTopic([0; 32]),
 	]
 	.into();
@@ -800,7 +800,7 @@ fn xcm_converter_convert_without_assets_yields_no_commands() {
 	let message: Xcm<()> = vec![
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -840,7 +840,7 @@ fn xcm_converter_convert_with_two_assets_yields() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -873,7 +873,7 @@ fn xcm_converter_convert_without_consuming_filter_yields_filter_does_not_consume
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -906,7 +906,7 @@ fn xcm_converter_convert_with_zero_amount_asset_yields_zero_asset_transfer() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -927,7 +927,7 @@ fn xcm_converter_convert_non_ethereum_asset_yields_asset_resolution_failed() {
 	let beneficiary_address: [u8; 20] = hex!("2000000000000000000000000000000000000000");
 
 	let assets: Assets = vec![Asset {
-		id: AssetId([GlobalConsensus(Polkadot), Parachain(1000), GeneralIndex(0)].into()),
+		id: AssetId([GlobalConsensus(Pezkuwi), Parachain(1000), GeneralIndex(0)].into()),
 		fun: Fungible(1000),
 	}]
 	.into();
@@ -938,7 +938,7 @@ fn xcm_converter_convert_non_ethereum_asset_yields_asset_resolution_failed() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -973,7 +973,7 @@ fn xcm_converter_convert_non_ethereum_chain_asset_yields_asset_resolution_failed
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -1008,7 +1008,7 @@ fn xcm_converter_convert_non_ethereum_chain_yields_asset_resolution_failed() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -1043,10 +1043,10 @@ fn xcm_converter_convert_with_non_ethereum_beneficiary_yields_beneficiary_resolu
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
-			beneficiary: AccountId32 { network: Some(Polkadot), id: beneficiary_address }.into(),
+			beneficiary: AccountId32 { network: Some(Pezkuwi), id: beneficiary_address }.into(),
 		},
 		SetTopic([0; 32]),
 	]
@@ -1077,7 +1077,7 @@ fn xcm_converter_convert_with_non_ethereum_chain_beneficiary_yields_beneficiary_
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		WithdrawAsset(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 {
@@ -1140,7 +1140,7 @@ fn xcm_converter_transfer_native_token_success() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		ReserveAssetDeposited(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),
@@ -1183,7 +1183,7 @@ fn xcm_converter_transfer_native_token_with_invalid_location_will_fail() {
 		WithdrawAsset(fee_asset.clone().into()),
 		PayFees { asset: fee_asset },
 		ReserveAssetDeposited(assets.clone()),
-		AliasOrigin(Location::new(1, [GlobalConsensus(Polkadot), Parachain(1000)])),
+		AliasOrigin(Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(1000)])),
 		DepositAsset {
 			assets: filter,
 			beneficiary: AccountKey20 { network: None, key: beneficiary_address }.into(),

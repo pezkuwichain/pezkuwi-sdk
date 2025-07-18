@@ -58,7 +58,7 @@ pallet-contracts-fixtures = { default-features = false, workspace = true }
 pretty_assertions = { workspace = true }
 wat = { workspace = true }
 
-# Polkadot Dependencies
+# Pezkuwi Dependencies
 xcm-builder = { default-features = true, workspace = true }
 
 # Substrate Dependencies

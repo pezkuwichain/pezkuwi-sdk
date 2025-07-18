@@ -48,8 +48,8 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/kitchensink-runtime/kitchensink_runtime.wasm
 // --pallet=pallet_scheduler
-// --header=/__w/polkadot-sdk/polkadot-sdk/substrate/HEADER-APACHE2
-// --output=/__w/polkadot-sdk/polkadot-sdk/substrate/frame/scheduler/src/weights.rs
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/substrate/HEADER-APACHE2
+// --output=/__w/pezkuwi-sdk/pezkuwi-sdk/substrate/frame/scheduler/src/weights.rs
 // --wasm-execution=compiled
 // --steps=50
 // --repeat=20

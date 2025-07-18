@@ -7,7 +7,7 @@ doc:
         previously handled by the approval-voting and approval-distribution subsystems.
         
         The new subsystem is enabled by default on all test networks. On production networks 
-        like Polkadot and Kusama, the legacy system with two separate subsystems is still in use. 
+        like Pezkuwi and Kusama, the legacy system with two separate subsystems is still in use. 
         However, there is a CLI option --enable-approval-voting-parallel to gradually roll out 
         the new subsystem on specific nodes. Once we are confident that it works as expected, 
         it will be enabled by default on all networks.
@@ -19,29 +19,29 @@ doc:
           approval-voting subsystem.
 
 crates:
-  - name: polkadot-overseer
+  - name: pezkuwi-overseer
     bump: major
-  - name: polkadot-node-primitives
+  - name: pezkuwi-node-primitives
     bump: major
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
-  - name: polkadot-approval-distribution
+  - name: pezkuwi-approval-distribution
     bump: major
-  - name: polkadot-node-core-approval-voting
+  - name: pezkuwi-node-core-approval-voting
     bump: major
-  - name: polkadot-node-core-approval-voting-parallel
+  - name: pezkuwi-node-core-approval-voting-parallel
     bump: major
-  - name: polkadot-network-bridge
+  - name: pezkuwi-network-bridge
     bump: major
-  - name: polkadot-node-core-dispute-coordinator
+  - name: pezkuwi-node-core-dispute-coordinator
     bump: major
   - name: cumulus-relay-chain-inprocess-interface
     bump: major
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: major
-  - name: polkadot
+  - name: pezkuwi
     bump: major
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor

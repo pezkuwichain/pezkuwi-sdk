@@ -91,7 +91,7 @@ parameter_types! {
 	pub Parameters: PricingParameters<u128> = PricingParameters {
 		exchange_rate: FixedU128::from_rational(1, 400),
 		fee_per_gas: gwei(20),
-		rewards: Rewards { local: DOT, remote: meth(1) },
+		rewards: Rewards { local: HEZ, remote: meth(1) },
 		multiplier: FixedU128::from_rational(4, 3),
 	};
 	pub const GatewayAddress: H160 = H160(GATEWAY_ADDRESS);
@@ -99,7 +99,7 @@ parameter_types! {
 	pub DefaultMyRewardKind: BridgeReward = BridgeReward::Snowbridge;
 }
 
-pub const DOT: u128 = 10_000_000_000;
+pub const HEZ: u128 = 10_000_000_000;
 
 /// Showcasing that we can handle multiple different rewards with the same pallet.
 #[derive(

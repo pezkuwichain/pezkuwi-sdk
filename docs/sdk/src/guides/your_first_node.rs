@@ -7,7 +7,7 @@
 //!
 //! [`your_first_runtime`] is a runtime with no consensus related code, and therefore can only be
 //! executed with a node that also expects no consensus ([`sc_consensus_manual_seal`]).
-//! `polkadot-omni-node`'s [`--dev-block-time`] precisely does this.
+//! `pezkuwi-omni-node`'s [`--dev-block-time`] precisely does this.
 //!
 //! > All of the following steps are coded as unit tests of this module. Please see `Source` of the
 //! > page for more information.
@@ -16,11 +16,11 @@
 //!
 //! ### Installs
 //!
-//! The `polkadot-omni-node` can either be downloaded from the latest [Release](https://github.com/paritytech/polkadot-sdk/releases/) of `polkadot-sdk`,
+//! The `pezkuwi-omni-node` can either be downloaded from the latest [Release](https://github.com/paritytech/polkadot-sdk/releases/) of `pezkuwi-sdk`,
 //! or installed using `cargo`:
 //!
 //! ```text
-//! cargo install polkadot-omni-node
+//! cargo install pezkuwi-omni-node
 //! ```
 //!
 //! Next, we need to install the [`chain-spec-builder`]. This is the tool that allows us to build
@@ -32,7 +32,7 @@
 //! ```
 //!
 //! > The name of the crate is prefixed with `staging` as the crate name `chain-spec-builder` on
-//! > crates.io is already taken and is not controlled by `polkadot-sdk` developers.
+//! > crates.io is already taken and is not controlled by `pezkuwi-sdk` developers.
 //!
 //! ### Building Runtime
 //!
@@ -51,7 +51,7 @@
 //! Next, we can generate the corresponding chain-spec file. For this example, we will use the
 //! `development` (`sp_genesis_config::DEVELOPMENT`) preset.
 //!
-//! Note that we intend to run this chain-spec with `polkadot-omni-node`, which is tailored for
+//! Note that we intend to run this chain-spec with `pezkuwi-omni-node`, which is tailored for
 //! running parachains. This requires the chain-spec to always contain the `para_id` and a
 //! `relay_chain` fields, which are provided below as CLI arguments.
 //!
@@ -61,7 +61,7 @@
 //! 	create \
 //! 	--para-id 42 \
 //! 	--relay-chain dontcare \
-//! 	--runtime polkadot_sdk_docs_first_runtime.wasm \
+//! 	--runtime pezkuwi_sdk_docs_first_runtime.wasm \
 //! 	named-preset development
 //! ```
 //!
@@ -69,13 +69,13 @@
 #![doc = docify::embed!("./src/guides/your_first_node.rs", csb)]
 //!
 //!
-//! ### Running `polkadot-omni-node`
+//! ### Running `pezkuwi-omni-node`
 //!
 //! Finally, we can run the node with the generated chain-spec file. We can also specify the block
 //! time using the `--dev-block-time` flag.
 //!
 //! ```text
-//! polkadot-omni-node \
+//! pezkuwi-omni-node \
 //! 	--tmp \
 //! 	--dev-block-time 1000 \
 //! 	--chain <chain_spec_file>.json
@@ -98,7 +98,7 @@
 //! [`node`]: crate::reference_docs::glossary#node
 //! [`build_config`]: first_runtime::Runtime#method.build_config
 //! [`omni-node`]: crate::reference_docs::omni_node
-//! [`--dev-block-time`]: (polkadot_omni_node_lib::cli::Cli::dev_block_time)
+//! [`--dev-block-time`]: (pezkuwi_omni_node_lib::cli::Cli::dev_block_time)
 
 #[cfg(test)]
 mod tests {
@@ -110,11 +110,11 @@ mod tests {
 	use std::path::PathBuf;
 
 	const PARA_RUNTIME: &'static str = "parachain-template-runtime";
-	const FIRST_RUNTIME: &'static str = "polkadot-sdk-docs-first-runtime";
+	const FIRST_RUNTIME: &'static str = "pezkuwi-sdk-docs-first-runtime";
 	const MINIMAL_RUNTIME: &'static str = "minimal-template-runtime";
 
 	const CHAIN_SPEC_BUILDER: &'static str = "chain-spec-builder";
-	const OMNI_NODE: &'static str = "polkadot-omni-node";
+	const OMNI_NODE: &'static str = "pezkuwi-omni-node";
 
 	fn cargo() -> Command {
 		Command::new(std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_string()))
@@ -171,7 +171,7 @@ mod tests {
 				.success();
 		}
 		if find_wasm(&FIRST_RUNTIME).is_none() {
-			println!("Building polkadot-sdk-docs-first-runtime...");
+			println!("Building pezkuwi-sdk-docs-first-runtime...");
 			#[docify::export_content]
 			fn build_runtime() {
 				run_cmd!(
@@ -202,12 +202,12 @@ mod tests {
 
 	fn maybe_build_omni_node() {
 		if find_release_binary(OMNI_NODE).is_none() {
-			println!("Building polkadot-omni-node...");
+			println!("Building pezkuwi-omni-node...");
 			Command::new("cargo")
 				.arg("build")
 				.arg("--release")
 				.arg("-p")
-				.arg("polkadot-omni-node")
+				.arg("pezkuwi-omni-node")
 				.assert()
 				.success();
 		}

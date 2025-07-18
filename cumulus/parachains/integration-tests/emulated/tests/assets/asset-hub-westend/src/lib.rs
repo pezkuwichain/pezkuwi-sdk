@@ -26,7 +26,7 @@ mod imports {
 		BoundedVec,
 	};
 
-	// Polkadot
+	// Pezkuwi
 	pub use xcm::{
 		latest::{AssetTransferFilter, ROCOCO_GENESIS_HASH, WESTEND_GENESIS_HASH},
 		prelude::{AccountId32 as AccountId32Junction, *},

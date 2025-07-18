@@ -5,5 +5,5 @@ doc:
     Demote some of the frequent prospective-parachains debug logs to trace level and prefer printing aggregate debug logs.
 
 crates:
-- name: polkadot-node-core-prospective-parachains
+- name: pezkuwi-node-core-prospective-parachains
   bump: patch

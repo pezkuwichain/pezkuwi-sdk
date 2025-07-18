@@ -1,0 +1,38 @@
+[package]
+name = "pezkuwi-node-core-runtime-api"
+version = "22.0.0"
+description = "Wrapper around the parachain-related runtime APIs"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+futures = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+pezkuwi-node-metrics.default-features = true
+pezkuwi-node-metrics.workspace = true
+pezkuwi-node-subsystem-types.default-features = true
+pezkuwi-node-subsystem-types.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+schnellru = { workspace = true }
+sp-consensus-babe.default-features = true
+sp-consensus-babe.workspace = true
+
+[dev-dependencies]
+async-trait = { workspace = true }
+futures = { features = ["thread-pool"], workspace = true }
+pezkuwi-node-primitives = { default-features = true, workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+sp-api = { default-features = true, workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }

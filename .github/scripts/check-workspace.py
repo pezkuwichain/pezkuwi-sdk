@@ -135,7 +135,7 @@ def check_links(all_crates):
 				if dep_name in all_crates:
 					links.append((name, dep_name))
 
-					if name == 'polkadot-sdk':
+					if name == 'pezkuwi-sdk':
 						if not 'path' in deps[dep]:
 							broken.append((name, dep_name, "crate must use path"))
 							return

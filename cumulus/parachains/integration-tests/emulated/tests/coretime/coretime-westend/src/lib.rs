@@ -19,7 +19,7 @@ mod imports {
 	// Substrate
 	pub use frame_support::assert_ok;
 
-	// Polkadot
+	// Pezkuwi
 	pub use xcm::{latest::WESTEND_GENESIS_HASH, prelude::*};
 
 	// Cumulus

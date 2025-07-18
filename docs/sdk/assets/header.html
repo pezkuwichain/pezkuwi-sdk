@@ -2,7 +2,7 @@
 	function createToC() {
 		let sidebar = document.querySelector(".sidebar");
 		let headers = document.querySelectorAll("#main-content h2, #main-content h3, #main-content h4");
-		console.log(`detected polkadot_sdk_docs: headers: ${headers.length}`);
+		console.log(`detected pezkuwi_sdk_docs: headers: ${headers.length}`);
 
 		let toc = document.createElement("div");
 		toc.classList.add("sidebar-table-of-contents");
@@ -68,10 +68,10 @@
 	}
 
 	window.addEventListener("DOMContentLoaded", (event) => {
-		// if the crate is one that starts with `polkadot_sdk_docs`
+		// if the crate is one that starts with `pezkuwi_sdk_docs`
 		let crate_name = document.querySelector("#main-content > div > h1 > a:nth-child(1)");
-		if (!crate_name.textContent.startsWith("polkadot_sdk_docs")) {
-			console.log("skipping -- not `polkadot_sdk_docs`");
+		if (!crate_name.textContent.startsWith("pezkuwi_sdk_docs")) {
+			console.log("skipping -- not `pezkuwi_sdk_docs`");
 			return;
 		} else {
 			// insert class 'sdk-docs' to the body, so it enables the custom css rules.
@@ -81,7 +81,7 @@
 		createToC();
 		hideSidebarElements();
 
-		console.log("updating page based on being `polkadot_sdk_docs` crate");
+		console.log("updating page based on being `pezkuwi_sdk_docs` crate");
 	});
 </script>
 

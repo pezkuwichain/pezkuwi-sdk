@@ -28,9 +28,9 @@ Single message lane may be seen as a transport channel for single application (o
 time the module itself never dictates any lane or message rules. In the end, it is the runtime developer who defines
 what message lane and message mean for this runtime.
 
-In our [Kusama<>Polkadot bridge](../../docs/polkadot-kusama-bridge-overview.md) we are using lane
+In our [Kusama<>Pezkuwi bridge](../../docs/pezkuwi-kusama-bridge-overview.md) we are using lane
 as a channel of communication between two parachains of different relay chains. For example, lane
-`[0, 0, 0, 0]` is used for Polkadot <> Kusama Asset Hub communications. Other lanes may be used to
+`[0, 0, 0, 0]` is used for Pezkuwi <> Kusama Asset Hub communications. Other lanes may be used to
 bridge other parachains.
 
 ## Message Workflow
@@ -93,9 +93,9 @@ here for detailed information.
 
 The messages module supports instances. Every module instance is supposed to bridge this chain and some bridged chain.
 To bridge with another chain, using another instance is suggested (this isn't forced anywhere in the code, though). Keep
-in mind, that the pallet may be used to build virtual channels between multiple chains, as we do in our [Polkadot <>
-Kusama bridge](../../docs/polkadot-kusama-bridge-overview.md). There, the pallet actually bridges only two parachains -
-Kusama Bridge Hub and Polkadot Bridge Hub. However, other Kusama and Polkadot parachains are able to send (XCM) messages
+in mind, that the pallet may be used to build virtual channels between multiple chains, as we do in our [Pezkuwi <>
+Kusama bridge](../../docs/pezkuwi-kusama-bridge-overview.md). There, the pallet actually bridges only two parachains -
+Kusama Bridge Hub and Pezkuwi Bridge Hub. However, other Kusama and Pezkuwi parachains are able to send (XCM) messages
 to their Bridge Hubs. The messages will be delivered to the other side of the bridge and routed to the proper
 destination parachain within the bridged chain consensus.
 

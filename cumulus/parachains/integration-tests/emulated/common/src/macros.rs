@@ -22,8 +22,8 @@ pub use pallet_balances;
 pub use pallet_message_queue;
 pub use pallet_xcm;
 
-// Polkadot
-pub use polkadot_runtime_parachains::dmp::Pallet as Dmp;
+// Pezkuwi
+pub use pezkuwi_runtime_parachains::dmp::Pallet as Dmp;
 pub use xcm::{
 	prelude::{
 		AccountId32, All, Asset, AssetId, BuyExecution, DepositAsset, ExpectTransactStatus,
@@ -66,7 +66,7 @@ macro_rules! test_parachain_is_trusted_teleporter {
 					// We are only testing the limited teleport version, which should be ok since success will
 					// depend only on a proper `XcmConfig` at destination.
 					<$sender_para>::execute_with(|| {
-						assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::limited_teleport_assets(
+						assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::limited_teleport_assets(
 							origin.clone(),
 							bx!(para_destination.clone().into()),
 							bx!(beneficiary.clone().into()),
@@ -80,7 +80,7 @@ macro_rules! test_parachain_is_trusted_teleporter {
 						assert_expected_events!(
 							$sender_para,
 							vec![
-								RuntimeEvent::PolkadotXcm(
+								RuntimeEvent::PezkuwiXcm(
 									$crate::macros::pallet_xcm::Event::Attempted { outcome: Outcome::Complete { .. } }
 								) => {},
 								RuntimeEvent::XcmpQueue(
@@ -248,7 +248,7 @@ macro_rules! test_parachain_is_trusted_teleporter_for_relay {
 
 			// Send XCM message from Parachain
 			<$sender_para>::execute_with(|| {
-				assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::limited_teleport_assets(
+				assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::limited_teleport_assets(
 					origin.clone(),
 					bx!(relay_destination.clone().into()),
 					bx!(beneficiary.clone().into()),
@@ -262,13 +262,13 @@ macro_rules! test_parachain_is_trusted_teleporter_for_relay {
 				assert_expected_events!(
 					$sender_para,
 					vec![
-						RuntimeEvent::PolkadotXcm(
+						RuntimeEvent::PezkuwiXcm(
 							$crate::macros::pallet_xcm::Event::Attempted { outcome: Outcome::Complete { .. } }
 						) => {},
 						RuntimeEvent::Balances(
 							$crate::macros::pallet_balances::Event::Burned { who: sender, amount }
 						) => {},
-						RuntimeEvent::PolkadotXcm(
+						RuntimeEvent::PezkuwiXcm(
 							$crate::macros::pallet_xcm::Event::Sent { .. }
 						) => {},
 					]
@@ -323,7 +323,7 @@ macro_rules! test_chain_can_claim_assets {
 			<$sender_para>::execute_with(|| {
 				// Assets are trapped for whatever reason.
 				// The possible reasons for this might differ from runtime to runtime, so here we just drop them directly.
-				<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::drop_assets(
+				<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::drop_assets(
 					&beneficiary,
 					$assets.clone().into(),
 					&XcmContext { origin: None, message_id: [0u8; 32], topic: None },
@@ -333,7 +333,7 @@ macro_rules! test_chain_can_claim_assets {
 				assert_expected_events!(
 					$sender_para,
 					vec![
-						RuntimeEvent::PolkadotXcm(
+						RuntimeEvent::PezkuwiXcm(
 							$crate::macros::pallet_xcm::Event::AssetsTrapped { origin: beneficiary, assets: versioned_assets, .. }
 						) => {},
 					]
@@ -343,20 +343,20 @@ macro_rules! test_chain_can_claim_assets {
 
 				// Different origin or different assets won't work.
 				let other_origin = <$sender_para as $crate::macros::Chain>::RuntimeOrigin::signed([<$sender_para Receiver>]::get());
-				assert!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::claim_assets(
+				assert!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::claim_assets(
 					other_origin,
 					bx!(versioned_assets.clone().into()),
 					bx!(beneficiary.clone().into()),
 				).is_err());
 				let other_versioned_assets: $crate::macros::VersionedAssets = Assets::new().into();
-				assert!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::claim_assets(
+				assert!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::claim_assets(
 					origin.clone(),
 					bx!(other_versioned_assets.into()),
 					bx!(beneficiary.clone().into()),
 				).is_err());
 
 				// Assets will be claimed to `beneficiary`, which is the same as `sender`.
-				assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::claim_assets(
+				assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::claim_assets(
 					origin.clone(),
 					bx!(versioned_assets.clone().into()),
 					bx!(beneficiary.clone().into()),
@@ -365,7 +365,7 @@ macro_rules! test_chain_can_claim_assets {
 				assert_expected_events!(
 					$sender_para,
 					vec![
-						RuntimeEvent::PolkadotXcm(
+						RuntimeEvent::PezkuwiXcm(
 							$crate::macros::pallet_xcm::Event::AssetsClaimed { origin: beneficiary, assets: versioned_assets, .. }
 						) => {},
 					]
@@ -376,7 +376,7 @@ macro_rules! test_chain_can_claim_assets {
 				assert_eq!(balance_after, balance_before + $amount);
 
 				// Claiming the assets again doesn't work.
-				assert!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::claim_assets(
+				assert!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::claim_assets(
 					origin.clone(),
 					bx!(versioned_assets.clone().into()),
 					bx!(beneficiary.clone().into()),
@@ -386,7 +386,7 @@ macro_rules! test_chain_can_claim_assets {
 				assert_eq!(balance, balance_after);
 
 				// You can also claim assets and send them to a different account.
-				<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::drop_assets(
+				<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::drop_assets(
 					&beneficiary,
 					$assets.clone().into(),
 					&XcmContext { origin: None, message_id: [0u8; 32], topic: None },
@@ -395,7 +395,7 @@ macro_rules! test_chain_can_claim_assets {
 				let other_beneficiary: Location =
 					$crate::macros::AccountId32 { network: Some($network_id), id: receiver.clone().into() }.into();
 				let balance_before = <$sender_para as [<$sender_para Pallet>]>::Balances::free_balance(&receiver);
-				assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::claim_assets(
+				assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::claim_assets(
 					origin.clone(),
 					bx!(versioned_assets.clone().into()),
 					bx!(other_beneficiary.clone().into()),
@@ -440,7 +440,7 @@ macro_rules! test_can_estimate_and_pay_exact_fees {
 					.initiate_reserve_withdraw(AllCounted(1), sender_to_ah, xcm_in_reserve)
 					.build();
 
-				RuntimeCall::PolkadotXcm(pallet_xcm::Call::execute {
+				RuntimeCall::PezkuwiXcm(pallet_xcm::Call::execute {
 					message: bx!(VersionedXcm::from(local_xcm)),
 					max_weight: Weight::from_parts(10_000_000_000, 500_000),
 				})
@@ -656,7 +656,7 @@ macro_rules! test_dry_run_transfer_across_pk_bridge {
 				// Give some initial funds.
 				<Balances as fungible::Mutate<_>>::set_balance(&who, initial_balance);
 
-				let call = RuntimeCall::PolkadotXcm(pallet_xcm::Call::transfer_assets {
+				let call = RuntimeCall::PezkuwiXcm(pallet_xcm::Call::transfer_assets {
 					dest: Box::new(VersionedLocation::from($destination)),
 					beneficiary: Box::new(VersionedLocation::from(Junction::AccountId32 {
 						id: who.clone().into(),
@@ -793,7 +793,7 @@ macro_rules! test_cross_chain_alias {
 						]);
 
 						let signed_origin = <$sender_para as Chain>::RuntimeOrigin::signed(account.into());
-						assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PolkadotXcm::execute(
+						assert_ok!(<$sender_para as [<$sender_para Pallet>]>::PezkuwiXcm::execute(
 							signed_origin,
 							bx!(xcm::VersionedXcm::from(xcm_message.into())),
 							Weight::MAX
@@ -801,7 +801,7 @@ macro_rules! test_cross_chain_alias {
 						assert_expected_events!(
 							$sender_para,
 							vec![
-								RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent { .. }) => {},
+								RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent { .. }) => {},
 							]
 						);
 					});

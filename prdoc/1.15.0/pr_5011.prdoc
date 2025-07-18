@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Use `BadOrigin` from `sp_runtime`"
 
@@ -11,9 +11,9 @@ doc:
 crates: 
 - name: pallet-collective-content
   bump: patch
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: patch
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch
 - name: pallet-alliance
   bump: patch

@@ -56,7 +56,7 @@ fn coretime_westend_genesis(
 				})
 				.collect(),
 		},
-		polkadot_xcm: PolkadotXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
+		pezkuwi_xcm: PezkuwiXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
 	})
 }
 

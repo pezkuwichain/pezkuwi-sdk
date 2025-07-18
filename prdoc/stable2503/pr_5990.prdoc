@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: On-demand credits
 
@@ -16,13 +16,13 @@ doc:
 crates:
   - name: pallet-broker
     bump: major 
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: major 
   - name: rococo-runtime
     bump: patch
   - name: westend-runtime
     bump: patch
-  - name: polkadot-test-runtime
+  - name: pezkuwi-test-runtime
     bump: patch
   - name: coretime-rococo-runtime
     bump: major 

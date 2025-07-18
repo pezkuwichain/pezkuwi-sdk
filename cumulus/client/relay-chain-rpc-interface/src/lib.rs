@@ -29,7 +29,7 @@ use cumulus_relay_chain_interface::{
 	BlockNumber, CoreState, PHeader, RelayChainError, RelayChainInterface, RelayChainResult,
 };
 use futures::{FutureExt, Stream, StreamExt};
-use polkadot_overseer::Handle;
+use pezkuwi_overseer::Handle;
 
 use sc_client_api::StorageProof;
 use sp_state_machine::StorageValue;

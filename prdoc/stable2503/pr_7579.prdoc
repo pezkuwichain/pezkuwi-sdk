@@ -7,9 +7,9 @@ crates:
   bump: minor
 - name: cumulus-pallet-xcm
   bump: minor
-- name: polkadot-runtime-common
+- name: pezkuwi-runtime-common
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: minor
 - name: pallet-bags-list
   bump: minor

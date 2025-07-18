@@ -5,7 +5,7 @@ doc:
     description: |
       Add benchmark that checks hardware satisifies the minimum required hardware cores
       for a validators. The new minimum requirements are schedule to come into effect 
-      in January 2025, for more details see: https://polkadot.subsquare.io/referenda/1051.
+      in January 2025, for more details see: https://pezkuwi.subsquare.io/referenda/1051.
  
 
 crates:
@@ -15,11 +15,11 @@ crates:
     bump: major
   - name: staging-node-cli
     bump: patch
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
-  - name: polkadot-parachain-lib
+  - name: pezkuwi-parachain-lib
     bump: patch
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: patch
   - name: parachain-template-node
     bump: patch

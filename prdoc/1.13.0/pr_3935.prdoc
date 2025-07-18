@@ -1,9 +1,9 @@
-title: "Introduce Polkadot-SDK umbrella crate"
+title: "Introduce Pezkuwi-SDK umbrella crate"
 
 doc:
   - audience: Runtime Dev
     description: |
-      Introduces a new "umbrella" crate that re-exports all published crates of the Polkadot-SDK.
+      Introduces a new "umbrella" crate that re-exports all published crates of the Pezkuwi-SDK.
       This helps developers to select a valid set of versions for all underlying dependencies.
 
       You can now use this create and remove lots of dependencies from your runtime and node crates.
@@ -24,7 +24,7 @@ crates:
     bump: patch
   - name: sp-api-proc-macro
     bump: patch
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: patch
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: major

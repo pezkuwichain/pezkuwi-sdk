@@ -6,5 +6,5 @@ doc:
       Fixes the people-westend chain spec.
 
 crates:
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch

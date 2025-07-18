@@ -1,0 +1,35 @@
+[package]
+name = "pezkuwi-node-core-pvf-checker"
+description = "Pezkuwi crate that implements the PVF pre-checking subsystem. Responsible for checking and voting for PVFs that are pending approval."
+version = "22.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+futures = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sp-keystore.default-features = true
+sp-keystore.workspace = true
+
+[dev-dependencies]
+futures-timer = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+sc-keystore = { default-features = true, workspace = true }
+sp-application-crypto = { default-features = true, workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }
+sp-runtime = { default-features = true, workspace = true }

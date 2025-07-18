@@ -7,9 +7,9 @@ doc:
       workers based on the chain-id.
 
 crates:
-  - name: polkadot-node-core-candidate-validation
+  - name: pezkuwi-node-core-candidate-validation
     bump: minor
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: minor
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: minor

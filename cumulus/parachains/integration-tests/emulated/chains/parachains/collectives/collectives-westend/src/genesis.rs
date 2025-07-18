@@ -54,7 +54,7 @@ pub fn genesis() -> Storage {
 				.collect(),
 			..Default::default()
 		},
-		polkadot_xcm: collectives_westend_runtime::PolkadotXcmConfig {
+		pezkuwi_xcm: collectives_westend_runtime::PezkuwiXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},

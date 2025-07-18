@@ -184,7 +184,7 @@ pub struct RpcParams {
 	///
 	/// A comma-separated list of origins (protocol://domain or special `null`
 	/// value). Value of `all` will disable origin validation. Default is to
-	/// allow localhost and <https://polkadot.js.org> origins. When running in
+	/// allow localhost and <https://pezkuwi.js.org> origins. When running in
 	/// `--dev` mode the default is to allow all origins.
 	#[arg(long, value_name = "ORIGINS")]
 	pub rpc_cors: Option<Cors>,
@@ -206,7 +206,7 @@ impl RpcParams {
 						"http://127.0.0.1:*".into(),
 						"https://localhost:*".into(),
 						"https://127.0.0.1:*".into(),
-						"https://polkadot.js.org".into(),
+						"https://pezkuwi.js.org".into(),
 					])
 				}
 			})
@@ -647,14 +647,14 @@ mod tests {
 	#[test]
 	fn parse_rpc_endpoint_multiple_cors() {
 		let addr = RpcEndpoint::from_str(
-			"listen-addr=127.0.0.1:9944,methods=auto,cors=https://polkadot.js.org,cors=*,cors=localhost:*",
+			"listen-addr=127.0.0.1:9944,methods=auto,cors=https://pezkuwi.js.org,cors=*,cors=localhost:*",
 		)
 		.unwrap();
 
 		assert_eq!(
 			addr.cors,
 			Some(vec![
-				"https://polkadot.js.org".to_string(),
+				"https://pezkuwi.js.org".to_string(),
 				"*".to_string(),
 				"localhost:*".to_string()
 			])

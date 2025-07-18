@@ -10,7 +10,7 @@ doc:
 crates:
   - name: pallet-asset-rewards
     bump: major
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor
   - name: kitchensink-runtime
     bump: major

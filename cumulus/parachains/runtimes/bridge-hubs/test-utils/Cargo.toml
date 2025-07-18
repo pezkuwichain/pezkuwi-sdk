@@ -17,7 +17,7 @@ asset-test-utils.workspace = true
 bp-header-chain.workspace = true
 bp-messages.workspace = true
 bp-parachains.workspace = true
-bp-polkadot-core.workspace = true
+bp-pezkuwi-core.workspace = true
 bp-relayers.workspace = true
 bp-runtime.workspace = true
 bp-test-utils.workspace = true
@@ -58,7 +58,7 @@ std = [
 	"bp-header-chain/std",
 	"bp-messages/std",
 	"bp-parachains/std",
-	"bp-polkadot-core/std",
+	"bp-pezkuwi-core/std",
 	"bp-relayers/std",
 	"bp-runtime/std",
 	"bp-test-utils/std",

@@ -42,7 +42,7 @@ use fake_runtime_api::RuntimeApi as FakeRuntimeApi;
 use frame_support::Deserialize;
 use genesis_state::WARN_SPEC_GENESIS_CTOR;
 use log::info;
-use polkadot_parachain_primitives::primitives::Id as ParaId;
+use pezkuwi_parachain_primitives::primitives::Id as ParaId;
 use sc_block_builder::BlockBuilderApi;
 use sc_chain_spec::{ChainSpec, ChainSpecExtension, GenesisBlockBuilder};
 use sc_cli::{CliConfiguration, Database, ImportParams, Result, SharedParams};
@@ -73,7 +73,7 @@ use std::{
 use subxt::{client::RuntimeVersion, ext::futures, Metadata};
 
 const DEFAULT_PARA_ID: u32 = 100;
-const LOG_TARGET: &'static str = "polkadot_sdk_frame::benchmark::overhead";
+const LOG_TARGET: &'static str = "pezkuwi_sdk_frame::benchmark::overhead";
 
 /// Benchmark the execution overhead per-block and per-extrinsic.
 #[derive(Debug, Parser)]
@@ -217,7 +217,7 @@ fn create_inherent_data<Client: UsageProvider<Block> + HeaderBackend<Block>, Blo
 	}
 
 	// Parachain inherent that is used on relay chains to perform parachain validation.
-	let para_inherent = polkadot_primitives::InherentData {
+	let para_inherent = pezkuwi_primitives::InherentData {
 		bitfields: Vec::new(),
 		backed_candidates: Vec::new(),
 		disputes: Vec::new(),
@@ -229,7 +229,7 @@ fn create_inherent_data<Client: UsageProvider<Block> + HeaderBackend<Block>, Blo
 
 	let _ = futures::executor::block_on(timestamp.provide_inherent_data(&mut inherent_data));
 	let _ =
-		inherent_data.put_data(polkadot_primitives::PARACHAINS_INHERENT_IDENTIFIER, &para_inherent);
+		inherent_data.put_data(pezkuwi_primitives::PARACHAINS_INHERENT_IDENTIFIER, &para_inherent);
 
 	inherent_data
 }

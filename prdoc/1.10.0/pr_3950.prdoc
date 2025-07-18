@@ -8,5 +8,5 @@ doc:
       specific depths.
 
 crates:
- - name: polkadot-node-subsystem-util
+ - name: pezkuwi-node-subsystem-util
    bump: minor

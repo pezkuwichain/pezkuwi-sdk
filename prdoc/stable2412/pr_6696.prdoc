@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Make approval-distribution aggression a bit more robust and less spammy
 
@@ -11,5 +11,5 @@ doc:
       and make resend enable only for the latest unfinalized block.
 
 crates:
-  - name: polkadot-approval-distribution
+  - name: pezkuwi-approval-distribution
     bump: minor

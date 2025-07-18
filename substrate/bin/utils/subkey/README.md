@@ -1,7 +1,7 @@
 # Subkey
 
 Subkey is a commandline utility included with Substrate. It allows generating and restoring keys for Substrate based
-chains such as Polkadot, Kusama and a growing number of parachains and Substrate based projects.
+chains such as Pezkuwi, Kusama and a growing number of parachains and Substrate based projects.
 
 `subkey` provides a few sub-commands to generate keys, check keys, sign messages, verify messages, etc...
 
@@ -65,8 +65,8 @@ Secret phrase `hotel forest jar hover kite book view eight stuff angle legend de
 ---
 ☠️ DO NT RE-USE ANY OF THE SEEDS AND SECRETS FROM THIS PAGE ☠️.
 
-You can read more about security and risks in [SECURITY.md](./SECURITY.md) and in the [Polkadot
-Wiki](https://wiki.polkadot.network/docs/learn-account-generation).
+You can read more about security and risks in [SECURITY.md](./SECURITY.md) and in the [Pezkuwi
+Wiki](https://wiki.pezkuwi.network/docs/learn-account-generation).
 
 ---
 
@@ -78,7 +78,7 @@ The output above also shows the **public key** and the **Account ID**. Those are
 you will use the key.
 
 The **SS58 address** (or **Public Address**) of a new account is a representation of the public keys of an account for
-a given network (for instance Kusama or Polkadot).
+a given network (for instance Kusama or Pezkuwi).
 
 You can read more about the [SS58 format in the Substrate Docs](https://docs.substrate.io/reference/address-formats/)
 and see the list of reserved prefixes in the [SS58 Registry](https://github.com/paritytech/ss58-registry).
@@ -86,7 +86,7 @@ and see the list of reserved prefixes in the [SS58 Registry](https://github.com/
 For instance, considering the previous seed `0xa05c75731970cc7868a2fb7cb577353cd5b31f62dccced92c441acd8fee0c92d` the
 SS58 addresses are:
 
-- Polkadot: `16m4J167Mptt8UXL8aGSAi7U2FnPpPxZHPrCgMG9KJzVoFqM`
+- Pezkuwi: `16m4J167Mptt8UXL8aGSAi7U2FnPpPxZHPrCgMG9KJzVoFqM`
 - Kusama: `JLNozAv8QeLSbLFwe2UvWeKKE4yvmDbfGxTuiYkF2BUMx4M`
 
 ### Json output
@@ -262,7 +262,7 @@ warned, depending on your hardware this may take a while.
 command:
 
 ```bash
-subkey vanity --network polkadot --pattern bob
+subkey vanity --network pezkuwi --pattern bob
 ```
 
 output:

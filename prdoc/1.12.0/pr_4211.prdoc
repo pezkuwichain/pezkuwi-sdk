@@ -9,7 +9,7 @@ doc:
       artifact on every validator, causing a significant finality lag.
 
 crates:
-  - name: polkadot-node-core-pvf
+  - name: pezkuwi-node-core-pvf
     bump: minor
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: minor

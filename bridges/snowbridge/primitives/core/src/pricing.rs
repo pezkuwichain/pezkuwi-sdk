@@ -9,7 +9,7 @@ use sp_std::prelude::*;
 	Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo,
 )]
 pub struct PricingParameters<Balance> {
-	/// ETH/DOT exchange rate
+	/// ETH/HEZ exchange rate
 	pub exchange_rate: FixedU128,
 	/// Relayer rewards
 	pub rewards: Rewards<Balance>,
@@ -23,7 +23,7 @@ pub struct PricingParameters<Balance> {
 	Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo,
 )]
 pub struct Rewards<Balance> {
-	/// Local reward in DOT
+	/// Local reward in HEZ
 	pub local: Balance,
 	/// Remote reward in ETH (wei)
 	pub remote: U256,

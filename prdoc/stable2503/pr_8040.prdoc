@@ -12,5 +12,5 @@ crates:
     bump: major
   - name: cumulus-client-consensus-aura
     bump: major
-  - name: polkadot-omni-node-lib
+  - name: pezkuwi-omni-node-lib
     bump: major

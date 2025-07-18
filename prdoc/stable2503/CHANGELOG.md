@@ -4,7 +4,7 @@
 ## Changelog for `Node Dev`
 
 **ℹ️ These changes are relevant to:**  Those who build around the client side code. Alternative client builders,
- SMOLDOT, those who consume RPCs. These are people who are oblivious to the runtime changes. They only care
+ SMOLHEZ, those who consume RPCs. These are people who are oblivious to the runtime changes. They only care
  about the meta-protocol, not the protocol itself.
 
 ### [#6979]: Update prometheus binding failure logging format
@@ -55,7 +55,7 @@ Fixes <https://github.com/paritytech/polkadot-sdk/issues/6573>.
 
 This PR adds implementation of `Ord, Eq, PartialOrd, PartialEq`  traits for `HashAndNumber` struct.
 
-### [#6534]: Forward logging directives to Polkadot workers
+### [#6534]: Forward logging directives to Pezkuwi workers
 
 This pull request forward all the logging directives given to the node via `RUST_LOG` or `-l` to the workers, instead
 of only forwarding `RUST_LOG`.
@@ -145,7 +145,7 @@ The `sc-network` interface is therefore updated accordingly.
 
 Removed useless debug message
 
-### [#7464]: Enable importing sc-tracing macros through Polkadot-sdk
+### [#7464]: Enable importing sc-tracing macros through Pezkuwi-sdk
 
 This PR makes it possible to use the sc-tracing macros when they are imported through the umbrella crate.
 
@@ -167,12 +167,12 @@ Adds a check that parachain candidates do not send out UMP signals with v1 descr
 
 ### [#7195]: Unify Import verifier usage across parachain template and omninode
 
-In Polkadot-omni-node block import pipeline it uses default aura verifier without checking equivocation.
+In Pezkuwi-omni-node block import pipeline it uses default aura verifier without checking equivocation.
 This Pr replaces the check with full verification with equivocation like in parachain template block import
 
 ### [#7610]: runtime-api: remove redundant version checks
 
-This PR removes unnecessary runtime API version checks for APIs supported by Polkadot
+This PR removes unnecessary runtime API version checks for APIs supported by Pezkuwi
 (the most recent network to upgrade). Specifically, it applies to the `DisabledValidators`,
 `MinimumBackingVotes` and `NodeFeatures` APIs.
 
@@ -274,9 +274,9 @@ all networks it should always be true.
 
 ### [#7708]: Support adding extra request-response protocols to the node
 
-Allow adding extra request-response protocols during Polkadot service initialization. This is required to add
+Allow adding extra request-response protocols during Pezkuwi service initialization. This is required to add
 a request-response protocol described in
-[RFC-0008](https://polkadot-fellows.github.io/RFCs/approved/0008-parachain-bootnodes-dht.html)
+[RFC-0008](https://pezkuwi-fellows.github.io/RFCs/approved/0008-parachain-bootnodes-dht.html)
 to the relay chain side of the parachain node.
 
 ### [#7554]: sc-informant: Print full hash when debug logging is enabled
@@ -289,9 +289,9 @@ logs and follow blocks.
 Previously, the method result was encoded to a json containing a "result" field. However, the spec specifies a "value" field.
 This aims to rectify that.
 
-### [#6913]: Enable approval-voting-parallel by default on Polkadot
+### [#6913]: Enable approval-voting-parallel by default on Pezkuwi
 
-Enable approval-voting-parallel by default on Polkadot
+Enable approval-voting-parallel by default on Pezkuwi
 
 ### [#6628]: Remove ReportCollator message
 
@@ -414,9 +414,9 @@ This pull request introduces measures to handle finality stalls by :
 An item is considered _outdated_ when the difference between its associated block and the current block
 exceeds a pre-defined threshold.
 
-### [#6889]: Remove Polkadot-omni-node-lib unused dependency
+### [#6889]: Remove Pezkuwi-omni-node-lib unused dependency
 
-Removed an unused dependency for `polkadot-omni-node-lib`.
+Removed an unused dependency for `pezkuwi-omni-node-lib`.
 
 ### [#6450]: Add omni-node checks for runtime parachain compatibility
 
@@ -496,7 +496,7 @@ This PR does not introduce changes in the logic.
 
 ### [#7866]: Make litep2p the default backend in Kusama
 
-A new trait `IdentifyNetworkBackend` is introduced for the Polkadot-service.
+A new trait `IdentifyNetworkBackend` is introduced for the Pezkuwi-service.
 The purpose of the trait is to specify the default network backend for individual chains.
 For Kusama based chains, the default is now litep2p. For other chains, the default remains unchanged to libp2p.
 The network backend field of the network configuration is made optional to accomodate for this change.
@@ -901,7 +901,7 @@ instead of the hard-coded `Location::parent()`.
 
 ## Motivation
 
-Internal auditors recommended to not truncate Polkadot Addresses when deriving Ethereum addresses from it.
+Internal auditors recommended to not truncate Pezkuwi Addresses when deriving Ethereum addresses from it.
 Reasoning is that they are raw public keys where truncating could lead to collisions when weaknesses in those curves
 are discovered in the future.
 Additionally,  some pallets generate account addresses in a way where only the suffix we were truncating contains any entropy.
@@ -1186,9 +1186,9 @@ It is worth noting that the PR also introduces a minimum credit purchase require
 - Added an docs.rs specific attribute so that the `unstable-hostfn` feature tag will show up on the functions
    that are guarded behind it.
 
-### [#8057]: Moved bridge primitives to `parity-bridge-common` and `polkadot-fellows/runtimes` repos
+### [#8057]: Moved bridge primitives to `parity-bridge-common` and `pezkuwi-fellows/runtimes` repos
 
-Removed packages `bp-polkadot`, `bp-kusama`, `bp-bridge-hub-polkadot` and `bp-bridge-hub-kusama`
+Removed packages `bp-pezkuwi`, `bp-kusama`, `bp-bridge-hub-pezkuwi` and `bp-bridge-hub-kusama`
 
 ### [#7794]: [glutton-westend] remove `CheckNonce` from `TXExtension` and add sudo key to genesis config
 
@@ -1302,9 +1302,9 @@ Introduces events to extrinsics from `pallet_nomination_pools` that previously h
 In solidity `block.timestamp` should be expressed in seconds
 see <https://docs.soliditylang.org/en/latest/units-and-global-variables.html#block-and-transaction-properties>
 
-### [#7619]: Add chain-spec-builder as a subcommand to the Polkadot-omni-node
+### [#7619]: Add chain-spec-builder as a subcommand to the Pezkuwi-omni-node
 
-This PR add chain-spec-builder as a subcommand to the Polkadot-omni-node
+This PR add chain-spec-builder as a subcommand to the Pezkuwi-omni-node
 
 ### [#6349]: runtimes: presets are provided as config patches
 
@@ -1384,7 +1384,7 @@ See the pallet docs for more info about the pallet.
 
 ### [#6624]: Use `cmd_lib` instead of `std::process::Command` when using `#[docify::export]`
 
-Simplified the display of commands and ensured they are tested for chain spec builder's `polkadot-sdk` reference docs.
+Simplified the display of commands and ensured they are tested for chain spec builder's `pezkuwi-sdk` reference docs.
 
 ### [#6986]: [pallet-mixnet] Migrate to using frame umbrella crate
 
@@ -1608,7 +1608,7 @@ And add more unit tests to cover `dispatch_as` and `dispatch_as_fallible`.
 
 ---
 
-Polkadot address: 156HGo9setPcU2qhFMVWLkcmtCEGySLwNqa3DaEiYSWtte4Y
+Pezkuwi address: 156HGo9setPcU2qhFMVWLkcmtCEGySLwNqa3DaEiYSWtte4Y
 
 ### [#7671]: Fix: [Referenda Tracks] Resolve representation issues that are breaking PJS apps
 
@@ -1723,7 +1723,7 @@ Simplify event assertions by introducing `contains_event`, reducing duplicated c
 
 Bump `polkavm` to 0.18.0, and update `sc-polkavm-executor` to be compatible with the API changes.
 In addition, bump also `polkavm-derive` and `polkavm-linker` in order to make sure that the all parts
-of the Polkadot SDK use the exact same ABI for `.polkavm` binaries.
+of the Pezkuwi SDK use the exact same ABI for `.polkavm` binaries.
 
 Purely relying on RV32E/RV64E ABI is not possible, as PolkaVM uses a RISCV-V alike ISA, which is derived
 from RV32E/RV64E but it is still its own microarchitecture, i.e. not fully binary compatible.
@@ -1898,7 +1898,7 @@ so if for an account, `frozen` is less or equal than `on_hold + ed`, you'd be ab
 up to `ed`. If for the account, `frozen` is more than `on_hold + ed`, the remaining amount after subtracting
 `frozen` to `on_hold + ed` is the amount you cannot spend from your `free` balance.
 
-See [sdk docs](https://paritytech.github.io/polkadot-sdk/master/frame_support/traits/tokens/fungible/index.html#visualising-balance-components-together-)
+See [sdk docs](https://paritytech.github.io/pezkuwi-sdk/master/frame_support/traits/tokens/fungible/index.html#visualising-balance-components-together-)
 to understand how to calculate the spendable balance of an asset account on the client side.
 
 ## Implementation of `InspectHold` and `MutateHold`
@@ -2091,12 +2091,12 @@ The problem is solved by moving the trait implemented by `impl_runtime_apis!` to
 
 Closes: <https://github.com/paritytech/polkadot-sdk/issues/6659>
 
-### [#7627]: Derive `DecodeWithMemTracking` for Cumulus pallets and for `polkadot-sdk` runtimes
+### [#7627]: Derive `DecodeWithMemTracking` for Cumulus pallets and for `pezkuwi-sdk` runtimes
 
 Related to <https://github.com/paritytech/polkadot-sdk/issues/7360>
 
 Derive `DecodeWithMemTracking` for the structures in the Cumulus pallets
-and for the structures in the `polkadot-sdk` runtimes.
+and for the structures in the `pezkuwi-sdk` runtimes.
 
 The PR contains no functional changes and no manual implementation. Just deriving `DecodeWithMemTracking`.
 
@@ -2291,7 +2291,7 @@ fix <https://github.com/paritytech/contract-issues/issues/12>
 ### [#7655]: derive `DecodeWithMemTracking` for `Block`
 
 This PR adds `DecodeWithMemTracking` as a trait bound for `Header`, `Block` and `TransactionExtension` and
-derives it for all the types that implement these traits in `polkadot-sdk`.
+derives it for all the types that implement these traits in `pezkuwi-sdk`.
 All the external types that implement these traits will need to implement `DecodeWithMemTracking` as well.
 
 ### [#7170]: Fix reversed error message in DispatchInfo
@@ -2660,7 +2660,7 @@ Closes: <https://github.com/paritytech/polkadot-sdk/issues/6745>
 ### [#6995]: added new proxy ParaRegistration to Westend
 
 This adds a new Proxy type to Westend Runtime called ParaRegistration.
-This is related to: <https://github.com/polkadot-fellows/runtimes/pull/520>.
+This is related to: <https://github.com/pezkuwi-fellows/runtimes/pull/520>.
 
 This new proxy allows:
 

@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Move assignment VRF check and vote signature in approval-distribution
 
@@ -12,17 +12,17 @@ doc:
       is ready to be imported.
 
 crates: 
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: major
-  - name: polkadot-approval-distribution
+  - name: pezkuwi-approval-distribution
     bump: major
-  - name: polkadot-node-core-approval-voting
+  - name: pezkuwi-node-core-approval-voting
     bump: major
-  - name: polkadot-node-primitives
+  - name: pezkuwi-node-primitives
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
-  - name: polkadot-subsystem-bench
+  - name: pezkuwi-subsystem-bench
     bump: major
-  - name: polkadot-overseer
+  - name: pezkuwi-overseer
     bump: patch

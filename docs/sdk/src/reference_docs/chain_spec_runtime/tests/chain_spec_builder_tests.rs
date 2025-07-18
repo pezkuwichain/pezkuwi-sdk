@@ -138,7 +138,7 @@ fn generate_chain_spec() {
 #[docify::export_content]
 fn cmd_generate_para_chain_spec(runtime_path: &str) -> String {
 	bash!(
-		chain-spec-builder -c /dev/stdout create -c polkadot -p 1000 -r $runtime_path named-preset preset_2
+		chain-spec-builder -c /dev/stdout create -c pezkuwi -p 1000 -r $runtime_path named-preset preset_2
 	)
 }
 
@@ -159,7 +159,7 @@ fn generate_para_chain_spec() {
 		"bootNodes": [],
 		"telemetryEndpoints": null,
 		"protocolId": null,
-		"relay_chain": "polkadot",
+		"relay_chain": "pezkuwi",
 		"para_id": 1000,
 		"properties": { "tokenDecimals": 12, "tokenSymbol": "UNIT" },
 		"codeSubstitutes": {},

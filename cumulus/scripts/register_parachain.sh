@@ -11,7 +11,7 @@ seed=$2
 wasm=$3
 genesis=$4
 parachain_id=$5
-types=$6 # we can remove this once parachain types are included in polkadot-js-api
+types=$6 # we can remove this once parachain types are included in pezkuwi-js-api
 
 [ -z "$url" ] && usage
 [ -z "$seed" ] && usage
@@ -28,9 +28,9 @@ if ! [ -r "$types" ]; then
     exit 1
 fi
 
-if ! which polkadot-js-api &> /dev/null; then
-    echo 'command `polkadot-js-api` not in PATH'
-    echo "npm install -g @polkadot/api-cli@beta"
+if ! which pezkuwi-js-api &> /dev/null; then
+    echo 'command `pezkuwi-js-api` not in PATH'
+    echo "npm install -g @pezkuwi/api-cli@beta"
     exit 1
 fi
 
@@ -40,7 +40,7 @@ test -f "$seed" && seed="$(cat "$seed")"
 
 wasm=$(cat $wasm)
 
-polkadot-js-api \
+pezkuwi-js-api \
     --ws "${url?}" \
     --sudo \
     --seed "${seed?}" \

@@ -1,6 +1,6 @@
 [package]
-name = "polkadot-sdk-docs-first-runtime"
-description = "A simple runtime created for the polkadot-sdk-docs guides"
+name = "pezkuwi-sdk-docs-first-runtime"
+description = "A simple runtime created for the pezkuwi-sdk-docs guides"
 version = "0.1.0"
 license = "MIT-0"
 authors.workspace = true

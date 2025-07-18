@@ -45,7 +45,7 @@ decl_test_parachains! {
 			MessageOrigin: bridge_hub_common::AggregateMessageOrigin,
 		},
 		pallets = {
-			PolkadotXcm: bridge_hub_westend_runtime::PolkadotXcm,
+			PezkuwiXcm: bridge_hub_westend_runtime::PezkuwiXcm,
 			Balances: bridge_hub_westend_runtime::Balances,
 			EthereumSystem: bridge_hub_westend_runtime::EthereumSystem,
 			EthereumInboundQueue: bridge_hub_westend_runtime::EthereumInboundQueue,

@@ -67,8 +67,8 @@ pallet-xcm-bridge-hub-router.workspace = true
 pallet-xcm.workspace = true
 parachain-info.workspace = true
 parachains-common.workspace = true
-polkadot-parachain-primitives.workspace = true
-polkadot-runtime-common.workspace = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-runtime-common.workspace = true
 primitive-types = { features = [
 	"codec",
 	"num-traits",
@@ -147,8 +147,8 @@ runtime-benchmarks = [
 	"pallet-xcm-bridge-hub-router/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
 	"parachains-common/runtime-benchmarks",
-	"polkadot-parachain-primitives/runtime-benchmarks",
-	"polkadot-runtime-common/runtime-benchmarks",
+	"pezkuwi-parachain-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-common/runtime-benchmarks",
 	"snowbridge-inbound-queue-primitives/runtime-benchmarks",
 	"snowbridge-pallet-system-frontend/runtime-benchmarks",
 	"snowbridge-runtime-common/runtime-benchmarks",
@@ -194,7 +194,7 @@ try-runtime = [
 	"pallet-xcm-bridge-hub-router/try-runtime",
 	"pallet-xcm/try-runtime",
 	"parachain-info/try-runtime",
-	"polkadot-runtime-common/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
 	"snowbridge-pallet-system-frontend/try-runtime",
 	"snowbridge-runtime-common/try-runtime",
 	"sp-runtime/try-runtime",
@@ -254,8 +254,8 @@ std = [
 	"pallet-xcm/std",
 	"parachain-info/std",
 	"parachains-common/std",
-	"polkadot-parachain-primitives/std",
-	"polkadot-runtime-common/std",
+	"pezkuwi-parachain-primitives/std",
+	"pezkuwi-runtime-common/std",
 	"primitive-types/std",
 	"scale-info/std",
 	"serde_json/std",

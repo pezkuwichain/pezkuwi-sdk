@@ -8,5 +8,5 @@ doc:
 
     Fixes: https://github.com/paritytech/polkadot-sdk/issues/6102
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major

@@ -6,10 +6,10 @@ doc:
        Introduces checks for the new candidate descriptor fields: `core_index` and `session_index`.
 
 crates:
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: minor
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: major
-  - name: polkadot-primitives-test-helpers
+  - name: pezkuwi-primitives-test-helpers
     bump: major
 

@@ -27,7 +27,7 @@ use asset_hub_westend_runtime::{
 	},
 	AllPalletsWithoutSystem, Assets, Balances, Block, ExistentialDeposit, ForeignAssets,
 	ForeignAssetsInstance, MetadataDepositBase, MetadataDepositPerByte, ParachainSystem,
-	PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys,
+	PezkuwiXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys,
 	ToRococoXcmRouterInstance, TrustBackedAssetsInstance, XcmpQueue,
 };
 pub use asset_hub_westend_runtime::{AssetConversion, AssetDeposit, CollatorSelection, System};
@@ -990,7 +990,7 @@ fn authorized_aliases_work() {
 			}
 
 			// Alice explicitly authorizes `alice_on_sibling_para` to alias her local account
-			assert_ok!(PolkadotXcm::add_authorized_alias(
+			assert_ok!(PezkuwiXcm::add_authorized_alias(
 				RuntimeHelper::origin_of(alice.clone()),
 				Box::new(alice_on_sibling_para.clone().into()),
 				None
@@ -1010,7 +1010,7 @@ fn authorized_aliases_work() {
 			}
 
 			// Alice explicitly authorizes `alice_on_relay` to alias her local account
-			assert_ok!(PolkadotXcm::add_authorized_alias(
+			assert_ok!(PezkuwiXcm::add_authorized_alias(
 				RuntimeHelper::origin_of(alice.clone()),
 				Box::new(alice_on_relay.clone().into()),
 				None
@@ -1025,7 +1025,7 @@ fn authorized_aliases_work() {
 			}
 
 			// Alice removes authorization for `alice_on_relay` to alias her local account
-			assert_ok!(PolkadotXcm::remove_authorized_alias(
+			assert_ok!(PezkuwiXcm::remove_authorized_alias(
 				RuntimeHelper::origin_of(alice.clone()),
 				Box::new(alice_on_relay.clone().into())
 			));
@@ -1056,7 +1056,7 @@ asset_test_utils::include_teleports_for_native_asset_works!(
 	ExistentialDeposit::get(),
 	Box::new(|runtime_event_encoded: Vec<u8>| {
 		match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-			Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+			Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 			_ => None,
 		}
 	}),
@@ -1077,7 +1077,7 @@ asset_test_utils::include_teleports_for_foreign_assets_works!(
 	ExistentialDeposit::get(),
 	Box::new(|runtime_event_encoded: Vec<u8>| {
 		match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-			Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+			Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 			_ => None,
 		}
 	}),
@@ -1175,7 +1175,7 @@ asset_test_utils::include_create_and_manage_foreign_assets_for_local_consensus_p
 );
 
 fn bridging_to_asset_hub_rococo() -> TestBridgingConfig {
-	let _ = PolkadotXcm::force_xcm_version(
+	let _ = PezkuwiXcm::force_xcm_version(
 		RuntimeOrigin::root(),
 		Box::new(bridging::to_rococo::AssetHubRococo::get()),
 		XCM_VERSION,
@@ -1205,7 +1205,7 @@ fn limited_reserve_transfer_assets_for_native_asset_to_asset_hub_rococo_works() 
 		AccountId::from(ALICE),
 		Box::new(|runtime_event_encoded: Vec<u8>| {
 			match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-				Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+				Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 				_ => None,
 			}
 		}),
@@ -1476,7 +1476,7 @@ fn reserve_transfer_native_asset_to_non_teleport_para_works() {
 		AccountId::from(ALICE),
 		Box::new(|runtime_event_encoded: Vec<u8>| {
 			match RuntimeEvent::decode(&mut &runtime_event_encoded[..]) {
-				Ok(RuntimeEvent::PolkadotXcm(event)) => Some(event),
+				Ok(RuntimeEvent::PezkuwiXcm(event)) => Some(event),
 				_ => None,
 			}
 		}),

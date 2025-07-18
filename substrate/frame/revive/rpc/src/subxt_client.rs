@@ -17,7 +17,7 @@
 //! The generated subxt client.
 //! Generated against a substrate chain configured with [`pallet_revive`] using:
 //! subxt metadata  --url ws://localhost:9944 -o rpc/revive_chain.scale
-use subxt::config::{signed_extensions, Config, PolkadotConfig};
+use subxt::config::{signed_extensions, Config, PezkuwiConfig};
 
 #[subxt::subxt(
 	runtime_metadata_path = "revive_chain.metadata",
@@ -71,12 +71,12 @@ pub use src_chain::*;
 pub enum SrcChainConfig {}
 impl Config for SrcChainConfig {
 	type Hash = sp_core::H256;
-	type AccountId = <PolkadotConfig as Config>::AccountId;
-	type Address = <PolkadotConfig as Config>::Address;
-	type Signature = <PolkadotConfig as Config>::Signature;
+	type AccountId = <PezkuwiConfig as Config>::AccountId;
+	type Address = <PezkuwiConfig as Config>::Address;
+	type Signature = <PezkuwiConfig as Config>::Signature;
 	type Hasher = BlakeTwo256;
 	type Header = subxt::config::substrate::SubstrateHeader<u32, BlakeTwo256>;
-	type AssetId = <PolkadotConfig as Config>::AssetId;
+	type AssetId = <PezkuwiConfig as Config>::AssetId;
 	type ExtrinsicParams = signed_extensions::AnyOf<
 		Self,
 		(

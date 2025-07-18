@@ -182,24 +182,24 @@
 //!   claim all their pending rewards for them. This is not optional, and MUST happen for the reward
 //!   calculation to remain correct (see the documentation of `bond` as an example). So, make sure
 //!   you are warning your users about it. They might be surprised if they see that they bonded an
-//!   extra 100 DOTs, and now suddenly their 5.23 DOTs in pending reward is gone. It is not gone, it
+//!   extra 100 HEZs, and now suddenly their 5.23 HEZs in pending reward is gone. It is not gone, it
 //!   has been paid out to you!
 //! * Joining a pool implies transferring funds to the pool account. So it might be (based on which
 //!   wallet that you are using) that you no longer see the funds that are moved to the pool in your
 //!   “free balance” section. Make sure the user is aware of this, and not surprised by seeing this.
 //!   Also, the transfer that happens here is configured to to never accidentally destroy the sender
-//!   account. So to join a Pool, your sender account must remain alive with 1 DOT left in it. This
-//!   means, with 1 DOT as existential deposit, and 1 DOT as minimum to join a pool, you need at
-//!   least 2 DOT to join a pool. Consequently, if you are suggesting members to join a pool with
-//!   “Maximum possible value”, you must subtract 1 DOT to remain in the sender account to not
+//!   account. So to join a Pool, your sender account must remain alive with 1 HEZ left in it. This
+//!   means, with 1 HEZ as existential deposit, and 1 HEZ as minimum to join a pool, you need at
+//!   least 2 HEZ to join a pool. Consequently, if you are suggesting members to join a pool with
+//!   “Maximum possible value”, you must subtract 1 HEZ to remain in the sender account to not
 //!   accidentally kill it.
 //! * Points and balance are not the same! Any pool member, at any point in time, can have points in
 //!   either the bonded pool or any of the unbonding pools. The crucial fact is that in any of these
 //!   pools, the ratio of point to balance is different and might not be 1. Each pool starts with a
 //!   ratio of 1, but as time goes on, for reasons such as slashing, the ratio gets broken. Over
-//!   time, 100 points in a bonded pool can be worth 90 DOTs. Make sure you are either representing
-//!   points as points (not as DOTs), or even better, always display both: “You have x points in
-//!   pool y which is worth z DOTs”. See here and here for examples of how to calculate point to
+//!   time, 100 points in a bonded pool can be worth 90 HEZs. Make sure you are either representing
+//!   points as points (not as HEZs), or even better, always display both: “You have x points in
+//!   pool y which is worth z HEZs”. See here and here for examples of how to calculate point to
 //!   balance ratio of each pool (it is almost trivial ;))
 //!
 //! ### Pool Management
@@ -545,7 +545,7 @@ impl<T: Config> PoolMember<T> {
 		// multiplied by a point. The worse case of a point is 10x the granularity of the balance
 		// (10x is the common configuration of `MaxPointsToBalance`).
 		//
-		// Assuming roughly the current issuance of polkadot (12,047,781,394,999,601,455, which is
+		// Assuming roughly the current issuance of pezkuwi (12,047,781,394,999,601,455, which is
 		// 1.2 * 10^9 * 10^10 = 1.2 * 10^19), the worse case point value is around 10^20.
 		//
 		// The final multiplication is:
@@ -1468,7 +1468,7 @@ impl<T: Config> RewardPool<T> {
 		// which, with the current numbers, is a miniscule fraction of the u128 capacity.
 		//
 		// Thus, adding two values of type reward counter should be safe for ages in a chain like
-		// Polkadot. The important note here is that `reward_pool.last_recorded_reward_counter` only
+		// Pezkuwi. The important note here is that `reward_pool.last_recorded_reward_counter` only
 		// ever accumulates, but its semantics imply that it is less than total_issuance, when
 		// represented as `FixedU128`, which means it is less than `total_issuance * 10^18`.
 		//
@@ -1486,7 +1486,7 @@ impl<T: Config> RewardPool<T> {
 		//
 		// x = 100
 		//
-		// which is basically 10^-8 DOTs. See `smallest_claimable_reward` for an example of this.
+		// which is basically 10^-8 HEZs. See `smallest_claimable_reward` for an example of this.
 		let current_reward_counter =
 			T::RewardCounter::checked_from_rational(new_pending_rewards, bonded_points)
 				.and_then(|ref r| self.last_recorded_reward_counter.checked_add(r))
@@ -1676,7 +1676,7 @@ pub mod pallet {
 		///
 		/// See the inline code docs of `Member::pending_rewards` and `RewardPool::update_recorded`
 		/// for example analysis. A [`sp_runtime::FixedU128`] should be fine for chains with balance
-		/// types similar to that of Polkadot and Kusama, in the absence of severe slashing (or
+		/// types similar to that of Pezkuwi and Kusama, in the absence of severe slashing (or
 		/// prevented via a reasonable `MaxPointsToBalance`), for many many years to come.
 		type RewardCounter: FixedPointNumber + MaxEncodedLen + TypeInfo + Default + codec::FullCodec;
 

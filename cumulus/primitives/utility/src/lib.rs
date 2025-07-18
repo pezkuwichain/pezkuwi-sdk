@@ -32,7 +32,7 @@ use frame_support::{
 	CloneNoBound,
 };
 use pallet_asset_conversion::SwapCredit as SwapCreditT;
-use polkadot_runtime_common::xcm_sender::PriceForMessageDelivery;
+use pezkuwi_runtime_common::xcm_sender::PriceForMessageDelivery;
 use sp_runtime::{
 	traits::{Saturating, Zero},
 	SaturatedConversion,

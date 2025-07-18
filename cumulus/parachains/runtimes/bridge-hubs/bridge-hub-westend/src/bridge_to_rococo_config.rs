@@ -18,7 +18,7 @@
 
 use crate::{
 	bridge_common_config::BridgeRelayersInstance, weights, xcm_config::UniversalLocation,
-	AccountId, Balance, Balances, BridgeRococoMessages, PolkadotXcm, Runtime, RuntimeEvent,
+	AccountId, Balance, Balances, BridgeRococoMessages, PezkuwiXcm, Runtime, RuntimeEvent,
 	RuntimeHoldReason, XcmOverBridgeHubRococo, XcmRouter, XcmpQueue,
 };
 use bp_messages::{
@@ -39,7 +39,7 @@ use pallet_bridge_relayers::extension::{
 	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
 };
 use parachains_common::xcm_config::{AllSiblingSystemParachains, RelayOrOtherSystemParachains};
-use polkadot_parachain_primitives::primitives::Sibling;
+use pezkuwi_parachain_primitives::primitives::Sibling;
 use testnet_parachains_constants::westend::currency::UNITS as WND;
 use xcm::{
 	latest::{prelude::*, ROCOCO_GENESIS_HASH},
@@ -168,7 +168,7 @@ impl pallet_xcm_bridge_hub::Config<XcmOverBridgeHubRococoInstance> for Runtime {
 	type BridgeMessagesPalletInstance = WithBridgeHubRococoMessagesInstance;
 
 	type MessageExportPrice = ();
-	type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PolkadotXcm, BridgeHubRococoLocation>;
+	type DestinationVersion = XcmVersionOfDestAndRemoteBridge<PezkuwiXcm, BridgeHubRococoLocation>;
 
 	type ForceOrigin = EnsureRoot<AccountId>;
 	// We don't want to allow creating bridges for this instance with `LegacyLaneId`.

@@ -75,11 +75,11 @@ pub use cumulus_primitives_parachain_inherent::ParachainInherentData;
 pub use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 pub use pallet_message_queue::{Config as MessageQueueConfig, Pallet as MessageQueuePallet};
 pub use parachains_common::{AccountId, Balance};
-pub use polkadot_primitives;
-pub use polkadot_runtime_parachains::inclusion::{AggregateMessageOrigin, UmpQueueId};
+pub use pezkuwi_primitives;
+pub use pezkuwi_runtime_parachains::inclusion::{AggregateMessageOrigin, UmpQueueId};
 
-// Polkadot
-pub use polkadot_parachain_primitives::primitives::RelayChainBlockNumber;
+// Pezkuwi
+pub use pezkuwi_parachain_primitives::primitives::RelayChainBlockNumber;
 use sp_core::{crypto::AccountId32, H256};
 pub use xcm::latest::prelude::{
 	AccountId32 as AccountId32Junction, Ancestor, Assets, Here, Location,
@@ -548,7 +548,7 @@ macro_rules! __impl_test_ext_for_relay_chain {
 				// Send messages if needed
 				$local_ext.with(|v| {
 					v.borrow_mut().execute_with(|| {
-						use $crate::polkadot_primitives::runtime_api::runtime_decl_for_parachain_host::$api_version;
+						use $crate::pezkuwi_primitives::runtime_api::runtime_decl_for_parachain_host::$api_version;
 
 						//TODO: mark sent count & filter out sent msg
 						for para_id in <$network>::para_ids() {
@@ -1160,7 +1160,7 @@ macro_rules! decl_test_networks {
 				) -> $crate::ParachainInherentData {
 					let mut sproof = $crate::RelayStateSproofBuilder::default();
 					sproof.para_id = para_id.into();
-					sproof.current_slot = $crate::polkadot_primitives::Slot::from(relay_parent_number as u64);
+					sproof.current_slot = $crate::pezkuwi_primitives::Slot::from(relay_parent_number as u64);
 
 					// egress channel
 					let e_index = sproof.hrmp_egress_channel_index.get_or_insert_with(Vec::new);

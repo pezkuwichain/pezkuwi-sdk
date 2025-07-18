@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Use relay chain slot for velocity measurement on parachains
 
@@ -12,7 +12,7 @@ doc:
 
       **🚨 Action Required:** A migration of name `cumulus_pallet_aura_ext::migration::MigrateV0ToV1` is included
       that cleans up a renamed storage item. Parachain must add it to their runtimes. More information is available in
-      the [reference docs](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/frame_runtime_upgrades_and_migrations/index.html#single-block-migrations).
+      the [reference docs](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/frame_runtime_upgrades_and_migrations/index.html#single-block-migrations).
 
 crates:
   - name: cumulus-pallet-parachain-system

@@ -38,7 +38,7 @@ crates:
     bump: major
   - name: people-rococo-runtime
     bump: major
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: major
   - name: westend-runtime
     bump: major

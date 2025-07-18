@@ -1,11 +1,11 @@
-name: Release - Publish polkadot deb package
+name: Release - Publish pezkuwi deb package
 
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Current final release tag in the format polkadot-stableYYMM or polkadot-stable-YYMM-X
-        default: polkadot-stable2412
+        description: Current final release tag in the format pezkuwi-stableYYMM or pezkuwi-stable-YYMM-X
+        default: pezkuwi-stable2412
         required: true
         type: string
 
@@ -57,16 +57,16 @@ jobs:
         run: |
           . ./.github/scripts/common/lib.sh
 
-          NODE_VERSION="$(get_polkadot_node_version_from_code)"
+          NODE_VERSION="$(get_pezkuwi_node_version_from_code)"
           echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_OUTPUT
 
-          fetch_debian_package_from_s3 polkadot
+          fetch_debian_package_from_s3 pezkuwi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: release-artifacts
-          path: release-artifacts/polkadot/*.deb
+          path: release-artifacts/pezkuwi/*.deb
 
   publish-deb-package:
     runs-on: ubuntu-latest
@@ -135,7 +135,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           # Add the new deb to the repo
-          reprepro -b "$LOCAL_DEB_REPO_PATH" includedeb "${{ inputs.distribution }}" "release-artifacts/polkadot_${NODE_VERSION}_amd64.deb"
+          reprepro -b "$LOCAL_DEB_REPO_PATH" includedeb "${{ inputs.distribution }}" "release-artifacts/pezkuwi_${NODE_VERSION}_amd64.deb"
 
       - name: Upload updated deb repo
         env:

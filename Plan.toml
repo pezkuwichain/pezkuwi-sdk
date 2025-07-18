@@ -200,7 +200,7 @@ from = "21.0.1"
 to = "21.0.1"
 
 [[crate]]
-# polkadot/node/tracking-allocator
+# pezkuwi/node/tracking-allocator
 name = "staging-tracking-allocator"
 from = "2.0.0"
 to = "2.0.0"
@@ -238,13 +238,13 @@ from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/node/gum/proc-macro
+# pezkuwi/node/gum/proc-macro
 name = "tracing-gum-proc-macro"
 from = "5.0.0"
 to = "5.0.0"
 
 [[crate]]
-# polkadot/xcm/procedural
+# pezkuwi/xcm/procedural
 name = "xcm-procedural"
 from = "11.0.1"
 to = "11.0.2"
@@ -520,8 +520,8 @@ from = "2.0.0"
 to = "2.0.0"
 
 [[crate]]
-# polkadot/core-primitives
-name = "polkadot-core-primitives"
+# pezkuwi/core-primitives
+name = "pezkuwi-core-primitives"
 from = "17.0.0"
 to = "17.1.0"
 bump = "minor"
@@ -536,7 +536,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/common/slot_range_helper
+# pezkuwi/runtime/common/slot_range_helper
 name = "slot-range-helper"
 from = "16.0.0"
 to = "17.0.0"
@@ -606,8 +606,8 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/parachain
-name = "polkadot-parachain-primitives"
+# pezkuwi/parachain
+name = "pezkuwi-parachain-primitives"
 from = "16.0.0"
 to = "16.1.0"
 bump = "minor"
@@ -804,8 +804,8 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/primitives
-name = "polkadot-primitives"
+# pezkuwi/primitives
+name = "pezkuwi-primitives"
 from = "18.0.0"
 to = "18.1.0"
 bump = "minor"
@@ -904,16 +904,16 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/primitives
-name = "polkadot-node-primitives"
+# pezkuwi/node/primitives
+name = "pezkuwi-node-primitives"
 from = "17.0.1"
 to = "19.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/primitives/test-helpers
-name = "polkadot-primitives-test-helpers"
+# pezkuwi/primitives/test-helpers
+name = "pezkuwi-primitives-test-helpers"
 from = "0.1.0"
 to = "0.1.0"
 
@@ -960,7 +960,7 @@ from = "2.0.0"
 to = "2.0.0"
 
 [[crate]]
-# polkadot/xcm
+# pezkuwi/xcm
 name = "staging-xcm"
 from = "16.1.0"
 to = "16.2.0"
@@ -968,31 +968,31 @@ bump = "minor"
 reason = "changed"
 
 [[crate]]
-# polkadot/parachain/test-parachains/adder
+# pezkuwi/parachain/test-parachains/adder
 name = "test-parachain-adder"
 from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/parachain/test-parachains/halt
+# pezkuwi/parachain/test-parachains/halt
 name = "test-parachain-halt"
 from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/parachain/test-parachains/undying
+# pezkuwi/parachain/test-parachains/undying
 name = "test-parachain-undying"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/runtime/test-runtime/constants
+# pezkuwi/runtime/test-runtime/constants
 name = "test-runtime-constants"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/node/gum
+# pezkuwi/node/gum
 name = "tracing-gum"
 from = "17.0.0"
 to = "19.0.0"
@@ -1164,32 +1164,32 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/erasure-coding
-name = "polkadot-erasure-coding"
+# pezkuwi/erasure-coding
+name = "pezkuwi-erasure-coding"
 from = "17.0.0"
 to = "19.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/pvf/common
-name = "polkadot-node-core-pvf-common"
+# pezkuwi/node/core/pvf/common
+name = "pezkuwi-node-core-pvf-common"
 from = "17.0.1"
 to = "19.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/statement-table
-name = "polkadot-statement-table"
+# pezkuwi/statement-table
+name = "pezkuwi-statement-table"
 from = "17.0.0"
 to = "19.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/zombienet-sdk-tests
-name = "polkadot-zombienet-sdk-tests"
+# pezkuwi/zombienet-sdk-tests
+name = "pezkuwi-zombienet-sdk-tests"
 from = "0.1.0"
 to = "0.1.0"
 
@@ -1256,13 +1256,13 @@ from = "2.0.0"
 to = "2.0.0"
 
 [[crate]]
-# polkadot/parachain/test-parachains
+# pezkuwi/parachain/test-parachains
 name = "test-parachains"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/node/zombienet-backchannel
+# pezkuwi/node/zombienet-backchannel
 name = "zombienet-backchannel"
 from = "1.0.0"
 to = "1.0.0"
@@ -1324,7 +1324,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/erasure-coding/fuzzer
+# pezkuwi/erasure-coding/fuzzer
 name = "erasure_coding_fuzzer"
 from = "1.0.0"
 to = "1.0.0"
@@ -1692,24 +1692,24 @@ bump = "minor"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/pvf/execute-worker
-name = "polkadot-node-core-pvf-execute-worker"
+# pezkuwi/node/core/pvf/execute-worker
+name = "pezkuwi-node-core-pvf-execute-worker"
 from = "17.0.0"
 to = "19.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/pvf/prepare-worker
-name = "polkadot-node-core-pvf-prepare-worker"
+# pezkuwi/node/core/pvf/prepare-worker
+name = "pezkuwi-node-core-pvf-prepare-worker"
 from = "17.0.1"
 to = "19.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/metrics
-name = "polkadot-runtime-metrics"
+# pezkuwi/runtime/metrics
+name = "pezkuwi-runtime-metrics"
 from = "18.0.0"
 to = "20.0.0"
 bump = "major"
@@ -1802,7 +1802,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/xcm-executor
+# pezkuwi/xcm/xcm-executor
 name = "staging-xcm-executor"
 from = "19.1.1"
 to = "19.1.2"
@@ -2002,8 +2002,8 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/protocol
-name = "polkadot-node-network-protocol"
+# pezkuwi/node/network/protocol
+name = "pezkuwi-node-network-protocol"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
@@ -2011,7 +2011,7 @@ reason = "changed"
 
 [[crate]]
 # substrate/frame
-name = "polkadot-sdk-frame"
+name = "pezkuwi-sdk-frame"
 from = "0.9.0"
 to = "0.9.1"
 bump = "minor"
@@ -2082,7 +2082,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/xcm-builder
+# pezkuwi/xcm/xcm-builder
 name = "staging-xcm-builder"
 from = "20.1.0"
 to = "20.1.1"
@@ -2090,7 +2090,7 @@ bump = "patch"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/xcm-runtime-apis
+# pezkuwi/xcm/xcm-runtime-apis
 name = "xcm-runtime-apis"
 from = "0.7.0"
 to = "0.7.1"
@@ -2098,8 +2098,8 @@ bump = "patch"
 reason = "changed"
 
 [[crate]]
-# bridges/primitives/polkadot-core
-name = "bp-polkadot-core"
+# bridges/primitives/pezkuwi-core
+name = "bp-pezkuwi-core"
 from = "0.20.0"
 to = "0.20.1"
 bump = "minor"
@@ -2376,7 +2376,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/pallet-xcm
+# pezkuwi/xcm/pallet-xcm
 name = "pallet-xcm"
 from = "19.1.1"
 to = "19.1.2"
@@ -2384,7 +2384,7 @@ bump = "patch"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/pallet-xcm-benchmarks
+# pezkuwi/xcm/pallet-xcm-benchmarks
 name = "pallet-xcm-benchmarks"
 from = "18.1.0"
 to = "20.0.0"
@@ -2400,8 +2400,8 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/subsystem-types
-name = "polkadot-node-subsystem-types"
+# pezkuwi/node/subsystem-types
+name = "pezkuwi-node-subsystem-types"
 from = "21.0.1"
 to = "22.0.0"
 bump = "major"
@@ -2409,7 +2409,7 @@ reason = "changed"
 
 [[crate]]
 # docs/sdk/packages/guides/first-pallet
-name = "polkadot-sdk-docs-first-pallet"
+name = "pezkuwi-sdk-docs-first-pallet"
 from = "0.1.0"
 to = "0.1.0"
 
@@ -2510,8 +2510,8 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# bridges/chains/chain-polkadot-bulletin
-name = "bp-polkadot-bulletin"
+# bridges/chains/chain-pezkuwi-bulletin
+name = "bp-pezkuwi-bulletin"
 from = "0.16.0"
 to = "0.17.0"
 bump = "major"
@@ -2634,8 +2634,8 @@ bump = "patch"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/parachains
-name = "polkadot-runtime-parachains"
+# pezkuwi/runtime/parachains
+name = "pezkuwi-runtime-parachains"
 from = "19.0.0"
 to = "19.1.0"
 bump = "minor"
@@ -2643,7 +2643,7 @@ reason = "changed"
 
 [[crate]]
 # docs/sdk/packages/guides/first-runtime
-name = "polkadot-sdk-docs-first-runtime"
+name = "pezkuwi-sdk-docs-first-runtime"
 from = "0.1.0"
 to = "0.1.0"
 
@@ -2764,16 +2764,16 @@ from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/rpc
-name = "polkadot-rpc"
+# pezkuwi/rpc
+name = "pezkuwi-rpc"
 from = "22.0.0"
 to = "23.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/common
-name = "polkadot-runtime-common"
+# pezkuwi/runtime/common
+name = "pezkuwi-runtime-common"
 from = "19.0.0"
 to = "19.1.0"
 bump = "minor"
@@ -2788,7 +2788,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/xcm-simulator
+# pezkuwi/xcm/xcm-simulator
 name = "xcm-simulator"
 from = "20.0.0"
 to = "20.1.0"
@@ -2858,13 +2858,13 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/test-runtime
-name = "polkadot-test-runtime"
+# pezkuwi/runtime/test-runtime
+name = "pezkuwi-test-runtime"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/runtime/rococo/constants
+# pezkuwi/runtime/rococo/constants
 name = "rococo-runtime-constants"
 from = "18.0.0"
 to = "20.0.0"
@@ -2900,7 +2900,7 @@ from = "2.0.0"
 to = "2.0.0"
 
 [[crate]]
-# polkadot/runtime/westend/constants
+# pezkuwi/runtime/westend/constants
 name = "westend-runtime-constants"
 from = "18.0.0"
 to = "20.0.0"
@@ -2908,13 +2908,13 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/docs
+# pezkuwi/xcm/docs
 name = "xcm-docs"
 from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/xcm/xcm-simulator/example
+# pezkuwi/xcm/xcm-simulator/example
 name = "xcm-simulator-example"
 from = "20.0.0"
 to = "20.0.1"
@@ -2922,7 +2922,7 @@ bump = "patch"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/xcm-simulator/fuzzer
+# pezkuwi/xcm/xcm-simulator/fuzzer
 name = "xcm-simulator-fuzzer"
 from = "1.0.0"
 to = "1.0.0"
@@ -2974,15 +2974,15 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/metrics
-name = "polkadot-node-metrics"
+# pezkuwi/node/metrics
+name = "pezkuwi-node-metrics"
 from = "21.1.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/rococo
+# pezkuwi/runtime/rococo
 name = "rococo-runtime"
 from = "22.0.0"
 to = "22.1.0"
@@ -3068,7 +3068,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/runtime/westend
+# pezkuwi/runtime/westend
 name = "westend-runtime"
 from = "22.2.0"
 to = "22.3.0"
@@ -3164,23 +3164,23 @@ bump = "minor"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/overseer
-name = "polkadot-overseer"
+# pezkuwi/node/overseer
+name = "pezkuwi-overseer"
 from = "21.1.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/utils/generate-bags
-name = "polkadot-voter-bags"
+# pezkuwi/utils/generate-bags
+name = "pezkuwi-voter-bags"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/utils/remote-ext-tests/bags-list
+# pezkuwi/utils/remote-ext-tests/bags-list
 name = "remote-ext-tests-bags-list"
 from = "1.0.0"
 to = "1.0.0"
@@ -3366,8 +3366,8 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/subsystem
-name = "polkadot-node-subsystem"
+# pezkuwi/node/subsystem
+name = "pezkuwi-node-subsystem"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
@@ -3470,48 +3470,48 @@ bump = "minor"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/bridge
-name = "polkadot-network-bridge"
+# pezkuwi/node/network/bridge
+name = "pezkuwi-network-bridge"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/chain-api
-name = "polkadot-node-core-chain-api"
+# pezkuwi/node/core/chain-api
+name = "pezkuwi-node-core-chain-api"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/parachains-inherent
-name = "polkadot-node-core-parachains-inherent"
+# pezkuwi/node/core/parachains-inherent
+name = "pezkuwi-node-core-parachains-inherent"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/pvf
-name = "polkadot-node-core-pvf"
+# pezkuwi/node/core/pvf
+name = "pezkuwi-node-core-pvf"
 from = "21.0.1"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/runtime-api
-name = "polkadot-node-core-runtime-api"
+# pezkuwi/node/core/runtime-api
+name = "pezkuwi-node-core-runtime-api"
 from = "21.0.1"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/subsystem-util
-name = "polkadot-node-subsystem-util"
+# pezkuwi/node/subsystem-util
+name = "pezkuwi-node-subsystem-util"
 from = "21.1.0"
 to = "22.0.0"
 bump = "major"
@@ -3582,158 +3582,158 @@ from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/node/network/approval-distribution
-name = "polkadot-approval-distribution"
+# pezkuwi/node/network/approval-distribution
+name = "pezkuwi-approval-distribution"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/bitfield-distribution
-name = "polkadot-availability-bitfield-distribution"
+# pezkuwi/node/network/bitfield-distribution
+name = "pezkuwi-availability-bitfield-distribution"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/availability-distribution
-name = "polkadot-availability-distribution"
+# pezkuwi/node/network/availability-distribution
+name = "pezkuwi-availability-distribution"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/availability-recovery
-name = "polkadot-availability-recovery"
+# pezkuwi/node/network/availability-recovery
+name = "pezkuwi-availability-recovery"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/collator-protocol
-name = "polkadot-collator-protocol"
+# pezkuwi/node/network/collator-protocol
+name = "pezkuwi-collator-protocol"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/dispute-distribution
-name = "polkadot-dispute-distribution"
+# pezkuwi/node/network/dispute-distribution
+name = "pezkuwi-dispute-distribution"
 from = "22.0.0"
 to = "22.1.0"
 bump = "minor"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/network/gossip-support
-name = "polkadot-gossip-support"
+# pezkuwi/node/network/gossip-support
+name = "pezkuwi-gossip-support"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/collation-generation
-name = "polkadot-node-collation-generation"
+# pezkuwi/node/collation-generation
+name = "pezkuwi-node-collation-generation"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/approval-voting
-name = "polkadot-node-core-approval-voting"
+# pezkuwi/node/core/approval-voting
+name = "pezkuwi-node-core-approval-voting"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/av-store
-name = "polkadot-node-core-av-store"
+# pezkuwi/node/core/av-store
+name = "pezkuwi-node-core-av-store"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/backing
-name = "polkadot-node-core-backing"
+# pezkuwi/node/core/backing
+name = "pezkuwi-node-core-backing"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/bitfield-signing
-name = "polkadot-node-core-bitfield-signing"
+# pezkuwi/node/core/bitfield-signing
+name = "pezkuwi-node-core-bitfield-signing"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/candidate-validation
-name = "polkadot-node-core-candidate-validation"
+# pezkuwi/node/core/candidate-validation
+name = "pezkuwi-node-core-candidate-validation"
 from = "21.0.1"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/chain-selection
-name = "polkadot-node-core-chain-selection"
+# pezkuwi/node/core/chain-selection
+name = "pezkuwi-node-core-chain-selection"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/dispute-coordinator
-name = "polkadot-node-core-dispute-coordinator"
+# pezkuwi/node/core/dispute-coordinator
+name = "pezkuwi-node-core-dispute-coordinator"
 from = "22.0.0"
 to = "22.0.1"
 bump = "patch"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/prospective-parachains
-name = "polkadot-node-core-prospective-parachains"
+# pezkuwi/node/core/prospective-parachains
+name = "pezkuwi-node-core-prospective-parachains"
 from = "20.0.0"
 to = "21.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/provisioner
-name = "polkadot-node-core-provisioner"
+# pezkuwi/node/core/provisioner
+name = "pezkuwi-node-core-provisioner"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/pvf-checker
-name = "polkadot-node-core-pvf-checker"
+# pezkuwi/node/core/pvf-checker
+name = "pezkuwi-node-core-pvf-checker"
 from = "21.0.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/subsystem-test-helpers
-name = "polkadot-node-subsystem-test-helpers"
+# pezkuwi/node/subsystem-test-helpers
+name = "pezkuwi-node-subsystem-test-helpers"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/node/network/statement-distribution
-name = "polkadot-statement-distribution"
+# pezkuwi/node/network/statement-distribution
+name = "pezkuwi-statement-distribution"
 from = "22.0.0"
 to = "22.0.1"
 bump = "patch"
@@ -3788,8 +3788,8 @@ bump = "minor"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/core/approval-voting-parallel
-name = "polkadot-node-core-approval-voting-parallel"
+# pezkuwi/node/core/approval-voting-parallel
+name = "pezkuwi-node-core-approval-voting-parallel"
 from = "0.4.0"
 to = "0.5.0"
 bump = "major"
@@ -3810,16 +3810,16 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/service
-name = "polkadot-service"
+# pezkuwi/node/service
+name = "pezkuwi-service"
 from = "22.1.0"
 to = "23.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/subsystem-bench
-name = "polkadot-subsystem-bench"
+# pezkuwi/node/subsystem-bench
+name = "pezkuwi-subsystem-bench"
 from = "1.0.0"
 to = "1.0.0"
 
@@ -3904,16 +3904,16 @@ from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# polkadot/cli
-name = "polkadot-cli"
+# pezkuwi/cli
+name = "pezkuwi-cli"
 from = "22.0.1"
 to = "23.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/test/service
-name = "polkadot-test-service"
+# pezkuwi/node/test/service
+name = "pezkuwi-test-service"
 from = "1.0.0"
 to = "1.0.0"
 
@@ -3926,33 +3926,33 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot
-name = "polkadot"
+# pezkuwi
+name = "pezkuwi"
 from = "21.1.0"
 to = "22.0.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/node/test/client
-name = "polkadot-test-client"
+# pezkuwi/node/test/client
+name = "pezkuwi-test-client"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/node/malus
-name = "polkadot-test-malus"
+# pezkuwi/node/malus
+name = "pezkuwi-test-malus"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/parachain/test-parachains/adder/collator
+# pezkuwi/parachain/test-parachains/adder/collator
 name = "test-parachain-adder-collator"
 from = "1.0.0"
 to = "1.0.0"
 
 [[crate]]
-# polkadot/parachain/test-parachains/undying/collator
+# pezkuwi/parachain/test-parachains/undying/collator
 name = "test-parachain-undying-collator"
 from = "1.0.0"
 to = "1.0.0"
@@ -3966,7 +3966,7 @@ bump = "major"
 reason = "changed"
 
 [[crate]]
-# polkadot/xcm/xcm-executor/integration-tests
+# pezkuwi/xcm/xcm-executor/integration-tests
 name = "xcm-executor-integration-tests"
 from = "1.0.0"
 to = "1.0.0"
@@ -3978,8 +3978,8 @@ from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# cumulus/polkadot-omni-node/lib
-name = "polkadot-omni-node-lib"
+# cumulus/pezkuwi-omni-node/lib
+name = "pezkuwi-omni-node-lib"
 from = "0.4.2"
 to = "0.5.0"
 bump = "major"
@@ -3992,16 +3992,16 @@ from = "0.1.0"
 to = "0.1.0"
 
 [[crate]]
-# cumulus/polkadot-omni-node
-name = "polkadot-omni-node"
+# cumulus/pezkuwi-omni-node
+name = "pezkuwi-omni-node"
 from = "0.4.0"
 to = "0.5.0"
 bump = "major"
 reason = "changed"
 
 [[crate]]
-# cumulus/polkadot-parachain
-name = "polkadot-parachain-bin"
+# cumulus/pezkuwi-parachain
+name = "pezkuwi-parachain-bin"
 from = "5.0.0"
 to = "6.0.0"
 bump = "major"
@@ -4009,7 +4009,7 @@ reason = "changed"
 
 [[crate]]
 # umbrella
-name = "polkadot-sdk"
+name = "pezkuwi-sdk"
 from = "0.12.2"
 to = "2503.0.1"
 bump = "patch"
@@ -4071,7 +4071,7 @@ to = "3.0.0"
 
 [[crate]]
 # docs/sdk
-name = "polkadot-sdk-docs"
+name = "pezkuwi-sdk-docs"
 from = "0.1.0"
 to = "0.1.0"
 

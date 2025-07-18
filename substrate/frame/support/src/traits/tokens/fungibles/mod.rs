@@ -24,7 +24,7 @@
 //! Also see the [`frame_tokens`] reference docs for more information about the place of
 //! `fungible` traits in Substrate.
 //!
-//! [`frame_tokens`]: ../../../../polkadot_sdk_docs/reference_docs/frame_tokens/index.html
+//! [`frame_tokens`]: ../../../../pezkuwi_sdk_docs/reference_docs/frame_tokens/index.html
 
 pub mod approvals;
 mod enumerable;

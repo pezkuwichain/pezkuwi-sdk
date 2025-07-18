@@ -76,7 +76,7 @@ impl MessagesWeightInfoExt
 	for pallet_bridge_messages_rococo_to_rococo_bulletin::WeightInfo<crate::Runtime>
 {
 	fn expected_extra_storage_proof_size() -> u32 {
-		bp_polkadot_bulletin::EXTRA_STORAGE_PROOF_SIZE
+		bp_pezkuwi_bulletin::EXTRA_STORAGE_PROOF_SIZE
 	}
 
 	fn receive_messages_proof_overhead_from_runtime() -> Weight {

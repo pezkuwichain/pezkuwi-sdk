@@ -23,7 +23,7 @@ para_id=$2
 
 echo "Generating chain spec for runtime: $rt_path and para_id: $para_id"
 
-binary="./target/release/polkadot-parachain"
+binary="./target/release/pezkuwi-parachain"
 
 # build the chain spec we'll manipulate
 $binary build-spec --chain coretime-rococo-dev > chain-spec-plain.json
@@ -38,8 +38,8 @@ cat chain-spec-plain.json | jq --rawfile code rt-hex.txt '.genesis.runtimeGenesi
     | jq '.id = "coretime-rococo"' \
     | jq '.chainType = "Live"' \
     | jq '.bootNodes = [
-          "/dns/rococo-coretime-collator-node-0.polkadot.io/tcp/30333/p2p/12D3KooWHBUH9wGBx1Yq1ZePov9VL3AzxRPv5DTR4KadiCU6VKxy",
-          "/dns/rococo-coretime-collator-node-1.polkadot.io/tcp/30333/p2p/12D3KooWB3SKxdj6kpwTkdMnHJi6YmadojCzmEqFkeFJjxN812XX"
+          "/dns/rococo-coretime-collator-node-0.pezkuwi.io/tcp/30333/p2p/12D3KooWHBUH9wGBx1Yq1ZePov9VL3AzxRPv5DTR4KadiCU6VKxy",
+          "/dns/rococo-coretime-collator-node-1.pezkuwi.io/tcp/30333/p2p/12D3KooWB3SKxdj6kpwTkdMnHJi6YmadojCzmEqFkeFJjxN812XX"
         ]' \
     | jq '.relay_chain = "rococo"' \
     | jq --argjson para_id $para_id '.para_id = $para_id' \

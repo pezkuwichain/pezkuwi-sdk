@@ -4,7 +4,7 @@ doc:
   description: This PR includes backport of the regular version bumps and `prdocs`
     reordering from the `stable2412` branch back ro master
 crates:
-- name: polkadot-node-primitives
+- name: pezkuwi-node-primitives
   bump: none
 - name: asset-hub-rococo-runtime
   bump: none

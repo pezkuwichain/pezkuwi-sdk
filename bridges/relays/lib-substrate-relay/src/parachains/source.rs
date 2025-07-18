@@ -23,7 +23,7 @@ use crate::{
 use async_std::sync::{Arc, Mutex};
 use async_trait::async_trait;
 use bp_parachains::parachain_head_storage_key_at_source;
-use bp_polkadot_core::parachains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
 use bp_runtime::HeaderIdProvider;
 use codec::Decode;
 use parachains_relay::parachains_loop::{AvailableHeader, SourceClient};

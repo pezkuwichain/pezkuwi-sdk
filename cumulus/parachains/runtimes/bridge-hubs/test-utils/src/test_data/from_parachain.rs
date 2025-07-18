@@ -39,7 +39,7 @@ use xcm::latest::prelude::*;
 use crate::test_cases::helpers::InboundRelayerId;
 use bp_header_chain::{justification::GrandpaJustification, ChainWithGrandpa};
 use bp_messages::{DeliveredMessages, InboundLaneData, MessageNonce, UnrewardedRelayer};
-use bp_polkadot_core::parachains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
 use pallet_bridge_messages::{
 	messages_generation::{
 		encode_all_messages, encode_lane_data, prepare_message_delivery_storage_proof,

@@ -9,5 +9,5 @@ doc:
 
 
 crates:
-- name: polkadot-approval-distribution
+- name: pezkuwi-approval-distribution
   bump: minor

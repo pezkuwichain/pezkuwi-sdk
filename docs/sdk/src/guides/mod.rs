@@ -1,7 +1,7 @@
-//! # Polkadot SDK Docs Guides
+//! # Pezkuwi SDK Docs Guides
 //!
 //! This crate contains a collection of guides that are foundational to the developers of
-//! Polkadot SDK. They are common user-journeys that are traversed in the Polkadot ecosystem.
+//! Pezkuwi SDK. They are common user-journeys that are traversed in the Pezkuwi ecosystem.
 //!
 //! The main user-journey covered by these guides is:
 //!
@@ -10,9 +10,9 @@
 //! * [`your_first_runtime`], where you learn how to compile your pallets into a WASM runtime.
 //! * [`your_first_node`], where you learn how to run the said runtime in a node.
 //!
-//! > By this step, you have already launched a full Polkadot-SDK-based blockchain!
+//! > By this step, you have already launched a full Pezkuwi-SDK-based blockchain!
 //!
-//! Once done, feel free to step up into one of our templates: [`crate::polkadot_sdk::templates`].
+//! Once done, feel free to step up into one of our templates: [`crate::pezkuwi_sdk::templates`].
 //!
 //! [`your_first_pallet`]: crate::guides::your_first_pallet
 //! [`your_first_runtime`]: crate::guides::your_first_runtime
@@ -24,7 +24,7 @@
 pub mod your_first_pallet;
 
 /// Write your first real [runtime](`crate::reference_docs::wasm_meta_protocol`),
-/// compiling it to [WASM](crate::polkadot_sdk::substrate#wasm-build).
+/// compiling it to [WASM](crate::pezkuwi_sdk::substrate#wasm-build).
 pub mod your_first_runtime;
 
 /// Running the given runtime with a node. No specific consensus mechanism is used at this stage.

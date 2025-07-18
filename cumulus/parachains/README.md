@@ -14,10 +14,10 @@ The general internal structure is:
 ## System Parachains
 
 The `runtimes` directory includes many, but is not limited to,
-[system parachains](https://wiki.polkadot.network/docs/learn-system-chains). Likewise, not all
+[system parachains](https://wiki.pezkuwi.network/docs/learn-system-chains). Likewise, not all
 system parachains are in this repo.
 
 ## Releases
 
-The project maintainers generally try to release a set of parachain runtimes for each Polkadot
+The project maintainers generally try to release a set of parachain runtimes for each Pezkuwi
 Relay Chain runtime release.

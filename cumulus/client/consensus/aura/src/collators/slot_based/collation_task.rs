@@ -21,10 +21,10 @@ use std::path::PathBuf;
 use cumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
 use cumulus_relay_chain_interface::RelayChainInterface;
 
-use polkadot_node_primitives::{MaybeCompressedPoV, SubmitCollationParams};
-use polkadot_node_subsystem::messages::CollationGenerationMessage;
-use polkadot_overseer::Handle as OverseerHandle;
-use polkadot_primitives::{CollatorPair, Id as ParaId};
+use pezkuwi_node_primitives::{MaybeCompressedPoV, SubmitCollationParams};
+use pezkuwi_node_subsystem::messages::CollationGenerationMessage;
+use pezkuwi_overseer::Handle as OverseerHandle;
+use pezkuwi_primitives::{CollatorPair, Id as ParaId};
 
 use cumulus_primitives_core::relay_chain::BlockId;
 use futures::prelude::*;

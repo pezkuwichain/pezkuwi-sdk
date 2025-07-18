@@ -152,7 +152,7 @@ fn asset_hub_root_aliases_anything() {
 		assert!(<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
 		let target = Location::new(2, X1([GlobalConsensus(Ethereum { chain_id: 1 })].into()));
 		assert!(<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
-		let target = Location::new(2, X2([GlobalConsensus(Polkadot), Parachain(1000)].into()));
+		let target = Location::new(2, X2([GlobalConsensus(Pezkuwi), Parachain(1000)].into()));
 		assert!(<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
 		let target = Location::new(0, X2([PalletInstance(8), GeneralIndex(9)].into()));
 		assert!(<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
@@ -172,7 +172,7 @@ fn asset_hub_root_aliases_anything() {
 		let origin = Location::new(1, Here);
 		let target = Location::new(2, X1([GlobalConsensus(Ethereum { chain_id: 1 })].into()));
 		assert!(!<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
-		let target = Location::new(2, X2([GlobalConsensus(Polkadot), Parachain(1000)].into()));
+		let target = Location::new(2, X2([GlobalConsensus(Pezkuwi), Parachain(1000)].into()));
 		assert!(!<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
 		let target = Location::new(0, X2([PalletInstance(8), GeneralIndex(9)].into()));
 		assert!(!<XcmConfig as xcm_executor::Config>::Aliasers::contains(&origin, &target));
@@ -214,7 +214,7 @@ fn authorized_cross_chain_aliases() {
 			.into()),
 		);
 		// `target` adds `penpal_origin` as authorized alias
-		assert_ok!(<CoretimeWestend as CoretimeWestendPallet>::PolkadotXcm::add_authorized_alias(
+		assert_ok!(<CoretimeWestend as CoretimeWestendPallet>::PezkuwiXcm::add_authorized_alias(
 			<CoretimeWestend as Chain>::RuntimeOrigin::signed(target.clone()),
 			Box::new(penpal_origin.into()),
 			None
@@ -257,7 +257,7 @@ fn authorized_cross_chain_aliases() {
 	CoretimeWestend::execute_with(|| {
 		// `target` removes all authorized aliases
 		assert_ok!(
-			<CoretimeWestend as CoretimeWestendPallet>::PolkadotXcm::remove_all_authorized_aliases(
+			<CoretimeWestend as CoretimeWestendPallet>::PezkuwiXcm::remove_all_authorized_aliases(
 				<CoretimeWestend as Chain>::RuntimeOrigin::signed(target.clone())
 			)
 		);

@@ -1,6 +1,6 @@
 # Deprecation Checklist
 
-Polkadot SDK is under constant development and improvement, thus deprecation and removal of existing code happen often.
+Pezkuwi SDK is under constant development and improvement, thus deprecation and removal of existing code happen often.
 When creating a breaking change we need to be mindful that external builders could be impacted by this.
 The deprecation checklist tries to mitigate this impact, while still keeping the developer experience, the DevEx, as
 smooth as possible.
@@ -38,8 +38,8 @@ when building the code.
 ## Update examples and tutorials
 
 Make sure that the rust docs are updated.
-We also need [https://docs.polkadot.com/](https://docs.polkadot.com/) to be updated accordingly. The repo behind it is
-[https://github.com/polkadot-developers/polkadot-docs](https://github.com/polkadot-developers/polkadot-docs).
+We also need [https://docs.pezkuwi.com/](https://docs.pezkuwi.com/) to be updated accordingly. The repo behind it is
+[https://github.com/pezkuwi-developers/pezkuwi-docs](https://github.com/pezkuwi-developers/pezkuwi-docs).
 
 ## Announce the deprecation and removal
 

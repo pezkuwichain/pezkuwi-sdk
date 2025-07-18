@@ -11,7 +11,7 @@ There are a few options to build a node within a container and inject a binary i
 
 ## Parity built container image
 
-Parity builds and publishes a container image that can be found as `docker.io/parity/polkadot-parachain`.
+Parity builds and publishes a container image that can be found as `docker.io/parity/pezkuwi-parachain`.
 
 ## Parity CI image
 
@@ -21,21 +21,21 @@ container image](https://github.com/paritytech/dockerfiles/tree/main/ci-unified)
 The command below allows building a Linux binary without having to even install Rust or any dependency locally:
 
 ```bash
-export $(curl https://raw.githubusercontent.com/paritytech/polkadot-sdk/refs/heads/master/.github/env | tr -d '"')
+export $(curl https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/refs/heads/master/.github/env | tr -d '"')
 docker run --rm -it \
-    -w /polkadot-sdk \
-    -v $(pwd):/polkadot-sdk \
+    -w /pezkuwi-sdk \
+    -v $(pwd):/pezkuwi-sdk \
     $IMAGE \
-    cargo build --release --locked -p polkadot-parachain-bin --bin polkadot-parachain
+    cargo build --release --locked -p pezkuwi-parachain-bin --bin pezkuwi-parachain
 sudo chown -R $(id -u):$(id -g) target/
 ```
 
 To reproduce the clean CI environment locally you can use the following commands:
 
 ```bash
-export $(curl https://raw.githubusercontent.com/paritytech/polkadot-sdk/refs/heads/master/.github/env | tr -d '"')
+export $(curl https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/refs/heads/master/.github/env | tr -d '"')
 docker run -it --rm $IMAGE bash
-root@e2ff8a3f347b:/builds# git clone https://github.com/paritytech/polkadot-sdk.git && cd polkadot-sdk
+root@e2ff8a3f347b:/builds# git clone https://github.com/paritytech/polkadot-sdk.git && cd pezkuwi-sdk
 root@e2ff8a3f347b:/builds# <your cargo command goes here>
 ```
 
@@ -44,7 +44,7 @@ root@e2ff8a3f347b:/builds# <your cargo command goes here>
 Injecting a binary inside a base image is the quickest option to get a working container image. This only works if you
 were able to build a Linux binary, either locally, or using a container as described above.
 
-After building a Linux binary (`polkadot-parachain`) with cargo or with Parity CI image as documented above, the
+After building a Linux binary (`pezkuwi-parachain`) with cargo or with Parity CI image as documented above, the
 following command allows producing a new container image where the compiled binary is injected:
 
 ```bash
@@ -59,7 +59,7 @@ anyone to get a working container image without requiring any of the Rust toolch
 ```bash
 docker build \
 	--tag $OWNER/$IMAGE_NAME \
- --file ./docker/dockerfiles/polkadot-parachain/polkadot-parachain_builder.Dockerfile .
+ --file ./docker/dockerfiles/pezkuwi-parachain/pezkuwi-parachain_builder.Dockerfile .
 ```
 
 You may then run your new container:

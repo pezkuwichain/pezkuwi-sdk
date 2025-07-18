@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/collectives-westend-runtime/collectives_westend_runtime.wasm
 // --pallet=pallet_salary
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/collectives/collectives-westend/src/weights
 // --wasm-execution=compiled
 // --steps=50
@@ -114,20 +114,20 @@ impl<T: frame_system::Config> pallet_salary::WeightInfo for WeightInfo<T> {
 	/// Proof: `AmbassadorCollective::Members` (`max_values`: None, `max_size`: Some(42), added: 2517, mode: `MaxEncodedLen`)
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::QueryCounter` (r:1 w:1)
-	/// Proof: `PolkadotXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::QueryCounter` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `XcmpQueue::DeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `XcmpQueue::DeliveryFeeFactor` (`max_values`: None, `max_size`: Some(28), added: 2503, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::RelevantMessagingState` (r:1 w:0)
 	/// Proof: `ParachainSystem::RelevantMessagingState` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `XcmpQueue::OutboundXcmpStatus` (r:1 w:1)
 	/// Proof: `XcmpQueue::OutboundXcmpStatus` (`max_values`: Some(1), `max_size`: Some(1282), added: 1777, mode: `MaxEncodedLen`)
 	/// Storage: `XcmpQueue::OutboundXcmpMessages` (r:0 w:1)
 	/// Proof: `XcmpQueue::OutboundXcmpMessages` (`max_values`: None, `max_size`: Some(105506), added: 107981, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::Queries` (r:0 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn payout() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `671`
@@ -146,20 +146,20 @@ impl<T: frame_system::Config> pallet_salary::WeightInfo for WeightInfo<T> {
 	/// Proof: `AmbassadorCollective::Members` (`max_values`: None, `max_size`: Some(42), added: 2517, mode: `MaxEncodedLen`)
 	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
 	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::QueryCounter` (r:1 w:1)
-	/// Proof: `PolkadotXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::QueryCounter` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::QueryCounter` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `XcmpQueue::DeliveryFeeFactor` (r:1 w:0)
 	/// Proof: `XcmpQueue::DeliveryFeeFactor` (`max_values`: None, `max_size`: Some(28), added: 2503, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	/// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	/// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	/// Storage: `ParachainSystem::RelevantMessagingState` (r:1 w:0)
 	/// Proof: `ParachainSystem::RelevantMessagingState` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	/// Storage: `XcmpQueue::OutboundXcmpStatus` (r:1 w:1)
 	/// Proof: `XcmpQueue::OutboundXcmpStatus` (`max_values`: Some(1), `max_size`: Some(1282), added: 1777, mode: `MaxEncodedLen`)
 	/// Storage: `XcmpQueue::OutboundXcmpMessages` (r:0 w:1)
 	/// Proof: `XcmpQueue::OutboundXcmpMessages` (`max_values`: None, `max_size`: Some(105506), added: 107981, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::Queries` (r:0 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:0 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn payout_other() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `671`
@@ -174,8 +174,8 @@ impl<T: frame_system::Config> pallet_salary::WeightInfo for WeightInfo<T> {
 	/// Proof: `AmbassadorSalary::Status` (`max_values`: Some(1), `max_size`: Some(56), added: 551, mode: `MaxEncodedLen`)
 	/// Storage: `AmbassadorSalary::Claimant` (r:1 w:1)
 	/// Proof: `AmbassadorSalary::Claimant` (`max_values`: None, `max_size`: Some(86), added: 2561, mode: `MaxEncodedLen`)
-	/// Storage: `PolkadotXcm::Queries` (r:1 w:1)
-	/// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	/// Storage: `PezkuwiXcm::Queries` (r:1 w:1)
+	/// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	fn check_payment() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `198`

@@ -60,18 +60,18 @@ fn bridge_hub_rococo_genesis(
 				})
 				.collect(),
 		},
-		polkadot_xcm: PolkadotXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
-		bridge_polkadot_bulletin_grandpa: BridgePolkadotBulletinGrandpaConfig {
+		pezkuwi_xcm: PezkuwiXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
+		bridge_pezkuwi_bulletin_grandpa: BridgePezkuwiBulletinGrandpaConfig {
 			owner: bridges_pallet_owner.clone(),
 		},
 		bridge_westend_grandpa: BridgeWestendGrandpaConfig { owner: bridges_pallet_owner.clone() },
 		bridge_westend_messages: BridgeWestendMessagesConfig {
 			owner: bridges_pallet_owner.clone(),
 		},
-		xcm_over_polkadot_bulletin: XcmOverPolkadotBulletinConfig {
+		xcm_over_pezkuwi_bulletin: XcmOverPezkuwiBulletinConfig {
 			opened_bridges: vec![(
 				Location::new(1, [Parachain(1004)]),
-				Junctions::from([GlobalConsensus(NetworkId::PolkadotBulletin).into()]),
+				Junctions::from([GlobalConsensus(NetworkId::PezkuwiBulletin).into()]),
 				Some(bp_messages::LegacyLaneId([0, 0, 0, 0])),
 			)],
 		},

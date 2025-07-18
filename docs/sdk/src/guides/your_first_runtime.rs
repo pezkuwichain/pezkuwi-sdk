@@ -10,7 +10,7 @@
 //! A runtime shares a few similar setup requirements as with a pallet:
 //!
 //! * importing [`frame`], [`codec`], and [`scale_info`] crates.
-//! * following the [`std` feature-gating](crate::polkadot_sdk::substrate#wasm-build) pattern.
+//! * following the [`std` feature-gating](crate::pezkuwi_sdk::substrate#wasm-build) pattern.
 //!
 //! But, more specifically, it also contains:
 //!
@@ -101,7 +101,7 @@
 //!
 //! Once you compile a crate that contains a runtime as above, simply running `cargo build` will
 //! generate the wasm blobs and place them under `./target/release/wbuild`, as explained
-//! [here](crate::polkadot_sdk::substrate#wasm-build).
+//! [here](crate::pezkuwi_sdk::substrate#wasm-build).
 //!
 //! ## Genesis Configuration
 //!
@@ -165,6 +165,6 @@
 //! 4. Learn more about adding and implementing runtime apis in
 //!    [`crate::reference_docs::custom_runtime_api_rpc`].
 //! 5. To see a complete example of a runtime+pallet that is similar to this guide, please see
-//!    [`crate::polkadot_sdk::templates`].
+//!    [`crate::pezkuwi_sdk::templates`].
 //!
 //! [`SolochainDefaultConfig`]: struct@frame_system::pallet::config_preludes::SolochainDefaultConfig

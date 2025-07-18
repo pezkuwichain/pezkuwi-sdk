@@ -69,7 +69,7 @@ pub fn send_inbound_message(fixture: EventFixture) -> DispatchResult {
 	)
 }
 
-/// Create an agent on Ethereum. An agent is a representation of an entity in the Polkadot
+/// Create an agent on Ethereum. An agent is a representation of an entity in the Pezkuwi
 /// ecosystem (like a parachain) on Ethereum.
 #[test]
 #[ignore]
@@ -480,7 +480,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 			AssetHubRococoReceiver::get(),
 		);
 		// Send the Weth back to Ethereum
-		<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+		<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 			RuntimeOrigin::signed(AssetHubRococoReceiver::get()),
 			Box::new(destination),
 			Box::new(beneficiary),
@@ -616,7 +616,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 			AssetHubRococoReceiver::get(),
 		);
 		// Send the Weth back to Ethereum
-		<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+		<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 			RuntimeOrigin::signed(AssetHubRococoReceiver::get()),
 			Box::new(destination),
 			Box::new(beneficiary),
@@ -637,7 +637,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 			AssetHubRococo,
 			vec![
 				_burned_event => {},
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent {
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent {
 					destination: _destination, ..
 				}) => {},
 			]

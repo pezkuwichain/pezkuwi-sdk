@@ -31,7 +31,7 @@ use emulated_integration_tests_common::{
 	xcm_emulator::decl_test_parachains,
 };
 
-// Polkadot
+// Pezkuwi
 use xcm::latest::{ROCOCO_GENESIS_HASH, WESTEND_GENESIS_HASH};
 
 // Penpal Parachain declaration
@@ -53,7 +53,7 @@ decl_test_parachains! {
 			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
 		},
 		pallets = {
-			PolkadotXcm: penpal_runtime::PolkadotXcm,
+			PezkuwiXcm: penpal_runtime::PezkuwiXcm,
 			Assets: penpal_runtime::Assets,
 			ForeignAssets: penpal_runtime::ForeignAssets,
 			AssetConversion: penpal_runtime::AssetConversion,
@@ -77,7 +77,7 @@ decl_test_parachains! {
 			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
 		},
 		pallets = {
-			PolkadotXcm: penpal_runtime::PolkadotXcm,
+			PezkuwiXcm: penpal_runtime::PezkuwiXcm,
 			Assets: penpal_runtime::Assets,
 			ForeignAssets: penpal_runtime::ForeignAssets,
 			AssetConversion: penpal_runtime::AssetConversion,

@@ -179,7 +179,7 @@ fn transact_hardcoded_weights_are_sane() {
 					pallet_message_queue::Event::Processed { success: true, .. }
 				) => {},
 				RelayEvent::Coretime(
-					polkadot_runtime_parachains::coretime::Event::CoreAssigned { .. }
+					pezkuwi_runtime_parachains::coretime::Event::CoreAssigned { .. }
 				) => {},
 			]
 		);

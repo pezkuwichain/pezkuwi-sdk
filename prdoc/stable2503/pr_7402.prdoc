@@ -68,7 +68,7 @@ crates:
   bump: minor
 - name: asset-hub-westend-runtime
   bump: major
-- name: polkadot-sdk
+- name: pezkuwi-sdk
   bump: patch
 - name: bridge-hub-common
   bump: major

@@ -19,7 +19,7 @@ crates:
     bump: patch
   - name: bp-bridge-hub-kusama
     bump: major
-  - name: bp-bridge-hub-polkadot
+  - name: bp-bridge-hub-pezkuwi
     bump: major
   - name: bp-bridge-hub-rococo
     bump: major

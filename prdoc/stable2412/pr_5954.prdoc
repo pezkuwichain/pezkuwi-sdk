@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "templates: make node compilation optional"
 
@@ -11,9 +11,9 @@ doc:
       to run the templates.
 
 crates:
-  - name: polkadot-omni-node
+  - name: pezkuwi-omni-node
     bump: patch
-  - name: polkadot-omni-node-lib
+  - name: pezkuwi-omni-node-lib
     bump: patch
   - name: staging-chain-spec-builder
     bump: patch

@@ -5,7 +5,7 @@
 //!
 //! ## Background
 //!
-//! Polkadot-SDK offers the ability to query and subscribe storages directly. However what it does
+//! Pezkuwi-SDK offers the ability to query and subscribe storages directly. However what it does
 //! not have is [view functions](https://github.com/paritytech/polkadot-sdk/issues/216). This is an
 //! essential feature to avoid duplicated logic between runtime and the client SDK. Custom RPC was
 //! used as a solution. It allow the RPC node to expose new RPCs that clients can be used to query
@@ -45,7 +45,7 @@
 //!
 //! For example, the Acala EVM+ RPC are implemented by
 //! [eth-rpc-adapter](https://github.com/AcalaNetwork/bodhi.js/tree/master/packages/eth-rpc-adapter).
-//! Alternatively, the [Frontier](https://github.com/polkadot-evm/frontier) project  also provided
+//! Alternatively, the [Frontier](https://github.com/pezkuwi-evm/frontier) project  also provided
 //! Ethereum RPC compatibility directly in the node-side software.
 //!
 //! ## Create a new Runtime API
@@ -72,6 +72,6 @@
 //!
 //! ## Future
 //!
-//! - [XCQ](https://forum.polkadot.network/t/cross-consensus-query-language-xcq/7583) will be a good
+//! - [XCQ](https://forum.pezkuwi.network/t/cross-consensus-query-language-xcq/7583) will be a good
 //! solution for most of the query needs.
 //! - [New JSON-RPC Specification](https://github.com/paritytech/json-rpc-interface-spec)

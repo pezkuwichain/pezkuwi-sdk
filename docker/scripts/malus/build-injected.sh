@@ -7,7 +7,7 @@
 
 PROJECT_ROOT=`git rev-parse --show-toplevel`
 
-export BINARY=malus,polkadot-execute-worker,polkadot-prepare-worker
+export BINARY=malus,pezkuwi-execute-worker,pezkuwi-prepare-worker
 export ARTIFACTS_FOLDER=$1
 # export TAGS=...
 

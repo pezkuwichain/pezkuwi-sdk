@@ -42,7 +42,7 @@ type HostFunctions = (
 /// Generate the metadata hash.
 ///
 /// The metadata hash is generated as specced in
-/// [RFC78](https://polkadot-fellows.github.io/RFCs/approved/0078-merkleized-metadata.html).
+/// [RFC78](https://pezkuwi-fellows.github.io/RFCs/approved/0078-merkleized-metadata.html).
 ///
 /// Returns the metadata hash.
 pub fn generate_metadata_hash(wasm: &Path, extra_info: MetadataExtraInfo) -> [u8; 32] {

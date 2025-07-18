@@ -10,7 +10,7 @@ doc:
       and verifies that everything functions correctly.
 
 crates:
-  - name: polkadot
+  - name: pezkuwi
     bump: none
     validate: false
   - name: test-parachain-undying

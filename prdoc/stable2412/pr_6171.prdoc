@@ -3,5 +3,5 @@ doc:
   - audience: Runtime Dev
     description: "Remove the code of the parachains_assigner pallet, since coretime was released on all production networks."
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major

@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Refactor get_account_id_from_seed / get_from_seed to one common place
 
@@ -10,9 +10,9 @@ doc:
       `Keyring::iter()` provides the same functionality and is used instead.
 
 crates: 
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: patch
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
   - name: sp-keyring
     bump: major
@@ -36,7 +36,7 @@ crates:
     bump: patch
   - name: collectives-westend-runtime
     bump: patch
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch
   - name: sp-core
     bump: patch

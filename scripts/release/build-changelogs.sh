@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PRODUCT=polkadot
+export PRODUCT=pezkuwi
 export VERSION=${VERSION:-stable2409}
 export ENGINE=${ENGINE:-podman}
 export REF1=${REF1:-'HEAD'}
@@ -30,7 +30,7 @@ $ENGINE run --rm -v ${PROJECT_ROOT}:/repo paritytech/prdoc load -d "prdoc/$VERSI
 cat $DATA_JSON | jq ' { "prdoc" : .}' > $CONTEXT_JSON
 
 # Fetch the list of valid audiences and their descriptions
-SCHEMA_URL=https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+SCHEMA_URL=https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 SCHEMA=$(curl -s $SCHEMA_URL | sed 's|^//.*||')
 aud_desc_array=()
 while IFS= read -r line; do

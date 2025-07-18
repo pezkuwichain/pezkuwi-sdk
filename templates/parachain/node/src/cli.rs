@@ -1,4 +1,4 @@
-use polkadot_sdk::*;
+use pezkuwi_sdk::*;
 use std::path::PathBuf;
 
 /// Sub-commands supported by the collator.
@@ -85,7 +85,7 @@ pub struct Cli {
 #[derive(Debug)]
 pub struct RelayChainCli {
 	/// The actual relay chain cli object.
-	pub base: polkadot_cli::RunCmd,
+	pub base: pezkuwi_cli::RunCmd,
 
 	/// Optional chain id that should be passed to the relay chain.
 	pub chain_id: Option<String>,
@@ -102,7 +102,7 @@ impl RelayChainCli {
 	) -> Self {
 		let extension = crate::chain_spec::Extensions::try_get(&*para_config.chain_spec);
 		let chain_id = extension.map(|e| e.relay_chain.clone());
-		let base_path = para_config.base_path.path().join("polkadot");
+		let base_path = para_config.base_path.path().join("pezkuwi");
 		Self {
 			base_path: Some(base_path),
 			chain_id,

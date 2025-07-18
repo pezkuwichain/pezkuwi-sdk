@@ -420,7 +420,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 				AssetHubWestendReceiver::get(),
 			);
 		// Send the Weth back to Ethereum
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 			RuntimeOrigin::signed(AssetHubWestendReceiver::get()),
 			Box::new(destination),
 			Box::new(beneficiary),
@@ -441,7 +441,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 			AssetHubWestend,
 			vec![
 				_burned_event => {},
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent {
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent {
 					destination: _destination, ..
 				}) => {},
 			]
@@ -813,7 +813,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 				AssetHubWestendReceiver::get(),
 			);
 		// Send the Weth back to Ethereum
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 			RuntimeOrigin::signed(AssetHubWestendReceiver::get()),
 			Box::new(destination),
 			Box::new(beneficiary),
@@ -1037,7 +1037,7 @@ fn transfer_relay_token() {
 			[AccountKey20 { network: None, key: ETHEREUM_DESTINATION_ADDRESS.into() }],
 		));
 
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			Box::new(destination),
 			Box::new(beneficiary),
@@ -1197,7 +1197,7 @@ fn transfer_ah_token() {
 			[AccountKey20 { network: None, key: ETHEREUM_DESTINATION_ADDRESS.into() }],
 		));
 
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			Box::new(VersionedLocation::from(ethereum_destination)),
 			Box::new(beneficiary),
@@ -1345,7 +1345,7 @@ fn transfer_penpal_native_asset() {
 		type RuntimeOrigin = <PenpalB as Chain>::RuntimeOrigin;
 		type RuntimeEvent = <PenpalB as Chain>::RuntimeEvent;
 
-		// DOT as fee
+		// HEZ as fee
 		let assets = vec![
 			// Should cover the bridge fee
 			Asset { id: AssetId(Location::parent()), fun: Fungible(BRIDGE_FEE) },
@@ -1378,7 +1378,7 @@ fn transfer_penpal_native_asset() {
 			.into(),
 		}]);
 
-		assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			RuntimeOrigin::signed(PenpalBSender::get()),
 			Box::new(VersionedLocation::from(destination)),
 			Box::new(VersionedAssets::from(assets)),
@@ -1459,12 +1459,12 @@ fn transfer_penpal_native_asset() {
 		let beneficiary =
 			Location::new(0, [AccountId32 { network: None, id: PenpalBReceiver::get().into() }]);
 
-		// DOT as fee
+		// HEZ as fee
 		let assets =
 			vec![Asset { id: AssetId(pal_at_asset_hub.clone()), fun: Fungible(TOKEN_AMOUNT) }];
 
 		assert_ok!(
-			<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::limited_teleport_assets(
+			<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::limited_teleport_assets(
 				RuntimeOrigin::signed(AssetHubWestendSender::get()),
 				Box::new(VersionedLocation::from(destination)),
 				Box::new(VersionedLocation::from(beneficiary)),
@@ -1553,7 +1553,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		type RuntimeOrigin = <PenpalB as Chain>::RuntimeOrigin;
 		type RuntimeEvent = <PenpalB as Chain>::RuntimeEvent;
 
-		// DOT as fee
+		// HEZ as fee
 		let assets = vec![
 			// Should cover the bridge fee
 			Asset { id: AssetId(Location::parent()), fun: Fungible(BRIDGE_FEE) },
@@ -1586,7 +1586,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 			.into(),
 		}]);
 
-		assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			RuntimeOrigin::signed(PenpalBSender::get()),
 			Box::new(VersionedLocation::from(destination)),
 			Box::new(VersionedAssets::from(assets)),
@@ -1673,7 +1673,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		let beneficiary =
 			Location::new(0, [AccountId32 { network: None, id: PenpalBReceiver::get().into() }]);
 
-		// DOT as fee
+		// HEZ as fee
 		let assets = vec![
 			Asset { id: AssetId(Location::parent()), fun: Fungible(XCM_FEE) },
 			Asset { id: AssetId(pal_at_asset_hub.clone()), fun: Fungible(TOKEN_AMOUNT) },
@@ -1688,7 +1688,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		]);
 
 		assert_ok!(
-			<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+			<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 				RuntimeOrigin::signed(AssetHubWestendSender::get()),
 				Box::new(VersionedLocation::from(destination)),
 				Box::new(VersionedAssets::from(assets)),
@@ -1867,7 +1867,7 @@ fn transfer_roc_from_ah_with_legacy_api_will_fail() {
 			[AccountKey20 { network: None, key: ETHEREUM_DESTINATION_ADDRESS.into() }],
 		));
 
-		let result = <AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets(
+		let result = <AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			Box::new(VersionedLocation::from(ethereum_destination)),
 			Box::new(beneficiary),
@@ -1937,7 +1937,7 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 			beneficiary,
 		}]);
 
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			Box::new(VersionedLocation::from(ethereum_destination)),
 			Box::new(versioned_assets),

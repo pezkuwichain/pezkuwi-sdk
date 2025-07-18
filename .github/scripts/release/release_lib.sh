@@ -100,11 +100,11 @@ reorder_prdocs() {
     commit_with_message "Reordering prdocs for the release $VERSION"
 }
 
-# Bump the binary version of the polkadot-parachain binary with the
+# Bump the binary version of the pezkuwi-parachain binary with the
 # new bumped version and commit changes.
 #
 # input: version e.g. 1.16.0
-set_polkadot_parachain_binary_version() {
+set_pezkuwi_parachain_binary_version() {
     bumped_version="$1"
     cargo_toml_file="$2"
 
@@ -144,7 +144,7 @@ upload_s3_release() {
 
 # Upload runtimes artifacts to s3 release bucket
 #
-# input: version (stable release tage.g. polkadot-stable2412 or polkadot-stable2412-rc1)
+# input: version (stable release tage.g. pezkuwi-stable2412 or pezkuwi-stable2412-rc1)
 # output: none
 upload_s3_runtimes_release_artifacts() {
   alias aws='podman run --rm -it docker.io/paritytech/awscli -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_BUCKET aws'
@@ -154,14 +154,14 @@ upload_s3_runtimes_release_artifacts() {
   echo "Working on version: $version "
 
   echo "Current content, should be empty on new uploads:"
-  aws s3 ls "s3://releases.parity.io/polkadot/runtimes/${version}/" --recursive --human-readable --summarize || true
+  aws s3 ls "s3://releases.parity.io/pezkuwi/runtimes/${version}/" --recursive --human-readable --summarize || true
   echo "Content to be uploaded:"
   artifacts="artifacts/runtimes/"
   ls "$artifacts"
-  aws s3 sync --acl public-read "$artifacts" "s3://releases.parity.io/polkadot/runtimes/${version}/"
+  aws s3 sync --acl public-read "$artifacts" "s3://releases.parity.io/pezkuwi/runtimes/${version}/"
   echo "Uploaded files:"
-  aws s3 ls "s3://releases.parity.io/polkadot/runtimes/${version}/" --recursive --human-readable --summarize
-  echo "✅ The release should be at https://releases.parity.io/polkadot/runtimes/${version}"
+  aws s3 ls "s3://releases.parity.io/pezkuwi/runtimes/${version}/" --recursive --human-readable --summarize
+  echo "✅ The release should be at https://releases.parity.io/pezkuwi/runtimes/${version}"
 }
 
 
@@ -170,16 +170,16 @@ upload_s3_runtimes_release_artifacts() {
 function get_s3_url_base() {
     name=$1
     case $name in
-      polkadot | polkadot-execute-worker | polkadot-prepare-worker )
-        printf "releases.parity.io/polkadot"
+      pezkuwi | pezkuwi-execute-worker | pezkuwi-prepare-worker )
+        printf "releases.parity.io/pezkuwi"
         ;;
 
-      polkadot-parachain)
-        printf "releases.parity.io/polkadot-parachain"
+      pezkuwi-parachain)
+        printf "releases.parity.io/pezkuwi-parachain"
         ;;
 
-      polkadot-omni-node)
-        printf "releases.parity.io/polkadot-omni-node"
+      pezkuwi-omni-node)
+        printf "releases.parity.io/pezkuwi-omni-node"
         ;;
 
       chain-spec-builder)

@@ -9,9 +9,9 @@ doc:
 crates:
 - name: sp-staking
   bump: major
-- name: polkadot-sdk
+- name: pezkuwi-sdk
   bump: patch
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch
 - name: pallet-babe
   bump: patch

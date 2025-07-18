@@ -52,8 +52,8 @@ use frame_support::{
 	weights::Weight,
 };
 use frame_system::{ensure_none, ensure_root, pallet_prelude::HeaderFor};
-use polkadot_parachain_primitives::primitives::RelayChainBlockNumber;
-use polkadot_runtime_parachains::FeeTracker;
+use pezkuwi_parachain_primitives::primitives::RelayChainBlockNumber;
+use pezkuwi_runtime_parachains::FeeTracker;
 use scale_info::TypeInfo;
 use sp_core::U256;
 use sp_runtime::{
@@ -741,9 +741,9 @@ pub mod pallet {
 	pub enum Error<T> {
 		/// Attempt to upgrade validation function while existing upgrade pending.
 		OverlappingUpgrades,
-		/// Polkadot currently prohibits this parachain from upgrading its validation function.
-		ProhibitedByPolkadot,
-		/// The supplied validation function has compiled into a blob larger than Polkadot is
+		/// Pezkuwi currently prohibits this parachain from upgrading its validation function.
+		ProhibitedByPezkuwi,
+		/// The supplied validation function has compiled into a blob larger than Pezkuwi is
 		/// willing to run.
 		TooBig,
 		/// The inherent which supplies the validation data did not run this block.
@@ -1371,10 +1371,10 @@ impl<T: Config> Pallet<T> {
 		});
 	}
 
-	/// Put a new validation function into a particular location where polkadot
-	/// monitors for updates. Calling this function notifies polkadot that a new
+	/// Put a new validation function into a particular location where pezkuwi
+	/// monitors for updates. Calling this function notifies pezkuwi that a new
 	/// upgrade has been scheduled.
-	fn notify_polkadot_of_pending_upgrade(code: &[u8]) {
+	fn notify_pezkuwi_of_pending_upgrade(code: &[u8]) {
 		NewValidationCode::<T>::put(code);
 		<DidSetValidationCode<T>>::put(true);
 	}
@@ -1392,20 +1392,20 @@ impl<T: Config> Pallet<T> {
 		// but we do care about the [`UpgradeRestrictionSignal`] which arrives with the same
 		// inherent.
 		ensure!(<ValidationData<T>>::exists(), Error::<T>::ValidationDataNotAvailable,);
-		ensure!(<UpgradeRestrictionSignal<T>>::get().is_none(), Error::<T>::ProhibitedByPolkadot);
+		ensure!(<UpgradeRestrictionSignal<T>>::get().is_none(), Error::<T>::ProhibitedByPezkuwi);
 
 		ensure!(!<PendingValidationCode<T>>::exists(), Error::<T>::OverlappingUpgrades);
 		let cfg = HostConfiguration::<T>::get().ok_or(Error::<T>::HostConfigurationNotAvailable)?;
 		ensure!(validation_function.len() <= cfg.max_code_size as usize, Error::<T>::TooBig);
 
 		// When a code upgrade is scheduled, it has to be applied in two
-		// places, synchronized: both polkadot and the individual parachain
+		// places, synchronized: both pezkuwi and the individual parachain
 		// have to upgrade on the same relay chain block.
 		//
-		// `notify_polkadot_of_pending_upgrade` notifies polkadot; the `PendingValidationCode`
+		// `notify_pezkuwi_of_pending_upgrade` notifies pezkuwi; the `PendingValidationCode`
 		// storage keeps track locally for the parachain upgrade, which will
 		// be applied later: when the relay-chain communicates go-ahead signal to us.
-		Self::notify_polkadot_of_pending_upgrade(&validation_function);
+		Self::notify_pezkuwi_of_pending_upgrade(&validation_function);
 		<PendingValidationCode<T>>::put(validation_function);
 		Self::deposit_event(Event::ValidationFunctionStored);
 
@@ -1515,7 +1515,7 @@ impl<T: Config> Pallet<T> {
 	pub fn initialize_for_set_code_benchmark(max_code_size: u32) {
 		// insert dummy ValidationData
 		let vfp = PersistedValidationData {
-			parent_head: polkadot_parachain_primitives::primitives::HeadData(Default::default()),
+			parent_head: pezkuwi_parachain_primitives::primitives::HeadData(Default::default()),
 			relay_parent_number: 1,
 			relay_parent_storage_root: Default::default(),
 			max_pov_size: 1_000,
@@ -1648,7 +1648,7 @@ impl<T: Config> InspectMessageQueues for Pallet<T> {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-impl<T: Config> polkadot_runtime_parachains::EnsureForParachain for Pallet<T> {
+impl<T: Config> pezkuwi_runtime_parachains::EnsureForParachain for Pallet<T> {
 	fn ensure(para_id: ParaId) {
 		if let ChannelStatus::Closed = Self::get_channel_status(para_id) {
 			Self::open_outbound_hrmp_channel_for_benchmarks_or_tests(para_id)

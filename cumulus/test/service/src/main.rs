@@ -21,7 +21,7 @@ use std::sync::Arc;
 use cli::{AuthoringPolicy, RelayChainCli, Subcommand, TestCollatorCli};
 use cumulus_primitives_core::relay_chain::CollatorPair;
 use cumulus_test_service::{chain_spec, new_partial, AnnounceBlockFn};
-use polkadot_service::IdentifyNetworkBackend;
+use pezkuwi_service::IdentifyNetworkBackend;
 use sc_cli::{CliConfiguration, SubstrateCli};
 use sp_core::Pair;
 

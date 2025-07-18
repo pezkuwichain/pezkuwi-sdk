@@ -20,7 +20,7 @@ do
     shift
 done
 
-export POLKADOT_SDK_PATH=`realpath ${BASH_SOURCE%/*}/../..`
+export PEZKUWI_SDK_PATH=`realpath ${BASH_SOURCE%/*}/../..`
 export FRAMEWORK_PATH=`realpath ${BASH_SOURCE%/*}/framework`
 
 # set path to binaries
@@ -29,14 +29,14 @@ if [ "$ZOMBIENET_DOCKER_PATHS" -eq 1 ]; then
     unset RUN_IN_CONTAINER
     unset ZOMBIENET_IMAGE
 
-    export POLKADOT_BINARY=/usr/local/bin/polkadot
-    export POLKADOT_PARACHAIN_BINARY=/usr/local/bin/polkadot-parachain
+    export PEZKUWI_BINARY=/usr/local/bin/pezkuwi
+    export PEZKUWI_PARACHAIN_BINARY=/usr/local/bin/pezkuwi-parachain
 
     export ZOMBIENET_BINARY=/usr/local/bin/zombie
     export SUBSTRATE_RELAY_BINARY=/usr/local/bin/substrate-relay
 else
-    export POLKADOT_BINARY=$POLKADOT_SDK_PATH/target/release/polkadot
-    export POLKADOT_PARACHAIN_BINARY=$POLKADOT_SDK_PATH/target/release/polkadot-parachain
+    export PEZKUWI_BINARY=$PEZKUWI_SDK_PATH/target/release/pezkuwi
+    export PEZKUWI_PARACHAIN_BINARY=$PEZKUWI_SDK_PATH/target/release/pezkuwi-parachain
 
     export ZOMBIENET_BINARY=~/local_bridge_testing/bin/zombienet
     export SUBSTRATE_RELAY_BINARY=~/local_bridge_testing/bin/substrate-relay

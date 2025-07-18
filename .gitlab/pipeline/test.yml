@@ -38,11 +38,11 @@ codecov-start:
     - !reference [.codecov-check, script]
     - >
       if [ "$CI_COMMIT_REF_NAME" != "master" ]; then
-        codecovcli -v create-commit -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --pr ${CI_COMMIT_REF_NAME} --git-service github;
-        codecovcli -v create-report -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --pr ${CI_COMMIT_REF_NAME} --git-service github;
+        codecovcli -v create-commit -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --pr ${CI_COMMIT_REF_NAME} --git-service github;
+        codecovcli -v create-report -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --pr ${CI_COMMIT_REF_NAME} --git-service github;
       else
-        codecovcli -v create-commit -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --git-service github;
-        codecovcli -v create-report -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --git-service github;      
+        codecovcli -v create-commit -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --git-service github;
+        codecovcli -v create-report -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --git-service github;      
       fi
 
 #
@@ -58,9 +58,9 @@ codecov-finish:
     - test-linux-stable-codecov
   script:
     - !reference [.codecov-check, script]
-    - codecovcli -v create-report-results -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --git-service github
-    - codecovcli -v get-report-results -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --git-service github
-    - codecovcli -v send-notifications -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --git-service github
+    - codecovcli -v create-report-results -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --git-service github
+    - codecovcli -v get-report-results -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --git-service github
+    - codecovcli -v send-notifications -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --git-service github
 
 #
 #
@@ -88,7 +88,7 @@ test-linux-stable-codecov:
     - mkdir -p target/coverage/result/
     # Place real test call here
     - >
-      time cargo nextest run -p polkadot \
+      time cargo nextest run -p pezkuwi \
         --locked \
         --release \
         --no-fail-fast \
@@ -105,7 +105,7 @@ test-linux-stable-codecov:
     - ls -l target/coverage/result/
     - >
       if [ "$CI_COMMIT_REF_NAME" != "master" ]; then  
-        codecovcli -v do-upload -f target/coverage/result/report-${CI_NODE_INDEX}.lcov --disable-search -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --pr ${CI_COMMIT_REF_NAME} --git-service github;
+        codecovcli -v do-upload -f target/coverage/result/report-${CI_NODE_INDEX}.lcov --disable-search -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --pr ${CI_COMMIT_REF_NAME} --git-service github;
       else
-        codecovcli -v do-upload -f target/coverage/result/report-${CI_NODE_INDEX}.lcov --disable-search -t ${CODECOV_TOKEN} -r paritytech/polkadot-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --git-service github;
+        codecovcli -v do-upload -f target/coverage/result/report-${CI_NODE_INDEX}.lcov --disable-search -t ${CODECOV_TOKEN} -r paritytech/pezkuwi-sdk --commit-sha ${CI_COMMIT_SHA} --fail-on-error --git-service github;
       fi

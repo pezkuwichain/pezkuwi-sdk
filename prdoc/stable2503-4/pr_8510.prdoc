@@ -5,5 +5,5 @@ doc:
     Fix statement-distribution to not exit early when it cannot process one of the hashes
     in handle_active_leaves.
 crates:
-- name: polkadot-statement-distribution
+- name: pezkuwi-statement-distribution
   bump: patch

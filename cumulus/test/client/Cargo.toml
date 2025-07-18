@@ -28,10 +28,10 @@ pallet-balances.default-features = true
 pallet-balances.workspace = true
 pallet-transaction-payment.default-features = true
 pallet-transaction-payment.workspace = true
-polkadot-parachain-primitives.default-features = true
-polkadot-parachain-primitives.workspace = true
-polkadot-primitives.default-features = true
-polkadot-primitives.workspace = true
+pezkuwi-parachain-primitives.default-features = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
 sc-block-builder.default-features = true
 sc-block-builder.workspace = true
 sc-consensus-aura.default-features = true
@@ -76,8 +76,8 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-transaction-payment/runtime-benchmarks",
-	"polkadot-parachain-primitives/runtime-benchmarks",
-	"polkadot-primitives/runtime-benchmarks",
+	"pezkuwi-parachain-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]

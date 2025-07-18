@@ -1,4 +1,4 @@
-!polkadot.service
+!pezkuwi.service
 .cargo-remote.toml
 .direnv/
 .DS_Store
@@ -29,8 +29,8 @@
 artifacts
 bin/node-template/Cargo.lock
 nohup.out
-polkadot_argument_parsing
-!docs/sdk/src/polkadot_sdk/polkadot.rs
+pezkuwi_argument_parsing
+!docs/sdk/src/pezkuwi_sdk/pezkuwi.rs
 pwasm-alloc/Cargo.lock
 pwasm-libc/Cargo.lock
 release-artifacts

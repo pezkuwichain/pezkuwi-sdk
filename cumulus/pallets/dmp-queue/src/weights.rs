@@ -22,7 +22,7 @@
 //! WASM-EXECUTION: `Compiled`, CHAIN: `Some("asset-hub-kusama-dev")`, DB CACHE: `1024`
 
 // Executed Command:
-// ./target/release/polkadot-parachain
+// ./target/release/pezkuwi-parachain
 // benchmark
 // pallet
 // --pallet

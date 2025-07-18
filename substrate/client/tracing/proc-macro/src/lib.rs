@@ -139,11 +139,11 @@ pub fn prefix_logs_with(arg: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 /// Resolve the correct path for sc_tracing:
-/// - If `polkadot-sdk` is in scope, returns a Path corresponding to `polkadot_sdk::sc_tracing`
+/// - If `pezkuwi-sdk` is in scope, returns a Path corresponding to `pezkuwi_sdk::sc_tracing`
 /// - Otherwise, falls back to `sc_tracing`
 fn resolve_sc_tracing() -> Result<Path> {
-	match crate_name("polkadot-sdk") {
-		Ok(FoundCrate::Itself) => syn::parse_str("polkadot_sdk::sc_tracing"),
+	match crate_name("pezkuwi-sdk") {
+		Ok(FoundCrate::Itself) => syn::parse_str("pezkuwi_sdk::sc_tracing"),
 		Ok(FoundCrate::Name(sdk_name)) => syn::parse_str(&format!("{}::sc_tracing", sdk_name)),
 		Err(_) => match crate_name("sc-tracing") {
 			Ok(FoundCrate::Itself) => syn::parse_str("sc_tracing"),

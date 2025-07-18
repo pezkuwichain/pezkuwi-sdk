@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Replace env_logger with sp_tracing
 
@@ -13,21 +13,21 @@ crates:
     bump: none
   - name: snowbridge-outbound-queue-merkle-tree
     bump: patch
-  - name: polkadot-node-core-approval-voting
+  - name: pezkuwi-node-core-approval-voting
     bump: patch
-  - name: polkadot-node-core-av-store
+  - name: pezkuwi-node-core-av-store
     bump: patch
-  - name: polkadot-approval-distribution
+  - name: pezkuwi-approval-distribution
     bump: patch
-  - name: polkadot-availability-bitfield-distribution
+  - name: pezkuwi-availability-bitfield-distribution
     bump: patch
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: patch
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
-  - name: polkadot-subsystem-bench
+  - name: pezkuwi-subsystem-bench
     bump: none
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: none
   - name: xcm-runtime-apis
     bump: patch

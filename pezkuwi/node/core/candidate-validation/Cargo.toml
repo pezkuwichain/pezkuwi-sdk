@@ -1,0 +1,52 @@
+[package]
+name = "pezkuwi-node-core-candidate-validation"
+description = "Pezkuwi crate that implements the Candidate Validation subsystem. Handles requests to validate candidates according to a PVF."
+version = "22.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+futures = { workspace = true }
+futures-timer = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+
+codec = { features = ["bit-vec", "derive"], workspace = true }
+pezkuwi-node-metrics.default-features = true
+pezkuwi-node-metrics.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-overseer.default-features = true
+pezkuwi-overseer.workspace = true
+pezkuwi-parachain-primitives.default-features = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sp-application-crypto.workspace = true
+sp-keystore.workspace = true
+
+[target.'cfg(not(any(target_os = "android", target_os = "unknown")))'.dependencies]
+pezkuwi-node-core-pvf.workspace = true
+pezkuwi-node-core-pvf.default-features = true
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+futures = { features = ["thread-pool"], workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives = { features = ["test"], default-features = false, workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+rstest = { workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }
+sp-maybe-compressed-blob = { default-features = true, workspace = true }

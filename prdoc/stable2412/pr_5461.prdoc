@@ -8,13 +8,13 @@ doc:
       Deprecates the `ttl` and `max_availability_timeouts` fields of the `HostConfiguration` primitive.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: major
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: major
   - name: rococo-runtime
     bump: major
   - name: westend-runtime
     bump: major
-  - name: polkadot
+  - name: pezkuwi
     bump: none

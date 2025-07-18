@@ -6,5 +6,5 @@ doc:
     This PR sets the claim queue core count to be the minimum between the num_cores param and the number of validator groups.'
 
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

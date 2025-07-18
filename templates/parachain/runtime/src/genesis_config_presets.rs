@@ -1,11 +1,11 @@
 use crate::{
-	AccountId, BalancesConfig, CollatorSelectionConfig, ParachainInfoConfig, PolkadotXcmConfig,
+	AccountId, BalancesConfig, CollatorSelectionConfig, ParachainInfoConfig, PezkuwiXcmConfig,
 	RuntimeGenesisConfig, SessionConfig, SessionKeys, SudoConfig, EXISTENTIAL_DEPOSIT,
 };
 
 use alloc::{vec, vec::Vec};
 
-use polkadot_sdk::{staging_xcm as xcm, *};
+use pezkuwi_sdk::{staging_xcm as xcm, *};
 
 use cumulus_primitives_core::ParaId;
 use frame_support::build_struct_json_patch;
@@ -58,7 +58,7 @@ fn testnet_genesis(
 				})
 				.collect::<Vec<_>>(),
 		},
-		polkadot_xcm: PolkadotXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
+		pezkuwi_xcm: PezkuwiXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
 		sudo: SudoConfig { key: Some(root) },
 	})
 }

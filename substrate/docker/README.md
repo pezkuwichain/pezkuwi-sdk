@@ -3,7 +3,7 @@
 The Docker image in this folder is a `builder` image. It is self contained and allows users to build the binaries
 themselves. There is no requirement on having Rust or any other toolchain installed but a working Docker environment.
 
-Unlike the `parity/polkadot` image which contains a single binary (`polkadot`!) used by default, the image in this
+Unlike the `parity/pezkuwi` image which contains a single binary (`pezkuwi`!) used by default, the image in this
 folder builds and contains several binaries and you need to provide the name of the binary to be called.
 
 You should refer to the [.Dockerfile](./substrate_builder.Dockerfile) for the actual list. At the time of editing, the

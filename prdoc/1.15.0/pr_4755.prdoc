@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Send PeerViewChange with high priority
 
@@ -12,13 +12,13 @@ doc:
 
 
 crates:
-  - name: polkadot-overseer
+  - name: pezkuwi-overseer
     bump: minor
-  - name: polkadot-network-bridge
+  - name: pezkuwi-network-bridge
     bump: patch
-  - name: polkadot-availability-distribution
+  - name: pezkuwi-availability-distribution
     bump: patch
-  - name: polkadot-test-malus
+  - name: pezkuwi-test-malus
     bump: patch
-  - name: polkadot-node-subsystem-test-helpers
+  - name: pezkuwi-node-subsystem-test-helpers
     bump: patch

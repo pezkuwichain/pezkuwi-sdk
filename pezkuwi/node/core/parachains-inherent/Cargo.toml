@@ -1,0 +1,30 @@
+[package]
+name = "pezkuwi-node-core-parachains-inherent"
+version = "22.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Parachains inherent data provider for Pezkuwi node"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+futures = { workspace = true }
+futures-timer = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-overseer.default-features = true
+pezkuwi-overseer.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sp-blockchain.default-features = true
+sp-blockchain.workspace = true
+sp-inherents.default-features = true
+sp-inherents.workspace = true
+thiserror = { workspace = true }

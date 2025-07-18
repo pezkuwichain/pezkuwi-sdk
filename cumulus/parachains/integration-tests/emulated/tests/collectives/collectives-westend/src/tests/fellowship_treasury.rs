@@ -18,7 +18,7 @@ use frame_support::{
 	assert_ok, dispatch::RawOrigin, instances::Instance1, sp_runtime::traits::Dispatchable,
 	traits::fungible::Inspect,
 };
-use polkadot_runtime_common::impls::VersionedLocatableAsset;
+use pezkuwi_runtime_common::impls::VersionedLocatableAsset;
 use westend_runtime_constants::currency::UNITS;
 use westend_system_emulated_network::westend_emulated_chain::westend_runtime::Dmp;
 use xcm_executor::traits::ConvertLocation;

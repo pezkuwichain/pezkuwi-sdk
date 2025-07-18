@@ -32,8 +32,8 @@ pub use pallet_assets;
 pub use pallet_message_queue;
 pub use pallet_xcm;
 
-// Polkadot
-pub use polkadot_runtime_parachains::{
+// Pezkuwi
+pub use pezkuwi_runtime_parachains::{
 	dmp, hrmp,
 	inclusion::{AggregateMessageOrigin, UmpQueueId},
 };
@@ -448,7 +448,7 @@ macro_rules! impl_assert_events_helpers_for_parachain {
 					$crate::impls::assert_expected_events!(
 						Self,
 						vec![
-							[<$chain RuntimeEvent>]::<N>::PolkadotXcm(
+							[<$chain RuntimeEvent>]::<N>::PezkuwiXcm(
 								$crate::impls::pallet_xcm::Event::Attempted { outcome: $crate::impls::Outcome::Complete { used: weight } }
 							) => {
 								weight: $crate::impls::weight_within_threshold(
@@ -470,7 +470,7 @@ macro_rules! impl_assert_events_helpers_for_parachain {
 						Self,
 						vec![
 							// Dispatchable is properly executed and XCM message sent
-							[<$chain RuntimeEvent>]::<N>::PolkadotXcm(
+							[<$chain RuntimeEvent>]::<N>::PezkuwiXcm(
 								$crate::impls::pallet_xcm::Event::Attempted { outcome: $crate::impls::Outcome::Incomplete { used: weight, error } }
 							) => {
 								weight: $crate::impls::weight_within_threshold(
@@ -490,7 +490,7 @@ macro_rules! impl_assert_events_helpers_for_parachain {
 						Self,
 						vec![
 							// Execution fails in the origin with `Barrier`
-							[<$chain RuntimeEvent>]::<N>::PolkadotXcm(
+							[<$chain RuntimeEvent>]::<N>::PezkuwiXcm(
 								$crate::impls::pallet_xcm::Event::Attempted { outcome: $crate::impls::Outcome::Error { error } }
 							) => {
 								error: *error == expected_error.unwrap_or((*error).into()).into(),
@@ -504,7 +504,7 @@ macro_rules! impl_assert_events_helpers_for_parachain {
 					$crate::impls::assert_expected_events!(
 						Self,
 						vec![
-							[<$chain RuntimeEvent>]::<N>::PolkadotXcm($crate::impls::pallet_xcm::Event::Sent { .. }) => {},
+							[<$chain RuntimeEvent>]::<N>::PezkuwiXcm($crate::impls::pallet_xcm::Event::Sent { .. }) => {},
 						]
 					);
 				}
@@ -909,7 +909,7 @@ macro_rules! impl_xcm_helpers_for_parachain {
 				/// Set XCM version for destination.
 				pub fn force_xcm_version(dest: $crate::impls::Location, version: $crate::impls::XcmVersion) {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
-						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::PolkadotXcm::force_xcm_version(
+						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::PezkuwiXcm::force_xcm_version(
 							<Self as $crate::impls::Chain>::RuntimeOrigin::root(),
 							$crate::impls::bx!(dest),
 							version,
@@ -920,7 +920,7 @@ macro_rules! impl_xcm_helpers_for_parachain {
 				/// Set default/safe XCM version for runtime.
 				pub fn force_default_xcm_version(version: Option<$crate::impls::XcmVersion>) {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
-						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::PolkadotXcm::force_default_xcm_version(
+						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::PezkuwiXcm::force_default_xcm_version(
 							<Self as $crate::impls::Chain>::RuntimeOrigin::root(),
 							version,
 						));

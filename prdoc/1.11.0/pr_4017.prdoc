@@ -7,9 +7,9 @@ doc:
       If you are not already, you should be using the standalone CLI at https://github.com/paritytech/try-runtime-cli.
 
 crates:
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: patch
   - name: staging-node-cli
     bump: patch

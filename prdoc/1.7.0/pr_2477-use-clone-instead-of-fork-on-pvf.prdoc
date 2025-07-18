@@ -15,8 +15,8 @@ migrations:
   runtime: []
 
 crates:
-  - name: polkadot-node-core-pvf
-  - name: polkadot-node-core-pvf-prepare-worker
-  - name: polkadot-node-core-pvf-execute-worker
+  - name: pezkuwi-node-core-pvf
+  - name: pezkuwi-node-core-pvf-prepare-worker
+  - name: pezkuwi-node-core-pvf-execute-worker
 
 host_functions: []

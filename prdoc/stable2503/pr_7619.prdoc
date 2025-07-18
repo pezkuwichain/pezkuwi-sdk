@@ -1,11 +1,11 @@
-title: 'Add chain-spec-builder as a subcommand to the polkadot-omni-node'
+title: 'Add chain-spec-builder as a subcommand to the pezkuwi-omni-node'
 doc:
 - audience: Runtime Dev
 
   description: |-
-    This PR add chain-spec-builder as a subcommand to the polkadot-omni-node
+    This PR add chain-spec-builder as a subcommand to the pezkuwi-omni-node
 crates:
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: major
 - name: staging-chain-spec-builder
   bump: patch

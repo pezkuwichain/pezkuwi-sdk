@@ -10,15 +10,15 @@ doc:
       Also simplifies the subsystem by no longer allowing parachain cycles.
 
 crates:
-  - name: polkadot-node-core-prospective-parachains
+  - name: pezkuwi-node-core-prospective-parachains
     bump: major
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
     bump: minor
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: minor
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: minor
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: major
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: major

@@ -17,7 +17,7 @@
 
 //! Extension module for Sassafras consensus.
 //!
-//! [Sassafras](https://research.web3.foundation/Polkadot/protocols/block-production/SASSAFRAS)
+//! [Sassafras](https://research.web3.foundation/Pezkuwi/protocols/block-production/SASSAFRAS)
 //! is a constant-time block production protocol that aims to ensure that there is
 //! exactly one block produced with constant time intervals rather than multiple or none.
 //!

@@ -70,8 +70,8 @@ use frame_support::{
 	BoundedVec,
 };
 use pallet_message_queue::OnQueueChanged;
-use polkadot_runtime_common::xcm_sender::PriceForMessageDelivery;
-use polkadot_runtime_parachains::FeeTracker;
+use pezkuwi_runtime_common::xcm_sender::PriceForMessageDelivery;
+use pezkuwi_runtime_parachains::FeeTracker;
 use scale_info::TypeInfo;
 use sp_core::MAX_POSSIBLE_ALLOCATION;
 use sp_runtime::{FixedU128, RuntimeDebug, Saturating, WeakBoundedVec};

@@ -54,7 +54,7 @@ fn send_weth_from_asset_hub_to_ethereum() {
 		type RuntimeOrigin = <AssetHubWestend as Chain>::RuntimeOrigin;
 
 		let local_fee_asset =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -83,7 +83,7 @@ fn send_weth_from_asset_hub_to_ethereum() {
 		]));
 
 		// Send the Weth back to Ethereum
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::signed(AssetHubWestendReceiver::get()),
 			bx!(xcm),
 			Weight::from(EXECUTION_WEIGHT),
@@ -197,14 +197,14 @@ fn transfer_relay_token_from_ah() {
 		type RuntimeEvent = <AssetHubWestend as Chain>::RuntimeEvent;
 
 		let local_fee_asset =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 		let remote_fee_asset =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
 
 		let assets = vec![
 			Asset {
 				id: AssetId(Location::parent()),
-				fun: Fungible(TOKEN_AMOUNT + LOCAL_FEE_AMOUNT_IN_DOT),
+				fun: Fungible(TOKEN_AMOUNT + LOCAL_FEE_AMOUNT_IN_HEZ),
 			},
 			remote_fee_asset.clone(),
 		];
@@ -231,8 +231,8 @@ fn transfer_relay_token_from_ah() {
 			},
 		]));
 
-		// Send DOT to Ethereum
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		// Send HEZ to Ethereum
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			bx!(xcm),
 			Weight::from(EXECUTION_WEIGHT),
@@ -296,7 +296,7 @@ fn send_weth_and_dot_from_asset_hub_to_ethereum() {
 		type RuntimeOrigin = <AssetHubWestend as Chain>::RuntimeOrigin;
 
 		let local_fee_asset =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 		let remote_fee_asset =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
 
@@ -331,7 +331,7 @@ fn send_weth_and_dot_from_asset_hub_to_ethereum() {
 			},
 		]));
 
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::signed(AssetHubWestendReceiver::get()),
 			bx!(xcms),
 			Weight::from(EXECUTION_WEIGHT),
@@ -383,7 +383,7 @@ fn transact_with_agent_from_asset_hub() {
 		type RuntimeOrigin = <AssetHubWestend as Chain>::RuntimeOrigin;
 
 		let local_fee_asset =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -427,7 +427,7 @@ fn transact_with_agent_from_asset_hub() {
 			},
 		]));
 
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			bx!(xcms),
 			Weight::from(EXECUTION_WEIGHT),
@@ -477,7 +477,7 @@ fn transact_with_agent_from_asset_hub_without_any_asset_transfer() {
 		type RuntimeOrigin = <AssetHubWestend as Chain>::RuntimeOrigin;
 
 		let local_fee_asset =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -511,7 +511,7 @@ fn transact_with_agent_from_asset_hub_without_any_asset_transfer() {
 			},
 		]));
 
-		<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::signed(AssetHubWestendSender::get()),
 			bx!(xcms),
 			Weight::from(EXECUTION_WEIGHT),
@@ -577,7 +577,7 @@ fn register_token_from_penpal() {
 		type RuntimeOrigin = <PenpalB as Chain>::RuntimeOrigin;
 
 		let local_fee_asset_on_penpal =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset_on_ah =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -622,7 +622,7 @@ fn register_token_from_penpal() {
 			},
 		]));
 
-		assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 			RuntimeOrigin::root(),
 			bx!(xcm.clone()),
 			Weight::from(EXECUTION_WEIGHT),
@@ -684,7 +684,7 @@ fn send_message_from_penpal_to_ethereum(sudo: bool) {
 		type RuntimeOrigin = <PenpalB as Chain>::RuntimeOrigin;
 
 		let local_fee_asset_on_penpal =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset_on_ah =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -759,13 +759,13 @@ fn send_message_from_penpal_to_ethereum(sudo: bool) {
 		]));
 
 		if sudo {
-			assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+			assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 				RuntimeOrigin::root(),
 				bx!(xcm.clone()),
 				Weight::from(EXECUTION_WEIGHT),
 			));
 		} else {
-			assert_ok!(<PenpalB as PenpalBPallet>::PolkadotXcm::execute(
+			assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::execute(
 				RuntimeOrigin::signed(PenpalBSender::get()),
 				bx!(xcm.clone()),
 				Weight::from(EXECUTION_WEIGHT),
@@ -848,7 +848,7 @@ fn export_message_from_asset_hub_to_ethereum_is_banned_when_set_operating_mode()
 		type Runtime = <AssetHubWestend as Chain>::Runtime;
 
 		let local_fee_asset =
-			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_DOT) };
+			Asset { id: AssetId(Location::parent()), fun: Fungible(LOCAL_FEE_AMOUNT_IN_HEZ) };
 
 		let remote_fee_asset =
 			Asset { id: AssetId(ethereum()), fun: Fungible(REMOTE_FEE_AMOUNT_IN_ETHER) };
@@ -878,7 +878,7 @@ fn export_message_from_asset_hub_to_ethereum_is_banned_when_set_operating_mode()
 
 		// Send the Weth back to Ethereum
 		assert_err_ignore_postinfo!(
-			<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+			<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 				RuntimeOrigin::signed(AssetHubWestendReceiver::get()),
 				bx!(xcm),
 				Weight::from(EXECUTION_WEIGHT),

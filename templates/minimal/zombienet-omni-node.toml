@@ -1,5 +1,5 @@
 [relaychain]
-default_command = "polkadot-omni-node"
+default_command = "pezkuwi-omni-node"
 chain = "dev"
 chain_spec_path = "./dev_chain_spec.json"
 default_args = ["--dev-block-time 3000"]

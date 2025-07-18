@@ -178,7 +178,7 @@ pub(crate) fn send_assets_from_asset_hub_rococo(
 		AccountId32Junction { network: None, id: AssetHubWestendReceiver::get().into() }.into();
 
 	AssetHubRococo::execute_with(|| {
-		<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+		<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 			signed_origin,
 			bx!(destination.into()),
 			bx!(beneficiary.into()),

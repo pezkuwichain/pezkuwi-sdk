@@ -69,10 +69,10 @@ use cumulus_relay_chain_minimal_node::{
 use cumulus_test_runtime::{Hash, Header, NodeBlock as Block, RuntimeApi};
 
 use frame_system_rpc_runtime_api::AccountNonceApi;
-use polkadot_node_subsystem::{errors::RecoveryError, messages::AvailabilityRecoveryMessage};
-use polkadot_overseer::Handle as OverseerHandle;
-use polkadot_primitives::{CandidateHash, CollatorPair, Hash as PHash, PersistedValidationData};
-use polkadot_service::{IdentifyNetworkBackend, ProvideRuntimeApi};
+use pezkuwi_node_subsystem::{errors::RecoveryError, messages::AvailabilityRecoveryMessage};
+use pezkuwi_overseer::Handle as OverseerHandle;
+use pezkuwi_primitives::{CandidateHash, CollatorPair, Hash as PHash, PersistedValidationData};
+use pezkuwi_service::{IdentifyNetworkBackend, ProvideRuntimeApi};
 use sc_consensus::ImportQueue;
 use sc_network::{
 	config::{FullNetworkConfiguration, TransportConfig},
@@ -280,15 +280,15 @@ async fn build_relay_chain_interface(
 	task_manager: &mut TaskManager,
 ) -> RelayChainResult<Arc<dyn RelayChainInterface + 'static>> {
 	let relay_chain_node = match collator_options.relay_chain_mode {
-		cumulus_client_cli::RelayChainMode::Embedded => polkadot_test_service::new_full(
+		cumulus_client_cli::RelayChainMode::Embedded => pezkuwi_test_service::new_full(
 			relay_chain_config,
 			if let Some(ref key) = collator_key {
-				polkadot_service::IsParachainNode::Collator(key.clone())
+				pezkuwi_service::IsParachainNode::Collator(key.clone())
 			} else {
-				polkadot_service::IsParachainNode::Collator(CollatorPair::generate().0)
+				pezkuwi_service::IsParachainNode::Collator(CollatorPair::generate().0)
 			},
 			None,
-			polkadot_service::CollatorOverseerGen,
+			pezkuwi_service::CollatorOverseerGen,
 		)
 		.map_err(|e| RelayChainError::Application(Box::new(e) as Box<_>))?,
 		cumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) =>
@@ -661,7 +661,7 @@ impl TestNodeBuilder {
 	/// node.
 	pub fn connect_to_relay_chain_node(
 		mut self,
-		node: &polkadot_test_service::PolkadotTestNode,
+		node: &pezkuwi_test_service::PezkuwiTestNode,
 	) -> Self {
 		self.relay_chain_nodes.push(node.addr.clone());
 		self
@@ -673,7 +673,7 @@ impl TestNodeBuilder {
 	/// node.
 	pub fn connect_to_relay_chain_nodes<'a>(
 		mut self,
-		nodes: impl IntoIterator<Item = &'a polkadot_test_service::PolkadotTestNode>,
+		nodes: impl IntoIterator<Item = &'a pezkuwi_test_service::PezkuwiTestNode>,
 	) -> Self {
 		self.relay_chain_nodes.extend(nodes.into_iter().map(|n| n.addr.clone()));
 		self
@@ -747,7 +747,7 @@ impl TestNodeBuilder {
 		)
 		.expect("could not generate Configuration");
 
-		let mut relay_chain_config = polkadot_test_service::node_config(
+		let mut relay_chain_config = pezkuwi_test_service::node_config(
 			self.storage_update_func_relay_chain.unwrap_or_else(|| Box::new(|| ())),
 			self.tokio_handle,
 			self.key,
@@ -1003,15 +1003,15 @@ pub fn construct_extrinsic(
 /// Run a relay-chain validator node.
 ///
 /// This is essentially a wrapper around
-/// [`run_validator_node`](polkadot_test_service::run_validator_node).
+/// [`run_validator_node`](pezkuwi_test_service::run_validator_node).
 pub fn run_relay_chain_validator_node(
 	tokio_handle: tokio::runtime::Handle,
 	key: Sr25519Keyring,
 	storage_update_func: impl Fn(),
 	boot_nodes: Vec<MultiaddrWithPeerId>,
 	port: Option<u16>,
-) -> polkadot_test_service::PolkadotTestNode {
-	let mut config = polkadot_test_service::node_config(
+) -> pezkuwi_test_service::PezkuwiTestNode {
+	let mut config = pezkuwi_test_service::node_config(
 		storage_update_func,
 		tokio_handle.clone(),
 		key,
@@ -1043,6 +1043,6 @@ pub fn run_relay_chain_validator_node(
 	workers_path.pop();
 
 	tokio_handle.block_on(async move {
-		polkadot_test_service::run_validator_node(config, Some(workers_path))
+		pezkuwi_test_service::run_validator_node(config, Some(workers_path))
 	})
 }

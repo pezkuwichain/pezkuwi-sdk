@@ -18,12 +18,12 @@ on:
       binary:
         description: Binary to be published
         required: true
-        default: polkadot
+        default: pezkuwi
         type: choice
         options:
-          - polkadot
-          - polkadot-omni-node
-          - polkadot-parachain
+          - pezkuwi
+          - pezkuwi-omni-node
+          - pezkuwi-parachain
           - chain-spec-builder
 
       registry:
@@ -41,12 +41,12 @@ on:
         default: parity
 
       version:
-        description: Version of the polkadot node release in format v1.16.0 or v1.16.0-rc1
+        description: Version of the pezkuwi node release in format v1.16.0 or v1.16.0-rc1
         default: v0.9.18
         required: true
 
       stable_tag:
-        description: Tag matching the actual stable release version in the format polkadot-stableYYMM(-rcX) or polkadot-stableYYMM-X(-rcX) for patch releases
+        description: Tag matching the actual stable release version in the format pezkuwi-stableYYMM(-rcX) or pezkuwi-stableYYMM-X(-rcX) for patch releases
         required: true
 
 permissions:
@@ -90,8 +90,8 @@ jobs:
           STABLE_TAG=$(validate_stable_tag ${{ inputs.stable_tag }})
           echo "stable_tag=${STABLE_TAG}" >> $GITHUB_OUTPUT
 
-  fetch-artifacts: # this job will be triggered for the polkadot-parachain rc and release or polkadot rc image build
-    if: ${{ inputs.binary == 'polkadot-omni-node' || inputs.binary == 'polkadot-parachain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
+  fetch-artifacts: # this job will be triggered for the pezkuwi-parachain rc and release or pezkuwi rc image build
+    if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'pezkuwi-parachain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
     runs-on: ubuntu-latest
     needs: [ validate-inputs ]
 
@@ -100,13 +100,13 @@ jobs:
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       - name: Fetch rc artifacts or release artifacts from s3 based on version
-        # if: ${{ env.EVENT_NAME  == 'workflow_dispatch' && inputs.binary != 'polkadot-omni-node' && inputs.binary != 'chain-spec-builder'}}
+        # if: ${{ env.EVENT_NAME  == 'workflow_dispatch' && inputs.binary != 'pezkuwi-omni-node' && inputs.binary != 'chain-spec-builder'}}
         run: |
           . ./.github/scripts/common/lib.sh
 
           VERSION="${{ needs.validate-inputs.outputs.stable_tag }}"
-          if [[ ${{ inputs.binary }} == 'polkadot' ]]; then
-            bins=(polkadot polkadot-prepare-worker polkadot-execute-worker)
+          if [[ ${{ inputs.binary }} == 'pezkuwi' ]]; then
+            bins=(pezkuwi pezkuwi-prepare-worker pezkuwi-execute-worker)
             for bin in "${bins[@]}"; do
               fetch_release_artifacts_from_s3 $bin x86_64-unknown-linux-gnu
             done
@@ -120,8 +120,8 @@ jobs:
           name: release-artifacts
           path: release-artifacts/x86_64-unknown-linux-gnu/${{ env.BINARY }}/**/*
 
-  build-container: # this job will be triggered for the polkadot-parachain rc and release or polkadot rc image build
-    if: ${{ inputs.binary == 'polkadot-omni-node' || inputs.binary == 'polkadot-parachain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
+  build-container: # this job will be triggered for the pezkuwi-parachain rc and release or pezkuwi rc image build
+    if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'pezkuwi-parachain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
     runs-on: ubuntu-latest
     needs: [ fetch-artifacts, validate-inputs ]
     environment: release
@@ -134,7 +134,7 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
 
       - name: Check sha256 ${{ env.BINARY }}
-        # if: ${{ inputs.binary == 'polkadot-parachain' || inputs.binary == 'polkadot' }}
+        # if: ${{ inputs.binary == 'pezkuwi-parachain' || inputs.binary == 'pezkuwi' }}
         working-directory: release-artifacts
         run: |
           . ../.github/scripts/common/lib.sh
@@ -143,7 +143,7 @@ jobs:
           check_sha256 $BINARY && echo "OK" || echo "ERR"
 
       - name: Check GPG ${{ env.BINARY }}
-        # if: ${{ inputs.binary == 'polkadot-parachain' || inputs.binary == 'polkadot' }}
+        # if: ${{ inputs.binary == 'pezkuwi-parachain' || inputs.binary == 'pezkuwi' }}
         working-directory: release-artifacts
         run: |
           . ../.github/scripts/common/lib.sh
@@ -175,8 +175,8 @@ jobs:
           echo "release=$(echo ${{ needs.validate-inputs.outputs.version }})" >> $GITHUB_OUTPUT
           echo "stable=$(prepare_docker_stable_tag ${{ needs.validate-inputs.outputs.stable_tag }})" >> $GITHUB_OUTPUT
 
-      - name: Build Injected Container image for polkadot rc
-        if: ${{ env.BINARY == 'polkadot' }}
+      - name: Build Injected Container image for pezkuwi rc
+        if: ${{ env.BINARY == 'pezkuwi' }}
         env:
           ARTIFACTS_FOLDER: release-artifacts
           IMAGE_NAME: ${{ env.BINARY }}
@@ -185,10 +185,10 @@ jobs:
         run: |
           ls -al
           echo "Building container for $BINARY"
-          ./docker/scripts/polkadot/build-injected.sh $ARTIFACTS_FOLDER
+          ./docker/scripts/pezkuwi/build-injected.sh $ARTIFACTS_FOLDER
 
-      - name: Build Injected Container image for polkadot-omni-node/chain-spec-builder
-        if: ${{ env.BINARY == 'polkadot-omni-node' || env.BINARY == 'chain-spec-builder' }}
+      - name: Build Injected Container image for pezkuwi-omni-node/chain-spec-builder
+        if: ${{ env.BINARY == 'pezkuwi-omni-node' || env.BINARY == 'chain-spec-builder' }}
         env:
           ARTIFACTS_FOLDER: release-artifacts
           IMAGE_NAME: ${{ env.BINARY }}
@@ -199,13 +199,13 @@ jobs:
           echo "Building container for $BINARY"
           ./docker/scripts/build-injected.sh
 
-      - name: Build Injected Container image for polkadot-parachain
-        if: ${{ env.BINARY == 'polkadot-parachain' }}
+      - name: Build Injected Container image for pezkuwi-parachain
+        if: ${{ env.BINARY == 'pezkuwi-parachain' }}
         env:
           ARTIFACTS_FOLDER: release-artifacts
           IMAGE_NAME: ${{ env.BINARY }}
           OWNER: ${{ env.DOCKER_OWNER }}
-          DOCKERFILE: docker/dockerfiles/polkadot-parachain/polkadot-parachain_injected.Dockerfile
+          DOCKERFILE: docker/dockerfiles/pezkuwi-parachain/pezkuwi-parachain_injected.Dockerfile
           TAGS: ${{ join(steps.fetch_rc_refs.outputs.*, ',') || join(steps.fetch_release_refs.outputs.*, ',') }}
         run: |
           ls -al
@@ -215,15 +215,15 @@ jobs:
           echo "Building container for $BINARY"
           ./docker/scripts/build-injected.sh
 
-      - name: Login to Dockerhub to publish polkadot
-        if: ${{ env.BINARY == 'polkadot' }}
+      - name: Login to Dockerhub to publish pezkuwi
+        if: ${{ env.BINARY == 'pezkuwi' }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
-          username: ${{ secrets.POLKADOT_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.POLKADOT_DOCKERHUB_TOKEN }}
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_TOKEN }}
 
-      - name: Login to Dockerhub to publish polkadot-omni-node/polkadot-parachain/chain-spec-builder
-        if: ${{ env.BINARY == 'polkadot-omni-node' || env.BINARY == 'polkadot-parachain' || env.BINARY == 'chain-spec-builder' }}
+      - name: Login to Dockerhub to publish pezkuwi-omni-node/pezkuwi-parachain/chain-spec-builder
+        if: ${{ env.BINARY == 'pezkuwi-omni-node' || env.BINARY == 'pezkuwi-parachain' || env.BINARY == 'chain-spec-builder' }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           username: ${{ secrets.CUMULUS_DOCKERHUB_USERNAME }}
@@ -246,12 +246,12 @@ jobs:
             $ENGINE run -i ${REGISTRY}/${DOCKER_OWNER}/${BINARY}:${RELEASE_TAG} --version
           fi
 
-  fetch-latest-debian-package-version: # this job will be triggered for polkadot release build
-    if: ${{ inputs.binary == 'polkadot' && inputs.image_type == 'release' }}
+  fetch-latest-debian-package-version: # this job will be triggered for pezkuwi release build
+    if: ${{ inputs.binary == 'pezkuwi' && inputs.image_type == 'release' }}
     runs-on: ubuntu-latest
     outputs:
-      polkadot_apt_version: ${{ steps.fetch-latest-apt.outputs.polkadot_apt_version }}
-      polkadot_container_tag: ${{ steps.fetch-latest-apt.outputs.polkadot_container_tag }}
+      pezkuwi_apt_version: ${{ steps.fetch-latest-apt.outputs.pezkuwi_apt_version }}
+      pezkuwi_container_tag: ${{ steps.fetch-latest-apt.outputs.pezkuwi_container_tag }}
     container:
       image: paritytech/parity-keyring
       options: --user root
@@ -260,16 +260,16 @@ jobs:
         id: fetch-latest-apt
         run: |
           apt update
-          apt show polkadot
-          version=$(apt show polkadot 2>/dev/null | grep "Version:" | awk '{print $2}')
+          apt show pezkuwi
+          version=$(apt show pezkuwi 2>/dev/null | grep "Version:" | awk '{print $2}')
           tag=$(echo $version | sed 's/-.*//')
-          echo "polkadot_apt_version=v$version" >> $GITHUB_OUTPUT
-          echo "polkadot_container_tag=v$tag" >> $GITHUB_OUTPUT
+          echo "pezkuwi_apt_version=v$version" >> $GITHUB_OUTPUT
+          echo "pezkuwi_container_tag=v$tag" >> $GITHUB_OUTPUT
           echo "You passed ${{ inputs.version }} but this is ignored"
           echo "We use the version from the Debian Package: $version"
 
-  build-polkadot-release-container: # this job will be triggered for polkadot release build
-    if: ${{ inputs.binary == 'polkadot' && inputs.image_type == 'release' }}
+  build-pezkuwi-release-container: # this job will be triggered for pezkuwi release build
+    if: ${{ inputs.binary == 'pezkuwi' && inputs.image_type == 'release' }}
     runs-on: ubuntu-latest
     needs: [ fetch-latest-debian-package-version, validate-inputs ]
     environment: release
@@ -291,8 +291,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
-          username: ${{ secrets.POLKADOT_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.POLKADOT_DOCKERHUB_TOKEN }}
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_TOKEN }}
 
       - name: Fetch values
         id: fetch-data
@@ -307,16 +307,16 @@ jobs:
         uses: docker/build-push-action@5e99dacf67635c4f273e532b9266ddb609b3025a #  v6.9.0
         with:
           push: true
-          file: docker/dockerfiles/polkadot/polkadot_injected_debian.Dockerfile
+          file: docker/dockerfiles/pezkuwi/pezkuwi_injected_debian.Dockerfile
           # TODO: The owner should be used below but buildx does not resolve the VARs
           # TODO: It would be good to get rid of this GHA that we don't really need.
           tags: |
-            parity/polkadot:${{ steps.fetch-data.outputs.stable }}
-            parity/polkadot:latest
-            parity/polkadot:${{ needs.fetch-latest-debian-package-version.outputs.polkadot_container_tag }}
+            parity/pezkuwi:${{ steps.fetch-data.outputs.stable }}
+            parity/pezkuwi:latest
+            parity/pezkuwi:${{ needs.fetch-latest-debian-package-version.outputs.pezkuwi_container_tag }}
           build-args: |
             VCS_REF=${{ github.ref }}
-            POLKADOT_VERSION=${{ needs.fetch-latest-debian-package-version.outputs.polkadot_apt_version }}
+            PEZKUWI_VERSION=${{ needs.fetch-latest-debian-package-version.outputs.pezkuwi_apt_version }}
             BUILD_DATE=${{ steps.fetch-data.outputs.date }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache

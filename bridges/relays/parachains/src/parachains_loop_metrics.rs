@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-use bp_polkadot_core::parachains::ParaId;
+use bp_pezkuwi_core::parachains::ParaId;
 use relay_utils::{
 	metrics::{metric_name, register, Gauge, Metric, PrometheusError, Registry, U64},
 	UniqueSaturatedInto,

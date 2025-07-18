@@ -5,7 +5,7 @@
     - export PATH=$(pwd)/artifacts:$PATH
   stage: zombienet
   needs:
-    - job: build-linux-stable # polkadot binaries
+    - job: build-linux-stable # pezkuwi binaries
       artifacts: true
     - job: build-templates-node # templates
       artifacts: true

@@ -8,17 +8,17 @@ doc:
       and advertised ahead of time (with up to `scheduling_lookahead` relay chain blocks in advance).
 
 crates:
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
     bump: patch
-  - name: polkadot-node-core-prospective-parachains
+  - name: pezkuwi-node-core-prospective-parachains
     bump: patch
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: patch
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: patch
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: minor
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: none
-  - name: polkadot
+  - name: pezkuwi
     bump: none

@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Swap for paying delivery fees in different assets
 
@@ -11,8 +11,8 @@ doc:
       This was already possible for execution fees via the `SwapFirstAssetTrader`.
       A runtime where this will be possible is Asset Hub.
       That means reserve asset transfers from Parachain A to Parachain B passing through Asset Hub no
-      longer need to have any DOT to pay for fees on AssetHub.
-      They can have any asset in a pool with DOT on Asset Hub, for example USDT or USDC.
+      longer need to have any HEZ to pay for fees on AssetHub.
+      They can have any asset in a pool with HEZ on Asset Hub, for example USDT or USDC.
   - audience: Runtime Dev
     description: |
       Using the `AssetExchanger` XCM config item, the executor now swaps fees to use for delivery fees,

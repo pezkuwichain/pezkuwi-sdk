@@ -9,6 +9,6 @@ doc:
       generation subsystems to forward the collation to the approapriate backing group.
 
 crates:
-- name: polkadot-node-collation-generation
-- name: polkadot-collator-protocol
+- name: pezkuwi-node-collation-generation
+- name: pezkuwi-collator-protocol
   bump: minor

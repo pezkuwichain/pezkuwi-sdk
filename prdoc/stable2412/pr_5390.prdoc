@@ -1,12 +1,12 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Remove NetworkIds for testnets Rococo and Westend
 
 doc:
   - audience: [Runtime Dev, Runtime User]
     description: |
-      Implemetation of https://github.com/polkadot-fellows/RFCs/pull/108, in the version 5 of XCM, 
+      Implemetation of https://github.com/pezkuwi-fellows/RFCs/pull/108, in the version 5 of XCM, 
       Remove `Westend` and `Rococo` from the included `NetworkId`s to improve the stability of the language.
 
       `NetworkId::Rococo` and `NetworkId::Westend` can just use `NetworkId::ByGenesis` by importing their genesis 

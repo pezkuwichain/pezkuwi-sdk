@@ -31,19 +31,19 @@ crates:
   bump: patch
 - name: bp-bridge-hub-kusama
   bump: patch
-- name: bp-bridge-hub-polkadot
+- name: bp-bridge-hub-pezkuwi
   bump: patch
 - name: bp-bridge-hub-rococo
   bump: patch
 - name: bp-bridge-hub-westend
   bump: patch
-- name: bp-polkadot-bulletin
+- name: bp-pezkuwi-bulletin
   bump: patch
 - name: bridge-hub-rococo-runtime
   bump: major
 - name: bridge-hub-westend-runtime
   bump: patch
-- name: polkadot-parachain-bin
+- name: pezkuwi-parachain-bin
   bump: none
 - name: bridge-hub-test-utils
   bump: major

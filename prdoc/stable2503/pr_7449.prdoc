@@ -10,17 +10,17 @@ doc:
       versions remains to allow for future additions.
 
 crates:
-  - name: polkadot-node-core-approval-voting-parallel
+  - name: pezkuwi-node-core-approval-voting-parallel
     bump: patch
-  - name: polkadot-approval-distribution
+  - name: pezkuwi-approval-distribution
     bump: patch
-  - name: polkadot-availability-bitfield-distribution
+  - name: pezkuwi-availability-bitfield-distribution
     bump: patch
-  - name: polkadot-network-bridge
+  - name: pezkuwi-network-bridge
     bump: patch
-  - name: polkadot-node-network-protocol
+  - name: pezkuwi-node-network-protocol
     bump: major
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major

@@ -1,15 +1,15 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Moved presets to the testnet runtimes"
 
 doc:
   - audience: Runtime Dev
     description: |
-      This PR migrates the genesis config presets from `polkadot-parachain-bin` to the relevant runtimes.
+      This PR migrates the genesis config presets from `pezkuwi-parachain-bin` to the relevant runtimes.
 
 crates:
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: patch
   - name: rococo-runtime
     bump: patch
@@ -29,13 +29,13 @@ crates:
     bump: patch
   - name: collectives-westend-runtime
     bump: patch
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: none
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
-  - name: polkadot-cli
+  - name: pezkuwi-cli
     bump: patch
   - name: sc-chain-spec
     bump: none

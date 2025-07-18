@@ -6,5 +6,5 @@ doc:
       Fixes the benchmark for relay chains like rococo-dev with `max_validators_per_core` value lower than 2.
 
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

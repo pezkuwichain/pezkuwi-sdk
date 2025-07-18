@@ -203,7 +203,7 @@ where
 	}
 
 	/// Construct the remote XCM needed to create a new asset in the `ForeignAssets` pallet
-	/// on AssetHub. Polkadot is the only supported network at the moment.
+	/// on AssetHub. Pezkuwi is the only supported network at the moment.
 	fn make_create_asset_xcm(
 		token: &H160,
 		network: super::message::Network,
@@ -228,7 +228,7 @@ where
 		);
 
 		match network {
-			super::message::Network::Polkadot => Ok(Self::make_create_asset_xcm_for_polkadot(
+			super::message::Network::Pezkuwi => Ok(Self::make_create_asset_xcm_for_pezkuwi(
 				create_call_index,
 				asset_id,
 				bridge_owner,
@@ -240,7 +240,7 @@ where
 	}
 
 	/// Construct the asset creation XCM for the Polkdot network.
-	fn make_create_asset_xcm_for_polkadot(
+	fn make_create_asset_xcm_for_pezkuwi(
 		create_call_index: [u8; 2],
 		asset_id: Location,
 		bridge_owner: AccountId,
@@ -411,12 +411,12 @@ mod tests {
 		pub InboundQueueLocation: InteriorLocation = [PalletInstance(84)].into();
 		pub EthereumUniversalLocation: InteriorLocation =
 			[GlobalConsensus(EthereumNetwork::get())].into();
-		pub AssetHubFromEthereum: Location = Location::new(1,[GlobalConsensus(Polkadot),Parachain(1000)]);
-		pub AssetHubUniversalLocation: InteriorLocation = [GlobalConsensus(Polkadot),Parachain(1000)].into();
+		pub AssetHubFromEthereum: Location = Location::new(1,[GlobalConsensus(Pezkuwi),Parachain(1000)]);
+		pub AssetHubUniversalLocation: InteriorLocation = [GlobalConsensus(Pezkuwi),Parachain(1000)].into();
 		pub const CreateAssetCall: [u8;2] = [53, 0];
 		pub const CreateAssetDeposit: u128 = 10_000_000_000u128;
 		pub EthereumLocation: Location = Location::new(2,EthereumUniversalLocation::get());
-		pub BridgeHubContext: InteriorLocation = [GlobalConsensus(Polkadot),Parachain(1002)].into();
+		pub BridgeHubContext: InteriorLocation = [GlobalConsensus(Pezkuwi),Parachain(1002)].into();
 	}
 
 	pub struct MockFailedTokenConvert;

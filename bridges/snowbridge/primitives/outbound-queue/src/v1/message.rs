@@ -56,7 +56,7 @@ pub struct Message {
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub enum Command {
-	/// Execute a sub-command within an agent for a consensus system in Polkadot
+	/// Execute a sub-command within an agent for a consensus system in Pezkuwi
 	/// DEPRECATED in favour of `UnlockNativeToken`. We still have to keep it around in
 	/// case buffered and uncommitted messages are using this variant.
 	AgentExecute {
@@ -81,18 +81,18 @@ pub enum Command {
 	},
 	/// Set token fees of the Gateway contract
 	SetTokenTransferFees {
-		/// The fee(DOT) for the cost of creating asset on AssetHub
+		/// The fee(HEZ) for the cost of creating asset on AssetHub
 		create_asset_xcm: u128,
-		/// The fee(DOT) for the cost of sending asset on AssetHub
+		/// The fee(HEZ) for the cost of sending asset on AssetHub
 		transfer_asset_xcm: u128,
 		/// The fee(Ether) for register token to discourage spamming
 		register_token: U256,
 	},
 	/// Set pricing parameters
 	SetPricingParameters {
-		// ETH/DOT exchange rate
+		// ETH/HEZ exchange rate
 		exchange_rate: UD60x18,
-		// Cost of delivering a message from Ethereum to BridgeHub, in ROC/KSM/DOT
+		// Cost of delivering a message from Ethereum to BridgeHub, in ROC/KSM/HEZ
 		delivery_cost: u128,
 		// Fee multiplier
 		multiplier: UD60x18,
@@ -108,7 +108,7 @@ pub enum Command {
 		/// The amount of tokens to transfer
 		amount: u128,
 	},
-	/// Register foreign token from Polkadot
+	/// Register foreign token from Pezkuwi
 	RegisterForeignToken {
 		/// ID for the token
 		token_id: H256,
@@ -119,7 +119,7 @@ pub enum Command {
 		/// Number of decimal places
 		decimals: u8,
 	},
-	/// Mint foreign token from Polkadot
+	/// Mint foreign token from Pezkuwi
 	MintForeignToken {
 		/// ID for the token
 		token_id: H256,

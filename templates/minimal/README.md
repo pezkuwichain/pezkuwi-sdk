@@ -1,13 +1,13 @@
 <div align="center">
 
-# Polkadot SDK's Minimal Template
+# Pezkuwi SDK's Minimal Template
 
-<img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_White.png#gh-dark-mode-only"/>
-<img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
+<img height="70px" alt="Pezkuwi SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_White.png#gh-dark-mode-only"/>
+<img height="70px" alt="Pezkuwi SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
 
-> This is a minimal template for creating a blockchain based on Polkadot SDK.
+> This is a minimal template for creating a blockchain based on Pezkuwi SDK.
 >
-> This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
+> This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/paritytech/polkadot-sdk).
 
 </div>
 
@@ -25,7 +25,7 @@
   - [Minimal Template Node](#minimal-template-node)
   - [Zombienet with Omni Node](#zombienet-with-omni-node)
   - [Zombienet with Minimal Template Node](#zombienet-with-minimal-template-node)
-  - [Connect with the Polkadot-JS Apps Front-End](#connect-with-the-polkadot-js-apps-front-end)
+  - [Connect with the Pezkuwi-JS Apps Front-End](#connect-with-the-pezkuwi-js-apps-front-end)
   - [Takeaways](#takeaways)
 
 - [Contributing](#contributing)
@@ -38,14 +38,14 @@
 template for building a blockchain node.
 
 - 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
-such as a [Balances pallet](https://paritytech.github.io/polkadot-sdk/master/pallet_balances/index.html).
+such as a [Balances pallet](https://paritytech.github.io/pezkuwi-sdk/master/pallet_balances/index.html).
 
 - 👤 The template has no consensus configured - it is best for experimenting with a single node network.
 
 
 ## Template Structure
 
-A Polkadot SDK based project such as this one consists of:
+A Pezkuwi SDK based project such as this one consists of:
 
 - 🧮 the [Runtime](./runtime/README.md) - the core logic of the blockchain.
 - 🎨 the [Pallets](./pallets/README.md) - from which the runtime is constructed.
@@ -74,13 +74,13 @@ cd minimal-template
 
 ### Omni Node
 
-[Omni Node](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html) can
-be used to run the minimal template's runtime. `polkadot-omni-node` binary crate usage is described at a high-level
-[on crates.io](https://crates.io/crates/polkadot-omni-node).
+[Omni Node](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/omni_node/index.html) can
+be used to run the minimal template's runtime. `pezkuwi-omni-node` binary crate usage is described at a high-level
+[on crates.io](https://crates.io/crates/pezkuwi-omni-node).
 
-#### Install `polkadot-omni-node`
+#### Install `pezkuwi-omni-node`
 
-Please see installation section on [crates.io/omni-node](https://crates.io/crates/polkadot-omni-node).
+Please see installation section on [crates.io/omni-node](https://crates.io/crates/pezkuwi-omni-node).
 
 #### Build `minimal-template-runtime`
 
@@ -110,7 +110,7 @@ Start Omni Node in development mode (sets up block production and finalization b
 sealing a new block every 3 seconds), with a minimal template runtime chain spec.
 
 ```sh
-polkadot-omni-node --chain <path/to/chain_spec.json> --dev
+pezkuwi-omni-node --chain <path/to/chain_spec.json> --dev
 ```
 
 ### Minimal Template Node
@@ -125,7 +125,7 @@ cargo build --workspace --release
 and has as entry point the node binary:
 
 ```sh
-docker build . -t polkadot-sdk-minimal-template
+docker build . -t pezkuwi-sdk-minimal-template
 ```
 
 #### Start the `minimal-template-node`
@@ -138,7 +138,7 @@ depend on a specific runtime, but asks for the chain spec at startup.
 ```sh
 <target/release/path/to/minimal-template-node> --tmp --consensus manual-seal-3000
 # or via docker
-docker run --rm polkadot-sdk-minimal-template
+docker run --rm pezkuwi-sdk-minimal-template
 ```
 
 ### Zombienet with Omni Node
@@ -180,17 +180,17 @@ For this one we just need to have `zombienet` installed and run:
 zombienet --provider native spawn zombienet-multi-node.toml
 ```
 
-### Connect with the Polkadot-JS Apps Front-End
+### Connect with the Pezkuwi-JS Apps Front-End
 
 - 🌐 You can interact with your local node using the
-hosted version of the [Polkadot/Substrate
-Portal](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944).
+hosted version of the [Pezkuwi/Substrate
+Portal](https://pezkuwi.js.org/apps/#/explorer?rpc=ws://localhost:9944).
 
 - 🪐 A hosted version is also
 available on [IPFS](https://dotapps.io/).
 
 - 🧑‍🔧 You can also find the source code and instructions for hosting your own instance in the
-[`polkadot-js/apps`](https://github.com/polkadot-js/apps) repository.
+[`pezkuwi-js/apps`](https://github.com/pezkuwi-js/apps) repository.
 
 ### Takeaways
 
@@ -203,7 +203,7 @@ Previously minimal template's development chains:
 
 ## Contributing
 
-- 🔄 This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
+- 🔄 This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/paritytech/polkadot-sdk).
 
 - ➡️ Any pull requests should be directed to this [source](https://github.com/paritytech/polkadot-sdk/tree/master/templates/minimal).
 
@@ -213,12 +213,12 @@ Previously minimal template's development chains:
 
 ## Getting Help
 
-- 🧑‍🏫 To learn about Polkadot in general, [docs.Polkadot.com](https://docs.polkadot.com/) website is a good starting point.
+- 🧑‍🏫 To learn about Pezkuwi in general, [docs.Pezkuwi.com](https://docs.pezkuwi.com/) website is a good starting point.
 
 - 🧑‍🔧 For technical introduction, [here](https://github.com/paritytech/polkadot-sdk#-documentation) are
-the Polkadot SDK documentation resources.
+the Pezkuwi SDK documentation resources.
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/paritytech/polkadot-sdk/issues) and
 [Substrate StackExchange](https://substrate.stackexchange.com/).
-- 👥You can also reach out on the [Official Polkdot discord server](https://polkadot-discord.w3f.tools/)
+- 👥You can also reach out on the [Official Polkdot discord server](https://pezkuwi-discord.w3f.tools/)
 - 🧑Reach out on [Telegram](https://t.me/substratedevs) for more questions and discussions

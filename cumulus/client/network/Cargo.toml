@@ -19,14 +19,14 @@ cumulus-relay-chain-interface.workspace = true
 futures = { workspace = true }
 futures-timer = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
-polkadot-node-primitives.default-features = true
-polkadot-node-primitives.workspace = true
-polkadot-node-subsystem.default-features = true
-polkadot-node-subsystem.workspace = true
-polkadot-parachain-primitives.default-features = true
-polkadot-parachain-primitives.workspace = true
-polkadot-primitives.default-features = true
-polkadot-primitives.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-parachain-primitives.default-features = true
+pezkuwi-parachain-primitives.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
 sc-client-api.default-features = true
 sc-client-api.workspace = true
 sp-api.default-features = true
@@ -56,8 +56,8 @@ sp-core = { default-features = true, workspace = true }
 sp-keyring = { default-features = true, workspace = true }
 sp-keystore = { default-features = true, workspace = true }
 
-# Polkadot
-polkadot-test-client = { workspace = true }
+# Pezkuwi
+pezkuwi-test-client = { workspace = true }
 
 # Cumulus
 cumulus-primitives-core = { default-features = true, workspace = true }

@@ -22,7 +22,7 @@ use std::{
 };
 
 use futures::Stream;
-use polkadot_overseer::prometheus::PrometheusError;
+use pezkuwi_overseer::prometheus::PrometheusError;
 use sc_client_api::StorageProof;
 use sp_version::RuntimeVersion;
 
@@ -40,7 +40,7 @@ pub use cumulus_primitives_core::{
 	},
 	InboundDownwardMessage, ParaId, PersistedValidationData,
 };
-pub use polkadot_overseer::Handle as OverseerHandle;
+pub use pezkuwi_overseer::Handle as OverseerHandle;
 pub use sp_state_machine::StorageValue;
 
 pub type RelayChainResult<T> = Result<T, RelayChainError>;

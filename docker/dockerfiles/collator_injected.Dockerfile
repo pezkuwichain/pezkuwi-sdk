@@ -31,7 +31,7 @@ RUN apt-get update && \
 	useradd -m -u 1000 -U -s /bin/sh -d /adder-collator adder-collator && \
 	mkdir -p /data /adder-collator/.local/share && \
 	chown -R adder-collator:adder-collator /data && \
-	ln -s /data /adder-collator/.local/share/polkadot
+	ln -s /data /adder-collator/.local/share/pezkuwi
 
 # add adder-collator binary to docker image
 COPY ./artifacts/adder-collator /usr/local/bin

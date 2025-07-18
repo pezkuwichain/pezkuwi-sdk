@@ -76,7 +76,7 @@ use cumulus_primitives_aura::AuraUnincludedSegmentApi;
 use cumulus_primitives_core::{ClaimQueueOffset, CoreSelector, GetCoreSelectorApi};
 use cumulus_relay_chain_interface::RelayChainInterface;
 use futures::FutureExt;
-use polkadot_primitives::{
+use pezkuwi_primitives::{
 	vstaging::DEFAULT_CLAIM_QUEUE_OFFSET, CollatorPair, CoreIndex, Hash as RelayHash, Id as ParaId,
 	ValidationCodeHash,
 };

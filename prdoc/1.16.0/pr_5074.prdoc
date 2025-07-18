@@ -4,7 +4,7 @@ doc:
   - audience: Runtime Dev
     description: |
       Since Rococo is now deprecated, we need another testnet to detect bleeding-edge changes 
-      to Substrate, Polkadot, BEEFY consensus protocols that could brick the bridge.
+      to Substrate, Pezkuwi, BEEFY consensus protocols that could brick the bridge.
   - audience: Runtime Dev
     description: |
       Like Rococo this PR enables the fast-runtime feature by default which is easier 
@@ -23,11 +23,11 @@ crates:
     bump: minor
   - name: bridge-hub-westend-integration-tests
     bump: minor
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: patch
   - name: westend-runtime
     bump: patch
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
   
 

@@ -53,7 +53,7 @@ pub enum Command {
 		/// XCM execution fee on AssetHub
 		fee: u128,
 	},
-	/// Send Polkadot token back to the original parachain
+	/// Send Pezkuwi token back to the original parachain
 	SendNativeToken {
 		/// The Id of the token
 		token_id: TokenId,
@@ -487,9 +487,9 @@ mod tests {
 		pub const InboundQueuePalletInstance: u8 = 80;
 		pub EthereumUniversalLocation: InteriorLocation =
 			[GlobalConsensus(NETWORK)].into();
-		pub AssetHubFromEthereum: Location = Location::new(1,[GlobalConsensus(Polkadot),Parachain(1000)]);
+		pub AssetHubFromEthereum: Location = Location::new(1,[GlobalConsensus(Pezkuwi),Parachain(1000)]);
 		pub EthereumLocation: Location = Location::new(2,EthereumUniversalLocation::get());
-		pub BridgeHubContext: InteriorLocation = [GlobalConsensus(Polkadot),Parachain(1002)].into();
+		pub BridgeHubContext: InteriorLocation = [GlobalConsensus(Pezkuwi),Parachain(1002)].into();
 	}
 
 	type AccountId = <<MultiSignature as Verify>::Signer as IdentifyAccount>::AccountId;
@@ -520,7 +520,7 @@ mod tests {
 
 	#[test]
 	fn test_contract_location_with_incorrect_location_fails_convert() {
-		let contract_location = Location::new(2, [GlobalConsensus(Polkadot), Parachain(1000)]);
+		let contract_location = Location::new(2, [GlobalConsensus(Pezkuwi), Parachain(1000)]);
 
 		assert_eq!(
 			EthereumLocationsConverterFor::<[u8; 32]>::convert_location(&contract_location),
@@ -532,12 +532,12 @@ mod tests {
 	fn test_reanchor_all_assets() {
 		let ethereum_context: InteriorLocation = [GlobalConsensus(Ethereum { chain_id: 1 })].into();
 		let ethereum = Location::new(2, ethereum_context.clone());
-		let ah_context: InteriorLocation = [GlobalConsensus(Polkadot), Parachain(1000)].into();
+		let ah_context: InteriorLocation = [GlobalConsensus(Pezkuwi), Parachain(1000)].into();
 		let global_ah = Location::new(1, ah_context.clone());
 		let assets = vec![
-			// DOT
+			// HEZ
 			Location::new(1, []),
-			// GLMR (Some Polkadot parachain currency)
+			// GLMR (Some Pezkuwi parachain currency)
 			Location::new(1, [Parachain(2004)]),
 			// AH asset
 			Location::new(0, [PalletInstance(50), GeneralIndex(42)]),

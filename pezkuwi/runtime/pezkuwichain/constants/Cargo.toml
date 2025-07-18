@@ -1,0 +1,42 @@
+[package]
+name = "pezkuwichain-constants"
+version = "1.0.0"
+description = "Constants used throughout the PezkuwiChain network."
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[package.metadata.pezkuwi-sdk]
+exclude-from-umbrella = true
+
+[lints]
+workspace = true
+
+[dependencies]
+frame-support.workspace = true
+pezkuwi-primitives.workspace = true
+pezkuwi-runtime-common.workspace = true
+smallvec = { workspace = true, default-features = true }
+sp-core.workspace = true
+sp-runtime.workspace = true
+sp-weights.workspace = true
+xcm-builder.workspace = true
+xcm.workspace = true
+
+[features]
+default = ["std"]
+std = [
+	"frame-support/std",
+	"pezkuwi-primitives/std",
+	"pezkuwi-runtime-common/std",
+	"sp-core/std",
+	"sp-runtime/std",
+	"sp-weights/std",
+	"xcm-builder/std",
+	"xcm/std",
+]
+
+# Set timing constants (e.g. session period) to faster versions to speed up testing.
+fast-runtime = []

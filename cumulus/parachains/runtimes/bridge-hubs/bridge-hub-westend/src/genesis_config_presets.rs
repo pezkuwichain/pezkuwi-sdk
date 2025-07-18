@@ -60,7 +60,7 @@ fn bridge_hub_westend_genesis(
 				})
 				.collect(),
 		},
-		polkadot_xcm: PolkadotXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
+		pezkuwi_xcm: PezkuwiXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
 		bridge_rococo_grandpa: BridgeRococoGrandpaConfig { owner: bridges_pallet_owner.clone() },
 		bridge_rococo_messages: BridgeRococoMessagesConfig { owner: bridges_pallet_owner.clone() },
 		xcm_over_bridge_hub_rococo: XcmOverBridgeHubRococoConfig { opened_bridges },

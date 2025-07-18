@@ -19,7 +19,7 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use bp_polkadot_core::*;
+pub use bp_pezkuwi_core::*;
 
 use bp_header_chain::ChainWithGrandpa;
 use bp_runtime::{decl_bridge_finality_runtime_apis, Chain, ChainId};
@@ -62,7 +62,7 @@ impl ChainWithGrandpa for Westend {
 }
 
 // The TransactionExtension used by Westend.
-pub use bp_polkadot_core::CommonTransactionExtension as TransactionExtension;
+pub use bp_pezkuwi_core::CommonTransactionExtension as TransactionExtension;
 
 /// Name of the parachains pallet in the Rococo runtime.
 pub const PARAS_PALLET_NAME: &str = "Paras";

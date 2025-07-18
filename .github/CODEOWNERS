@@ -22,7 +22,7 @@
 /.gitlab/ @paritytech/ci
 
 # XCM
-/polkadot/xcm/ @paritytech/xcm
+/pezkuwi/xcm/ @paritytech/xcm
 
 # WASM executor, low-level client <-> WASM interface and other WASM-related code
 /substrate/client/allocator/ @koute

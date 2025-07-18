@@ -83,8 +83,8 @@ jobs:
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          app-id: ${{ secrets.POLKADOTSDK_GHPAGES_APP_ID }}
-          private-key: ${{ secrets.POLKADOTSDK_GHPAGES_APP_KEY }}
+          app-id: ${{ secrets.PEZKUWISDK_GHPAGES_APP_ID }}
+          private-key: ${{ secrets.PEZKUWISDK_GHPAGES_APP_KEY }}
 
       - name: Generate ${{ env.BENCH }}
         env:

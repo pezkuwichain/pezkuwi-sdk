@@ -30,8 +30,8 @@ use cumulus_test_client::{
 	Sr25519Keyring,
 };
 use futures::{channel::mpsc, SinkExt};
-use polkadot_node_primitives::AvailableData;
-use polkadot_node_subsystem::{messages::AvailabilityRecoveryMessage, RecoveryError, TimeoutExt};
+use pezkuwi_node_primitives::AvailableData;
+use pezkuwi_node_subsystem::{messages::AvailabilityRecoveryMessage, RecoveryError, TimeoutExt};
 use rstest::rstest;
 use sc_client_api::{
 	BlockImportNotification, ClientInfo, CompactProof, FinalityNotification, FinalityNotifications,
@@ -316,7 +316,7 @@ impl RelayChainInterface for Relaychain {
 		let version = self.inner.lock().expect("Poisoned lock").runtime_version;
 
 		let apis = sp_version::create_apis_vec!([(
-			<dyn polkadot_primitives::runtime_api::ParachainHost<polkadot_primitives::Block>>::ID,
+			<dyn pezkuwi_primitives::runtime_api::ParachainHost<pezkuwi_primitives::Block>>::ID,
 			version
 		)])
 		.into_owned()

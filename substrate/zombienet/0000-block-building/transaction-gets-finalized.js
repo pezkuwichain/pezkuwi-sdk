@@ -1,4 +1,4 @@
-//based on: https://polkadot.js.org/docs/api/examples/promise/transfer-events
+//based on: https://pezkuwi.js.org/docs/api/examples/promise/transfer-events
 
 const assert = require("assert");
 

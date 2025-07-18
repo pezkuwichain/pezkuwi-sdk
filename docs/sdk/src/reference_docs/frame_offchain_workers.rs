@@ -46,7 +46,7 @@
 //! there is no need for determinism in this context.
 //!
 //! > A common mistake here is for novice developers to see this HTTP API, and imagine that
-//! > `polkadot-sdk` somehow magically solved the determinism in blockchains, and now a blockchain
+//! > `pezkuwi-sdk` somehow magically solved the determinism in blockchains, and now a blockchain
 //! > can make HTTP calls and it will all work. This is absolutely NOT the case. An HTTP call made
 //! > by the offchain worker is non-deterministic by design. Blockchains can't and always won't be
 //! > able to perform non-deterministic operations such as making HTTP calls to a foreign server.
@@ -84,7 +84,7 @@
 //!
 //! Consider the fact that in principle, an offchain worker code written using the above API is no
 //! different than an equivalent written with an _actual offchain interaction library_, such as
-//! [Polkadot-JS](https://polkadot.js.org/docs/), or any of the other ones listed [here](https://github.com/substrate-developer-hub/awesome-substrate?tab=readme-ov-file#client-libraries).
+//! [Pezkuwi-JS](https://pezkuwi.js.org/docs/), or any of the other ones listed [here](https://github.com/substrate-developer-hub/awesome-substrate?tab=readme-ov-file#client-libraries).
 //!
 //! They can both read from the state, and have no means of updating the state, other than the route
 //! of submitting an extrinsic to the chain. Therefore, it is worth thinking twice before embedding
@@ -102,13 +102,13 @@
 //!
 //! For example, imagine you have modified a storage item to have a new type. This will possibly
 //! require a [`crate::reference_docs::frame_runtime_upgrades_and_migrations`], and any offchain
-//! code, such as a Polkadot-JS application, will have to be updated to reflect this change. Whereas
+//! code, such as a Pezkuwi-JS application, will have to be updated to reflect this change. Whereas
 //! the WASM offchain worker code is guaranteed to already be updated, or else the runtime code will
 //! not even compile.
 //!
 //!
 //! ## Further References
 //!
-//! - <https://forum.polkadot.network/t/offchain-workers-design-assumptions-vulnerabilities/2548>
+//! - <https://forum.pezkuwi.network/t/offchain-workers-design-assumptions-vulnerabilities/2548>
 //! - <https://substrate.stackexchange.com/questions/11058/how-can-i-create-ocw-that-wont-activates-every-block-but-will-activates-only-w/11060#11060>
 //! - [Offchain worker example](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/examples/offchain-worker)

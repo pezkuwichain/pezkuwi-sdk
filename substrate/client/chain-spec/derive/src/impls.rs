@@ -174,7 +174,7 @@ pub fn derive(
 	let crate_path = match crate_name(CRATE_NAME) {
 		Ok(FoundCrate::Itself) => CRATE_NAME.replace("-", "_"),
 		Ok(FoundCrate::Name(chain_spec_name)) => chain_spec_name,
-		Err(e) => match crate_name("polkadot-sdk") {
+		Err(e) => match crate_name("pezkuwi-sdk") {
 			Ok(FoundCrate::Name(sdk)) => format!("{sdk}::{CRATE_NAME}").replace("-", "_"),
 			_ => {
 				return Error::new(Span::call_site(), &e).to_compile_error().into();

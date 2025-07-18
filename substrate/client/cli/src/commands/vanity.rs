@@ -186,12 +186,12 @@ mod tests {
 	#[test]
 	fn generate_key_respects_network_override() {
 		let seed =
-			generate_key::<sr25519::Pair>("ab", Ss58AddressFormatRegistry::PolkadotAccount.into())
+			generate_key::<sr25519::Pair>("ab", Ss58AddressFormatRegistry::PezkuwiAccount.into())
 				.unwrap();
 		assert!(sr25519::Pair::from_seed_slice(&array_bytes::hex2bytes_unchecked(&seed))
 			.unwrap()
 			.public()
-			.to_ss58check_with_version(Ss58AddressFormatRegistry::PolkadotAccount.into())
+			.to_ss58check_with_version(Ss58AddressFormatRegistry::PezkuwiAccount.into())
 			.contains("ab"));
 	}
 
@@ -203,7 +203,7 @@ mod tests {
 
 	#[test]
 	fn test_score_100() {
-		let score = calculate_score("Polkadot", "5PolkadotwHY5k9GpdTgpqs9xjuNvtv8EcwCFpEeyEf3KHim");
+		let score = calculate_score("Pezkuwi", "5PezkuwiwHY5k9GpdTgpqs9xjuNvtv8EcwCFpEeyEf3KHim");
 		assert_eq!(score, 430);
 	}
 
@@ -211,7 +211,7 @@ mod tests {
 	fn test_score_50_2() {
 		// 50% for the position + 50% for the size
 		assert_eq!(
-			calculate_score("Polkadot", "5PolkXXXXwHY5k9GpdTgpqs9xjuNvtv8EcwCFpEeyEf3KHim"),
+			calculate_score("Pezkuwi", "5PolkXXXXwHY5k9GpdTgpqs9xjuNvtv8EcwCFpEeyEf3KHim"),
 			238
 		);
 	}
@@ -219,7 +219,7 @@ mod tests {
 	#[test]
 	fn test_score_0() {
 		assert_eq!(
-			calculate_score("Polkadot", "5GUWv4bLCchGUHJrzULXnh4JgXsMpTKRnjuXTY7Qo1Kh9uYK"),
+			calculate_score("Pezkuwi", "5GUWv4bLCchGUHJrzULXnh4JgXsMpTKRnjuXTY7Qo1Kh9uYK"),
 			0
 		);
 	}

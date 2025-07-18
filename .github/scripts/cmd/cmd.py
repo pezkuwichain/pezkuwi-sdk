@@ -31,7 +31,7 @@ def setup_logging():
         os.makedirs('/tmp/cmd')
     open('/tmp/cmd/command_output.log', 'w')
 
-parser = argparse.ArgumentParser(prog="/cmd ", description='A command runner for polkadot-sdk repo', add_help=False)
+parser = argparse.ArgumentParser(prog="/cmd ", description='A command runner for pezkuwi-sdk repo', add_help=False)
 parser.add_argument('--help', action=_HelpAction, help='help for help if you need some help')  # help for help
 for arg, config in common_args.items():
     parser.add_argument(arg, **config)
@@ -200,16 +200,16 @@ def main():
                     print(f'-- package_dir: {package_dir}')
                     print(f'-- manifest_path: {manifest_path}')
                     output_path = os.path.join(package_dir, "src", "weights.rs")
-                    # TODO: we can remove once all pallets in dev runtime are migrated to polkadot-sdk-frame
+                    # TODO: we can remove once all pallets in dev runtime are migrated to pezkuwi-sdk-frame
                     try:
-                        uses_polkadot_sdk_frame = "true" in os.popen(f"cargo metadata --locked --format-version 1 --no-deps | jq -r '.packages[] | select(.name == \"{pallet.replace('_', '-')}\") | .dependencies | any(.name == \"polkadot-sdk-frame\")'").read()
-                        print(f'uses_polkadot_sdk_frame: {uses_polkadot_sdk_frame}')
+                        uses_pezkuwi_sdk_frame = "true" in os.popen(f"cargo metadata --locked --format-version 1 --no-deps | jq -r '.packages[] | select(.name == \"{pallet.replace('_', '-')}\") | .dependencies | any(.name == \"pezkuwi-sdk-frame\")'").read()
+                        print(f'uses_pezkuwi_sdk_frame: {uses_pezkuwi_sdk_frame}')
                     # Empty output from the previous os.popen command
                     except StopIteration:
                         print(f'Error: {pallet} not found in dev runtime')
-                        uses_polkadot_sdk_frame = False
+                        uses_pezkuwi_sdk_frame = False
                     template = config['template']
-                    if uses_polkadot_sdk_frame and re.match(r"frame-(:?umbrella-)?weight-template\.hbs", os.path.normpath(template).split(os.path.sep)[-1]):
+                    if uses_pezkuwi_sdk_frame and re.match(r"frame-(:?umbrella-)?weight-template\.hbs", os.path.normpath(template).split(os.path.sep)[-1]):
                         template = "substrate/.maintain/frame-umbrella-weight-template.hbs"
                     print(f'template: {template}')
                 else:

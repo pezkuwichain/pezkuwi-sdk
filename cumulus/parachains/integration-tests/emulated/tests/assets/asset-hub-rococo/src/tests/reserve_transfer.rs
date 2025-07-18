@@ -117,7 +117,7 @@ pub fn system_para_to_para_sender_assertions(t: SystemParaToParaTest) {
 		AssetHubRococo,
 		vec![
 			// Delivery fees are paid
-			RuntimeEvent::PolkadotXcm(pallet_xcm::Event::FeesPaid { .. }) => {},
+			RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::FeesPaid { .. }) => {},
 		]
 	);
 	AssetHubRococo::assert_xcm_pallet_sent();
@@ -307,7 +307,7 @@ fn system_para_to_para_assets_sender_assertions(t: SystemParaToParaTest) {
 				who: *who == TreasuryAccount::get(),
 			},
 			// Delivery fees are paid
-			RuntimeEvent::PolkadotXcm(
+			RuntimeEvent::PezkuwiXcm(
 				pallet_xcm::Event::FeesPaid { .. }
 			) => {},
 		]
@@ -338,7 +338,7 @@ fn para_to_system_para_assets_sender_assertions(t: ParaToSystemParaTest) {
 				balance: *balance == t.args.amount,
 			},
 			// Delivery fees are paid
-			RuntimeEvent::PolkadotXcm(
+			RuntimeEvent::PezkuwiXcm(
 				pallet_xcm::Event::FeesPaid { .. }
 			) => {},
 		]
@@ -528,7 +528,7 @@ fn relay_to_para_reserve_transfer_assets(t: RelayToParaTest) -> DispatchResult {
 }
 
 fn para_to_relay_reserve_transfer_assets(t: ParaToRelayTest) -> DispatchResult {
-	<PenpalA as PenpalAPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -539,7 +539,7 @@ fn para_to_relay_reserve_transfer_assets(t: ParaToRelayTest) -> DispatchResult {
 }
 
 fn system_para_to_para_reserve_transfer_assets(t: SystemParaToParaTest) -> DispatchResult {
-	<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+	<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -552,7 +552,7 @@ fn system_para_to_para_reserve_transfer_assets(t: SystemParaToParaTest) -> Dispa
 fn para_to_para_through_asset_hub_limited_reserve_transfer_assets(
 	t: ParaToParaThroughAHTest,
 ) -> DispatchResult {
-	<PenpalA as PenpalAPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -563,7 +563,7 @@ fn para_to_para_through_asset_hub_limited_reserve_transfer_assets(
 }
 
 fn para_to_system_para_reserve_transfer_assets(t: ParaToSystemParaTest) -> DispatchResult {
-	<PenpalA as PenpalAPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -583,7 +583,7 @@ fn para_to_para_through_relay_limited_reserve_transfer_assets(
 	Rococo::ext_wrapper(|| {
 		Dmp::make_parachain_reachable(para_id);
 	});
-	<PenpalA as PenpalAPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -644,7 +644,7 @@ fn reserve_transfer_native_asset_from_asset_hub_to_relay_fails() {
 	// this should fail
 	AssetHubRococo::execute_with(|| {
 		let result =
-			<AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::limited_reserve_transfer_assets(
+			<AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::limited_reserve_transfer_assets(
 				signed_origin,
 				bx!(destination.into()),
 				bx!(beneficiary.into()),
@@ -1040,9 +1040,9 @@ fn reserve_transfer_multiple_assets_from_asset_hub_to_para() {
 }
 
 /// Reserve Transfers of a random asset and native asset from Parachain to Asset Hub should work
-/// Receiver is empty account to show deposit works as long as transfer includes enough DOT for ED.
+/// Receiver is empty account to show deposit works as long as transfer includes enough HEZ for ED.
 /// Once we have https://github.com/paritytech/polkadot-sdk/issues/5298,
-/// we should do equivalent test with USDT instead of DOT.
+/// we should do equivalent test with USDT instead of HEZ.
 #[test]
 fn reserve_transfer_multiple_assets_from_para_to_asset_hub() {
 	// Init values for Parachain
@@ -1604,7 +1604,7 @@ fn reserve_withdraw_from_untrusted_reserve_fails() {
 
 	// this should fail
 	AssetHubRococo::execute_with(|| {
-		let result = <AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		let result = <AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			signed_origin.clone(),
 			bx!(destination.clone().into()),
 			bx!(assets.clone().into()),
@@ -1634,7 +1634,7 @@ fn reserve_withdraw_from_untrusted_reserve_fails() {
 				xcm: Xcm::<()>::new(),
 			},
 		]);
-		let result = <AssetHubRococo as AssetHubRococoPallet>::PolkadotXcm::execute(
+		let result = <AssetHubRococo as AssetHubRococoPallet>::PezkuwiXcm::execute(
 			signed_origin,
 			bx!(xcm::VersionedXcm::from(xcm)),
 			Weight::MAX,

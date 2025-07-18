@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: update scale-info to 2.11.6
 
@@ -52,11 +52,11 @@ crates:
     bump: none
   - name: cumulus-primitives-core
     bump: none
-  - name: polkadot-core-primitives
+  - name: pezkuwi-core-primitives
     bump: none
-  - name: polkadot-parachain-primitives
+  - name: pezkuwi-parachain-primitives
     bump: none
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: none
   - name: sp-authority-discovery 
     bump: none
@@ -70,7 +70,7 @@ crates:
     bump: none
   - name: pallet-message-queue
     bump: none
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: none
   - name: frame-election-provider-support
     bump: none
@@ -78,7 +78,7 @@ crates:
     bump: none
   - name: sp-consensus-grandpa
     bump: none
-  - name: polkadot-primitives
+  - name: pezkuwi-primitives
     bump: none
   - name: sp-authority-discovery 
     bump: none
@@ -134,7 +134,7 @@ crates:
     bump: none
   - name: pallet-vesting
     bump: none
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: none
   - name: pallet-authority-discovery
     bump: none
@@ -208,7 +208,7 @@ crates:
     bump: none
   - name: pallet-multisig
     bump: none
-  - name: polkadot-sdk-frame
+  - name: pezkuwi-sdk-frame
     bump: none
   - name: pallet-dev-mode
     bump: none
@@ -262,7 +262,7 @@ crates:
     bump: none
   - name: bp-parachains
     bump: none
-  - name: bp-polkadot-core
+  - name: bp-pezkuwi-core
     bump: none
   - name: bp-relayers
     bump: none
@@ -374,7 +374,7 @@ crates:
     bump: none
   - name: bp-asset-hub-westend
     bump: none
-  - name: bp-polkadot-bulletin
+  - name: bp-pezkuwi-bulletin
     bump: none
   - name: asset-hub-rococo-runtime
     bump: none

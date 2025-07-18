@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! > Made with *Substrate*, for *Polkadot*.
+//! > Made with *Substrate*, for *Pezkuwi*.
 //!
 //! [![github]](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/sudo)
-//! [![polkadot]](https://polkadot.network)
+//! [![pezkuwi]](https://pezkuwi.network)
 //!
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
-//! [polkadot]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
+//! [pezkuwi]: https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white
 //!
 //! # Sudo Pallet
 //!

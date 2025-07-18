@@ -56,17 +56,17 @@ pallet-timestamp.default-features = true
 pallet-timestamp.workspace = true
 pallet-transaction-payment.default-features = true
 pallet-transaction-payment.workspace = true
-polkadot-cli.default-features = true
-polkadot-cli.workspace = true
-polkadot-node-subsystem.default-features = true
-polkadot-node-subsystem.workspace = true
-polkadot-overseer.default-features = true
-polkadot-overseer.workspace = true
-polkadot-primitives.default-features = true
-polkadot-primitives.workspace = true
-polkadot-service.default-features = true
-polkadot-service.workspace = true
-polkadot-test-service.workspace = true
+pezkuwi-cli.default-features = true
+pezkuwi-cli.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-overseer.default-features = true
+pezkuwi-overseer.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+pezkuwi-service.default-features = true
+pezkuwi-service.workspace = true
+pezkuwi-test-service.workspace = true
 prometheus = { workspace = true }
 rand = { workspace = true, default-features = true }
 sc-basic-authorship.default-features = true
@@ -137,8 +137,8 @@ url = { workspace = true }
 cumulus-test-client = { workspace = true }
 futures = { workspace = true }
 
-# Polkadot dependencies
-polkadot-test-service = { workspace = true }
+# Pezkuwi dependencies
+pezkuwi-test-service = { workspace = true }
 
 # Substrate dependencies
 sc-cli = { default-features = true, workspace = true }
@@ -152,10 +152,10 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"pallet-transaction-payment/runtime-benchmarks",
-	"polkadot-cli/runtime-benchmarks",
-	"polkadot-primitives/runtime-benchmarks",
-	"polkadot-service/runtime-benchmarks",
-	"polkadot-test-service/runtime-benchmarks",
+	"pezkuwi-cli/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-service/runtime-benchmarks",
+	"pezkuwi-test-service/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]

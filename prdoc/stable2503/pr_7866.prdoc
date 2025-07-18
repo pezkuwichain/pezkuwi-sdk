@@ -9,7 +9,7 @@ doc:
 
   - audience: Node Dev
     description: |
-      A new trait `IdentifyNetworkBackend` is introduced for the polkadot-service. The purpose of the trait
+      A new trait `IdentifyNetworkBackend` is introduced for the pezkuwi-service. The purpose of the trait
       is to specify the default network backend for individual chains. For Kusama based chains, the default
       is now litep2p. For other chains, the default remains unchanged to libp2p.
       The network backend field of the network configuration is made optional to accomodate for this change.
@@ -19,11 +19,11 @@ crates:
     bump: minor
   - name: sc-network-types
     bump: minor
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: minor
   - name: sc-cli
     bump: patch
   - name: cumulus-relay-chain-minimal-node
     bump: patch
-  - name: polkadot-omni-node-lib
+  - name: pezkuwi-omni-node-lib
     bump: patch

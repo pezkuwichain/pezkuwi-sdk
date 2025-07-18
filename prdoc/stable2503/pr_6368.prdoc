@@ -3,5 +3,5 @@ doc:
 - audience: Runtime Dev
   description: Migrate inclusion benchmark to v2.
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch

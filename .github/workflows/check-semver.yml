@@ -129,7 +129,7 @@ jobs:
 
           Please check the output above and see the following links for more help:
           - https://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/prdoc.md#record-semver-changes
-          - https://forum.polkadot.network/t/psa-polkadot-sdk-to-use-semver
+          - https://forum.pezkuwi.network/t/psa-pezkuwi-sdk-to-use-semver
 
           Otherwise feel free to ask in the Merge Request or in Matrix chat.
           EOF

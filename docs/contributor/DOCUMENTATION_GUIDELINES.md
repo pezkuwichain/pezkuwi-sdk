@@ -18,7 +18,7 @@ development.
       - [Formatting Matters](#formatting-matters)
   - [Pallet Crates](#pallet-crates)
     - [Top Level Pallet Docs (`lib.rs`)](#top-level-pallet-docs-librs)
-      - [Polkadot and Substrate](#polkadot-and-substrate)
+      - [Pezkuwi and Substrate](#pezkuwi-and-substrate)
     - [Dispatchables](#dispatchables)
     - [Storage Items](#storage-items)
     - [Errors and Events](#errors-and-events)
@@ -143,7 +143,7 @@ The following is a set of notes that may not necessarily hold in all circumstanc
 #### Document Through Code
 
 You should make sure that your code is properly-named and well-organized so that your code functions as a form of
-documentation. However, within the complexity of our projects in Polkadot/Substrate that is not enough. Particularly,
+documentation. However, within the complexity of our projects in Pezkuwi/Substrate that is not enough. Particularly,
 things like examples, errors and panics cannot be documented only through properly-named and well-organized code.
 
 > Our north star is self-documenting code that also happens to be well-documented and littered with examples.
@@ -283,17 +283,17 @@ and beyond are flexible.
 
 ---
 
-#### Polkadot and Substrate
+#### Pezkuwi and Substrate
 
 Optionally, in order to demonstrate the relation between the two, you can start the pallet documentation with:
 
 ```
-//! > Made with *Substrate*, for *Polkadot*.
+//! > Made with *Substrate*, for *Pezkuwi*.
 //!
 //! [![github]](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/fast-unstake) -
-//! [![polkadot]](https://polkadot.com)
+//! [![pezkuwi]](https://pezkuwi.com)
 //!
-//! [polkadot]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
+//! [pezkuwi]: https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 ```
 

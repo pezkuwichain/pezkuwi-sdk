@@ -12,5 +12,5 @@ doc:
       which can manage XCM versions for destinations.
 
 crates:
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: major

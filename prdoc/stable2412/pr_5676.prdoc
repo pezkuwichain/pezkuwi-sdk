@@ -24,21 +24,21 @@ crates:
   bump: patch
 - name: cumulus-primitives-utility
   bump: patch
-- name: polkadot-node-core-approval-voting
+- name: pezkuwi-node-core-approval-voting
   bump: patch
-- name: polkadot-node-core-pvf-common
+- name: pezkuwi-node-core-pvf-common
   bump: patch
-- name: polkadot-approval-distribution
+- name: pezkuwi-approval-distribution
   bump: patch
-- name: polkadot-availability-recovery
+- name: pezkuwi-availability-recovery
   bump: patch
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: patch
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch
 - name: westend-runtime
   bump: patch
-- name: polkadot-statement-table
+- name: pezkuwi-statement-table
   bump: patch
 - name: pallet-xcm-benchmarks
   bump: patch
@@ -90,15 +90,15 @@ crates:
   bump: patch
 - name: shell-runtime
   bump: patch
-- name: polkadot-parachain-lib
+- name: pezkuwi-parachain-lib
   bump: patch
-- name: polkadot-cli
+- name: pezkuwi-cli
   bump: patch
-- name: polkadot-node-core-pvf
+- name: pezkuwi-node-core-pvf
   bump: patch
-- name: polkadot-service
+- name: pezkuwi-service
   bump: patch
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: patch
 - name: staging-xcm-executor
   bump: patch
@@ -140,7 +140,7 @@ crates:
   bump: patch
 - name: sp-keyring
   bump: patch
-- name: polkadot-availability-distribution
+- name: pezkuwi-availability-distribution
   bump: patch
 - name: sp-runtime
   bump: patch
@@ -164,9 +164,9 @@ crates:
   bump: patch
 - name: bp-header-chain
   bump: patch
-- name: polkadot-overseer
+- name: pezkuwi-overseer
   bump: patch
-- name: polkadot
+- name: pezkuwi
   bump: patch
 - name: bridge-hub-westend-runtime
   bump: major

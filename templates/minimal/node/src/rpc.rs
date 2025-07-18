@@ -24,7 +24,7 @@
 
 use jsonrpsee::RpcModule;
 use minimal_template_runtime::interface::{AccountId, Nonce, OpaqueBlock};
-use polkadot_sdk::{
+use pezkuwi_sdk::{
 	sc_transaction_pool_api::TransactionPool,
 	sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata},
 	*,
@@ -56,7 +56,7 @@ where
 	C::Api: substrate_frame_rpc_system::AccountNonceApi<OpaqueBlock, AccountId, Nonce>,
 	P: TransactionPool + 'static,
 {
-	use polkadot_sdk::substrate_frame_rpc_system::{System, SystemApiServer};
+	use pezkuwi_sdk::substrate_frame_rpc_system::{System, SystemApiServer};
 	let mut module = RpcModule::new(());
 	let FullDeps { client, pool } = deps;
 

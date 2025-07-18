@@ -12,10 +12,10 @@ Alternatively, you can start a zombienet network with the westend Asset Hub para
 
 Prerequisites for running a local network:
 - download latest [zombienet release](https://github.com/paritytech/zombienet/releases);
-- build Polkadot binary by running `cargo build -p polkadot --release  --features fast-runtime` command in the
-  [`polkadot-sdk`](https://github.com/paritytech/polkadot-sdk) repository clone;
-- build Polkadot Parachain binary by running `cargo build -p polkadot-parachain-bin --release` command in the
-  [`polkadot-sdk`](https://github.com/paritytech/polkadot-sdk) repository clone;
+- build Pezkuwi binary by running `cargo build -p pezkuwi --release  --features fast-runtime` command in the
+  [`pezkuwi-sdk`](https://github.com/paritytech/polkadot-sdk) repository clone;
+- build Pezkuwi Parachain binary by running `cargo build -p pezkuwi-parachain-bin --release` command in the
+  [`pezkuwi-sdk`](https://github.com/paritytech/polkadot-sdk) repository clone;
 
 ```bash
 zombienet spawn --provider native  westend_local_network.toml
@@ -43,6 +43,6 @@ JS examples have been moved to the [evm-test-suite](https://github.com/paritytec
 
 ### Configure MetaMask
 
-See the doc [here](https://contracts.polkadot.io/work-with-a-local-node#metemask-configuration) for more
+See the doc [here](https://contracts.pezkuwi.io/work-with-a-local-node#metemask-configuration) for more
 information on how to configure MetaMask.
 

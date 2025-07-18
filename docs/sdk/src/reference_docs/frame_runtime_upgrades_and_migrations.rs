@@ -6,7 +6,7 @@
 //! 2. a state transition function.
 //!
 //! In Substrate-based blockchains, state transition functions are referred to as
-//! [runtimes](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/blockchain_state_machines/index.html).
+//! [runtimes](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/blockchain_state_machines/index.html).
 //!
 //! Traditionally, before Substrate, upgrading state transition functions required node
 //! operators to download new software and restart their nodes in a process called
@@ -100,7 +100,7 @@
 //! inadvertently result in a bricked chain.
 //!
 //! It is recommended to run as part of your CI pipeline. See the
-//! [polkadot-sdk check-runtime-migration job](https://github.com/paritytech/polkadot-sdk/blob/4a293bc5a25be637c06ce950a34490706597615b/.gitlab/pipeline/check.yml#L103-L124)
+//! [pezkuwi-sdk check-runtime-migration job](https://github.com/paritytech/polkadot-sdk/blob/4a293bc5a25be637c06ce950a34490706597615b/.gitlab/pipeline/check.yml#L103-L124)
 //! for an example of how to configure this.
 //!
 //! ### Note on the Manipulability of PoV Size and Execution Time

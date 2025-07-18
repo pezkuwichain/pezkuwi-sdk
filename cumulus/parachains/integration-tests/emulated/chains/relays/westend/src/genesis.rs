@@ -21,8 +21,8 @@ use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
 use sp_core::storage::Storage;
 use sp_runtime::Perbill;
 
-// Polkadot
-use polkadot_primitives::{AssignmentId, ValidatorId};
+// Pezkuwi
+use pezkuwi_primitives::{AssignmentId, ValidatorId};
 
 // Cumulus
 use emulated_integration_tests_common::{

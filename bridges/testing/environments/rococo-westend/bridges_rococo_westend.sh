@@ -9,7 +9,7 @@ source "$FRAMEWORK_PATH/utils/bridges.sh"
 #
 ##[test]
 #fn generate_sovereign_accounts() {
-#	use polkadot_parachain_primitives::primitives::Sibling;
+#	use pezkuwi_parachain_primitives::primitives::Sibling;
 #	use sp_core::crypto::Ss58Codec;
 #	use staging_xcm_builder::{GlobalConsensusConvertsFor, SiblingParachainConvertsVia};
 #	use xcm::latest::{prelude::*, ROCOCO_GENESIS_HASH, WESTEND_GENESIS_HASH};
@@ -239,7 +239,7 @@ case "$1" in
     run_messages_relay
     ;;
   init-asset-hub-rococo-local)
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # create foreign assets for native Westend token (governance call on Rococo)
       force_create_foreign_asset \
           "ws://127.0.0.1:9942" \
@@ -269,7 +269,7 @@ case "$1" in
           $XCM_VERSION
       ;;
   init-bridge-hub-rococo-local)
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # SA of sibling asset hub pays for the execution
       transfer_balance \
           "ws://127.0.0.1:8943" \
@@ -298,7 +298,7 @@ case "$1" in
           $XCM_VERSION
       ;;
   init-asset-hub-westend-local)
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # create foreign assets for native Rococo token (governance call on Westend)
       force_create_foreign_asset \
           "ws://127.0.0.1:9945" \
@@ -357,7 +357,7 @@ case "$1" in
       ;;
   reserve-transfer-assets-from-asset-hub-rococo-local)
       amount=$2
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # send ROCs to Alice account on AHW
       limited_reserve_transfer_assets \
           "ws://127.0.0.1:9910" \
@@ -370,7 +370,7 @@ case "$1" in
       ;;
   withdraw-reserve-assets-from-asset-hub-rococo-local)
       amount=$2
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # send back only 100000000000 wrappedWNDs to Alice account on AHW
       limited_reserve_transfer_assets \
           "ws://127.0.0.1:9910" \
@@ -383,7 +383,7 @@ case "$1" in
       ;;
   reserve-transfer-assets-from-asset-hub-westend-local)
       amount=$2
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # send WNDs to Alice account on AHR
       limited_reserve_transfer_assets \
           "ws://127.0.0.1:9010" \
@@ -396,7 +396,7 @@ case "$1" in
       ;;
   withdraw-reserve-assets-from-asset-hub-westend-local)
       amount=$2
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # send back only 100000000000 wrappedROCs to Alice account on AHR
       limited_reserve_transfer_assets \
           "ws://127.0.0.1:9010" \
@@ -408,7 +408,7 @@ case "$1" in
           "Unlimited"
       ;;
   claim-rewards-bridge-hub-rococo-local)
-      ensure_polkadot_js_api
+      ensure_pezkuwi_js_api
       # bhwd -> [62, 68, 77, 64] -> 0x62687764
       claim_rewards \
           "ws://127.0.0.1:8943" \
@@ -439,7 +439,7 @@ case "$1" in
           "BridgedChain"
       ;;
   stop)
-    pkill -f polkadot
+    pkill -f pezkuwi
     pkill -f parachain
     ;;
   import)

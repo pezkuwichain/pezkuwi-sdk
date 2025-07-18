@@ -66,7 +66,7 @@ crates:
   bump: major
 - name: frame-benchmarking
   bump: major
-- name: polkadot-sdk-frame
+- name: pezkuwi-sdk-frame
   bump: major
 - name: frame-support
   bump: major

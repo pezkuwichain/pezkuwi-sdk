@@ -11,6 +11,6 @@ migrations:
   runtime: []
 
 crates:
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
 
 host_functions: []

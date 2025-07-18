@@ -16,7 +16,7 @@
 // Cumulus
 use parachains_common::AccountId;
 
-// Polkadot
+// Pezkuwi
 use sp_core::H256;
 use xcm::{prelude::*, DoubleEncoded};
 use xcm_emulator::Chain;

@@ -32,7 +32,7 @@ use async_std::{
 };
 use async_trait::async_trait;
 use bp_parachains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};
-use bp_polkadot_core::parachains::{ParaHash, ParaId};
+use bp_pezkuwi_core::parachains::{ParaHash, ParaId};
 use bp_runtime::HeaderIdProvider;
 use futures::{select, FutureExt};
 use num_traits::Zero;

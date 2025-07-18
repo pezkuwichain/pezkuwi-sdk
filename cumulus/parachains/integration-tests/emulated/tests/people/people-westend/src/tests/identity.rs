@@ -88,7 +88,7 @@ fn set_identity_cross_chain() {
 
 		let signed_origin =
 			<AssetHubWestend as Chain>::RuntimeOrigin::signed(asset_hub_westend_alice);
-		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		assert_ok!(<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			signed_origin,
 			bx!(xcm::VersionedXcm::from(xcm_message.into())),
 			Weight::MAX
@@ -96,7 +96,7 @@ fn set_identity_cross_chain() {
 		assert_expected_events!(
 			AssetHubWestend,
 			vec![
-				RuntimeEvent::PolkadotXcm(pallet_xcm::Event::Sent { .. }) => {},
+				RuntimeEvent::PezkuwiXcm(pallet_xcm::Event::Sent { .. }) => {},
 			]
 		);
 	});

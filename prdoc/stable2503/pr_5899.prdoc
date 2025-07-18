@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Remove usage of AccountKeyring"
 
@@ -25,13 +25,13 @@ crates:
     bump: patch
   - name: sc-rpc-spec-v2
     bump: patch
-  - name: polkadot-node-metrics
+  - name: pezkuwi-node-metrics
     bump: patch
   - name: substrate-frame-rpc-system
     bump: patch
   - name: westend-runtime
     bump: patch
-  - name: polkadot-sdk-frame
+  - name: pezkuwi-sdk-frame
     bump: patch
   - name: rococo-runtime
     bump: patch

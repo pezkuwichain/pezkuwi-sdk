@@ -8,5 +8,5 @@ doc:
 
     Fixes #6921
 crates:
-- name: polkadot-omni-node-lib
+- name: pezkuwi-omni-node-lib
   bump: patch

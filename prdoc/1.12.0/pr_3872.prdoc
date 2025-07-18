@@ -76,9 +76,9 @@ crates:
     bump: minor
   - name: rococo-parachain-runtime
     bump: minor
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: minor
-  - name: polkadot-test-runtime
+  - name: pezkuwi-test-runtime
     bump: minor
   - name: parachain-template-runtime
     bump: minor

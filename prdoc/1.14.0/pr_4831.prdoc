@@ -15,7 +15,7 @@ crates:
     bump: major
   - name: collectives-westend-runtime
     bump: patch
-  - name: polkadot-runtime-common
+  - name: pezkuwi-runtime-common
     bump: patch
   - name: rococo-runtime
     bump: patch

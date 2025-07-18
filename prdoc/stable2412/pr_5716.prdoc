@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Replace `lazy_static` with `LazyLock`
 
@@ -21,17 +21,17 @@ crates:
     bump: patch
   - name: sp-consensus-beefy
     bump: patch
-  - name: polkadot-node-primitives
+  - name: pezkuwi-node-primitives
     bump: patch
-  - name: polkadot-node-jaeger
+  - name: pezkuwi-node-jaeger
     bump: patch
   - name: frame-benchmarking-cli
     bump: major
   - name: sc-offchain
     bump: patch
-  - name: polkadot-dispute-distribution
+  - name: pezkuwi-dispute-distribution
     bump: patch
-  - name: polkadot-gossip-support
+  - name: pezkuwi-gossip-support
     bump: patch
   - name: xcm-emulator
     bump: patch  

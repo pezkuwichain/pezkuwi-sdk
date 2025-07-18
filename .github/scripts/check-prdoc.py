@@ -12,7 +12,7 @@ python3 .github/scripts/check-prdoc.py Cargo.toml prdoc/*.prdoc
 
 Produces example output:
 ```pre
-🔎 Reading workspace polkadot-sdk/Cargo.toml
+🔎 Reading workspace pezkuwi-sdk/Cargo.toml
 📦 Checking 32 prdocs against 493 crates.
 ✅ All prdocs are valid
 ```

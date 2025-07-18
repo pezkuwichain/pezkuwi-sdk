@@ -25,11 +25,11 @@
 
 mod xcm_config;
 
-use polkadot_sdk::{staging_parachain_info as parachain_info, staging_xcm as xcm, *};
+use pezkuwi_sdk::{staging_parachain_info as parachain_info, staging_xcm as xcm, *};
 #[cfg(not(feature = "runtime-benchmarks"))]
-use polkadot_sdk::{staging_xcm_builder as xcm_builder, staging_xcm_executor as xcm_executor};
+use pezkuwi_sdk::{staging_xcm_builder as xcm_builder, staging_xcm_executor as xcm_executor};
 
-// Substrate and Polkadot dependencies
+// Substrate and Pezkuwi dependencies
 use cumulus_pallet_parachain_system::RelayNumberMonotonicallyIncreases;
 use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use frame_support::{
@@ -48,7 +48,7 @@ use frame_system::{
 };
 use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use parachains_common::message_queue::{NarrowOriginToSibling, ParaIdToSibling};
-use polkadot_runtime_common::{
+use pezkuwi_runtime_common::{
 	xcm_sender::NoPriceForMessageDelivery, BlockHashCount, SlowAdjustingFeeUpdate,
 };
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;

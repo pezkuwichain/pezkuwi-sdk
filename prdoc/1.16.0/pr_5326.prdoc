@@ -1,13 +1,13 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
-title: Update Readme of the `polkadot` crate
+title: Update Readme of the `pezkuwi` crate
 
 doc:
   - audience: Node Operator
     description: |
-      Updated Readme of the `polkadot` crate.
+      Updated Readme of the `pezkuwi` crate.
 
 crates:
-  - name: polkadot
+  - name: pezkuwi
     bump: patch

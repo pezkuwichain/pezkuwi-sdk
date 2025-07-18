@@ -367,7 +367,7 @@ fn pay_xcm_fee_with_some_asset_swapped_for_native() {
 			penpal.clone(),
 		);
 
-		assert_ok!(<PenpalA as PenpalAPallet>::PolkadotXcm::send(
+		assert_ok!(<PenpalA as PenpalAPallet>::PezkuwiXcm::send(
 			penpal_root,
 			bx!(asset_hub_location),
 			bx!(xcm),

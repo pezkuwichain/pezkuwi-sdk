@@ -23,7 +23,7 @@
 //! WASM-EXECUTION: `Compiled`, CHAIN: `Some("coretime-rococo-dev")`, DB CACHE: 1024
 
 // Executed Command:
-// ./target/release/polkadot-parachain
+// ./target/release/pezkuwi-parachain
 // benchmark
 // pallet
 // --wasm-execution=compiled

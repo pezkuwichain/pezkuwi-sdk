@@ -37,7 +37,7 @@
 use super::{
 	AccountId, AllPalletsWithSystem, AssetId as AssetIdPalletAssets, Assets, Authorship, Balance,
 	Balances, CollatorSelection, ForeignAssets, ForeignAssetsInstance, NonZeroIssuance,
-	ParachainInfo, ParachainSystem, PolkadotXcm, Runtime, RuntimeCall, RuntimeEvent,
+	ParachainInfo, ParachainSystem, PezkuwiXcm, Runtime, RuntimeCall, RuntimeEvent,
 	RuntimeHoldReason, RuntimeOrigin, WeightToFee, XcmpQueue,
 };
 use crate::{BaseDeliveryFee, FeeAssetId, TransactionByteFee};
@@ -58,8 +58,8 @@ use parachains_common::{
 	xcm_config::{AssetFeeAsExistentialDepositMultiplier, ConcreteAssetFromSystem},
 	TREASURY_PALLET_ID,
 };
-use polkadot_parachain_primitives::primitives::Sibling;
-use polkadot_runtime_common::{impls::ToAuthor, xcm_sender::ExponentialPrice};
+use pezkuwi_parachain_primitives::primitives::Sibling;
+use pezkuwi_runtime_common::{impls::ToAuthor, xcm_sender::ExponentialPrice};
 use sp_runtime::traits::{AccountIdConversion, ConvertInto, Identity, TryConvertInto};
 use testnet_parachains_constants::westend::currency::deposit;
 use xcm::latest::{prelude::*, WESTEND_GENESIS_HASH};
@@ -241,7 +241,7 @@ impl Contains<Location> for ParentOrParentsExecutivePlurality {
 pub type Barrier = TrailingSetTopicAsId<(
 	TakeWeightCredit,
 	// Expected responses are OK.
-	AllowKnownQueryResponses<PolkadotXcm>,
+	AllowKnownQueryResponses<PezkuwiXcm>,
 	// Allow XCMs with some computed origins to pass through.
 	WithComputedOrigin<
 		(
@@ -298,7 +298,7 @@ parameter_types! {
 		Location::new(1, [Parachain(ASSET_HUB_ID), PalletInstance(ASSETS_PALLET_ID)]);
 	pub AssetsPalletLocation: Location =
 		Location::new(0, [PalletInstance(ASSETS_PALLET_ID)]);
-	pub CheckingAccount: AccountId = PolkadotXcm::check_account();
+	pub CheckingAccount: AccountId = PezkuwiXcm::check_account();
 	pub LocalTeleportableToAssetHub: Location = Location::new(
 		0,
 		[PalletInstance(ASSETS_PALLET_ID), GeneralIndex(TELEPORTABLE_ASSET_ID.into())]
@@ -388,7 +388,7 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
-	type XcmEventEmitter = PolkadotXcm;
+	type XcmEventEmitter = PezkuwiXcm;
 	// How to withdraw and deposit an asset.
 	type AssetTransactor = AssetTransactors;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
@@ -419,10 +419,10 @@ impl xcm_executor::Config for XcmConfig {
 			AccountId,
 		>,
 	);
-	type ResponseHandler = PolkadotXcm;
-	type AssetTrap = PolkadotXcm;
-	type AssetClaims = PolkadotXcm;
-	type SubscriptionService = PolkadotXcm;
+	type ResponseHandler = PezkuwiXcm;
+	type AssetTrap = PezkuwiXcm;
+	type AssetClaims = PezkuwiXcm;
+	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type AssetLocker = ();
@@ -440,7 +440,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
-	type XcmRecorder = PolkadotXcm;
+	type XcmRecorder = PezkuwiXcm;
 }
 
 /// Multiplier used for dedicated `TakeFirstAssetTrader` with `ForeignAssets` instance.
@@ -463,7 +463,7 @@ pub type PriceForParentDelivery =
 /// queues.
 pub type XcmRouter = WithUniqueTopic<(
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, PriceForParentDelivery>,
+	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PezkuwiXcm, PriceForParentDelivery>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 )>;
@@ -471,7 +471,7 @@ pub type XcmRouter = WithUniqueTopic<(
 parameter_types! {
 	pub const DepositPerItem: Balance = deposit(1, 0);
 	pub const DepositPerByte: Balance = deposit(0, 1);
-	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PolkadotXcm(pallet_xcm::HoldReason::AuthorizeAlias);
+	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PezkuwiXcm(pallet_xcm::HoldReason::AuthorizeAlias);
 }
 
 impl pallet_xcm::Config for Runtime {

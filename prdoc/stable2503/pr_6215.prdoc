@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Remove `ProspectiveParachainsMode` from backing subsystem
 doc:
@@ -10,7 +10,7 @@ doc:
       all networks it should always be true.
 
 crates:
-  - name: polkadot-node-core-backing
+  - name: pezkuwi-node-core-backing
     bump: patch
-  - name: polkadot-statement-table
+  - name: pezkuwi-statement-table
     bump: major

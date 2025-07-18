@@ -3,8 +3,8 @@ title: Make PendingConfigs storage item public
 doc:
   - audience: Runtime Dev
     description: |
-      Make PendingConfigs storage item in polkadot's configuration crate public.
+      Make PendingConfigs storage item in pezkuwi's configuration crate public.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: minor

@@ -12,7 +12,7 @@ crates:
     bump: major
   - name: sc-network-sync
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
   - name: cumulus-client-service
     bump: major

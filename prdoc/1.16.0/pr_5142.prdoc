@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: "Move decompression to worker processes"
 
@@ -12,15 +12,15 @@ doc:
       workers running synchronously in separate processes.
 
 crates:
-  - name: polkadot-node-core-candidate-validation
+  - name: pezkuwi-node-core-candidate-validation
     bump: patch
-  - name: polkadot-overseer
+  - name: pezkuwi-overseer
     bump: patch
-  - name: polkadot-node-core-pvf
+  - name: pezkuwi-node-core-pvf
     bump: major
-  - name: polkadot-node-core-pvf-common
+  - name: pezkuwi-node-core-pvf-common
     bump: major
-  - name: polkadot-node-core-pvf-execute-worker
+  - name: pezkuwi-node-core-pvf-execute-worker
     bump: patch
-  - name: polkadot-node-core-pvf-prepare-worker
+  - name: pezkuwi-node-core-pvf-prepare-worker
     bump: patch

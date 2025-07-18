@@ -128,7 +128,7 @@ fn ah_to_penpal_foreign_assets_receiver_assertions(t: SystemParaToParaTest) {
 	let expected_asset_id = t.args.asset_id.unwrap();
 	let (_, expected_asset_amount) =
 		non_fee_asset(&t.args.assets, t.args.fee_asset_item as usize).unwrap();
-	let checking_account = <PenpalA as PenpalAPallet>::PolkadotXcm::check_account();
+	let checking_account = <PenpalA as PenpalAPallet>::PezkuwiXcm::check_account();
 	let system_para_native_asset_location = RelayLocation::get();
 
 	PenpalA::assert_xcmp_queue_success(None);
@@ -158,7 +158,7 @@ fn ah_to_penpal_foreign_assets_receiver_assertions(t: SystemParaToParaTest) {
 }
 
 fn system_para_limited_teleport_assets(t: SystemParaToRelayTest) -> DispatchResult {
-	<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::limited_teleport_assets(
+	<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::limited_teleport_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -169,7 +169,7 @@ fn system_para_limited_teleport_assets(t: SystemParaToRelayTest) -> DispatchResu
 }
 
 fn para_to_system_para_transfer_assets(t: ParaToSystemParaTest) -> DispatchResult {
-	<PenpalA as PenpalAPallet>::PolkadotXcm::transfer_assets(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -180,7 +180,7 @@ fn para_to_system_para_transfer_assets(t: ParaToSystemParaTest) -> DispatchResul
 }
 
 fn system_para_to_para_transfer_assets(t: SystemParaToParaTest) -> DispatchResult {
-	<AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets(
+	<AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets(
 		t.signed_origin,
 		bx!(t.args.dest.into()),
 		bx!(t.args.beneficiary.into()),
@@ -283,7 +283,7 @@ pub fn do_bidirectional_teleport_foreign_assets_between_para_and_asset_hub_using
 	let asset_owner = PenpalAssetOwner::get();
 	let system_para_native_asset_location = RelayLocation::get();
 	let sender = PenpalASender::get();
-	let penpal_check_account = <PenpalA as PenpalAPallet>::PolkadotXcm::check_account();
+	let penpal_check_account = <PenpalA as PenpalAPallet>::PezkuwiXcm::check_account();
 	let ah_as_seen_by_penpal = PenpalA::sibling_location_of(AssetHubWestend::para_id());
 	let penpal_assets: Assets = vec![
 		(Parent, fee_amount_to_send).into(),
@@ -524,7 +524,7 @@ fn teleport_to_untrusted_chain_fails() {
 
 	// this should fail
 	AssetHubWestend::execute_with(|| {
-		let result = <AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::transfer_assets_using_type_and_then(
+		let result = <AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			signed_origin.clone(),
 			bx!(destination.clone().into()),
 			bx!(assets.clone().into()),
@@ -550,7 +550,7 @@ fn teleport_to_untrusted_chain_fails() {
 			WithdrawAsset(assets.into()),
 			InitiateTeleport { assets: Wild(All), dest: destination, xcm: Xcm::<()>::new() },
 		]);
-		let result = <AssetHubWestend as AssetHubWestendPallet>::PolkadotXcm::execute(
+		let result = <AssetHubWestend as AssetHubWestendPallet>::PezkuwiXcm::execute(
 			signed_origin,
 			bx!(xcm::VersionedXcm::from(xcm)),
 			Weight::MAX,

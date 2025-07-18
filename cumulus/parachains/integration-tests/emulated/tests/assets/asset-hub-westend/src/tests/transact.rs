@@ -72,7 +72,7 @@ fn transfer_and_transact_in_same_xcm(
 			remote_xcm: xcm_on_ah,
 		},
 	]);
-	<PenpalA as PenpalAPallet>::PolkadotXcm::execute(
+	<PenpalA as PenpalAPallet>::PezkuwiXcm::execute(
 		signed_origin,
 		bx!(xcm::VersionedXcm::from(xcm.into())),
 		Weight::MAX,

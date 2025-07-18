@@ -12,5 +12,5 @@ doc:
       to make any progress.
 
 crates:
-  - name: polkadot-runtime-common
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-common
+  - name: pezkuwi-runtime-parachains

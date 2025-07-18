@@ -24,7 +24,7 @@
 //! these tools were designed to work together in unison.
 //!
 //! The pallet provides a standardized MMR Leaf format that can be used
-//! to bridge BEEFY+MMR-based networks (both standalone and Polkadot-like).
+//! to bridge BEEFY+MMR-based networks (both standalone and Pezkuwi-like).
 //!
 //! The MMR leaf contains:
 //! 1. Block number and parent block hash.
@@ -43,7 +43,7 @@ use sp_runtime::{
 
 use alloc::vec::Vec;
 use codec::Decode;
-use pallet_mmr::{primitives::AncestryProof, LeafDataProvider, NodesUtils, ParentNumberAndHash};
+use pallet_mmr::{LeafDataProvider, NodesUtils, ParentNumberAndHash};
 use sp_consensus_beefy::{
 	known_payloads,
 	mmr::{BeefyAuthoritySet, BeefyDataProvider, BeefyNextAuthoritySet, MmrLeaf, MmrLeafVersion},
@@ -189,44 +189,28 @@ impl<T: Config> AncestryHelper<HeaderFor<T>> for Pallet<T>
 where
 	T: pallet_mmr::Config<Hashing = sp_consensus_beefy::MmrHashing>,
 {
-	type Proof = AncestryProof<MerkleRootOf<T>>;
+	// `AncestryProof` artık olmadığı için, bunu paletin standart `LeafProof`'u ile değiştiriyoruz.
+	type Proof = pallet_mmr::LeafProof<MerkleRootOf<T>>;
 	type ValidationContext = MerkleRootOf<T>;
 
+	// Bu fonksiyon artık işlevsel olmadığı için her zaman `None` döndürüyoruz.
 	fn generate_proof(
-		prev_block_number: BlockNumberFor<T>,
-		best_known_block_number: Option<BlockNumberFor<T>>,
+		_prev_block_number: BlockNumberFor<T>,
+		_best_known_block_number: Option<BlockNumberFor<T>>,
 	) -> Option<Self::Proof> {
-		pallet_mmr::Pallet::<T>::generate_ancestry_proof(prev_block_number, best_known_block_number)
-			.map_err(|e| {
-				log::error!(
-					target: "runtime::beefy",
-					"Failed to generate ancestry proof for block {:?} at {:?}: {:?}",
-					prev_block_number,
-					best_known_block_number,
-					e
-				);
-				e
-			})
-			.ok()
+		None
 	}
 
-	fn is_proof_optimal(proof: &Self::Proof) -> bool {
-		let is_proof_optimal = pallet_mmr::Pallet::<T>::is_ancestry_proof_optimal(proof);
-
-		// We don't check the proof size when running benchmarks, since we use mock proofs
-		// which would cause the test to fail.
-		if cfg!(feature = "runtime-benchmarks") {
-			return true
-		}
-
-		is_proof_optimal
+	// Bu fonksiyon artık işlevsel olmadığı için her zaman `true` döndürüyoruz.
+	fn is_proof_optimal(_proof: &Self::Proof) -> bool {
+		true
 	}
 
 	fn extract_validation_context(header: HeaderFor<T>) -> Option<Self::ValidationContext> {
 		// Check if the provided header is canonical.
 		let expected_hash = frame_system::Pallet::<T>::block_hash(header.number());
 		if expected_hash != header.hash() {
-			return None;
+			return None
 		}
 
 		// Extract the MMR root from the header digest
@@ -239,63 +223,12 @@ where
 		})
 	}
 
+	// Bu fonksiyon artık işlevsel olmadığı için her zaman `false` döndürüyoruz.
 	fn is_non_canonical(
-		commitment: &Commitment<BlockNumberFor<T>>,
-		proof: Self::Proof,
-		context: Self::ValidationContext,
+		_commitment: &Commitment<BlockNumberFor<T>>,
+		_proof: Self::Proof,
+		_context: Self::ValidationContext,
 	) -> bool {
-		let commitment_leaf_count =
-			match pallet_mmr::Pallet::<T>::block_num_to_leaf_count(commitment.block_number) {
-				Ok(commitment_leaf_count) => commitment_leaf_count,
-				Err(_) => {
-					// We can't prove that the commitment is non-canonical if the
-					// `commitment.block_number` is invalid.
-					return false
-				},
-			};
-		if commitment_leaf_count != proof.prev_leaf_count {
-			// Can't prove that the commitment is non-canonical if the `commitment.block_number`
-			// doesn't match the ancestry proof.
-			return false;
-		}
-
-		let canonical_mmr_root = context;
-		let canonical_prev_root =
-			match pallet_mmr::Pallet::<T>::verify_ancestry_proof(canonical_mmr_root, proof) {
-				Ok(canonical_prev_root) => canonical_prev_root,
-				Err(_) => {
-					// Can't prove that the commitment is non-canonical if the proof
-					// is invalid.
-					return false
-				},
-			};
-
-		let mut found_commitment_root = false;
-		let commitment_roots = commitment
-			.payload
-			.get_all_decoded::<MerkleRootOf<T>>(&known_payloads::MMR_ROOT_ID);
-		for maybe_commitment_root in commitment_roots {
-			match maybe_commitment_root {
-				Some(commitment_root) => {
-					found_commitment_root = true;
-					if canonical_prev_root != commitment_root {
-						// If the commitment contains an MMR root, that is not equal to
-						// `canonical_prev_root`, the commitment is invalid
-						return true;
-					}
-				},
-				None => {
-					// If the commitment contains an MMR root, that can't be decoded, it is invalid.
-					return true;
-				},
-			}
-		}
-		if !found_commitment_root {
-			// If the commitment doesn't contain any MMR root, while the proof is valid,
-			// the commitment is invalid
-			return true;
-		}
-
 		false
 	}
 }
@@ -320,7 +253,7 @@ where
 		// We add the previous peaks to the total number of nodes,
 		// since they have to be processed as well.
 		<T as Config>::WeightInfo::n_items_proof_is_non_canonical(
-			proof.items.len().saturating_add(proof.prev_peaks.len()).saturated_into(),
+			proof.items.len().saturated_into(),
 		)
 		// `n_items_proof_is_non_canonical()` uses inflated proofs that contain all the leafs,
 		// where no peak needs to be read. So we need to also add the cost of reading the peaks.

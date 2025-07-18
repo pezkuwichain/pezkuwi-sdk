@@ -55,7 +55,7 @@
 //!   --port 30333 \
 //!   --ws-port 9945 \
 //!   --rpc-port 9933 \
-//!   --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" \
+//!   --telemetry-url "wss://telemetry.pezkuwi.io/submit/ 0" \
 //!   --validator \
 //!   --rpc-methods Unsafe \
 //!   --name MyNode01
@@ -79,7 +79,7 @@
 //!   --bob \
 //!   --port 30334 \
 //!   --rpc-port 9946 \
-//!   --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" \
+//!   --telemetry-url "wss://telemetry.pezkuwi.io/submit/ 0" \
 //!   --validator \
 //!   --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWEyoppNCUx8Yx66oV9fJnriXwCcXwDDUA2kj6vnc6iDEp
 //! ```

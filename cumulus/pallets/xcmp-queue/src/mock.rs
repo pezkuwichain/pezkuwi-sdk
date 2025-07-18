@@ -198,7 +198,7 @@ parameter_types! {
 	pub const ByteFee: Balance = 1_000_000;
 }
 
-pub type PriceForSiblingParachainDelivery = polkadot_runtime_common::xcm_sender::ExponentialPrice<
+pub type PriceForSiblingParachainDelivery = pezkuwi_runtime_common::xcm_sender::ExponentialPrice<
 	FeeAssetId,
 	BaseDeliveryFee,
 	ByteFee,

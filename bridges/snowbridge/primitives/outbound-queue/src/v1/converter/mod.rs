@@ -330,8 +330,8 @@ where
 		}
 	}
 
-	/// Convert the xcm for Polkadot-native token from AH into the Command
-	/// To match transfers of Polkadot-native tokens, we expect an input of the form:
+	/// Convert the xcm for Pezkuwi-native token from AH into the Command
+	/// To match transfers of Pezkuwi-native tokens, we expect an input of the form:
 	/// # ReserveAssetDeposited
 	/// # ClearOrigin
 	/// # BuyExecution

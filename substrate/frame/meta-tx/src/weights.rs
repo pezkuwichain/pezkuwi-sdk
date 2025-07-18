@@ -32,7 +32,7 @@
 // --extrinsic=*
 // --wasm-execution=compiled
 // --heap-pages=4096
-// --json-file=/builds/parity/mirrors/polkadot-sdk/.git/.artifacts/bench.json
+// --json-file=/builds/parity/mirrors/pezkuwi-sdk/.git/.artifacts/bench.json
 // --pallet=pallet_meta_tx
 // --chain=dev
 // --header=./substrate/HEADER-APACHE2

@@ -18,7 +18,7 @@
 
 use crate::{BlockNumberOf, Chain, HashOf, SimpleRuntimeVersion};
 use bp_header_chain::SubmitFinalityProofCallExtras;
-use bp_polkadot_core::parachains::ParaId;
+use bp_pezkuwi_core::parachains::ParaId;
 use jsonrpsee::core::ClientError as RpcError;
 use relay_utils::MaybeConnectionError;
 use sc_rpc_api::system::Health;

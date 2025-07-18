@@ -11,4 +11,4 @@ call to relayer account from the relayer-rewards account, determined by the mess
 We have two examples of how this pallet is used in production. Rewards are registered at the target chain to
 compensate fees of message delivery transactions (and linked finality delivery calls). At the source chain, rewards
 are registered during delivery confirmation transactions. You may find more information about that in the
-[Kusama <> Polkadot bridge](../../docs/polkadot-kusama-bridge-overview.md) documentation.
+[Kusama <> Pezkuwi bridge](../../docs/pezkuwi-kusama-bridge-overview.md) documentation.

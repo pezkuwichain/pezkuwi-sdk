@@ -1,4 +1,4 @@
-title: Enable ChainSpec API for polkadot-parachain
+title: Enable ChainSpec API for pezkuwi-parachain
 
 doc:
   - audience:
@@ -14,5 +14,5 @@ doc:
 crates: 
   - name: sc-service
     bump: patch
-  - name: polkadot-rpc
+  - name: pezkuwi-rpc
     bump: patch

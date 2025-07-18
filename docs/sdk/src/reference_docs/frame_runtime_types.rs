@@ -5,7 +5,7 @@
 //!
 //! > As of now, many of these important types are generated within the internals of
 //! > [`construct_runtime`], and there is no easy way for you to visually know they exist.
-//! > [#polkadot-sdk#1378](https://github.com/paritytech/polkadot-sdk/pull/1378) is meant to
+//! > [#pezkuwi-sdk#1378](https://github.com/paritytech/polkadot-sdk/pull/1378) is meant to
 //! > significantly improve this. Exploring the rust-docs of a runtime, such as [`runtime`] which is
 //! > defined in this module is as of now the best way to learn about these types.
 //!
@@ -136,7 +136,7 @@
 //! * [`RuntimeCall`] is a particularly interesting composite enum as it dictates the encoding of an
 //!   extrinsic. See [`crate::reference_docs::transaction_extensions`] for more information.
 //! * See the documentation of [`construct_runtime`].
-//! * See the corresponding lecture in the [pba-book](https://polkadot-blockchain-academy.github.io/pba-book/frame/outer-enum/page.html).
+//! * See the corresponding lecture in the [pba-book](https://pezkuwi-blockchain-academy.github.io/pba-book/frame/outer-enum/page.html).
 //!
 //!
 //! [`construct_runtime`]: frame::runtime::prelude::construct_runtime

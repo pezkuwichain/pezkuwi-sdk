@@ -87,9 +87,10 @@ pub trait FullLeaf: Clone + PartialEq + fmt::Debug {
 	fn using_encoded<R, F: FnOnce(&[u8]) -> R>(&self, f: F, compact: bool) -> R;
 }
 
+/// Blanket implementation for all types that are encodable, decodable, etc.
 impl<T: codec::Encode + codec::Decode + Clone + PartialEq + fmt::Debug> FullLeaf for T {
 	fn using_encoded<R, F: FnOnce(&[u8]) -> R>(&self, f: F, _compact: bool) -> R {
-		codec::Encode::using_encoded(self, f)
+		f(&self.encode())
 	}
 }
 
@@ -105,7 +106,7 @@ impl<T: codec::Encode + codec::Decode + Clone + PartialEq + fmt::Debug> FullLeaf
 /// it would have to be SCALE-compatible with the concrete leaf type, but due to SCALE limitations
 /// it's not possible to know how many bytes the encoding of concrete leaf type uses.
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[derive(RuntimeDebug, Clone, PartialEq)]
+#[derive(RuntimeDebug, Clone, PartialEq, Eq, codec::Encode, codec::Decode, TypeInfo)]
 pub struct OpaqueLeaf(
 	/// Raw bytes of the leaf type encoded in its compact form.
 	///
@@ -129,12 +130,6 @@ impl OpaqueLeaf {
 	/// Attempt to decode the leaf into expected concrete type.
 	pub fn try_decode<T: codec::Decode>(&self) -> Option<T> {
 		codec::Decode::decode(&mut &*self.0).ok()
-	}
-}
-
-impl FullLeaf for OpaqueLeaf {
-	fn using_encoded<R, F: FnOnce(&[u8]) -> R>(&self, f: F, _compact: bool) -> R {
-		f(&self.0)
 	}
 }
 
@@ -176,7 +171,7 @@ impl EncodableOpaqueLeaf {
 ///
 /// [DataOrHash::hash] method calculates the hash of this element in its compact form,
 /// so should be used instead of hashing the encoded form (which will always be non-compact).
-#[derive(RuntimeDebug, Clone, PartialEq)]
+#[derive(RuntimeDebug, Clone, PartialEq, Eq, TypeInfo)]
 pub enum DataOrHash<H: traits::Hash, L> {
 	/// Arbitrary data in its full form.
 	Data(L),
@@ -247,7 +242,7 @@ impl<H: traits::Hash, L: FullLeaf> DataOrHash<H, L> {
 /// into [DataOrHash] and each tuple element is hashed first before constructing
 /// the final hash of the entire tuple. This allows you to replace tuple elements
 /// you don't care about with their hashes.
-#[derive(RuntimeDebug, Clone, PartialEq)]
+#[derive(RuntimeDebug, Clone, PartialEq, Eq, TypeInfo)]
 pub struct Compact<H, T> {
 	/// Internal tuple representation.
 	pub tuple: T,
@@ -275,62 +270,6 @@ impl<H, T: codec::Decode> codec::Decode for Compact<H, T> {
 	}
 }
 
-macro_rules! impl_leaf_data_for_tuple {
-	( $( $name:ident : $id:tt ),+ ) => {
-		/// [FullLeaf] implementation for `Compact<H, (DataOrHash<H, Tuple>, ...)>`
-		impl<H, $( $name ),+> FullLeaf for Compact<H, ( $( DataOrHash<H, $name>, )+ )> where
-			H: traits::Hash,
-			$( $name: FullLeaf ),+
-		{
-			fn using_encoded<R, F: FnOnce(&[u8]) -> R>(&self, f: F, compact: bool) -> R {
-				if compact {
-					codec::Encode::using_encoded(&(
-						$( DataOrHash::<H, $name>::Hash(self.tuple.$id.hash()), )+
-					), f)
-				} else {
-					codec::Encode::using_encoded(&self.tuple, f)
-				}
-			}
-		}
-
-		/// [LeafDataProvider] implementation for `Compact<H, (DataOrHash<H, Tuple>, ...)>`
-		///
-		/// This provides a compact-form encoding for tuples wrapped in [Compact].
-		impl<H, $( $name ),+> LeafDataProvider for Compact<H, ( $( $name, )+ )> where
-			H: traits::Hash,
-			$( $name: LeafDataProvider ),+
-		{
-			type LeafData = Compact<
-				H,
-				( $( DataOrHash<H, $name::LeafData>, )+ ),
-			>;
-
-			fn leaf_data() -> Self::LeafData {
-				let tuple = (
-					$( DataOrHash::Data($name::leaf_data()), )+
-				);
-				Compact::new(tuple)
-			}
-		}
-
-		/// [LeafDataProvider] implementation for `(Tuple, ...)`
-		///
-		/// This provides regular (non-compactable) composition of [LeafDataProvider]s.
-		impl<$( $name ),+> LeafDataProvider for ( $( $name, )+ ) where
-			( $( $name::LeafData, )+ ): FullLeaf,
-			$( $name: LeafDataProvider ),+
-		{
-			type LeafData = ( $( $name::LeafData, )+ );
-
-			fn leaf_data() -> Self::LeafData {
-				(
-					$( $name::leaf_data(), )+
-				)
-			}
-		}
-	}
-}
-
 /// Test functions implementation for `Compact<H, (DataOrHash<H, Tuple>, ...)>`
 #[cfg(test)]
 impl<H, A, B> Compact<H, (DataOrHash<H, A>, DataOrHash<H, B>)>
@@ -345,14 +284,8 @@ where
 	}
 }
 
-impl_leaf_data_for_tuple!(A:0);
-impl_leaf_data_for_tuple!(A:0, B:1);
-impl_leaf_data_for_tuple!(A:0, B:1, C:2);
-impl_leaf_data_for_tuple!(A:0, B:1, C:2, D:3);
-impl_leaf_data_for_tuple!(A:0, B:1, C:2, D:3, E:4);
-
 /// An MMR proof data for a group of leaves.
-#[derive(codec::Encode, codec::Decode, RuntimeDebug, Clone, PartialEq, Eq, TypeInfo)]
+#[derive(RuntimeDebug, Clone, PartialEq, Eq, codec::Encode, codec::Decode, TypeInfo, DecodeWithMemTracking)]
 pub struct LeafProof<Hash> {
 	/// The indices of the leaves the proof is for.
 	pub leaf_indices: Vec<LeafIndex>,

@@ -34,7 +34,7 @@ pub mod account {
 }
 
 pub mod currency {
-	use polkadot_core_primitives::Balance;
+	use pezkuwi_core_primitives::Balance;
 	use westend_runtime_constants as constants;
 
 	/// The existential deposit. Set to 1/10 of its parent Relay Chain.
@@ -61,7 +61,7 @@ pub mod fee {
 			WeightToFeeCoefficients, WeightToFeePolynomial,
 		},
 	};
-	use polkadot_core_primitives::Balance;
+	use pezkuwi_core_primitives::Balance;
 	use smallvec::smallvec;
 	pub use sp_runtime::Perbill;
 
@@ -160,7 +160,7 @@ pub mod consensus {
 
 /// Time-related
 pub mod time {
-	use polkadot_core_primitives::BlockNumber;
+	use pezkuwi_core_primitives::BlockNumber;
 
 	// Time is measured by number of blocks.
 	pub const MINUTES: BlockNumber =

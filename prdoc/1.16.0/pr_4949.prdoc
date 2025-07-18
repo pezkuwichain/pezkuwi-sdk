@@ -34,7 +34,7 @@ crates:
   bump: major
 - name: bp-parachains
   bump: major
-- name: bp-polkadot-core
+- name: bp-pezkuwi-core
   bump: none
 - name: bp-relayers
   bump: major

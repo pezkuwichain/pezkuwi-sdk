@@ -1,9 +1,9 @@
 :root {
-	--polkadot-pink: #E6007A;
-	--polkadot-green: #56F39A;
-	--polkadot-lime: #D3FF33;
-	--polkadot-cyan: #00B2FF;
-	--polkadot-purple: #552BBF;
+	--pezkuwi-pink: #E6007A;
+	--pezkuwi-green: #56F39A;
+	--pezkuwi-lime: #D3FF33;
+	--pezkuwi-cyan: #00B2FF;
+	--pezkuwi-purple: #552BBF;
 }
 
 /* Light theme */
@@ -39,7 +39,7 @@ body.sdk-docs {
 }
 
 html[data-theme="light"] .sidebar-crate > .logo-container > img {
-  content: url("https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/docs/images/Polkadot_Logo_Horizontal_Pink_Black.png");
+  content: url("https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png");
 }
 
 /* Custom styles for blockquotes */

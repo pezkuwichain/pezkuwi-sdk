@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   find-runtimes:
-      name: Scan repo paritytech/polkadot-sdk
+      name: Scan repo paritytech/pezkuwi-sdk
       outputs:
         runtime: ${{ steps.get_runtimes_list.outputs.runtime }}
       runs-on: ubuntu-latest

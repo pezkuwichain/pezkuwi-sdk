@@ -4,14 +4,14 @@ doc:
   - audience: Node Dev
     description: |
       Syncing strategy is no longer implicitly created when building network, but needs to be instantiated explicitly.
-      Previously default implementation can be created with new function `build_polkadot_syncing_strategy` or custom
+      Previously default implementation can be created with new function `build_pezkuwi_syncing_strategy` or custom
       syncing strategy could be implemented and used instead if desired, providing greater flexibility for chain
       developers.
 
 crates:
   - name: cumulus-client-service
     bump: patch
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: patch
   - name: sc-service
     bump: major

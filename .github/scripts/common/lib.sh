@@ -73,7 +73,7 @@ github_label () {
     -F "ref=master" \
     -F "variables[LABEL]=${1}" \
     -F "variables[PRNO]=${CI_COMMIT_REF_NAME}" \
-    -F "variables[PROJECT]=paritytech/polkadot" \
+    -F "variables[PROJECT]=paritytech/pezkuwi" \
     "${GITLAB_API}/projects/${GITHUB_API_PROJECT}/trigger/pipeline"
 }
 
@@ -104,7 +104,7 @@ boldprint () { printf "|\n| \033[1m%s\033[0m\n|\n" "${@}"; }
 boldcat () { printf "|\n"; while read -r l; do printf "| \033[1m%s\033[0m\n" "${l}"; done; printf "|\n" ; }
 
 skip_if_companion_pr() {
-  url="https://api.github.com/repos/paritytech/polkadot/pulls/${CI_COMMIT_REF_NAME}"
+  url="https://api.github.com/repos/paritytech/pezkuwi/pulls/${CI_COMMIT_REF_NAME}"
   echo "[+] API URL: $url"
 
   pr_title=$(curl -sSL -H "Authorization: token ${GITHUB_PR_TOKEN}" "$url" | jq -r .title)
@@ -120,7 +120,7 @@ skip_if_companion_pr() {
 
 # Fetches the tag name of the latest release from a repository
 # repo: 'organisation/repo'
-# Usage: latest_release 'paritytech/polkadot'
+# Usage: latest_release 'paritytech/pezkuwi'
 latest_release() {
   curl -s "$api_base/$1/releases/latest" | jq -r '.tag_name'
 }
@@ -132,7 +132,7 @@ has_runtime_changes() {
   to=$2
 
   if git diff --name-only "${from}...${to}" \
-    | grep -q -e '^runtime/polkadot' -e '^runtime/kusama' -e '^primitives/src/' -e '^runtime/common'
+    | grep -q -e '^runtime/pezkuwi' -e '^runtime/kusama' -e '^primitives/src/' -e '^runtime/common'
   then
     return 0
   else
@@ -144,8 +144,8 @@ has_runtime_changes() {
 # with only the bootnode specified and test whether that bootnode provides peers
 # The optional third argument is the index of the bootnode in the list of bootnodes, this is just used to pick an ephemeral
 # port for the node to run on. If you're only testing one, it'll just use the first ephemeral port
-# BOOTNODE: /dns/polkadot-connect-0.parity.io/tcp/443/wss/p2p/12D3KooWEPmjoRpDSUuiTjvyNDd8fejZ9eNWH5bE965nyBMDrB4o
-# CHAINSPEC_FILE: /path/to/polkadot.json
+# BOOTNODE: /dns/pezkuwi-connect-0.parity.io/tcp/443/wss/p2p/12D3KooWEPmjoRpDSUuiTjvyNDd8fejZ9eNWH5bE965nyBMDrB4o
+# CHAINSPEC_FILE: /path/to/pezkuwi.json
 check_bootnode(){
     BOOTNODE=$1
     BASE_CHAINSPEC=$2
@@ -161,10 +161,10 @@ check_bootnode(){
     RPC_PORT=$(python -c "import socket; s=socket.socket(); s.bind(('', 0)); print(s.getsockname()[1]); s.close()")
 
     echo "[+] Checking bootnode $BOOTNODE"
-    polkadot --chain "$TMP_CHAINSPEC_FILE" --no-mdns --rpc-port="$RPC_PORT" --tmp > /dev/null 2>&1 &
+    pezkuwi --chain "$TMP_CHAINSPEC_FILE" --no-mdns --rpc-port="$RPC_PORT" --tmp > /dev/null 2>&1 &
     # Wait a few seconds for the node to start up
     sleep 5
-    POLKADOT_PID=$!
+    PEZKUWI_PID=$!
 
     MAX_POLLS=10
     TIME_BETWEEN_POLLS=3
@@ -179,14 +179,14 @@ check_bootnode(){
       if [ "$PEERS" -ge $MIN_PEERS ]; then
         echo "[+] $PEERS peers found for $BOOTNODE"
         echo "    Bootnode appears contactable"
-        kill $POLKADOT_PID
+        kill $PEZKUWI_PID
         # Delete the temporary chainspec file now we're done running the node
         rm "$TMP_CHAINSPEC_FILE"
         return 0
       fi
       sleep "$TIME_BETWEEN_POLLS"
     done
-    kill $POLKADOT_PID
+    kill $PEZKUWI_PID
     # Delete the temporary chainspec file now we're done running the node
     rm "$TMP_CHAINSPEC_FILE"
     echo "[!] No peers found for $BOOTNODE"
@@ -197,7 +197,7 @@ check_bootnode(){
 # Assumes the ENV are set:
 # - RELEASE_ID
 # - GITHUB_TOKEN
-# - REPO in the form paritytech/polkadot
+# - REPO in the form paritytech/pezkuwi
 fetch_release_artifacts() {
   echo "Release ID : $RELEASE_ID"
   echo "Repo       : $REPO"
@@ -240,7 +240,7 @@ fetch_release_artifacts() {
 # Fetch deb package from S3. Assumes the ENV are set:
 # - RELEASE_ID
 # - GITHUB_TOKEN
-# - REPO in the form paritytech/polkadot
+# - REPO in the form paritytech/pezkuwi
 fetch_debian_package_from_s3() {
   BINARY=$1
   echo "Version    : $NODE_VERSION"
@@ -270,7 +270,7 @@ fetch_debian_package_from_s3() {
 }
 
 # Fetch the release artifacts like binary and signatures from S3. Assumes the ENV are set:
-# inputs: binary (polkadot), target(aarch64-apple-darwin)
+# inputs: binary (pezkuwi), target(aarch64-apple-darwin)
 fetch_release_artifacts_from_s3() {
   BINARY=$1
   TARGET=$2
@@ -304,16 +304,16 @@ fetch_release_artifacts_from_s3() {
 function get_s3_url_base() {
     name=$1
     case $name in
-      polkadot | polkadot-execute-worker | polkadot-prepare-worker )
-        printf "https://releases.parity.io/polkadot"
+      pezkuwi | pezkuwi-execute-worker | pezkuwi-prepare-worker )
+        printf "https://releases.parity.io/pezkuwi"
         ;;
 
-      polkadot-parachain)
-        printf "https://releases.parity.io/polkadot-parachain"
+      pezkuwi-parachain)
+        printf "https://releases.parity.io/pezkuwi-parachain"
         ;;
 
-      polkadot-omni-node)
-        printf "https://releases.parity.io/polkadot-omni-node"
+      pezkuwi-omni-node)
+        printf "https://releases.parity.io/pezkuwi-omni-node"
         ;;
 
       chain-spec-builder)
@@ -366,7 +366,7 @@ function check_gpg() {
 
 # GITHUB_REF will typically be like:
 # - refs/heads/release-v1.2.3
-# - refs/heads/release-polkadot-v1.2.3-rc2
+# - refs/heads/release-pezkuwi-v1.2.3-rc2
 # This function extracts the version
 function get_version_from_ghref() {
   GITHUB_REF=$1
@@ -385,10 +385,10 @@ function get_latest_rc_tag() {
   version=$1
   product=$2
 
-  if [[ "$product" == "polkadot" ]]; then
+  if [[ "$product" == "pezkuwi" ]]; then
     last_rc=$(git tag -l "$version-rc*" | sort -V | tail -n 1)
-  elif [[ "$product" == "polkadot-parachain"  ]]; then
-    last_rc=$(git tag -l "polkadot-parachains-$version-rc*" | sort -V | tail -n 1)
+  elif [[ "$product" == "pezkuwi-parachain"  ]]; then
+    last_rc=$(git tag -l "pezkuwi-parachains-$version-rc*" | sort -V | tail -n 1)
   fi
   echo "${last_rc}"
 }
@@ -478,11 +478,11 @@ check_release_id() {
 # output: latest_release_tag
 get_latest_release_tag() {
     TOKEN="Authorization: Bearer $GITHUB_TOKEN"
-    latest_release_tag=$(curl -s -H "$TOKEN" $api_base/paritytech/polkadot-sdk/releases/latest | jq -r '.tag_name')
+    latest_release_tag=$(curl -s -H "$TOKEN" $api_base/paritytech/pezkuwi-sdk/releases/latest | jq -r '.tag_name')
     printf $latest_release_tag
 }
 
-function get_polkadot_node_version_from_code() {
+function get_pezkuwi_node_version_from_code() {
    # list all the files with node version
   git grep -e "\(NODE_VERSION[^=]*= \)\".*\"" |
   # fetch only the one we need
@@ -497,7 +497,7 @@ function get_polkadot_node_version_from_code() {
 
 validate_stable_tag() {
     tag="$1"
-    pattern="^(polkadot-)?stable[0-9]{4}(-[0-9]+)?(-rc[0-9]+)?$"
+    pattern="^(pezkuwi-)?stable[0-9]{4}(-[0-9]+)?(-rc[0-9]+)?$"
 
     if [[ $tag =~ $pattern ]]; then
         echo $tag
@@ -507,9 +507,9 @@ validate_stable_tag() {
     fi
 }
 
-# Prepare docker stable tag form the polkadot stable tag
+# Prepare docker stable tag form the pezkuwi stable tag
 #
-# input: tag (polkaodot-stableYYMM(-X) or polkadot-stableYYMM(-X)-rcX)
+# input: tag (polkaodot-stableYYMM(-X) or pezkuwi-stableYYMM(-X)-rcX)
 # output: stableYYMM(-X) or stableYYMM(-X)-rcX
 prepare_docker_stable_tag() {
   tag="$1"

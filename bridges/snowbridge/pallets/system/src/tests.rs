@@ -203,7 +203,7 @@ fn register_token_with_signed_yields_bad_origin() {
 }
 
 pub struct RegisterTokenTestCase {
-	/// Input: Location of Polkadot-native token relative to BH
+	/// Input: Location of Pezkuwi-native token relative to BH
 	pub native: Location,
 	/// Output: Reanchored, canonicalized location
 	pub reanchored: Location,
@@ -214,17 +214,17 @@ pub struct RegisterTokenTestCase {
 #[test]
 fn register_all_tokens_succeeds() {
 	let test_cases = vec![
-		// DOT
+		// HEZ
 		RegisterTokenTestCase {
 			native: Location::parent(),
-			reanchored: Location::new(1, GlobalConsensus(Polkadot)),
+			reanchored: Location::new(1, GlobalConsensus(Pezkuwi)),
 			foreign: hex!("4e241583d94b5d48a27a22064cd49b2ed6f5231d2d950e432f9b7c2e0ade52b2")
 				.into(),
 		},
-		// GLMR (Some Polkadot parachain currency)
+		// GLMR (Some Pezkuwi parachain currency)
 		RegisterTokenTestCase {
 			native: Location::new(1, [Parachain(2004)]),
-			reanchored: Location::new(1, [GlobalConsensus(Polkadot), Parachain(2004)]),
+			reanchored: Location::new(1, [GlobalConsensus(Pezkuwi), Parachain(2004)]),
 			foreign: hex!("34c08fc90409b6924f0e8eabb7c2aaa0c749e23e31adad9f6d217b577737fafb")
 				.into(),
 		},
@@ -234,7 +234,7 @@ fn register_all_tokens_succeeds() {
 			reanchored: Location::new(
 				1,
 				[
-					GlobalConsensus(Polkadot),
+					GlobalConsensus(Pezkuwi),
 					Parachain(1000),
 					PalletInstance(50),
 					GeneralIndex(1984),

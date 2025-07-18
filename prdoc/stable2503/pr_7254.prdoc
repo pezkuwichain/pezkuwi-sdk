@@ -14,25 +14,25 @@ crates:
   bump: minor
 - name: cumulus-relay-chain-rpc-interface
   bump: minor
-- name: polkadot-node-core-candidate-validation
+- name: pezkuwi-node-core-candidate-validation
   bump: minor
-- name: polkadot-node-core-prospective-parachains
+- name: pezkuwi-node-core-prospective-parachains
   bump: minor
-- name: polkadot-node-core-provisioner
+- name: pezkuwi-node-core-provisioner
   bump: minor
-- name: polkadot-node-core-runtime-api
+- name: pezkuwi-node-core-runtime-api
   bump: minor
-- name: polkadot-collator-protocol
+- name: pezkuwi-collator-protocol
   bump: major
-- name: polkadot-overseer
+- name: pezkuwi-overseer
   bump: major
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: major
-- name: polkadot-node-subsystem-util
+- name: pezkuwi-node-subsystem-util
   bump: major
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: minor
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: minor
 - name: rococo-runtime
   bump: minor
@@ -44,11 +44,11 @@ crates:
   bump: minor
 - name: cumulus-relay-chain-interface
   bump: major
-- name: polkadot-statement-distribution
+- name: pezkuwi-statement-distribution
   bump: major
-- name: polkadot
+- name: pezkuwi
   bump: none
-- name: polkadot-service
+- name: pezkuwi-service
   bump: minor
 - name: cumulus-client-consensus-common
   bump: minor

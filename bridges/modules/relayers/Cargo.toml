@@ -30,7 +30,7 @@ sp-runtime.workspace = true
 
 [dev-dependencies]
 bp-parachains = { default-features = false, workspace = true }
-bp-polkadot-core = { default-features = false, workspace = true }
+bp-pezkuwi-core = { default-features = false, workspace = true }
 bp-runtime = { default-features = false, workspace = true }
 bp-test-utils = { default-features = false, workspace = true }
 pallet-balances = { default-features = true, workspace = true }
@@ -45,7 +45,7 @@ std = [
 	"bp-header-chain/std",
 	"bp-messages/std",
 	"bp-parachains/std",
-	"bp-polkadot-core/std",
+	"bp-pezkuwi-core/std",
 	"bp-relayers/std",
 	"bp-runtime/std",
 	"bp-test-utils/std",

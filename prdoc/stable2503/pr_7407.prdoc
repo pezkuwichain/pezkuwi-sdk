@@ -12,7 +12,7 @@ doc:
 
     ---
 
-    Polkadot address: 156HGo9setPcU2qhFMVWLkcmtCEGySLwNqa3DaEiYSWtte4Y
+    Pezkuwi address: 156HGo9setPcU2qhFMVWLkcmtCEGySLwNqa3DaEiYSWtte4Y
 crates:
 - name: asset-hub-rococo-runtime
   bump: minor

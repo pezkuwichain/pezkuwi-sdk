@@ -16,7 +16,7 @@
 
 #![cfg(test)]
 
-use bp_polkadot_core::Signature;
+use bp_pezkuwi_core::Signature;
 use bridge_hub_rococo_runtime::{
 	bridge_to_westend_config::OnBridgeHubRococoRefundBridgeHubWestendMessages,
 	xcm_config::XcmConfig, AllPalletsWithoutSystem, BridgeRejectObsoleteHeadersAndMessages,
@@ -130,8 +130,8 @@ fn ethereum_client_consensus_extrinsics_work() {
 }
 
 #[test]
-fn ethereum_to_polkadot_message_extrinsics_work() {
-	snowbridge_runtime_test_common::ethereum_to_polkadot_message_extrinsics_work(
+fn ethereum_to_pezkuwi_message_extrinsics_work() {
+	snowbridge_runtime_test_common::ethereum_to_pezkuwi_message_extrinsics_work(
 		collator_session_keys(),
 		1013,
 		construct_and_apply_extrinsic,

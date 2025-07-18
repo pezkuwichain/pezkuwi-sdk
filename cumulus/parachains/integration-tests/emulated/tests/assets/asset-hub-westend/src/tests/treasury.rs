@@ -19,7 +19,7 @@ use emulated_integration_tests_common::{
 	USDT_ID,
 };
 use frame_support::traits::fungibles::{Inspect, Mutate};
-use polkadot_runtime_common::impls::VersionedLocatableAsset;
+use pezkuwi_runtime_common::impls::VersionedLocatableAsset;
 use westend_system_emulated_network::westend_emulated_chain::westend_runtime::Dmp;
 use xcm_executor::traits::ConvertLocation;
 

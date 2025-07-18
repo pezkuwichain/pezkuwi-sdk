@@ -9,5 +9,5 @@ doc:
      `Context`
 
 crates:
-  - name: polkadot-node-core-approval-voting
+  - name: pezkuwi-node-core-approval-voting
     bump: major

@@ -10,7 +10,7 @@ description = "Consensus extension module for Sassafras consensus."
 readme = "README.md"
 publish = false
 
-[package.metadata.polkadot-sdk]
+[package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true
 
 [lints]

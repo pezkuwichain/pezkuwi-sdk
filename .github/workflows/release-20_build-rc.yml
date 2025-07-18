@@ -8,15 +8,15 @@ on:
         default: all
         type: choice
         options:
-          - polkadot
-          - polkadot-parachain
-          - polkadot-omni-node
+          - pezkuwi
+          - pezkuwi-parachain
+          - pezkuwi-omni-node
           - frame-omni-bencher
           - chain-spec-builder
           - all
 
       release_tag:
-        description: Tag matching the actual release candidate with the format polkadot-stableYYMM(-X)-rcX or polkadot-stableYYMM(-X)
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcX or pezkuwi-stableYYMM(-X)
         type: string
 
 jobs:
@@ -44,13 +44,13 @@ jobs:
           RELEASE_TAG=$(validate_stable_tag ${{ inputs.release_tag }})
           echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
 
-  build-polkadot-binary:
+  build-pezkuwi-binary:
     needs: [validate-inputs]
-    if: ${{ inputs.binary == 'polkadot' || inputs.binary == 'all' }}
+    if: ${{ inputs.binary == 'pezkuwi' || inputs.binary == 'all' }}
     uses: "./.github/workflows/release-reusable-rc-buid.yml"
     with:
-      binary: '["polkadot", "polkadot-prepare-worker", "polkadot-execute-worker"]'
-      package: polkadot
+      binary: '["pezkuwi", "pezkuwi-prepare-worker", "pezkuwi-execute-worker"]'
+      package: pezkuwi
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: x86_64-unknown-linux-gnu
     secrets:
@@ -66,13 +66,13 @@ jobs:
       attestations: write
       contents: read
 
-  build-polkadot-parachain-binary:
+  build-pezkuwi-parachain-binary:
     needs: [validate-inputs]
-    if: ${{ inputs.binary == 'polkadot-parachain' || inputs.binary == 'all' }}
+    if: ${{ inputs.binary == 'pezkuwi-parachain' || inputs.binary == 'all' }}
     uses: "./.github/workflows/release-reusable-rc-buid.yml"
     with:
-      binary: '["polkadot-parachain"]'
-      package: "polkadot-parachain-bin"
+      binary: '["pezkuwi-parachain"]'
+      package: "pezkuwi-parachain-bin"
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: x86_64-unknown-linux-gnu
     secrets:
@@ -88,13 +88,13 @@ jobs:
       attestations: write
       contents: read
 
-  build-polkadot-omni-node-binary:
+  build-pezkuwi-omni-node-binary:
     needs: [validate-inputs]
-    if: ${{ inputs.binary == 'polkadot-omni-node' || inputs.binary == 'all' }}
+    if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'all' }}
     uses: "./.github/workflows/release-reusable-rc-buid.yml"
     with:
-      binary: '["polkadot-omni-node"]'
-      package: "polkadot-omni-node"
+      binary: '["pezkuwi-omni-node"]'
+      package: "pezkuwi-omni-node"
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: x86_64-unknown-linux-gnu
     secrets:
@@ -154,13 +154,13 @@ jobs:
       attestations: write
       contents: read
 
-  build-polkadot-macos-binary:
+  build-pezkuwi-macos-binary:
     needs: [validate-inputs]
-    if: ${{ inputs.binary == 'polkadot' || inputs.binary == 'all' }}
+    if: ${{ inputs.binary == 'pezkuwi' || inputs.binary == 'all' }}
     uses: "./.github/workflows/release-reusable-rc-buid.yml"
     with:
-      binary: '["polkadot", "polkadot-prepare-worker", "polkadot-execute-worker"]'
-      package: polkadot
+      binary: '["pezkuwi", "pezkuwi-prepare-worker", "pezkuwi-execute-worker"]'
+      package: pezkuwi
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: aarch64-apple-darwin
     secrets:
@@ -176,13 +176,13 @@ jobs:
       attestations: write
       contents: read
 
-  build-polkadot-parachain-macos-binary:
+  build-pezkuwi-parachain-macos-binary:
     needs: [validate-inputs]
-    if: ${{ inputs.binary == 'polkadot-parachain' || inputs.binary == 'all' }}
+    if: ${{ inputs.binary == 'pezkuwi-parachain' || inputs.binary == 'all' }}
     uses: "./.github/workflows/release-reusable-rc-buid.yml"
     with:
-      binary: '["polkadot-parachain"]'
-      package: polkadot-parachain-bin
+      binary: '["pezkuwi-parachain"]'
+      package: pezkuwi-parachain-bin
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: aarch64-apple-darwin
     secrets:
@@ -198,13 +198,13 @@ jobs:
       attestations: write
       contents: read
 
-  build-polkadot-omni-node-macos-binary:
+  build-pezkuwi-omni-node-macos-binary:
     needs: [validate-inputs]
-    if: ${{ inputs.binary == 'polkadot-omni-node' || inputs.binary == 'all' }}
+    if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'all' }}
     uses: "./.github/workflows/release-reusable-rc-buid.yml"
     with:
-      binary: '["polkadot-omni-node"]'
-      package: polkadot-omni-node
+      binary: '["pezkuwi-omni-node"]'
+      package: pezkuwi-omni-node
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: aarch64-apple-darwin
     secrets:

@@ -19,10 +19,10 @@
 use codec::{Decode, Encode};
 
 use frame_support::weights::Weight;
-use polkadot_parachain_primitives::primitives::{
+use pezkuwi_parachain_primitives::primitives::{
 	DmpMessageHandler, Id as ParaId, XcmpMessageFormat, XcmpMessageHandler,
 };
-use polkadot_primitives::BlockNumber as RelayBlockNumber;
+use pezkuwi_primitives::BlockNumber as RelayBlockNumber;
 use sp_runtime::traits::{Get, Hash};
 
 use xcm::{latest::prelude::*, VersionedXcm};

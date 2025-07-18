@@ -9,13 +9,13 @@ doc:
       The functionality of backing unconnected candidates introduced by the previous rework is preserved.
 
 crates:
-  - name: polkadot-node-core-prospective-parachains
+  - name: pezkuwi-node-core-prospective-parachains
     bump: minor
-  - name: polkadot-node-subsystem-types
+  - name: pezkuwi-node-subsystem-types
     bump: minor
-  - name: polkadot-node-subsystem-util
+  - name: pezkuwi-node-subsystem-util
     bump: minor
-  - name: polkadot-node-core-provisioner
+  - name: pezkuwi-node-core-provisioner
     bump: none
-  - name: polkadot-statement-distribution
+  - name: pezkuwi-statement-distribution
     bump: none

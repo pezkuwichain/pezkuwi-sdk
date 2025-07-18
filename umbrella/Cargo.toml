@@ -1,7 +1,7 @@
 [package]
-name = "polkadot-sdk"
+name = "pezkuwi-sdk"
 version = "2503.0.1"
-description = "Polkadot SDK umbrella crate."
+description = "Pezkuwi SDK umbrella crate."
 license = "Apache-2.0"
 
 [features]
@@ -13,7 +13,7 @@ std = [
 	"bp-header-chain?/std",
 	"bp-messages?/std",
 	"bp-parachains?/std",
-	"bp-polkadot-core?/std",
+	"bp-pezkuwi-core?/std",
 	"bp-relayers?/std",
 	"bp-runtime?/std",
 	"bp-test-utils?/std",
@@ -159,13 +159,13 @@ std = [
 	"pallet-xcm?/std",
 	"parachains-common?/std",
 	"parachains-runtimes-test-utils?/std",
-	"polkadot-core-primitives?/std",
-	"polkadot-parachain-primitives?/std",
-	"polkadot-primitives?/std",
-	"polkadot-runtime-common?/std",
-	"polkadot-runtime-metrics?/std",
-	"polkadot-runtime-parachains?/std",
-	"polkadot-sdk-frame?/std",
+	"pezkuwi-core-primitives?/std",
+	"pezkuwi-parachain-primitives?/std",
+	"pezkuwi-primitives?/std",
+	"pezkuwi-runtime-common?/std",
+	"pezkuwi-runtime-metrics?/std",
+	"pezkuwi-runtime-parachains?/std",
+	"pezkuwi-sdk-frame?/std",
 	"sc-executor?/std",
 	"slot-range-helper?/std",
 	"sp-api-proc-macro?/std",
@@ -327,15 +327,15 @@ runtime-benchmarks = [
 	"pallet-xcm-bridge-hub?/runtime-benchmarks",
 	"pallet-xcm?/runtime-benchmarks",
 	"parachains-common?/runtime-benchmarks",
-	"polkadot-cli?/runtime-benchmarks",
-	"polkadot-node-metrics?/runtime-benchmarks",
-	"polkadot-omni-node-lib?/runtime-benchmarks",
-	"polkadot-parachain-primitives?/runtime-benchmarks",
-	"polkadot-primitives?/runtime-benchmarks",
-	"polkadot-runtime-common?/runtime-benchmarks",
-	"polkadot-runtime-parachains?/runtime-benchmarks",
-	"polkadot-sdk-frame?/runtime-benchmarks",
-	"polkadot-service?/runtime-benchmarks",
+	"pezkuwi-cli?/runtime-benchmarks",
+	"pezkuwi-node-metrics?/runtime-benchmarks",
+	"pezkuwi-omni-node-lib?/runtime-benchmarks",
+	"pezkuwi-parachain-primitives?/runtime-benchmarks",
+	"pezkuwi-primitives?/runtime-benchmarks",
+	"pezkuwi-runtime-common?/runtime-benchmarks",
+	"pezkuwi-runtime-parachains?/runtime-benchmarks",
+	"pezkuwi-sdk-frame?/runtime-benchmarks",
+	"pezkuwi-service?/runtime-benchmarks",
 	"sc-client-db?/runtime-benchmarks",
 	"sc-service?/runtime-benchmarks",
 	"sp-runtime?/runtime-benchmarks",
@@ -456,17 +456,17 @@ try-runtime = [
 	"pallet-xcm-bridge-hub-router?/try-runtime",
 	"pallet-xcm-bridge-hub?/try-runtime",
 	"pallet-xcm?/try-runtime",
-	"polkadot-cli?/try-runtime",
-	"polkadot-omni-node-lib?/try-runtime",
-	"polkadot-runtime-common?/try-runtime",
-	"polkadot-runtime-parachains?/try-runtime",
-	"polkadot-sdk-frame?/try-runtime",
-	"polkadot-service?/try-runtime",
+	"pezkuwi-cli?/try-runtime",
+	"pezkuwi-omni-node-lib?/try-runtime",
+	"pezkuwi-runtime-common?/try-runtime",
+	"pezkuwi-runtime-parachains?/try-runtime",
+	"pezkuwi-sdk-frame?/try-runtime",
+	"pezkuwi-service?/try-runtime",
 	"sp-runtime?/try-runtime",
 	"staging-parachain-info?/try-runtime",
 ]
 serde = [
-	"bp-polkadot-core?/serde",
+	"bp-pezkuwi-core?/serde",
 	"frame-benchmarking?/serde",
 	"pallet-asset-tx-payment?/serde",
 	"pallet-beefy-mmr?/serde",
@@ -508,7 +508,7 @@ experimental = [
 	"frame-support-procedural?/experimental",
 	"frame-support?/experimental",
 	"frame-system?/experimental",
-	"polkadot-sdk-frame?/experimental",
+	"pezkuwi-sdk-frame?/experimental",
 ]
 with-tracing = [
 	"frame-executive?/with-tracing",
@@ -524,7 +524,7 @@ runtime-full = [
 	"bp-header-chain",
 	"bp-messages",
 	"bp-parachains",
-	"bp-polkadot-core",
+	"bp-pezkuwi-core",
 	"bp-relayers",
 	"bp-runtime",
 	"bp-test-utils",
@@ -672,13 +672,13 @@ runtime-full = [
 	"pallet-xcm-bridge-hub",
 	"pallet-xcm-bridge-hub-router",
 	"parachains-common",
-	"polkadot-core-primitives",
-	"polkadot-parachain-primitives",
-	"polkadot-primitives",
-	"polkadot-runtime-common",
-	"polkadot-runtime-metrics",
-	"polkadot-runtime-parachains",
-	"polkadot-sdk-frame",
+	"pezkuwi-core-primitives",
+	"pezkuwi-parachain-primitives",
+	"pezkuwi-primitives",
+	"pezkuwi-runtime-common",
+	"pezkuwi-runtime-metrics",
+	"pezkuwi-runtime-parachains",
+	"pezkuwi-sdk-frame",
 	"sc-chain-spec-derive",
 	"sc-tracing-proc-macro",
 	"slot-range-helper",
@@ -752,8 +752,8 @@ runtime = [
 	"frame-system-benchmarking",
 	"frame-system-rpc-runtime-api",
 	"frame-try-runtime",
-	"polkadot-sdk-frame",
-	"polkadot-sdk-frame?/runtime",
+	"pezkuwi-sdk-frame",
+	"pezkuwi-sdk-frame?/runtime",
 	"sp-api",
 	"sp-api-proc-macro",
 	"sp-application-crypto",
@@ -832,47 +832,47 @@ node = [
 	"pallet-revive-mock-network",
 	"pallet-transaction-payment-rpc",
 	"parachains-runtimes-test-utils",
-	"polkadot-approval-distribution",
-	"polkadot-availability-bitfield-distribution",
-	"polkadot-availability-distribution",
-	"polkadot-availability-recovery",
-	"polkadot-cli",
-	"polkadot-collator-protocol",
-	"polkadot-dispute-distribution",
-	"polkadot-erasure-coding",
-	"polkadot-gossip-support",
-	"polkadot-network-bridge",
-	"polkadot-node-collation-generation",
-	"polkadot-node-core-approval-voting",
-	"polkadot-node-core-approval-voting-parallel",
-	"polkadot-node-core-av-store",
-	"polkadot-node-core-backing",
-	"polkadot-node-core-bitfield-signing",
-	"polkadot-node-core-candidate-validation",
-	"polkadot-node-core-chain-api",
-	"polkadot-node-core-chain-selection",
-	"polkadot-node-core-dispute-coordinator",
-	"polkadot-node-core-parachains-inherent",
-	"polkadot-node-core-prospective-parachains",
-	"polkadot-node-core-provisioner",
-	"polkadot-node-core-pvf",
-	"polkadot-node-core-pvf-checker",
-	"polkadot-node-core-pvf-common",
-	"polkadot-node-core-pvf-execute-worker",
-	"polkadot-node-core-pvf-prepare-worker",
-	"polkadot-node-core-runtime-api",
-	"polkadot-node-metrics",
-	"polkadot-node-network-protocol",
-	"polkadot-node-primitives",
-	"polkadot-node-subsystem",
-	"polkadot-node-subsystem-types",
-	"polkadot-node-subsystem-util",
-	"polkadot-omni-node-lib",
-	"polkadot-overseer",
-	"polkadot-rpc",
-	"polkadot-service",
-	"polkadot-statement-distribution",
-	"polkadot-statement-table",
+	"pezkuwi-approval-distribution",
+	"pezkuwi-availability-bitfield-distribution",
+	"pezkuwi-availability-distribution",
+	"pezkuwi-availability-recovery",
+	"pezkuwi-cli",
+	"pezkuwi-collator-protocol",
+	"pezkuwi-dispute-distribution",
+	"pezkuwi-erasure-coding",
+	"pezkuwi-gossip-support",
+	"pezkuwi-network-bridge",
+	"pezkuwi-node-collation-generation",
+	"pezkuwi-node-core-approval-voting",
+	"pezkuwi-node-core-approval-voting-parallel",
+	"pezkuwi-node-core-av-store",
+	"pezkuwi-node-core-backing",
+	"pezkuwi-node-core-bitfield-signing",
+	"pezkuwi-node-core-candidate-validation",
+	"pezkuwi-node-core-chain-api",
+	"pezkuwi-node-core-chain-selection",
+	"pezkuwi-node-core-dispute-coordinator",
+	"pezkuwi-node-core-parachains-inherent",
+	"pezkuwi-node-core-prospective-parachains",
+	"pezkuwi-node-core-provisioner",
+	"pezkuwi-node-core-pvf",
+	"pezkuwi-node-core-pvf-checker",
+	"pezkuwi-node-core-pvf-common",
+	"pezkuwi-node-core-pvf-execute-worker",
+	"pezkuwi-node-core-pvf-prepare-worker",
+	"pezkuwi-node-core-runtime-api",
+	"pezkuwi-node-metrics",
+	"pezkuwi-node-network-protocol",
+	"pezkuwi-node-primitives",
+	"pezkuwi-node-subsystem",
+	"pezkuwi-node-subsystem-types",
+	"pezkuwi-node-subsystem-util",
+	"pezkuwi-omni-node-lib",
+	"pezkuwi-overseer",
+	"pezkuwi-rpc",
+	"pezkuwi-service",
+	"pezkuwi-statement-distribution",
+	"pezkuwi-statement-table",
 	"sc-allocator",
 	"sc-authority-discovery",
 	"sc-basic-authorship",
@@ -992,10 +992,10 @@ default-features = false
 optional = true
 path = "../bridges/primitives/parachains"
 
-[dependencies.bp-polkadot-core]
+[dependencies.bp-pezkuwi-core]
 default-features = false
 optional = true
-path = "../bridges/primitives/polkadot-core"
+path = "../bridges/primitives/pezkuwi-core"
 
 [dependencies.bp-relayers]
 default-features = false
@@ -1710,12 +1710,12 @@ path = "../substrate/frame/whitelist"
 [dependencies.pallet-xcm]
 default-features = false
 optional = true
-path = "../polkadot/xcm/pallet-xcm"
+path = "../pezkuwi/xcm/pallet-xcm"
 
 [dependencies.pallet-xcm-benchmarks]
 default-features = false
 optional = true
-path = "../polkadot/xcm/pallet-xcm-benchmarks"
+path = "../pezkuwi/xcm/pallet-xcm-benchmarks"
 
 [dependencies.pallet-xcm-bridge-hub]
 default-features = false
@@ -1732,37 +1732,37 @@ default-features = false
 optional = true
 path = "../cumulus/parachains/common"
 
-[dependencies.polkadot-core-primitives]
+[dependencies.pezkuwi-core-primitives]
 default-features = false
 optional = true
-path = "../polkadot/core-primitives"
+path = "../pezkuwi/core-primitives"
 
-[dependencies.polkadot-parachain-primitives]
+[dependencies.pezkuwi-parachain-primitives]
 default-features = false
 optional = true
-path = "../polkadot/parachain"
+path = "../pezkuwi/parachain"
 
-[dependencies.polkadot-primitives]
+[dependencies.pezkuwi-primitives]
 default-features = false
 optional = true
-path = "../polkadot/primitives"
+path = "../pezkuwi/primitives"
 
-[dependencies.polkadot-runtime-common]
+[dependencies.pezkuwi-runtime-common]
 default-features = false
 optional = true
-path = "../polkadot/runtime/common"
+path = "../pezkuwi/runtime/common"
 
-[dependencies.polkadot-runtime-metrics]
+[dependencies.pezkuwi-runtime-metrics]
 default-features = false
 optional = true
-path = "../polkadot/runtime/metrics"
+path = "../pezkuwi/runtime/metrics"
 
-[dependencies.polkadot-runtime-parachains]
+[dependencies.pezkuwi-runtime-parachains]
 default-features = false
 optional = true
-path = "../polkadot/runtime/parachains"
+path = "../pezkuwi/runtime/parachains"
 
-[dependencies.polkadot-sdk-frame]
+[dependencies.pezkuwi-sdk-frame]
 default-features = false
 optional = true
 path = "../substrate/frame"
@@ -1780,7 +1780,7 @@ path = "../substrate/client/tracing/proc-macro"
 [dependencies.slot-range-helper]
 default-features = false
 optional = true
-path = "../polkadot/runtime/common/slot_range_helper"
+path = "../pezkuwi/runtime/common/slot_range_helper"
 
 [dependencies.sp-api]
 default-features = false
@@ -2020,17 +2020,17 @@ path = "../cumulus/parachains/pallets/parachain-info"
 [dependencies.staging-xcm]
 default-features = false
 optional = true
-path = "../polkadot/xcm"
+path = "../pezkuwi/xcm"
 
 [dependencies.staging-xcm-builder]
 default-features = false
 optional = true
-path = "../polkadot/xcm/xcm-builder"
+path = "../pezkuwi/xcm/xcm-builder"
 
 [dependencies.staging-xcm-executor]
 default-features = false
 optional = true
-path = "../polkadot/xcm/xcm-executor"
+path = "../pezkuwi/xcm/xcm-executor"
 
 [dependencies.substrate-bip39]
 default-features = false
@@ -2045,17 +2045,17 @@ path = "../cumulus/parachains/runtimes/constants"
 [dependencies.tracing-gum-proc-macro]
 default-features = false
 optional = true
-path = "../polkadot/node/gum/proc-macro"
+path = "../pezkuwi/node/gum/proc-macro"
 
 [dependencies.xcm-procedural]
 default-features = false
 optional = true
-path = "../polkadot/xcm/procedural"
+path = "../pezkuwi/xcm/procedural"
 
 [dependencies.xcm-runtime-apis]
 default-features = false
 optional = true
-path = "../polkadot/xcm/xcm-runtime-apis"
+path = "../pezkuwi/xcm/xcm-runtime-apis"
 
 [dependencies.asset-test-utils]
 default-features = false
@@ -2207,210 +2207,210 @@ default-features = false
 optional = true
 path = "../cumulus/parachains/runtimes/test-utils"
 
-[dependencies.polkadot-approval-distribution]
+[dependencies.pezkuwi-approval-distribution]
 default-features = false
 optional = true
-path = "../polkadot/node/network/approval-distribution"
+path = "../pezkuwi/node/network/approval-distribution"
 
-[dependencies.polkadot-availability-bitfield-distribution]
+[dependencies.pezkuwi-availability-bitfield-distribution]
 default-features = false
 optional = true
-path = "../polkadot/node/network/bitfield-distribution"
+path = "../pezkuwi/node/network/bitfield-distribution"
 
-[dependencies.polkadot-availability-distribution]
+[dependencies.pezkuwi-availability-distribution]
 default-features = false
 optional = true
-path = "../polkadot/node/network/availability-distribution"
+path = "../pezkuwi/node/network/availability-distribution"
 
-[dependencies.polkadot-availability-recovery]
+[dependencies.pezkuwi-availability-recovery]
 default-features = false
 optional = true
-path = "../polkadot/node/network/availability-recovery"
+path = "../pezkuwi/node/network/availability-recovery"
 
-[dependencies.polkadot-cli]
+[dependencies.pezkuwi-cli]
 default-features = false
 optional = true
-path = "../polkadot/cli"
+path = "../pezkuwi/cli"
 
-[dependencies.polkadot-collator-protocol]
+[dependencies.pezkuwi-collator-protocol]
 default-features = false
 optional = true
-path = "../polkadot/node/network/collator-protocol"
+path = "../pezkuwi/node/network/collator-protocol"
 
-[dependencies.polkadot-dispute-distribution]
+[dependencies.pezkuwi-dispute-distribution]
 default-features = false
 optional = true
-path = "../polkadot/node/network/dispute-distribution"
+path = "../pezkuwi/node/network/dispute-distribution"
 
-[dependencies.polkadot-erasure-coding]
+[dependencies.pezkuwi-erasure-coding]
 default-features = false
 optional = true
-path = "../polkadot/erasure-coding"
+path = "../pezkuwi/erasure-coding"
 
-[dependencies.polkadot-gossip-support]
+[dependencies.pezkuwi-gossip-support]
 default-features = false
 optional = true
-path = "../polkadot/node/network/gossip-support"
+path = "../pezkuwi/node/network/gossip-support"
 
-[dependencies.polkadot-network-bridge]
+[dependencies.pezkuwi-network-bridge]
 default-features = false
 optional = true
-path = "../polkadot/node/network/bridge"
+path = "../pezkuwi/node/network/bridge"
 
-[dependencies.polkadot-node-collation-generation]
+[dependencies.pezkuwi-node-collation-generation]
 default-features = false
 optional = true
-path = "../polkadot/node/collation-generation"
+path = "../pezkuwi/node/collation-generation"
 
-[dependencies.polkadot-node-core-approval-voting]
+[dependencies.pezkuwi-node-core-approval-voting]
 default-features = false
 optional = true
-path = "../polkadot/node/core/approval-voting"
+path = "../pezkuwi/node/core/approval-voting"
 
-[dependencies.polkadot-node-core-approval-voting-parallel]
+[dependencies.pezkuwi-node-core-approval-voting-parallel]
 default-features = false
 optional = true
-path = "../polkadot/node/core/approval-voting-parallel"
+path = "../pezkuwi/node/core/approval-voting-parallel"
 
-[dependencies.polkadot-node-core-av-store]
+[dependencies.pezkuwi-node-core-av-store]
 default-features = false
 optional = true
-path = "../polkadot/node/core/av-store"
+path = "../pezkuwi/node/core/av-store"
 
-[dependencies.polkadot-node-core-backing]
+[dependencies.pezkuwi-node-core-backing]
 default-features = false
 optional = true
-path = "../polkadot/node/core/backing"
+path = "../pezkuwi/node/core/backing"
 
-[dependencies.polkadot-node-core-bitfield-signing]
+[dependencies.pezkuwi-node-core-bitfield-signing]
 default-features = false
 optional = true
-path = "../polkadot/node/core/bitfield-signing"
+path = "../pezkuwi/node/core/bitfield-signing"
 
-[dependencies.polkadot-node-core-candidate-validation]
+[dependencies.pezkuwi-node-core-candidate-validation]
 default-features = false
 optional = true
-path = "../polkadot/node/core/candidate-validation"
+path = "../pezkuwi/node/core/candidate-validation"
 
-[dependencies.polkadot-node-core-chain-api]
+[dependencies.pezkuwi-node-core-chain-api]
 default-features = false
 optional = true
-path = "../polkadot/node/core/chain-api"
+path = "../pezkuwi/node/core/chain-api"
 
-[dependencies.polkadot-node-core-chain-selection]
+[dependencies.pezkuwi-node-core-chain-selection]
 default-features = false
 optional = true
-path = "../polkadot/node/core/chain-selection"
+path = "../pezkuwi/node/core/chain-selection"
 
-[dependencies.polkadot-node-core-dispute-coordinator]
+[dependencies.pezkuwi-node-core-dispute-coordinator]
 default-features = false
 optional = true
-path = "../polkadot/node/core/dispute-coordinator"
+path = "../pezkuwi/node/core/dispute-coordinator"
 
-[dependencies.polkadot-node-core-parachains-inherent]
+[dependencies.pezkuwi-node-core-parachains-inherent]
 default-features = false
 optional = true
-path = "../polkadot/node/core/parachains-inherent"
+path = "../pezkuwi/node/core/parachains-inherent"
 
-[dependencies.polkadot-node-core-prospective-parachains]
+[dependencies.pezkuwi-node-core-prospective-parachains]
 default-features = false
 optional = true
-path = "../polkadot/node/core/prospective-parachains"
+path = "../pezkuwi/node/core/prospective-parachains"
 
-[dependencies.polkadot-node-core-provisioner]
+[dependencies.pezkuwi-node-core-provisioner]
 default-features = false
 optional = true
-path = "../polkadot/node/core/provisioner"
+path = "../pezkuwi/node/core/provisioner"
 
-[dependencies.polkadot-node-core-pvf]
+[dependencies.pezkuwi-node-core-pvf]
 default-features = false
 optional = true
-path = "../polkadot/node/core/pvf"
+path = "../pezkuwi/node/core/pvf"
 
-[dependencies.polkadot-node-core-pvf-checker]
+[dependencies.pezkuwi-node-core-pvf-checker]
 default-features = false
 optional = true
-path = "../polkadot/node/core/pvf-checker"
+path = "../pezkuwi/node/core/pvf-checker"
 
-[dependencies.polkadot-node-core-pvf-common]
+[dependencies.pezkuwi-node-core-pvf-common]
 default-features = false
 optional = true
-path = "../polkadot/node/core/pvf/common"
+path = "../pezkuwi/node/core/pvf/common"
 
-[dependencies.polkadot-node-core-pvf-execute-worker]
+[dependencies.pezkuwi-node-core-pvf-execute-worker]
 default-features = false
 optional = true
-path = "../polkadot/node/core/pvf/execute-worker"
+path = "../pezkuwi/node/core/pvf/execute-worker"
 
-[dependencies.polkadot-node-core-pvf-prepare-worker]
+[dependencies.pezkuwi-node-core-pvf-prepare-worker]
 default-features = false
 optional = true
-path = "../polkadot/node/core/pvf/prepare-worker"
+path = "../pezkuwi/node/core/pvf/prepare-worker"
 
-[dependencies.polkadot-node-core-runtime-api]
+[dependencies.pezkuwi-node-core-runtime-api]
 default-features = false
 optional = true
-path = "../polkadot/node/core/runtime-api"
+path = "../pezkuwi/node/core/runtime-api"
 
-[dependencies.polkadot-node-metrics]
+[dependencies.pezkuwi-node-metrics]
 default-features = false
 optional = true
-path = "../polkadot/node/metrics"
+path = "../pezkuwi/node/metrics"
 
-[dependencies.polkadot-node-network-protocol]
+[dependencies.pezkuwi-node-network-protocol]
 default-features = false
 optional = true
-path = "../polkadot/node/network/protocol"
+path = "../pezkuwi/node/network/protocol"
 
-[dependencies.polkadot-node-primitives]
+[dependencies.pezkuwi-node-primitives]
 default-features = false
 optional = true
-path = "../polkadot/node/primitives"
+path = "../pezkuwi/node/primitives"
 
-[dependencies.polkadot-node-subsystem]
+[dependencies.pezkuwi-node-subsystem]
 default-features = false
 optional = true
-path = "../polkadot/node/subsystem"
+path = "../pezkuwi/node/subsystem"
 
-[dependencies.polkadot-node-subsystem-types]
+[dependencies.pezkuwi-node-subsystem-types]
 default-features = false
 optional = true
-path = "../polkadot/node/subsystem-types"
+path = "../pezkuwi/node/subsystem-types"
 
-[dependencies.polkadot-node-subsystem-util]
+[dependencies.pezkuwi-node-subsystem-util]
 default-features = false
 optional = true
-path = "../polkadot/node/subsystem-util"
+path = "../pezkuwi/node/subsystem-util"
 
-[dependencies.polkadot-omni-node-lib]
+[dependencies.pezkuwi-omni-node-lib]
 default-features = false
 optional = true
-path = "../cumulus/polkadot-omni-node/lib"
+path = "../cumulus/pezkuwi-omni-node/lib"
 
-[dependencies.polkadot-overseer]
+[dependencies.pezkuwi-overseer]
 default-features = false
 optional = true
-path = "../polkadot/node/overseer"
+path = "../pezkuwi/node/overseer"
 
-[dependencies.polkadot-rpc]
+[dependencies.pezkuwi-rpc]
 default-features = false
 optional = true
-path = "../polkadot/rpc"
+path = "../pezkuwi/rpc"
 
-[dependencies.polkadot-service]
+[dependencies.pezkuwi-service]
 default-features = false
 optional = true
-path = "../polkadot/node/service"
+path = "../pezkuwi/node/service"
 
-[dependencies.polkadot-statement-distribution]
+[dependencies.pezkuwi-statement-distribution]
 default-features = false
 optional = true
-path = "../polkadot/node/network/statement-distribution"
+path = "../pezkuwi/node/network/statement-distribution"
 
-[dependencies.polkadot-statement-table]
+[dependencies.pezkuwi-statement-table]
 default-features = false
 optional = true
-path = "../polkadot/statement-table"
+path = "../pezkuwi/statement-table"
 
 [dependencies.sc-allocator]
 default-features = false
@@ -2730,7 +2730,7 @@ path = "../substrate/bin/node/inspect"
 [dependencies.staging-tracking-allocator]
 default-features = false
 optional = true
-path = "../polkadot/node/tracking-allocator"
+path = "../pezkuwi/node/tracking-allocator"
 
 [dependencies.subkey]
 default-features = false
@@ -2775,7 +2775,7 @@ path = "../substrate/utils/wasm-builder"
 [dependencies.tracing-gum]
 default-features = false
 optional = true
-path = "../polkadot/node/gum"
+path = "../pezkuwi/node/gum"
 
 [dependencies.xcm-emulator]
 default-features = false
@@ -2785,7 +2785,7 @@ path = "../cumulus/xcm/xcm-emulator"
 [dependencies.xcm-simulator]
 default-features = false
 optional = true
-path = "../polkadot/xcm/xcm-simulator"
+path = "../pezkuwi/xcm/xcm-simulator"
 
 [package.metadata.docs.rs]
 features = ["node", "runtime-full"]

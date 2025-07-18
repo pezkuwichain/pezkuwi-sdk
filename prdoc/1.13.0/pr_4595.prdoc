@@ -14,12 +14,12 @@ doc:
       missed rewards. 
 
 crates:
-  - name: polkadot-collator-protocol
+  - name: pezkuwi-collator-protocol
     bump: major
     validate: false
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: major
     validate: false
-  - name: polkadot-parachain-bin
+  - name: pezkuwi-parachain-bin
     bump: minor
     validate: false

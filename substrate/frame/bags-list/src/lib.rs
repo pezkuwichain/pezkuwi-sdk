@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! > Made with *Substrate*, for *Polkadot*.
+//! > Made with *Substrate*, for *Pezkuwi*.
 //!
 //! [![github]](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/bags-list) -
-//! [![polkadot]](https://polkadot.network)
+//! [![pezkuwi]](https://pezkuwi.network)
 //!
-//! [polkadot]:
-//!     https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
+//! [pezkuwi]:
+//!     https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white
 //! [github]:
 //!     https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
@@ -53,8 +53,8 @@
 //! optimal position in a bag, the [`Pallet::put_in_front_of`] or [`Pallet::put_in_front_of_other`]
 //! can be used.
 //!
-//! Additional reading, about how this pallet is used in the context of Polkadot's staking system:
-//! <https://polkadot.network/blog/staking-update-september-2021/#bags-list-in-depth>
+//! Additional reading, about how this pallet is used in the context of Pezkuwi's staking system:
+//! <https://pezkuwi.network/blog/staking-update-september-2021/#bags-list-in-depth>
 //!
 //! ## Examples
 //!
@@ -100,17 +100,17 @@
 /// graph LR
 /// 	Bag0 --> Bag1 --> Bag2
 ///
-/// 	subgraph Bag0[Bag 0: 21-30 DOT]
+/// 	subgraph Bag0[Bag 0: 21-30 HEZ]
 /// 		direction LR
 /// 		25 --> 21 --> 22X[22]
 /// 	end
 ///
-/// 	subgraph Bag1[Bag 1: 11-20 DOT]
+/// 	subgraph Bag1[Bag 1: 11-20 HEZ]
 /// 		direction LR
 /// 		12 --> 22
 /// 	end
 ///
-/// 	subgraph Bag2[Bag 2: 0-10 DOT]
+/// 	subgraph Bag2[Bag 2: 0-10 HEZ]
 /// 		direction LR
 /// 		5 --> 7 --> 3
 /// 	end

@@ -35,7 +35,7 @@ pub type RelayAccountIdOf<T> = <<T as Config>::Coretime as CoretimeInterface>::A
 /// Relay-chain block number with a fixed divisor of Config::TimeslicePeriod.
 pub type Timeslice = u32;
 /// Counter for the total number of set bits over every core's `CoreMask`. `u32` so we don't
-/// ever get an overflow. This is 1/80th of a Polkadot Core per timeslice. Assuming timeslices are
+/// ever get an overflow. This is 1/80th of a Pezkuwi Core per timeslice. Assuming timeslices are
 /// 80 blocks, then this indicates usage of a single core one time over a timeslice.
 pub type CoreMaskBitCount = u32;
 /// The same as `CoreMaskBitCount` but signed.
@@ -77,7 +77,7 @@ pub enum Finality {
 pub struct RegionId {
 	/// The timeslice at which this Region begins.
 	pub begin: Timeslice,
-	/// The index of the Polkadot Core on which this Region will be scheduled.
+	/// The index of the Pezkuwi Core on which this Region will be scheduled.
 	pub core: CoreIndex,
 	/// The regularity parts in which this Region will be scheduled.
 	pub mask: CoreMask,
@@ -107,12 +107,12 @@ pub struct RegionRecord<AccountId, Balance> {
 	pub end: Timeslice,
 	/// The owner of the Region.
 	pub owner: Option<AccountId>,
-	/// The amount paid to Polkadot for this Region, or `None` if renewal is not allowed.
+	/// The amount paid to Pezkuwi for this Region, or `None` if renewal is not allowed.
 	pub paid: Option<Balance>,
 }
 pub type RegionRecordOf<T> = RegionRecord<<T as SConfig>::AccountId, BalanceOf<T>>;
 
-/// An distinct item which can be scheduled on a Polkadot Core.
+/// An distinct item which can be scheduled on a Pezkuwi Core.
 #[derive(
 	Encode,
 	Decode,
@@ -150,7 +150,7 @@ pub struct InstaPoolHistoryRecord<Balance> {
 	/// The total amount of Coretime (measured in Core Mask Bits minus any contributions which have
 	/// already been paid out.
 	pub private_contributions: CoreMaskBitCount,
-	/// The total amount of Coretime (measured in Core Mask Bits contributed by the Polkadot System
+	/// The total amount of Coretime (measured in Core Mask Bits contributed by the Pezkuwi System
 	/// in this timeslice.
 	pub system_contributions: CoreMaskBitCount,
 	/// The payout remaining for the `private_contributions`, or `None` if the revenue is not yet
@@ -216,7 +216,7 @@ pub struct StatusRecord {
 	/// The current size of the Instantaneous Coretime Pool, measured in
 	/// Core Mask Bits.
 	pub private_pool_size: CoreMaskBitCount,
-	/// The current amount of the Instantaneous Coretime Pool which is provided by the Polkadot
+	/// The current amount of the Instantaneous Coretime Pool which is provided by the Pezkuwi
 	/// System, rather than provided as a result of privately operated Coretime.
 	pub system_pool_size: CoreMaskBitCount,
 	/// The last (Relay-chain) timeslice which we committed to the Relay-chain.
@@ -233,7 +233,7 @@ pub struct PoolIoRecord {
 	/// The total change of the portion of the pool supplied by purchased Bulk Coretime, measured
 	/// in Core Mask Bits.
 	pub private: SignedCoreMaskBitCount,
-	/// The total change of the portion of the pool supplied by the Polkadot System, measured in
+	/// The total change of the portion of the pool supplied by the Pezkuwi System, measured in
 	/// Core Mask Bits.
 	pub system: SignedCoreMaskBitCount,
 }
@@ -269,7 +269,7 @@ pub struct SaleInfoRecord<Balance, RelayBlockNumber> {
 }
 pub type SaleInfoRecordOf<T> = SaleInfoRecord<BalanceOf<T>, RelayBlockNumberOf<T>>;
 
-/// Record for Polkadot Core reservations (generally tasked with the maintenance of System
+/// Record for Pezkuwi Core reservations (generally tasked with the maintenance of System
 /// Chains).
 pub type ReservationsRecord<Max> = BoundedVec<Schedule, Max>;
 pub type ReservationsRecordOf<T> = ReservationsRecord<<T as Config>::MaxReservedCores>;
@@ -283,7 +283,7 @@ pub struct LeaseRecordItem {
 	pub task: TaskId,
 }
 
-/// Record for Polkadot Core legacy leases.
+/// Record for Pezkuwi Core legacy leases.
 pub type LeasesRecord<Max> = BoundedVec<LeaseRecordItem, Max>;
 pub type LeasesRecordOf<T> = LeasesRecord<<T as Config>::MaxLeasedCores>;
 

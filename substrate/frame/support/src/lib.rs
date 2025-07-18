@@ -1480,7 +1480,7 @@ pub mod pallet_macros {
 	/// ```
 	///
 	/// To learn more about supertraits, see the
-	/// [trait_based_programming](../../polkadot_sdk_docs/reference_docs/trait_based_programming/index.html)
+	/// [trait_based_programming](../../pezkuwi_sdk_docs/reference_docs/trait_based_programming/index.html)
 	/// reference doc.
 	pub use frame_support_procedural::disable_frame_system_supertrait_check;
 
@@ -2520,7 +2520,7 @@ pub mod pallet_macros {
 	/// To use a type as the value of a storage type, be it `StorageValue`, `StorageMap` or
 	/// anything else, you need to meet a number of trait bound constraints.
 	///
-	/// See: <https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/frame_storage_derives/index.html>.
+	/// See: <https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/reference_docs/frame_storage_derives/index.html>.
 	///
 	/// Notably, all value types need to implement `Encode`, `Decode`, `MaxEncodedLen` and
 	/// `TypeInfo`, and possibly `Default`, if
@@ -2671,7 +2671,7 @@ pub mod pallet_macros {
 	/// `RuntimeOrigin`, very similar to [`call`], [`error`] and [`event`]. See
 	/// [`composite_enum`] for similar cases.
 	///
-	/// Origin is a complex FRAME topics and is further explained in `polkadot_sdk_docs`.
+	/// Origin is a complex FRAME topics and is further explained in `pezkuwi_sdk_docs`.
 	///
 	/// ## Syntax Variants
 	///
@@ -2720,7 +2720,7 @@ pub mod pallet_macros {
 	/// change in encoding. If stored anywhere on-chain, this will require a data migration.
 	///
 	/// Read more about origins at the [Origin Reference
-	/// Docs](../../polkadot_sdk_docs/reference_docs/frame_origin/index.html).
+	/// Docs](../../pezkuwi_sdk_docs/reference_docs/frame_origin/index.html).
 	pub use frame_support_procedural::origin;
 }
 

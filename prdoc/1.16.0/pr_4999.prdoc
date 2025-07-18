@@ -1,5 +1,5 @@
-# Schema: Polkadot SDK PRDoc Schema (prdoc) v1.0.0
-# See doc at https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/prdoc/schema_user.json
 
 title: Fixes entropy for derivation of proxy delegator account.
 
@@ -7,7 +7,7 @@ doc:
   - audience: Runtime Dev
     description: |
       This fixes how ProxyDelegator accounts are derived but may cause issues in Westend since it would use the old
-      derivative accounts. Does not affect Polkadot/Kusama as this pallet is not deployed to them yet.
+      derivative accounts. Does not affect Pezkuwi/Kusama as this pallet is not deployed to them yet.
 
 crates:
   - name: westend-runtime

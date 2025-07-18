@@ -1,0 +1,34 @@
+--- pallet-trust İÇİN KRİTİK NOTLAR VE UYARILAR ---
+
+1.  **Güven Skoru Hesaplama Formülü (`recalculate_and_cache_trust`):**
+    * **Formül Doğruluğu:** `1 + Ln( Katkı Toplamı )` formülünün ve her bir katkı bileşeninin (stake, referans, eğitim, aktivite, tiki, staking puanı) hesaplanma mantığının projenizin hedefleriyle tam olarak örtüştüğünden emin olun.
+    * **Logaritma ve Sıfır Durumu:** `checked_ln()` fonksiyonunun, katkıların toplamı (`inner_sum`) sıfır veya negatif olduğunda (ki normalde olmamalıdır) doğru şekilde hata (`LogError`) döndürdüğünü ve bu durumda skorun başlangıç skoruna (`initial_score`) ayarlandığını test edin.
+    * **Aritmetik Hatalar:** Tüm `checked_*` ve `saturating_*` işlemlerinin potansiyel taşma (`ArithmeticError`) veya beklenmedik durumları doğru şekilde ele aldığını doğrulayın. Özellikle farklı tipler (`Balance`, `u32`, `u64`, `StakingPointBalance`) `TrustScore`'a (FixedU128) dönüştürülürken veri kaybı veya taşma olup olmadığını kontrol edin.
+    * **Parametre Etkisi:** `TrustParams` içindeki ağırlıkların (`referral_weight`, `egitim_weight`, `islem_weight`, `staking_point_weight`), katmanların (`stake_contribution_tiers`) ve tavan değerlerinin (`max_..._contribution`) skor üzerindeki etkisini simüle ederek veya test ederek ayarlayın.
+
+2.  **Provider Bağımlılıkları (`Config`):**
+    * **Runtime Implementasyonu:** `runtime/src/lib.rs` içinde `pallet-trust`'ın `Config`'ini implemente ederken `StakingProvider`, `EducationProvider`, `ReferralProvider` tiplerinin doğru paletlere (`Staking`, `Egitim`, `Referral`) bağlandığından emin olun.
+    * **Provider Fonksiyonları:** Bu provider paletlerinin `get_locked_balance`, `get_education_score`, `get_referral_count` gibi gerekli fonksiyonları sağladığını ve doğru değerleri döndürdüğünü doğrulayın.
+    * **NFT Erişimi:** `recalculate_and_cache_trust` içinde `pallet_nft::Pallet::<T>::get_tikis(who)` çağrısının doğru çalıştığından emin olun. `pallet-trust::Config`'in `pallet_nft::Config`'i inherit ettiğini (`Config: frame_system::Config + pallet_nft::Config`) kontrol edin.
+
+3.  **Staking Puanı Entegrasyonu (`record_staking_points_internal`):**
+    * `pallet-staking`'den gelen puanların `StakingPoints` storage'ına doğru şekilde eklendiğini test edin.
+    * Bu storage'ın zamanla çok büyüyüp büyümeyeceğini değerlendirin. Gerekirse eski verileri temizleme mekanizması düşünülebilir.
+    * Puanlar eklendikten sonra Trust skorunun hemen yeniden hesaplanıp hesaplanmayacağına karar verin (şu anki kodda hesaplama sadece skor gerektiğinde yapılıyor).
+
+4.  **`TrustParams` Ayarları:**
+    * `TrustParams<T>::default()` içindeki değerler sadece **örnektir**. Üretim ortamı için bu değerler (stake katmanları, ağırlıklar, tavanlar, min/max skor, staking puanı ağırlığı) dikkatlice **ayarlanmalı** ve muhtemelen genesis veya yönetişim yoluyla belirlenmelidir.
+    * `MaxTikiTypes` sabitinin runtime'da, `TrustParams` içindeki `tiki_weights` vektörünün boyutuna uygun olarak tanımlandığından emin olun.
+
+5.  **Scheduler ve Aktivite Sıfırlama:**
+    * `on_initialize` içindeki aktivite sayacı sıfırlama görevinin zamanlama (`ActivityResetPeriod`) ve iptal etme mantığının doğru çalıştığını test edin.
+    * `reset_activity_counters_internal` fonksiyonunun tüm sayaçları başarılı bir şekilde temizlediğini doğrulayın.
+
+6.  **Weights:**
+    * `pallets/trust/src/weights.rs` dosyasındaki tüm fonksiyonlar (özellikle `recalculate_and_cache_trust` gibi karmaşık olanlar) için **benchmark** yapılmalı ve placeholder değerler güncellenmelidir.
+
+7.  **Testler:**
+    * `recalculate_and_cache_trust` fonksiyonunu farklı girdi kombinasyonları (sıfır katkı, yüksek katkı, sadece belirli katkılar vb.) ile **kapsamlı** olarak test edin.
+    * `force_apply_penalty` fonksiyonunun skoru doğru şekilde düşürdüğünü ve minimum sınırın altına inmediğini test edin.
+    * Aktivite sayacı ve sıfırlama mekanizmasını test edin.
+    * Farklı provider paletlerinden gelen verilerin skor üzerindeki etkisini test edin.

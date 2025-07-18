@@ -28,7 +28,7 @@ def from_pr_number(n, audience, bump, force):
 	print(f"Fetching PR '{n}' from GitHub")
 	g = Github()
 	
-	repo = g.get_repo("paritytech/polkadot-sdk")
+	repo = g.get_repo("paritytech/pezkuwi-sdk")
 	pr = repo.get_pull(n)
 
 	patch_url = pr.patch_url

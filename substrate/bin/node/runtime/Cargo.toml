@@ -24,7 +24,7 @@ log = { workspace = true }
 node-primitives.workspace = true
 pallet-example-mbm.workspace = true
 pallet-example-tasks.workspace = true
-polkadot-sdk = { features = ["runtime-full", "tuples-96"], workspace = true }
+pezkuwi-sdk = { features = ["runtime-full", "tuples-96"], workspace = true }
 primitive-types = { features = ["codec", "num-traits", "scale-info"], workspace = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 serde_json = { features = ["alloc", "arbitrary_precision"], workspace = true }
@@ -36,14 +36,14 @@ substrate-wasm-builder = { optional = true, workspace = true, default-features =
 
 [features]
 default = ["std"]
-with-tracing = ["polkadot-sdk/with-tracing"]
+with-tracing = ["pezkuwi-sdk/with-tracing"]
 std = [
 	"codec/std",
 	"log/std",
 	"node-primitives/std",
 	"pallet-example-mbm/std",
 	"pallet-example-tasks/std",
-	"polkadot-sdk/std",
+	"pezkuwi-sdk/std",
 	"primitive-types/std",
 	"scale-info/std",
 	"serde_json/std",
@@ -53,12 +53,12 @@ std = [
 runtime-benchmarks = [
 	"pallet-example-mbm/runtime-benchmarks",
 	"pallet-example-tasks/runtime-benchmarks",
-	"polkadot-sdk/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
 ]
 try-runtime = [
 	"pallet-example-mbm/try-runtime",
 	"pallet-example-tasks/try-runtime",
-	"polkadot-sdk/try-runtime",
+	"pezkuwi-sdk/try-runtime",
 ]
 experimental = [
 	"pallet-example-tasks/experimental",

@@ -75,7 +75,7 @@ jobs:
     env:
       PACKAGE_NAME: ${{ matrix.runtime.package }}
       FLAGS: ${{ matrix.runtime.bench_flags }}
-      RUST_LOG: "frame_omni_bencher=info,polkadot_sdk_frame=info"
+      RUST_LOG: "frame_omni_bencher=info,pezkuwi_sdk_frame=info"
     steps:
     
       - name: Checkout
@@ -169,8 +169,8 @@ jobs:
           THREE_MONTHS_AGO=$(date -d "3 months ago" +%Y-%m-%d)
           
           # Get tags with their dates
-          ONE_MONTH_INFO=$(git for-each-ref --sort=-creatordate --format '%(refname:short)|%(creatordate:iso-strict-local)' 'refs/tags/polkadot-v*' | awk -v date="$ONE_MONTH_AGO" -F'|' '$2 <= date {print $0; exit}')
-          THREE_MONTHS_INFO=$(git for-each-ref --sort=-creatordate --format '%(refname:short)|%(creatordate:iso-strict-local)' 'refs/tags/polkadot-v*' | awk -v date="$THREE_MONTHS_AGO" -F'|' '$2 <= date {print $0; exit}')
+          ONE_MONTH_INFO=$(git for-each-ref --sort=-creatordate --format '%(refname:short)|%(creatordate:iso-strict-local)' 'refs/tags/pezkuwi-v*' | awk -v date="$ONE_MONTH_AGO" -F'|' '$2 <= date {print $0; exit}')
+          THREE_MONTHS_INFO=$(git for-each-ref --sort=-creatordate --format '%(refname:short)|%(creatordate:iso-strict-local)' 'refs/tags/pezkuwi-v*' | awk -v date="$THREE_MONTHS_AGO" -F'|' '$2 <= date {print $0; exit}')
           
           # Split into tag and date
           ONE_MONTH_TAG=$(echo "$ONE_MONTH_INFO" | cut -d'|' -f1)
@@ -179,7 +179,7 @@ jobs:
           THREE_MONTHS_DATE=$(echo "$THREE_MONTHS_INFO" | cut -d'|' -f2 | cut -d'T' -f1)
 
           # Base URL for Subweight comparisons
-          BASE_URL="https://weights.tasty.limo/compare?repo=polkadot-sdk&threshold=5&path_pattern=.%2F**%2Fweights%2F**%2F*.rs%2C.%2F**%2Fweights.rs&method=asymptotic&ignore_errors=true&unit=time"
+          BASE_URL="https://weights.tasty.limo/compare?repo=pezkuwi-sdk&threshold=5&path_pattern=.%2F**%2Fweights%2F**%2F*.rs%2C.%2F**%2Fweights.rs&method=asymptotic&ignore_errors=true&unit=time"
           
           # Generate comparison links
           MASTER_LINK="${BASE_URL}&old=master&new=${BRANCH}"

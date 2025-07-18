@@ -1,0 +1,62 @@
+[package]
+name = "pezkuwi-availability-recovery"
+description = "The Availability Recovery subsystem. Handles requests for recovering the availability data of included candidates."
+version = "22.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+fatality = { workspace = true }
+futures = { workspace = true }
+gum.default-features = true
+gum.workspace = true
+rand = { workspace = true, default-features = true }
+schnellru = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, default-features = true }
+
+codec = { features = ["derive"], workspace = true }
+pezkuwi-erasure-coding.default-features = true
+pezkuwi-erasure-coding.workspace = true
+pezkuwi-node-network-protocol.default-features = true
+pezkuwi-node-network-protocol.workspace = true
+pezkuwi-node-primitives.default-features = true
+pezkuwi-node-primitives.workspace = true
+pezkuwi-node-subsystem-util.default-features = true
+pezkuwi-node-subsystem-util.workspace = true
+pezkuwi-node-subsystem.default-features = true
+pezkuwi-node-subsystem.workspace = true
+pezkuwi-primitives.default-features = true
+pezkuwi-primitives.workspace = true
+sc-network.default-features = true
+sc-network.workspace = true
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+futures-timer = { workspace = true }
+rstest = { workspace = true }
+
+sc-network = { default-features = true, workspace = true }
+sp-core = { default-features = true, workspace = true }
+sp-keyring = { default-features = true, workspace = true }
+sp-tracing = { default-features = true, workspace = true }
+
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+pezkuwi-subsystem-bench = { workspace = true }
+
+[[bench]]
+name = "availability-recovery-regression-bench"
+path = "benches/availability-recovery-regression-bench.rs"
+harness = false
+required-features = ["subsystem-benchmarks"]
+
+[features]
+subsystem-benchmarks = []

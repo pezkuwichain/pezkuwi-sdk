@@ -34,7 +34,7 @@ jobs:
       # -Cinstrument-coverage slows everything down but it is necessary for code coverage
       # https://doc.rust-lang.org/rustc/instrument-coverage.html
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings -Cinstrument-coverage"
-      LLVM_PROFILE_FILE: "/__w/polkadot-sdk/polkadot-sdk/target/coverage/cargo-test-${{ matrix.ci_node_index }}-%p-%m.profraw"
+      LLVM_PROFILE_FILE: "/__w/pezkuwi-sdk/pezkuwi-sdk/target/coverage/cargo-test-${{ matrix.ci_node_index }}-%p-%m.profraw"
     strategy:
       fail-fast: false
       matrix:
@@ -75,7 +75,7 @@ jobs:
           - test(/get_preset/)
           - test(/list_presets/)
           - test(/tests::receive_rate_limit_is_enforced/)
-          - test(/polkadot-availability-recovery/)
+          - test(/pezkuwi-availability-recovery/)
           "
           --partition count:${{ matrix.ci_node_index }}/${{ matrix.ci_node_total }}
 
@@ -107,7 +107,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           directory: reports
-          root_dir: /__w/polkadot-sdk/polkadot-sdk/
+          root_dir: /__w/pezkuwi-sdk/pezkuwi-sdk/
 
   #
   #

@@ -85,7 +85,7 @@ use pallet_bridge_messages::LaneIdOf;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 
-use polkadot_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
+use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
 
 #[cfg(feature = "runtime-benchmarks")]
 use xcm::latest::ROCOCO_GENESIS_HASH;
@@ -205,8 +205,8 @@ impl frame_support::traits::OnRuntimeUpgrade for InitStorageVersions {
 
 		let mut writes = 0;
 
-		if PolkadotXcm::on_chain_storage_version() == StorageVersion::new(0) {
-			PolkadotXcm::in_code_storage_version().put::<PolkadotXcm>();
+		if PezkuwiXcm::on_chain_storage_version() == StorageVersion::new(0) {
+			PezkuwiXcm::in_code_storage_version().put::<PezkuwiXcm>();
 			writes.saturating_inc();
 		}
 
@@ -441,7 +441,7 @@ parameter_types! {
 	pub const BaseDeliveryFee: u128 = CENTS.saturating_mul(3);
 }
 
-pub type PriceForSiblingParachainDelivery = polkadot_runtime_common::xcm_sender::ExponentialPrice<
+pub type PriceForSiblingParachainDelivery = pezkuwi_runtime_common::xcm_sender::ExponentialPrice<
 	FeeAssetId,
 	BaseDeliveryFee,
 	TransactionByteFee,
@@ -451,7 +451,7 @@ pub type PriceForSiblingParachainDelivery = polkadot_runtime_common::xcm_sender:
 impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = ParachainSystem;
-	type VersionWrapper = PolkadotXcm;
+	type VersionWrapper = PezkuwiXcm;
 	type XcmpQueue = TransformOrigin<MessageQueue, AggregateMessageOrigin, ParaId, ParaIdToSibling>;
 	type MaxInboundSuspended = ConstU32<1_000>;
 	type MaxActiveOutboundChannels = ConstU32<128>;
@@ -571,7 +571,7 @@ construct_runtime!(
 
 		// XCM helpers.
 		XcmpQueue: cumulus_pallet_xcmp_queue = 30,
-		PolkadotXcm: pallet_xcm = 31,
+		PezkuwiXcm: pallet_xcm = 31,
 		CumulusXcm: cumulus_pallet_xcm = 32,
 
 		// Handy utilities.
@@ -810,7 +810,7 @@ impl_runtime_apis! {
 	impl xcm_runtime_apis::fees::XcmPaymentApi<Block> for Runtime {
 		fn query_acceptable_payment_assets(xcm_version: xcm::Version) -> Result<Vec<VersionedAssetId>, XcmPaymentApiError> {
 			let acceptable_assets = vec![AssetId(xcm_config::WestendLocation::get())];
-			PolkadotXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
+			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
 		}
 
 		fn query_weight_to_asset_fee(weight: Weight, asset: VersionedAssetId) -> Result<u128, XcmPaymentApiError> {
@@ -832,21 +832,21 @@ impl_runtime_apis! {
 		}
 
 		fn query_xcm_weight(message: VersionedXcm<()>) -> Result<Weight, XcmPaymentApiError> {
-			PolkadotXcm::query_xcm_weight(message)
+			PezkuwiXcm::query_xcm_weight(message)
 		}
 
 		fn query_delivery_fees(destination: VersionedLocation, message: VersionedXcm<()>) -> Result<VersionedAssets, XcmPaymentApiError> {
-			PolkadotXcm::query_delivery_fees(destination, message)
+			PezkuwiXcm::query_delivery_fees(destination, message)
 		}
 	}
 
 	impl xcm_runtime_apis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
 		fn dry_run_call(origin: OriginCaller, call: RuntimeCall, result_xcms_version: XcmVersion) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			PolkadotXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
+			PezkuwiXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
 
 		fn dry_run_xcm(origin_location: VersionedLocation, xcm: VersionedXcm<RuntimeCall>) -> Result<XcmDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			PolkadotXcm::dry_run_xcm::<Runtime, xcm_config::XcmRouter, RuntimeCall, xcm_config::XcmConfig>(origin_location, xcm)
+			PezkuwiXcm::dry_run_xcm::<Runtime, xcm_config::XcmRouter, RuntimeCall, xcm_config::XcmConfig>(origin_location, xcm)
 		}
 	}
 
@@ -864,10 +864,10 @@ impl_runtime_apis! {
 
 	impl xcm_runtime_apis::trusted_query::TrustedQueryApi<Block> for Runtime {
 		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
-			PolkadotXcm::is_trusted_reserve(asset, location)
+			PezkuwiXcm::is_trusted_reserve(asset, location)
 		}
 		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
-			PolkadotXcm::is_trusted_teleporter(asset, location)
+			PezkuwiXcm::is_trusted_teleporter(asset, location)
 		}
 	}
 
@@ -876,13 +876,13 @@ impl_runtime_apis! {
 			Vec<xcm_runtime_apis::authorized_aliases::OriginAliaser>,
 			xcm_runtime_apis::authorized_aliases::Error
 		> {
-			PolkadotXcm::authorized_aliasers(target)
+			PezkuwiXcm::authorized_aliasers(target)
 		}
 		fn is_authorized_alias(origin: VersionedLocation, target: VersionedLocation) -> Result<
 			bool,
 			xcm_runtime_apis::authorized_aliases::Error
 		> {
-			PolkadotXcm::is_authorized_alias(origin, target)
+			PezkuwiXcm::is_authorized_alias(origin, target)
 		}
 	}
 
@@ -1202,7 +1202,7 @@ impl_runtime_apis! {
 				fn export_message_origin_and_destination(
 				) -> Result<(Location, NetworkId, InteriorLocation), BenchmarkError> {
 					// save XCM version for remote bridge hub
-					let _ = PolkadotXcm::force_xcm_version(
+					let _ = PezkuwiXcm::force_xcm_version(
 						RuntimeOrigin::root(),
 						alloc::boxed::Box::new(bridge_to_rococo_config::BridgeHubRococoLocation::get()),
 						XCM_VERSION,
@@ -1351,20 +1351,20 @@ impl_runtime_apis! {
 			};
 
 			impl BridgeParachainsConfig<bridge_to_rococo_config::BridgeParachainRococoInstance> for Runtime {
-				fn parachains() -> Vec<bp_polkadot_core::parachains::ParaId> {
+				fn parachains() -> Vec<bp_pezkuwi_core::parachains::ParaId> {
 					use bp_runtime::Parachain;
-					vec![bp_polkadot_core::parachains::ParaId(bp_bridge_hub_rococo::BridgeHubRococo::PARACHAIN_ID)]
+					vec![bp_pezkuwi_core::parachains::ParaId(bp_bridge_hub_rococo::BridgeHubRococo::PARACHAIN_ID)]
 				}
 
 				fn prepare_parachain_heads_proof(
-					parachains: &[bp_polkadot_core::parachains::ParaId],
+					parachains: &[bp_pezkuwi_core::parachains::ParaId],
 					parachain_head_size: u32,
 					proof_params: bp_runtime::UnverifiedStorageProofParams,
 				) -> (
 					bp_parachains::RelayBlockNumber,
 					bp_parachains::RelayBlockHash,
-					bp_polkadot_core::parachains::ParaHeadsProof,
-					Vec<(bp_polkadot_core::parachains::ParaId, bp_polkadot_core::parachains::ParaHash)>,
+					bp_pezkuwi_core::parachains::ParaHeadsProof,
+					Vec<(bp_pezkuwi_core::parachains::ParaId, bp_pezkuwi_core::parachains::ParaHash)>,
 				) {
 					prepare_parachain_heads_proof::<Runtime, bridge_to_rococo_config::BridgeParachainRococoInstance>(
 						parachains,
@@ -1449,7 +1449,7 @@ mod tests {
 
 	#[test]
 	fn ensure_transaction_extension_definition_is_compatible_with_relay() {
-		use bp_polkadot_core::SuffixedCommonTransactionExtensionExt;
+		use bp_pezkuwi_core::SuffixedCommonTransactionExtensionExt;
 
 		sp_io::TestExternalities::default().execute_with(|| {
 			frame_system::BlockHash::<Runtime>::insert(BlockNumber::zero(), Hash::default());

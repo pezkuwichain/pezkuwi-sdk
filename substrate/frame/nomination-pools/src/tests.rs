@@ -5553,12 +5553,12 @@ mod update_roles {
 mod reward_counter_precision {
 	use super::*;
 
-	const DOT: Balance = 10u128.pow(10u32);
-	const POLKADOT_TOTAL_ISSUANCE_GENESIS: Balance = DOT * 10u128.pow(9u32);
+	const HEZ: Balance = 10u128.pow(10u32);
+	const PEZKUWI_TOTAL_ISSUANCE_GENESIS: Balance = HEZ * 10u128.pow(9u32);
 
 	const fn inflation(years: u128) -> u128 {
 		let mut i = 0;
-		let mut start = POLKADOT_TOTAL_ISSUANCE_GENESIS;
+		let mut start = PEZKUWI_TOTAL_ISSUANCE_GENESIS;
 		while i < years {
 			start = start + start / 10;
 			i += 1
@@ -5584,9 +5584,9 @@ mod reward_counter_precision {
 
 	#[test]
 	fn smallest_claimable_reward() {
-		// create a pool that has all of the polkadot issuance in 50 years.
+		// create a pool that has all of the pezkuwi issuance in 50 years.
 		let pool_bond = inflation(50);
-		ExtBuilder::default().ed(DOT).min_bond(pool_bond).build_and_execute(|| {
+		ExtBuilder::default().ed(HEZ).min_bond(pool_bond).build_and_execute(|| {
 			assert_eq!(
 				pool_events_since_last_call(),
 				vec![
@@ -5624,8 +5624,8 @@ mod reward_counter_precision {
 
 	#[test]
 	fn massive_reward_in_small_pool() {
-		let tiny_bond = 1000 * DOT;
-		ExtBuilder::default().ed(DOT).min_bond(tiny_bond).build_and_execute(|| {
+		let tiny_bond = 1000 * HEZ;
+		ExtBuilder::default().ed(HEZ).min_bond(tiny_bond).build_and_execute(|| {
 			assert_eq!(
 				pool_events_since_last_call(),
 				vec![
@@ -5657,10 +5657,10 @@ mod reward_counter_precision {
 	}
 
 	#[test]
-	fn reward_counter_calc_wont_fail_in_normal_polkadot_future() {
-		// create a pool that has roughly half of the polkadot issuance in 10 years.
+	fn reward_counter_calc_wont_fail_in_normal_pezkuwi_future() {
+		// create a pool that has roughly half of the pezkuwi issuance in 10 years.
 		let pool_bond = inflation(10) / 2;
-		ExtBuilder::default().ed(DOT).min_bond(pool_bond).build_and_execute(|| {
+		ExtBuilder::default().ed(HEZ).min_bond(pool_bond).build_and_execute(|| {
 			assert_eq!(
 				pool_events_since_last_call(),
 				vec![
@@ -5678,7 +5678,7 @@ mod reward_counter_precision {
 			// in 10 years, the total claimed rewards are large values as well. assuming that a pool
 			// is earning all of the inflation per year (which is really unrealistic, but worse
 			// case), that will be:
-			let pool_total_earnings_10_years = inflation(10) - POLKADOT_TOTAL_ISSUANCE_GENESIS;
+			let pool_total_earnings_10_years = inflation(10) - PEZKUWI_TOTAL_ISSUANCE_GENESIS;
 			deposit_rewards(pool_total_earnings_10_years);
 
 			// some whale now joins with the other half ot the total issuance. This will bloat all
@@ -5704,12 +5704,12 @@ mod reward_counter_precision {
 				vec![Event::PaidOut { member: 10, pool_id: 1, payout: 15937424600999999996 }]
 			);
 
-			// now let a small member join with 10 DOTs.
-			Currency::set_balance(&30, 20 * DOT);
-			assert_ok!(Pools::join(RuntimeOrigin::signed(30), 10 * DOT, 1));
+			// now let a small member join with 10 HEZs.
+			Currency::set_balance(&30, 20 * HEZ);
+			assert_ok!(Pools::join(RuntimeOrigin::signed(30), 10 * HEZ, 1));
 
 			// and give a reasonably small reward to the pool.
-			deposit_rewards(DOT);
+			deposit_rewards(HEZ);
 
 			assert_ok!(Pools::claim_payout(RuntimeOrigin::signed(30)));
 			assert_eq!(
@@ -5725,9 +5725,9 @@ mod reward_counter_precision {
 
 	#[test]
 	fn reward_counter_update_can_fail_if_pool_is_highly_slashed() {
-		// create a pool that has roughly half of the polkadot issuance in 10 years.
+		// create a pool that has roughly half of the pezkuwi issuance in 10 years.
 		let pool_bond = inflation(10) / 2;
-		ExtBuilder::default().ed(DOT).min_bond(pool_bond).build_and_execute(|| {
+		ExtBuilder::default().ed(HEZ).min_bond(pool_bond).build_and_execute(|| {
 			assert_eq!(
 				pool_events_since_last_call(),
 				vec![
@@ -5759,10 +5759,10 @@ mod reward_counter_precision {
 
 	#[test]
 	fn if_small_member_waits_long_enough_they_will_earn_rewards() {
-		// create a pool that has a quarter of the current polkadot issuance
+		// create a pool that has a quarter of the current pezkuwi issuance
 		ExtBuilder::default()
-			.ed(DOT)
-			.min_bond(POLKADOT_TOTAL_ISSUANCE_GENESIS / 4)
+			.ed(HEZ)
+			.min_bond(PEZKUWI_TOTAL_ISSUANCE_GENESIS / 4)
 			.build_and_execute(|| {
 				assert_eq!(
 					pool_events_since_last_call(),
@@ -5779,11 +5779,11 @@ mod reward_counter_precision {
 				);
 
 				// and have a tiny fish join the pool as well..
-				Currency::set_balance(&20, 20 * DOT);
-				assert_ok!(Pools::join(RuntimeOrigin::signed(20), 10 * DOT, 1));
+				Currency::set_balance(&20, 20 * HEZ);
+				assert_ok!(Pools::join(RuntimeOrigin::signed(20), 10 * HEZ, 1));
 
 				// earn some small rewards
-				deposit_rewards(DOT / 1000);
+				deposit_rewards(HEZ / 1000);
 
 				// no point in claiming for 20 (nonetheless, it should be harmless)
 				assert!(pending_rewards(20).unwrap().is_zero());
@@ -5803,7 +5803,7 @@ mod reward_counter_precision {
 
 				// earn some small more, still nothing can be claimed for 20, but 10 claims their
 				// share.
-				deposit_rewards(DOT / 1000);
+				deposit_rewards(HEZ / 1000);
 				assert!(pending_rewards(20).unwrap().is_zero());
 				assert_ok!(Pools::claim_payout(RuntimeOrigin::signed(10)));
 				assert_eq!(
@@ -5812,7 +5812,7 @@ mod reward_counter_precision {
 				);
 
 				// earn some more rewards, this time 20 can also claim.
-				deposit_rewards(DOT / 1000);
+				deposit_rewards(HEZ / 1000);
 				assert_eq!(pending_rewards(20).unwrap(), 1);
 				assert_ok!(Pools::claim_payout(RuntimeOrigin::signed(10)));
 				assert_ok!(Pools::claim_payout(RuntimeOrigin::signed(20)));
@@ -5828,10 +5828,10 @@ mod reward_counter_precision {
 
 	#[test]
 	fn zero_reward_claim_does_not_update_reward_counter() {
-		// create a pool that has a quarter of the current polkadot issuance
+		// create a pool that has a quarter of the current pezkuwi issuance
 		ExtBuilder::default()
-			.ed(DOT)
-			.min_bond(POLKADOT_TOTAL_ISSUANCE_GENESIS / 4)
+			.ed(HEZ)
+			.min_bond(PEZKUWI_TOTAL_ISSUANCE_GENESIS / 4)
 			.build_and_execute(|| {
 				assert_eq!(
 					pool_events_since_last_call(),
@@ -5848,11 +5848,11 @@ mod reward_counter_precision {
 				);
 
 				// and have a tiny fish join the pool as well..
-				Currency::set_balance(&20, 20 * DOT);
-				assert_ok!(Pools::join(RuntimeOrigin::signed(20), 10 * DOT, 1));
+				Currency::set_balance(&20, 20 * HEZ);
+				assert_ok!(Pools::join(RuntimeOrigin::signed(20), 10 * HEZ, 1));
 
 				// earn some small rewards
-				deposit_rewards(DOT / 1000);
+				deposit_rewards(HEZ / 1000);
 
 				// if 20 claims now, their reward counter should stay the same, so that they have a
 				// chance of claiming this if they let it accumulate. Also see

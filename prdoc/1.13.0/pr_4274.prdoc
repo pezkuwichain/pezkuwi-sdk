@@ -5,7 +5,7 @@ doc:
     description: |
        Introduces the new `CheckMetadataHash` signed extension. This extension can be added to a
        runtime to support verifying the metadata hash as described in
-       [RFC78](https://polkadot-fellows.github.io/RFCs/approved/0078-merkleized-metadata.html).
+       [RFC78](https://pezkuwi-fellows.github.io/RFCs/approved/0078-merkleized-metadata.html).
        This removes the requirement for having a metadata portal and in general a centralized
        authentication of the metadata. With this signed extension the runtime is able to verify
        that the metadata used by the wallet was correct. This is mainly useful for offline wallets
@@ -27,7 +27,7 @@ crates:
     bump: patch
   - name: frame-metadata-hash-extension
     bump: major
-  - name: polkadot-service
+  - name: pezkuwi-service
     bump: none
   - name: rococo-runtime
     bump: major

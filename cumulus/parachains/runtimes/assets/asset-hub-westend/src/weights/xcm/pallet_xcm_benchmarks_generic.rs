@@ -29,7 +29,7 @@
 // --extrinsic=*
 // --runtime=target/production/wbuild/asset-hub-westend-runtime/asset_hub_westend_runtime.wasm
 // --pallet=pallet_xcm_benchmarks::generic
-// --header=/__w/polkadot-sdk/polkadot-sdk/cumulus/file_header.txt
+// --header=/__w/pezkuwi-sdk/pezkuwi-sdk/cumulus/file_header.txt
 // --output=./cumulus/parachains/runtimes/assets/asset-hub-westend/src/weights/xcm
 // --wasm-execution=compiled
 // --steps=50
@@ -54,8 +54,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `System::Account` (r:2 w:2)
 	// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
@@ -96,8 +96,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 		// Minimum execution time: 658_000 picoseconds.
 		Weight::from_parts(706_000, 0)
 	}
-	// Storage: `PolkadotXcm::Queries` (r:1 w:0)
-	// Proof: `PolkadotXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::Queries` (r:1 w:0)
+	// Proof: `PezkuwiXcm::Queries` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	pub fn query_response() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -168,8 +168,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `System::Account` (r:2 w:2)
 	// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
@@ -185,8 +185,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(7))
 			.saturating_add(T::DbWeight::get().writes(3))
 	}
-	// Storage: `PolkadotXcm::AssetTraps` (r:1 w:1)
-	// Proof: `PolkadotXcm::AssetTraps` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::AssetTraps` (r:1 w:1)
+	// Proof: `PezkuwiXcm::AssetTraps` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	pub fn claim_asset() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `23`
@@ -203,12 +203,12 @@ impl<T: frame_system::Config> WeightInfo<T> {
 		// Minimum execution time: 3_234_000 picoseconds.
 		Weight::from_parts(3_353_000, 0)
 	}
-	// Storage: `PolkadotXcm::VersionNotifyTargets` (r:1 w:1)
-	// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:1 w:1)
+	// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
 	// Proof: `ParachainSystem::HostConfiguration` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
 	// Storage: `ParachainSystem::PendingUpwardMessages` (r:1 w:1)
@@ -222,8 +222,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().reads(5))
 			.saturating_add(T::DbWeight::get().writes(2))
 	}
-	// Storage: `PolkadotXcm::VersionNotifyTargets` (r:0 w:1)
-	// Proof: `PolkadotXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::VersionNotifyTargets` (r:0 w:1)
+	// Proof: `PezkuwiXcm::VersionNotifyTargets` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	pub fn unsubscribe_version() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
@@ -271,8 +271,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `System::Account` (r:2 w:2)
 	// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)
@@ -299,8 +299,8 @@ impl<T: frame_system::Config> WeightInfo<T> {
 	// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::UpwardDeliveryFeeFactor` (r:1 w:0)
 	// Proof: `ParachainSystem::UpwardDeliveryFeeFactor` (`max_values`: Some(1), `max_size`: None, mode: `Measured`)
-	// Storage: `PolkadotXcm::SupportedVersion` (r:1 w:0)
-	// Proof: `PolkadotXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
+	// Storage: `PezkuwiXcm::SupportedVersion` (r:1 w:0)
+	// Proof: `PezkuwiXcm::SupportedVersion` (`max_values`: None, `max_size`: None, mode: `Measured`)
 	// Storage: `System::Account` (r:2 w:2)
 	// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
 	// Storage: `ParachainSystem::HostConfiguration` (r:1 w:0)

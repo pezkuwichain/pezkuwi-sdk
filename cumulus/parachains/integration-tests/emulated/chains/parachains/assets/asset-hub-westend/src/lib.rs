@@ -45,7 +45,7 @@ decl_test_parachains! {
 			DigestProvider: (),
 		},
 		pallets = {
-			PolkadotXcm: asset_hub_westend_runtime::PolkadotXcm,
+			PezkuwiXcm: asset_hub_westend_runtime::PezkuwiXcm,
 			Balances: asset_hub_westend_runtime::Balances,
 			Assets: asset_hub_westend_runtime::Assets,
 			ForeignAssets: asset_hub_westend_runtime::ForeignAssets,
@@ -66,6 +66,6 @@ impl_xcm_helpers_for_parachain!(AssetHubWestend);
 impl_bridge_helpers_for_chain!(
 	AssetHubWestend,
 	ParaPallet,
-	PolkadotXcm,
+	PezkuwiXcm,
 	bp_bridge_hub_westend::RuntimeCall::XcmOverBridgeHubRococo
 );

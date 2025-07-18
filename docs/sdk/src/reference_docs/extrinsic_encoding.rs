@@ -6,8 +6,8 @@
 //!
 //! Substrate is configurable enough that extrinsics can take any format. In practice, runtimes
 //! tend to use our [`sp_runtime::generic::UncheckedExtrinsic`] type to represent extrinsics,
-//! because it's generic enough to cater for most (if not all) use cases. In Polkadot, this is
-//! configured [here](https://github.com/polkadot-fellows/runtimes/blob/94b2798b69ba6779764e20a50f056e48db78ebef/relay/polkadot/src/lib.rs#L1478)
+//! because it's generic enough to cater for most (if not all) use cases. In Pezkuwi, this is
+//! configured [here](https://github.com/pezkuwi-fellows/runtimes/blob/94b2798b69ba6779764e20a50f056e48db78ebef/relay/pezkuwi/src/lib.rs#L1478)
 //! at the time of writing.
 //!
 //! What follows is a description of how extrinsics based on this
@@ -94,9 +94,9 @@
 //! address is the first generic parameter of [`sp_runtime::generic::UncheckedExtrinsic`], and so
 //! can vary from chain to chain.
 //!
-//! The address type used on the Polkadot relay chain is [`sp_runtime::MultiAddress<AccountId32>`],
+//! The address type used on the Pezkuwi relay chain is [`sp_runtime::MultiAddress<AccountId32>`],
 //! where `AccountId32` is defined [here][`sp_core::crypto::AccountId32`]. When constructing a
-//! signed extrinsic to be submitted to a Polkadot node, you'll always use the
+//! signed extrinsic to be submitted to a Pezkuwi node, you'll always use the
 //! [`sp_runtime::MultiAddress::Id`] variant to wrap your `AccountId32`.
 //!
 //! #### signature
@@ -108,7 +108,7 @@
 //! The signature is obtained by signing the _signed payload_ bytes (see below on how this is
 //! constructed) using the private key associated with the address and correct algorithm.
 //!
-//! The signature type used on the Polkadot relay chain is [`sp_runtime::MultiSignature`]; the
+//! The signature type used on the Pezkuwi relay chain is [`sp_runtime::MultiSignature`]; the
 //! variants there are the types of signature that can be provided.
 //!
 //! ### General extrinsics
@@ -138,8 +138,8 @@
 //! Either (or both) of these can encode to zero bytes.
 //!
 //! Each chain configures the set of transaction extensions that it uses in its runtime
-//! configuration. At the time of writing, Polkadot configures them
-//! [here](https://github.com/polkadot-fellows/runtimes/blob/1dc04eb954eadf8aadb5d83990b89662dbb5a074/relay/polkadot/src/lib.rs#L1432C25-L1432C25).
+//! configuration. At the time of writing, Pezkuwi configures them
+//! [here](https://github.com/pezkuwi-fellows/runtimes/blob/1dc04eb954eadf8aadb5d83990b89662dbb5a074/relay/pezkuwi/src/lib.rs#L1432C25-L1432C25).
 //! Some of the common transaction extensions are defined
 //! [here][frame::deps::frame_system#transaction-extensions].
 //!
@@ -290,7 +290,7 @@ pub mod encoding_example {
 	);
 
 	// We'll use `UncheckedExtrinsic` to encode our extrinsic for us. We set
-	// the address and signature type to those used on Polkadot, use our custom
+	// the address and signature type to those used on Pezkuwi, use our custom
 	// `Call` type, and use our custom set of `TransactionExtensions`.
 	type Extrinsic = UncheckedExtrinsic<
 		MultiAddress<AccountId32, ()>,

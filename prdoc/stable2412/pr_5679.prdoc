@@ -8,9 +8,9 @@ doc:
     It doesn't alter any functionality and is required before implementing RFC103 on the 
     node side. 
 crates:
-- name: polkadot-primitives
+- name: pezkuwi-primitives
   bump: major
-- name: polkadot-runtime-parachains
+- name: pezkuwi-runtime-parachains
   bump: patch
 - name: rococo-runtime
   bump: patch
@@ -18,11 +18,11 @@ crates:
   bump: patch
 - name: cumulus-relay-chain-inprocess-interface
   bump: major
-- name: polkadot-service
+- name: pezkuwi-service
   bump: patch
-- name: polkadot-node-subsystem-types
+- name: pezkuwi-node-subsystem-types
   bump: major
-- name: polkadot
+- name: pezkuwi
   bump: patch
 - name: cumulus-client-network
   bump: major
@@ -34,47 +34,47 @@ crates:
   bump: major
 - name: cumulus-relay-chain-rpc-interface
   bump: major
-- name: polkadot-node-collation-generation
+- name: pezkuwi-node-collation-generation
   bump: major
-- name: polkadot-node-core-approval-voting
+- name: pezkuwi-node-core-approval-voting
   bump: major
-- name: polkadot-node-core-av-store
+- name: pezkuwi-node-core-av-store
   bump: major
-- name: polkadot-node-core-backing
+- name: pezkuwi-node-core-backing
   bump: major
-- name: polkadot-node-core-bitfield-signing
+- name: pezkuwi-node-core-bitfield-signing
   bump: major
-- name: polkadot-node-core-candidate-validation
+- name: pezkuwi-node-core-candidate-validation
   bump: major
-- name: polkadot-node-core-dispute-coordinator
+- name: pezkuwi-node-core-dispute-coordinator
   bump: major
-- name: polkadot-node-core-parachains-inherent
+- name: pezkuwi-node-core-parachains-inherent
   bump: major
-- name: polkadot-node-core-prospective-parachains
+- name: pezkuwi-node-core-prospective-parachains
   bump: major
-- name: polkadot-node-core-provisioner
+- name: pezkuwi-node-core-provisioner
   bump: major
-- name: polkadot-node-core-runtime-api
+- name: pezkuwi-node-core-runtime-api
   bump: major
-- name: polkadot-availability-distribution
+- name: pezkuwi-availability-distribution
   bump: major
-- name: polkadot-availability-recovery
+- name: pezkuwi-availability-recovery
   bump: major
-- name: polkadot-collator-protocol
+- name: pezkuwi-collator-protocol
   bump: major
-- name: polkadot-dispute-distribution
+- name: pezkuwi-dispute-distribution
   bump: major
-- name: polkadot-node-network-protocol
+- name: pezkuwi-node-network-protocol
   bump: major
-- name: polkadot-statement-distribution
+- name: pezkuwi-statement-distribution
   bump: major
-- name: polkadot-node-primitives
+- name: pezkuwi-node-primitives
   bump: major
-- name: polkadot-node-subsystem-util
+- name: pezkuwi-node-subsystem-util
   bump: major
-- name: polkadot-statement-table
+- name: pezkuwi-statement-table
   bump: major
-- name: polkadot-overseer
+- name: pezkuwi-overseer
   bump: patch
 - name: cumulus-client-consensus-common
   bump: major

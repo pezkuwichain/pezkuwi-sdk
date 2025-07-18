@@ -598,7 +598,7 @@ where
 			beneficiary: Location::new(1, [Parachain(1000)]),
 		}])),
 		ExportMessage {
-			network: Polkadot,
+			network: Pezkuwi,
 			destination: [Parachain(1000)].into(),
 			xcm: Xcm(vec![
 				ReserveAssetDeposited(Assets::from(vec![Asset {

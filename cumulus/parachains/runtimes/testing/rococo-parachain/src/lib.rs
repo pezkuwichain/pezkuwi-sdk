@@ -26,7 +26,7 @@ extern crate alloc;
 
 use alloc::{vec, vec::Vec};
 use cumulus_pallet_parachain_system::RelayNumberMonotonicallyIncreases;
-use polkadot_runtime_common::xcm_sender::NoPriceForMessageDelivery;
+use pezkuwi_runtime_common::xcm_sender::NoPriceForMessageDelivery;
 use sp_api::impl_runtime_apis;
 use sp_core::OpaqueMetadata;
 use sp_runtime::{
@@ -84,7 +84,7 @@ use xcm_executor::traits::JustTry;
 
 // XCM imports
 use pallet_xcm::{EnsureXcm, IsMajorityOfBody, XcmPassthrough};
-use polkadot_parachain_primitives::primitives::Sibling;
+use pezkuwi_parachain_primitives::primitives::Sibling;
 use xcm::latest::{prelude::*, ROCOCO_GENESIS_HASH};
 use xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowTopLevelPaidExecutionFrom,
@@ -339,7 +339,7 @@ parameter_types! {
 	pub const RococoNetwork: NetworkId = NetworkId::ByGenesis(ROCOCO_GENESIS_HASH);
 	pub RelayChainOrigin: RuntimeOrigin = cumulus_pallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation = [GlobalConsensus(RococoNetwork::get()), Parachain(ParachainInfo::parachain_id().into())].into();
-	pub CheckingAccount: AccountId = PolkadotXcm::check_account();
+	pub CheckingAccount: AccountId = PezkuwiXcm::check_account();
 }
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used
@@ -450,7 +450,7 @@ pub type Barrier = TrailingSetTopicAsId<(
 	// The network's Asset Hub gets free execution.
 	AllowExplicitUnpaidExecutionFrom<AssetHub>,
 	// Expected responses are OK.
-	AllowKnownQueryResponses<PolkadotXcm>,
+	AllowKnownQueryResponses<PezkuwiXcm>,
 	// Subscriptions for version tracking are OK.
 	AllowSubscriptionsFrom<Everything>,
 	// HRMP notifications from the relay chain are OK.
@@ -472,7 +472,7 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
-	type XcmEventEmitter = PolkadotXcm;
+	type XcmEventEmitter = PezkuwiXcm;
 	// How to withdraw and deposit an asset.
 	type AssetTransactor = AssetTransactors;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
@@ -482,10 +482,10 @@ impl xcm_executor::Config for XcmConfig {
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
 	type Trader = UsingComponents<IdentityFee<Balance>, RocLocation, AccountId, Balances, ()>;
-	type ResponseHandler = PolkadotXcm;
-	type AssetTrap = PolkadotXcm;
-	type AssetClaims = PolkadotXcm;
-	type SubscriptionService = PolkadotXcm;
+	type ResponseHandler = PezkuwiXcm;
+	type AssetTrap = PezkuwiXcm;
+	type AssetClaims = PezkuwiXcm;
+	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type AssetLocker = ();
@@ -500,7 +500,7 @@ impl xcm_executor::Config for XcmConfig {
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
 	type HrmpChannelClosingHandler = ();
-	type XcmRecorder = PolkadotXcm;
+	type XcmRecorder = PezkuwiXcm;
 }
 
 /// Converts a local signed origin into an XCM location. Forms the basis for local origins
@@ -639,7 +639,7 @@ construct_runtime! {
 
 		// XCM helpers.
 		XcmpQueue: cumulus_pallet_xcmp_queue = 50,
-		PolkadotXcm: pallet_xcm = 51,
+		PezkuwiXcm: pallet_xcm = 51,
 		CumulusXcm: cumulus_pallet_xcm = 52,
 		// RIP DmpQueue 53
 		MessageQueue: pallet_message_queue = 54,

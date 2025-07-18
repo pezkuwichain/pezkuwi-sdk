@@ -1,19 +1,19 @@
 
 ## Docker images
 
-The docker images for the `polkadot` node binary and the `polkadot-parachain` binary can be found at Docker hub (will be available a few minutes after the release has been published):
-- [Polkadot image](https://hub.docker.com/r/parity/polkadot/tags?page=1&ordering=last_updated)
-- [Polkadot-Parachain image](https://hub.docker.com/r/parity/polkadot-parachain/tags?page=1&ordering=last_updated)
+The docker images for the `pezkuwi` node binary and the `pezkuwi-parachain` binary can be found at Docker hub (will be available a few minutes after the release has been published):
+- [Pezkuwi image](https://hub.docker.com/r/parity/pezkuwi/tags?page=1&ordering=last_updated)
+- [Pezkuwi-Parachain image](https://hub.docker.com/r/parity/pezkuwi-parachain/tags?page=1&ordering=last_updated)
 
 
 You may also pull it with:
 
 ```
-docker pull parity/polkadot:latest
+docker pull parity/pezkuwi:latest
 ```
 
 or
 
 ```
-docker pull parity/polkadot-parachain:latest
+docker pull parity/pezkuwi-parachain:latest
 ```

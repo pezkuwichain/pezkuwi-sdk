@@ -2,9 +2,9 @@ FROM node:latest AS pjs
 
 # It would be great to depend on a more stable tag, but we need some
 # as-yet-unreleased features.
-RUN yarn global add @polkadot/api-cli@0.10.0-beta.14
+RUN yarn global add @pezkuwi/api-cli@0.10.0-beta.14
 
-ENTRYPOINT [ "polkadot-js-api" ]
+ENTRYPOINT [ "pezkuwi-js-api" ]
 CMD [ "--version" ]
 
 # To use the pjs build stage to access the blockchain from the host machine:
@@ -12,7 +12,7 @@ CMD [ "--version" ]
 #   docker build -f docker/dockerfiles/parachain-registrar.Dockerfile --target pjs -t parachain-registrar:pjs .
 #   alias pjs='docker run --rm --net cumulus_testing_net parachain-registrar:pjs --ws ws://172.28.1.1:9944'
 #
-# Then, as long as the chain is running, you can use the polkadot-js-api CLI like:
+# Then, as long as the chain is running, you can use the pezkuwi-js-api CLI like:
 #
 #   pjs query.sudo.key
 

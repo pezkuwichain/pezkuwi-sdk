@@ -26,7 +26,7 @@ sudo=$8
 [ -z "$para_$id" ] && usage
 [ -z "$sudo" ] && usage
 
-binary="./target/release/polkadot-parachain"
+binary="./target/release/pezkuwi-parachain"
 
 # build the chain spec we'll manipulate
 $binary build-spec --disable-default-bootnode --chain seedling > seedling-spec-plain.json

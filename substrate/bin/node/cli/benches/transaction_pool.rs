@@ -21,7 +21,7 @@ use futures::{future, StreamExt};
 use kitchensink_runtime::{constants::currency::*, BalancesCall, SudoCall};
 use node_cli::service::{create_extrinsic, fetch_nonce, FullClient, TransactionPool};
 use node_primitives::AccountId;
-use polkadot_sdk::{
+use pezkuwi_sdk::{
 	sc_service::config::{ExecutorConfiguration, RpcConfiguration},
 	sc_transaction_pool_api::TransactionPool as _,
 	*,

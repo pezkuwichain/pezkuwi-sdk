@@ -8,7 +8,7 @@ doc:
       Currently, the number of heads is limited to the first 1024 heads sorted by para id.
 
 crates:
-  - name: polkadot-runtime-parachains
+  - name: pezkuwi-runtime-parachains
     bump: minor
   - name: rococo-runtime
     bump: minor
@@ -18,5 +18,5 @@ crates:
     bump: major
   - name: pallet-beefy-mmr
     bump: minor
-  - name: polkadot-sdk
+  - name: pezkuwi-sdk
     bump: minor
