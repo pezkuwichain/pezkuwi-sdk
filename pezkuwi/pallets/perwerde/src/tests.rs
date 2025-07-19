@@ -8,9 +8,9 @@ fn create_bounded_vec(s: &[u8]) -> Vec<u8> {
 #[test]
 fn create_course_works() {
 	new_test_ext().execute_with(|| {
-		// Eylem: Root yetkisiyle bir kurs oluşturulur.
+		// Eylem: Admin yetkisine sahip 0 ID'li hesap ile bir kurs oluşturulur.
 		assert_ok!(EgitimPallet::create_course(
-			RuntimeOrigin::root(),
+			RuntimeOrigin::signed(0),
 			create_bounded_vec(b"Blockchain 101").try_into().unwrap(),
 			create_bounded_vec(b"Giris seviyesi").try_into().unwrap(),
 			create_bounded_vec(b"http://example.com").try_into().unwrap()

@@ -12803,6 +12803,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-perwerde"
+version = "1.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-balances",
+ "parity-scale-codec",
+ "pezkuwi-primitives",
+ "scale-info",
+ "serde",
+ "sp-core 36.1.0",
+ "sp-io 40.0.1",
+ "sp-runtime 41.1.0",
+ "sp-std 14.0.0",
+]
+
+[[package]]
 name = "pallet-preimage"
 version = "40.0.0"
 dependencies = [
@@ -16634,6 +16653,7 @@ dependencies = [
  "pallet-nis",
  "pallet-offences",
  "pallet-parameters",
+ "pallet-perwerde",
  "pallet-preimage",
  "pallet-proxy",
  "pallet-ranked-collective",

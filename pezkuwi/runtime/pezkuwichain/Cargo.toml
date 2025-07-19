@@ -74,6 +74,7 @@ pezkuwi-parachain-primitives.workspace = true
 pallet-tiki = { path = "../../pallets/tiki", default-features = false }
 pallet-referral = { path = "../../pallets/referral", default-features = false }
 pallet-identity-kyc = { path = "../../../pezkuwi/pallets/identity-kyc", default-features = false }
+# pallet-perwerde = { path = "../../../pezkuwi/pallets/perwerde", default-features = false }
 pallet-nfts = { default-features = false, workspace = true }
 pezkuwi-primitives.workspace = true
 pezkuwi-runtime-common.workspace = true
@@ -180,6 +181,7 @@ std = [
 	"pallet-tiki/std",
 	"pallet-referral/std",
 	"pallet-identity-kyc/std",
+	# "pallet-perwerde/std",
 	"pallet-nfts/std",
 	"pallet-xcm/std",
 	"pezkuwi-parachain-primitives/std",
@@ -274,6 +276,8 @@ runtime-benchmarks = [
 	"pallet-tiki/runtime-benchmarks",
 	"pallet-identity-kyc/runtime-benchmarks",
 	"pallet-referral/runtime-benchmarks",
+	# "pallet-perwerde/runtime-benchmarks",
+
 ]
 try-runtime = [
 	"frame-executive/try-runtime",

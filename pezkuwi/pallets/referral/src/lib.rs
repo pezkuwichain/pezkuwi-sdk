@@ -10,12 +10,9 @@ pub mod pallet {
 	use super::*;
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
-    // Eski pezkuwi_primitives importlarını kendi yerel tiplerimizle değiştiriyoruz
-	// Yerel Kyc tiplerini sildik, onların yerine pallet-identity-kyc'den gelenleri kullanacağız.
-	use pallet_identity_kyc::types::{KycLevel, KycStatus};
-
+	use pallet_identity_kyc::types::KycStatus;
 	use crate::types::{
-		InviterProvider, OnKycApproved, ReferralScoreProvider, RawScore, Tiki
+		InviterProvider, OnKycApproved, ReferralScoreProvider, RawScore
 	};
 	use sp_std::prelude::*;
 
@@ -23,12 +20,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + TypeInfo {
+	pub trait Config: frame_system::Config + pallet_identity_kyc::Config + TypeInfo {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type WeightInfo: weights::WeightInfo;
-		// Trait'leri yerel tiplerimize göre güncelliyoruz
-		// Artık pallet-identity-kyc'nin kendi trait'ini kullanıyoruz.
-		type KycStatusProvider: KycStatus<Self::AccountId>;		
 	}
 
 	// --- Depolama Alanları (Storage) ---
@@ -83,7 +77,7 @@ pub mod pallet {
 	impl<T: Config> Pallet<T> {
 		/// Başka bir kullanıcıyı sisteme davet etmek için bir referans kaydı başlatır.
 		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::initiate_referral())]
+		#[pallet::weight(<T as Config>::WeightInfo::initiate_referral())]
 		pub fn initiate_referral(
 			origin: OriginFor<T>,
 			referred: T::AccountId,
@@ -105,12 +99,11 @@ pub mod pallet {
 		fn on_kyc_approved(who: &T::AccountId) {
 			// Güvenlik kontrolü: Referansı onaylamadan önce kullanıcının KYC durumunun
 			// gerçekten "Approved" olduğunu zincir üzerinde teyit et.
-			if T::KycStatusProvider::get_kyc_status(who) == pallet_identity_kyc::types::KycLevel::Approved {
+			// Artık pallet_identity_kyc'nin depolama alanına doğrudan erişiyoruz.
+			if pallet_identity_kyc::Pallet::<T>::get_kyc_status(who) == pallet_identity_kyc::types::KycLevel::Approved {
 				if let Some(referrer) = PendingReferrals::<T>::take(who) {
-					let new_count = ReferralCount::<T>::mutate(&referrer, |count| {
-						*count = count.saturating_add(1);
-						*count
-					});
+					let new_count = ReferralCount::<T>::get(&referrer).saturating_add(1);
+                    ReferralCount::<T>::insert(&referrer, new_count);
 
 					let referral_info = ReferralInfo {
 						referrer: referrer.clone(),
@@ -123,9 +116,6 @@ pub mod pallet {
 						referred: who.clone(),
 						new_referrer_count: new_count,
 					});
-
-					// NFT basma veya diğer ödül mantıkları burada olmayacak.
-					// Bu olay (Event::ReferralConfirmed) dinlenerek başka bir palet tarafından tetiklenecek.
 				}
 			}
 		}

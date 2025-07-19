@@ -1,6 +1,5 @@
 use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
-use frame_support::pallet_prelude::DispatchResult;
 use sp_runtime::RuntimeDebug;
 
 // --- GENEL TİPLER ---

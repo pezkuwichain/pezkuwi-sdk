@@ -1,20 +1,29 @@
 // ==============================================================================
-// === KK/pallets/society/egitim/src/weights.rs  =========
+// === KK/pallets/society/perwerde/src/weights.rs  =========
 // ==============================================================================
 
-//! Pallet-Egitim için Weight bilgisi.
+//! Pallet-perwerde için Weight bilgisi.
 //! Bu dosya, pallet'in extrinsic'lerinin ağırlıklarını tanımlayan bir taslaktır.
 //! Gerçek değerler benchmarking ile elde edilmelidir.
 
 use frame_support::weights::Weight; // SADECE BU IMPORT YETERLİ
 
-/// Pallet-Egitim için WeightInfo trait'i
+/// Pallet-perwerde için WeightInfo trait'i
 pub trait WeightInfo {
     fn create_course(name_len: u32, desc_len: u32, link_len: u32) -> Weight;
     fn enroll() -> Weight;
     fn complete_course() -> Weight;
     fn archive_course() -> Weight;
-    fn get_egitim_score(completed_courses_count: u32) -> Weight;
+    // Bu extrinsic sadece `get_perwerde_score` fonksiyonunun ağırlığını ölçmek için kullanılır.
+		#[cfg(feature = "runtime-benchmarks")]
+		#[pallet::call_index(4)]
+		#[pallet::weight(T::WeightInfo::get_perwerde_score(T::MaxStudentsPerCourse::get()))]
+		pub fn benchmark_get_perwerde_score(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
+			ensure_signed(origin)?;
+			let _score = Self::get_perwerde_score(&who);
+			Ok(())
+		}
+    fn benchmark_get_perwerde_score(completed_courses_count: u32) -> Weight;
 }
 
 // Sabit ağırlık değerleri
@@ -55,7 +64,7 @@ impl WeightInfo for () {
             .saturating_add(WRITE_OP_WEIGHT)
     }
 
-     fn get_egitim_score(completed_courses_count: u32) -> Weight {
+     fn benchmark_get_perwerde_score(completed_courses_count: u32) -> Weight {
         Weight::from_parts(5_000_000, 0)
             .saturating_add(READ_OP_WEIGHT)
             .saturating_add(Weight::from_parts(READ_OP_REF_TIME / 10, 0).saturating_mul(completed_courses_count as u64))

@@ -75,7 +75,7 @@ parameter_types! {
 
 impl pallet_egitim::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type AdminOrigin = EnsureRoot<Self::AccountId>;
+	type AdminOrigin = frame_system::EnsureSigned<Self::AccountId>;
 	type WeightInfo = ();
 	type MaxCourseNameLength = MaxCourseNameLength;
 	type MaxCourseDescLength = MaxCourseDescLength;

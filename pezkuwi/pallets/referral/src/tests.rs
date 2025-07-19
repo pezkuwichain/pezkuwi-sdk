@@ -1,9 +1,9 @@
 use super::*;
-use crate::{mock::*, Error, Event, ReferralCount, ReferralInfo, PendingReferrals};
+use crate::{mock::*, Error, Event, ReferralCount, PendingReferrals};
+use crate::types::OnKycApproved;
 use frame_support::{assert_noop, assert_ok};
-use pezkuwi_primitives::traits::OnKycApproved;
 
-type ReferralPallet = Pallet<TestRuntime>;
+type ReferralPallet = Pallet<Test>;
 
 #[test]
 fn initiate_referral_works() {
@@ -24,7 +24,7 @@ fn initiate_referral_fails_for_self_referral() {
 		// Eylem & Doğrulama: Kullanıcı kendini davet edemez.
 		assert_noop!(
 			ReferralPallet::initiate_referral(RuntimeOrigin::signed(1), 1),
-			Error::<TestRuntime>::SelfReferral
+			Error::<Test>::SelfReferral
 		);
 	});
 }
@@ -38,7 +38,7 @@ fn initiate_referral_fails_if_already_referred() {
 		// Eylem & Doğrulama: 3 numaralı kullanıcı, zaten davet edilmiş olan 2'yi davet edemez.
 		assert_noop!(
 			ReferralPallet::initiate_referral(RuntimeOrigin::signed(3), 2),
-			Error::<TestRuntime>::AlreadyReferred
+			Error::<Test>::AlreadyReferred
 		);
 	});
 }
@@ -49,20 +49,29 @@ fn on_kyc_approved_hook_works_when_referral_exists() {
 		// Kurulum: 1 numaralı kullanıcı 2'yi davet eder.
 		let referrer = 1;
 		let referred = 2;
+
+		// Test senaryosunu kuran en önemli adım: Bekleyen referansı oluştur!
 		assert_ok!(ReferralPallet::initiate_referral(RuntimeOrigin::signed(referrer), referred));
-		assert_eq!(ReferralPallet::referral_count(referrer), 0);
+		
+		// KYC'nin onaylanmış gibi davranması için mock'u hazırlıyoruz.
+		// Aslında mock'umuz her zaman Approved döndürdüğü için bu adıma gerek yok,
+		// ama gerçek senaryoda state'i böyle kurardık.
+		// IdentityKyc::set_kyc_status_for_account(referred, KycLevel::Approved);
+		
+		// Eylemden önce kullanıcının KYC'sini onaylanmış olarak ayarlayalım.
+		pallet_identity_kyc::KycStatuses::<Test>::insert(referred, pallet_identity_kyc::types::KycLevel::Approved);
 
 		// Eylem: KYC paleti, 2 numaralı kullanıcının KYC'sinin onaylandığını bildirir.
 		ReferralPallet::on_kyc_approved(&referred);
 
 		// Doğrulama
 		// 1. Bekleyen referans kaydı silinir.
-		assert_eq!(PendingReferrals::<TestRuntime>::get(referred), None);
+		assert_eq!(PendingReferrals::<Test>::get(referred), None);
 		// 2. Davet edenin referans sayısı 1 artar.
-		assert_eq!(ReferralCount::<TestRuntime>::get(referrer), 1);
+		assert_eq!(ReferralCount::<Test>::get(referrer), 1);
 		// 3. Kalıcı referans bilgisi oluşturulur.
-		assert!(Referrals::<TestRuntime>::contains_key(referred));
-		let referral_info = Referrals::<TestRuntime>::get(referred).unwrap();
+		assert!(Referrals::<Test>::contains_key(referred));
+		let referral_info = Referrals::<Test>::get(referred).unwrap();
 		assert_eq!(referral_info.referrer, referrer);
 		// 4. Doğru olay yayınlanır.
 		System::assert_last_event(
@@ -82,7 +91,7 @@ fn on_kyc_approved_hook_does_nothing_when_no_referral() {
 
 		// Doğrulama: Hiçbir depolama değişmez ve olay yayınlanmaz.
 		// (Bu testi basit tutmak için olay sayısını kontrol edebiliriz)
-		assert_eq!(ReferralCount::<TestRuntime>::iter().count(), 0);
-		assert_eq!(Referrals::<TestRuntime>::iter().count(), 0);
+		assert_eq!(ReferralCount::<Test>::iter().count(), 0);
+		assert_eq!(Referrals::<Test>::iter().count(), 0);
 	});
 }

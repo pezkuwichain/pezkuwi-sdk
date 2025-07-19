@@ -14,11 +14,11 @@ mod tests;
 pub mod weights;
 
 // Gerekli import'lar
-use frame_support::pallet_prelude::*;
+use frame_support::pallet_prelude::{BoundedBTreeSet, *};
 use frame_system::pallet_prelude::*;
 use sp_runtime::traits::Zero;
 use sp_std::prelude::*;
-use pezkuwi_primitives::traits::EgitimScoreProvider;
+use pezkuwi_primitives::traits::PerwerdeScoreProvider;
 
 // Pallet'in kendisini ve ağırlık bilgisini dışa aktarma
 pub use pallet::*;
@@ -62,9 +62,9 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::config]
-    pub trait Config: frame_system::Config {
+   pub trait Config: frame_system::Config + TypeInfo {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
-        type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>; // Sadece Admin'in kurs oluşturabilmesi için
+        type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>; // Admin yetkisi ve AccountId'si
         type WeightInfo: WeightInfo;
 
         #[pallet::constant]
@@ -207,14 +207,23 @@ pub mod pallet {
             Self::deposit_event(Event::CourseArchived { course_id });
             Ok(())
         }
+        // Bu extrinsic sadece `get_perwerde_score` fonksiyonunun ağırlığını ölçmek için kullanılır.
+		#[cfg(feature = "runtime-benchmarks")]
+		#[pallet::call_index(4)]
+		#[pallet::weight(T::WeightInfo::get_perwerde_score(T::MaxStudentsPerCourse::get()))]
+		pub fn benchmark_get_perwerde_score(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
+			ensure_signed(origin)?;
+			let _score = Self::get_perwerde_score(&who);
+			Ok(())
+		}
     }
 }
 
-// EgitimScoreProvider trait'inin implementasyonu
-impl<T: Config> EgitimScoreProvider<T::AccountId> for Pallet<T> {
-    type Score = u32; // RawScore u32 olarak varsayıldı
+// PerwerdeScoreProvider trait'inin implementasyonu
+impl<T: Config> PerwerdeScoreProvider<T::AccountId> for Pallet<T> {
+    type Score = u32;
 
-    fn get_egitim_score(who: &T::AccountId) -> Self::Score {
+    fn get_perwerde_score(who: &T::AccountId) -> u32 {
         let completed = CompletedCourses::<T>::get(who);
         let completed_count = completed.len() as u32;
 
