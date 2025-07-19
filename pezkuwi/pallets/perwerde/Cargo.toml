@@ -24,10 +24,6 @@ log = { default-features = false, workspace = true }
 sp-runtime = { default-features = false, workspace = true }
 sp-std = { default-features = false, workspace = true }
 
-# Projemizin özel tiplerini ve trait'lerini içeren kütüphane
-pezkuwi-primitives = { path = "../../primitives", default-features = false }
-
-
 [dev-dependencies]
 sp-core = { workspace = true }
 sp-io = { workspace = true }
@@ -48,7 +44,6 @@ std = [
 	"sp-io/std",
 	"sp-runtime/std",
     "sp-std/std",
-    "pezkuwi-primitives/std",
 ]
 runtime-benchmarks = [
 	"frame-benchmarking",
@@ -56,7 +51,6 @@ runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-    "pezkuwi-primitives/runtime-benchmarks",
 ]
 try-runtime = [
 	"frame-support/try-runtime",

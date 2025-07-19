@@ -3,6 +3,14 @@
 pub use pallet::*;
 pub mod weights;
 pub mod types; // Yeni types modülümüzü ekliyoruz
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
 use crate::weights::WeightInfo;
 
 #[frame_support::pallet]
@@ -144,8 +152,3 @@ pub mod pallet {
 		}
 	}
 }
-#[cfg(test)]
-mod mock;
-
-#[cfg(test)]
-mod tests;

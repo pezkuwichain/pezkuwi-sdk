@@ -1,4 +1,4 @@
-use crate::{mock::*, Error, Event, Pallet as EgitimPallet};
+use crate::{mock::*, Error, Event, Pallet as PerwerdePallet};
 use frame_support::{assert_noop, assert_ok};
 
 fn create_bounded_vec(s: &[u8]) -> Vec<u8> {
@@ -43,8 +43,8 @@ fn create_course_fails_for_non_admin() {
 #[test]
 fn enroll_works() {
 	new_test_ext().execute_with(|| {
-		// Kurulum: Önce bir kurs oluştur.
-		let _ = EgitimPallet::create_course(RuntimeOrigin::root(), vec![].try_into().unwrap(), vec![].try_into().unwrap(), vec![].try_into().unwrap());
+		// Kurulum: Önce admin (0) ile bir kurs oluştur.
+		assert_ok!(PerwerdePallet::create_course(RuntimeOrigin::signed(0), vec![].try_into().unwrap(), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
 		
 		// Eylem: 1 numaralı kullanıcı 0 ID'li kursa kaydolur.
 		assert_ok!(EgitimPallet::enroll(RuntimeOrigin::signed(1), 0));

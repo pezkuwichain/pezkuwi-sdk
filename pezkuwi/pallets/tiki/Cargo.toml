@@ -24,7 +24,7 @@ sp-runtime = { default-features = false, workspace = true }
 strum = { version = "0.26", default-features = false, features = ["derive"] }
 strum_macros = { version = "0.26", default-features = false }
 # Aşağıdaki bağımlılıklar eklendi:
-sp-std = { default-features = false, path = "../../../substrate/primitives/std" } # Doğru yol (üç nokta)
+sp-std = { default-features = false, workspace = true }
 num-traits = { version = "0.2", default-features = false }
 num-derive = { version = "0.3", default-features = false }
 serde = { version = "1.0", default-features = false, features = ["derive"] }

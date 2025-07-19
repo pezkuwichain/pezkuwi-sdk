@@ -18,7 +18,6 @@ use frame_support::pallet_prelude::{BoundedBTreeSet, *};
 use frame_system::pallet_prelude::*;
 use sp_runtime::traits::Zero;
 use sp_std::prelude::*;
-use pezkuwi_primitives::traits::PerwerdeScoreProvider;
 
 // Pallet'in kendisini ve ağırlık bilgisini dışa aktarma
 pub use pallet::*;
@@ -210,7 +209,7 @@ pub mod pallet {
         // Bu extrinsic sadece `get_perwerde_score` fonksiyonunun ağırlığını ölçmek için kullanılır.
 		#[cfg(feature = "runtime-benchmarks")]
 		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::get_perwerde_score(T::MaxStudentsPerCourse::get()))]
+		#[pallet::weight(T::WeightInfo::benchmark_get_perwerde_score(T::MaxStudentsPerCourse::get()))]
 		pub fn benchmark_get_perwerde_score(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			ensure_signed(origin)?;
 			let _score = Self::get_perwerde_score(&who);
@@ -219,10 +218,19 @@ pub mod pallet {
     }
 }
 
-// PerwerdeScoreProvider trait'inin implementasyonu
-impl<T: Config> PerwerdeScoreProvider<T::AccountId> for Pallet<T> {
-    type Score = u32;
+// --- Arayüz (Trait) Tanımı ---
 
+/// Diğer paletlerin, bu paletten Perwerde (Eğitim) puanlarını sorgulaması için
+/// kullanılacak olan arayüz (trait).
+pub trait PerwerdeScoreProvider<AccountId> {
+	/// Belirtilen hesabın sahip olduğu tamamlanmış kurslardan gelen toplam puanı döndürür.
+	fn get_perwerde_score(who: &AccountId) -> u32;
+}
+
+
+// --- Trait Implementasyonu ---
+
+impl<T: Config> PerwerdeScoreProvider<T::AccountId> for Pallet<T> {
     fn get_perwerde_score(who: &T::AccountId) -> u32 {
         let completed = CompletedCourses::<T>::get(who);
         let completed_count = completed.len() as u32;

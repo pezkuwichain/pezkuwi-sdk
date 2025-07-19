@@ -42,8 +42,9 @@ mod benchmarks {
 		let student_origin = RawOrigin::Signed(student.clone());
 
 		// Kurulum: Önce bir kurs oluşturmamız gerekiyor.
+		let admin: T::AccountId = account("admin", 0, 0);
 		perwerde::<T>::create_course(
-			RawOrigin::Root.into(),
+			RawOrigin::Signed(admin).into(),
 			create_bounded(b"Test Kursu"),
 			create_bounded(b"Test aciklama"),
 			create_bounded(b"http://test.com"),
@@ -82,12 +83,14 @@ mod benchmarks {
 	#[benchmark]
 	fn archive_course() {
 		let course_id = 0;
+		let admin: T::AccountId = account("admin", 0, 0);
 		// Kurulum: Bir kurs oluşturuyoruz.
-		perwerde::<T>::create_course(RawOrigin::Root.into(), create_bounded(b"Test"), create_bounded(b"Test"), create_bounded(b"Test")).unwrap();
+		perwerde::<T>::create_course(RawOrigin::Signed(admin.clone()).into(), create_bounded(b"Test"), create_bounded(b"Test"), create_bounded(b"Test")).unwrap();
+		let course = Courses::<T>::get(course_id).unwrap();
 
 		// EYLEM: `archive_course` extrinsic'ini admin yetkisiyle çağırıyoruz.
 		#[extrinsic_call]
-		_(RawOrigin::Signed(course.owner), course_id);
+		_(RawOrigin::Signed(admin), course_id);
 
 		// DOĞRULAMA: Kursun durumunun 'Archived' olarak değiştiğini kontrol ediyoruz.
 		let course = Courses::<T>::get(course_id).unwrap();

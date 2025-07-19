@@ -108,7 +108,7 @@ use frame_support::{
 		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp, ProcessMessage,
 		ProcessMessageError, StorageMapShim, WithdrawReasons,
 	},
-	weights::{ConstantMultiplier, WeightMeter, WeightToFee as _},
+	weights::{ConstantMultiplier, WeightMeter},
 	PalletId,
 };
 use pallet_nfts::PalletFeatures;
@@ -842,8 +842,6 @@ impl pallet_identity_kyc::Config for Runtime {
 impl pallet_referral::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_referral::weights::SubstrateWeight<Runtime>;
-	// Diğer paletlerle olan bağlantıları kuruyoruz:
-	type KycStatusProvider = IdentityKyc;
 }
 
 parameter_types! {
@@ -1960,8 +1958,11 @@ mod benches {
 		[pallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pallet_xcm_benchmarks::fungible, pallet_xcm_benchmarks::fungible::Pallet::<Runtime>]
 		[pallet_xcm_benchmarks::generic, pallet_xcm_benchmarks::generic::Pallet::<Runtime>]
-		// Bizim özel paletimiz
+		// Bizim özel paletlerimiz
 		[pallet_tiki, Tiki]
+		[pallet_identity_kyc, IdentityKyc]
+		[pallet_referral, Referral]
+		[pallet_perwerde, Perwerde]
 	);
 }
 

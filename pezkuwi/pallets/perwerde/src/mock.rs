@@ -1,4 +1,4 @@
-use crate as pallet_egitim;
+use crate as pallet_perwerde;
 use frame_support::{
 	construct_runtime, parameter_types,
 	traits::{ConstU16, ConstU32, ConstU64, Everything},
@@ -20,7 +20,7 @@ construct_runtime!(
 	{
 		System: frame_system,
 		Balances: pallet_balances,
-		Egitim: pallet_egitim,
+		Perwerde: pallet_perwerde,
 	}
 );
 
@@ -73,7 +73,7 @@ parameter_types! {
 	pub const MaxStudentsPerCourse: u32 = 1000;
 }
 
-impl pallet_egitim::Config for Test {
+impl pallet_perwerde::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type AdminOrigin = frame_system::EnsureSigned<Self::AccountId>;
 	type WeightInfo = ();
