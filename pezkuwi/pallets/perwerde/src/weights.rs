@@ -1,72 +1,140 @@
-// ==============================================================================
-// === KK/pallets/society/perwerde/src/weights.rs  =========
-// ==============================================================================
+#![cfg_attr(rustfmt, rustfmt_skip)]
+#![allow(unused_parens)]
+#![allow(unused_imports)]
+#![allow(missing_docs)]
 
-//! Pallet-perwerde için Weight bilgisi.
-//! Bu dosya, pallet'in extrinsic'lerinin ağırlıklarını tanımlayan bir taslaktır.
-//! Gerçek değerler benchmarking ile elde edilmelidir.
+use frame_support::{traits::Get, weights::Weight};
+use sp_std::marker::PhantomData;
 
-use frame_support::weights::Weight; // SADECE BU IMPORT YETERLİ
-
-/// Pallet-perwerde için WeightInfo trait'i
+/// Weight functions for `pallet_perwerde`.
 pub trait WeightInfo {
-    fn create_course(name_len: u32, desc_len: u32, link_len: u32) -> Weight;
-    fn enroll() -> Weight;
-    fn complete_course() -> Weight;
-    fn archive_course() -> Weight;
-    // Bu extrinsic sadece `get_perwerde_score` fonksiyonunun ağırlığını ölçmek için kullanılır.
-		#[cfg(feature = "runtime-benchmarks")]
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::get_perwerde_score(T::MaxStudentsPerCourse::get()))]
-		pub fn benchmark_get_perwerde_score(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
-			ensure_signed(origin)?;
-			let _score = Self::get_perwerde_score(&who);
-			Ok(())
-		}
-    fn benchmark_get_perwerde_score(completed_courses_count: u32) -> Weight;
+	fn create_course(name_len: u32, desc_len: u32, link_len: u32) -> Weight;
+	fn enroll() -> Weight;
+	fn complete_course() -> Weight;
+	fn archive_course() -> Weight;
+	fn benchmark_get_perwerde_score(c: u32, ) -> Weight;
 }
 
-// Sabit ağırlık değerleri
-const READ_OP_REF_TIME: u64 = 20_000_000;
-const WRITE_OP_REF_TIME: u64 = 40_000_000;
+/// Weights for `pallet_perwerde` using the Substrate node and recommended hardware.
+pub struct SubstrateWeight<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
+	/// Storage: `Perwerde::NextCourseId` (r:1 w:1)
+	/// Proof: `Perwerde::NextCourseId` (`max_values`: Some(1), `max_size`: Some(8), added: 503, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Courses` (r:0 w:1)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(1724), added: 4199, mode: `MaxEncodedLen`)
+	/// The range of component `name_len` is `[1, 100]`.
+	/// The range of component `desc_len` is `[1, 500]`.
+	/// The range of component `link_len` is `[1, 200]`.
+	fn create_course(name_len: u32, desc_len: u32, link_len: u32, ) -> Weight {
+		// Minimum execution time: 30_000 nanoseconds.
+		Weight::from_parts(30_763_000, 0)
+			// Standard Error: 2_000
+			.saturating_add(Weight::from_parts(2_000, 0).saturating_mul(name_len.into()))
+			// Standard Error: 2_000
+			.saturating_add(Weight::from_parts(1_000, 0).saturating_mul(desc_len.into()))
+			// Standard Error: 2_000
+			.saturating_add(Weight::from_parts(2_000, 0).saturating_mul(link_len.into()))
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+			.saturating_add(T::DbWeight::get().writes(2_u64))
+	}
+	/// Storage: `Perwerde::Courses` (r:1 w:1)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(1724), added: 4199, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Enrollments` (r:1 w:1)
+	/// Proof: `Perwerde::Enrollments` (`max_values`: None, `max_size`: Some(112), added: 2587, mode: `MaxEncodedLen`)
+	fn enroll() -> Weight {
+		// Minimum execution time: 35_000 nanoseconds.
+		Weight::from_parts(36_000_000, 0)
+			.saturating_add(T::DbWeight::get().reads(2_u64))
+			.saturating_add(T::DbWeight::get().writes(2_u64))
+	}
+	/// Storage: `Perwerde::Enrollments` (r:1 w:1)
+	/// Proof: `Perwerde::Enrollments` (`max_values`: None, `max_size`: Some(112), added: 2587, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::CompletedCourses` (r:1 w:1)
+	/// Proof: `Perwerde::CompletedCourses` (`max_values`: None, `max_size`: Some(40042), added: 42517, mode: `MaxEncodedLen`)
+	fn complete_course() -> Weight {
+		// Minimum execution time: 32_000 nanoseconds.
+		Weight::from_parts(34_000_000, 0)
+			.saturating_add(T::DbWeight::get().reads(2_u64))
+			.saturating_add(T::DbWeight::get().writes(2_u64))
+	}
+	/// Storage: `Perwerde::Courses` (r:1 w:1)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(1724), added: 4199, mode: `MaxEncodedLen`)
+	fn archive_course() -> Weight {
+		// Minimum execution time: 24_000 nanoseconds.
+		Weight::from_parts(25_000_000, 0)
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+			.saturating_add(T::DbWeight::get().writes(1_u64))
+	}
+	/// Storage: `Perwerde::CompletedCourses` (r:1 w:0)
+	/// Proof: `Perwerde::CompletedCourses` (`max_values`: None, `max_size`: Some(40042), added: 42517, mode: `MaxEncodedLen`)
+	/// The range of component `c` is `[0, 1000]`.
+	fn benchmark_get_perwerde_score(c: u32, ) -> Weight {
+		// Minimum execution time: 8_000 nanoseconds.
+		Weight::from_parts(9_064_500, 0)
+			// Standard Error: 3_000
+			.saturating_add(Weight::from_parts(1_000, 0).saturating_mul(c.into()))
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+	}
+}
 
-const READ_OP_WEIGHT: Weight = Weight::from_parts(READ_OP_REF_TIME, 0);
-const WRITE_OP_WEIGHT: Weight = Weight::from_parts(WRITE_OP_REF_TIME, 0);
-
+// For backwards compatibility, we have a hardware specific implementation file.
+// You can ignore this block, benchmark will overwrite this automatically.
 impl WeightInfo for () {
-    fn create_course(name_len: u32, desc_len: u32, link_len: u32) -> Weight {
-        Weight::from_parts(10_000_000, 0)
-            .saturating_add(READ_OP_WEIGHT)
-            .saturating_add(WRITE_OP_WEIGHT)
-            .saturating_add(WRITE_OP_WEIGHT)
-            .saturating_add(Weight::from_parts(1_000, 0).saturating_mul(name_len as u64))
-            .saturating_add(Weight::from_parts(1_000, 0).saturating_mul(desc_len as u64))
-            .saturating_add(Weight::from_parts(1_000, 0).saturating_mul(link_len as u64))
-    }
-
-    fn enroll() -> Weight {
-        Weight::from_parts(15_000_000, 0)
-            .saturating_add(READ_OP_WEIGHT.saturating_mul(2))
-            .saturating_add(WRITE_OP_WEIGHT.saturating_mul(2))
-    }
-
-    fn complete_course() -> Weight {
-        Weight::from_parts(20_000_000, 0)
-             .saturating_add(READ_OP_WEIGHT.saturating_mul(2))
-             .saturating_add(WRITE_OP_WEIGHT)
-             .saturating_add(READ_OP_WEIGHT)
-             .saturating_add(WRITE_OP_WEIGHT)
-    }
-
-    fn archive_course() -> Weight {
-        Weight::from_parts(10_000_000, 0)
-            .saturating_add(READ_OP_WEIGHT)
-            .saturating_add(WRITE_OP_WEIGHT)
-    }
-
-     fn benchmark_get_perwerde_score(completed_courses_count: u32) -> Weight {
-        Weight::from_parts(5_000_000, 0)
-            .saturating_add(READ_OP_WEIGHT)
-            .saturating_add(Weight::from_parts(READ_OP_REF_TIME / 10, 0).saturating_mul(completed_courses_count as u64))
-    }
+	/// Storage: `Perwerde::NextCourseId` (r:1 w:1)
+	/// Proof: `Perwerde::NextCourseId` (`max_values`: Some(1), `max_size`: Some(8), added: 503, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Courses` (r:0 w:1)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(1724), added: 4199, mode: `MaxEncodedLen`)
+	/// The range of component `name_len` is `[1, 100]`.
+	/// The range of component `desc_len` is `[1, 500]`.
+	/// The range of component `link_len` is `[1, 200]`.
+	fn create_course(name_len: u32, desc_len: u32, link_len: u32, ) -> Weight {
+		// Minimum execution time: 30_000 nanoseconds.
+		Weight::from_parts(30_763_000, 0)
+			// Standard Error: 2_000
+			.saturating_add(Weight::from_parts(2_000, 0).saturating_mul(name_len.into()))
+			// Standard Error: 2_000
+			.saturating_add(Weight::from_parts(1_000, 0).saturating_mul(desc_len.into()))
+			// Standard Error: 2_000
+			.saturating_add(Weight::from_parts(2_000, 0).saturating_mul(link_len.into()))
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(2_u64))
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(1_u64))
+	}
+	/// Storage: `Perwerde::Courses` (r:1 w:1)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(1724), added: 4199, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Enrollments` (r:1 w:1)
+	/// Proof: `Perwerde::Enrollments` (`max_values`: None, `max_size`: Some(112), added: 2587, mode: `MaxEncodedLen`)
+	fn enroll() -> Weight {
+		// Minimum execution time: 35_000 nanoseconds.
+		Weight::from_parts(36_000_000, 0)
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(2_u64))
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(2_u64))
+	}
+	/// Storage: `Perwerde::Enrollments` (r:1 w:1)
+	/// Proof: `Perwerde::Enrollments` (`max_values`: None, `max_size`: Some(112), added: 2587, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::CompletedCourses` (r:1 w:1)
+	/// Proof: `Perwerde::CompletedCourses` (`max_values`: None, `max_size`: Some(40042), added: 42517, mode: `MaxEncodedLen`)
+	fn complete_course() -> Weight {
+		// Minimum execution time: 32_000 nanoseconds.
+		Weight::from_parts(34_000_000, 0)
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(2_u64))
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(2_u64))
+	}
+	/// Storage: `Perwerde::Courses` (r:1 w:1)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(1724), added: 4199, mode: `MaxEncodedLen`)
+	fn archive_course() -> Weight {
+		// Minimum execution time: 24_000 nanoseconds.
+		Weight::from_parts(25_000_000, 0)
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(1_u64))
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(1_u64))
+	}
+	/// Storage: `Perwerde::CompletedCourses` (r:1 w:0)
+	/// Proof: `Perwerde::CompletedCourses` (`max_values`: None, `max_size`: Some(40042), added: 42517, mode: `MaxEncodedLen`)
+	/// The range of component `c` is `[0, 1000]`.
+	fn benchmark_get_perwerde_score(c: u32, ) -> Weight {
+		// Minimum execution time: 8_000 nanoseconds.
+		Weight::from_parts(9_064_500, 0)
+			// Standard Error: 3_000
+			.saturating_add(Weight::from_parts(1_000, 0).saturating_mul(c.into()))
+			.saturating_add(Weight::from_parts(0, 0).saturating_mul(1_u64))
+	}
 }

@@ -116,6 +116,9 @@ use frame_system::{EnsureRoot, EnsureSigned};
 use pallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
 use pallet_identity::legacy::IdentityInfo;
 use pallet_session::historical as session_historical;
+use pallet_balances;
+use pallet_sudo;
+use pallet_collective;
 use pallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
 use sp_core::{ConstU128, ConstU8, Get, OpaqueMetadata, H256};
 use sp_runtime::{
@@ -242,6 +245,13 @@ parameter_types! {
 	pub const TikiCollectionIdConstant: u32 = 42;
 	pub Features: PalletFeatures = PalletFeatures::all_enabled();
 	pub const MaxTikisPerUser: u32 = 100;
+}
+
+parameter_types! {
+	pub const MaxCourseNameLength: u32 = 100;
+	pub const MaxCourseDescLength: u32 = 500;
+	pub const MaxCourseLinkLength: u32 = 200;
+	pub const MaxStudentsPerCourse: u32 = 1000;
 }
 
 #[derive_impl(frame_system::config_preludes::RelayChainDefaultConfig)]
@@ -496,6 +506,11 @@ impl sp_runtime::traits::Convert<AccountId, Option<AccountId>> for ValidatorIdOf
 	}
 }
 
+parameter_types! {
+	pub const SessionsPerEra: SessionIndex = 6;
+	pub const BondingDuration: sp_staking::EraIndex = 28;
+}
+
 impl pallet_session::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ValidatorId = AccountId;
@@ -521,10 +536,56 @@ impl pallet_session::historical::Config for Runtime {
 	type FullIdentificationOf = FullIdentificationOf;
 }
 
-parameter_types! {
+/* parameter_types! {
+	// Staking paleti için sabitler
 	pub const SessionsPerEra: SessionIndex = 6;
 	pub const BondingDuration: sp_staking::EraIndex = 28;
+	pub const SlashDeferDuration: sp_staking::EraIndex = 27;
+	pub const MaxNominatorRewardedPerValidator: u32 = 256;
+	pub const OffendingValidatorsThreshold: Perbill = Perbill::from_percent(17);
 }
+
+pub struct StakingAdmin;
+impl EnsureOrigin<RuntimeOrigin> for StakingAdmin {
+	type Success = AccountId;
+	fn try_origin(o: RuntimeOrigin) -> Result<Self::Success, RuntimeOrigin> {
+		GeneralAdmin::try_origin(o)
+	}
+	#[cfg(feature = "runtime-benchmarks")]
+	fn successful_origin() -> RuntimeOrigin {
+		GeneralAdmin::successful_origin()
+	}
+}
+
+impl pallet_staking::Config for Runtime {
+	type Currency = Balances;
+	type CurrencyBalance = Balance;
+	type UnixTime = Timestamp;
+	type AdminOrigin = StakingAdmin;
+	type CouncilOrigin = GeneralAdmin;
+	type TechnicalCommitteeOrigin = GeneralAdmin;
+	type GenesisElectionProvider = on_chain_election::OnChainSequentialPhragmen<Self>;
+	type MaxNominations = ConstU32;
+	type MaxNominatorRewardedPerValidator = MaxNominatorRewardedPerValidator;
+	type MaxUnlockingChunks = ConstU32;
+	type MinCommission = Perbill::from_percent(5);
+	type OffendingValidatorsThreshold = OffendingValidatorsThreshold;
+	type RewardRemainder = Treasury;
+	type SessionsPerEra = SessionsPerEra;
+	type SlashDeferDuration = SlashDeferDuration;
+	type BondingDuration = BondingDuration;
+	type SessionInterface = Self;
+	type TargetList = pallet_staking::UseValidatorsMap<Self>;
+	type HistoryDepth = ConstU32;
+	type EventListeners = ();
+	type OnStakerSlash = ();
+	type NextNewSession = Session;
+	type MaxExposurePageSize = ConstU32;
+	type ElectionProvider = on_chain_election::OnChainSequentialPhragmen<Self>;
+	type NominationsQuota = pallet_staking::FixedNominationsQuota<1000>;
+	type WeightInfo = weights::pallet_staking::WeightInfo<Runtime>;
+} */
+
 parameter_types! {
 	pub const SpendPeriod: BlockNumber = 6 * DAYS;
 	pub const Burn: Permill = Permill::from_perthousand(2);
@@ -544,6 +605,14 @@ parameter_types! {
 	pub const MaxPeerInHeartbeats: u32 = 10_000;
 	pub const MaxBalance: Balance = Balance::max_value();
 }
+
+parameter_types! {
+	pub const CouncilMotionDuration: BlockNumber = 5 * DAYS;
+	pub const CouncilMaxProposals: u32 = 100;
+	pub const CouncilMaxMembers: u32 = 100;
+	pub MaxProposalWeight: Weight = Perbill::from_percent(50) * BlockWeights::get().max_block;
+}
+
 impl pallet_treasury::Config for Runtime {
 	type PalletId = TreasuryPalletId;
 	type Currency = Balances;
@@ -582,6 +651,24 @@ impl pallet_treasury::Config for Runtime {
 	type BlockNumberProvider = System;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
+}
+
+pub type CouncilCollective = pallet_collective::Instance1;
+impl pallet_collective::Config<CouncilCollective> for Runtime {
+	type RuntimeOrigin = RuntimeOrigin;
+	type Proposal = RuntimeCall;
+	type RuntimeEvent = RuntimeEvent;
+	type MotionDuration = CouncilMotionDuration;
+	type MaxProposals = CouncilMaxProposals;
+	type MaxMembers = CouncilMaxMembers;
+	type DefaultVote = pallet_collective::PrimeDefaultVote;
+	type WeightInfo = (); // GEÇİCİ DEĞER
+	type SetMembersOrigin = EnsureRoot<AccountId>;
+	type MaxProposalWeight = MaxProposalWeight;
+	// EKSİK ALANLAR EKLENDİ
+	type DisapproveOrigin = EnsureRoot<AccountId>;
+	type KillOrigin = EnsureRoot<AccountId>;
+	type Consideration = ();
 }
 
 parameter_types! {
@@ -842,6 +929,16 @@ impl pallet_identity_kyc::Config for Runtime {
 impl pallet_referral::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_referral::weights::SubstrateWeight<Runtime>;
+}
+
+impl pallet_perwerde::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type AdminOrigin = pallet_collective::EnsureMember<AccountId, pallet_collective::Instance1>;
+	type WeightInfo = pallet_perwerde::weights::SubstrateWeight<Runtime>;
+	type MaxCourseNameLength = MaxCourseNameLength;
+	type MaxCourseDescLength = MaxCourseDescLength;
+	type MaxCourseLinkLength = MaxCourseLinkLength;
+	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 }
 
 parameter_types! {
@@ -1571,6 +1668,7 @@ construct_runtime! {
 
 		// Governance stuff; uncallable initially.
 		Treasury: pallet_treasury = 18,
+		Council: pallet_collective::<Instance1> = 17,
 		ConvictionVoting: pallet_conviction_voting = 20,
 		Referenda: pallet_referenda = 21,
 		//	pub type FellowshipCollectiveInstance = pallet_ranked_collective::Instance1;
@@ -1630,6 +1728,12 @@ construct_runtime! {
 
 		// Referral module
 		Referral: pallet_referral::{Pallet, Call, Storage, Event<T>} = 47,
+
+		// Perwerde (Eğitim) module
+		Perwerde: pallet_perwerde::{Pallet, Call, Storage, Event<T>} = 48,
+
+		/* // Staking Score module
+		StakingScore: pallet_staking_score::{Pallet, Call, Storage, Event<T>} = 49, */
 
 		// pub type NisCounterpartInstance = pallet_balances::Instance2;
 		NisCounterpartBalances: pallet_balances::<Instance2> = 45,
@@ -1928,6 +2032,7 @@ mod benches {
 		[frame_benchmarking::baseline, Baseline::<Runtime>]
 		[pallet_bounties, Bounties]
 		[pallet_child_bounties, ChildBounties]
+		[pallet_collective, Council]
 		[pallet_conviction_voting, ConvictionVoting]
 		[pallet_nis, Nis]
 		[pallet_identity, Identity]
@@ -1963,6 +2068,8 @@ mod benches {
 		[pallet_identity_kyc, IdentityKyc]
 		[pallet_referral, Referral]
 		[pallet_perwerde, Perwerde]
+		// [pallet_staking_score, StakingScore]
+		
 	);
 }
 
@@ -2795,11 +2902,11 @@ sp_api::impl_runtime_apis! {
 	}
 
 	impl xcm_runtime_apis::trusted_query::TrustedQueryApi<Block> for Runtime {
-		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> Result<bool, xcm_runtime_apis::trusted_query::Error> {
-			XcmPallet::is_trusted_reserve(asset, location)
+		fn is_trusted_reserve(_asset: VersionedAsset, _location: VersionedLocation) -> Result<bool, xcm_runtime_apis::trusted_query::Error> {
+			Ok(false)
 		}
-		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> Result<bool, xcm_runtime_apis::trusted_query::Error> {
-			XcmPallet::is_trusted_teleporter(asset, location)
+		fn is_trusted_teleporter(_asset: VersionedAsset, _location: VersionedLocation) -> Result<bool, xcm_runtime_apis::trusted_query::Error> {
+			Ok(false)
 		}
 	}
 }

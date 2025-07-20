@@ -64,8 +64,10 @@ impl StakingInfoProvider<AccountId, Balance> for MockStakingInfoProvider {
 }
 
 impl pallet_staking_score::Config for Test {
-    type RuntimeEvent = RuntimeEvent; // lib.rs'de eklenmesi gerekebilir.
+    type RuntimeEvent = RuntimeEvent;
     type StakingInfo = MockStakingInfoProvider;
+    type WeightInfo = ();
+    type Balance = Balance;
 }
 
 pub fn new_test_ext() -> sp_io::TestExternalities {

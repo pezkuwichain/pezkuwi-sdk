@@ -24,10 +24,14 @@ log = { default-features = false, workspace = true }
 sp-runtime = { default-features = false, workspace = true }
 sp-std = { default-features = false, workspace = true }
 
+# Mock ve benchmark için gerekli olanlar buraya optional olarak eklendi
+pallet-balances = { workspace = true, default-features = false, optional = true }
+pallet-collective = { workspace = true, default-features = false, optional = true }
+sp-core = { workspace = true, default-features = false, optional = true }
+sp-io = { workspace = true, default-features = false, optional = true }
+
 [dev-dependencies]
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-pallet-balances = { workspace = true }
+# Artık boş, çünkü her şey [dependencies] altına taşındı.
 
 [features]
 default = ["std"]
@@ -37,20 +41,25 @@ std = [
 	"frame-support/std",
 	"frame-system/std",
 	"log/std",
-	"pallet-balances/std",
 	"scale-info/std",
 	"serde",
-	"sp-core/std",
-	"sp-io/std",
 	"sp-runtime/std",
     "sp-std/std",
+    # Opsiyonel bağımlılıklar için std özelliğini aktif et
+    "pallet-balances/std",
+    "pallet-collective/std",
+    "sp-core/std",
+    "sp-io/std",
 ]
 runtime-benchmarks = [
-	"frame-benchmarking",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+    "pallet-balances",
+    "pallet-collective",
+    "sp-core",
+    "sp-io",
 ]
 try-runtime = [
 	"frame-support/try-runtime",

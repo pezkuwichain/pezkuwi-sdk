@@ -1,75 +1,162 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
-use frame_support::pallet_prelude::*;
-use pezkuwi_primitives::{
-    traits::{StakingInfoProvider, StakingScoreProvider},
-    types::RawScore,
-};
-use sp_runtime::traits::Saturating;
 
-// Zaman aralıklarını blok numarası cinsinden tanımlıyoruz (Rococo için 6 saniyede 1 blok varsayımıyla)
-pub const MINUTE_IN_BLOCKS: u32 = 10;
-pub const HOUR_IN_BLOCKS: u32 = 60 * MINUTE_IN_BLOCKS;
-pub const DAY_IN_BLOCKS: u32 = 24 * HOUR_IN_BLOCKS;
-pub const MONTH_IN_BLOCKS: u32 = 30 * DAY_IN_BLOCKS;
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+pub mod weights;
 
 #[frame_support::pallet]
 pub mod pallet {
-    use super::*;
+	use super::weights::WeightInfo; // WeightInfo'yu üst modülden doğru şekilde import ediyoruz.
+	use frame_support::pallet_prelude::*;
+	use frame_system::pallet_prelude::*;
+	use sp_runtime::{traits::{Saturating, Zero}, Perbill};
+	use sp_std::ops::Div;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+	// --- Sabitler ---
+	pub const MONTH_IN_BLOCKS: u32 = 30 * 24 * 60 * 10;
+	pub const UNITS: u128 = 1_000_000_000_000;
 
-    #[pallet::config]
-    pub trait Config: frame_system::Config {
-        /// Staking verilerini okumak için kullanılacak arayüz.
-        type StakingInfo: StakingInfoProvider<Self::AccountId, BalanceOf<Self>>;
-    }
-    
-    // Bu palet bir hesaplama motoru olduğu için event, error, storage veya call'a ihtiyaç duymaz.
-}
+	#[pallet::pallet]
+	pub struct Pallet<T>(_);
 
-// Balance tipini Config'den almak için bir takma ad.
-type BalanceOf<T> = <<T as Config>::StakingInfo as StakingInfoProvider<
-    <T as frame_system::Config>::AccountId,
->>::Balance;
+	#[pallet::config]
+	pub trait Config: frame_system::Config + TypeInfo
+	where
+		// BlockNumber'ın u32'den dönüştürülebilir olduğunu garanti ediyoruz.
+		BlockNumberFor<Self>: From<u32>,
+	{
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		/// Staking için kullanılacak bakiye tipi.
+		/// Gerekli olan tüm matematiksel ve karşılaştırma özelliklerini ekliyoruz.
+		type Balance: Member
+			+ Parameter
+			+ MaxEncodedLen
+			+ Copy
+			+ Default
+			+ PartialOrd
+			+ Saturating
+			+ Zero
+			+ Div<Output = Self::Balance> // Bölme işleminin sonucunun da Balance olduğunu belirtiyoruz.
+			+ From<u128>;
+		/// Staking verilerini okumak için kullanılacak arayüz.
+		type StakingInfo: StakingInfoProvider<Self::AccountId, Self::Balance>;
+		/// Extrinsic'lerin ağırlıklarını sağlamak için.
+		type WeightInfo: WeightInfo;
+	}
 
-// Staking Puanı hesaplama mantığını burada implemente ediyoruz.
-impl<T: Config> StakingScoreProvider<T::AccountId> for Pallet<T> {
-    fn get_staking_score(who: &T::AccountId) -> RawScore {
-        let (staked_amount, start_block) = T::StakingInfo::get_staking_details(who);
-        
-        // --- Miktar Puanı Hesaplama ---
-        const UNITS: u128 = 1_000_000_000_000; // 1 HEZ = 10^12
-        let staked_hez = staked_amount / UNITS;
+	// --- Depolama (Storage) ---
+	#[pallet::storage]
+	#[pallet::getter(fn staking_start_block)]
+	pub type StakingStartBlock<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
 
-        let amount_score = match staked_hez {
-            0 => return 0, // Sıfır stake, sıfır puan kuralı
-            1..=100 => 20,
-            101..=250 => 30,
-            251..=750 => 40,
-            _ => 50, // 751+ HEZ
-        };
+	#[pallet::event]
+	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	pub enum Event<T: Config> {
+		/// Bir kullanıcı, süreye dayalı puanlamayı başlattı.
+		ScoreTrackingStarted { who: T::AccountId, start_block: BlockNumberFor<T> },
+	}
 
-        // --- Süre Çarpanı Hesaplama ---
-        let current_block = frame_system::Pallet::<T>::block_number();
-        let duration_in_blocks = current_block.saturating_sub(start_block.into());
+	#[pallet::error]
+	pub enum Error<T> {
+		/// Puan takibini başlatmak için önce stake yapmış olmalısınız.
+		NoStakeFound,
+		/// Puan takibi zaten daha önce başlatılmış.
+		TrackingAlreadyStarted,
+	}
 
-        let duration_multiplier = if duration_in_blocks > 12 * MONTH_IN_BLOCKS {
-            Perbill::from_rational(20u32, 10u32) // x2.0
-        } else if duration_in_blocks > 6 * MONTH_IN_BLOCKS {
-            Perbill::from_rational(17u32, 10u32) // x1.7
-        } else if duration_in_blocks > 3 * MONTH_IN_BLOCKS {
-            Perbill::from_rational(14u32, 10u32) // x1.4
-        } else if duration_in_blocks > MONTH_IN_BLOCKS {
-            Perbill::from_rational(12u32, 10u32) // x1.2
-        } else {
-            Perbill::from_rational(10u32, 10u32) // x1.0
-        };
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
+		/// Süreye dayalı puanlamayı manuel olarak aktive eder.
+		/// Bu fonksiyon, her kullanıcı tarafından sadece bir kez çağrılmalıdır.
+		#[pallet::call_index(0)]
+		#[pallet::weight(T::WeightInfo::start_score_tracking())]
+		pub fn start_score_tracking(origin: OriginFor<T>) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+			
+			// 1. Kullanıcının puan takibini daha önce başlatıp başlatmadığını kontrol et.
+			ensure!(StakingStartBlock::<T>::get(&who).is_none(), Error::<T>::TrackingAlreadyStarted);
 
-        // --- Nihai Puan ---
-        let final_score = duration_multiplier * amount_score;
-        final_score.min(100)
-    }
+			// 2. Kullanıcının ana staking paletinde stake'i var mı diye kontrol et.
+			let (staked_amount, _) = T::StakingInfo::get_staking_details(&who);
+			ensure!(!staked_amount.is_zero(), Error::<T>::NoStakeFound);
+
+			// 3. O anki blok numarasını kaydet.
+			let current_block = frame_system::Pallet::<T>::block_number();
+			StakingStartBlock::<T>::insert(&who, current_block);
+
+			Self::deposit_event(Event::ScoreTrackingStarted { who, start_block: current_block });
+			Ok(())
+		}
+	}
+
+	// --- Arayüz (Trait) ve Tip Tanımları ---
+
+	/// Puanlamada kullanılacak ham skor tipi.
+	pub type RawScore = u32;
+	
+	/// Bu paletin dış dünyaya sunduğu arayüz.
+	pub trait StakingScoreProvider<AccountId> {
+		fn get_staking_score(who: &AccountId) -> RawScore;
+	}
+
+	/// Bu paletin, staking verilerini almak için ihtiyaç duyduğu arayüz.
+	pub trait StakingInfoProvider<AccountId, Balance> {
+    	fn get_staking_details(who: &AccountId) -> (Balance, u32);
+	}
+
+	// --- Trait Implementasyonu ---
+
+	impl<T: Config> StakingScoreProvider<T::AccountId> for Pallet<T> {
+		fn get_staking_score(who: &T::AccountId) -> RawScore {
+			let (staked_amount, _) = T::StakingInfo::get_staking_details(who);
+			let staked_hez: T::Balance = staked_amount / UNITS.into();
+
+			// Sıfır stake, sıfır puan kuralı
+			if staked_hez.is_zero() {
+				return 0;
+			}
+
+			let amount_score: u32 = if staked_hez <= 100u128.into() {
+				20
+			} else if staked_hez <= 250u128.into() {
+				30
+			} else if staked_hez <= 750u128.into() {
+				40
+			} else {
+				50 // 751+ HEZ
+			};
+
+			// Hibrit Model: Süre çarpanını hesapla.
+			let duration_multiplier = match StakingStartBlock::<T>::get(who) {
+				// Eğer kullanıcı takibi manuel başlattıysa, süreye göre çarpan hesapla.
+				Some(start_block) => {
+					let current_block: BlockNumberFor<T> = frame_system::Pallet::<T>::block_number();
+					let duration_in_blocks = current_block.saturating_sub(start_block);
+
+					if duration_in_blocks > (12 * MONTH_IN_BLOCKS).into() {
+						Perbill::from_rational(20u32, 10u32) // x2.0
+					} else if duration_in_blocks > (6 * MONTH_IN_BLOCKS).into() {
+						Perbill::from_rational(17u32, 10u32) // x1.7
+					} else if duration_in_blocks > (3 * MONTH_IN_BLOCKS).into() {
+						Perbill::from_rational(14u32, 10u32) // x1.4
+					} else if duration_in_blocks > MONTH_IN_BLOCKS.into() {
+						Perbill::from_rational(12u32, 10u32) // x1.2
+					} else {
+						Perbill::from_rational(10u32, 10u32) // x1.0
+					}
+				},
+				// Eğer takip başlatılmadıysa, süre çarpanı 1.0'dır.
+				None => Perbill::from_rational(10u32, 10u32), // x1.0
+			};
+
+			let final_score = duration_multiplier.mul_floor(amount_score);
+			final_score.min(100)
+		}
+	}
 }
