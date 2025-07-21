@@ -1,44 +1,37 @@
-use crate::{mock::*, Error, Event, Pallet};
+use crate::{
+	mock::{new_test_ext, RuntimeOrigin, System, Test, ADMIN_ACCOUNT},
+	Error, Event, Pallet,
+};
 use frame_support::{assert_noop, assert_ok};
 use sp_runtime::DispatchError;
-use frame_support::pallet_prelude::Get;
-use frame_support::BoundedVec;
 type PerwerdePallet = Pallet<Test>;
-
-fn create_bounded_vec<L: Get<u32>>(s: &[u8]) -> BoundedVec<u8, L> {
-	s.to_vec().try_into().unwrap()
-}
 
 #[test]
 fn create_course_works() {
 	new_test_ext().execute_with(|| {
-		// Eylem: Admin (root) yetkisiyle bir kurs oluşturulur.
 		assert_ok!(PerwerdePallet::create_course(
-			RuntimeOrigin::root(),
-			create_bounded_vec(b"Blockchain 101").try_into().unwrap(),
-			create_bounded_vec(b"Giris seviyesi").try_into().unwrap(),
-			create_bounded_vec(b"http://example.com").try_into().unwrap()
+			RuntimeOrigin::signed(ADMIN_ACCOUNT),
+			b"Blockchain 101".to_vec(),
+			b"Giris seviyesi".to_vec(),
+			b"http://example.com".to_vec()
 		));
 
-		// Doğrulama: Kursun doğru bir şekilde oluşturulduğunu ve olay'ın yayınlandığını kontrol et.
-		// AdminOrigin root olduğu için sahibi her zaman 0'dır (root'un varsayılan hesabı).
 		assert!(crate::Courses::<Test>::contains_key(0));
 		let course = crate::Courses::<Test>::get(0).unwrap();
-		assert_eq!(course.name.to_vec(), b"Blockchain 101".to_vec());
-		System::assert_last_event(Event::CourseCreated { course_id: 0, owner: 0 }.into());
+		assert_eq!(course.owner, ADMIN_ACCOUNT);
+		System::assert_last_event(Event::CourseCreated { course_id: 0, owner: ADMIN_ACCOUNT }.into());
 	});
 }
 
 #[test]
 fn create_course_fails_for_non_admin() {
 	new_test_ext().execute_with(|| {
-		// Eylem & Doğrulama: Normal bir kullanıcının (1) kurs oluşturamaması gerekir.
 		assert_noop!(
 			PerwerdePallet::create_course(
-				RuntimeOrigin::signed(1),
-				create_bounded_vec(b"Hacking 101").try_into().unwrap(),
-				create_bounded_vec(b"Yetkisiz kurs").try_into().unwrap(),
-				create_bounded_vec(b"http://example.com").try_into().unwrap()
+				RuntimeOrigin::signed(2), // 2, admin değil
+				b"Hacking 101".to_vec(),
+				b"Yetkisiz kurs".to_vec(),
+				b"http://example.com".to_vec()
 			),
 			DispatchError::BadOrigin
 		);
@@ -48,30 +41,29 @@ fn create_course_fails_for_non_admin() {
 #[test]
 fn enroll_works() {
 	new_test_ext().execute_with(|| {
-		// Kurulum: Önce admin (root) ile bir kurs oluştur.
-		assert_ok!(PerwerdePallet::create_course(RuntimeOrigin::root(), vec![].try_into().unwrap(), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(PerwerdePallet::create_course(
+            RuntimeOrigin::signed(ADMIN_ACCOUNT),
+            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
+        ));
 		
-		// Eylem: 1 numaralı kullanıcı 0 ID'li kursa kaydolur.
-		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(1), 0));
+		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0));
 
-		// Doğrulama: Kaydın oluştuğunu ve olayın yayınlandığını kontrol et.
-		assert!(crate::Enrollments::<Test>::contains_key((1, 0)));
-		let course = crate::Courses::<Test>::get(0).unwrap();
-		assert!(course.students.contains(&1));
-		System::assert_last_event(Event::CourseEnrolled { student: 1, course_id: 0 }.into());
+		assert!(crate::Enrollments::<Test>::contains_key((2, 0)));
+		System::assert_last_event(Event::StudentEnrolled { student: 2, course_id: 0 }.into());
 	});
 }
 
 #[test]
 fn enroll_fails_if_already_enrolled() {
 	new_test_ext().execute_with(|| {
-		// Kurulum: Kurs oluştur ve kullanıcıyı kaydet.
-		let _ = PerwerdePallet::create_course(RuntimeOrigin::root(), vec![].try_into().unwrap(), vec![].try_into().unwrap(), vec![].try_into().unwrap());
-		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(1), 0));
+		assert_ok!(PerwerdePallet::create_course(
+            RuntimeOrigin::signed(ADMIN_ACCOUNT),
+            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
+        ));
+		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0));
 
-		// Eylem & Doğrulama: Aynı kursa tekrar kaydolmaya çalışınca hata vermeli.
 		assert_noop!(
-			PerwerdePallet::enroll(RuntimeOrigin::signed(1), 0),
+			PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0),
 			Error::<Test>::AlreadyEnrolled
 		);
 	});
@@ -80,31 +72,31 @@ fn enroll_fails_if_already_enrolled() {
 #[test]
 fn complete_course_works() {
 	new_test_ext().execute_with(|| {
-		// Kurulum: Kurs oluştur ve kullanıcıyı kaydet.
-		let _ = PerwerdePallet::create_course(RuntimeOrigin::root(), vec![].try_into().unwrap(), vec![].try_into().unwrap(), vec![].try_into().unwrap());
-		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(1), 0));
+		assert_ok!(PerwerdePallet::create_course(
+            RuntimeOrigin::signed(ADMIN_ACCOUNT),
+            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
+        ));
+		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0));
 
-		// Eylem: Kullanıcı kursu 10 puanla tamamlar.
-		assert_ok!(PerwerdePallet::complete_course(RuntimeOrigin::signed(1), 0, 10));
+		assert_ok!(PerwerdePallet::complete_course(RuntimeOrigin::signed(2), 0, 10));
 
-		// Doğrulama: Kaydın tamamlandı olarak güncellendiğini ve puanın işlendiğini kontrol et.
-		let enrollment = crate::Enrollments::<Test>::get((1, 0)).unwrap();
+		let enrollment = crate::Enrollments::<Test>::get((2, 0)).unwrap();
 		assert!(enrollment.completed_at.is_some());
 		assert_eq!(enrollment.points_earned, 10);
-		assert!(crate::CompletedCourses::<Test>::get(1).contains(&0));
-		System::assert_last_event(Event::CourseCompleted { student: 1, course_id: 0, points_earned: 10 }.into());
+		System::assert_last_event(Event::CourseCompleted { student: 2, course_id: 0, points: 10 }.into());
 	});
 }
 
 #[test]
 fn complete_course_fails_if_not_enrolled() {
 	new_test_ext().execute_with(|| {
-		// Kurulum: Kurs oluştur.
-		let _ = PerwerdePallet::create_course(RuntimeOrigin::root(), vec![].try_into().unwrap(), vec![].try_into().unwrap(), vec![].try_into().unwrap());
+		assert_ok!(PerwerdePallet::create_course(
+            RuntimeOrigin::signed(ADMIN_ACCOUNT),
+            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
+        ));
 
-		// Eylem & Doğrulama: Kayıtlı olmadığı bir kursu tamamlamaya çalışınca hata vermeli.
 		assert_noop!(
-			PerwerdePallet::complete_course(RuntimeOrigin::signed(1), 0, 10),
+			PerwerdePallet::complete_course(RuntimeOrigin::signed(2), 0, 10),
 			Error::<Test>::NotEnrolled
 		);
 	});

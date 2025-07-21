@@ -1,20 +1,18 @@
 use crate as pallet_perwerde;
 use frame_support::{
 	construct_runtime, parameter_types,
-	traits::{ConstU128, ConstU16, ConstU32, ConstU64, Everything},
+	traits::{ConstU128, ConstU16, ConstU32, ConstU64, Everything, EnsureOrigin},
 };
-use frame_system::{EnsureRoot, EnsureRootWithSuccess};
+use frame_system::ensure_signed;
 use sp_core::H256;
 use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
-	BuildStorage, // Bu `use` ifadesi std ortamında gereklidir.
+	BuildStorage,
 };
 use sp_std::vec;
 
 type AccountId = u64;
 type Balance = u128;
-type BlockNumber = u64;
-// `mocking::MockBlock` `std` gerektirir.
 type Block = frame_system::mocking::MockBlock<Test>;
 
 construct_runtime!(
@@ -23,9 +21,25 @@ construct_runtime!(
 		System: frame_system,
 		Balances: pallet_balances,
 		Perwerde: pallet_perwerde,
-		Council: pallet_collective::<Instance1>,
 	}
 );
+
+// --- Test için sahte yetki denetleyicimiz ---
+pub const ADMIN_ACCOUNT: AccountId = 1;
+
+pub struct EnsureAdmin;
+impl EnsureOrigin<RuntimeOrigin> for EnsureAdmin {
+    type Success = AccountId;
+    fn try_origin(o: RuntimeOrigin) -> Result<Self::Success, RuntimeOrigin> {
+        let who = ensure_signed(o.clone()).map_err(|_| o)?;
+        if who == ADMIN_ACCOUNT {
+            Ok(who)
+        } else {
+            Err(RuntimeOrigin::root()) // Hata durumunda farklı bir Origin döndürerek BadOrigin tetikle
+        }
+    }
+}
+// --- Bitiş ---
 
 impl frame_system::Config for Test {
 	type BaseCallFilter = Everything;
@@ -82,53 +96,29 @@ parameter_types! {
 	pub const MaxCourseDescLength: u32 = 500;
 	pub const MaxCourseLinkLength: u32 = 200;
 	pub const MaxStudentsPerCourse: u32 = 1000;
-	pub const RootAccountId: AccountId = 0;
 }
 
 impl pallet_perwerde::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type AdminOrigin = EnsureRootWithSuccess<AccountId, RootAccountId>;
+	type AdminOrigin = EnsureAdmin; // <-- Sahte denetleyicimizi burada kullanıyoruz
 	type WeightInfo = ();
 	type MaxCourseNameLength = MaxCourseNameLength;
 	type MaxCourseDescLength = MaxCourseDescLength;
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 }
-use pallet_collective::Instance1;
-
-parameter_types! {
-	pub const CouncilMotionDuration: BlockNumber = 5 * 60; // 5 minutes
-	pub const CouncilMaxProposals: u32 = 100;
-	pub const CouncilMaxMembers: u32 = 100;
-	pub MaxProposalWeight: frame_support::weights::Weight = frame_support::weights::Weight::from_parts(1_000_000_000, 0);
-}
-
-impl pallet_collective::Config<Instance1> for Test {
-	type RuntimeOrigin = RuntimeOrigin;
-	type Proposal = RuntimeCall;
-	type RuntimeEvent = RuntimeEvent;
-	type MotionDuration = CouncilMotionDuration;
-	type MaxProposals = CouncilMaxProposals;
-	type MaxMembers = CouncilMaxMembers;
-	type DefaultVote = pallet_collective::PrimeDefaultVote;
-	type WeightInfo = ();
-	type SetMembersOrigin = EnsureRoot<AccountId>;
-	type MaxProposalWeight = MaxProposalWeight;
-	type DisapproveOrigin = EnsureRoot<AccountId>;
-	type KillOrigin = EnsureRoot<AccountId>;
-	type Consideration = ();
-}
 
 pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let mut storage = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+
 	pallet_balances::GenesisConfig::<Test> {
-		balances: vec![(0, 1000), (1, 1000), (2, 1000), (3, 1000)],
-		dev_accounts: None, // Bu alan projenizin versiyonunda gerekli.
+		balances: vec![(ADMIN_ACCOUNT, 1_000_000), (2, 1000), (3, 1000)],
+		dev_accounts: None,
 	}
-	.assimilate_storage(&mut t)
+	.assimilate_storage(&mut storage)
 	.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = sp_io::TestExternalities::new(storage);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }
