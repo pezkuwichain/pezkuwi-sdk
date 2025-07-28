@@ -1762,9 +1762,9 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "base64ct"
-version = "1.8.0"
+version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "55248b47b0caf0546f7988906588779981c43bb1bc9d0c44087278f80cdb44ba"
+checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
 name = "binary-merkle-tree"
@@ -13338,6 +13338,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-staking-score"
+version = "1.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-election-provider-support",
+ "frame-support",
+ "frame-system",
+ "pallet-bags-list",
+ "pallet-balances",
+ "pallet-session",
+ "pallet-staking",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "pezkuwi-primitives",
+ "pezkuwichain-constants",
+ "scale-info",
+ "serde",
+ "sp-core 36.1.0",
+ "sp-io 40.0.1",
+ "sp-npos-elections",
+ "sp-runtime 41.1.0",
+ "sp-staking",
+ "sp-std 14.0.0",
+]
+
+[[package]]
 name = "pallet-state-trie-migration"
 version = "44.1.0"
 dependencies = [
@@ -16619,6 +16645,7 @@ dependencies = [
  "binary-merkle-tree",
  "bitvec",
  "frame-benchmarking",
+ "frame-election-provider-support",
  "frame-executive",
  "frame-metadata-hash-extension",
  "frame-remote-externalities",
@@ -16633,6 +16660,7 @@ dependencies = [
  "pallet-authority-discovery",
  "pallet-authorship",
  "pallet-babe",
+ "pallet-bags-list",
  "pallet-balances",
  "pallet-beefy",
  "pallet-beefy-mmr",
@@ -16666,6 +16694,7 @@ dependencies = [
  "pallet-session",
  "pallet-society",
  "pallet-staking",
+ "pallet-staking-score",
  "pallet-state-trie-migration",
  "pallet-sudo",
  "pallet-tiki",

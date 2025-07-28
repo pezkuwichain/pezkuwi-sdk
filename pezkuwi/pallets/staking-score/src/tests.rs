@@ -1,42 +1,97 @@
-use crate::mock::{new_test_ext, Test, StakingScore, MockStakedAmount, MockStakingStartBlock};
-use pezkuwi_primitives::traits::StakingScoreProvider;
-use crate::{MONTH_IN_BLOCKS};
+//! pallet-staking-score için testler.
 
-const UNITS: u128 = 1_000_000_000_000;
+use crate::{mock::*, StakingScoreProvider, MONTH_IN_BLOCKS, UNITS};
+use frame_support::assert_ok;
+use pallet_staking::RewardDestination;
+
+// Testlerde kullanacağımız sabitler
+const USER_STASH: AccountId = 10;
+const USER_CONTROLLER: AccountId = 10;
 
 #[test]
-fn scoring_logic_works_correctly() {
-    new_test_ext().execute_with(|| {
-        // Test için mevcut bloğu 15. ay olarak ayarlayalım.
-        let now = 15 * MONTH_IN_BLOCKS;
-        frame_system::Pallet::<Test>::set_block_number(now);
+fn zero_stake_should_return_zero_score() {
+	ExtBuilder::default().build_and_execute(|| {
+		// ExtBuilder'da 10 numaralı hesap için bir staker oluşturmadık.
+		// Bu nedenle, palet 0 puan vermelidir.
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 0);
+	});
+}
 
-        // --- Senaryo 1: Sıfır stake ---
-        MockStakedAmount::set(0);
-        assert_eq!(StakingScore::get_staking_score(&1), 0);
+#[test]
+fn score_is_calculated_correctly_without_time_tracking() {
+	ExtBuilder::default()
+		.build_and_execute(|| {
+			// 50 HEZ stake edelim. Staking::bond çağrısı ile stake işlemini başlat.
+			assert_ok!(Staking::bond(
+				RuntimeOrigin::signed(USER_STASH),
+				50 * UNITS,
+				RewardDestination::Staked
+			));
 
-        // --- Senaryo 2: Giriş Seviyesi, Yeni Katılımcı (< 1 ay) ---
-        MockStakedAmount::set(50 * UNITS);
-        MockStakingStartBlock::set(now - (MONTH_IN_BLOCKS / 2)); // Yarım ay önce
-        // Puan = 20 (miktar) * 1.0 (süre) = 20
-        assert_eq!(StakingScore::get_staking_score(&1), 20);
+			// Süre takibi yokken, puan sadece miktara göre hesaplanmalı (20 puan).
+			assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 20);
+		});
+}
 
-        // --- Senaryo 3: Destekçi Seviyesi, Orta Vadeli (3-6 ay) ---
-        MockStakedAmount::set(500 * UNITS);
-        MockStakingStartBlock::set(now - (4 * MONTH_IN_BLOCKS)); // 4 ay önce
-        // Puan = 40 (miktar) * 1.4 (süre) = 56
-        assert_eq!(StakingScore::get_staking_score(&1), 56);
-        
-        // --- Senaryo 4: Güçlü Destekçi, Yıllık & Plus Üye (> 1 yıl) ---
-        MockStakedAmount::set(1000 * UNITS);
-        MockStakingStartBlock::set(1); // Çok uzun zaman önce
-        // Puan = 50 (miktar) * 2.0 (süre) = 100
-        assert_eq!(StakingScore::get_staking_score(&1), 100);
-        
-        // --- Senaryo 5: Küçük ama Sadık Yatırımcı (6-12 ay) ---
-        MockStakedAmount::set(100 * UNITS); // Miktar puanı = 20
-        MockStakingStartBlock::set(now - (7 * MONTH_IN_BLOCKS)); // 7 ay önce
-        // Puan = 20 (miktar) * 1.7 (süre) = 34
-        assert_eq!(StakingScore::get_staking_score(&1), 34);
+#[test]
+fn start_score_tracking_works_and_enables_duration_multiplier() {
+	ExtBuilder::default()
+		.build_and_execute(|| {
+			// --- 1. Kurulum ve Başlangıç ---
+			let initial_block = 10;
+			System::set_block_number(initial_block);
+
+			// 500 HEZ stake edelim. Bu, 40 temel puan demektir.
+			assert_ok!(Staking::bond(
+				RuntimeOrigin::signed(USER_STASH),
+				500 * UNITS,
+				RewardDestination::Staked
+			));
+
+			// Eylem: Süre takibini başlat. Depolamaya `10` yazılacak.
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+
+			// Doğrulama: Başlangıç puanı doğru mu?
+			assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 40, "Initial score should be 40");
+
+			// --- 2. Dört Ay Sonrası ---
+			let target_block_4m = initial_block + (4 * MONTH_IN_BLOCKS) as u64;
+			let expected_duration_4m = target_block_4m - initial_block;
+			// Eylem: Zamanı 4 ay ileri "yaşat".
+			System::set_block_number(target_block_4m);
+
+			let (score_4m, duration_4m) = StakingScore::get_staking_score(&USER_STASH);
+			assert_eq!(duration_4m, expected_duration_4m, "Duration after 4 months is wrong");
+			assert_eq!(score_4m, 56, "Score after 4 months should be 56");
+
+			// --- 3. On Üç Ay Sonrası ---
+			let target_block_13m = initial_block + (13 * MONTH_IN_BLOCKS) as u64;
+			let expected_duration_13m = target_block_13m - initial_block;
+			// Eylem: Zamanı başlangıçtan 13 ay sonrasına "yaşat".
+			System::set_block_number(target_block_13m);
+
+			let (score_13m, duration_13m) = StakingScore::get_staking_score(&USER_STASH);
+			assert_eq!(duration_13m, expected_duration_13m, "Duration after 13 months is wrong");
+			assert_eq!(score_13m, 80, "Score after 13 months should be 80");
+		});
+}
+
+#[test]
+fn get_staking_score_works_without_explicit_tracking() {
+    ExtBuilder::default().build_and_execute(|| {
+		// 751 HEZ stake edelim. Bu, 50 temel puan demektir.
+		assert_ok!(Staking::bond(
+			RuntimeOrigin::signed(USER_STASH),
+			751 * UNITS,
+			RewardDestination::Staked
+		));
+
+        // Puanın 50 olmasını bekliyoruz.
+        assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 50);
+
+        // Zamanı ne kadar ileri alırsak alalım, `start_score_tracking` çağrılmadığı
+        // için puan değişmemeli.
+        System::set_block_number(1_000_000_000);
+        assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 50);
     });
 }

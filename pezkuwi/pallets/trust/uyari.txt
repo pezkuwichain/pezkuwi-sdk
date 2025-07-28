@@ -1,1 +1,0 @@
-Not: Eğer TrustParams'ı genesis config'de JSON'dan okumanız gerekiyorsa, serde derive'larını geri ekleyip Config trait'indeki MaxTikiTypes ve MaxStakeTiers tiplerine gerekli bound'ları (Clone, Debug, Default, PartialEq, Serialize, Deserialize) eklemeniz gerekir.

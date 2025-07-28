@@ -1,157 +1,121 @@
-// === pallet_trust/src/mock.rs ===
+//! Mock runtime for pallet-trust.
 
-use crate as pallet_trust; // This makes pallet_trust items accessible via crate::
-use frame_support::{
-    parameter_types,
-    traits::{
-        ConstU32, ConstU64, Everything,
-        schedule::{self, Named as ScheduleNamed},
-        Get,
-    },
-    PalletId,
-};
-use frame_system as system;
+use crate as pallet_trust;
+use frame_support::{construct_runtime, derive_impl, parameter_types, traits::ConstU64};
 use sp_core::H256;
-use sp_runtime::{
-    testing::Header,
-    traits::{IdentityLookup, BlakeTwo256},
-    DispatchResult,
+use sp_runtime::{traits::{BlakeTwo256, IdentityLookup}, BuildStorage};
+use sp_std::collections::btree_map::BTreeMap;
+
+// Paletimizin ihtiyaç duyduğu Arayüzleri (trait) import ediyoruz.
+use pallet_trust::{
+	CitizenshipStatusProvider, PerwerdeScoreProvider, RawScore, ReferralScoreProvider,
+	StakingScoreProvider, TikiScoreProvider,
 };
-use sp_std::{marker::PhantomData, prelude::*};
 
-use pezkuwi_primitives::{types::{RawScore, TrustScore}, traits::*}; // AccountIdCore not directly used here
-
+type Block = frame_system::mocking::MockBlock<Test>;
 pub type AccountId = u64;
 pub type BlockNumber = u64;
 
-pub struct MockEgitimScoreProvider;
-impl EgitimScoreProvider<AccountId> for MockEgitimScoreProvider {
-    type Score = RawScore;
-    fn get_egitim_score(_who: &AccountId) -> RawScore { 100 }
-}
-
-pub struct MockStakingScoreProvider;
-impl StakingScoreProvider<AccountId> for MockStakingScoreProvider {
-    type Score = RawScore;
-    fn get_staking_score(_who: &AccountId) -> RawScore { 200 }
-}
-
-pub struct MockReferralScoreProvider;
-impl ReferralScoreProvider<AccountId> for MockReferralScoreProvider {
-    type Score = RawScore;
-    fn get_referral_score(_who: &AccountId) -> RawScore { 50 }
-}
-
-pub struct MockTikiScoreProvider;
-impl TikiScoreProvider<AccountId> for MockTikiScoreProvider {
-    type Score = RawScore;
-    fn get_tiki_score(_who: &AccountId) -> RawScore { 150 }
-}
-
-pub struct MockScheduler<Call>(PhantomData<Call>);
-impl<Call: 'static + From<crate::pallet::Call<TestRuntime>> + Clone + Eq + PartialEq + sp_std::fmt::Debug> ScheduleNamed<
-    BlockNumber,
-    Call,
-    <TestRuntime as frame_system::Config>::RuntimeOrigin,
-> for MockScheduler<Call> {
-    type PalletsOrigin = <TestRuntime as frame_system::Config>::RuntimeOrigin;
-
-    fn schedule_named(
-        _id: Vec<u8>,
-        _when: schedule::DispatchTime<BlockNumber>,
-        _maybe_periodic: Option<schedule::SchedulePeriod<BlockNumber>>,
-        _priority: schedule::SchedulePriority,
-        _origin: Self::PalletsOrigin,
-        _call: Call,
-    ) -> DispatchResult {
-        Ok(())
-    }
-
-    fn cancel_named(_id: Vec<u8>) -> DispatchResult { Ok(()) }
-}
-
-frame_support::construct_runtime!(
-    pub enum TestRuntime where
-        Block = MockBlock, // Explicitly use MockBlock defined below
-        NodeBlock = MockBlock,
-        UncheckedExtrinsic = MockUncheckedExtrinsic, // Explicitly use MockUncheckedExtrinsic
-    {
-        System: system::{Pallet, Call, Config, Storage, Event<T>},
-        Trust: pallet_trust::{Pallet, Call, Storage, Event<T>}, // pallet_trust is crate
-    }
+construct_runtime!(
+	pub enum Test
+	{
+		System: frame_system,
+		Trust: pallet_trust,
+	}
 );
 
-pub type MockUncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<TestRuntime>;
-pub type MockBlock = frame_system::mocking::MockBlock<TestRuntime>;
-
-impl system::Config for TestRuntime {
-    type BaseCallFilter = Everything;
-    type BlockWeights = ();
-    type BlockLength = ();
-    type DbWeight = ();
-    type RuntimeOrigin = RuntimeOrigin;
-    type RuntimeCall = RuntimeCall;
-    type Index = u64;
-    type BlockNumber = BlockNumber;
-    type Hash = H256;
-    type Hashing = BlakeTwo256;
-    type AccountId = AccountId;
-    type Lookup = IdentityLookup<AccountId>;
-    type Header = Header;
-    type RuntimeEvent = RuntimeEvent;
-    type BlockHashCount = ConstU64<250>;
-    type Version = ();
-    type PalletInfo = PalletInfo;
-    type AccountData = ();
-    type OnNewAccount = ();
-    type OnKilledAccount = ();
-    type SystemWeightInfo = ();
-    type SS58Prefix = ConstU32<42>;
-    type OnSetCode = ();
-    type MaxConsumers = ConstU32<16>;
+#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
+impl frame_system::Config for Test {
+	type Block = Block;
 }
 
+// --- Mock Veri Sağlayıcıları ---
+#[derive(Default)]
+pub struct MockStakingScoreProvider {
+	pub scores: BTreeMap<AccountId, (RawScore, BlockNumber)>,
+}
+impl StakingScoreProvider<AccountId, BlockNumber> for MockStakingScoreProvider {
+	fn get_staking_score(who: &AccountId) -> (RawScore, BlockNumber) {
+		self.scores.get(who).cloned().unwrap_or((0, 0))
+	}
+}
+
+#[derive(Default)]
+pub struct MockReferralScoreProvider { pub scores: BTreeMap<AccountId, RawScore> }
+impl ReferralScoreProvider<AccountId> for MockReferralScoreProvider {
+	fn get_referral_score(who: &AccountId) -> RawScore { self.scores.get(who).cloned().unwrap_or(0) }
+}
+
+#[derive(Default)]
+pub struct MockPerwerdeScoreProvider { pub scores: BTreeMap<AccountId, RawScore> }
+impl PerwerdeScoreProvider<AccountId> for MockPerwerdeScoreProvider {
+	fn get_perwerde_score(who: &AccountId) -> RawScore { self.scores.get(who).cloned().unwrap_or(0) }
+}
+
+#[derive(Default)]
+pub struct MockTikiScoreProvider { pub scores: BTreeMap<AccountId, RawScore> }
+impl TikiScoreProvider<AccountId> for MockTikiScoreProvider {
+	fn get_tiki_score(who: &AccountId) -> RawScore { self.scores.get(who).cloned().unwrap_or(0) }
+}
+
+#[derive(Default)]
+pub struct MockCitizenshipStatusProvider { pub citizens: BTreeMap<AccountId, bool> }
+impl CitizenshipStatusProvider<AccountId> for MockCitizenshipStatusProvider {
+	fn is_citizen(who: &AccountId) -> bool { self.citizens.get(who).cloned().unwrap_or(false) }
+}
+
+// --- Paletimiz için Config Implementasyonu ---
 parameter_types! {
-    pub const TrustPalletIdValue: PalletId = PalletId(*b"pz/trust");
-    pub const EgitimCoeffValue: u32 = 100;
-    pub const StakingCoeffValue: u32 = 100;
-    pub const ReferralCoeffValue: u32 = 100;
-    pub const TikiCoeffValue: u32 = 100;
-    pub const ActivityCoeffValue: u32 = 100;
-    pub const ScoreFactorValue: u32 = 1000;
-    pub const MaxTrustScoreValue: TrustScore = 10000;
-    pub const ActivityResetPeriodValue: BlockNumber = 10;
-    pub const MaxTaskIdLenValue: u32 = 32;
-    pub const MaxActivityCounterItemsValue: u32 = 1000;
+	pub const ScoreMultiplierBase: u128 = 1000;
 }
 
-// Use crate::pallet::Config for the pallet's Config trait
-impl crate::pallet::Config for TestRuntime {
-    type PalletId = TrustPalletIdValue;
-    type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = ();
-    type EgitimScoreProvider = MockEgitimScoreProvider;
-    type StakingScoreProvider = MockStakingScoreProvider;
-    type ReferralScoreProvider = MockReferralScoreProvider;
-    type TikiScoreProvider = MockTikiScoreProvider;
-    type EgitimCoefficientScaled = EgitimCoeffValue;
-    type StakingCoefficientScaled = StakingCoeffValue;
-    type ReferralCoefficientScaled = ReferralCoeffValue;
-    type TikiCoefficientScaled = TikiCoeffValue;
-    type ActivityCoefficientScaled = ActivityCoeffValue;
-    type ScoreScaleFactor = ScoreFactorValue;
-    type MaxScaledTrustScore = MaxTrustScoreValue;
-    type RecalculateOrigin = frame_system::EnsureRoot<AccountId>;
-    type PenaltyOrigin = frame_system::EnsureRoot<AccountId>;
-    type ActivityResetOrigin = frame_system::EnsureRoot<AccountId>;
-    type RecordActivityOrigin = frame_system::EnsureRoot<AccountId>;
-    type ActivityResetPeriod = ActivityResetPeriodValue;
-    type MaxTaskIdLen = MaxTaskIdLenValue;
-    type RuntimeCall = RuntimeCall;
-    type Scheduler = MockScheduler<RuntimeCall>;
-    // MODIFIED: GetPalletsOriginDefault is now inside crate::pallet
-    // The #[pallet::type_value] on GetPalletsOriginDefault<T: Config> creates a ZST named GetPalletsOriginDefault
-    // which implements Get.
-    type PalletsOrigin = crate::pallet::GetPalletsOriginDefault;
-    type MaxActivityCounterItems = MaxActivityCounterItemsValue;
+impl pallet_trust::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = ();
+	type Score = u128;
+	type ScoreMultiplierBase = ScoreMultiplierBase;
+
+	// Mock sağlayıcıları bağlıyoruz
+	type StakingScoreSource = MockStakingScoreProvider;
+	type ReferralScoreSource = MockReferralScoreProvider;
+	type PerwerdeScoreSource = MockPerwerdeScoreProvider;
+	type TikiScoreSource = MockTikiScoreProvider;
+	type CitizenshipSource = MockCitizenshipStatusProvider;
+}
+
+// --- Test Ortamı Kurulumu ---
+pub struct ExtBuilder {
+	pub staking_scores: BTreeMap<AccountId, (RawScore, BlockNumber)>,
+	pub referral_scores: BTreeMap<AccountId, RawScore>,
+	pub perwerde_scores: BTreeMap<AccountId, RawScore>,
+	pub tiki_scores: BTreeMap<AccountId, RawScore>,
+	pub citizens: BTreeMap<AccountId, bool>,
+}
+
+impl Default for ExtBuilder {
+	fn default() -> Self {
+		Self {
+			staking_scores: BTreeMap::new(),
+			referral_scores: BTreeMap::new(),
+			perwerde_scores: BTreeMap::new(),
+			tiki_scores: BTreeMap::new(),
+			citizens: BTreeMap::new(),
+		}
+	}
+}
+
+impl ExtBuilder {
+	pub fn build(self) -> sp_io::TestExternalities {
+		let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		// Mock sağlayıcıların başlangıç verilerini ayarlıyoruz.
+		MockStakingScoreProvider { scores: self.staking_scores }.assimilate_storage(&mut t).unwrap();
+		MockReferralScoreProvider { scores: self.referral_scores }.assimilate_storage(&mut t).unwrap();
+		MockPerwerdeScoreProvider { scores: self.perwerde_scores }.assimilate_storage(&mut t).unwrap();
+		MockTikiScoreProvider { scores: self.tiki_scores }.assimilate_storage(&mut t).unwrap();
+		MockCitizenshipStatusProvider { citizens: self.citizens }.assimilate_storage(&mut t).unwrap();
+		
+		let mut ext = sp_io::TestExternalities::new(t);
+		ext.execute_with(|| System::set_block_number(1));
+		ext
+	}
 }

@@ -4,120 +4,127 @@ use super::{Pallet as Perwerde, *};
 
 // Gerekli modülleri içe aktarıyoruz.
 use frame_benchmarking::{account, benchmarks, whitelisted_caller};
+use frame_support::{pallet_prelude::Get, BoundedVec};
 use frame_system::RawOrigin;
 use pallet_collective::Instance1; // Council için Instance1'i kullanıyoruz.
 use sp_std::vec;
-use sp_std::vec::Vec;
 
 const SEED: u32 = 0;
 
+// Benchmark'larda BoundedVec oluşturmak için bir yardımcı fonksiyon.
+fn create_bounded_vec<L: Get<u32>>(s: &[u8]) -> BoundedVec<u8, L> {
+	s.to_vec().try_into().unwrap()
+}
+
 benchmarks! {
-    // Bu 'where' koşulu, benchmark ortamının T'nin aynı zamanda
-    // `pallet_collective::Config<Instance1>`'i de uyguladığını bilmesini sağlar. Bu kritik öneme sahiptir.
-    where_clause {
-        where T: pallet_collective::Config<Instance1>
-    }
+	// Bu 'where' koşulu, benchmark ortamının T'nin aynı zamanda
+	// `pallet_collective::Config<Instance1>`'i de uyguladığını bilmesini sağlar. Bu kritik öneme sahiptir.
+	where_clause {
+		where T: pallet_collective::Config<Instance1>
+	}
 
-    create_course {
-        let name: Vec<u8> = b"Substrate egitimi".to_vec();
-        let description: Vec<u8> = b"Bu egitim Substrate temellerini kapsar.".to_vec();
-        let content_link: Vec<u8> = b"http://example.com".to_vec();
-        let name_len = name.len() as u32;
-        let desc_len = description.len() as u32;
-        let link_len = content_link.len() as u32;
+	create_course {
+		let name: BoundedVec<u8, T::MaxCourseNameLength> = create_bounded_vec(b"Substrate egitimi");
+		let description: BoundedVec<u8, T::MaxCourseDescLength> = create_bounded_vec(b"Bu egitim Substrate temellerini kapsar.");
+		let content_link: BoundedVec<u8, T::MaxCourseLinkLength> = create_bounded_vec(b"http://example.com");
 
-        // Deterministik bir admin hesabı oluştur.
-        let admin: T::AccountId = account("admin", 0, SEED);
-        // Bu admin'i `Council` (Instance1) üyesi yap.
-        // Bu `set_members` çağrısının kendisi Root yetkisi gerektirir.
-        pallet_collective::Pallet::<T, Instance1>::set_members(
-            RawOrigin::Root.into(),
-            vec![admin.clone()],
-            Some(admin.clone()), // Prime üye olarak da ayarla
-            0u32.into(),
-        )?;
+		let name_len = name.len() as u32;
+		let desc_len = description.len() as u32;
+		let link_len = content_link.len() as u32;
 
-    }: _(RawOrigin::Signed(admin), name, description, content_link)
-    verify {
-        assert!(Courses::<T>::get(0).is_some());
-    }
 
-    enroll {
-        let student: T::AccountId = whitelisted_caller();
-        let course_id = 0;
+		// Deterministik bir admin hesabı oluştur.
+		let admin: T::AccountId = account("admin", 0, SEED);
+		// Bu admin'i `Council` (Instance1) üyesi yap.
+		// Bu `set_members` çağrısının kendisi Root yetkisi gerektirir.
+		pallet_collective::Pallet::<T, Instance1>::set_members(
+			RawOrigin::Root.into(),
+			vec![admin.clone()],
+			Some(admin.clone()), // Prime üye olarak da ayarla
+			0u32.into(),
+		)?;
 
-        // Kurulum: Önce bir adminin kurs oluşturması gerekir.
-        let admin: T::AccountId = account("admin", 0, SEED);
-        pallet_collective::Pallet::<T, Instance1>::set_members(
-            RawOrigin::Root.into(),
-            vec![admin.clone()],
-            Some(admin.clone()),
-            0u32.into(),
-        )?;
-        Perwerde::<T>::create_course(
-            RawOrigin::Signed(admin).into(),
-            b"Benchmark Course".to_vec(),
-            b"Description".to_vec(),
-            b"Link".to_vec()
-        )?;
+	}: _(RawOrigin::Signed(admin), name.clone(), description.clone(), content_link.clone())
+	verify {
+		assert!(Courses::<T>::get(0).is_some());
+	}
 
-    }: _(RawOrigin::Signed(student.clone()), course_id)
-    verify {
-        assert!(Enrollments::<T>::get((student, course_id)).is_some());
-    }
+	enroll {
+		let student: T::AccountId = whitelisted_caller();
+		let course_id = 0;
 
-    complete_course {
-        let student: T::AccountId = whitelisted_caller();
-        let student_origin = RawOrigin::Signed(student.clone());
-        let course_id = 0;
-        let points = 10;
+		// Kurulum: Önce bir adminin kurs oluşturması gerekir.
+		let admin: T::AccountId = account("admin", 0, SEED);
+		pallet_collective::Pallet::<T, Instance1>::set_members(
+			RawOrigin::Root.into(),
+			vec![admin.clone()],
+			Some(admin.clone()),
+			0u32.into(),
+		)?;
+		Perwerde::<T>::create_course(
+			RawOrigin::Signed(admin).into(),
+			create_bounded_vec(b"Benchmark Course"),
+			create_bounded_vec(b"Description"),
+			create_bounded_vec(b"Link")
+		)?;
 
-        // Kurulum: Admin kurs oluşturur, öğrenci kaydolur.
-        let admin: T::AccountId = account("admin", 0, SEED);
-        pallet_collective::Pallet::<T, Instance1>::set_members(
-            RawOrigin::Root.into(),
-            vec![admin.clone()],
-            Some(admin.clone()),
-            0u32.into(),
-        )?;
-        Perwerde::<T>::create_course(
-            RawOrigin::Signed(admin).into(),
-            b"Benchmark Course".to_vec(),
-            b"Description".to_vec(),
-            b"Link".to_vec()
-        )?;
-        Perwerde::<T>::enroll(student_origin.clone().into(), course_id)?;
+	}: _(RawOrigin::Signed(student.clone()), course_id)
+	verify {
+		assert!(Enrollments::<T>::get((student, course_id)).is_some());
+	}
 
-    }: _(student_origin, course_id, points)
-    verify {
-        let enrollment = Enrollments::<T>::get((student, course_id)).unwrap();
-        assert!(enrollment.completed_at.is_some());
-        assert_eq!(enrollment.points_earned, points);
-    }
+	complete_course {
+		let student: T::AccountId = whitelisted_caller();
+		let student_origin = RawOrigin::Signed(student.clone());
+		let course_id = 0;
+		let points = 10;
 
-    archive_course {
-        let course_id = 0;
+		// Kurulum: Admin kurs oluşturur, öğrenci kaydolur.
+		let admin: T::AccountId = account("admin", 0, SEED);
+		pallet_collective::Pallet::<T, Instance1>::set_members(
+			RawOrigin::Root.into(),
+			vec![admin.clone()],
+			Some(admin.clone()),
+			0u32.into(),
+		)?;
+		Perwerde::<T>::create_course(
+			RawOrigin::Signed(admin).into(),
+			create_bounded_vec(b"Benchmark Course"),
+			create_bounded_vec(b"Description"),
+			create_bounded_vec(b"Link")
+		)?;
+		Perwerde::<T>::enroll(student_origin.clone().into(), course_id)?;
 
-        // Kurulum: Admin kurs oluşturur.
-        let admin: T::AccountId = account("admin", 0, SEED);
-        pallet_collective::Pallet::<T, Instance1>::set_members(
-            RawOrigin::Root.into(),
-            vec![admin.clone()],
-            Some(admin.clone()),
-            0u32.into(),
-        )?;
-        Perwerde::<T>::create_course(
-            RawOrigin::Signed(admin.clone()).into(),
-            b"Benchmark Course".to_vec(),
-            b"Description".to_vec(),
-            b"Link".to_vec()
-        )?;
+	}: _(student_origin, course_id, points)
+	verify {
+		let enrollment = Enrollments::<T>::get((student, course_id)).unwrap();
+		assert!(enrollment.completed_at.is_some());
+		assert_eq!(enrollment.points_earned, points);
+	}
 
-    }: _(RawOrigin::Signed(admin), course_id)
-    verify {
-        let course = Courses::<T>::get(course_id).unwrap();
-        assert_eq!(course.status, CourseStatus::Archived);
-    }
+	archive_course {
+		let course_id = 0;
+
+		// Kurulum: Admin kurs oluşturur.
+		let admin: T::AccountId = account("admin", 0, SEED);
+		pallet_collective::Pallet::<T, Instance1>::set_members(
+			RawOrigin::Root.into(),
+			vec![admin.clone()],
+			Some(admin.clone()),
+			0u32.into(),
+		)?;
+		Perwerde::<T>::create_course(
+			RawOrigin::Signed(admin.clone()).into(),
+			create_bounded_vec(b"Benchmark Course"),
+			create_bounded_vec(b"Description"),
+			create_bounded_vec(b"Link")
+		)?;
+
+	}: _(RawOrigin::Signed(admin), course_id)
+	verify {
+		let course = Courses::<T>::get(course_id).unwrap();
+		assert_eq!(course.status, CourseStatus::Archived);
+	}
 }
 
 #[cfg(feature = "std")]

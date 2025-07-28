@@ -31,7 +31,7 @@ sp-core = { workspace = true, default-features = false, optional = true }
 sp-io = { workspace = true, default-features = false, optional = true }
 
 [dev-dependencies]
-# Artık boş, çünkü her şey [dependencies] altına taşındı.
+# pallet-sudo = { workspace = true, default-features = false } 
 
 [features]
 default = ["std"]
@@ -45,7 +45,6 @@ std = [
 	"serde",
 	"sp-runtime/std",
     "sp-std/std",
-    # Opsiyonel bağımlılıklar için std özelliğini aktif et
     "pallet-balances/std",
     "pallet-collective/std",
     "sp-core/std",

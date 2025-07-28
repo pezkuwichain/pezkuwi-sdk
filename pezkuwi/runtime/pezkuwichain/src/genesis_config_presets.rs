@@ -18,8 +18,9 @@
 
 use crate::{
 	BabeConfig, BalancesConfig, ConfigurationConfig, RegistrarConfig, RuntimeGenesisConfig,
-	SessionConfig, SessionKeys, SudoConfig, BABE_GENESIS_EPOCH_CONFIG,
+	SessionConfig, SessionKeys, SudoConfig, StakingConfig, BABE_GENESIS_EPOCH_CONFIG,
 };
+
 #[cfg(not(feature = "std"))]
 use alloc::format;
 use alloc::{vec, vec::Vec};
@@ -32,6 +33,8 @@ use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
 use sp_consensus_grandpa::AuthorityId as GrandpaId;
 use sp_core::{crypto::get_public_from_string_or_panic, sr25519};
 use sp_genesis_builder::PresetId;
+use sp_runtime::Perbill;
+use crate::CouncilConfig;
 use sp_keyring::Sr25519Keyring;
 #[cfg(feature = "runtime-benchmarks")]
 use frame_benchmarking::whitelisted_caller;
@@ -166,11 +169,32 @@ fn pezkuwichain_testnet_genesis(
 ) -> serde_json::Value {
 	let endowed_accounts: Vec<AccountId> = endowed_accounts.unwrap_or_else(testnet_accounts);
 
-	const ENDOWMENT: u128 = 1_000_000 * HEZ;
+	const ENDOWMENT: u128 = 10_000_000_000 * HEZ; // Claude AI önerisi: Daha yüksek genel bakiye
+	const STAKER_ENDOWMENT: u128 = 1_000_000_000 * HEZ; // Claude AI önerisi: Staker'lar için yeterli bakiye
 
 	build_struct_json_patch!(RuntimeGenesisConfig {
 		balances: BalancesConfig {
-			balances: endowed_accounts.iter().map(|k| (k.clone(), ENDOWMENT)).collect::<Vec<_>>(),
+			// Hem genel endowed_accounts'ı hem de initial_authorities'in stash hesaplarını bolca bakiye ile dolduruyoruz.
+			balances: endowed_accounts.iter().map(|k| (k.clone(), ENDOWMENT))
+				.chain(initial_authorities.iter().map(|x| (x.0.clone(), STAKER_ENDOWMENT))) // Stash hesaplarına bol miktarda bakiye ekle
+				.collect::<Vec<_>>(),
+		},
+
+		staking: StakingConfig {
+			validator_count: initial_authorities.len() as u32,
+			minimum_validator_count: 1,
+			stakers: initial_authorities
+				.iter()
+				.map(|x| (x.0.clone(), x.0.clone(), STAKER_ENDOWMENT / 100, pallet_staking::StakerStatus::Validator)) // Claude AI önerisi: Self-controller ve daha düşük stake yüzdesi
+				.collect(),
+			invulnerables: vec![], // Claude AI önerisi: Boş invulnerables listesi
+			slash_reward_fraction: Perbill::from_percent(10),
+			force_era: pallet_staking::Forcing::NotForcing, // Claude AI önerisi: Zorlamayı kapat
+			min_nominator_bond: 1000 * HEZ, // Claude AI önerisi: Daha yüksek min bondlar
+			min_validator_bond: 1000 * HEZ, // Claude AI önerisi: Daha yüksek min bondlar
+			max_validator_count: Some(100), // Claude AI önerisi: Max validator limitini belirle
+			max_nominator_count: Some(1000), // Claude AI önerisi: Max nominator limitini belirle
+			..Default::default()
 		},
 		session: SessionConfig {
 			keys: initial_authorities
@@ -191,6 +215,12 @@ fn pezkuwichain_testnet_genesis(
 				})
 				.collect::<Vec<_>>(),
 		},
+		// ***** YENİ EKLENEN BLOK *****
+		council: CouncilConfig {
+			members: vec![root_key.clone()],
+			..Default::default()
+		},
+		// *****************************
 		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
 		sudo: SudoConfig { key: Some(root_key.clone()) },
 		configuration: ConfigurationConfig {
@@ -457,18 +487,83 @@ fn pezkuwichain_development_config_genesis() -> serde_json::Value {
 		Some(testnet_accounts()),
 	)
 }
-
-// `runtime-benchmarks` özelliği ile derlendiğinde, `whitelisted_caller`'ı ekler.
+// `runtime-benchmarks` özelliği ile derlendiğinde, `whitelisted_caller`'ı ve diğer benchmark hesaplarını ekler.
 #[cfg(feature = "runtime-benchmarks")]
 fn pezkuwichain_development_config_genesis() -> serde_json::Value {
+	use frame_benchmarking::account;
+	const SEED: u32 = 0;
+
 	let mut endowed_accounts = testnet_accounts();
 	endowed_accounts.push(whitelisted_caller());
+	endowed_accounts.push(account("admin", 0, SEED)); // Benchmark admin hesabı
 
-	pezkuwichain_testnet_genesis(
-		Vec::from([get_authority_keys_from_seed("Alice")]),
-		Sr25519Keyring::Alice.to_account_id(),
-		Some(endowed_accounts),
-	)
+	// Claude AI önerisi: Benchmarking için özel hesaplar ekle
+	for i in 0..50 {
+		endowed_accounts.push(account("benchmark", i, SEED));
+	}
+
+	// Claude AI önerisi: Daha az validator ile başla (benchmarking için)
+	let initial_authorities: Vec<_> = (0..4) // 20 yerine 4 validator
+		.map(|i| get_authority_keys_from_seed(&format!("//Validator{}", i))) // İsimlendirmeyi de değiştiriyoruz
+		.collect();
+
+	// Özel genesis yapılandırması (pezkuwichain_testnet_genesis'i çağırmak yerine direkt burada tanımlıyoruz)
+	const ENDOWMENT: u128 = 10_000_000_000 * HEZ; // Claude AI önerisi: Daha yüksek bakiye
+	const STAKER_ENDOWMENT: u128 = 1_000_000_000 * HEZ; // Claude AI önerisi: Staker'lar için yeterli bakiye
+
+	build_struct_json_patch!(RuntimeGenesisConfig {
+		balances: BalancesConfig {
+			balances: endowed_accounts.iter().map(|k| (k.clone(), ENDOWMENT))
+				.chain(initial_authorities.iter().map(|x| (x.0.clone(), STAKER_ENDOWMENT)))
+				.collect::<Vec<_>>(),
+		},
+		staking: StakingConfig {
+			validator_count: initial_authorities.len() as u32,
+			minimum_validator_count: 1,
+			stakers: initial_authorities
+				.iter()
+				.map(|x| (x.0.clone(), x.0.clone(), STAKER_ENDOWMENT / 100, pallet_staking::StakerStatus::Validator)) // Self-controller
+				.collect(),
+			invulnerables: vec![], // Boş invulnerables listesi
+			slash_reward_fraction: Perbill::from_percent(10),
+			force_era: pallet_staking::Forcing::NotForcing, // Zorlamayı kapat
+			min_nominator_bond: 1000 * HEZ,
+			min_validator_bond: 1000 * HEZ,
+			max_validator_count: Some(100),
+			max_nominator_count: Some(1000),
+			..Default::default()
+		},
+		session: SessionConfig {
+			keys: initial_authorities
+				.iter()
+				.map(|x| {
+					(
+						x.0.clone(),
+						x.0.clone(), // Self-controller
+						pezkuwichain_session_keys(
+							x.2.clone(),
+							x.3.clone(),
+							x.4.clone(),
+							x.5.clone(),
+							x.6.clone(),
+							x.7.clone(),
+						),
+					)
+				})
+				.collect::<Vec<_>>(),
+		},
+		// Council konfigürasyonunu kaldır veya basitleştir
+		council: CouncilConfig {
+		    members: vec![],
+		    ..Default::default()
+		},
+		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
+		sudo: SudoConfig { key: Some(endowed_accounts[0].clone()) },
+		configuration: ConfigurationConfig {
+			config: default_parachains_host_configuration(),
+		},
+		registrar: RegistrarConfig { next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID },
+	})
 }
 
 //local_testnet

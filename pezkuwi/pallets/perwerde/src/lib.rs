@@ -113,12 +113,12 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::create_course(name.len() as u32, description.len() as u32, content_link.len() as u32))]
+		#[pallet::weight(T::WeightInfo::create_course())]
 		pub fn create_course(
 			origin: OriginFor<T>,
-			name: Vec<u8>,
-			description: Vec<u8>,
-			content_link: Vec<u8>,
+			name: BoundedVec<u8, T::MaxCourseNameLength>,
+			description: BoundedVec<u8, T::MaxCourseDescLength>,
+			content_link: BoundedVec<u8, T::MaxCourseLinkLength>,
 		) -> DispatchResult {
 			let owner = T::AdminOrigin::ensure_origin(origin)?;
 			let course_id = NextCourseId::<T>::get();

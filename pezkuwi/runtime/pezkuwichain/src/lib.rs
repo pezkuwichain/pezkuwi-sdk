@@ -69,7 +69,7 @@ use pezkuwi_runtime_common::{
 	BlockHashCount, BlockLength, SlowAdjustingFeeUpdate,
 };
 use pezkuwichain_constants::{
-	currency::{CENTS, GRAND},
+	currency::{CENTS, GRAND, UNITS as HEZ},
 	time::{DAYS, MINUTES, EpochDurationInBlocks},
 };
 use frame_support::weights::WeightToFee;
@@ -105,14 +105,16 @@ use frame_support::{
 	traits::{
 		AsEnsureOriginWithArg, fungible::HoldConsideration, tokens::UnityOrOuterConversion,
 		Contains, EitherOf, EitherOfDiverse, EnsureOrigin, EnsureOriginWithArg, EverythingBut,
-		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp, ProcessMessage,
-		ProcessMessageError, StorageMapShim, WithdrawReasons,
+		Imbalance, InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, OnUnbalanced,
+		PrivilegeCmp, ProcessMessage, ProcessMessageError, StorageMapShim, WithdrawReasons,
 	},
 	weights::{ConstantMultiplier, WeightMeter},
 	PalletId,
 };
+use frame_support::traits::Currency; // Currency ve Imbalance trait'lerini import ediyoruz
 use pallet_nfts::PalletFeatures;
 use frame_system::{EnsureRoot, EnsureSigned};
+
 use pallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
 use pallet_identity::legacy::IdentityInfo;
 use pallet_session::historical as session_historical;
@@ -125,7 +127,7 @@ use sp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{
 		AccountIdConversion, BlakeTwo256, Block as BlockT, ConstU32, ConvertInto, IdentityLookup,
-		Keccak256, OpaqueKeys, SaturatedConversion, Verify,
+		Keccak256, OpaqueKeys, SaturatedConversion, Verify, // Saturating trait'ini sildik
 	},
 	transaction_validity::{TransactionPriority, TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, FixedU128, KeyTypeId, Perbill, Percent, Permill, RuntimeDebug,
@@ -248,11 +250,14 @@ parameter_types! {
 }
 
 parameter_types! {
+	// pallet-perwerde için sabitler
+	pub const MaxAdmins: u32 = 10;
 	pub const MaxCourseNameLength: u32 = 100;
 	pub const MaxCourseDescLength: u32 = 500;
 	pub const MaxCourseLinkLength: u32 = 200;
 	pub const MaxStudentsPerCourse: u32 = 1000;
 }
+
 
 #[derive_impl(frame_system::config_preludes::RelayChainDefaultConfig)]
 impl frame_system::Config for Runtime {
@@ -506,10 +511,6 @@ impl sp_runtime::traits::Convert<AccountId, Option<AccountId>> for ValidatorIdOf
 	}
 }
 
-parameter_types! {
-	pub const SessionsPerEra: SessionIndex = 6;
-	pub const BondingDuration: sp_staking::EraIndex = 28;
-}
 
 impl pallet_session::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -535,56 +536,150 @@ impl pallet_session::historical::Config for Runtime {
 	type FullIdentification = ();
 	type FullIdentificationOf = FullIdentificationOf;
 }
+// REWARD_CURVE sabitini, versiyon uyumsuzluklarını önlemek için doğrudan tanımlıyoruz.
+const REWARD_CURVE_POINTS: [(Perbill, Perbill); 3] = [
+	(Perbill::from_percent(0), Perbill::from_percent(0)),
+	(Perbill::from_percent(50), Perbill::from_percent(10)),
+	(Perbill::from_percent(100), Perbill::from_percent(2)),
+];
+const REWARD_CURVE: sp_runtime::curve::PiecewiseLinear<'static> = sp_runtime::curve::PiecewiseLinear {
+	points: &REWARD_CURVE_POINTS,
+	maximum: Perbill::from_parts(2101587),
+};
 
-/* parameter_types! {
-	// Staking paleti için sabitler
+parameter_types! {
 	pub const SessionsPerEra: SessionIndex = 6;
-	pub const BondingDuration: sp_staking::EraIndex = 28;
-	pub const SlashDeferDuration: sp_staking::EraIndex = 27;
-	pub const MaxNominatorRewardedPerValidator: u32 = 256;
-	pub const OffendingValidatorsThreshold: Perbill = Perbill::from_percent(17);
+	pub const BondingDuration: sp_staking::EraIndex = 24 * 28; // 28 gün
+	pub const SlashDeferDuration: sp_staking::EraIndex = 24 * 7; // 7 gün
+	pub const HistoryDepth: u32 = 84;
+	pub const MaxWinners: u32 = 100;
+	// Election provider için sınırlar. Tipleri açıkça `SizeBound` ve `CountBound` olarak sarmalıyoruz.
+	pub const ElectionBounds: frame_election_provider_support::bounds::ElectionBounds =
+		frame_election_provider_support::bounds::ElectionBounds {
+			voters: frame_election_provider_support::bounds::DataProviderBounds {
+				size: Some(frame_election_provider_support::bounds::SizeBound(20_000)),
+				count: Some(frame_election_provider_support::bounds::CountBound(1_000)),
+			},
+			targets: frame_election_provider_support::bounds::DataProviderBounds {
+				size: Some(frame_election_provider_support::bounds::SizeBound(1_500)),
+				count: Some(frame_election_provider_support::bounds::CountBound(200)),
+			},
+		};
+	pub const RewardCurve: &'static sp_runtime::curve::PiecewiseLinear<'static> = &REWARD_CURVE;
 }
 
-pub struct StakingAdmin;
-impl EnsureOrigin<RuntimeOrigin> for StakingAdmin {
-	type Success = AccountId;
-	fn try_origin(o: RuntimeOrigin) -> Result<Self::Success, RuntimeOrigin> {
-		GeneralAdmin::try_origin(o)
-	}
-	#[cfg(feature = "runtime-benchmarks")]
-	fn successful_origin() -> RuntimeOrigin {
-		GeneralAdmin::successful_origin()
+pub struct OnChainSeqPhragmen;
+impl frame_election_provider_support::onchain::Config for OnChainSeqPhragmen {
+	type System = Runtime;
+	type Solver = frame_election_provider_support::SequentialPhragmen<AccountId, Perbill>;
+	type DataProvider = Staking;
+	type WeightInfo = frame_election_provider_support::weights::SubstrateWeight<Runtime>;
+	type MaxWinners = MaxWinners;
+	type Bounds = ElectionBounds;
+}
+
+// Staking için OnUnbalanced handler'ları ve gerekli importlar
+use frame_support::traits::fungible;
+
+// Staking'den gelen yeni `fungible::Imbalance`'ı, Treasury'nin anladığı eski `Currency::NegativeImbalance`'a çevirir.
+pub struct StakingRewardRemainder;
+impl OnUnbalanced<fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>> for StakingRewardRemainder {
+	fn on_unbalanced(amount: fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>) {
+		let value = amount.peek();
+		// Treasury'nin beklediği tipte yeni bir Imbalance oluşturuyoruz.
+		let treasury_imbalance = <Balances as Currency<AccountId>>::NegativeImbalance::new(value);
+		<Treasury as OnUnbalanced<_>>::on_unbalanced(treasury_imbalance);
+		// Orijinal Imbalance'ı tüketiyoruz.
+		let _ = amount.drop_zero();
 	}
 }
 
+// Staking'den gelen yeni `fungible::Imbalance`'ı, Treasury'nin anladığı eski `Currency::NegativeImbalance`'a çevirir.
+pub struct StakingSlash;
+impl OnUnbalanced<fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>> for StakingSlash {
+	fn on_unbalanced(amount: fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>) {
+		let value = amount.peek();
+		// Treasury'nin beklediği tipte yeni bir Imbalance oluşturuyoruz.
+		let treasury_imbalance = <Balances as Currency<AccountId>>::NegativeImbalance::new(value);
+		<Treasury as OnUnbalanced<_>>::on_unbalanced(treasury_imbalance);
+		// Orijinal Imbalance'ı tüketiyoruz.
+		let _ = amount.drop_zero();
+	}
+}
+
+pub struct StakingReward;
+impl OnUnbalanced<fungible::Imbalance<Balance, fungible::IncreaseIssuance<AccountId, Balances>, fungible::DecreaseIssuance<AccountId, Balances>>> for StakingReward {
+	fn on_unbalanced(amount: fungible::Imbalance<Balance, fungible::IncreaseIssuance<AccountId, Balances>, fungible::DecreaseIssuance<AccountId, Balances>>) {
+		let _ = <Balances as Currency<AccountId>>::deposit_creating(&Treasury::account_id(), amount.peek());
+		let _ = amount.drop_zero();
+	}
+}
+
+/* // Subxt ile kullanılacak PezkuwiChain konfigürasyonu
+// #[subxt::subxt_client(runtime_spec_path = "../../target/release/wsm/pezkuwichain.wasm")]
+pub struct PezkuwiConfig; // Bu struct'ı tanımlıyoruz
+
+// Subxt'in runtime konfigürasyonu için gerekli trait implementasyonu
+impl subxt::Config for PezkuwiConfig {
+    type AccountId = AccountId;
+    type Address = sp_runtime::MultiAddress<AccountId, ()>;
+    type Signature = Signature;
+    type SignedExtra = TxExtension;
+    type AssetId = u32; // Bu, projenizin token ID tipi olmalı (örn. ERC-20 benzeri ID'ler için u32)
+    type Balance = Balance;
+    type BlockNumber = BlockNumber;
+    type Hash = Hash;
+    type Hasher = <Hash as sp_runtime::traits::Hash>::Hasher;
+    type Header = Header;
+    type Extrinsic = UncheckedExtrinsic;
+    type Index = Nonce;
+    type TxPayload = sp_runtime::OpaqueExtrinsic;
+    type Call = RuntimeCall;
+    type Nonce = Nonce;
+    type HrmpChannelId = u32; // Bu, HRMP kanal ID tipi olmalı (varsayılan olarak u32)
+} */
+
+
+// pallet_staking::Config için BenchmarkingConfig implementasyonu
+// Benchmarking sırasında daha fazla validator/nominator ile başlama yeteneği sağlar.
+pub struct PezkuwiStakingBenchmarkingConfig;
+impl pallet_staking::BenchmarkingConfig for PezkuwiStakingBenchmarkingConfig {
+	type MaxValidators = frame_support::traits::ConstU32<1000>; // Artırılmış değer
+	type MaxNominators = frame_support::traits::ConstU32<1000>; // Artırılmış değer
+}
 impl pallet_staking::Config for Runtime {
 	type Currency = Balances;
 	type CurrencyBalance = Balance;
 	type UnixTime = Timestamp;
-	type AdminOrigin = StakingAdmin;
-	type CouncilOrigin = GeneralAdmin;
-	type TechnicalCommitteeOrigin = GeneralAdmin;
-	type GenesisElectionProvider = on_chain_election::OnChainSequentialPhragmen<Self>;
-	type MaxNominations = ConstU32;
-	type MaxNominatorRewardedPerValidator = MaxNominatorRewardedPerValidator;
-	type MaxUnlockingChunks = ConstU32;
-	type MinCommission = Perbill::from_percent(5);
-	type OffendingValidatorsThreshold = OffendingValidatorsThreshold;
-	type RewardRemainder = Treasury;
+	type CurrencyToVote = sp_staking::currency_to_vote::U128CurrencyToVote;
+	type RewardRemainder = StakingRewardRemainder;
+	type RuntimeEvent = RuntimeEvent;
+	type Slash = StakingSlash;
+	type Reward = StakingReward;
 	type SessionsPerEra = SessionsPerEra;
-	type SlashDeferDuration = SlashDeferDuration;
 	type BondingDuration = BondingDuration;
+	type SlashDeferDuration = SlashDeferDuration;
 	type SessionInterface = Self;
-	type TargetList = pallet_staking::UseValidatorsMap<Self>;
-	type HistoryDepth = ConstU32;
-	type EventListeners = ();
-	type OnStakerSlash = ();
+	type EraPayout = pallet_staking::ConvertCurve<RewardCurve>;
 	type NextNewSession = Session;
-	type MaxExposurePageSize = ConstU32;
-	type ElectionProvider = on_chain_election::OnChainSequentialPhragmen<Self>;
-	type NominationsQuota = pallet_staking::FixedNominationsQuota<1000>;
-	type WeightInfo = weights::pallet_staking::WeightInfo<Runtime>;
-} */
+	type MaxExposurePageSize = ConstU32<64>;
+	type ElectionProvider = frame_election_provider_support::onchain::OnChainExecution<OnChainSeqPhragmen>;
+	type GenesisElectionProvider = Self::ElectionProvider;
+	type VoterList = VoterBagsList;
+	type TargetList = pallet_staking::UseValidatorsMap<Self>;
+	type MaxControllersInDeprecationBatch = ConstU32<5_900>;
+	type AdminOrigin = EnsureRoot<AccountId>;
+	type EventListeners = ();
+	type WeightInfo = pallet_staking::weights::SubstrateWeight<Runtime>;
+	type RuntimeHoldReason = RuntimeHoldReason;
+	type HistoryDepth = HistoryDepth;
+	type NominationsQuota = pallet_staking::FixedNominationsQuota<16>;
+	type MaxUnlockingChunks = ConstU32<32>;
+	// type Filter = frame_support::traits::Everything;
+	type Filter = frame_support::traits::Nothing;
+	type OldCurrency = Balances; // Eski Currency arayüzü için
+	type BenchmarkingConfig = PezkuwiStakingBenchmarkingConfig; // Kendi config'imizi kullanıyoruz.
+}
 
 parameter_types! {
 	pub const SpendPeriod: BlockNumber = 6 * DAYS;
@@ -651,6 +746,30 @@ impl pallet_treasury::Config for Runtime {
 	type BlockNumberProvider = System;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
+}
+parameter_types! {
+	// `sp_staking::CoreStaking` artık kullanılmadığı için sabit bir eşik listesi tanımlıyoruz.
+	pub const VoterBagThresholds: &'static [u64] = &[
+		10 * HEZ as u64,
+		20 * HEZ as u64,
+		30 * HEZ as u64,
+		40 * HEZ as u64,
+		50 * HEZ as u64,
+		60 * HEZ as u64,
+		1_000 * HEZ as u64,
+		2_000 * HEZ as u64,
+		10_000 * HEZ as u64,
+	];
+}
+
+pub type VoterBagsListInstance = pallet_bags_list::Instance1;
+impl pallet_bags_list::Config<VoterBagsListInstance> for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_bags_list::weights::SubstrateWeight<Runtime>;
+	// Artık gerçek `Staking` paletini bağlıyoruz.
+	type ScoreProvider = Staking;
+	type BagThresholds = VoterBagThresholds;
+	type Score = u64;
 }
 
 pub type CouncilCollective = pallet_collective::Instance1;
@@ -939,6 +1058,75 @@ impl pallet_perwerde::Config for Runtime {
 	type MaxCourseDescLength = MaxCourseDescLength;
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
+}
+
+/* impl pallet_perwerde::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type AdminOrigin = pallet_perwerde::ensure::EnsureAdmin<Runtime>;
+	type ManageAdminOrigin = EnsureRoot<AccountId>;
+	type WeightInfo = pallet_perwerde::weights::SubstrateWeight<Runtime>;
+	type MaxAdmins = MaxAdmins;
+	type MaxCourseNameLength = MaxCourseNameLength;
+	type MaxCourseDescLength = MaxCourseDescLength;
+	type MaxCourseLinkLength = MaxCourseLinkLength;
+	type MaxStudentsPerCourse = MaxStudentsPerCourse;
+} */
+
+/// Staking verilerini `pallet-staking-score`'un anlayacağı formata çeviren adaptör.
+pub struct StakingDataProvider;
+
+impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for StakingDataProvider {
+	fn get_staking_details(
+		who: &AccountId,
+	) -> Option<pallet_staking_score::StakingDetails<Balance>> {
+		// `ledger` fonksiyonu artık `Result` döndürüyor ve `StakingAccount` parametresi alıyor.
+		if let Ok(ledger) = pallet_staking::Pallet::<Runtime>::ledger(
+			sp_staking::StakingAccount::Stash(who.clone()),
+		) {
+			let nominations_count =
+				pallet_staking::Pallet::<Runtime>::nominators(who.clone()).map_or(0, |n| n.targets.len() as u32);
+			let unlocking_chunks_count = ledger.unlocking.len() as u32;
+
+			Some(pallet_staking_score::StakingDetails {
+				staked_amount: ledger.total,
+				nominations_count,
+				unlocking_chunks_count,
+			})
+		} else {
+			// Eğer `ledger` alınamazsa (örn. hesap mevcut değil), stake yok demektir.
+			None
+		}
+	}
+}
+// Benchmarking için mock staking info provider
+#[cfg(feature = "runtime-benchmarks")]
+pub struct MockStakingInfoProvider;
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for MockStakingInfoProvider {
+	fn get_staking_details(_who: &AccountId) -> Option<pallet_staking_score::StakingDetails<Balance>> {
+		// Benchmarking için her zaman geçerli bir stake döndür
+		Some(pallet_staking_score::StakingDetails {
+			staked_amount: 1000 * HEZ,
+			nominations_count: 5,
+			unlocking_chunks_count: 2,
+		})
+	}
+}
+
+// Conditional type kullanın
+#[cfg(not(feature = "runtime-benchmarks"))]
+type StakingInfoForScore = StakingDataProvider;
+
+#[cfg(feature = "runtime-benchmarks")]
+type StakingInfoForScore = MockStakingInfoProvider;
+
+impl pallet_staking_score::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = Balance;
+	type WeightInfo = pallet_staking_score::weights::SubstrateWeight<Runtime>;
+	/// Conditional olarak adaptörü bağlıyoruz.
+	type StakingInfo = StakingInfoForScore; // ← SADECE BU SATIR KALMALI
 }
 
 parameter_types! {
@@ -1509,6 +1697,7 @@ impl pallet_parameters::Config for Runtime {
 
 parameter_types! {
 	pub BeefySetIdSessionEntries: u32 = BondingDuration::get() * SessionsPerEra::get();
+	
 }
 
 impl pallet_beefy::Config for Runtime {
@@ -1663,6 +1852,7 @@ construct_runtime! {
 		Historical: session_historical = 34,
 
 		Session: pallet_session = 8,
+		Staking: pallet_staking = 9,
 		Grandpa: pallet_grandpa = 10,
 		AuthorityDiscovery: pallet_authority_discovery = 12,
 
@@ -1732,8 +1922,11 @@ construct_runtime! {
 		// Perwerde (Eğitim) module
 		Perwerde: pallet_perwerde::{Pallet, Call, Storage, Event<T>} = 48,
 
-		/* // Staking Score module
-		StakingScore: pallet_staking_score::{Pallet, Call, Storage, Event<T>} = 49, */
+		/* // Perwerde (Eğitim) module
+		Perwerde: pallet_perwerde = 48, */
+
+		// Staking Score module
+		StakingScore: pallet_staking_score::{Pallet, Call, Storage, Event<T>} = 49,
 
 		// pub type NisCounterpartInstance = pallet_balances::Instance2;
 		NisCounterpartBalances: pallet_balances::<Instance2> = 45,
@@ -1790,6 +1983,9 @@ construct_runtime! {
 
 		// Root testing pallet.
 		RootTesting: pallet_root_testing = 249,
+
+		// VoterBagsList pallet.
+		VoterBagsList: pallet_bags_list::<Instance1> = 100,
 
 		// Sudo.
 		Sudo: pallet_sudo = 255,
@@ -2050,6 +2246,8 @@ mod benches {
 		[pallet_referenda, FellowshipReferenda]
 		[pallet_scheduler, Scheduler]
 		[pallet_sudo, Sudo]
+		[pallet_bags_list, VoterBagsList]
+		[pallet_staking, Staking]
 		[frame_system, SystemBench::<Runtime>]
 		[frame_system_extensions, SystemExtensionsBench::<Runtime>]
 		[pallet_timestamp, Timestamp]
@@ -2068,7 +2266,7 @@ mod benches {
 		[pallet_identity_kyc, IdentityKyc]
 		[pallet_referral, Referral]
 		[pallet_perwerde, Perwerde]
-		// [pallet_staking_score, StakingScore]
+		[pallet_staking_score, StakingScore]
 		
 	);
 }

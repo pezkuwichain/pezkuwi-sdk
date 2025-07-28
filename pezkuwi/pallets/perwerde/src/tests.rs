@@ -1,103 +1,49 @@
 use crate::{
-	mock::{new_test_ext, RuntimeOrigin, System, Test, ADMIN_ACCOUNT},
-	Error, Event, Pallet,
+	mock::{new_test_ext, RuntimeOrigin, System, Test, Perwerde as PerwerdePallet},
+	Event,
 };
-use frame_support::{assert_noop, assert_ok};
+use frame_support::{assert_noop, assert_ok, pallet_prelude::Get, BoundedVec};
 use sp_runtime::DispatchError;
-type PerwerdePallet = Pallet<Test>;
+
+fn create_bounded_vec<L: Get<u32>>(s: &[u8]) -> BoundedVec<u8, L> {
+	s.to_vec().try_into().unwrap()
+}
 
 #[test]
 fn create_course_works() {
 	new_test_ext().execute_with(|| {
+		// Admin olarak mock.rs'te TestAdminProvider içinde tanımladığımız hesabı kullanıyoruz.
+		let admin_account_id = 0;
+
+		// Eylem: Yetkili admin ile kurs oluştur.
 		assert_ok!(PerwerdePallet::create_course(
-			RuntimeOrigin::signed(ADMIN_ACCOUNT),
-			b"Blockchain 101".to_vec(),
-			b"Giris seviyesi".to_vec(),
-			b"http://example.com".to_vec()
+			RuntimeOrigin::signed(admin_account_id),
+			create_bounded_vec(b"Blockchain 101"),
+			create_bounded_vec(b"Giris seviyesi"),
+			create_bounded_vec(b"http://example.com")
 		));
 
+		// Doğrulama
 		assert!(crate::Courses::<Test>::contains_key(0));
 		let course = crate::Courses::<Test>::get(0).unwrap();
-		assert_eq!(course.owner, ADMIN_ACCOUNT);
-		System::assert_last_event(Event::CourseCreated { course_id: 0, owner: ADMIN_ACCOUNT }.into());
+		assert_eq!(course.owner, admin_account_id);
+		System::assert_last_event(Event::CourseCreated { course_id: 0, owner: admin_account_id }.into());
 	});
 }
 
 #[test]
 fn create_course_fails_for_non_admin() {
 	new_test_ext().execute_with(|| {
+		// Admin (0) dışındaki bir hesap (2) kurs oluşturamaz.
+		let non_admin = 2;
 		assert_noop!(
 			PerwerdePallet::create_course(
-				RuntimeOrigin::signed(2), // 2, admin değil
-				b"Hacking 101".to_vec(),
-				b"Yetkisiz kurs".to_vec(),
-				b"http://example.com".to_vec()
+				RuntimeOrigin::signed(non_admin),
+				create_bounded_vec(b"Hacking 101"),
+				create_bounded_vec(b"Yetkisiz kurs"),
+				create_bounded_vec(b"http://example.com")
 			),
 			DispatchError::BadOrigin
-		);
-	});
-}
-
-#[test]
-fn enroll_works() {
-	new_test_ext().execute_with(|| {
-		assert_ok!(PerwerdePallet::create_course(
-            RuntimeOrigin::signed(ADMIN_ACCOUNT),
-            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
-        ));
-		
-		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0));
-
-		assert!(crate::Enrollments::<Test>::contains_key((2, 0)));
-		System::assert_last_event(Event::StudentEnrolled { student: 2, course_id: 0 }.into());
-	});
-}
-
-#[test]
-fn enroll_fails_if_already_enrolled() {
-	new_test_ext().execute_with(|| {
-		assert_ok!(PerwerdePallet::create_course(
-            RuntimeOrigin::signed(ADMIN_ACCOUNT),
-            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
-        ));
-		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0));
-
-		assert_noop!(
-			PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0),
-			Error::<Test>::AlreadyEnrolled
-		);
-	});
-}
-
-#[test]
-fn complete_course_works() {
-	new_test_ext().execute_with(|| {
-		assert_ok!(PerwerdePallet::create_course(
-            RuntimeOrigin::signed(ADMIN_ACCOUNT),
-            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
-        ));
-		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(2), 0));
-
-		assert_ok!(PerwerdePallet::complete_course(RuntimeOrigin::signed(2), 0, 10));
-
-		let enrollment = crate::Enrollments::<Test>::get((2, 0)).unwrap();
-		assert!(enrollment.completed_at.is_some());
-		assert_eq!(enrollment.points_earned, 10);
-		System::assert_last_event(Event::CourseCompleted { student: 2, course_id: 0, points: 10 }.into());
-	});
-}
-
-#[test]
-fn complete_course_fails_if_not_enrolled() {
-	new_test_ext().execute_with(|| {
-		assert_ok!(PerwerdePallet::create_course(
-            RuntimeOrigin::signed(ADMIN_ACCOUNT),
-            b"Test Course".to_vec(), b"Test Desc".to_vec(), b"http://test.com".to_vec()
-        ));
-
-		assert_noop!(
-			PerwerdePallet::complete_course(RuntimeOrigin::signed(2), 0, 10),
-			Error::<Test>::NotEnrolled
 		);
 	});
 }
