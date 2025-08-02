@@ -1,0 +1,108 @@
+[package]
+name = "pallet-welati"
+version = "1.0.0"
+description = "PezkuwiChain Governance and State Administration Pallet"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "3.6.12", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { default-features = false, features = ["derive"], workspace = true }
+serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
+
+frame-support = { default-features = false, workspace = true }
+frame-system = { default-features = false, workspace = true }
+frame-benchmarking = { default-features = false, optional = true, workspace = true }
+log = { default-features = false, workspace = true }
+sp-runtime = { default-features = false, workspace = true }
+sp-std = { default-features = false, workspace = true }
+sp-core = { workspace = true, default-features = false, optional = true }
+sp-io = { workspace = true, default-features = false, optional = true }
+
+# PezkuwiChain özel paletler
+pallet-tiki = { path = "../tiki", default-features = false }
+pallet-trust = { path = "../trust", default-features = false }
+pallet-identity-kyc = { path = "../identity-kyc", default-features = false }
+pallet-referral = { path = "../referral", default-features = false }
+
+# Substrate core paletler
+pallet-collective = { default-features = false, workspace = true }
+pallet-scheduler = { default-features = false, workspace = true }
+pallet-elections-phragmen = { default-features = false, workspace = true }
+pallet-democracy = { default-features = false, workspace = true }
+pallet-timestamp = { default-features = false, workspace = true }
+
+[dev-dependencies]
+sp-core = { workspace = true, default-features = false }
+sp-io = { workspace = true, default-features = false }
+pallet-balances = { workspace = true, default-features = false }
+pallet-timestamp = { workspace = true }
+pallet-nfts = { workspace = true, default-features = false }
+pallet-staking-score = { path = "../staking-score", default-features = false }
+pallet-identity = { workspace = true, default-features = false } 
+
+[features]
+default = ["std"]
+std = [
+    "codec/std",
+    "frame-benchmarking?/std",
+    "frame-support/std",
+    "frame-system/std",
+    "log/std",
+    "pallet-tiki/std",
+    "pallet-trust/std",
+    "pallet-identity-kyc/std",
+    "pallet-referral/std",
+    "pallet-staking-score/std",
+    "pallet-nfts/std",
+    "pallet-collective/std",
+    "pallet-scheduler/std", 
+    "pallet-elections-phragmen/std",
+    "pallet-democracy/std",
+    "pallet-timestamp/std",
+    "scale-info/std",
+    "serde",
+    "sp-core/std",
+    "sp-io/std",
+    "sp-runtime/std",
+    "sp-std/std",
+]
+runtime-benchmarks = [
+    "frame-benchmarking/runtime-benchmarks",
+    "frame-support/runtime-benchmarks",
+    "frame-system/runtime-benchmarks",
+    "pallet-tiki/runtime-benchmarks",
+    "pallet-trust/runtime-benchmarks",
+    "pallet-identity-kyc/runtime-benchmarks",
+    "pallet-referral/runtime-benchmarks",
+    "pallet-staking-score/runtime-benchmarks",
+    "pallet-nfts/runtime-benchmarks",
+    "pallet-collective/runtime-benchmarks",
+    "pallet-scheduler/runtime-benchmarks",
+    "pallet-elections-phragmen/runtime-benchmarks",
+    "pallet-democracy/runtime-benchmarks",
+    "pallet-timestamp/runtime-benchmarks",
+    "sp-runtime/runtime-benchmarks",
+    "sp-core",
+    "sp-io",
+]
+try-runtime = [
+    "frame-support/try-runtime",
+    "frame-system/try-runtime",
+    "pallet-tiki/try-runtime",
+    "pallet-trust/try-runtime",
+    "pallet-identity-kyc/try-runtime",
+    "pallet-referral/try-runtime",
+    "pallet-collective/try-runtime",
+    "pallet-scheduler/try-runtime",
+    "pallet-elections-phragmen/try-runtime",
+    "pallet-democracy/try-runtime",
+    "pallet-timestamp/try-runtime",
+]

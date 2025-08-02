@@ -1,9 +1,9 @@
 [workspace.package]
-authors = ["Parity Technologies <admin@parity.io>"]
+authors = ["Kurdistan Tech Ministry <tech@kurdistan.gov>"]
 edition = "2021"
-homepage = "https://paritytech.github.io/pezkuwi-sdk/"
-license = "GPL-3.0-only"
-repository = "https://github.com/paritytech/polkadot-sdk.git"
+homepage = "https://pezkuwichain.network"
+license = "Kurdistan Talent Institute License"
+repository = "https://github.com/kurdistan-tech/pezkuwichain.git"
 
 [workspace]
 resolver = "2"

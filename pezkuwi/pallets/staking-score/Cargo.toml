@@ -22,6 +22,9 @@ pallet-staking = { workspace = true, default-features = false, optional = true }
 pallet-balances = { workspace = true, default-features = false, optional = true }
 pezkuwichain-constants = { workspace = true, default-features = false, optional = true }
 
+# PezkuwiChain'in özel tiplerini ve trait'lerini içeren kütüphane
+pezkuwi-primitives = { path = "../../primitives", default-features = false }
+
 [dev-dependencies]
 sp-core = { workspace = true, features = ["std"] }
 sp-io = { workspace = true, features = ["std"] }
@@ -52,6 +55,7 @@ std = [
 	"serde?/std",
 	"sp-runtime/std",
 	"sp-std/std",
+	"pezkuwi-primitives/std",
 ]
 runtime-benchmarks = [
 	"frame-benchmarking/runtime-benchmarks",
@@ -61,6 +65,7 @@ runtime-benchmarks = [
 	"pallet-staking/runtime-benchmarks",
 	"pezkuwichain-constants",
 	"sp-runtime/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 ]
 try-runtime = [
 	"frame-support/try-runtime",

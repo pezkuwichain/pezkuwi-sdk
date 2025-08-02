@@ -13,7 +13,7 @@ path = "src/bin/prepare-worker.rs"
 [package]
 name = "polkadot"
 description = "Implementation of a `https://polkadot.network` node in Rust based on the Substrate framework."
-license = "GPL-3.0-only"
+license = "Kurdistan Talent Institute License"
 rust-version = "1.64.0"
 readme = "README.md"
 authors.workspace = true

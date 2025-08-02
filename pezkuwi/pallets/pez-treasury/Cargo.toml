@@ -1,0 +1,78 @@
+[package]
+name = "pallet-pez-treasury"
+version = "1.0.0"
+description = "PezkuwiChain Programmatic Treasury with Synthetic Halving"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { package = "parity-scale-codec", default-features = false, features = ["derive"], workspace = true }
+scale-info = { default-features = false, features = ["derive"], workspace = true }
+serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
+
+frame-support = { default-features = false, workspace = true }
+frame-system = { default-features = false, workspace = true }
+log = { default-features = false, workspace = true }
+sp-runtime = { default-features = false, workspace = true }
+sp-std = { default-features = false, workspace = true }
+
+# PezkuwiChain'in özel tiplerini ve trait'lerini içeren kütüphane
+pezkuwi-primitives = { path = "../../primitives", default-features = false }
+
+# Standart Substrate paletleri
+pallet-balances = { default-features = false, workspace = true }
+pallet-scheduler = { default-features = false, workspace = true }
+
+# Test ve Benchmark için Gerekli İsteğe Bağlı Bağımlılıklar
+frame-benchmarking = { default-features = false, optional = true, workspace = true }
+sp-core = { workspace = true, default-features = false, optional = true }
+sp-io = { workspace = true, default-features = false, optional = true }
+
+[dev-dependencies]
+# Test için gerekli olan bağımlılıklar
+sp-core = { workspace = true, default-features = false }
+sp-io = { workspace = true, default-features = false }
+
+[features]
+default = ["std"]
+std = [
+    "codec/std",
+    "frame-benchmarking?/std",
+    "frame-support/std",
+    "frame-system/std",
+    "log/std",
+    "pallet-balances/std",
+    "pallet-scheduler/std",
+    "scale-info/std",
+    "serde",
+    "sp-core?/std",
+    "sp-io?/std",
+    "sp-runtime/std",
+    "sp-std/std",
+    "pezkuwi-primitives/std",
+]
+runtime-benchmarks = [
+    "frame-benchmarking",
+    "frame-benchmarking/runtime-benchmarks",
+    "frame-support/runtime-benchmarks",
+    "frame-system/runtime-benchmarks",
+    "pallet-balances/runtime-benchmarks",
+    "pallet-scheduler/runtime-benchmarks",
+    "sp-runtime/runtime-benchmarks",
+    "sp-core",
+    "sp-io",
+    "pezkuwi-primitives/runtime-benchmarks",
+]
+try-runtime = [
+    "frame-support/try-runtime",
+    "frame-system/try-runtime",
+    "pallet-balances/try-runtime",
+    "pallet-scheduler/try-runtime",
+]

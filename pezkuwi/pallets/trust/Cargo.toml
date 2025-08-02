@@ -23,39 +23,75 @@ log = { default-features = false, workspace = true }
 sp-runtime = { default-features = false, workspace = true }
 sp-std = { default-features = false, workspace = true }
 
+# PezkuwiChain'in özel tiplerini ve trait'lerini içeren kütüphane
+pezkuwi-primitives = { path = "../../primitives", default-features = false }
+
+# Palet bağımlılıkları (Trust puanı hesaplaması için gerekli)
+# Standart Substrate paletleri için path belirtilmez, workspace=true kullanılır.
+pallet-balances = { default-features = false, workspace = true } 
+# Özel PezkuwiChain paletleri için göreli path kullanılır.
+pallet-staking-score = { path = "../staking-score", default-features = false } 
+pallet-referral = { path = "../referral", default-features = false } 
+pallet-perwerde = { path = "../perwerde", default-features = false } 
+pallet-tiki = { path = "../tiki", default-features = false }
+pallet-identity-kyc = { path = "../identity-kyc", default-features = false }
+
+
 # --- Test ve Benchmark için Gerekli İsteğe Bağlı Bağımlılıklar ---
 frame-benchmarking = { default-features = false, optional = true, workspace = true }
 sp-core = { workspace = true, default-features = false, optional = true }
 sp-io = { workspace = true, default-features = false, optional = true }
 
 [dev-dependencies]
-# Test için gerekli olan ana bağımlılıklar `[dependencies]` altında `optional = true` 
-# olarak tanımlandığı için bu bölümü boş bırakmak daha temiz bir yaklaşımdır.
+# Test için gerekli olan bağımlılıklar
+sp-core = { workspace = true, default-features = false }
+sp-io = { workspace = true, default-features = false }
 
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"frame-benchmarking?/std",
-	"frame-support/std",
-	"frame-system/std",
-	"log/std",
-	"scale-info/std",
-	"serde",
-	"sp-core?/std",
-	"sp-io?/std",
-	"sp-runtime/std",
-	"sp-std/std",
+    "codec/std",
+    "frame-benchmarking?/std",
+    "frame-support/std",
+    "frame-system/std",
+    "log/std",
+    # Diğer paletlerin std özellikleri
+    "pallet-balances/std", 
+    "pallet-staking-score/std", 
+    "pallet-referral/std", 
+    "pallet-perwerde/std", 
+    "pallet-tiki/std",
+    "pallet-identity-kyc/std",
+    "scale-info/std",
+    "serde", # serde'yi doğrudan feature olarak ekliyoruz
+    "sp-core?/std",
+    "sp-io?/std",
+    "sp-runtime/std",
+    "sp-std/std",
+    "pezkuwi-primitives/std",
 ]
 runtime-benchmarks = [
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-core",
-	"sp-io",
+    "frame-benchmarking/runtime-benchmarks",
+    "frame-support/runtime-benchmarks",
+    "frame-system/runtime-benchmarks",
+    # Diğer paletlerin runtime-benchmarks özellikleri
+    "pallet-balances/runtime-benchmarks", 
+    "pallet-staking-score/runtime-benchmarks", 
+    "pallet-referral/runtime-benchmarks", 
+    "pallet-perwerde/runtime-benchmarks", 
+    "pallet-tiki/runtime-benchmarks",
+    "pallet-identity-kyc/runtime-benchmarks",
+    "sp-runtime/runtime-benchmarks",
+    "sp-core",
+    "sp-io",
+    "pezkuwi-primitives/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
+    "frame-support/try-runtime",
+    "frame-system/try-runtime",
+    # Diğer paletlerin try-runtime özellikleri
+    "pallet-staking-score/try-runtime", 
+    "pallet-referral/try-runtime", 
+    "pallet-perwerde/try-runtime", 
+    "pallet-tiki/try-runtime",
 ]

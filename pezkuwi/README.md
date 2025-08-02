@@ -1,9 +1,9 @@
 # Pezkuwi
 
-Implementation of a <https://pezkuwi.com> node in Rust based on the Substrate framework.
+Implementation of a <https://pezkuwichain.network> node in Rust based on the Substrate framework.
 
 The README provides information about installing the `pezkuwi` binary and developing on the codebase. For more specific
-guides, like how to run a validator node, see the [Pezkuwi Wiki](https://wiki.pezkuwi.network/docs/getting-started).
+guides, like how to run a validator node, see the [Pezkuwi Wiki](https://wiki.pezkuwichain.network/docs/getting-started).
 
 ## Installation
 
@@ -132,7 +132,7 @@ You can see your node on [Westend telemetry](https://telemetry.pezkuwi.io/#list/
 
 If you want to do anything on Pezkuwi, Kusama, or Westend, then you'll need to get an account and
 some HEZ, KSM, or WND tokens, respectively. Follow the
-[instructions](https://wiki.pezkuwi.network/docs/learn-HEZ#obtaining-testnet-tokens) on the Wiki to obtain tokens for
+[instructions](https://wiki.pezkuwichain.network/docs/learn-HEZ#obtaining-testnet-tokens) on the Wiki to obtain tokens for
 your testnet of choice.
 
 ## Hacking on Pezkuwi
@@ -204,7 +204,7 @@ Ensure you replace `ALICE_BOOTNODE_ID_HERE` with the node ID from the output of 
 
 ### Monitoring
 
-[Setup Prometheus and Grafana](https://wiki.pezkuwi.network/docs/maintain-guides-how-to-monitor-your-node).
+[Setup Prometheus and Grafana](https://wiki.pezkuwichain.network/docs/maintain-guides-how-to-monitor-your-node).
 
 Once you set this up you can take a look at the [Pezkuwi Grafana dashboards](grafana/README.md)
 that we currently maintain.

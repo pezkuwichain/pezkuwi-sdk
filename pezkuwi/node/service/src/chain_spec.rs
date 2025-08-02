@@ -300,3 +300,35 @@ pub fn pezkuwichain_local_testnet_config() -> Result<PezkuwiChainSpec, String> {
     .with_properties(pezkuwi_properties())
     .build())
 }
+
+/// PezkuwiChain production config
+#[cfg(feature = "pezkuwi-native")]
+pub fn pezkuwichain_production_config() -> Result<PezkuwiChainSpec, String> {
+    Ok(PezkuwiChainSpec::builder(
+        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi production wasm not available")?,
+        Default::default(),
+    )
+    .with_name("PezkuwiChain")
+    .with_id("pezkuwichain")
+    .with_chain_type(ChainType::Live) // LIVE chain
+    .with_genesis_config_preset_name("production")
+    .with_protocol_id("pezkuwi")
+    .with_properties(pezkuwi_properties())
+    .build())
+}
+
+/// PezkuwiChain staging testnet config
+#[cfg(feature = "pezkuwi-native")]
+pub fn pezkuwichain_staging_testnet_config() -> Result<PezkuwiChainSpec, String> {
+    Ok(PezkuwiChainSpec::builder(
+        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi staging wasm not available")?,
+        Default::default(),
+    )
+    .with_name("PezkuwiChain Staging")
+    .with_id("pezkuwichain_staging")
+    .with_chain_type(ChainType::Live)
+    .with_genesis_config_preset_name("staging_testnet")
+    .with_protocol_id("pezkuwi")
+    .with_properties(pezkuwi_properties())
+    .build())
+}

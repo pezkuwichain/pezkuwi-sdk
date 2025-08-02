@@ -37,10 +37,10 @@ where
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]
-	fn successful_origin() -> T::RuntimeOrigin {
-		let zero_account = T::AccountId::decode(&mut sp_runtime::traits::TrailingZeroInput::zeroes())
-			.expect("infinite length input; no invalid inputs for type; qed");
-		T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(zero_account))
+	fn try_successful_origin() -> Result<T::RuntimeOrigin, ()> {
+		use frame_benchmarking::account;
+		let zero_account: T::AccountId = account("tiki_holder", 0, 0);
+		Ok(T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(zero_account)))
 	}
 }
 

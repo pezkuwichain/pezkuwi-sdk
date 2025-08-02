@@ -1,0 +1,45 @@
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'alerts@pezkuwi.com'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+  routes:
+  - match:
+      severity: critical
+    receiver: 'critical-alerts'
+
+receivers:
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://localhost:5001/webhook'
+
+- name: 'critical-alerts'
+  email_configs:
+  - to: 'admin@pezkuwi.com'
+    subject: 'PezkuwiChain Critical Alert'
+    body: |
+      {{ range .Alerts }}
+      Alert: {{ .Annotations.summary }}
+      Description: {{ .Annotations.description }}
+      {{ end }}
+  
+  slack_configs:
+  - api_url: 'YOUR_SLACK_WEBHOOK_URL'
+    channel: '#pezkuwi-alerts'
+    title: 'PezkuwiChain Alert'
+    text: |
+      {{ range .Alerts }}
+      {{ .Annotations.summary }}
+      {{ end }}
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']

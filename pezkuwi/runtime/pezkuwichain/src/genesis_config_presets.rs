@@ -14,11 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Genesis configs presets for the Rococo runtime
+//! Genesis configs presets for the PezkuwiChain runtime
 
 use crate::{
 	BabeConfig, BalancesConfig, ConfigurationConfig, RegistrarConfig, RuntimeGenesisConfig,
 	SessionConfig, SessionKeys, SudoConfig, StakingConfig, BABE_GENESIS_EPOCH_CONFIG,
+	PezTreasuryConfig, PezRewardsConfig,
 };
 
 #[cfg(not(feature = "std"))]
@@ -169,14 +170,13 @@ fn pezkuwichain_testnet_genesis(
 ) -> serde_json::Value {
 	let endowed_accounts: Vec<AccountId> = endowed_accounts.unwrap_or_else(testnet_accounts);
 
-	const ENDOWMENT: u128 = 10_000_000_000 * HEZ; // Claude AI önerisi: Daha yüksek genel bakiye
-	const STAKER_ENDOWMENT: u128 = 1_000_000_000 * HEZ; // Claude AI önerisi: Staker'lar için yeterli bakiye
+	const ENDOWMENT: u128 = 10_000_000_000 * HEZ; 
+	const STAKER_ENDOWMENT: u128 = 1_000_000_000 * HEZ; 
 
 	build_struct_json_patch!(RuntimeGenesisConfig {
 		balances: BalancesConfig {
-			// Hem genel endowed_accounts'ı hem de initial_authorities'in stash hesaplarını bolca bakiye ile dolduruyoruz.
 			balances: endowed_accounts.iter().map(|k| (k.clone(), ENDOWMENT))
-				.chain(initial_authorities.iter().map(|x| (x.0.clone(), STAKER_ENDOWMENT))) // Stash hesaplarına bol miktarda bakiye ekle
+				.chain(initial_authorities.iter().map(|x| (x.0.clone(), STAKER_ENDOWMENT)))
 				.collect::<Vec<_>>(),
 		},
 
@@ -185,15 +185,15 @@ fn pezkuwichain_testnet_genesis(
 			minimum_validator_count: 1,
 			stakers: initial_authorities
 				.iter()
-				.map(|x| (x.0.clone(), x.0.clone(), STAKER_ENDOWMENT / 100, pallet_staking::StakerStatus::Validator)) // Claude AI önerisi: Self-controller ve daha düşük stake yüzdesi
+				.map(|x| (x.0.clone(), x.0.clone(), STAKER_ENDOWMENT / 100, pallet_staking::StakerStatus::Validator))
 				.collect(),
-			invulnerables: vec![], // Claude AI önerisi: Boş invulnerables listesi
+			invulnerables: vec![],
 			slash_reward_fraction: Perbill::from_percent(10),
-			force_era: pallet_staking::Forcing::NotForcing, // Claude AI önerisi: Zorlamayı kapat
-			min_nominator_bond: 1000 * HEZ, // Claude AI önerisi: Daha yüksek min bondlar
-			min_validator_bond: 1000 * HEZ, // Claude AI önerisi: Daha yüksek min bondlar
-			max_validator_count: Some(100), // Claude AI önerisi: Max validator limitini belirle
-			max_nominator_count: Some(1000), // Claude AI önerisi: Max nominator limitini belirle
+			force_era: pallet_staking::Forcing::NotForcing,
+			min_nominator_bond: 1000 * HEZ,
+			min_validator_bond: 1000 * HEZ,
+			max_validator_count: Some(100),
+			max_nominator_count: Some(1000),
 			..Default::default()
 		},
 		session: SessionConfig {
@@ -215,12 +215,10 @@ fn pezkuwichain_testnet_genesis(
 				})
 				.collect::<Vec<_>>(),
 		},
-		// ***** YENİ EKLENEN BLOK *****
 		council: CouncilConfig {
 			members: vec![root_key.clone()],
 			..Default::default()
 		},
-		// *****************************
 		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
 		sudo: SudoConfig { key: Some(root_key.clone()) },
 		configuration: ConfigurationConfig {
@@ -233,6 +231,18 @@ fn pezkuwichain_testnet_genesis(
 			},
 		},
 		registrar: RegistrarConfig { next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID },
+		
+		// PEZ Treasury başlangıç ayarları
+		pez_treasury: PezTreasuryConfig {
+			initialize_treasury: true,
+			_phantom: Default::default(),
+		},
+		
+		// PEZ Rewards başlangıç ayarları  
+		pez_rewards: PezRewardsConfig {
+			start_rewards_system: true,
+			_phantom: Default::default(),
+		},
 	})
 }
 
@@ -242,7 +252,7 @@ fn pezkuwichain_staging_testnet_config_genesis() -> serde_json::Value {
 	use sp_core::crypto::UncheckedInto;
 
 	// subkey inspect "$SECRET"
-	let endowed_accounts = Vec::from([
+	let endowed_accounts: Vec<AccountId> = Vec::from([
 		// 5DwBmEFPXRESyEam5SsQF1zbWSCn2kCjyLW51hJHXe9vW4xs
 		hex!["52bc71c1eca5353749542dfdf0af97bf764f9c2f44e860cd485f1cd86400f649"].into(),
 	]);
@@ -473,6 +483,17 @@ fn pezkuwichain_staging_testnet_config_genesis() -> serde_json::Value {
 		sudo: SudoConfig { key: Some(endowed_accounts[0].clone()) },
 		configuration: ConfigurationConfig { config: default_parachains_host_configuration() },
 		registrar: RegistrarConfig { next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID },
+				// PEZ Treasury başlangıç ayarları
+        pez_treasury: PezTreasuryConfig {
+            initialize_treasury: true,
+            _phantom: Default::default(),
+        },
+        
+        // PEZ Rewards başlangıç ayarları  
+        pez_rewards: PezRewardsConfig {
+            start_rewards_system: true,
+            _phantom: Default::default(),
+        },
 	})
 }
 
@@ -563,6 +584,17 @@ fn pezkuwichain_development_config_genesis() -> serde_json::Value {
 			config: default_parachains_host_configuration(),
 		},
 		registrar: RegistrarConfig { next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID },
+		// PEZ Treasury başlangıç ayarları
+        pez_treasury: PezTreasuryConfig {
+            initialize_treasury: true,
+            _phantom: Default::default(),
+        },
+        
+        // PEZ Rewards başlangıç ayarları  
+        pez_rewards: PezRewardsConfig {
+            start_rewards_system: true,
+            _phantom: Default::default(),
+        },
 	})
 }
 
@@ -575,7 +607,7 @@ fn pezkuwichain_local_testnet_genesis() -> serde_json::Value {
 	)
 }
 
-/// `Versi` is a temporary testnet that uses the same runtime as rococo.
+/// `Versi` is a temporary testnet that uses the same runtime as pezkuwichain.
 // versi_local_testnet
 fn versi_local_testnet_genesis() -> serde_json::Value {
 	pezkuwichain_testnet_genesis(
@@ -596,8 +628,8 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => pezkuwichain_local_testnet_genesis(),
 		sp_genesis_builder::DEV_RUNTIME_PRESET => pezkuwichain_development_config_genesis(),
 		"staging_testnet" => pezkuwichain_staging_testnet_config_genesis(),
-		// This can be removed or renamed later if you don't use Versi
 		"versi_local_testnet" => versi_local_testnet_genesis(),
+		"production" => pezkuwichain_production_config_genesis(), // Production preset ekle
 		_ => return None,
 	};
 	Some(
@@ -607,6 +639,117 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 	)
 }
 
+/// Production genesis configuration
+fn pezkuwichain_production_config_genesis() -> serde_json::Value {
+    use hex_literal::hex;
+    use sp_core::crypto::UncheckedInto;
+
+    // Ürettiğimiz anahtarlar
+    let initial_authorities: Vec<(
+        AccountId, AccountId, BabeId, GrandpaId, ValidatorId,
+        AssignmentId, AuthorityDiscoveryId, BeefyId,
+    )> = Vec::from([
+        // VALIDATOR 1 ("stool bench...")
+        (
+            hex!["d2fe55a51763b6b8e047c1a644bb2b610df40dff4bae4ccd9c8e3a185d4abc1d"].into(), // Stash
+            hex!["1cbf1dd9a54cbc28aa9f31085e375456130e449ad4a2babc3a3d5e4fbfb4c816"].into(), // Controller
+            hex!["149d6e00fd8c26c3b69802feb63a70e1cb52bd5127fff4c6547092c408cba679"].unchecked_into(), // Babe
+            hex!["02c4b8be50387755b0430e0c1056f8fa9db11e6a9ea9416c36a8941a767c896a"].unchecked_into(), // Grandpa
+            hex!["da77ad045773f9a9c71e2c081c96e2b8c7785d2920033135d5fe641e8c28ff0f"].unchecked_into(), // Para Validator
+            hex!["3c522a83afc977a71da9407504f828521c03667d0e73c398353064c31134e47d"].unchecked_into(), // Para Assignment
+            hex!["367916884f71cf35b502d071a7d037be4f141510f450e27189fa24b9a954fe18"].unchecked_into(), // Authority Discovery
+            hex!["030b3676b133e8162eb266ba24362ebcdc08cd3abe90e74da1e69f51392f9b2d6d"].unchecked_into(), // Beefy
+        ),
+        // VALIDATOR 2 ("legal indoor...")
+        (
+            hex!["fc260ea19d6d7cd2cae4a7fc6c323c97f0208597427da14c93f66a83da90d352"].into(), // Stash
+            hex!["cc63a2dffad73936d41d98b68511ac9b963e2b605cd0f72e11c0bde3da304326"].into(), // Controller
+            hex!["84acb9d8e22fe6ee32e2ea92919e6ee7355c9fc4112bc2ca4b29942ebd986e69"].unchecked_into(), // Babe
+            hex!["3f50dd6e1cb2f47d355e6160f63f11cf42660e0fadd8126785314943294b3678"].unchecked_into(), // Grandpa
+            hex!["9252b826f5d0d45774c463d91ea5d877b950014473024425bb44d460d3e00470"].unchecked_into(), // Para Validator
+            hex!["f25790ae9338110f46945f070aed4353fee5636bc0f2d6c8552ddee3135e014c"].unchecked_into(), // Para Assignment
+            hex!["9eb5e8d43c9a5110ed4f80a2c876aadf5892062036bfc4d999e151c58086bb13"].unchecked_into(), // Authority Discovery
+            hex!["02536f28c11da1b6c6f195939a9a024ef811635ff04e1a9786c96a37842d051f6e"].unchecked_into(), // Beefy
+        ),
+    ]);
+
+    // Ürettiğimiz hesaplar
+    let endowed_accounts: Vec<AccountId> = Vec::from([
+        hex!["54581177449f8ab246e300fc76bd9ce21bdab84f23fdc98a9b06a46979318d50"].into(), // Founder account
+        hex!["74d407c722c5a94659400d6258be308e0ec7a131425d347b3426acce4790e914"].into(), // Presale account
+        // Admin ve DAO hesapları için yeni anahtarlar üretebilir veya şimdilik Founder'ı kullanabilirsiniz.
+        hex!["54581177449f8ab246e300fc76bd9ce21bdab84f23fdc98a9b06a46979318d50"].into(), // Treasury admin
+        hex!["54581177449f8ab246e300fc76bd9ce21bdab84f23fdc98a9b06a46979318d50"].into(), // DAO multisig
+    ]);
+
+    const FOUNDER_ENDOWMENT: u128 = 93_750_000 * HEZ;
+    const PRESALE_ENDOWMENT: u128 = 93_750_000 * HEZ;
+    const VALIDATOR_STASH: u128 = 10_000 * HEZ;
+    const ADMIN_ENDOWMENT: u128 = 1_000 * HEZ;
+
+    build_struct_json_patch!(RuntimeGenesisConfig {
+        balances: BalancesConfig {
+            balances: vec![
+                (endowed_accounts[0].clone(), FOUNDER_ENDOWMENT),
+                (endowed_accounts[1].clone(), PRESALE_ENDOWMENT),
+                (endowed_accounts[2].clone(), ADMIN_ENDOWMENT),
+                (endowed_accounts[3].clone(), ADMIN_ENDOWMENT),
+            ]
+            .into_iter()
+            .chain(initial_authorities.iter().map(|x| (x.0.clone(), VALIDATOR_STASH)))
+            .collect::<Vec<_>>(),
+        },
+        staking: StakingConfig {
+            validator_count: initial_authorities.len() as u32,
+            minimum_validator_count: 2,
+            stakers: initial_authorities
+                .iter()
+                .map(|x| (x.0.clone(), x.1.clone(), VALIDATOR_STASH / 2, pallet_staking::StakerStatus::Validator))
+                .collect(),
+            invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect(),
+            slash_reward_fraction: Perbill::from_percent(10),
+            force_era: pallet_staking::Forcing::NotForcing,
+            min_nominator_bond: 100 * HEZ,
+            min_validator_bond: 1000 * HEZ,
+            max_validator_count: Some(100),
+            max_nominator_count: Some(10000),
+            ..Default::default()
+        },
+        session: SessionConfig {
+            keys: initial_authorities
+                .iter()
+                .map(|x| {
+                    (
+                        x.0.clone(),
+                        x.1.clone(),
+                        pezkuwichain_session_keys(x.2.clone(), x.3.clone(), x.4.clone(), x.5.clone(), x.6.clone(), x.7.clone()),
+                    )
+                })
+                .collect::<Vec<_>>(),
+        },
+        council: CouncilConfig {
+            members: vec![endowed_accounts[0].clone()], // Founder
+            ..Default::default()
+        },
+        babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
+        sudo: SudoConfig { key: Some(endowed_accounts[0].clone()) },
+        configuration: ConfigurationConfig {
+            config: default_parachains_host_configuration(),
+        },
+        registrar: RegistrarConfig {
+            next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID
+        },
+        pez_treasury: PezTreasuryConfig {
+            initialize_treasury: true,
+            _phantom: Default::default(),
+        },
+        pez_rewards: PezRewardsConfig {
+            start_rewards_system: true,
+            _phantom: Default::default(),
+        },
+    })
+}
+
 /// List of supported presets.
 pub fn preset_names() -> Vec<PresetId> {
 	vec![
@@ -614,5 +757,6 @@ pub fn preset_names() -> Vec<PresetId> {
 		PresetId::from(sp_genesis_builder::DEV_RUNTIME_PRESET),
 		PresetId::from("staging_testnet"),
 		PresetId::from("versi_local_testnet"),
+		PresetId::from("production"), // Production preset ekle
 	]
 }

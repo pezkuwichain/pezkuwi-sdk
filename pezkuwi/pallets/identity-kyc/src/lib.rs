@@ -161,7 +161,9 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> KycStatus<T::AccountId> for Pallet<T> {
+pub use types::KycStatus;
+
+impl<T: Config> types::KycStatus<T::AccountId> for Pallet<T> {
 	fn get_kyc_status(who: &T::AccountId) -> KycLevel {
 		KycStatuses::<T>::get(who)
 	}

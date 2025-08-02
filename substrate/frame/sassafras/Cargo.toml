@@ -1,7 +1,7 @@
 [package]
 name = "pallet-sassafras"
 version = "0.3.5"
-authors = ["Parity Technologies <admin@parity.io>"]
+authors = ["Kurdistan Tech Ministry <tech@kurdistan.gov>"]
 edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true

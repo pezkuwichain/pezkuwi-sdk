@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! The Rococo runtime for v1 parachains.
+//! The PezkuwiChain runtime for v1 parachains.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit.
@@ -34,6 +34,7 @@
 extern crate alloc;
 
 use alloc::{
+	boxed::Box, // Bu satırı ekleyin
 	collections::{btree_map::BTreeMap, vec_deque::VecDeque},
 	vec,
 	vec::Vec,
@@ -72,7 +73,7 @@ use pezkuwichain_constants::{
 	currency::{CENTS, GRAND, UNITS as HEZ},
 	time::{DAYS, MINUTES, EpochDurationInBlocks},
 };
-use frame_support::weights::WeightToFee;
+
 use pezkuwi_runtime_parachains::{
 	assigner_coretime as parachains_assigner_coretime, configuration as parachains_configuration,
 	configuration::ActiveConfigHrmpChannelSizeAndCapacityRatio,
@@ -146,7 +147,7 @@ pub use frame_system::Call as SystemCall;
 pub use pallet_balances::Call as BalancesCall;
 
 /// Constant values used within the runtime.
-use pezkuwichain_constants::{currency::*, fee::*, time::*};
+use pezkuwichain_constants::{currency::*, time::*};
 
 // Weights used in the runtime.
 mod weights;
@@ -193,7 +194,7 @@ pub mod fast_runtime_binary {
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
-	impl_name: alloc::borrow::Cow::Borrowed("parity-rococo-v2.0"),
+	impl_name: alloc::borrow::Cow::Borrowed("pezkuwichain-v1.0"),
 	authoring_version: 0,
 	spec_version: 1_018_001,
 	impl_version: 0,
@@ -247,6 +248,19 @@ parameter_types! {
 	pub const TikiCollectionIdConstant: u32 = 42;
 	pub Features: PalletFeatures = PalletFeatures::all_enabled();
 	pub const MaxTikisPerUser: u32 = 100;
+}
+
+parameter_types! {
+	// pallet-welati için sabitler
+	pub const ParliamentSize: u32 = 201;
+	pub const DiwanSize: u32 = 11;
+	pub const ElectionPeriod: BlockNumber = 432_000;
+	pub const CandidacyPeriod: BlockNumber = 86_400;
+	pub const CampaignPeriod: BlockNumber = 259_200;
+	pub const ElectoralDistricts: u32 = 10;
+	pub const CandidacyDeposit: Balance = 100 * UNITS;
+	pub const PresidentialEndorsements: u32 = 100;
+	pub const ParliamentaryEndorsements: u32 = 50;
 }
 
 parameter_types! {
@@ -370,19 +384,17 @@ impl EnsureOriginWithArg<RuntimeOrigin, RuntimeParametersKey> for DynamicParamet
 }
 
 impl pallet_scheduler::Config for Runtime {
-	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeEvent = RuntimeEvent;
+	type RuntimeOrigin = RuntimeOrigin;
 	type PalletsOrigin = OriginCaller;
 	type RuntimeCall = RuntimeCall;
 	type MaximumWeight = MaximumSchedulerWeight;
-	// The goal of having ScheduleOrigin include AuctionAdmin is to allow the auctions track of
-	// OpenGov to schedule periodic auctions.
 	type ScheduleOrigin = EitherOf<EnsureRoot<AccountId>, AuctionAdmin>;
 	type MaxScheduledPerBlock = MaxScheduledPerBlock;
 	type WeightInfo = weights::pallet_scheduler::WeightInfo<Runtime>;
 	type OriginPrivilegeCmp = OriginPrivilegeCmp;
 	type Preimages = Preimage;
-	type BlockNumberProvider = frame_system::Pallet<Runtime>;
+	type BlockNumberProvider = System;
 }
 
 parameter_types! {
@@ -664,8 +676,12 @@ impl pallet_staking::Config for Runtime {
 	type NextNewSession = Session;
 	type MaxExposurePageSize = ConstU32<64>;
 	type ElectionProvider = frame_election_provider_support::onchain::OnChainExecution<OnChainSeqPhragmen>;
-	type GenesisElectionProvider = Self::ElectionProvider;
-	type VoterList = VoterBagsList;
+	type GenesisElectionProvider = frame_election_provider_support::NoElection<(
+		Self::AccountId,
+		frame_system::pallet_prelude::BlockNumberFor<Self>,
+		pallet_staking::Pallet<Self>,
+		MaxWinners,
+	)>;	type VoterList = VoterBagsList;
 	type TargetList = pallet_staking::UseValidatorsMap<Self>;
 	type MaxControllersInDeprecationBatch = ConstU32<5_900>;
 	type AdminOrigin = EnsureRoot<AccountId>;
@@ -675,10 +691,10 @@ impl pallet_staking::Config for Runtime {
 	type HistoryDepth = HistoryDepth;
 	type NominationsQuota = pallet_staking::FixedNominationsQuota<16>;
 	type MaxUnlockingChunks = ConstU32<32>;
-	// type Filter = frame_support::traits::Everything;
-	type Filter = frame_support::traits::Nothing;
-	type OldCurrency = Balances; // Eski Currency arayüzü için
-	type BenchmarkingConfig = PezkuwiStakingBenchmarkingConfig; // Kendi config'imizi kullanıyoruz.
+	type Filter = frame_support::traits::Everything;
+	// type Filter = frame_support::traits::Nothing;
+	type OldCurrency = Balances; 
+	type BenchmarkingConfig = PezkuwiStakingBenchmarkingConfig;
 }
 
 parameter_types! {
@@ -781,7 +797,7 @@ impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type MaxProposals = CouncilMaxProposals;
 	type MaxMembers = CouncilMaxMembers;
 	type DefaultVote = pallet_collective::PrimeDefaultVote;
-	type WeightInfo = (); // GEÇİCİ DEĞER
+	type WeightInfo = pallet_collective::weights::SubstrateWeight<Runtime>;
 	type SetMembersOrigin = EnsureRoot<AccountId>;
 	type MaxProposalWeight = MaxProposalWeight;
 	// EKSİK ALANLAR EKLENDİ
@@ -1026,11 +1042,9 @@ impl pallet_nfts::Config for Runtime {
 
 impl pallet_tiki::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type AdminOrigin = EnsureRoot<AccountId>; // Veya daha spesifik bir Origin
+    type AdminOrigin = EnsureRoot<AccountId>;
     type WeightInfo = pallet_tiki::weights::SubstrateWeight<Runtime>;
     type TikiCollectionId = TikiCollectionIdConstant;
-    type ItemId = u32;
-    // --- EKSİK OLAN VE EKLENEN SATIRLAR ---
     type MaxTikisPerUser = MaxTikisPerUser;
     type Tiki = pallet_tiki::Tiki;
 }
@@ -1048,6 +1062,7 @@ impl pallet_identity_kyc::Config for Runtime {
 impl pallet_referral::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_referral::weights::SubstrateWeight<Runtime>;
+	
 }
 
 impl pallet_perwerde::Config for Runtime {
@@ -1058,6 +1073,7 @@ impl pallet_perwerde::Config for Runtime {
 	type MaxCourseDescLength = MaxCourseDescLength;
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
+	
 }
 
 /* impl pallet_perwerde::Config for Runtime {
@@ -1098,14 +1114,14 @@ impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for StakingDa
 		}
 	}
 }
-// Benchmarking için mock staking info provider
-#[cfg(feature = "runtime-benchmarks")]
+
+// Mock provider SADECE test ortamında
+#[cfg(all(test, feature = "runtime-benchmarks"))]
 pub struct MockStakingInfoProvider;
 
-#[cfg(feature = "runtime-benchmarks")]
+#[cfg(all(test, feature = "runtime-benchmarks"))]
 impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for MockStakingInfoProvider {
 	fn get_staking_details(_who: &AccountId) -> Option<pallet_staking_score::StakingDetails<Balance>> {
-		// Benchmarking için her zaman geçerli bir stake döndür
 		Some(pallet_staking_score::StakingDetails {
 			staked_amount: 1000 * HEZ,
 			nominations_count: 5,
@@ -1114,19 +1130,71 @@ impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for MockStaki
 	}
 }
 
-// Conditional type kullanın
-#[cfg(not(feature = "runtime-benchmarks"))]
-type StakingInfoForScore = StakingDataProvider;
-
-#[cfg(feature = "runtime-benchmarks")]
+// Güvenli provider selection
+#[cfg(all(test, feature = "runtime-benchmarks"))]
 type StakingInfoForScore = MockStakingInfoProvider;
+
+#[cfg(not(all(test, feature = "runtime-benchmarks")))]
+type StakingInfoForScore = StakingDataProvider;
 
 impl pallet_staking_score::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
 	type WeightInfo = pallet_staking_score::weights::SubstrateWeight<Runtime>;
 	/// Conditional olarak adaptörü bağlıyoruz.
-	type StakingInfo = StakingInfoForScore; // ← SADECE BU SATIR KALMALI
+	type StakingInfo = StakingInfoForScore; // ← SADECE BU SATIR 
+		
+}
+
+use pallet_tiki::TikiScoreProvider;
+use hex_literal::hex;
+
+parameter_types! {
+	// Trust pallet için sabitler
+	pub const TrustScoreMultiplierBase: u128 = 1000;
+	pub const TrustUpdateInterval: BlockNumber = 24 * 60 * 10; // 24 saat (6 saniye/block varsayımı ile)
+}
+parameter_types! {
+    // PEZ Treasury ve Rewards için parameter types
+    pub const PezTreasuryPalletId: PalletId = PalletId(*b"py/pztrs");
+    pub const PezIncentivePotId: PalletId = PalletId(*b"py/pzinc");
+    pub const PezGovernmentPotId: PalletId = PalletId(*b"py/pzgov");
+}
+
+#[cfg(not(test))]
+parameter_types! {
+    pub QaziMuhammedAccount: AccountId = AccountId::from(hex!["54581177449f8ab246e300fc76bd9ce21bdab84f23fdc98a9b06a46979318d50"]);
+    pub PresaleAccount: AccountId = AccountId::from(hex!["74d407c722c5a94659400d6258be308e0ec7a131425d347b3426acce4790e914"]);
+}
+
+#[cfg(test)]
+parameter_types! {
+    pub QaziMuhammedAccount: AccountId = AccountId::from(hex!["d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d"]);
+    pub PresaleAccount: AccountId = AccountId::from(hex!["8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48"]);
+}
+
+// PEZ Treasury Config
+impl pallet_pez_treasury::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type Currency = Balances;
+    type WeightInfo = pallet_pez_treasury::weights::SubstrateWeight<Runtime>;
+    type TreasuryPalletId = PezTreasuryPalletId;
+    type IncentivePotId = PezIncentivePotId;
+    type GovernmentPotId = PezGovernmentPotId;
+    type PresaleAccount = PresaleAccount;
+    type FounderAccount = QaziMuhammedAccount;
+    type ForceOrigin = EnsureRoot<AccountId>;
+}
+
+// PEZ Rewards Config
+impl pallet_pez_rewards::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type Currency = Balances;
+    type WeightInfo = pallet_pez_rewards::weights::SubstrateWeight<Runtime>;
+    type TrustScoreSource = Trust;
+    type IncentivePotId = PezIncentivePotId;
+    type ClawbackRecipient = QaziMuhammedAccount;
+    type ForceOrigin = EnsureRoot<AccountId>;
 }
 
 parameter_types! {
@@ -1913,6 +1981,9 @@ construct_runtime! {
 		// Tiki modules.
 		Tiki: pallet_tiki::{Pallet, Call, Storage, Event<T>} = 42,
 
+		// Welati modules.
+		Welati: pallet_welati::{Pallet, Call, Storage, Event<T>} = 75,
+
 		// Identity and KYC modules
 		IdentityKyc: pallet_identity_kyc::{Pallet, Call, Storage, Event<T>} = 46,
 
@@ -1922,11 +1993,16 @@ construct_runtime! {
 		// Perwerde (Eğitim) module
 		Perwerde: pallet_perwerde::{Pallet, Call, Storage, Event<T>} = 48,
 
-		/* // Perwerde (Eğitim) module
-		Perwerde: pallet_perwerde = 48, */
-
 		// Staking Score module
 		StakingScore: pallet_staking_score::{Pallet, Call, Storage, Event<T>} = 49,
+
+		// Trust module
+		Trust: pallet_trust = 69,
+
+		// PEZ Economic System
+		PezTreasury: pallet_pez_treasury = 101,
+		PezRewards: pallet_pez_rewards = 102,
+        
 
 		// pub type NisCounterpartInstance = pallet_balances::Instance2;
 		NisCounterpartBalances: pallet_balances::<Instance2> = 45,
@@ -1992,6 +2068,54 @@ construct_runtime! {
 	}
 }
 
+// runtime/pezkuwichain/src/lib.rs içindeki setup_automated_scheduling fonksiyonunu DÜZELT:
+
+impl Runtime {
+    pub fn setup_automated_scheduling() -> sp_runtime::DispatchResult {
+        // Aylık treasury release scheduling
+        let treasury_call = RuntimeCall::PezTreasury(
+            pallet_pez_treasury::Call::release_monthly_funds {}
+        );
+        
+        // DOĞRU API kullanımı:
+        Scheduler::schedule(
+            RuntimeOrigin::root(),
+            432_000u32.into(), // when (block number)
+            Some((432_000u32.into(), u32::MAX)), // maybe_periodic (interval, repetitions)
+            63, // priority
+            treasury_call.into(),
+        )?;
+
+        // Aylık epoch finalization scheduling
+        let epoch_call = RuntimeCall::PezRewards(
+            pallet_pez_rewards::Call::finalize_epoch {}
+        );
+        
+        Scheduler::schedule(
+            RuntimeOrigin::root(),
+            432_000u32.into(),
+            Some((432_000u32.into(), u32::MAX)),
+            62,
+            epoch_call.into(),
+        )?;
+
+        // Haftalık clawback scheduling (1 hafta offset ile)
+        let clawback_call = RuntimeCall::PezRewards(
+            pallet_pez_rewards::Call::close_epoch { epoch_index: 0 }
+        );
+        
+        Scheduler::schedule(
+            RuntimeOrigin::root(),
+            532_800u32.into(), // 1 hafta sonra başla
+            Some((432_000u32.into(), u32::MAX)),
+            61,
+            clawback_call.into(),
+        )?;
+
+        Ok(())
+    }
+}
+
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
 /// Block header type as expected by this runtime.
@@ -2028,6 +2152,101 @@ pub type UncheckedSignaturePayload =
 /// This contains the combined migrations of the last 10 releases. It allows to skip runtime
 /// upgrades in case governance decides to do so. THE ORDER IS IMPORTANT.
 pub type Migrations = migrations::Unreleased;
+
+
+// Hemwelatî (Citizenship) Provider - KYC paletinden
+pub struct CitizenshipProvider;
+impl pallet_trust::CitizenshipStatusProvider<AccountId> for CitizenshipProvider {
+	fn is_citizen(who: &AccountId) -> bool {
+		use pallet_identity_kyc::types::KycLevel;
+		pallet_identity_kyc::KycStatuses::<Runtime>::get(who) == KycLevel::Approved
+	}
+}
+
+pub struct ReferralProvider;
+impl pallet_trust::ReferralScoreProvider<AccountId> for ReferralProvider {
+	fn get_referral_score(who: &AccountId) -> u32 {
+		pallet_referral::ReferralCount::<Runtime>::get(who).saturating_mul(10) // Her referral için 10 puan
+	}
+}
+
+// Perwerde Score Provider - Education paletinden
+pub struct PerwerdeProvider;
+impl pallet_trust::PerwerdeScoreProvider<AccountId> for PerwerdeProvider {
+	fn get_perwerde_score(who: &AccountId) -> u32 {
+		// pallet-perwerde'nin kendi içindeki public 'get_perwerde_score' fonksiyonunu çağırıyoruz.
+		pallet_perwerde::Pallet::<Runtime>::get_perwerde_score(who)
+	}
+}
+
+// Tiki Score Provider - Tiki paletinden
+pub struct TikiProvider;
+impl pallet_trust::TikiScoreProvider<AccountId> for TikiProvider {
+	fn get_tiki_score(who: &AccountId) -> u32 {
+		pallet_tiki::Pallet::<Runtime>::get_tiki_score(who)
+	}
+}
+
+impl pallet_trust::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_trust::weights::SubstrateWeight<Runtime>;
+	type Score = u128;
+	type ScoreMultiplierBase = TrustScoreMultiplierBase;
+	type UpdateInterval = TrustUpdateInterval;
+
+	// Provider'ları bağla
+	type StakingScoreSource = StakingScore;
+	type ReferralScoreSource = ReferralProvider;
+	type PerwerdeScoreSource = PerwerdeProvider;
+	type TikiScoreSource = TikiProvider;
+	type CitizenshipSource = CitizenshipProvider;
+}
+
+// Mock CitizenInfo provider for pallet-welati
+pub struct MockCitizenInfo;
+impl pallet_welati::CitizenInfo for MockCitizenInfo {
+	fn citizen_count() -> u32 {
+		100_000u32
+	}
+}
+
+// Mock KYC provider SADECE test ortamında
+#[cfg(all(test, feature = "runtime-benchmarks"))]
+pub struct MockKycProvider;
+
+#[cfg(all(test, feature = "runtime-benchmarks"))]
+impl pallet_identity_kyc::types::KycStatus<AccountId> for MockKycProvider {
+	fn get_kyc_status(_who: &AccountId) -> pallet_identity_kyc::types::KycLevel {
+		pallet_identity_kyc::types::KycLevel::Approved
+	}
+}
+
+// Güvenli KYC provider selection
+#[cfg(all(test, feature = "runtime-benchmarks"))]
+type KycProviderForWelati = MockKycProvider;
+
+#[cfg(not(all(test, feature = "runtime-benchmarks")))]
+type KycProviderForWelati = IdentityKyc;
+
+impl pallet_welati::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_welati::weights::WeightInfo<Runtime>;
+	type Randomness = pallet_babe::RandomnessFromOneEpochAgo<Runtime>;
+	type RuntimeCall = RuntimeCall;
+	type TrustScoreSource = Trust;
+	type TikiSource = Tiki;
+	type CitizenSource = MockCitizenInfo;
+	type KycSource = KycProviderForWelati; // Conditional provider kullan
+	type ParliamentSize = ParliamentSize;
+	type DiwanSize = DiwanSize;
+	type ElectionPeriod = ElectionPeriod;
+	type CandidacyPeriod = CandidacyPeriod;
+	type CampaignPeriod = CampaignPeriod;
+	type ElectoralDistricts = ElectoralDistricts;
+	type CandidacyDeposit = CandidacyDeposit;
+	type PresidentialEndorsements = PresidentialEndorsements;
+	type ParliamentaryEndorsements = ParliamentaryEndorsements;
+}
 
 /// The runtime migrations per release.
 #[allow(deprecated, missing_docs)]
@@ -2263,11 +2482,14 @@ mod benches {
 		[pallet_xcm_benchmarks::generic, pallet_xcm_benchmarks::generic::Pallet::<Runtime>]
 		// Bizim özel paletlerimiz
 		[pallet_tiki, Tiki]
+		[pallet_welati, Welati]
 		[pallet_identity_kyc, IdentityKyc]
 		[pallet_referral, Referral]
 		[pallet_perwerde, Perwerde]
 		[pallet_staking_score, StakingScore]
-		
+		[pallet_trust, Trust]
+		[pallet_pez_treasury, PezTreasury]
+		[pallet_pez_rewards, PezRewards]
 	);
 }
 
@@ -2836,7 +3058,7 @@ sp_api::impl_runtime_apis! {
 	#[cfg(feature = "try-runtime")]
 	impl frame_try_runtime::TryRuntime<Block> for Runtime {
 		fn on_runtime_upgrade(checks: frame_try_runtime::UpgradeCheckSelect) -> (Weight, Weight) {
-			log::info!("try-runtime::on_runtime_upgrade rococo.");
+			log::info!("try-runtime::on_runtime_upgrade pezkuwichain.");
 			let weight = Executive::try_runtime_upgrade(checks).unwrap();
 			(weight, BlockWeights::get().max_block)
 		}

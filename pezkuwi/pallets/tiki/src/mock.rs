@@ -9,25 +9,24 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	BuildStorage,
 };
-use crate::Tiki as TikiEnum; // TikiEnum'u crate'den import ettik
+use crate::Tiki as TikiEnum;
 
 type Block = frame_system::mocking::MockBlock<Test>;
-pub type AccountId = u64; // Testlerde genellikle u64 kullanılır
-pub type Balance = u128; // Bakiyeler için u128
+pub type AccountId = u64;
+pub type Balance = u128;
 
-// Runtime'ı oluşturuyoruz. Paletlerin Config<T> yerine sadece temel tanımlarını veriyoruz.
-// frame_system zaten GenesisConfig'e sahip olduğu için onun için 'Config<T>' kullanıyoruz.
+// Runtime'ı oluştur - Identity pallet'ini de ekle
 construct_runtime!(
 	pub enum Test
 	{
 		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
 		Balances: pallet_balances::{Pallet, Call, Storage, Event<T>},
+		Identity: pallet_identity::{Pallet, Call, Storage, Event<T>},
 		Nfts: pallet_nfts::{Pallet, Call, Storage, Event<T>},
 		Tiki: pallet_tiki::{Pallet, Call, Storage, Event<T>},
 	}
 );
 
-// frame_system::Config implementasyonu
 impl frame_system::Config for Test {
 	type BaseCallFilter = frame_support::traits::Everything;
 	type BlockWeights = ();
@@ -57,11 +56,10 @@ impl frame_system::Config for Test {
 	type MultiBlockMigrator = ();
 	type PreInherents = ();
 	type PostInherents = ();
-	type PostTransactions = ();
+	type PostTransactions = (); // Eksik olan trait
 	type ExtensionsWeightInfo = ();
 }
 
-// pallet_balances::Config implementasyonu
 impl pallet_balances::Config for Test {
 	type Balance = Balance;
 	type DustRemoval = ();
@@ -79,11 +77,51 @@ impl pallet_balances::Config for Test {
 	type DoneSlashHandler = ();
 }
 
+// pallet_identity::Config implementasyonu
+parameter_types! {
+	pub const BasicDeposit: Balance = 1000;
+	pub const ByteDeposit: Balance = 10;
+	pub const SubAccountDeposit: Balance = 100;
+	pub const MaxSubAccounts: u32 = 10;
+	pub const MaxRegistrars: u32 = 10;
+	pub const UsernameDeposit: Balance = 100;
+	pub const PendingUsernameExpiration: u64 = 100;
+	pub const UsernameGracePeriod: u64 = 50;
+	pub const MaxSuffixLength: u32 = 10;
+	pub const MaxUsernameLength: u32 = 32;
+}
+
+impl pallet_identity::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type BasicDeposit = BasicDeposit;
+	type ByteDeposit = ByteDeposit;
+	type SubAccountDeposit = SubAccountDeposit;
+	type MaxSubAccounts = MaxSubAccounts;
+	type IdentityInformation = pallet_identity::legacy::IdentityInfo<MaxAdditionalFields>;
+	type MaxRegistrars = MaxRegistrars;
+	type Slashed = ();
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type RegistrarOrigin = frame_system::EnsureRoot<AccountId>;
+	type WeightInfo = ();
+	type OffchainSignature = sp_runtime::testing::TestSignature;
+	type SigningPublicKey = <sp_runtime::testing::TestSignature as sp_runtime::traits::Verify>::Signer;
+	type UsernameAuthorityOrigin = frame_system::EnsureRoot<AccountId>;
+	type UsernameDeposit = UsernameDeposit;
+	type PendingUsernameExpiration = PendingUsernameExpiration;
+	type UsernameGracePeriod = UsernameGracePeriod;
+	type MaxSuffixLength = MaxSuffixLength;
+	type MaxUsernameLength = MaxUsernameLength;
+}
+
+parameter_types! {
+	pub const MaxAdditionalFields: u32 = 10;
+}
+
 parameter_types! {
 	pub Features: pallet_nfts::PalletFeatures = pallet_nfts::PalletFeatures::default();
 }
 
-// pallet_nfts::Config implementasyonu
 impl pallet_nfts::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type CollectionId = u32;
@@ -115,53 +153,111 @@ impl pallet_nfts::Config for Test {
 }
 
 parameter_types! {
-    // Testte oluşturabildiğimiz tek ID `0` olduğu için sabitimizi `0` yapıyoruz.
 	pub const TikiCollectionId: u32 = 0;
-    // Anlaştığımız üzere, teknik üst sınırı 100 olarak belirliyoruz.
-    pub const MaxTikisPerUser: u32 = 100;
+	pub const MaxTikisPerUser: u32 = 100;
 }
 
-// crate::Config implementasyonu
 impl crate::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type AdminOrigin = frame_system::EnsureRoot<AccountId>;
 	type WeightInfo = ();
 	type TikiCollectionId = TikiCollectionId;
 	type MaxTikisPerUser = MaxTikisPerUser;
-	type ItemId = u32;
 	type Tiki = TikiEnum;
 }
 
-// Test ortamını başlatan fonksiyon
-pub fn new_test_ext() -> sp_io::TestExternalities {
-    // Balances GenesisConfig'ini ekleyerek test ortamına başlangıç bakiyeleri sağlıyoruz.
-    // Özellikle Root hesabı (genellikle 0 veya 1 olarak kabul edilir) için bakiye olması önemlidir.
-    let mut t = frame_system::GenesisConfig::<Test>::default()
-        .build_storage()
-        .unwrap();
-
-    pallet_balances::GenesisConfig::<Test> {
-        balances: vec![(1, 1000), (2, 1000), (3, 1000)], // Testlerde kullanılacak hesaplara bakiye veriyoruz.
-        dev_accounts: Default::default(), // `dev_accounts` alanı eklendi
-    }
-    .assimilate_storage(&mut t)
-    .unwrap();
-
-    let mut ext = sp_io::TestExternalities::new(t);
-    ext.execute_with(|| {
-        System::set_block_number(1);
-
-        // Nfts::force_create'i RuntimeOrigin::root() ile çağırıyoruz.
-        // Bu, testlerin başında Tiki koleksiyonunun oluşturulduğundan emin olur.
-        assert_ok!(Nfts::force_create(
+// Helper functions for tests
+pub fn setup_identity_for_user(account: AccountId) {
+    use pallet_identity::{Data, Judgement};
+    use pallet_identity::legacy::IdentityInfo;
+    
+    let info = IdentityInfo {
+        additional: Default::default(),
+        display: Data::Raw(b"Test User".to_vec().try_into().unwrap()),
+        legal: Data::None,
+        web: Data::None,
+        riot: Data::None,
+        email: Data::None,
+        pgp_fingerprint: None,
+        image: Data::None,
+        twitter: Data::None,
+    };
+    
+    // Registrar olarak kullanılacak hesaba balance ver
+    let _ = Balances::force_set_balance(RuntimeOrigin::root(), 1, 10000);
+    
+    // Set identity
+    assert_ok!(Identity::set_identity(
+        RuntimeOrigin::signed(account),
+        Box::new(info)
+    ));
+    
+    // Add registrar (account 1) - sadece bir kez eklenmesi için kontrol
+    if pallet_identity::Registrars::<Test>::get().is_empty() {
+        assert_ok!(Identity::add_registrar(
             RuntimeOrigin::root(),
-            1, // owner (Bu hesap genellikle testlerde root olarak kullanılır)
-            pallet_nfts::CollectionConfig {
-                settings: Default::default(),
-                max_supply: None,
-                mint_settings: Default::default(),
-            }
+            1
         ));
-    });
-    ext
+    }
+    
+    // Request judgement first
+    assert_ok!(Identity::request_judgement(
+        RuntimeOrigin::signed(account),
+        0, // registrar index
+        1000 // max fee
+    ));
+    
+    // Provide judgement - registrar tarafından
+    assert_ok!(Identity::provide_judgement(
+        RuntimeOrigin::signed(1), // registrar account
+        0, // registrar index
+        account, // target account
+        Judgement::KnownGood,
+        H256::zero()
+    ));
+}
+
+pub fn advance_blocks(blocks: u64) {
+    for _i in 0..blocks {
+        let current_block = System::block_number();
+        System::set_block_number(current_block + 1);
+        // Trigger hooks for the new block
+        <pallet_tiki::Pallet<Test> as frame_support::traits::Hooks<u64>>::on_initialize(current_block + 1);
+    }
+}
+
+pub fn new_test_ext() -> sp_io::TestExternalities {
+	let mut t = frame_system::GenesisConfig::<Test>::default()
+		.build_storage()
+		.unwrap();
+
+	pallet_balances::GenesisConfig::<Test> {
+		balances: vec![(1, 10000), (2, 10000), (3, 10000), (4, 10000), (5, 10000)],
+		dev_accounts: Default::default(),
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
+
+	let mut ext = sp_io::TestExternalities::new(t);
+	ext.execute_with(|| {
+		System::set_block_number(1);
+
+		// Tiki koleksiyonunu oluştur - mint permissions ile
+		assert_ok!(Nfts::force_create(
+			RuntimeOrigin::root(),
+			1, // owner
+			pallet_nfts::CollectionConfig {
+				settings: pallet_nfts::CollectionSettings::all_enabled(),
+				max_supply: None,
+				mint_settings: pallet_nfts::MintSettings {
+					mint_type: pallet_nfts::MintType::Public,
+					price: None,
+					start_block: None,
+					end_block: None,
+					default_item_settings: pallet_nfts::ItemSettings::all_enabled(),
+				},
+			}
+		));
+	});
+	ext
 }

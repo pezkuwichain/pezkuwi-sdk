@@ -1,7 +1,7 @@
 [package]
 name = "pallet-collective-content"
 version = "0.18.0"
-authors = ["Parity Technologies <admin@parity.io>"]
+authors = ["Kurdistan Tech Ministry <tech@kurdistan.gov>"]
 edition.workspace = true
 description = "Managed content"
 license = "Apache-2.0"

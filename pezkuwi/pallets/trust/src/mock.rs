@@ -1,72 +1,90 @@
-//! Mock runtime for pallet-trust.
-
 use crate as pallet_trust;
-use frame_support::{construct_runtime, derive_impl, parameter_types, traits::ConstU64};
-use sp_core::H256;
-use sp_runtime::{traits::{BlakeTwo256, IdentityLookup}, BuildStorage};
-use sp_std::collections::btree_map::BTreeMap;
-
-// Paletimizin ihtiyaç duyduğu Arayüzleri (trait) import ediyoruz.
-use pallet_trust::{
-	CitizenshipStatusProvider, PerwerdeScoreProvider, RawScore, ReferralScoreProvider,
-	StakingScoreProvider, TikiScoreProvider,
+use frame_support::{
+	derive_impl, parameter_types,
+	traits::{ConstU16, ConstU64},
 };
+use sp_core::H256;
+use sp_runtime::{
+	traits::{BlakeTwo256, IdentityLookup}, BuildStorage,
+};
+use frame_system as system;
 
 type Block = frame_system::mocking::MockBlock<Test>;
-pub type AccountId = u64;
-pub type BlockNumber = u64;
 
-construct_runtime!(
+frame_support::construct_runtime!(
 	pub enum Test
 	{
 		System: frame_system,
-		Trust: pallet_trust,
+		TrustPallet: pallet_trust,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(frame_system::config_preludes::TestDefaultConfig as frame_system::DefaultConfig)]
+impl system::Config for Test {
+	type BaseCallFilter = frame_support::traits::Everything;
+	type BlockWeights = ();
+	type BlockLength = ();
+	type DbWeight = ();
+	type RuntimeOrigin = RuntimeOrigin;
+	type RuntimeCall = RuntimeCall;
+	type Nonce = u64;
+	type Hash = H256;
+	type Hashing = BlakeTwo256;
+	type AccountId = u64;
+	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
+	type RuntimeEvent = RuntimeEvent;
+	type BlockHashCount = ConstU64<250>;
+	type Version = ();
+	type PalletInfo = PalletInfo;
+	type AccountData = ();
+	type OnNewAccount = ();
+	type OnKilledAccount = ();
+	type SystemWeightInfo = ();
+	type SS58Prefix = ConstU16<42>;
+	type OnSetCode = ();
+	type MaxConsumers = frame_support::traits::ConstU32<16>;
 }
 
-// --- Mock Veri Sağlayıcıları ---
-#[derive(Default)]
-pub struct MockStakingScoreProvider {
-	pub scores: BTreeMap<AccountId, (RawScore, BlockNumber)>,
+parameter_types! {
+	pub const ScoreMultiplierBase: u128 = 1000;
+	pub const TrustUpdateInterval: u64 = 100; // Test için kısa interval
 }
-impl StakingScoreProvider<AccountId, BlockNumber> for MockStakingScoreProvider {
-	fn get_staking_score(who: &AccountId) -> (RawScore, BlockNumber) {
-		self.scores.get(who).cloned().unwrap_or((0, 0))
+
+pub struct MockStakingScoreProvider;
+impl pallet_trust::StakingScoreProvider<u64, u64> for MockStakingScoreProvider {
+	fn get_staking_score(_who: &u64) -> (u32, u64) {
+		(100, 0)
 	}
 }
 
-#[derive(Default)]
-pub struct MockReferralScoreProvider { pub scores: BTreeMap<AccountId, RawScore> }
-impl ReferralScoreProvider<AccountId> for MockReferralScoreProvider {
-	fn get_referral_score(who: &AccountId) -> RawScore { self.scores.get(who).cloned().unwrap_or(0) }
+pub struct MockReferralScoreProvider;
+impl pallet_trust::ReferralScoreProvider<u64> for MockReferralScoreProvider {
+	fn get_referral_score(_who: &u64) -> u32 {
+		50
+	}
 }
 
-#[derive(Default)]
-pub struct MockPerwerdeScoreProvider { pub scores: BTreeMap<AccountId, RawScore> }
-impl PerwerdeScoreProvider<AccountId> for MockPerwerdeScoreProvider {
-	fn get_perwerde_score(who: &AccountId) -> RawScore { self.scores.get(who).cloned().unwrap_or(0) }
+pub struct MockPerwerdeScoreProvider;
+impl pallet_trust::PerwerdeScoreProvider<u64> for MockPerwerdeScoreProvider {
+	fn get_perwerde_score(_who: &u64) -> u32 {
+		30
+	}
 }
 
-#[derive(Default)]
-pub struct MockTikiScoreProvider { pub scores: BTreeMap<AccountId, RawScore> }
-impl TikiScoreProvider<AccountId> for MockTikiScoreProvider {
-	fn get_tiki_score(who: &AccountId) -> RawScore { self.scores.get(who).cloned().unwrap_or(0) }
+pub struct MockTikiScoreProvider;
+impl pallet_trust::TikiScoreProvider<u64> for MockTikiScoreProvider {
+	fn get_tiki_score(_who: &u64) -> u32 {
+		20
+	}
 }
 
-#[derive(Default)]
-pub struct MockCitizenshipStatusProvider { pub citizens: BTreeMap<AccountId, bool> }
-impl CitizenshipStatusProvider<AccountId> for MockCitizenshipStatusProvider {
-	fn is_citizen(who: &AccountId) -> bool { self.citizens.get(who).cloned().unwrap_or(false) }
-}
-
-// --- Paletimiz için Config Implementasyonu ---
-parameter_types! {
-	pub const ScoreMultiplierBase: u128 = 1000;
+pub struct MockCitizenshipStatusProvider;
+impl pallet_trust::CitizenshipStatusProvider<u64> for MockCitizenshipStatusProvider {
+	fn is_citizen(who: &u64) -> bool {
+		// Test için: 1-100 arası hesaplar vatandaş, 999 değil
+		*who >= 1 && *who <= 100 && *who != 999
+	}
 }
 
 impl pallet_trust::Config for Test {
@@ -74,8 +92,7 @@ impl pallet_trust::Config for Test {
 	type WeightInfo = ();
 	type Score = u128;
 	type ScoreMultiplierBase = ScoreMultiplierBase;
-
-	// Mock sağlayıcıları bağlıyoruz
+	type UpdateInterval = TrustUpdateInterval;
 	type StakingScoreSource = MockStakingScoreProvider;
 	type ReferralScoreSource = MockReferralScoreProvider;
 	type PerwerdeScoreSource = MockPerwerdeScoreProvider;
@@ -83,39 +100,6 @@ impl pallet_trust::Config for Test {
 	type CitizenshipSource = MockCitizenshipStatusProvider;
 }
 
-// --- Test Ortamı Kurulumu ---
-pub struct ExtBuilder {
-	pub staking_scores: BTreeMap<AccountId, (RawScore, BlockNumber)>,
-	pub referral_scores: BTreeMap<AccountId, RawScore>,
-	pub perwerde_scores: BTreeMap<AccountId, RawScore>,
-	pub tiki_scores: BTreeMap<AccountId, RawScore>,
-	pub citizens: BTreeMap<AccountId, bool>,
-}
-
-impl Default for ExtBuilder {
-	fn default() -> Self {
-		Self {
-			staking_scores: BTreeMap::new(),
-			referral_scores: BTreeMap::new(),
-			perwerde_scores: BTreeMap::new(),
-			tiki_scores: BTreeMap::new(),
-			citizens: BTreeMap::new(),
-		}
-	}
-}
-
-impl ExtBuilder {
-	pub fn build(self) -> sp_io::TestExternalities {
-		let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-		// Mock sağlayıcıların başlangıç verilerini ayarlıyoruz.
-		MockStakingScoreProvider { scores: self.staking_scores }.assimilate_storage(&mut t).unwrap();
-		MockReferralScoreProvider { scores: self.referral_scores }.assimilate_storage(&mut t).unwrap();
-		MockPerwerdeScoreProvider { scores: self.perwerde_scores }.assimilate_storage(&mut t).unwrap();
-		MockTikiScoreProvider { scores: self.tiki_scores }.assimilate_storage(&mut t).unwrap();
-		MockCitizenshipStatusProvider { citizens: self.citizens }.assimilate_storage(&mut t).unwrap();
-		
-		let mut ext = sp_io::TestExternalities::new(t);
-		ext.execute_with(|| System::set_block_number(1));
-		ext
-	}
+pub fn new_test_ext() -> sp_io::TestExternalities {
+	system::GenesisConfig::<Test>::default().build_storage().unwrap().into()
 }

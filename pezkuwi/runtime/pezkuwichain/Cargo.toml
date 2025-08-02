@@ -79,7 +79,11 @@ pallet-referral = { path = "../../pallets/referral", default-features = false }
 pallet-identity-kyc = { path = "../../pallets/identity-kyc", default-features = false }
 pallet-perwerde = { path = "../../pallets/perwerde", default-features = false }
 pallet-staking-score = { path = "../../pallets/staking-score", default-features = false }
-# pallet-trust = { path = "../../pallets/trust", default-features = false }
+pallet-trust = { path = "../../pallets/trust", default-features = false }
+pallet-pez-treasury = { path = "../../pallets/pez-treasury", default-features = false }
+pallet-pez-rewards = { path = "../../pallets/pez-rewards", default-features = false }
+pallet-welati = { path = "../../pallets/welati", default-features = false }
+
 pallet-nfts = { default-features = false, workspace = true }
 pezkuwi-primitives.workspace = true
 pezkuwi-runtime-common.workspace = true
@@ -118,6 +122,8 @@ xcm.workspace = true
 remote-externalities = { default-features = true, workspace = true }
 serde_json = { workspace = true, default-features = true }
 sp-keyring = { default-features = true, workspace = true }
+sp-io = { workspace = true }
+frame-support-test = { workspace = true }
 sp-tracing = { default-features = false, workspace = true }
 tokio = { features = ["macros"], workspace = true, default-features = true }
 
@@ -191,7 +197,10 @@ std = [
 	"pallet-identity-kyc/std",
 	"pallet-perwerde/std",
 	"pallet-staking-score/std",
-	# "pallet-trust/std",
+	"pallet-trust/std",
+	"pallet-pez-treasury/std",
+	"pallet-pez-rewards/std",
+	"pallet-welati/std",
 	"pallet-nfts/std",
 	"pallet-xcm/std",
 	"pezkuwi-parachain-primitives/std",
@@ -290,8 +299,10 @@ runtime-benchmarks = [
 	"pallet-referral/runtime-benchmarks",
 	"pallet-perwerde/runtime-benchmarks",
 	"pallet-staking-score/runtime-benchmarks",
-	# "pallet-trust/runtime-benchmarks",
-
+	"pallet-trust/runtime-benchmarks",
+	"pallet-pez-treasury/runtime-benchmarks",
+	"pallet-pez-rewards/runtime-benchmarks",
+	"pallet-welati/runtime-benchmarks",
 
 ]
 try-runtime = [

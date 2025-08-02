@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Validator Node 1
+  pezkuwi-validator-1:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.production
+    container_name: pezkuwi-validator-1
+    restart: unless-stopped
+    ports:
+      - "30333:30333"
+      - "9944:9944"
+      - "9615:9615"
+    volumes:
+      - validator1-data:/data
+      - ../chainspecs:/chainspecs:ro
+    environment:
+      - RUST_LOG=info
+    command:
+      - --validator
+      - --name=PezkuwiValidator1
+      - --chain=/chainspecs/pezkuwichain-production-raw.json
+      - --base-path=/data
+      - --port=30333
+      - --rpc-port=9944
+      - --prometheus-port=9615
+      - --prometheus-external
+      - --rpc-cors=all
+      - --rpc-methods=safe
+      - --unsafe-rpc-external
+    networks:
+      - pezkuwi-network
+
+  # RPC Node
+  pezkuwi-rpc:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.production
+    container_name: pezkuwi-rpc
+    restart: unless-stopped
+    ports:
+      - "9933:9933"
+      - "9945:9944"
+      - "9616:9615"
+    volumes:
+      - rpc-data:/data
+      - ../chainspecs:/chainspecs:ro
+    environment:
+      - RUST_LOG=info
+    command:
+      - --name=PezkuwiRPC
+      - --chain=/chainspecs/pezkuwichain-production-raw.json
+      - --base-path=/data
+      - --port=30334
+      - --rpc-port=9944
+      - --prometheus-port=9615
+      - --prometheus-external
+      - --rpc-cors=all
+      - --rpc-methods=safe
+      - --unsafe-rpc-external
+      - --rpc-max-connections=1000
+    networks:
+      - pezkuwi-network
+
+volumes:
+  validator1-data:
+  rpc-data:
+
+networks:
+  pezkuwi-network:
+    driver: bridge
