@@ -1,0 +1,8 @@
+=== VALIDATOR 4 KEYS ===
+Secret phrase:       nothing salute play hunt expand juice case chuckle volcano hollow wrist else
+  Network ID:        substrate
+  Secret seed:       0x83e0a0705bc631d3f1372b87f63b98a8b3303246d0669eeca9725786aa06352d
+  Public key (hex):  0x467c198dcc743c7b376092d0043e52842abaa06e07574712745be3e3cc0f8005
+  Account ID:        0x467c198dcc743c7b376092d0043e52842abaa06e07574712745be3e3cc0f8005
+  Public key (SS58): 5Df85Gf8Em6rpyeFuv1b8aUTcxzPaGdso5yE8LCygVcsvuoK
+  SS58 Address:      5Df85Gf8Em6rpyeFuv1b8aUTcxzPaGdso5yE8LCygVcsvuoK

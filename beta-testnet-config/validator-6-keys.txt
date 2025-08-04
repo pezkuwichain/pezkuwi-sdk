@@ -1,0 +1,8 @@
+=== VALIDATOR 6 KEYS ===
+Secret phrase:       shoulder gloom east possible deputy belt enact arrive immense toilet fashion where
+  Network ID:        substrate
+  Secret seed:       0x5b2c658c79ce699d0d70c8c496b9c954046978882f9904a31e3eb0b2e8d7e665
+  Public key (hex):  0x36dfe33eaf50466412e42a5c33b747d2e43fec983f50078e5af8be864cdbba66
+  Account ID:        0x36dfe33eaf50466412e42a5c33b747d2e43fec983f50078e5af8be864cdbba66
+  Public key (SS58): 5DJex8z7hGT3UGqnmAJDwDyDME66GDVCa9nmw3NXj6A9KawQ
+  SS58 Address:      5DJex8z7hGT3UGqnmAJDwDyDME66GDVCa9nmw3NXj6A9KawQ

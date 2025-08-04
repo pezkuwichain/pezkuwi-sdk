@@ -1,0 +1,8 @@
+=== VALIDATOR 1 KEYS ===
+Secret phrase:       soft erode pulse shy beyond result trophy pepper hour hidden wasp drum
+  Network ID:        substrate
+  Secret seed:       0xb932ad3186b4f1f3d16cf6cbdf89f66411e9d7de84945f24b09afc2a54b5a46f
+  Public key (hex):  0x0c31e8f9644eb2ca4ada916abc1ed48aab6f5c3d8b75b458244f96f06acbe57d
+  Account ID:        0x0c31e8f9644eb2ca4ada916abc1ed48aab6f5c3d8b75b458244f96f06acbe57d
+  Public key (SS58): 5CLhFvhowJL4BsjMcYfzBAnCAUvPpJ7cbnbjt6QbgG3P6ktW
+  SS58 Address:      5CLhFvhowJL4BsjMcYfzBAnCAUvPpJ7cbnbjt6QbgG3P6ktW

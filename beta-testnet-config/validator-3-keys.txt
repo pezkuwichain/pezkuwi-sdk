@@ -1,0 +1,8 @@
+=== VALIDATOR 3 KEYS ===
+Secret phrase:       glide creek ginger witness vault ivory wood enemy canoe scene bright pause
+  Network ID:        substrate
+  Secret seed:       0x0a61cec07b1cf5f311abd5a14e8d11984e92779cbfb564f7fa916077f9acc1cb
+  Public key (hex):  0x46c5672df211f004e8bed0489a0a494d7e1a8ca339a7586ae619b429e537e16f
+  Account ID:        0x46c5672df211f004e8bed0489a0a494d7e1a8ca339a7586ae619b429e537e16f
+  Public key (SS58): 5DfVrFoD4pp78gzyFSLysQau4kNdWCLm7RnS5sxLceHKxVGY
+  SS58 Address:      5DfVrFoD4pp78gzyFSLysQau4kNdWCLm7RnS5sxLceHKxVGY

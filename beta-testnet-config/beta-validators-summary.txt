@@ -1,0 +1,41 @@
+=== BETA TESTNET VALIDATOR ADDRESSES ===
+VALIDATOR 1:
+  Secret seed:       0xb932ad3186b4f1f3d16cf6cbdf89f66411e9d7de84945f24b09afc2a54b5a46f
+  Public key (hex):  0x0c31e8f9644eb2ca4ada916abc1ed48aab6f5c3d8b75b458244f96f06acbe57d
+  Public key (SS58): 5CLhFvhowJL4BsjMcYfzBAnCAUvPpJ7cbnbjt6QbgG3P6ktW
+
+VALIDATOR 2:
+  Secret seed:       0x382dfd5da56a8edd4123a3d6e01dcf1f2ee66c6bf32644d79299a4df591da5f5
+  Public key (hex):  0x2e79a8fdc85eb1304b9bfe27b633ae2d4a79a9fab0807f3765428867d0d0ce77
+  Public key (SS58): 5D7eCacDqkmgijnTP2n2Vd76MCFzvnBbTDDo9AsAFWxdKbra
+
+VALIDATOR 3:
+  Secret seed:       0x0a61cec07b1cf5f311abd5a14e8d11984e92779cbfb564f7fa916077f9acc1cb
+  Public key (hex):  0x46c5672df211f004e8bed0489a0a494d7e1a8ca339a7586ae619b429e537e16f
+  Public key (SS58): 5DfVrFoD4pp78gzyFSLysQau4kNdWCLm7RnS5sxLceHKxVGY
+
+VALIDATOR 4:
+  Secret seed:       0x83e0a0705bc631d3f1372b87f63b98a8b3303246d0669eeca9725786aa06352d
+  Public key (hex):  0x467c198dcc743c7b376092d0043e52842abaa06e07574712745be3e3cc0f8005
+  Public key (SS58): 5Df85Gf8Em6rpyeFuv1b8aUTcxzPaGdso5yE8LCygVcsvuoK
+
+VALIDATOR 5:
+  Secret seed:       0x4bc4818d97d83084839e1b7a4f4e90389cc2bcbcc2e711184a237f89a2b4e80b
+  Public key (hex):  0xbef0d34135fd62389bf2c051f22fd5386b194ef3723d3458e3c9e343a0322a64
+  Public key (SS58): 5GP4VgPsbqpPvTfwnCUgZHoh6Gcv3q1gQ2wdGUtp2NtQUBJh
+
+VALIDATOR 6:
+  Secret seed:       0x5b2c658c79ce699d0d70c8c496b9c954046978882f9904a31e3eb0b2e8d7e665
+  Public key (hex):  0x36dfe33eaf50466412e42a5c33b747d2e43fec983f50078e5af8be864cdbba66
+  Public key (SS58): 5DJex8z7hGT3UGqnmAJDwDyDME66GDVCa9nmw3NXj6A9KawQ
+
+VALIDATOR 7:
+  Secret seed:       0xb8ee3301eb2a5f7b7506942065e3b75273cd1d1d6cbd6fe57a0a37eaaa579e80
+  Public key (hex):  0x0cffc75157ebb23e446c24dd9300d7d3bfef868725de20ee9606d5ac21497e79
+  Public key (SS58): 5CMkQxa5jCsGJFg85x3EYoJX9dXeqqFJZczkeFQk3JVqmgjZ
+
+VALIDATOR 8:
+  Secret seed:       0x40f96addffcfa7b9b018ffa0026bfe955bb37af369d149a2053774b3b10fe522
+  Public key (hex):  0xf4c7a5e6e53a13bcdfb5f8629ebaf64d3ab8b6f669db318d1d7c9f2cc6131155
+  Public key (SS58): 5HberBv13pkPeF6bWFs1tJXwo8Y1qRJEoQ8Fp5AuCVPXiUjH
+

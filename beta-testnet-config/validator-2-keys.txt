@@ -1,0 +1,8 @@
+=== VALIDATOR 2 KEYS ===
+Secret phrase:       trial pear pudding fire execute shuffle vague earn shoulder diet drama affair
+  Network ID:        substrate
+  Secret seed:       0x382dfd5da56a8edd4123a3d6e01dcf1f2ee66c6bf32644d79299a4df591da5f5
+  Public key (hex):  0x2e79a8fdc85eb1304b9bfe27b633ae2d4a79a9fab0807f3765428867d0d0ce77
+  Account ID:        0x2e79a8fdc85eb1304b9bfe27b633ae2d4a79a9fab0807f3765428867d0d0ce77
+  Public key (SS58): 5D7eCacDqkmgijnTP2n2Vd76MCFzvnBbTDDo9AsAFWxdKbra
+  SS58 Address:      5D7eCacDqkmgijnTP2n2Vd76MCFzvnBbTDDo9AsAFWxdKbra

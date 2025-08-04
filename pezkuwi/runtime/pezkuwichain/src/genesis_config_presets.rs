@@ -571,6 +571,7 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		"versi_local_testnet" => versi_local_testnet_genesis(),
 		"production" => pezkuwichain_production_config_genesis(),
 		"real_testnet" => pezkuwichain_real_testnet_genesis(),
+		"beta_testnet" => pezkuwichain_beta_testnet_genesis(),
 		_ => return None,
 	};
 	Some(
@@ -831,6 +832,12 @@ fn pezkuwichain_real_testnet_genesis() -> serde_json::Value {
     })
 }
 
+/// Beta PezkuwiChain Testnet Genesis Configuration  
+fn pezkuwichain_beta_testnet_genesis() -> serde_json::Value {
+    // Real testnet ile aynı config, 8 validator ready
+    pezkuwichain_real_testnet_genesis()
+}
+
 /// List of supported presets.
 pub fn preset_names() -> Vec<PresetId> {
 	vec![
@@ -840,5 +847,6 @@ pub fn preset_names() -> Vec<PresetId> {
 		PresetId::from("versi_local_testnet"),
 		PresetId::from("production"),
 		PresetId::from("real_testnet"),
+		PresetId::from("beta_testnet"),
 	]
 }

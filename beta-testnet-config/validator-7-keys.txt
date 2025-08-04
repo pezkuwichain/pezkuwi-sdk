@@ -1,0 +1,8 @@
+=== VALIDATOR 7 KEYS ===
+Secret phrase:       body trigger letter close obey gain gather wait goat spirit link foot
+  Network ID:        substrate
+  Secret seed:       0xb8ee3301eb2a5f7b7506942065e3b75273cd1d1d6cbd6fe57a0a37eaaa579e80
+  Public key (hex):  0x0cffc75157ebb23e446c24dd9300d7d3bfef868725de20ee9606d5ac21497e79
+  Account ID:        0x0cffc75157ebb23e446c24dd9300d7d3bfef868725de20ee9606d5ac21497e79
+  Public key (SS58): 5CMkQxa5jCsGJFg85x3EYoJX9dXeqqFJZczkeFQk3JVqmgjZ
+  SS58 Address:      5CMkQxa5jCsGJFg85x3EYoJX9dXeqqFJZczkeFQk3JVqmgjZ

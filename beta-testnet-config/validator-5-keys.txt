@@ -1,0 +1,8 @@
+=== VALIDATOR 5 KEYS ===
+Secret phrase:       laptop tortoise blush all race chat tumble lava weapon cradle dish drift
+  Network ID:        substrate
+  Secret seed:       0x4bc4818d97d83084839e1b7a4f4e90389cc2bcbcc2e711184a237f89a2b4e80b
+  Public key (hex):  0xbef0d34135fd62389bf2c051f22fd5386b194ef3723d3458e3c9e343a0322a64
+  Account ID:        0xbef0d34135fd62389bf2c051f22fd5386b194ef3723d3458e3c9e343a0322a64
+  Public key (SS58): 5GP4VgPsbqpPvTfwnCUgZHoh6Gcv3q1gQ2wdGUtp2NtQUBJh
+  SS58 Address:      5GP4VgPsbqpPvTfwnCUgZHoh6Gcv3q1gQ2wdGUtp2NtQUBJh
