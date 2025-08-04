@@ -29,6 +29,7 @@ pezkuwi-primitives = { path = "../../primitives", default-features = false }
 # Standart Substrate paletleri
 pallet-balances = { default-features = false, workspace = true }
 pallet-scheduler = { default-features = false, workspace = true }
+pallet-nfts = { default-features = false, workspace = true }
 
 # PezkuwiChain özel paletleri
 pallet-trust = { path = "../trust", default-features = false }
@@ -54,6 +55,7 @@ std = [
     "log/std",
     "pallet-balances/std",
     "pallet-scheduler/std",
+    "pallet-nfts/std",
     "pallet-trust/std",
     "pallet-pez-treasury/std",
     "scale-info/std",
@@ -70,6 +72,7 @@ runtime-benchmarks = [
     "frame-system/runtime-benchmarks",
     "pallet-balances/runtime-benchmarks",
     "pallet-scheduler/runtime-benchmarks",
+    "pallet-nfts/runtime-benchmarks",
     "pallet-trust/runtime-benchmarks",
     "pallet-pez-treasury/runtime-benchmarks",
     "sp-runtime/runtime-benchmarks",
@@ -84,4 +87,5 @@ try-runtime = [
     "pallet-scheduler/try-runtime",
     "pallet-trust/try-runtime",
     "pallet-pez-treasury/try-runtime",
+    "pallet-nfts/try-runtime",
 ]

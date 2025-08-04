@@ -2,14 +2,14 @@ use frame_support::{assert_ok, traits::{Currency, Hooks}};
 use crate as pallet_pez_rewards;
 use frame_support::{
 	derive_impl, parameter_types,
-	traits::{ConstU16, ConstU64, ConstU128},
+	traits::{ConstU16, ConstU64, ConstU128, ConstU32},
 	PalletId,
 };
 use sp_core::H256;
 use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup}, BuildStorage,
 };
-use frame_system as system;
+use frame_system::{self as system, EnsureSigned};
 
 type Block = frame_system::mocking::MockBlock<Test>;
 
@@ -18,6 +18,7 @@ frame_support::construct_runtime!(
 	{
 		System: frame_system,
 		Balances: pallet_balances,
+		Nfts: pallet_nfts,
 		PezRewards: pallet_pez_rewards,
 		Trust: pallet_trust,
 	}
@@ -65,6 +66,47 @@ impl pallet_balances::Config for Test {
 	type FreezeIdentifier = ();
 	type MaxFreezes = ();
 	type DoneSlashHandler = ();
+}
+
+// Add NFT pallet configuration
+parameter_types! {
+	pub const CollectionDeposit: u128 = 100;
+	pub const ItemDeposit: u128 = 1;
+	pub const StringLimit: u32 = 256;
+	pub const MetadataDepositBase: u128 = 10;
+	pub const AttributeDepositBase: u128 = 10;
+	pub const DepositPerByte: u128 = 1;
+	pub const MaxTips: u32 = 10;
+	pub const MaxDeadlineDuration: u64 = 12345;
+	pub const MaxAttributesPerCall: u32 = 10;
+}
+
+impl pallet_nfts::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type CollectionId = u32;
+	type ItemId = u32;
+	type Currency = Balances;
+	type CreateOrigin = frame_support::traits::AsEnsureOriginWithArg<EnsureSigned<u64>>;
+	type ForceOrigin = frame_system::EnsureRoot<u64>;
+	type Locker = ();
+	type CollectionDeposit = CollectionDeposit;
+	type ItemDeposit = ItemDeposit;
+	type MetadataDepositBase = MetadataDepositBase;
+	type AttributeDepositBase = AttributeDepositBase;
+	type DepositPerByte = DepositPerByte;
+	type StringLimit = StringLimit;
+	type KeyLimit = ConstU32<32>;
+	type ValueLimit = ConstU32<256>;
+	type ApprovalsLimit = ConstU32<20>;
+	type ItemAttributesApprovalsLimit = ConstU32<20>;
+	type MaxTips = MaxTips;
+	type MaxDeadlineDuration = MaxDeadlineDuration;
+	type MaxAttributesPerCall = MaxAttributesPerCall;
+	type Features = ();
+	type OffchainSignature = sp_runtime::testing::TestSignature;
+	type OffchainPublic = sp_runtime::testing::UintAuthorityId;
+	type BlockNumberProvider = System;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -143,11 +185,13 @@ parameter_types! {
 impl pallet_pez_rewards::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
-	type WeightInfo = ();
+	type WeightInfo = crate::weights::WeightInfo<Test>;
 	type TrustScoreSource = MockTrustScoreProvider;
 	type IncentivePotId = IncentivePotId;
 	type ClawbackRecipient = ClawbackRecipient;
 	type ForceOrigin = frame_system::EnsureRoot<u64>;
+	type CollectionId = u32;
+	type ItemId = u32;
 }
 
 pub fn new_test_ext() -> sp_io::TestExternalities {
@@ -168,6 +212,9 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 		<Balances as Currency<u64>>::deposit_creating(&1, 1_000_000);
 		<Balances as Currency<u64>>::deposit_creating(&2, 1_000_000);
 		<Balances as Currency<u64>>::deposit_creating(&3, 1_000_000);
+		
+		// Note: NFT creation is simplified for testing
+		// In actual runtime, parliamentary NFTs would be properly created
 	});
 	
 	ext

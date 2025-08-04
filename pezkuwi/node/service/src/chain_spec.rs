@@ -332,3 +332,19 @@ pub fn pezkuwichain_staging_testnet_config() -> Result<PezkuwiChainSpec, String>
     .with_properties(pezkuwi_properties())
     .build())
 }
+
+/// PezkuwiChain real testnet config (8 validators, real token economics)
+#[cfg(feature = "pezkuwi-native")]
+pub fn pezkuwichain_real_testnet_config() -> Result<PezkuwiChainSpec, String> {
+    Ok(PezkuwiChainSpec::builder(
+        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi real testnet wasm not available")?,
+        Default::default(),
+    )
+    .with_name("PezkuwiChain Real Testnet")
+    .with_id("pezkuwichain_real_testnet")
+    .with_chain_type(ChainType::Live)
+    .with_genesis_config_preset_name("real_testnet")
+    .with_protocol_id("pezkuwi")
+    .with_properties(pezkuwi_properties())
+    .build())
+}

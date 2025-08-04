@@ -83,6 +83,7 @@ pallet-trust = { path = "../../pallets/trust", default-features = false }
 pallet-pez-treasury = { path = "../../pallets/pez-treasury", default-features = false }
 pallet-pez-rewards = { path = "../../pallets/pez-rewards", default-features = false }
 pallet-welati = { path = "../../pallets/welati", default-features = false }
+pallet-validator-pool = { path = "../../pallets/validator-pool", default-features = false }
 
 pallet-nfts = { default-features = false, workspace = true }
 pezkuwi-primitives.workspace = true
@@ -201,6 +202,7 @@ std = [
 	"pallet-pez-treasury/std",
 	"pallet-pez-rewards/std",
 	"pallet-welati/std",
+	"pallet-validator-pool/std",
 	"pallet-nfts/std",
 	"pallet-xcm/std",
 	"pezkuwi-parachain-primitives/std",
@@ -303,6 +305,7 @@ runtime-benchmarks = [
 	"pallet-pez-treasury/runtime-benchmarks",
 	"pallet-pez-rewards/runtime-benchmarks",
 	"pallet-welati/runtime-benchmarks",
+	"pallet-validator-pool/runtime-benchmarks",
 
 ]
 try-runtime = [
@@ -356,6 +359,7 @@ try-runtime = [
 	"pezkuwi-runtime-common/try-runtime",
 	"pezkuwi-runtime-parachains/try-runtime",
 	"sp-runtime/try-runtime",
+	"pallet-validator-pool/try-runtime",
 ]
 metadata-hash = ["substrate-wasm-builder/metadata-hash"]
 fast-runtime = ["pezkuwichain-constants/fast-runtime"]

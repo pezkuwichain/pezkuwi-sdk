@@ -34,7 +34,6 @@
 extern crate alloc;
 
 use alloc::{
-	boxed::Box, // Bu satırı ekleyin
 	collections::{btree_map::BTreeMap, vec_deque::VecDeque},
 	vec,
 	vec::Vec,
@@ -47,6 +46,7 @@ use frame_support::{
 };
 use pallet_balances::WeightInfo;
 use pallet_nis::WithMaximumOf;
+use pallet_validator_pool;
 use pezkuwi_primitives::{
 	slashing,
 	vstaging::{
@@ -523,18 +523,18 @@ impl sp_runtime::traits::Convert<AccountId, Option<AccountId>> for ValidatorIdOf
 	}
 }
 
-
 impl pallet_session::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type ValidatorId = AccountId;
-	type ValidatorIdOf = ValidatorIdOf;
-	type ShouldEndSession = Babe;
-	type NextSessionRotation = Babe;
-	type SessionManager = pallet_session::historical::NoteHistoricalRoot<Self, ValidatorManager>;
-	type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
-	type Keys = SessionKeys;
-	type DisablingStrategy = ();
-	type WeightInfo = weights::pallet_session::WeightInfo<Runtime>;
+    type RuntimeEvent = RuntimeEvent;
+    type ValidatorId = AccountId;
+    type ValidatorIdOf = ValidatorIdOf;
+    type ShouldEndSession = Babe;
+    type NextSessionRotation = Babe;
+    // Geçici olarak ValidatorManager kullan, sonra ValidatorPool'a geçeriz
+    type SessionManager = pallet_session::historical::NoteHistoricalRoot<Self, ValidatorManager>;
+    type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
+    type Keys = SessionKeys;
+    type DisablingStrategy = ();
+    type WeightInfo = weights::pallet_session::WeightInfo<Runtime>;
 }
 
 pub struct FullIdentificationOf;
@@ -627,33 +627,7 @@ impl OnUnbalanced<fungible::Imbalance<Balance, fungible::IncreaseIssuance<Accoun
 	}
 }
 
-/* // Subxt ile kullanılacak PezkuwiChain konfigürasyonu
-// #[subxt::subxt_client(runtime_spec_path = "../../target/release/wsm/pezkuwichain.wasm")]
-pub struct PezkuwiConfig; // Bu struct'ı tanımlıyoruz
-
-// Subxt'in runtime konfigürasyonu için gerekli trait implementasyonu
-impl subxt::Config for PezkuwiConfig {
-    type AccountId = AccountId;
-    type Address = sp_runtime::MultiAddress<AccountId, ()>;
-    type Signature = Signature;
-    type SignedExtra = TxExtension;
-    type AssetId = u32; // Bu, projenizin token ID tipi olmalı (örn. ERC-20 benzeri ID'ler için u32)
-    type Balance = Balance;
-    type BlockNumber = BlockNumber;
-    type Hash = Hash;
-    type Hasher = <Hash as sp_runtime::traits::Hash>::Hasher;
-    type Header = Header;
-    type Extrinsic = UncheckedExtrinsic;
-    type Index = Nonce;
-    type TxPayload = sp_runtime::OpaqueExtrinsic;
-    type Call = RuntimeCall;
-    type Nonce = Nonce;
-    type HrmpChannelId = u32; // Bu, HRMP kanal ID tipi olmalı (varsayılan olarak u32)
-} */
-
-
 // pallet_staking::Config için BenchmarkingConfig implementasyonu
-// Benchmarking sırasında daha fazla validator/nominator ile başlama yeteneği sağlar.
 pub struct PezkuwiStakingBenchmarkingConfig;
 impl pallet_staking::BenchmarkingConfig for PezkuwiStakingBenchmarkingConfig {
 	type MaxValidators = frame_support::traits::ConstU32<1000>; // Artırılmış değer
@@ -671,7 +645,7 @@ impl pallet_staking::Config for Runtime {
 	type SessionsPerEra = SessionsPerEra;
 	type BondingDuration = BondingDuration;
 	type SlashDeferDuration = SlashDeferDuration;
-	type SessionInterface = Self;
+	type SessionInterface = ();
 	type EraPayout = pallet_staking::ConvertCurve<RewardCurve>;
 	type NextNewSession = Session;
 	type MaxExposurePageSize = ConstU32<64>;
@@ -691,8 +665,8 @@ impl pallet_staking::Config for Runtime {
 	type HistoryDepth = HistoryDepth;
 	type NominationsQuota = pallet_staking::FixedNominationsQuota<16>;
 	type MaxUnlockingChunks = ConstU32<32>;
-	type Filter = frame_support::traits::Everything;
-	// type Filter = frame_support::traits::Nothing;
+	// type Filter = frame_support::traits::Everything;
+	type Filter = frame_support::traits::Nothing;
 	type OldCurrency = Balances; 
 	type BenchmarkingConfig = PezkuwiStakingBenchmarkingConfig;
 }
@@ -1190,11 +1164,13 @@ impl pallet_pez_treasury::Config for Runtime {
 impl pallet_pez_rewards::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
-    type WeightInfo = pallet_pez_rewards::weights::SubstrateWeight<Runtime>;
+    type WeightInfo = pallet_pez_rewards::weights::WeightInfo<Runtime>;
     type TrustScoreSource = Trust;
     type IncentivePotId = PezIncentivePotId;
     type ClawbackRecipient = QaziMuhammedAccount;
     type ForceOrigin = EnsureRoot<AccountId>;
+    type CollectionId = u32;  // Must match pallet_nfts::Config::CollectionId
+    type ItemId = u32;        // Must match pallet_nfts::Config::ItemId
 }
 
 parameter_types! {
@@ -2002,6 +1978,9 @@ construct_runtime! {
 		// PEZ Economic System
 		PezTreasury: pallet_pez_treasury = 101,
 		PezRewards: pallet_pez_rewards = 102,
+
+		// Validator Pool System
+    	ValidatorPool: pallet_validator_pool = 103,
         
 
 		// pub type NisCounterpartInstance = pallet_balances::Instance2;
@@ -2071,6 +2050,39 @@ construct_runtime! {
 // runtime/pezkuwichain/src/lib.rs içindeki setup_automated_scheduling fonksiyonunu DÜZELT:
 
 impl Runtime {
+    /// Runtime-specific implementation for parliamentary NFT distribution
+    pub fn distribute_parliamentary_rewards_runtime(
+        epoch: u32,
+        total_incentive_pool: Balance
+    ) -> sp_runtime::DispatchResult {
+        // Calculate 10% for parliamentary NFTs
+        let parliamentary_allocation = total_incentive_pool * 10 / 100;
+        let per_nft_reward = parliamentary_allocation / 201;
+
+        // Distribute to each NFT holder automatically
+        for nft_id in 1..=201u32 {
+            if let Some(owner) = pallet_nfts::Pallet::<Runtime>::owner(100u32, nft_id) {
+                let incentive_pot = PezRewards::incentive_pot_account_id();
+                
+                // Direct transfer - no claim needed
+                let _ = Balances::transfer(
+                    &incentive_pot,
+                    &owner,
+                    per_nft_reward,
+                    frame_support::traits::ExistenceRequirement::AllowDeath,
+                );
+
+                // Log the distribution (events will be handled by pallet during epoch finalization)
+                log::info!(
+                    "Parliamentary NFT {} reward distributed: {:?} to {:?} for epoch {}",
+                    nft_id, per_nft_reward, owner, epoch
+                );
+            }
+        }
+
+        Ok(())
+    }
+
     pub fn setup_automated_scheduling() -> sp_runtime::DispatchResult {
         // Aylık treasury release scheduling
         let treasury_call = RuntimeCall::PezTreasury(
@@ -2086,7 +2098,7 @@ impl Runtime {
             treasury_call.into(),
         )?;
 
-        // Aylık epoch finalization scheduling
+        // Aylık epoch finalization scheduling with parliamentary distribution
         let epoch_call = RuntimeCall::PezRewards(
             pallet_pez_rewards::Call::finalize_epoch {}
         );
@@ -2097,6 +2109,19 @@ impl Runtime {
             Some((432_000u32.into(), u32::MAX)),
             62,
             epoch_call.into(),
+        )?;
+
+        // Schedule parliamentary NFT reward distribution right after epoch finalization
+        let parliamentary_call = RuntimeCall::System(
+            frame_system::Call::remark { remark: b"parliamentary_distribution".to_vec() }
+        );
+        
+        Scheduler::schedule(
+            RuntimeOrigin::root(),
+            432_001u32.into(), // 1 block after epoch finalization
+            Some((432_000u32.into(), u32::MAX)),
+            61,
+            parliamentary_call.into(),
         )?;
 
         // Haftalık clawback scheduling (1 hafta offset ile)
@@ -2202,6 +2227,36 @@ impl pallet_trust::Config for Runtime {
 	type CitizenshipSource = CitizenshipProvider;
 }
 
+// Adapter Structs for ValidatorPool Integration
+pub struct ValidatorPoolTrustAdapter;
+impl pallet_validator_pool::TrustScoreProvider<AccountId> for ValidatorPoolTrustAdapter {
+	fn trust_score_of(who: &AccountId) -> u128 {
+		pallet_trust::Pallet::<Runtime>::calculate_trust_score(who)
+			.unwrap_or(0) // Hata durumunda 0 döndür
+	}
+}
+
+pub struct ValidatorPoolTikiAdapter;
+impl pallet_validator_pool::TikiScoreProvider<AccountId> for ValidatorPoolTikiAdapter {
+	fn get_tiki_score(who: &AccountId) -> u32 {
+		<pallet_tiki::Pallet<Runtime> as pallet_tiki::TikiScoreProvider<AccountId>>::get_tiki_score(who)
+	}
+}
+
+pub struct ValidatorPoolReferralAdapter;
+impl pallet_validator_pool::types::ReferralProvider<AccountId> for ValidatorPoolReferralAdapter {
+	fn get_referral_count(who: &AccountId) -> u32 {
+		pallet_referral::ReferralCount::<Runtime>::get(who)
+	}
+}
+
+pub struct ValidatorPoolPerwerdeAdapter;
+impl pallet_validator_pool::types::PerwerdeProvider<AccountId> for ValidatorPoolPerwerdeAdapter {
+	fn get_perwerde_score(who: &AccountId) -> u32 {
+		pallet_perwerde::Pallet::<Runtime>::get_perwerde_score(who)
+	}
+}
+
 // Mock CitizenInfo provider for pallet-welati
 pub struct MockCitizenInfo;
 impl pallet_welati::CitizenInfo for MockCitizenInfo {
@@ -2246,6 +2301,28 @@ impl pallet_welati::Config for Runtime {
 	type CandidacyDeposit = CandidacyDeposit;
 	type PresidentialEndorsements = PresidentialEndorsements;
 	type ParliamentaryEndorsements = ParliamentaryEndorsements;
+}
+
+parameter_types! {
+    // Validator Pool Configuration
+    pub const MaxValidatorsPerEra: u32 = 21;
+    pub const MaxValidatorPoolSize: u32 = 500;
+    pub const MinValidatorStakeAmount: Balance = 10_000 * HEZ;
+    pub const EraLength: BlockNumber = 24 * 60 * 10;
+}
+
+impl pallet_validator_pool::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type WeightInfo = pallet_validator_pool::weights::SubstrateWeight<Runtime>;
+    type Randomness = pallet_babe::RandomnessFromOneEpochAgo<Runtime>;
+    type TrustSource = ValidatorPoolTrustAdapter;
+    type TikiSource = ValidatorPoolTikiAdapter;
+    type ReferralSource = ValidatorPoolReferralAdapter;
+    type PerwerdeSource = ValidatorPoolPerwerdeAdapter;
+    type PoolManagerOrigin = EnsureRoot<AccountId>;
+    type MaxValidators = MaxValidatorsPerEra;
+    type MaxPoolSize = MaxValidatorPoolSize;
+    type MinStakeAmount = MinValidatorStakeAmount;
 }
 
 /// The runtime migrations per release.
@@ -2490,6 +2567,7 @@ mod benches {
 		[pallet_trust, Trust]
 		[pallet_pez_treasury, PezTreasury]
 		[pallet_pez_rewards, PezRewards]
+		[pallet_validator_pool, ValidatorPool]
 	);
 }
 

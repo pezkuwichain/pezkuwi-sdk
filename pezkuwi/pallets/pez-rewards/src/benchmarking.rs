@@ -27,6 +27,18 @@ mod benchmarks {
 	}
 
 	#[benchmark]
+	fn register_parliamentary_nft_owner() {
+		let owner: T::AccountId = account("owner", 0, 0);
+		let nft_id = 1u32;
+
+		#[extrinsic_call]
+		register_parliamentary_nft_owner(RawOrigin::Root, nft_id, owner.clone());
+
+		assert!(PezRewards::<T>::get_parliamentary_nft_owner(nft_id).is_some());
+		assert_eq!(PezRewards::<T>::get_parliamentary_nft_owner(nft_id).unwrap(), owner);
+	}
+
+	#[benchmark]
 	fn record_trust_score() {
 		// Setup - clear storage and initialize system
 		crate::EpochInfo::<T>::kill();
@@ -74,7 +86,7 @@ mod benchmarks {
 		
 		// Fast forward time to end of epoch
 		let current_block = frame_system::Pallet::<T>::block_number();
-		let target_block = current_block + crate::BLOCKS_PER_EPOCH.into();
+		let target_block = current_block + crate::pallet::BLOCKS_PER_EPOCH.into();
 		frame_system::Pallet::<T>::set_block_number(target_block);
 
 		#[extrinsic_call]
@@ -99,33 +111,36 @@ mod benchmarks {
 		
 		let user: T::AccountId = account("user", 0, 0);
 		
-		// Give user substantial initial balance to meet existential deposit requirement
-		let large_initial_balance: BalanceOf<T> = 1_000_000u128.try_into().unwrap_or_else(|_| {
-			BalanceOf::<T>::max_value() / 10000u32.into()
+		// Give user MASSIVE initial balance to meet existential deposit requirement  
+		let large_initial_balance: BalanceOf<T> = 1_000_000_000_000u128.try_into().unwrap_or_else(|_| {
+			BalanceOf::<T>::max_value() / 10u32.into()
 		});
 		let _ = T::Currency::make_free_balance_be(&user, large_initial_balance);
 		
 		// Manually setup complete scenario for claim
-		crate::UserEpochScores::<T>::insert(0, &user, 100u128);
+		crate::UserEpochScores::<T>::insert(0, &user, 1000u128); // Increased trust score
 		
-		// Setup incentive pot with funds
+		// Setup incentive pot with HUGE funds
 		let incentive_pot = PezRewards::<T>::incentive_pot_account_id();
-		let amount: BalanceOf<T> = 1_000_000_000u128.try_into().unwrap_or_else(|_| {
-			BalanceOf::<T>::max_value() / 1000u32.into()
+		let amount: BalanceOf<T> = 1_000_000_000_000_000u128.try_into().unwrap_or_else(|_| {
+			BalanceOf::<T>::max_value() / 10u32.into()
 		});
 		let _ = T::Currency::make_free_balance_be(&incentive_pot, amount);
 		
 		// Setup reward pool with valid claim period
 		let current_block = frame_system::Pallet::<T>::block_number();
-		let claim_deadline = current_block + crate::CLAIM_PERIOD_BLOCKS.into();
+		let claim_deadline = current_block + crate::pallet::CLAIM_PERIOD_BLOCKS.into();
 		
-		// Use smaller reward per point to avoid balance issues
-		let reward_per_point: BalanceOf<T> = 100u32.try_into().unwrap_or_else(|_| Zero::zero());
+		// Use MUCH larger reward per point to meet existential deposit requirements
+		let reward_per_point: BalanceOf<T> = 1_000_000u32.try_into().unwrap_or_else(|_| {
+			// Fallback to a very large amount
+			BalanceOf::<T>::max_value() / 1000000u32.into()
+		});
 		
 		let reward_pool = crate::EpochRewardPool {
 			epoch_index: 0,
 			total_reward_pool: amount,
-			total_trust_score: 100u128,
+			total_trust_score: 1000u128, // Matching trust score
 			reward_per_trust_point: reward_per_point,
 			participants_count: 1,
 			claim_deadline,

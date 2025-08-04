@@ -13,21 +13,38 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-use frame_support::{traits::{Currency, Get}, PalletId};
+use frame_support::{traits::{Currency, Get}, PalletId, Parameter};
 use frame_system::pallet_prelude::BlockNumberFor;
-use sp_runtime::traits::{AccountIdConversion, Saturating, Zero};
+use sp_runtime::traits::{AccountIdConversion, Saturating, Zero, Member};
 use pallet_trust::TrustScoreProvider;
+use codec::{Encode, Decode, MaxEncodedLen};
+use scale_info::TypeInfo;
 
 #[frame_support::pallet]
 pub mod pallet {
-	use super::{*, weights::WeightInfo};
+	use super::*;
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use sp_runtime::traits::{CheckedDiv, CheckedMul};
 
+	/// Weight functions trait for this pallet
+	pub trait WeightInfo {
+		fn initialize_rewards_system() -> Weight;
+		fn record_trust_score() -> Weight;
+		fn finalize_epoch() -> Weight;
+		fn claim_reward() -> Weight;
+		fn close_epoch() -> Weight;
+		fn register_parliamentary_nft_owner() -> Weight;
+	}
+
 	/// Epoch (dönem) sabitleri
 	pub const BLOCKS_PER_EPOCH: u32 = 432_000; // 1 ay = ~30 gün * 24 saat * 60 dakika * 10 blok/dakika
 	pub const CLAIM_PERIOD_BLOCKS: u32 = 100_800; // 1 hafta = ~7 gün * 24 saat * 60 dakita * 10 blok/dakika
+
+	/// Parliamentary NFT constants
+	pub const PARLIAMENTARY_COLLECTION_ID: u32 = 100;
+	pub const PARLIAMENTARY_NFT_COUNT: u32 = 201;
+	pub const PARLIAMENTARY_REWARD_PERCENT: u32 = 10; // 10% of incentive pool
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -36,7 +53,7 @@ pub mod pallet {
 	pub trait Config: frame_system::Config + pallet_trust::Config + TypeInfo {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type Currency: Currency<Self::AccountId>;
-		type WeightInfo: weights::WeightInfo;
+		type WeightInfo: WeightInfo;
 
 		/// Trust puanı sağlayıcısı
 		type TrustScoreSource: pallet_trust::TrustScoreProvider<Self::AccountId>;
@@ -51,6 +68,10 @@ pub mod pallet {
 
 		/// Root origin için yetki kontrolü
 		type ForceOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+
+		/// NFT Collection ID ve Item ID types - must match pallet_nfts::Config
+		type CollectionId: Member + Parameter + MaxEncodedLen + Copy + From<u32> + Into<u32>;
+		type ItemId: Member + Parameter + MaxEncodedLen + Copy + From<u32> + Into<u32>;
 	}
 
 	pub type BalanceOf<T> =
@@ -92,6 +113,18 @@ pub mod pallet {
 	#[pallet::storage]
 	#[pallet::getter(fn epoch_status)]
 	pub type EpochStatus<T: Config> = StorageMap<_, Blake2_128Concat, u32, EpochState, ValueQuery>;
+
+	/// Parliamentary NFT ID to owner mapping
+	/// This will be populated by governance or runtime integration
+	#[pallet::storage]
+	#[pallet::getter(fn parliamentary_nft_owners)]
+	pub type ParliamentaryNftOwners<T: Config> = StorageMap<
+		_,
+		Blake2_128Concat,
+		u32, // nft_id
+		T::AccountId, // owner
+		OptionQuery,
+	>;
 
 	#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	pub struct EpochData<T: Config> {
@@ -167,6 +200,13 @@ pub mod pallet {
 			epoch_index: u32,
 			trust_score: u128,
 		},
+		/// Parliamentary NFT reward automatically distributed
+		ParliamentaryNftRewardDistributed {
+			nft_id: u32,
+			owner: T::AccountId,
+			amount: BalanceOf<T>,
+			epoch: u32,
+		},
 	}
 
 	#[pallet::error]
@@ -216,7 +256,7 @@ pub mod pallet {
 		#[pallet::call_index(0)]
 		#[pallet::weight(<T as Config>::WeightInfo::initialize_rewards_system())]
 		pub fn initialize_rewards_system(origin: OriginFor<T>) -> DispatchResult {
-			T::ForceOrigin::ensure_origin(origin)?;
+			<T as Config>::ForceOrigin::ensure_origin(origin)?;
 			Self::do_initialize_rewards_system()
 		}
 
@@ -232,7 +272,7 @@ pub mod pallet {
 		#[pallet::call_index(2)]
 		#[pallet::weight(<T as Config>::WeightInfo::finalize_epoch())]
 		pub fn finalize_epoch(origin: OriginFor<T>) -> DispatchResult {
-			T::ForceOrigin::ensure_origin(origin)?;
+			<T as Config>::ForceOrigin::ensure_origin(origin)?;
 			Self::do_finalize_epoch()
 		}
 
@@ -248,15 +288,28 @@ pub mod pallet {
 		#[pallet::call_index(4)]
 		#[pallet::weight(<T as Config>::WeightInfo::close_epoch())]
 		pub fn close_epoch(origin: OriginFor<T>, epoch_index: u32) -> DispatchResult {
-			T::ForceOrigin::ensure_origin(origin)?;
+			<T as Config>::ForceOrigin::ensure_origin(origin)?;
 			Self::do_close_epoch(epoch_index)
+		}
+
+		/// Register parliamentary NFT owner (governance only)
+		#[pallet::call_index(5)]
+		#[pallet::weight(<T as Config>::WeightInfo::register_parliamentary_nft_owner())]
+		pub fn register_parliamentary_nft_owner(
+			origin: OriginFor<T>,
+			nft_id: u32,
+			owner: T::AccountId
+		) -> DispatchResult {
+			<T as Config>::ForceOrigin::ensure_origin(origin)?;
+			Self::do_register_parliamentary_nft_owner(nft_id, owner);
+			Ok(())
 		}
 	}
 
 	impl<T: Config> Pallet<T> {
 		/// Teşvik pot hesabını döndür
 		pub fn incentive_pot_account_id() -> T::AccountId {
-			T::IncentivePotId::get().into_account_truncating()
+			<T as Config>::IncentivePotId::get().into_account_truncating()
 		}
 
 		/// Ödül sistemini başlat
@@ -290,7 +343,7 @@ pub mod pallet {
 			ensure!(epoch_state == EpochState::Open, Error::<T>::EpochAlreadyClosed);
 
 			// Trust puanını al
-			let trust_score = T::TrustScoreSource::trust_score_of(who);
+			let trust_score = <T as Config>::TrustScoreSource::trust_score_of(who);
 			let trust_score_u128: u128 = trust_score.into();
 
 			// Sadece pozitif puanları kaydet
@@ -322,12 +375,18 @@ pub mod pallet {
 
 			// Teşvik pot bakiyesini al
 			let incentive_pot = Self::incentive_pot_account_id();
-			let total_reward_pool = T::Currency::free_balance(&incentive_pot);
+			let total_reward_pool = <T as Config>::Currency::free_balance(&incentive_pot);
 
 			ensure!(
 				total_reward_pool > Zero::zero(),
 				Error::<T>::InsufficientIncentivePot
 			);
+
+			// NEW: First, automatically distribute 10% to parliamentary NFT holders
+			Self::distribute_parliamentary_rewards(current_epoch, total_reward_pool)?;
+
+			// Calculate remaining pool for trust score rewards (90%)
+			let trust_score_pool = total_reward_pool * 90u32.into() / 100u32.into();
 
 			// Bu epoch'taki tüm kullanıcıların toplam trust puanını hesapla
 			let mut total_trust_score = 0u128;
@@ -343,7 +402,7 @@ pub mod pallet {
 			let reward_per_trust_point = if total_trust_score > 0 {
 				let trust_score_balance = BalanceOf::<T>::try_from(total_trust_score)
 					.map_err(|_| Error::<T>::CalculationOverflow)?;
-				total_reward_pool.checked_div(&trust_score_balance)
+				trust_score_pool.checked_div(&trust_score_balance)
 					.unwrap_or_else(Zero::zero)
 			} else {
 				Zero::zero()
@@ -355,7 +414,7 @@ pub mod pallet {
 			// Ödül havuzu bilgilerini kaydet
 			let reward_pool = EpochRewardPool {
 				epoch_index: current_epoch,
-				total_reward_pool,
+				total_reward_pool: trust_score_pool,
 				total_trust_score,
 				reward_per_trust_point,
 				participants_count,
@@ -424,28 +483,14 @@ pub mod pallet {
 				.checked_mul(&user_trust_balance)
 				.ok_or(Error::<T>::CalculationOverflow)?;
 
-			// Ödülü transfer et - BU SATIRLARI DEĞİŞTİRİN
+			// Ödülü transfer et
 			let incentive_pot = Self::incentive_pot_account_id();
-			
-			// SADECE test ortamında mock transfer
-			#[cfg(all(test, feature = "runtime-benchmarks"))]
-			{
-				let _ = T::Currency::deposit_creating(who, reward_amount);
-				let current_pot_balance = T::Currency::free_balance(&incentive_pot);
-				let remaining = current_pot_balance.saturating_sub(reward_amount);
-				let _ = T::Currency::make_free_balance_be(&incentive_pot, remaining);
-			}
-
-			// Production ve benchmark'ta normal transfer
-			#[cfg(not(all(test, feature = "runtime-benchmarks")))]
-			{
-				T::Currency::transfer(
-					&incentive_pot,
-					who,
-					reward_amount,
-					frame_support::traits::ExistenceRequirement::AllowDeath,
-				)?;
-			}
+			<T as Config>::Currency::transfer(
+				&incentive_pot,
+				who,
+				reward_amount,
+				frame_support::traits::ExistenceRequirement::AllowDeath,
+			)?;
 
 			// Talep edildi olarak işaretle
 			ClaimedRewards::<T>::insert(epoch_index, who, reward_amount);
@@ -479,12 +524,12 @@ pub mod pallet {
 
 			// Talep edilmemiş ödül miktarını hesapla
 			let incentive_pot = Self::incentive_pot_account_id();
-			let remaining_balance = T::Currency::free_balance(&incentive_pot);
+			let remaining_balance = <T as Config>::Currency::free_balance(&incentive_pot);
 			
 			// Clawback recipient'a transfer et
-			let clawback_recipient = T::ClawbackRecipient::get();
+			let clawback_recipient = <T as Config>::ClawbackRecipient::get();
 			if remaining_balance > Zero::zero() {
-				T::Currency::transfer(
+				<T as Config>::Currency::transfer(
 					&incentive_pot,
 					&clawback_recipient,
 					remaining_balance,
@@ -522,6 +567,59 @@ pub mod pallet {
 		/// Kullanıcının belirli bir epoch'tan talep ettiği ödül miktarını döndür
 		pub fn get_claimed_reward(epoch_index: u32, who: &T::AccountId) -> Option<BalanceOf<T>> {
 			ClaimedRewards::<T>::get(epoch_index, who)
+		}
+
+		/// Distribute rewards to parliamentary NFT holders automatically
+		pub fn distribute_parliamentary_rewards(
+			epoch: u32,
+			total_incentive_pool: BalanceOf<T>
+		) -> DispatchResult {
+			// Calculate 10% for parliamentary NFTs
+			let parliamentary_allocation = total_incentive_pool * PARLIAMENTARY_REWARD_PERCENT.into() / 100u32.into();
+			let per_nft_reward = parliamentary_allocation / PARLIAMENTARY_NFT_COUNT.into();
+
+			let incentive_pot = Self::incentive_pot_account_id();
+
+			// Distribute to each NFT holder automatically
+			for nft_id in 1..=PARLIAMENTARY_NFT_COUNT {
+				// Since we can't directly access pallet_nfts from here due to trait bound conflicts,
+				// we'll use a different approach: check if there's a pre-defined mapping
+				// or use the runtime's helper function through a trait
+				
+				// For now, we'll implement a simple storage-based approach
+				// The actual NFT ownership will be verified at runtime level
+				
+				// Check if this NFT has a registered owner in our pallet
+				if let Some(owner) = Self::get_parliamentary_nft_owner(nft_id) {
+					// Direct transfer to NFT owner
+					T::Currency::transfer(
+						&incentive_pot,
+						&owner,
+						per_nft_reward,
+						frame_support::traits::ExistenceRequirement::AllowDeath,
+					)?;
+
+					// Emit event for successful distribution
+					Self::deposit_event(Event::ParliamentaryNftRewardDistributed {
+						nft_id,
+						owner,
+						amount: per_nft_reward,
+						epoch,
+					});
+				}
+			}
+
+			Ok(())
+		}
+
+		/// Get parliamentary NFT owner from our storage
+		pub fn get_parliamentary_nft_owner(nft_id: u32) -> Option<T::AccountId> {
+			ParliamentaryNftOwners::<T>::get(nft_id)
+		}
+
+		/// Register parliamentary NFT owner (can be called by governance)
+		pub fn do_register_parliamentary_nft_owner(nft_id: u32, owner: T::AccountId) {
+			ParliamentaryNftOwners::<T>::insert(nft_id, owner);
 		}
 	}
 }

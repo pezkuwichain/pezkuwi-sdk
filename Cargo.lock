@@ -12818,6 +12818,7 @@ dependencies = [
  "frame-system",
  "log",
  "pallet-balances",
+ "pallet-nfts",
  "pallet-pez-treasury",
  "pallet-scheduler",
  "pallet-trust",
@@ -13672,6 +13673,27 @@ dependencies = [
  "sp-core 36.1.0",
  "sp-io 40.0.1",
  "sp-runtime 41.1.0",
+]
+
+[[package]]
+name = "pallet-validator-pool"
+version = "1.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-balances",
+ "pallet-session",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core 36.1.0",
+ "sp-io 40.0.1",
+ "sp-runtime 41.1.0",
+ "sp-staking",
+ "sp-std 14.0.0",
 ]
 
 [[package]]
@@ -16789,6 +16811,7 @@ dependencies = [
  "pallet-treasury",
  "pallet-trust",
  "pallet-utility",
+ "pallet-validator-pool",
  "pallet-vesting",
  "pallet-welati",
  "pallet-whitelist",
