@@ -1,0 +1,18 @@
+{
+  "name": "DKSApp",
+  "version": "1.0.0",
+  "description": "Dijital Kurdistan State - Mobile Application",
+  "main": "index.js",
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-native": "0.72.0"
+  },
+  "keywords": ["kurdistan", "blockchain", "pezkuwichain"],
+  "author": "Kurdistan Tech Ministry",
+  "license": "MIT"
+}
