@@ -42,3 +42,4 @@ target/
 *.scale
 justfile
 rustc-ice-*
+node_modules/
