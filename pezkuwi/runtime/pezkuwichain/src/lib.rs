@@ -238,11 +238,11 @@ parameter_types! {
 
 parameter_types! {
 	// pallet-nfts için temel depozito miktarları.
-	pub const CollectionDeposit: Balance = 10 * UNITS;
-	pub const ItemDeposit: Balance = 1 * UNITS;
-	pub const MetadataDepositBase: Balance = 1 * UNITS;
-	pub const AttributeDepositBase: Balance = 1 * UNITS;
-	pub const DepositPerByte: Balance = 1 * CENTS;
+	pub const NftsCollectionDeposit: Balance = 10 * UNITS;
+	pub const NftsItemDeposit: Balance = 1 * UNITS;
+	pub const NftsMetadataDepositBase: Balance = 1 * UNITS;
+	pub const NftsAttributeDepositBase: Balance = 1 * UNITS;
+	pub const NftsDepositPerByte: Balance = 1 * CENTS;
 
 	// pallet-tiki için koleksiyon ID'si.
 	pub const TikiCollectionIdConstant: u32 = 42;
@@ -401,6 +401,14 @@ parameter_types! {
 	pub const PreimageHoldReason: RuntimeHoldReason = RuntimeHoldReason::Preimage(pallet_preimage::HoldReason::Preimage);
 }
 
+parameter_types! {
+    pub const AssetDeposit: Balance = 100 * HEZ;
+    pub const ApprovalDeposit: Balance = 1 * HEZ;
+    pub const StringLimit: u32 = 50;
+    pub const MetadataDepositBase: Balance = 10 * HEZ;
+    pub const MetadataDepositPerByte: Balance = 1 * HEZ;
+}
+
 impl pallet_preimage::Config for Runtime {
 	type WeightInfo = weights::pallet_preimage::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
@@ -416,6 +424,30 @@ impl pallet_preimage::Config for Runtime {
 			Balance,
 		>,
 	>;
+}
+
+impl pallet_assets::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = Balance;
+	type AssetId = u32;
+	type AssetIdParameter = u32;
+	type Currency = Balances; 
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<0>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type CallbackHandle = ();
+	type WeightInfo = ();
+	type Holder = ();
+	type RemoveItemsLimit = ConstU32<1000>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 parameter_types! {
@@ -992,11 +1024,11 @@ impl pallet_nfts::Config for Runtime {
 	type ForceOrigin = EnsureRoot<AccountId>;
 	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
 	type Locker = ();
-	type CollectionDeposit = CollectionDeposit;
-	type ItemDeposit = ItemDeposit;
-	type MetadataDepositBase = MetadataDepositBase;
-	type AttributeDepositBase = AttributeDepositBase;
-	type DepositPerByte = DepositPerByte;
+	type CollectionDeposit = NftsCollectionDeposit;
+	type ItemDeposit = NftsItemDeposit;
+	type MetadataDepositBase = NftsMetadataDepositBase;
+	type AttributeDepositBase = NftsAttributeDepositBase;
+	type DepositPerByte = NftsDepositPerByte;
 	type StringLimit = ConstU32<256>;
 	type KeyLimit = ConstU32<64>;
 	type ValueLimit = ConstU32<256>;
@@ -1148,10 +1180,15 @@ parameter_types! {
 }
 
 // PEZ Treasury Config
+parameter_types! {
+    pub const PezAssetId: u32 = 1; // PEZ Token'ımızın ID'si 1 olacak
+}
+
 impl pallet_pez_treasury::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type Currency = Balances;
+    type Assets = Assets; // `Currency = Balances` yerine bunu kullanıyoruz
     type WeightInfo = pallet_pez_treasury::weights::SubstrateWeight<Runtime>;
+    type PezAssetId = PezAssetId; // Yeni eklediğimiz asset ID'sini bağlıyoruz
     type TreasuryPalletId = PezTreasuryPalletId;
     type IncentivePotId = PezIncentivePotId;
     type GovernmentPotId = PezGovernmentPotId;
@@ -1163,14 +1200,15 @@ impl pallet_pez_treasury::Config for Runtime {
 // PEZ Rewards Config
 impl pallet_pez_rewards::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type Currency = Balances;
+    type Assets = Assets; // `Currency = Balances` yerine bunu kullanıyoruz
     type WeightInfo = pallet_pez_rewards::weights::WeightInfo<Runtime>;
+    type PezAssetId = PezAssetId; // Yeni eklediğimiz asset ID'sini bağlıyoruz
     type TrustScoreSource = Trust;
     type IncentivePotId = PezIncentivePotId;
     type ClawbackRecipient = QaziMuhammedAccount;
     type ForceOrigin = EnsureRoot<AccountId>;
-    type CollectionId = u32;  // Must match pallet_nfts::Config::CollectionId
-    type ItemId = u32;        // Must match pallet_nfts::Config::ItemId
+    type CollectionId = u32;
+    type ItemId = u32;
 }
 
 parameter_types! {
@@ -1951,6 +1989,8 @@ construct_runtime! {
 		Bounties: pallet_bounties = 35,
 		ChildBounties: pallet_child_bounties = 40,
 
+		Assets: pallet_assets = 36,
+
 		// Nfts modules.
 		Nfts: pallet_nfts::{Pallet, Call, Storage, Event<T>} = 41,
 
@@ -2523,6 +2563,7 @@ mod benches {
 		[pallet_beefy_mmr, MmrLeaf]
 		[frame_benchmarking::baseline, Baseline::<Runtime>]
 		[pallet_bounties, Bounties]
+		[pallet_assets, pallet_assets::Pallet<Runtime>]
 		[pallet_child_bounties, ChildBounties]
 		[pallet_collective, Council]
 		[pallet_conviction_voting, ConvictionVoting]

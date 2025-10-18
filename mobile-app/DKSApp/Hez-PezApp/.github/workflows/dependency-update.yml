@@ -1,0 +1,94 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 0 * * MON'  # Every Monday at midnight
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Update npm dependencies
+        run: |
+          npx npm-check-updates -u
+          npm install
+          npm audit fix
+      
+      - name: Run tests after update
+        run: |
+          npm run lint
+          npm test
+          npm run build
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update dependencies'
+          title: 'Automated Dependency Updates'
+          body: |
+            ## Automated Dependency Updates
+            
+            This PR contains automated dependency updates performed by GitHub Actions.
+            
+            ### Changes
+            - Updated npm dependencies to latest versions
+            - Applied security fixes from npm audit
+            
+            ### Checks Performed
+            - ✅ Linting passed
+            - ✅ Tests passed
+            - ✅ Build successful
+            
+            Please review the changes and merge if all checks pass.
+          branch: automated-dependency-updates
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
+          reviewers: |
+            team-leads
+            security-team
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run npm audit
+        run: npm audit
+        continue-on-error: true
+      
+      - name: Run Snyk test
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+      
+      - name: Upload dependency graph
+        uses: advanced-security/dependency-submission-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -78,12 +78,14 @@ pallet-tiki = { path = "../../pallets/tiki", default-features = false }
 pallet-referral = { path = "../../pallets/referral", default-features = false }
 pallet-identity-kyc = { path = "../../pallets/identity-kyc", default-features = false }
 pallet-perwerde = { path = "../../pallets/perwerde", default-features = false }
+pallet-assets = { workspace = true, default-features = false }
 pallet-staking-score = { path = "../../pallets/staking-score", default-features = false }
 pallet-trust = { path = "../../pallets/trust", default-features = false }
 pallet-pez-treasury = { path = "../../pallets/pez-treasury", default-features = false }
 pallet-pez-rewards = { path = "../../pallets/pez-rewards", default-features = false }
 pallet-welati = { path = "../../pallets/welati", default-features = false }
 pallet-validator-pool = { path = "../../pallets/validator-pool", default-features = false }
+
 
 pallet-nfts = { default-features = false, workspace = true }
 pezkuwi-primitives.workspace = true
@@ -150,6 +152,7 @@ std = [
 	"log/std",
 	"pallet-asset-rate/std",
 	"pallet-authority-discovery/std",
+	"pallet-assets/std",
 	"pallet-authorship/std",
 	"pallet-babe/std",
 	"pallet-bags-list/std",
@@ -251,6 +254,7 @@ runtime-benchmarks = [
 	"pallet-balances/runtime-benchmarks",
 	"pallet-beefy-mmr/runtime-benchmarks",
 	"pallet-bounties/runtime-benchmarks",
+	"pallet-assets/runtime-benchmarks",
 	"pallet-child-bounties/runtime-benchmarks",
 	"pallet-collective/runtime-benchmarks",
 	"pallet-conviction-voting/runtime-benchmarks",

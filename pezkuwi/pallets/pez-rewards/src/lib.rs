@@ -13,7 +13,7 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-use frame_support::{traits::{Currency, Get}, PalletId, Parameter};
+use frame_support::{traits::{fungibles::{Inspect, Mutate}, tokens::Preservation, Get}, PalletId, Parameter};
 use frame_system::pallet_prelude::BlockNumberFor;
 use sp_runtime::traits::{AccountIdConversion, Saturating, Zero, Member};
 use pallet_trust::TrustScoreProvider;
@@ -38,6 +38,7 @@ pub mod pallet {
 	}
 
 	/// Epoch (dönem) sabitleri
+	// pub const BLOCKS_PER_EPOCH: u32 = 20; // TEST İÇİN DEĞİŞTİRİLDİ - Orijinali 432_000
 	pub const BLOCKS_PER_EPOCH: u32 = 432_000; // 1 ay = ~30 gün * 24 saat * 60 dakika * 10 blok/dakika
 	pub const CLAIM_PERIOD_BLOCKS: u32 = 100_800; // 1 hafta = ~7 gün * 24 saat * 60 dakita * 10 blok/dakika
 
@@ -52,7 +53,9 @@ pub mod pallet {
 	#[pallet::config]
 	pub trait Config: frame_system::Config + pallet_trust::Config + TypeInfo {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
-		type Currency: Currency<Self::AccountId>;
+		type Assets: Mutate<Self::AccountId>;
+		#[pallet::constant]
+		type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;
 		type WeightInfo: WeightInfo;
 
 		/// Trust puanı sağlayıcısı
@@ -75,7 +78,7 @@ pub mod pallet {
 	}
 
 	pub type BalanceOf<T> =
-		<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+		<<T as Config>::Assets as Inspect<<T as frame_system::Config>::AccountId>>::Balance;
 
 	/// Epoch (dönem) bilgilerini tutan storage
 	#[pallet::storage]
@@ -375,7 +378,7 @@ pub mod pallet {
 
 			// Teşvik pot bakiyesini al
 			let incentive_pot = Self::incentive_pot_account_id();
-			let total_reward_pool = <T as Config>::Currency::free_balance(&incentive_pot);
+			let total_reward_pool = T::Assets::balance(T::PezAssetId::get(), &incentive_pot);
 
 			ensure!(
 				total_reward_pool > Zero::zero(),
@@ -452,47 +455,39 @@ pub mod pallet {
 		pub fn do_claim_reward(who: &T::AccountId, epoch_index: u32) -> DispatchResult {
 			let current_block = frame_system::Pallet::<T>::block_number();
 
-			// Epoch'un durumunu kontrol et
 			let epoch_state = EpochStatus::<T>::get(epoch_index);
 			ensure!(epoch_state == EpochState::ClaimPeriod, Error::<T>::ClaimPeriodExpired);
 
-			// Daha önce talep edilmiş mi kontrol et
 			ensure!(
 				!ClaimedRewards::<T>::contains_key(epoch_index, who),
 				Error::<T>::RewardAlreadyClaimed
 			);
 
-			// Ödül havuzu bilgilerini al
 			let reward_pool = EpochRewardPools::<T>::get(epoch_index)
 				.ok_or(Error::<T>::RewardPoolNotCalculated)?;
 
-			// Talep süresi geçmiş mi kontrol et
 			ensure!(
 				current_block <= reward_pool.claim_deadline,
 				Error::<T>::ClaimPeriodExpired
 			);
 
-			// Kullanıcının trust puanını al
 			let user_trust_score = UserEpochScores::<T>::get(epoch_index, who)
 				.ok_or(Error::<T>::NoTrustScoreForEpoch)?;
 
-			// Ödül miktarını hesapla
 			let user_trust_balance = BalanceOf::<T>::try_from(user_trust_score)
 				.map_err(|_| Error::<T>::CalculationOverflow)?;
 			let reward_amount = reward_pool.reward_per_trust_point
 				.checked_mul(&user_trust_balance)
 				.ok_or(Error::<T>::CalculationOverflow)?;
 
-			// Ödülü transfer et
 			let incentive_pot = Self::incentive_pot_account_id();
-			<T as Config>::Currency::transfer(
+			T::Assets::transfer(
+				T::PezAssetId::get(),
 				&incentive_pot,
 				who,
 				reward_amount,
-				frame_support::traits::ExistenceRequirement::AllowDeath,
+				Preservation::Expendable, // Fon transfer edilirken kaynak hesabın token'ı olmasa bile silinmesine izin ver
 			)?;
-
-			// Talep edildi olarak işaretle
 			ClaimedRewards::<T>::insert(epoch_index, who, reward_amount);
 
 			Self::deposit_event(Event::RewardClaimed {
@@ -508,36 +503,31 @@ pub mod pallet {
 		pub fn do_close_epoch(epoch_index: u32) -> DispatchResult {
 			let current_block = frame_system::Pallet::<T>::block_number();
 
-			// Epoch'un durumunu kontrol et
 			let epoch_state = EpochStatus::<T>::get(epoch_index);
 			ensure!(epoch_state == EpochState::ClaimPeriod, Error::<T>::EpochAlreadyClosed);
 
-			// Ödül havuzu bilgilerini al
 			let reward_pool = EpochRewardPools::<T>::get(epoch_index)
 				.ok_or(Error::<T>::RewardPoolNotCalculated)?;
 
-			// Talep süresi geçmiş mi kontrol et
 			ensure!(
 				current_block > reward_pool.claim_deadline,
 				Error::<T>::ClaimPeriodExpired
 			);
 
-			// Talep edilmemiş ödül miktarını hesapla
 			let incentive_pot = Self::incentive_pot_account_id();
-			let remaining_balance = <T as Config>::Currency::free_balance(&incentive_pot);
-			
-			// Clawback recipient'a transfer et
+			let remaining_balance = T::Assets::balance(T::PezAssetId::get(), &incentive_pot);
+
 			let clawback_recipient = <T as Config>::ClawbackRecipient::get();
 			if remaining_balance > Zero::zero() {
-				<T as Config>::Currency::transfer(
+				T::Assets::transfer(
+					T::PezAssetId::get(),
 					&incentive_pot,
 					&clawback_recipient,
 					remaining_balance,
-					frame_support::traits::ExistenceRequirement::AllowDeath,
+					Preservation::Expendable, // Fon transfer edilirken kaynak hesabın token'ı olmasa bile silinmesine izin ver
 				)?;
 			}
 
-			// Epoch'u kapalı olarak işaretle
 			EpochStatus::<T>::insert(epoch_index, EpochState::Closed);
 
 			Self::deposit_event(Event::EpochClosed {
@@ -574,32 +564,21 @@ pub mod pallet {
 			epoch: u32,
 			total_incentive_pool: BalanceOf<T>
 		) -> DispatchResult {
-			// Calculate 10% for parliamentary NFTs
 			let parliamentary_allocation = total_incentive_pool * PARLIAMENTARY_REWARD_PERCENT.into() / 100u32.into();
 			let per_nft_reward = parliamentary_allocation / PARLIAMENTARY_NFT_COUNT.into();
 
 			let incentive_pot = Self::incentive_pot_account_id();
 
-			// Distribute to each NFT holder automatically
 			for nft_id in 1..=PARLIAMENTARY_NFT_COUNT {
-				// Since we can't directly access pallet_nfts from here due to trait bound conflicts,
-				// we'll use a different approach: check if there's a pre-defined mapping
-				// or use the runtime's helper function through a trait
-				
-				// For now, we'll implement a simple storage-based approach
-				// The actual NFT ownership will be verified at runtime level
-				
-				// Check if this NFT has a registered owner in our pallet
 				if let Some(owner) = Self::get_parliamentary_nft_owner(nft_id) {
-					// Direct transfer to NFT owner
-					T::Currency::transfer(
+					T::Assets::transfer(
+						T::PezAssetId::get(),
 						&incentive_pot,
 						&owner,
 						per_nft_reward,
-						frame_support::traits::ExistenceRequirement::AllowDeath,
+						Preservation::Expendable, // Fon transfer edilirken kaynak hesabın token'ı olmasa bile silinmesine izin ver
 					)?;
 
-					// Emit event for successful distribution
 					Self::deposit_event(Event::ParliamentaryNftRewardDistributed {
 						nft_id,
 						owner,

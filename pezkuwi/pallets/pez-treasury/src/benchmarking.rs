@@ -1,9 +1,16 @@
+// pezkuwi/pallets/pez-treasury/src/benchmarking.rs
+
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 use crate::Pallet as PezTreasury;
 use frame_benchmarking::v2::*;
+use frame_support::traits::{
+	fungibles::{Inspect, Mutate},
+	Get, // HATA GİDERİLDİ: .get() fonksiyonu için bu trait eklendi
+};
 use frame_system::RawOrigin;
+use sp_runtime::traits::{Saturating, Zero};
 
 #[benchmarks]
 mod benchmarks {
@@ -11,7 +18,6 @@ mod benchmarks {
 
 	#[benchmark]
 	fn initialize_treasury() {
-		// Setup - Treasury'yi reset et (clean state için)
 		crate::TreasuryStartBlock::<T>::kill();
 		crate::HalvingInfo::<T>::kill();
 		crate::NextReleaseMonth::<T>::kill();
@@ -19,48 +25,50 @@ mod benchmarks {
 		#[extrinsic_call]
 		initialize_treasury(RawOrigin::Root);
 
-		// Verify treasury was initialized
 		assert!(crate::TreasuryStartBlock::<T>::get().is_some());
 		let halving_info = crate::HalvingInfo::<T>::get();
 		assert_eq!(halving_info.current_period, 0);
-		assert!(halving_info.monthly_amount > Zero::zero());
+		assert!(!halving_info.monthly_amount.is_zero());
 	}
 
 	#[benchmark]
 	fn force_genesis_distribution() {
-		// Setup - account'ları temizle ve clean state sağla
+		#[block]
+		{
+			PezTreasury::<T>::do_genesis_distribution().unwrap();
+		}
+
 		let treasury_account = PezTreasury::<T>::treasury_account_id();
 		let presale_account = T::PresaleAccount::get();
 		let founder_account = T::FounderAccount::get();
 
-		// Existing balances'ları temizle (benchmark için clean state)
-		// Not: Bu benchmark ortamı için güvenlidir
-		let _ = T::Currency::make_free_balance_be(&treasury_account, Zero::zero());
-		let _ = T::Currency::make_free_balance_be(&presale_account, Zero::zero());
-		let _ = T::Currency::make_free_balance_be(&founder_account, Zero::zero());
-
-		#[extrinsic_call]
-		force_genesis_distribution(RawOrigin::Root);
-
-		// Verify distribution happened
-		assert!(T::Currency::free_balance(&treasury_account) > Zero::zero());
-		assert!(T::Currency::free_balance(&presale_account) > Zero::zero());
-		assert!(T::Currency::free_balance(&founder_account) > Zero::zero());
+		assert!(!T::Assets::balance(T::PezAssetId::get(), &treasury_account).is_zero());
+		assert!(!T::Assets::balance(T::PezAssetId::get(), &presale_account).is_zero());
+		assert!(!T::Assets::balance(T::PezAssetId::get(), &founder_account).is_zero());
 	}
 
 	#[benchmark]
 	fn release_monthly_funds() {
-		// Setup - initialize treasury first ve clean state
+		// Setup
 		crate::TreasuryStartBlock::<T>::kill();
 		crate::HalvingInfo::<T>::kill();
 		crate::NextReleaseMonth::<T>::kill();
-		crate::MonthlyReleases::<T>::remove_all(None);
+		// Deprecated `remove_all` yerine `clear` kullanılıyor.
+		crate::MonthlyReleases::<T>::clear(u32::MAX, None);
 
-		// Treasury'yi initialize et
-		let _ = PezTreasury::<T>::do_genesis_distribution();
-		let _ = PezTreasury::<T>::do_initialize_treasury();
-		
-		// Fast forward time to make release possible
+		PezTreasury::<T>::do_initialize_treasury().unwrap();
+		let treasury_account = PezTreasury::<T>::treasury_account_id();
+		let initial_monthly_amount = PezTreasury::<T>::halving_info().monthly_amount;
+		let incentive_amount = initial_monthly_amount * 75u32.into() / 100u32.into();
+        let government_amount = initial_monthly_amount.saturating_sub(incentive_amount);
+
+		// Benchmark öncesi hazine hesabına yeterli PEZ token'ı mint et
+		let _ = T::Assets::mint_into(
+			T::PezAssetId::get(),
+			&treasury_account,
+			initial_monthly_amount,
+		);
+
 		let current_block = frame_system::Pallet::<T>::block_number();
 		let target_block = current_block + crate::BLOCKS_PER_MONTH.into() + 1u32.into();
 		frame_system::Pallet::<T>::set_block_number(target_block);
@@ -68,11 +76,8 @@ mod benchmarks {
 		#[extrinsic_call]
 		release_monthly_funds(RawOrigin::Root);
 
-		// Verify funds were released to pots
-		let incentive_balance = PezTreasury::<T>::get_incentive_pot_balance();
-		let government_balance = PezTreasury::<T>::get_government_pot_balance();
-		assert!(incentive_balance > Zero::zero());
-		assert!(government_balance > Zero::zero());
+		assert_eq!(PezTreasury::<T>::get_incentive_pot_balance(), incentive_amount);
+		assert_eq!(PezTreasury::<T>::get_government_pot_balance(), government_amount);
 	}
 
 	impl_benchmark_test_suite!(PezTreasury, crate::mock::new_test_ext(), crate::mock::Test);

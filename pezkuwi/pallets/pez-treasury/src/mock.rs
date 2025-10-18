@@ -1,7 +1,9 @@
+// pezkuwi/pallets/pez-treasury/src/mock.rs
+
 use crate as pallet_pez_treasury;
 use frame_support::{
-	derive_impl, parameter_types, assert_ok,
-	traits::{ConstU16, ConstU64, ConstU128, Hooks},
+	derive_impl, parameter_types,
+	traits::{ConstU16, ConstU32, ConstU64, ConstU128, AsEnsureOriginWithArg},
 	PalletId,
 };
 use sp_core::H256;
@@ -9,14 +11,17 @@ use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup}, BuildStorage,
 };
 use frame_system as system;
+use frame_system::EnsureRoot;
 
 type Block = frame_system::mocking::MockBlock<Test>;
+type AccountId = u64;
 
 frame_support::construct_runtime!(
 	pub enum Test
 	{
 		System: frame_system,
 		Balances: pallet_balances,
+		Assets: pallet_assets, // EKLENDİ
 		PezTreasury: pallet_pez_treasury,
 	}
 );
@@ -32,7 +37,7 @@ impl system::Config for Test {
 	type Nonce = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
-	type AccountId = u64;
+	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
 	type RuntimeEvent = RuntimeEvent;
@@ -62,8 +67,39 @@ impl pallet_balances::Config for Test {
 	type RuntimeFreezeReason = ();
 	type FreezeIdentifier = ();
 	type MaxFreezes = ();
-	type DoneSlashHandler = ();
 }
+
+// DÜZELTİLDİ: pallet_assets için Config
+parameter_types! {
+	pub const AssetDeposit: u128 = 1;
+	pub const ApprovalDeposit: u128 = 1;
+	pub const StringLimit: u32 = 50;
+	pub const MetadataDepositBase: u128 = 1;
+	pub const MetadataDepositPerByte: u128 = 1;
+}
+impl pallet_assets::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = u128;
+	type AssetId = u32;
+	type AssetIdParameter = u32;
+	type Currency = Balances;
+	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<0>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type WeightInfo = ();
+	type RemoveItemsLimit = ConstU32<1000>;
+	type CallbackHandle = ();
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
+}
+
 
 parameter_types! {
 	pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
@@ -71,12 +107,15 @@ parameter_types! {
 	pub const GovernmentPotId: PalletId = PalletId(*b"py/govmt");
 	pub const PresaleAccount: u64 = 100;
 	pub const FounderAccount: u64 = 200;
+	pub const PezAssetId: u32 = 1; // EKLENDİ
 }
 
+// DÜZELTİLDİ: PezTreasury için Config
 impl pallet_pez_treasury::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type Currency = Balances;
+	type Assets = Assets; // `Currency = Balances`'dan değiştirildi
 	type WeightInfo = ();
+	type PezAssetId = PezAssetId; // EKLENDİ
 	type TreasuryPalletId = TreasuryPalletId;
 	type IncentivePotId = IncentivePotId;
 	type GovernmentPotId = GovernmentPotId;
@@ -85,33 +124,27 @@ impl pallet_pez_treasury::Config for Test {
 	type ForceOrigin = frame_system::EnsureRoot<u64>;
 }
 
+// DÜZELTİLDİ: Genesis bloğu
 pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut ext: sp_io::TestExternalities = system::GenesisConfig::<Test>::default()
-		.build_storage()
-		.unwrap()
-		.into();
-	
+	let mut storage = system::GenesisConfig::<Test>::default().build_storage().unwrap();
+
+	// PEZ token'ını genesis'te yarat
+	let assets_genesis = pallet_assets::GenesisConfig::<Test> {
+		assets: vec![(
+			PezAssetId::get(), // id
+			0, // owner (root/alice)
+			true, // is_sufficient
+			1, // min_balance
+		)],
+		metadata: vec![(PezAssetId::get(), "Pez".into(), "PEZ".into(), 12)],
+		accounts: vec![],
+		next_asset_id: Some(2),
+	};
+	assets_genesis.assimilate_storage(&mut storage).unwrap();
+
+	let mut ext: sp_io::TestExternalities = storage.into();
 	ext.execute_with(|| {
-		// Genesis distribution ve treasury initialization
-		assert_ok!(PezTreasury::force_genesis_distribution(RuntimeOrigin::root()));
-		assert_ok!(PezTreasury::initialize_treasury(RuntimeOrigin::root()));
+		System::set_block_number(1);
 	});
-	
 	ext
-}
-
-// Test helper functions
-pub fn run_to_block(n: u64) {
-	while System::block_number() < n {
-		if System::block_number() > 1 {
-			System::on_finalize(System::block_number());
-		}
-		System::set_block_number(System::block_number() + 1);
-		System::on_initialize(System::block_number());
-	}
-}
-
-pub fn advance_blocks(num_blocks: u64) {
-	let target = System::block_number() + num_blocks;
-	run_to_block(target);
 }
