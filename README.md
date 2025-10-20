@@ -19,8 +19,10 @@ PezkuwiChain is a sovereign blockchain network built for the Kurdistan region, f
 
 ## Built by Kurdistan Tech Ministry
 
-**Website**: https://pezkuwichain.network  
-**License**: Kurdistan Talent Institute License  
+**Website**: https://pezkuwichain.io
+**Website**: https://pezkuwichain.app  
+**License**: Kurdistan Talent Institute License
+**Contact**: info@pezkuwichain.io
 **Contact**: tech@kurdistan.gov
 
 ---
