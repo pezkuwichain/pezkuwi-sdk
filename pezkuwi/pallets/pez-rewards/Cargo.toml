@@ -42,8 +42,12 @@ sp-io = { workspace = true, default-features = false, optional = true }
 
 [dev-dependencies]
 # Test için gerekli olan bağımlılıklar
-sp-core = { workspace = true, default-features = false }
-sp-io = { workspace = true, default-features = false }
+sp-core = { workspace = true, default-features = false, features = ["std"] }
+sp-io = { workspace = true, default-features = false, features = ["std"] }
+frame-system = { workspace = true, default-features = false, features = ["std"] }
+pallet-balances = { workspace = true, default-features = false, features = ["std"] }
+pallet-assets = { workspace = true, default-features = false, features = ["std"] }
+pallet-trust = { path = "../trust", default-features = false, features = ["std"] }
 
 [features]
 default = ["std"]

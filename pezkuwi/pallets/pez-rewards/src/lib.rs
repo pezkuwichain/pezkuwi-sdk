@@ -3,6 +3,7 @@
 pub use pallet::*;
 
 pub mod weights;
+pub use weights::WeightInfo;
 
 #[cfg(test)]
 mod mock;
@@ -27,16 +28,6 @@ pub mod pallet {
 	use frame_system::pallet_prelude::*;
 	use sp_runtime::traits::{CheckedDiv, CheckedMul};
 
-	/// Weight functions trait for this pallet
-	pub trait WeightInfo {
-		fn initialize_rewards_system() -> Weight;
-		fn record_trust_score() -> Weight;
-		fn finalize_epoch() -> Weight;
-		fn claim_reward() -> Weight;
-		fn close_epoch() -> Weight;
-		fn register_parliamentary_nft_owner() -> Weight;
-	}
-
 	/// Epoch (dönem) sabitleri
 	// pub const BLOCKS_PER_EPOCH: u32 = 20; // TEST İÇİN DEĞİŞTİRİLDİ - Orijinali 432_000
 	pub const BLOCKS_PER_EPOCH: u32 = 432_000; // 1 ay = ~30 gün * 24 saat * 60 dakika * 10 blok/dakika
@@ -56,7 +47,7 @@ pub mod pallet {
 		type Assets: Mutate<Self::AccountId>;
 		#[pallet::constant]
 		type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;
-		type WeightInfo: WeightInfo;
+		type WeightInfo: crate::weights::WeightInfo;
 
 		/// Trust puanı sağlayıcısı
 		type TrustScoreSource: pallet_trust::TrustScoreProvider<Self::AccountId>;
@@ -169,6 +160,8 @@ pub mod pallet {
 		}
 	}
 
+	// lib.rs içinde Event enum'una eklenecek kısım (satır ~174 civarı)
+
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
@@ -210,6 +203,11 @@ pub mod pallet {
 			amount: BalanceOf<T>,
 			epoch: u32,
 		},
+		/// Parliamentary NFT owner registered (YENİ EVENT - tests.rs:590 için)
+		ParliamentaryOwnerRegistered {
+			nft_id: u32,
+			owner: T::AccountId,
+		},
 	}
 
 	#[pallet::error]
@@ -234,7 +232,12 @@ pub mod pallet {
 		InvalidEpochIndex,
 		/// Hesaplama taşması
 		CalculationOverflow,
-	}
+		/// Sistem zaten başlatılmış.
+        AlreadyInitialized, // BU SATIRI EKLEYİN (tests.rs:37 için)        
+        /// Kullanıcının bu epoch'tan talep edeceği bir ödülü yok.
+        NoRewardToClaim, // BU SATIRI EKLEYİN (tests.rs:251 ve 333 için)
+        // EpochNotFinished zaten 'help' olarak göründüğü için lib.rs'te mevcut.
+    }
 
 	#[pallet::genesis_config]
 	#[derive(frame_support::DefaultNoBound)]
@@ -317,6 +320,11 @@ pub mod pallet {
 
 		/// Ödül sistemini başlat
 		pub fn do_initialize_rewards_system() -> DispatchResult {
+			// GUARD: Zaten initialize edilmiş mi kontrol et
+			if EpochInfo::<T>::exists() {
+				return Err(Error::<T>::AlreadyInitialized.into());
+			}
+			
 			let current_block = frame_system::Pallet::<T>::block_number();
 			
 			let epoch_data = EpochData {
@@ -349,16 +357,14 @@ pub mod pallet {
 			let trust_score = <T as Config>::TrustScoreSource::trust_score_of(who);
 			let trust_score_u128: u128 = trust_score.into();
 
-			// Sadece pozitif puanları kaydet
-			if trust_score_u128 > 0 {
-				UserEpochScores::<T>::insert(current_epoch, who, trust_score_u128);
+			// FIX: Sıfır skorları da kaydet (testler bunu bekliyor)
+			UserEpochScores::<T>::insert(current_epoch, who, trust_score_u128);
 
-				Self::deposit_event(Event::TrustScoreRecorded {
-					user: who.clone(),
-					epoch_index: current_epoch,
-					trust_score: trust_score_u128,
-				});
-			}
+			Self::deposit_event(Event::TrustScoreRecorded {
+				user: who.clone(),
+				epoch_index: current_epoch,
+				trust_score: trust_score_u128,
+			});
 
 			Ok(())
 		}
@@ -376,6 +382,10 @@ pub mod pallet {
 				Error::<T>::EpochNotFinished
 			);
 
+			// GUARD: Epoch zaten finalize edilmiş mi?
+			let epoch_state = EpochStatus::<T>::get(current_epoch);
+			ensure!(epoch_state == EpochState::Open, Error::<T>::EpochAlreadyClosed);
+
 			// Teşvik pot bakiyesini al
 			let incentive_pot = Self::incentive_pot_account_id();
 			let total_reward_pool = T::Assets::balance(T::PezAssetId::get(), &incentive_pot);
@@ -385,18 +395,16 @@ pub mod pallet {
 				Error::<T>::InsufficientIncentivePot
 			);
 
-			// NEW: First, automatically distribute 10% to parliamentary NFT holders
+			// Parliamentary rewards distribute et (10%)
 			Self::distribute_parliamentary_rewards(current_epoch, total_reward_pool)?;
 
-			// Calculate remaining pool for trust score rewards (90%)
+			// Kalan 90% trust score rewards için
 			let trust_score_pool = total_reward_pool * 90u32.into() / 100u32.into();
 
 			// Bu epoch'taki tüm kullanıcıların toplam trust puanını hesapla
 			let mut total_trust_score = 0u128;
 			let mut participants_count = 0u32;
 
-			// UserEpochScores'u iterate et (gerçek implementasyonda daha verimli yöntem kullanılmalı)
-			// Şimdilik basit bir yaklaşım kullanıyoruz
 			for (_, trust_score) in UserEpochScores::<T>::iter_prefix(current_epoch) {
 				total_trust_score = total_trust_score.saturating_add(trust_score);
 				participants_count = participants_count.saturating_add(1);
@@ -425,6 +433,8 @@ pub mod pallet {
 			};
 
 			EpochRewardPools::<T>::insert(current_epoch, reward_pool);
+			
+			// FIX: Epoch state'ini ClaimPeriod yap (Closed değil!)
 			EpochStatus::<T>::insert(current_epoch, EpochState::ClaimPeriod);
 
 			// Yeni epoch başlat
@@ -435,9 +445,10 @@ pub mod pallet {
 			EpochInfo::<T>::put(epoch_data);
 			EpochStatus::<T>::insert(new_epoch, EpochState::Open);
 
+			// FIX: Event'te trust_score_pool göster (total_reward_pool değil)
 			Self::deposit_event(Event::EpochRewardPoolCalculated {
 				epoch_index: current_epoch,
-				total_pool: total_reward_pool,
+				total_pool: trust_score_pool,  // ← 90% pool
 				total_trust_score,
 				participants_count,
 				claim_deadline,
@@ -451,7 +462,6 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Ödül talep et
 		pub fn do_claim_reward(who: &T::AccountId, epoch_index: u32) -> DispatchResult {
 			let current_block = frame_system::Pallet::<T>::block_number();
 
@@ -480,13 +490,16 @@ pub mod pallet {
 				.checked_mul(&user_trust_balance)
 				.ok_or(Error::<T>::CalculationOverflow)?;
 
+			// FIX: Eğer reward 0 ise, claim edilecek bir şey yok
+			ensure!(reward_amount > Zero::zero(), Error::<T>::NoRewardToClaim);
+
 			let incentive_pot = Self::incentive_pot_account_id();
 			T::Assets::transfer(
 				T::PezAssetId::get(),
 				&incentive_pot,
 				who,
 				reward_amount,
-				Preservation::Expendable, // Fon transfer edilirken kaynak hesabın token'ı olmasa bile silinmesine izin ver
+				Preservation::Expendable,
 			)?;
 			ClaimedRewards::<T>::insert(epoch_index, who, reward_amount);
 
@@ -598,7 +611,13 @@ pub mod pallet {
 
 		/// Register parliamentary NFT owner (can be called by governance)
 		pub fn do_register_parliamentary_nft_owner(nft_id: u32, owner: T::AccountId) {
-			ParliamentaryNftOwners::<T>::insert(nft_id, owner);
+			ParliamentaryNftOwners::<T>::insert(nft_id, owner.clone());
+
+			// YENİ: Event emit et
+			Self::deposit_event(Event::ParliamentaryOwnerRegistered {
+				nft_id,
+				owner,
+			});
 		}
 	}
 }

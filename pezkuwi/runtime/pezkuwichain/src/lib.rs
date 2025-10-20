@@ -1201,7 +1201,7 @@ impl pallet_pez_treasury::Config for Runtime {
 impl pallet_pez_rewards::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Assets = Assets; // `Currency = Balances` yerine bunu kullanıyoruz
-    type WeightInfo = pallet_pez_rewards::weights::WeightInfo<Runtime>;
+    type WeightInfo = pallet_pez_rewards::weights::SubstrateWeight<Runtime>;
     type PezAssetId = PezAssetId; // Yeni eklediğimiz asset ID'sini bağlıyoruz
     type TrustScoreSource = Trust;
     type IncentivePotId = PezIncentivePotId;

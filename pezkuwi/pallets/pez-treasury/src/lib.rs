@@ -16,7 +16,7 @@ mod benchmarking;
 use frame_support::{
     traits::{
         fungibles::{Inspect, Mutate},
-        tokens::Preservation, // <-- Değişiklik burada yapıldı
+        tokens::Preservation,
         Get,
     },
     PalletId,
@@ -30,7 +30,7 @@ pub mod pallet {
     use super::{*, weights::WeightInfo};
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
-    use sp_runtime::traits::CheckedDiv;
+    // use sp_runtime::traits::CheckedDiv;
 
     pub const HALVING_PERIOD_MONTHS: u32 = 48; // 4 yıl = 48 ay
     pub const BLOCKS_PER_MONTH: u32 = 432_000; // ~30 gün * 24 saat * 60 dakika * 10 blok/dakika
@@ -289,7 +289,9 @@ pub mod pallet {
             let blocks_passed = current_block.saturating_sub(start_block);
             let months_passed: u32 = (blocks_passed / BLOCKS_PER_MONTH.into()).try_into().unwrap_or(0);
 
-            ensure!(months_passed >= next_month, Error::<T>::ReleaseTooEarly);
+            // 0. ayı serbest bırakmak için months_passed >= 1 olmalı (next_month + 1)
+            // 1. ayı serbest bırakmak için months_passed >= 2 olmalı
+            ensure!(months_passed >= next_month + 1, Error::<T>::ReleaseTooEarly);
 
             let mut halving_data = HalvingInfo::<T>::get();
 
@@ -321,14 +323,17 @@ pub mod pallet {
                 &incentive_pot,
                 incentive_amount,
                 Preservation::Preserve,
-            )?;
+            )
+            .map_err(|_| Error::<T>::InsufficientTreasuryBalance)?;
+
             T::Assets::transfer(
                 T::PezAssetId::get(),
                 &treasury_account,
                 &government_pot,
                 government_amount,
                 Preservation::Preserve,
-            )?;
+            )
+            .map_err(|_| Error::<T>::InsufficientTreasuryBalance)?;
 
             halving_data.total_released = halving_data.total_released.saturating_add(monthly_amount);
             HalvingInfo::<T>::put(halving_data);

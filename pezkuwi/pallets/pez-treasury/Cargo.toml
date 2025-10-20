@@ -39,6 +39,7 @@ sp-io = { workspace = true, default-features = false, optional = true }
 # Test için gerekli olan bağımlılıklar
 sp-core = { workspace = true, default-features = false }
 sp-io = { workspace = true, default-features = false }
+pallet-assets = { workspace = true, default-features = false, features = ["std"] } # <-- BU SATIRI EKLEYİN
 
 [features]
 default = ["std"]
@@ -48,7 +49,8 @@ std = [
     "frame-support/std",
     "frame-system/std",
     "log/std",
-    "pallet-balances/std",
+    "pallet-assets/std",
+    "pallet-balances/std",    
     "pallet-scheduler/std",
     "scale-info/std",
     "serde",
@@ -63,6 +65,7 @@ runtime-benchmarks = [
     "frame-benchmarking/runtime-benchmarks",
     "frame-support/runtime-benchmarks",
     "frame-system/runtime-benchmarks",
+    "pallet-assets/runtime-benchmarks",
     "pallet-balances/runtime-benchmarks",
     "pallet-scheduler/runtime-benchmarks",
     "sp-runtime/runtime-benchmarks",
