@@ -50,9 +50,9 @@ jobs:
           k8s_auth
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - uses: actions/download-artifact@v4.1.8
+      - uses: actions/download-artifact@v5
         with:
           name: prepare-pezkuwi-zombienet-artifacts-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
