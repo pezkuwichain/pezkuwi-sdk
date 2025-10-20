@@ -872,7 +872,7 @@ linregress = { version = "0.5.1" }
 lite-json = { version = "0.2.0", default-features = false }
 litep2p = { version = "0.9.4", features = ["websocket"] }
 log = { version = "0.4.22", default-features = false }
-macro_magic = { version = "0.5.1" }
+macro_magic = { version = "0.6.0" }
 maplit = { version = "1.0.2" }
 memmap2 = { version = "0.9.3" }
 memory-db = { version = "0.32.0", default-features = false }
