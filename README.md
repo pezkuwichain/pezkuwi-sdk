@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PezkuwiChain
 
 **The Kurdistan Blockchain Network**
@@ -24,3 +25,7 @@ PezkuwiChain is a sovereign blockchain network built for the Kurdistan region, f
 
 ---
 *Empowering Kurdistan through blockchain technology*
+=======
+# pezkuwi-sdk
+dijital state for kurdish nation on blockchain
+>>>>>>> 87652fb4c67fbc2e48871295928d664cb800aa39
