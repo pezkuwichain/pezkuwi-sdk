@@ -522,7 +522,7 @@ impl pallet_transaction_payment::Config for Runtime {
 }
 
 parameter_types! {
-	pub const MinimumPeriod: u64 = SLOT_DURATION / 2;
+	pub const MinimumPeriod: u64 = 1; // Development: fastest possible
 }
 impl pallet_timestamp::Config for Runtime {
 	type Moment = u64;

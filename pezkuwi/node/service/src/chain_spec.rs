@@ -27,9 +27,9 @@ use sc_telemetry::TelemetryEndpoints;
 use serde::{Deserialize, Serialize};
 // GEREKLİ EKLEMELER
 use pezkuwi_primitives::AccountId;
-use pezkuwi_runtime::{AssetsConfig, PezTreasuryPalletId};
-use sp_core::sr25519;
+use pezkuwi_runtime::{AssetsConfig, PezTreasuryPalletId}; // AssetsConfig geri eklendi
 use sp_runtime::traits::AccountIdConversion;
+use sp_consensus_grandpa::AuthorityId as GrandpaId; // Ed25519 düzeltmesi için gerekli
 #[cfg(feature = "westend-native")]
 use westend_runtime as westend;
 
@@ -274,40 +274,72 @@ fn pezkuwi_properties() -> sc_service::Properties {
     let _ = p.insert("ss58Format".into(), 42.into());
     p
 }
-
 /// PezkuwiChain development config (single validator Alice)
 #[cfg(feature = "pezkuwi-native")]
 pub fn pezkuwichain_development_config() -> Result<PezkuwiChainSpec, String> {
-    // Önce genesis yapılandırması için gerekli verileri hazırlıyoruz.
     const TOTAL_SUPPLY: u128 = 5_000_000_000 * 1_000_000_000_000; // 5 Milyar PEZ
+    const ALICE_PEZ: u128 = 1_000_000_000 * 1_000_000_000_000;     // 1 Milyar PEZ (test için)
+    const TREASURY_PEZ: u128 = TOTAL_SUPPLY - ALICE_PEZ;           // 4 Milyar PEZ
 
     let root_key = sp_keyring::Sr25519Keyring::Alice.to_account_id();
     let pez_treasury_account: AccountId = PezTreasuryPalletId::get().into_account_truncating();
 
+    // 1. Assets paletini NATIVE struct kullanarak yapılandır - Alice ve Treasury'ye PEZ ver
     let assets_config = AssetsConfig {
         assets: vec![(
             1,      // Asset ID
-            root_key, // Owner (Alice)
+            root_key.clone(), // Owner (Alice)
             true,   // is_sufficient
             1,      // min_balance
         )],
         metadata: vec![(1, "Pez".into(), "PEZ".into(), 12)],
-        accounts: vec![(1, pez_treasury_account.clone(), TOTAL_SUPPLY)],
+        accounts: vec![
+            (1, pez_treasury_account.clone(), TREASURY_PEZ),  // Treasury: 4 Milyar PEZ
+            (1, root_key.clone(), ALICE_PEZ),                 // Alice: 1 Milyar PEZ (testler için)
+        ],
         next_asset_id: Some(2),
     };
 
-    // Verileri `add_genesis_patch`'in beklediği JSON formatına dönüştürüyoruz.
-    let patch = serde_json::json!({
-        "assets": {
-            "assets": assets_config.assets,
-            "metadata": assets_config.metadata,
-            "accounts": assets_config.accounts,
-            "nextAssetId": assets_config.next_asset_id
+    // 2. Assets struct'ını JSON Value'ye dönüştür
+    let assets_patch = serde_json::json!({
+        "assets": assets_config
+    });
+
+    // 3. GRANDPA (KONSENSÜS) YAPILANDIRMASI (Ed25519 düzeltmesi)
+    let alice_authority_id: GrandpaId = sp_keyring::Ed25519Keyring::Alice
+        .public()
+        .into();
+    
+    let grandpa_patch = serde_json::json!({
+        "grandpa": {
+            "authorities": vec![(alice_authority_id, 1)]
         }
     });
-    let patch = serde_json::to_value(patch).expect("serialization works");
 
-    // Zincir yapılandırmasını oluşturup yamayı ekliyoruz.
+    // 4. BALANCES PATCH - Alice'e HEZ bakiyesi ver
+    let alice_account = sp_keyring::Sr25519Keyring::Alice.to_account_id();
+    let balances_patch = serde_json::json!({
+        "balances": {
+            "balances": vec![
+                (alice_account, 10_000_000_000_000_000_000_000u128), // 10 Milyar HEZ
+            ]
+        }
+    });
+
+    // 5. Tüm JSON patch'lerini birleştir
+    let mut patch_map = serde_json::Map::new();
+    if let serde_json::Value::Object(assets_obj) = assets_patch {
+        patch_map.extend(assets_obj);
+    }
+    if let serde_json::Value::Object(grandpa_obj) = grandpa_patch {
+        patch_map.extend(grandpa_obj);
+    }
+    if let serde_json::Value::Object(balances_obj) = balances_patch {
+        patch_map.extend(balances_obj);
+    }
+    let patch = serde_json::Value::Object(patch_map);
+
+    // 6. Zincir yapılandırmasını oluştur
     Ok(PezkuwiChainSpec::builder(
         pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi development wasm not available")?,
         Default::default(),
@@ -315,26 +347,10 @@ pub fn pezkuwichain_development_config() -> Result<PezkuwiChainSpec, String> {
     .with_name("Pezkuwi Development")
     .with_id("pezkuwichain_dev")
     .with_chain_type(ChainType::Development)
-    .with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
+    .with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET) 
     .with_protocol_id("pezkuwi")
     .with_properties(pezkuwi_properties())
-    .with_genesis_config_patch(patch)
-    .build())
-}
-
-/// PezkuwiChain local testnet config (multivalidator Alice + Bob)
-#[cfg(feature = "pezkuwi-native")]
-pub fn pezkuwichain_local_testnet_config() -> Result<PezkuwiChainSpec, String> {
-    Ok(PezkuwiChainSpec::builder(
-        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi local wasm not available")?,
-        Default::default(),
-    )
-    .with_name("Pezkuwi Local Testnet")
-    .with_id("pezkuwichain_local")
-    .with_chain_type(ChainType::Local)
-    .with_genesis_config_preset_name(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
-    .with_protocol_id("pezkuwi")
-    .with_properties(pezkuwi_properties())
+    .with_genesis_config_patch(patch) // Birleştirilmiş yamayı kullan
     .build())
 }
 
@@ -369,6 +385,23 @@ pub fn pezkuwichain_beta_testnet_config() -> Result<PezkuwiChainSpec, String> {
     .with_properties(pezkuwi_properties())
     .build())
 }
+
+/// PezkuwiChain local testnet config (multivalidator Alice + Bob)
+#[cfg(feature = "pezkuwi-native")]
+pub fn pezkuwichain_local_testnet_config() -> Result<PezkuwiChainSpec, String> {
+    Ok(PezkuwiChainSpec::builder(
+        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi local testnet wasm not available")?,
+        Default::default(),
+    )
+    .with_name("PezkuwiChain Local Testnet")
+    .with_id("pezkuwichain_local_testnet")
+    .with_chain_type(ChainType::Local)
+    .with_genesis_config_preset_name(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
+    .with_protocol_id("pezkuwi")
+    .with_properties(pezkuwi_properties())
+    .build())
+}
+
 
 /// PezkuwiChain real testnet config (8 validators, real token economics)
 #[cfg(feature = "pezkuwi-native")]
