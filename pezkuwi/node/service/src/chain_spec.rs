@@ -277,69 +277,123 @@ fn pezkuwi_properties() -> sc_service::Properties {
 /// PezkuwiChain development config (single validator Alice)
 #[cfg(feature = "pezkuwi-native")]
 pub fn pezkuwichain_development_config() -> Result<PezkuwiChainSpec, String> {
+    use sp_consensus_babe::AuthorityId as BabeId;
+    use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+    use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
+    use pezkuwi_primitives::{ValidatorId, AssignmentId};
+
     const TOTAL_SUPPLY: u128 = 5_000_000_000 * 1_000_000_000_000; // 5 Milyar PEZ
     const ALICE_PEZ: u128 = 1_000_000_000 * 1_000_000_000_000;     // 1 Milyar PEZ (test için)
     const TREASURY_PEZ: u128 = TOTAL_SUPPLY - ALICE_PEZ;           // 4 Milyar PEZ
 
     let root_key = sp_keyring::Sr25519Keyring::Alice.to_account_id();
+    let alice_account = sp_keyring::Sr25519Keyring::Alice.to_account_id();
     let pez_treasury_account: AccountId = PezTreasuryPalletId::get().into_account_truncating();
 
-    // 1. Assets paletini NATIVE struct kullanarak yapılandır - Alice ve Treasury'ye PEZ ver
+    // Authority keys
+    let alice_babe_id: BabeId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_grandpa_id: GrandpaId = sp_keyring::Ed25519Keyring::Alice.public().into();
+    let alice_validator_id: ValidatorId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_assignment_id: AssignmentId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_discovery_id: AuthorityDiscoveryId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_beefy_id: BeefyId = sp_core::ecdsa::Public::from_raw([0u8; 33]).into();
+
+    // 1. Assets patch
     let assets_config = AssetsConfig {
-        assets: vec![(
-            1,      // Asset ID
-            root_key.clone(), // Owner (Alice)
-            true,   // is_sufficient
-            1,      // min_balance
-        )],
+        assets: vec![(1, root_key.clone(), true, 1)],
         metadata: vec![(1, "Pez".into(), "PEZ".into(), 12)],
         accounts: vec![
-            (1, pez_treasury_account.clone(), TREASURY_PEZ),  // Treasury: 4 Milyar PEZ
-            (1, root_key.clone(), ALICE_PEZ),                 // Alice: 1 Milyar PEZ (testler için)
+            (1, pez_treasury_account.clone(), TREASURY_PEZ),
+            (1, root_key.clone(), ALICE_PEZ),
         ],
         next_asset_id: Some(2),
     };
 
-    // 2. Assets struct'ını JSON Value'ye dönüştür
     let assets_patch = serde_json::json!({
         "assets": assets_config
     });
 
-    // 3. GRANDPA (KONSENSÜS) YAPILANDIRMASI (Ed25519 düzeltmesi)
-    let alice_authority_id: GrandpaId = sp_keyring::Ed25519Keyring::Alice
-        .public()
-        .into();
-    
+    // 2. Grandpa patch
+    /* 
     let grandpa_patch = serde_json::json!({
         "grandpa": {
-            "authorities": vec![(alice_authority_id, 1)]
+            "authorities": vec![(alice_grandpa_id.clone(), 1u64)]
         }
-    });
+    }); */
 
-    // 4. BALANCES PATCH - Alice'e HEZ bakiyesi ver
-    let alice_account = sp_keyring::Sr25519Keyring::Alice.to_account_id();
+    // 3. Balances patch
     let balances_patch = serde_json::json!({
         "balances": {
-            "balances": vec![
-                (alice_account, 10_000_000_000_000_000_000_000u128), // 10 Milyar HEZ
-            ]
+            "balances": vec![(alice_account.clone(), 10_000_000_000_000_000_000_000u128)]
         }
     });
 
-    // 5. Tüm JSON patch'lerini birleştir
+    // 4. BABE patch - Sadece epochConfig (authorities Session'dan gelir)
+    // BABE config - Session ve Runtime'dan gelsin
+    // let babe_patch = serde_json::json!({ ... });
+
+    // 5. Session patch
+    let session_patch = serde_json::json!({
+        "session": {
+            "keys": vec![(
+                alice_account.clone(),
+                alice_account.clone(),
+                serde_json::json!({
+                    "babe": alice_babe_id.clone(),
+                    "grandpa": alice_grandpa_id.clone(),
+                    "para_validator": alice_validator_id.clone(),
+                    "para_assignment": alice_assignment_id.clone(),
+                    "authority_discovery": alice_discovery_id.clone(),
+                    "beefy": alice_beefy_id.clone(),
+                })
+            )]
+        }
+    });
+
+    // 6. Staking patch
+    let staking_patch = serde_json::json!({
+        "staking": {
+            "validatorCount": 1u32,
+            "minimumValidatorCount": 1u32,
+            "stakers": serde_json::json!([
+                [
+                    alice_account.clone(),
+                    alice_account.clone(),
+                    1_000_000_000_000_000_000_000u128,
+                    "Validator"
+                ]
+            ]),
+            "invulnerables": serde_json::json!([]),
+            "minNominatorBond": 1_000_000_000_000_000_000u128,
+            "minValidatorBond": 1_000_000_000_000_000_000u128
+        }
+    });
+
+    // 7. Tüm patch'leri birleştir
     let mut patch_map = serde_json::Map::new();
-    if let serde_json::Value::Object(assets_obj) = assets_patch {
-        patch_map.extend(assets_obj);
+    
+    if let serde_json::Value::Object(obj) = assets_patch {
+        patch_map.extend(obj);
     }
-    if let serde_json::Value::Object(grandpa_obj) = grandpa_patch {
-        patch_map.extend(grandpa_obj);
+    // if let serde_json::Value::Object(obj) = grandpa_patch {
+    //     patch_map.extend(obj);
+    // }
+    if let serde_json::Value::Object(obj) = balances_patch {
+        patch_map.extend(obj);
     }
-    if let serde_json::Value::Object(balances_obj) = balances_patch {
-        patch_map.extend(balances_obj);
+    // if let serde_json::Value::Object(obj) = babe_patch {
+    //     patch_map.extend(obj);
+    // }
+    if let serde_json::Value::Object(obj) = session_patch {
+        patch_map.extend(obj);
     }
+    if let serde_json::Value::Object(obj) = staking_patch {
+        patch_map.extend(obj);
+    }
+
     let patch = serde_json::Value::Object(patch_map);
 
-    // 6. Zincir yapılandırmasını oluştur
+    // 8. Chain spec oluştur
     Ok(PezkuwiChainSpec::builder(
         pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi development wasm not available")?,
         Default::default(),
@@ -347,10 +401,10 @@ pub fn pezkuwichain_development_config() -> Result<PezkuwiChainSpec, String> {
     .with_name("Pezkuwi Development")
     .with_id("pezkuwichain_dev")
     .with_chain_type(ChainType::Development)
-    .with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET) 
+    // .with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
     .with_protocol_id("pezkuwi")
     .with_properties(pezkuwi_properties())
-    .with_genesis_config_patch(patch) // Birleştirilmiş yamayı kullan
+    .with_genesis_config_patch(patch)
     .build())
 }
 

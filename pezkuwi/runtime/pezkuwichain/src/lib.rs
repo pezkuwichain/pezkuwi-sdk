@@ -505,7 +505,7 @@ impl pallet_balances::Config for Runtime {
 }
 
 parameter_types! {
-	pub const TransactionByteFee: Balance = 10 * MILLICENTS;
+	pub const TransactionByteFee: Balance = MILLICENTS;
 	/// This value increases the priority of `Operational` transactions by adding
 	/// a "virtual tip" that's equal to the `OperationalFeeMultiplier * final_fee`.
 	pub const OperationalFeeMultiplier: u8 = 5;
@@ -515,14 +515,14 @@ impl pallet_transaction_payment::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OnChargeTransaction = FungibleAdapter<Balances, ToAuthor<Runtime>>;
 	type OperationalFeeMultiplier = OperationalFeeMultiplier;
-	type WeightToFee = ConstantMultiplier<Balance, TransactionByteFee>;
+	type WeightToFee = ConstantMultiplier<Balance, ConstU128<{ MILLICENTS / 10 }>>;
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type FeeMultiplierUpdate = SlowAdjustingFeeUpdate<Self>;
 	type WeightInfo = weights::pallet_transaction_payment::WeightInfo<Runtime>;
 }
 
 parameter_types! {
-	pub const MinimumPeriod: u64 = 1; // Development: fastest possible
+	pub const MinimumPeriod: u64 = SLOT_DURATION / 2; // 3000ms (3 saniye)
 }
 impl pallet_timestamp::Config for Runtime {
 	type Moment = u64;

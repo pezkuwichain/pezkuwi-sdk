@@ -16,6 +16,7 @@
 
 //! Genesis configs presets for the PezkuwiChain runtime
 
+use alloc::string::ToString;  // ← Önce bu
 use crate::{
 	AssetsConfig, BabeConfig, BalancesConfig, ConfigurationConfig, PezTreasuryPalletId,
 	RegistrarConfig, RuntimeGenesisConfig, SessionConfig, SessionKeys, SudoConfig, 
@@ -227,7 +228,14 @@ fn pezkuwichain_testnet_genesis(
 			members: vec![root_key.clone()],
 			..Default::default()
 		},
-		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
+		babe: BabeConfig {
+			authorities: initial_authorities
+				.iter()
+				.map(|x| (x.2.clone(), 1))  // x.2 = BabeId
+				.collect(),
+			epoch_config: BABE_GENESIS_EPOCH_CONFIG,
+			_config: Default::default(),
+		},
 		sudo: SudoConfig { key: Some(root_key.clone()) },
 		configuration: ConfigurationConfig {
 			config: pezkuwi_runtime_parachains::configuration::HostConfiguration {
@@ -441,36 +449,8 @@ fn pezkuwichain_staging_testnet_config_genesis() -> serde_json::Value {
 
 #[cfg(not(feature = "runtime-benchmarks"))]
 fn pezkuwichain_development_config_genesis() -> serde_json::Value {
-	use crate::{AssetsConfig, PezTreasuryPalletId};
-	use sp_runtime::traits::AccountIdConversion;
-	
-	const TOTAL_PEZ: u128 = 5_000_000_000 * 1_000_000_000_000; // 5 Milyar PEZ
-	const ALICE_PEZ: u128 = 1_000_000_000 * 1_000_000_000_000;  // 1 Milyar PEZ (test için)
-	const TREASURY_PEZ: u128 = TOTAL_PEZ - ALICE_PEZ;           // 4 Milyar PEZ
-	
-	let alice = Sr25519Keyring::Alice.to_account_id();
-	let treasury: AccountId = PezTreasuryPalletId::get().into_account_truncating();
-	
-	let mut genesis = pezkuwichain_testnet_genesis(
-		Vec::from([get_authority_keys_from_seed("Alice")]),
-		alice.clone(),
-		Some(testnet_accounts()),
-	);
-	
-	// PEZ token yapılandırmasını ekle
-	if let serde_json::Value::Object(ref mut map) = genesis {
-		map.insert("assets".to_string(), serde_json::json!({
-			"assets": vec![(1u32, alice.clone(), true, 1u128)],
-			"metadata": vec![(1u32, "Pez", "PEZ", 12u8)],
-			"accounts": vec![
-				(1u32, treasury, TREASURY_PEZ),
-				(1u32, alice, ALICE_PEZ),
-			],
-			"nextAssetId": 2u32,
-		}));
-	}
-	
-	genesis
+	// Boş JSON döndür - tüm config chain_spec.rs'de
+	serde_json::json!({})
 }
 
 #[cfg(feature = "runtime-benchmarks")]

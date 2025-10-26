@@ -1,0 +1,460 @@
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/tiki/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/pez-rewards/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/perwerde/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/identity-kyc/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/trust/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/pez-treasury/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/staking-score/Cargo.toml: unused manifest key: dependencies.codec.package
+warning: /home/mamoste/PezkuwiChain/pezkuwi/pallets/staking-score/Cargo.toml: unused manifest key: dev-dependencies.pezkuwi-primitives.path
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/tracing/src/types.rs:451:15
+    |
+451 |         fn metadata(&self) -> &tracing_core::Metadata {
+    |                     ^^^^^     -----------------------
+    |                     |         ||
+    |                     |         |the same lifetime is hidden here
+    |                     |         the same lifetime is elided here
+    |                     the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+451 |         fn metadata(&self) -> &tracing_core::Metadata<'_> {
+    |                                                      ++++
+
+warning: `sp-tracing` (lib) generated 1 warning
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/primitives/core/src/traits.rs:63:24
+   |
+63 |     fn fetch_runtime_code(&self) -> Option<Cow<[u8]>>;
+   |                           ^^^^^            --------- the same lifetime is hidden here
+   |                           |
+   |                           the lifetime is elided here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+   = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+   |
+63 |     fn fetch_runtime_code(&self) -> Option<Cow<'_, [u8]>>;
+   |                                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/primitives/core/src/traits.rs:70:24
+   |
+70 |     fn fetch_runtime_code(&self) -> Option<Cow<[u8]>> {
+   |                           ^^^^^            --------- the same lifetime is hidden here
+   |                           |
+   |                           the lifetime is elided here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+   |
+70 |     fn fetch_runtime_code(&self) -> Option<Cow<'_, [u8]>> {
+   |                                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/primitives/core/src/traits.rs:79:24
+   |
+79 |     fn fetch_runtime_code(&self) -> Option<Cow<[u8]>> {
+   |                           ^^^^^            --------- the same lifetime is hidden here
+   |                           |
+   |                           the lifetime is elided here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+   |
+79 |     fn fetch_runtime_code(&self) -> Option<Cow<'_, [u8]>> {
+   |                                                +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/core/src/traits.rs:116:24
+    |
+116 |     fn fetch_runtime_code(&self) -> Option<Cow<[u8]>> {
+    |                           ^^^^^            --------- the same lifetime is hidden here
+    |                           |
+    |                           the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+116 |     fn fetch_runtime_code(&self) -> Option<Cow<'_, [u8]>> {
+    |                                                +++
+
+warning: `sp-core` (lib) generated 4 warnings
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/panic-handler/src/lib.rs:131:31
+    |
+131 | fn strip_control_codes(input: &str) -> std::borrow::Cow<str> {
+    |                               ^^^^     --------------------- the same lifetime is hidden here
+    |                               |
+    |                               the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+131 | fn strip_control_codes(input: &str) -> std::borrow::Cow<'_, str> {
+    |                                                         +++
+
+warning: `sp-panic-handler` (lib) generated 1 warning
+warning: enum `Error` is never used
+  --> substrate/primitives/state-machine/src/ext.rs:62:10
+   |
+62 | pub enum Error<B, E> {
+   |          ^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/state-machine/src/backend.rs:406:24
+    |
+406 |     fn fetch_runtime_code(&self) -> Option<std::borrow::Cow<[u8]>> {
+    |                           ^^^^^            ---------------------- the same lifetime is hidden here
+    |                           |
+    |                           the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+406 |     fn fetch_runtime_code(&self) -> Option<std::borrow::Cow<'_, [u8]>> {
+    |                                                             +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/state-machine/src/backend.rs:426:22
+    |
+426 |     pub fn runtime_code(&self) -> Result<RuntimeCode, &'static str> {
+    |                         ^^^^^            ----------- the same lifetime is hidden here
+    |                         |
+    |                         the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+426 |     pub fn runtime_code(&self) -> Result<RuntimeCode<'_>, &'static str> {
+    |                                                     ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/primitives/state-machine/src/overlayed_changes/offchain.rs:45:14
+   |
+45 |     pub fn iter(&mut self) -> impl Iterator<Item = OffchainOverlayedChangesItem> {
+   |                 ^^^^^^^^^                          ---------------------------- the same lifetime is hidden here
+   |                 |
+   |                 the lifetime is elided here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+   |
+45 |     pub fn iter(&mut self) -> impl Iterator<Item = OffchainOverlayedChangesItem<'_>> {
+   |                                                                                ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/primitives/state-machine/src/testing.rs:64:13
+   |
+64 |     pub fn ext(&mut self) -> Ext<H, InMemoryBackend<H>> {
+   |                ^^^^^^^^^     -------------------------- the same lifetime is hidden here
+   |                |
+   |                the lifetime is elided here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+   |
+64 |     pub fn ext(&mut self) -> Ext<'_, H, InMemoryBackend<H>> {
+   |                                  +++
+
+warning: `sp-state-machine` (lib) generated 5 warnings
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/runtime/src/generic/digest.rs:227:14
+    |
+227 |     pub fn dref(&self) -> DigestItemRef {
+    |                 ^^^^^     ------------- the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+227 |     pub fn dref(&self) -> DigestItemRef<'_> {
+    |                                        ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/runtime/src/offchain/http.rs:460:19
+    |
+460 |     pub fn into_iter(&self) -> HeadersIterator {
+    |                      ^^^^^     --------------- the same lifetime is hidden here
+    |                      |
+    |                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+460 |     pub fn into_iter(&self) -> HeadersIterator<'_> {
+    |                                               ++++
+
+warning: `sp-runtime` (lib) generated 2 warnings
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/api/src/lib.rs:540:33
+    |
+540 |     fn construct_runtime_api(call: &C) -> ApiRef<Self::RuntimeApi>;
+    |                                    ^^     ------------------------ the same lifetime is hidden here
+    |                                    |
+    |                                    the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+540 |     fn construct_runtime_api(call: &C) -> ApiRef<'_, Self::RuntimeApi>;
+    |                                                  +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/primitives/api/src/lib.rs:759:17
+    |
+759 |     fn runtime_api(&self) -> ApiRef<Self::Api>;
+    |                    ^^^^^     ----------------- the same lifetime is hidden here
+    |                    |
+    |                    the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+759 |     fn runtime_api(&self) -> ApiRef<'_, Self::Api>;
+    |                                     +++
+
+warning: `sp-api` (lib) generated 2 warnings
+warning: struct `WithName` is never constructed
+   --> substrate/frame/support/src/traits/tokens/currency/reservable.rs:244:12
+    |
+244 | pub struct WithName<NamedReservable, Id, AccountId>(
+    |            ^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: struct `NoVestedTransfers` is never constructed
+   --> substrate/frame/support/src/traits/tokens/currency/lockable.rs:150:12
+    |
+150 | pub struct NoVestedTransfers<C> {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: `frame-support` (lib) generated 2 warnings
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> pezkuwi/xcm/src/v3/junctions.rs:584:14
+    |
+584 |     pub fn iter(&self) -> JunctionsRefIterator {
+    |                 ^^^^^     -------------------- the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+584 |     pub fn iter(&self) -> JunctionsRefIterator<'_> {
+    |                                               ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> pezkuwi/xcm/src/v4/junctions.rs:537:14
+    |
+537 |     pub fn iter(&self) -> JunctionsRefIterator {
+    |                 ^^^^^     -------------------- the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+537 |     pub fn iter(&self) -> JunctionsRefIterator<'_> {
+    |                                               ++++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> pezkuwi/xcm/src/v5/junctions.rs:537:14
+    |
+537 |     pub fn iter(&self) -> JunctionsRefIterator {
+    |                 ^^^^^     -------------------- the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+537 |     pub fn iter(&self) -> JunctionsRefIterator<'_> {
+    |                                               ++++
+
+warning: `staging-xcm` (lib) generated 3 warnings
+warning: unnecessary parentheses around closure body
+    --> substrate/frame/identity/src/lib.rs:1417:34
+     |
+1417 |             .map_or(false, |registration| (registration.info.has_identity(fields)))
+     |                                           ^                                      ^
+     |
+     = note: `#[warn(unused_parens)]` on by default
+help: remove these parentheses
+     |
+1417 -             .map_or(false, |registration| (registration.info.has_identity(fields)))
+1417 +             .map_or(false, |registration| registration.info.has_identity(fields))
+     |
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/primitives/maybe-compressed-blob/src/lib.rs:75:25
+   |
+75 | pub fn decompress(blob: &[u8], bomb_limit: usize) -> Result<Cow<[u8]>, Error> {
+   |                         ^^^^^ the lifetime is elided here   --------- the same lifetime is hidden here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+   = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+   |
+75 | pub fn decompress(blob: &[u8], bomb_limit: usize) -> Result<Cow<'_, [u8]>, Error> {
+   |                                                                 +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> substrate/frame/message-queue/src/lib.rs:326:16
+    |
+326 |     fn peek_first(&self) -> Option<BoundedSlice<u8, IntoU32<HeapSize, Size>>> {
+    |                   ^^^^^            ----------------------------------------- the same lifetime is hidden here
+    |                   |
+    |                   the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+326 |     fn peek_first(&self) -> Option<BoundedSlice<'_, u8, IntoU32<HeapSize, Size>>> {
+    |                                                 +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+  --> substrate/frame/message-queue/src/mock_helpers.rs:92:28
+   |
+92 | pub fn msg<N: Get<u32>>(x: &str) -> BoundedSlice<u8, N> {
+   |                            ^^^^     ------------------- the same lifetime is hidden here
+   |                            |
+   |                            the lifetime is elided here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+   |
+92 | pub fn msg<N: Get<u32>>(x: &str) -> BoundedSlice<'_, u8, N> {
+   |                                                  +++
+
+warning: unused variable: `duration_multiplier`
+   --> pezkuwi/pallets/staking-score/src/lib.rs:177:9
+    |
+177 |             let (duration_multiplier, duration_for_return) = match StakingStartBlock::<T>::get(who) {
+    |                  ^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_duration_multiplier`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: `pallet-identity` (lib) generated 1 warning (run `cargo fix --lib -p pallet-identity` to apply 1 suggestion)
+warning: `sp-maybe-compressed-blob` (lib) generated 1 warning
+warning: `pallet-message-queue` (lib) generated 2 warnings
+warning: `pallet-staking-score` (lib) generated 1 warning
+warning: struct `FilterAssets` is never constructed
+  --> pezkuwi/xcm/xcm-executor/src/traits/drop_assets.rs:35:12
+   |
+35 | pub struct FilterAssets<D, A>(PhantomData<(D, A)>);
+   |            ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: struct `FilterOrigin` is never constructed
+  --> pezkuwi/xcm/xcm-executor/src/traits/drop_assets.rs:50:12
+   |
+50 | pub struct FilterOrigin<D, O>(PhantomData<(D, O)>);
+   |            ^^^^^^^^^^^^
+
+warning: unused import: `sp_std::vec::Vec`
+  --> pezkuwi/pallets/perwerde/src/lib.rs:27:6
+   |
+27 |     use sp_std::vec::Vec;
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: `staging-xcm-executor` (lib) generated 2 warnings
+warning: `pallet-perwerde` (lib) generated 1 warning (run `cargo fix --lib -p pallet-perwerde` to apply 1 suggestion)
+warning: struct `XcmFeeToAccount` is never constructed
+  --> pezkuwi/xcm/xcm-builder/src/fee_handling.rs:80:12
+   |
+80 | pub struct XcmFeeToAccount<AssetTransactor, AccountId, ReceiverAccount>(
+   |            ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: unused import: `LeafIndex`
+  --> substrate/frame/merkle-mountain-range/src/mmr/mmr.rs:24:74
+   |
+24 |         mmr_lib, mmr_lib::MMRStoreReadOps, utils::NodesUtils, Error, FullLeaf, LeafIndex,
+   |                                                                                ^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: `staging-xcm-builder` (lib) generated 1 warning
+warning: `pallet-mmr` (lib) generated 1 warning (run `cargo fix --lib -p pallet-mmr` to apply 1 suggestion)
+warning: unused import: `known_payloads`
+  --> substrate/frame/beefy-mmr/src/lib.rs:48:2
+   |
+48 |     known_payloads,
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `RawOrigin`
+  --> pezkuwi/pallets/welati/src/lib.rs:33:39
+   |
+33 | use frame_system::{pallet_prelude::*, RawOrigin};
+   |                                       ^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: `pallet-beefy-mmr` (lib) generated 1 warning (run `cargo fix --lib -p pallet-beefy-mmr` to apply 1 suggestion)
+warning: `pallet-welati` (lib) generated 1 warning (run `cargo fix --lib -p pallet-welati` to apply 1 suggestion)
+   Compiling pezkuwichain v1.0.0 (/home/mamoste/PezkuwiChain/pezkuwi/runtime/pezkuwichain)
+warning: struct `IndexedUtilityPalletId` is never constructed
+   --> substrate/frame/utility/src/lib.rs:611:8
+    |
+611 | struct IndexedUtilityPalletId(u16);
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `pallet-utility` (lib) generated 1 warning
+warning: pezkuwichain@1.0.0: You are building WASM runtime using `wasm32-unknown-unknown` target, although Rust >= 1.84 supports `wasm32v1-none` target!
+warning: pezkuwichain@1.0.0: You can install it with `rustup target add wasm32v1-none --toolchain stable-x86_64-unknown-linux-gnu` if you're using `rustup`.
+warning: pezkuwichain@1.0.0: After installing `wasm32v1-none` target, you must rebuild WASM runtime from scratch, use `cargo clean` before building.
+warning: pezkuwichain@1.0.0: You are building WASM runtime using `wasm32-unknown-unknown` target, although Rust >= 1.84 supports `wasm32v1-none` target!
+warning: pezkuwichain@1.0.0: You can install it with `rustup target add wasm32v1-none --toolchain stable-x86_64-unknown-linux-gnu` if you're using `rustup`.
+warning: pezkuwichain@1.0.0: After installing `wasm32v1-none` target, you must rebuild WASM runtime from scratch, use `cargo clean` before building.
+warning: unused imports: `AssetsConfig` and `PezTreasuryPalletId`
+  --> pezkuwi/runtime/pezkuwichain/src/genesis_config_presets.rs:21:2
+   |
+21 |     AssetsConfig, BabeConfig, BalancesConfig, ConfigurationConfig, PezTreasuryPalletId,
+   |     ^^^^^^^^^^^^                                                   ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `AssetsConfig`
+   --> pezkuwi/runtime/pezkuwichain/src/genesis_config_presets.rs:445:14
+    |
+445 |     use crate::{AssetsConfig, PezTreasuryPalletId};
+    |                 ^^^^^^^^^^^^
+
+warning: unused import: `sp_core::crypto::UncheckedInto`
+   --> pezkuwi/runtime/pezkuwichain/src/genesis_config_presets.rs:728:9
+    |
+728 |     use sp_core::crypto::UncheckedInto;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `ValidatorPoolConfig` is never constructed
+   --> pezkuwi/runtime/pezkuwichain/src/genesis_config_presets.rs:718:12
+    |
+718 | pub struct ValidatorPoolConfig {
+    |            ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `pezkuwichain` (lib) generated 4 warnings (run `cargo fix --lib -p pezkuwichain` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 34s
+warning: the following packages contain code that will be rejected by a future version of Rust: trie-db v0.30.0
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
