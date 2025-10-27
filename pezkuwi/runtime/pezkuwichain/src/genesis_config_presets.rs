@@ -247,6 +247,21 @@ fn pezkuwichain_testnet_genesis(
 			},
 		},
 		registrar: RegistrarConfig { next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID },
+
+		// PEZ Token Assets Configuration - Dual Token System (HEZ + PEZ)
+		assets: AssetsConfig {
+			assets: vec![(1, root_key.clone(), true, 1)],
+			metadata: vec![(1, "Pez".into(), "PEZ".into(), 12)],
+			accounts: {
+				const TOTAL_PEZ_SUPPLY: u128 = 5_000_000_000 * HEZ; // 5 Billion PEZ
+				let pez_per_validator = TOTAL_PEZ_SUPPLY / initial_authorities.len() as u128;
+				initial_authorities
+					.iter()
+					.map(|x| (1, x.0.clone(), pez_per_validator))
+					.collect()
+			},
+			next_asset_id: Some(2),
+		},
 		
 		pez_treasury: PezTreasuryConfig {
 			initialize_treasury: true,

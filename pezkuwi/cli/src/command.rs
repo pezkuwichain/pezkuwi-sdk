@@ -97,7 +97,7 @@ impl SubstrateCli for Cli {
 			#[cfg(feature = "pezkuwi-native")]
 			"dev" | "pezkuwichain-dev" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_development_config()?),
 			#[cfg(feature = "pezkuwi-native")]
-			"pezkuwichain-local" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?),
+			"pezkuwichain-local" | "pezkuwi-local-testnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?),
 			#[cfg(feature = "pezkuwi-native")]
 			"pezkuwichain-beta-testnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_beta_testnet_config()?),
 			#[cfg(feature = "pezkuwi-native")]

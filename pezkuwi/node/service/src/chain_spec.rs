@@ -440,19 +440,141 @@ pub fn pezkuwichain_beta_testnet_config() -> Result<PezkuwiChainSpec, String> {
     .build())
 }
 
-/// PezkuwiChain local testnet config (multivalidator Alice + Bob)
-#[cfg(feature = "pezkuwi-native")]
 pub fn pezkuwichain_local_testnet_config() -> Result<PezkuwiChainSpec, String> {
+    use sp_consensus_babe::AuthorityId as BabeId;
+    use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+    use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
+    use pezkuwi_primitives::{ValidatorId, AssignmentId};
+
+    // Currency constants (runtime'dan kopyalandı)
+    const UNITS: u128 = 1_000_000_000_000; // 1 HEZ = 10^12 plancks
+    const MILLICENTS: u128 = UNITS / 100_000; // 10^7 plancks
+    
+    const TOTAL_SUPPLY: u128 = 5_000_000_000 * UNITS; // 5 Billion PEZ
+    const ALICE_PEZ: u128 = 2_500_000_000 * UNITS;  // 2.5 Billion PEZ
+    const BOB_PEZ: u128 = 2_500_000_000 * UNITS;    // 2.5 Billion PEZ
+    const ENDOWMENT: u128 = 10_000_000_000 * UNITS; // 10,000 HEZ
+
+    let alice_account = sp_keyring::Sr25519Keyring::Alice.to_account_id();
+    let bob_account = sp_keyring::Sr25519Keyring::Bob.to_account_id();
+    let _pez_treasury_account: AccountId = PezTreasuryPalletId::get().into_account_truncating();
+    
+    // Alice authority keys
+    let alice_babe_id: BabeId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_grandpa_id: GrandpaId = sp_keyring::Ed25519Keyring::Alice.public().into();
+    let alice_validator_id: ValidatorId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_assignment_id: AssignmentId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_discovery_id: AuthorityDiscoveryId = sp_keyring::Sr25519Keyring::Alice.public().into();
+    let alice_beefy_id: BeefyId = sp_core::ecdsa::Public::from_raw([0u8; 33]).into();
+
+    // Bob authority keys
+    let bob_babe_id: BabeId = sp_keyring::Sr25519Keyring::Bob.public().into();
+    let bob_grandpa_id: GrandpaId = sp_keyring::Ed25519Keyring::Bob.public().into();
+    let bob_validator_id: ValidatorId = sp_keyring::Sr25519Keyring::Bob.public().into();
+    let bob_assignment_id: AssignmentId = sp_keyring::Sr25519Keyring::Bob.public().into();
+    let bob_discovery_id: AuthorityDiscoveryId = sp_keyring::Sr25519Keyring::Bob.public().into();
+    let bob_beefy_id: BeefyId = sp_core::ecdsa::Public::from_raw([1u8; 33]).into();
+
+    // Assets patch
+    let assets_config = AssetsConfig {
+        assets: vec![(1, alice_account.clone(), true, 1)],
+        metadata: vec![(1, "Pez".into(), "PEZ".into(), 12)],
+        accounts: vec![
+            (1, alice_account.clone(), ALICE_PEZ),
+            (1, bob_account.clone(), BOB_PEZ),
+        ],
+        next_asset_id: Some(2),
+    };
+
+    let assets_patch = serde_json::json!({
+        "assets": assets_config
+    });
+
+    // Balances patch
+    let balances_patch = serde_json::json!({
+        "balances": {
+            "balances": vec![
+                (alice_account.clone(), ENDOWMENT),
+                (bob_account.clone(), ENDOWMENT),
+            ]
+        }
+    });
+
+    // Session patch (Alice + Bob)
+    let session_patch = serde_json::json!({
+        "session": {
+            "keys": vec![
+                (
+                    alice_account.clone(),
+                    alice_account.clone(),
+                    serde_json::json!({
+                        "babe": alice_babe_id.clone(),
+                        "grandpa": alice_grandpa_id.clone(),
+                        "para_validator": alice_validator_id.clone(),
+                        "para_assignment": alice_assignment_id.clone(),
+                        "authority_discovery": alice_discovery_id.clone(),
+                        "beefy": alice_beefy_id.clone(),
+                    })
+                ),
+                (
+                    bob_account.clone(),
+                    bob_account.clone(),
+                    serde_json::json!({
+                        "babe": bob_babe_id.clone(),
+                        "grandpa": bob_grandpa_id.clone(),
+                        "para_validator": bob_validator_id.clone(),
+                        "para_assignment": bob_assignment_id.clone(),
+                        "authority_discovery": bob_discovery_id.clone(),
+                        "beefy": bob_beefy_id.clone(),
+                    })
+                )
+            ]
+        }
+    });
+
+    // Staking patch
+    let staking_patch = serde_json::json!({
+        "staking": {
+            "validatorCount": 2u32,
+            "minimumValidatorCount": 1u32,
+            "stakers": serde_json::json!([
+                [alice_account.clone(), alice_account.clone(), ENDOWMENT / 2, "Validator"],
+                [bob_account.clone(), bob_account.clone(), ENDOWMENT / 2, "Validator"]
+            ]),
+            "invulnerables": serde_json::json!([]),
+            "minNominatorBond": 1_000_000_000_000_000_000u128,
+            "minValidatorBond": 1_000_000_000_000_000_000u128
+        }
+    });
+
+    // Combine all patches
+    let mut patch_map = serde_json::Map::new();
+    
+    if let serde_json::Value::Object(obj) = assets_patch {
+        patch_map.extend(obj);
+    }
+    if let serde_json::Value::Object(obj) = balances_patch {
+        patch_map.extend(obj);
+    }
+    if let serde_json::Value::Object(obj) = session_patch {
+        patch_map.extend(obj);
+    }
+    if let serde_json::Value::Object(obj) = staking_patch {
+        patch_map.extend(obj);
+    }
+
+    let patch = serde_json::Value::Object(patch_map);
+
     Ok(PezkuwiChainSpec::builder(
-        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi local testnet wasm not available")?,
+        pezkuwi_runtime::WASM_BINARY.ok_or("Pezkuwi wasm not available")?,
         Default::default(),
     )
-    .with_name("PezkuwiChain Local Testnet")
-    .with_id("pezkuwichain_local_testnet")
+    .with_name("Pezkuwi Local Testnet")
+    .with_id("pezkuwi_local_testnet")
     .with_chain_type(ChainType::Local)
-    .with_genesis_config_preset_name(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
     .with_protocol_id("pezkuwi")
     .with_properties(pezkuwi_properties())
+    .with_genesis_config_patch(patch)
     .build())
 }
 
