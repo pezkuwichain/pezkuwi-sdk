@@ -99,7 +99,13 @@ impl SubstrateCli for Cli {
 			#[cfg(feature = "pezkuwi-native")]
 			"pezkuwichain-local" | "pezkuwi-local-testnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?),
 			#[cfg(feature = "pezkuwi-native")]
+			"pezkuwichain-alfa-testnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_alfa_testnet_config()?),
+			#[cfg(feature = "pezkuwi-native")]
 			"pezkuwichain-beta-testnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_beta_testnet_config()?),
+			#[cfg(feature = "pezkuwi-native")]
+			"pezkuwichain-staging" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_staging_config()?),
+			#[cfg(feature = "pezkuwi-native")]
+			"pezkuwichain-production" | "pezkuwichain" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_production_config()?),
 			#[cfg(feature = "pezkuwi-native")]
 			"pezkuwichain-real-testnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_real_testnet_config()?),
 			#[cfg(feature = "rococo-native")]

@@ -128,7 +128,7 @@ use sp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{
 		AccountIdConversion, BlakeTwo256, Block as BlockT, ConstU32, ConvertInto, IdentityLookup,
-		Keccak256, OpaqueKeys, SaturatedConversion, Verify, // Saturating trait'ini sildik
+		Keccak256, OpaqueKeys, SaturatedConversion, Verify,
 	},
 	transaction_validity::{TransactionPriority, TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, FixedU128, KeyTypeId, Perbill, Percent, Permill, RuntimeDebug,
@@ -448,6 +448,56 @@ impl pallet_assets::Config for Runtime {
 	type RemoveItemsLimit = ConstU32<1000>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
+}
+
+// Token Wrapper Config
+parameter_types! {
+    pub const TokenWrapperPalletId: PalletId = PalletId(*b"py/wrper");
+    pub const WrapperAssetId: u32 = 0;  // wHEZ = Asset ID 0
+}
+
+impl pallet_token_wrapper::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type WeightInfo = pallet_token_wrapper::weights::SubstrateWeight<Runtime>;
+    type Currency = Balances;
+    type Assets = Assets;
+    type PalletId = TokenWrapperPalletId;
+    type WrapperAssetId = WrapperAssetId;
+}
+
+// AssetConversion Config - Send Fees to Treasury Account
+parameter_types! {
+	pub const AssetConversionPalletId: frame_support::PalletId = frame_support::PalletId(*b"py/ascon");
+	pub const LiquidityWithdrawalFee: sp_runtime::Permill = sp_runtime::Permill::from_percent(0);
+	pub const MaxSwapPathLength: u32 = 4;
+	pub const MintMinLiquidity: Balance = 100;
+	pub const PoolSetupFee: Balance = 10 * CENTS;
+	pub const Native: u32 = 9999;
+	pub TreasuryAccountId: AccountId = Treasury::account_id();
+}
+
+impl pallet_asset_conversion::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type Balance = Balance;
+    type HigherPrecisionBalance = sp_core::U256;
+    type AssetKind = u32;
+    type Assets = Assets;
+    type PoolId = (u32, u32);
+    type PoolLocator = pallet_asset_conversion::Ascending<AccountId, u32, pallet_asset_conversion::AccountIdConverter<AssetConversionPalletId, (u32, u32)>>;
+    type PoolAssetId = u32;
+    type PoolAssets = Assets;
+    type PoolSetupFee = PoolSetupFee;
+    type PoolSetupFeeAsset = ConstU32<0>;
+    type PoolSetupFeeTarget = frame_support::traits::tokens::imbalance::ResolveAssetTo<TreasuryAccountId, Assets>;
+    type PalletId = AssetConversionPalletId;
+    type LPFee = sp_runtime::traits::ConstU32<30>;
+    type LiquidityWithdrawalFee = LiquidityWithdrawalFee;
+    type MaxSwapPathLength = MaxSwapPathLength;
+    type MintMinLiquidity = MintMinLiquidity;
+    type WeightInfo = ();
+    
+    #[cfg(feature = "runtime-benchmarks")]
+    type BenchmarkHelper = ();
 }
 
 parameter_types! {
@@ -1990,6 +2040,8 @@ construct_runtime! {
 		ChildBounties: pallet_child_bounties = 40,
 
 		Assets: pallet_assets = 36,
+		AssetConversion: pallet_asset_conversion = 37,
+		TokenWrapper: pallet_token_wrapper = 76,
 
 		// Nfts modules.
 		Nfts: pallet_nfts::{Pallet, Call, Storage, Event<T>} = 41,
@@ -2593,6 +2645,8 @@ mod benches {
 		[pallet_utility, Utility]
 		[pallet_vesting, Vesting]
 		[pallet_asset_rate, AssetRate]
+		[pallet_token_wrapper,TokenWrapper]
+		[pallet_asset_conversion, AssetConversion]
 		[pallet_whitelist, Whitelist]
 		// XCM
 		[pallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
@@ -3467,7 +3521,7 @@ mod remote_tests {
 
 		sp_tracing::try_init_simple();
 		let transport: Transport =
-			var("WS").unwrap_or("wss://rococo-rpc.pezkuwi.io:443".to_string()).into();
+			var("WS").unwrap_or("wss://rococo-rpc.pezkuwichain.io:443".to_string()).into();
 		let maybe_state_snapshot: Option<SnapshotConfig> = var("SNAP").map(|s| s.into()).ok();
 		let mut ext = Builder::<Block>::default()
 			.mode(if let Some(state_snapshot) = maybe_state_snapshot {

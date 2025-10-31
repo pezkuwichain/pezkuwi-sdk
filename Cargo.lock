@@ -13524,6 +13524,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-token-wrapper"
+version = "1.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "pallet-assets",
+ "pallet-balances",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core 36.1.0",
+ "sp-io 40.0.1",
+ "sp-runtime 41.1.0",
+ "sp-std 14.0.0",
+]
+
+[[package]]
 name = "pallet-transaction-payment"
 version = "40.0.0"
 dependencies = [
@@ -16762,6 +16780,7 @@ dependencies = [
  "frame-try-runtime",
  "hex-literal",
  "log",
+ "pallet-asset-conversion",
  "pallet-asset-rate",
  "pallet-assets",
  "pallet-authority-discovery",
@@ -16809,6 +16828,7 @@ dependencies = [
  "pallet-tiki",
  "pallet-timestamp",
  "pallet-tips",
+ "pallet-token-wrapper",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-treasury",

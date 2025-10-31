@@ -1,0 +1,17 @@
+{
+  "name": "pezkuwichain-tests",
+  "version": "1.0.0",
+  "description": "PezkuwiChain Integration Tests",
+  "scripts": {
+    "test:dev": "node tests/scenarios/dev.test.js",
+    "test:local": "node tests/scenarios/local.test.js",
+    "test:alfa": "node tests/scenarios/alfa.test.js",
+    "test:all": "bash scripts/test_all.sh",
+    "report": "node scripts/generate-report.js"
+  },
+  "dependencies": {
+    "@polkadot/api": "^10.9.1",
+    "@polkadot/keyring": "^12.3.2",
+    "chalk": "^5.3.0"
+  }
+}

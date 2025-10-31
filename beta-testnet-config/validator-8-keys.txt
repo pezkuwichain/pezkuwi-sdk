@@ -1,8 +1,0 @@
-=== VALIDATOR 8 KEYS ===
-Secret phrase:       flight orchard latin tower book leopard evolve scrap dial quote quiz cross
-  Network ID:        substrate
-  Secret seed:       0x40f96addffcfa7b9b018ffa0026bfe955bb37af369d149a2053774b3b10fe522
-  Public key (hex):  0xf4c7a5e6e53a13bcdfb5f8629ebaf64d3ab8b6f669db318d1d7c9f2cc6131155
-  Account ID:        0xf4c7a5e6e53a13bcdfb5f8629ebaf64d3ab8b6f669db318d1d7c9f2cc6131155
-  Public key (SS58): 5HberBv13pkPeF6bWFs1tJXwo8Y1qRJEoQ8Fp5AuCVPXiUjH
-  SS58 Address:      5HberBv13pkPeF6bWFs1tJXwo8Y1qRJEoQ8Fp5AuCVPXiUjH

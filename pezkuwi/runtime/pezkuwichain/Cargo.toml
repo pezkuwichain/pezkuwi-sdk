@@ -79,13 +79,14 @@ pallet-referral = { path = "../../pallets/referral", default-features = false }
 pallet-identity-kyc = { path = "../../pallets/identity-kyc", default-features = false }
 pallet-perwerde = { path = "../../pallets/perwerde", default-features = false }
 pallet-assets = { workspace = true, default-features = false }
+pallet-asset-conversion = { workspace = true, default-features = false }
 pallet-staking-score = { path = "../../pallets/staking-score", default-features = false }
 pallet-trust = { path = "../../pallets/trust", default-features = false }
 pallet-pez-treasury = { path = "../../pallets/pez-treasury", default-features = false }
 pallet-pez-rewards = { path = "../../pallets/pez-rewards", default-features = false }
 pallet-welati = { path = "../../pallets/welati", default-features = false }
 pallet-validator-pool = { path = "../../pallets/validator-pool", default-features = false }
-
+pallet-token-wrapper = { path = "../../pallets/token-wrapper", default-features = false }
 
 pallet-nfts = { default-features = false, workspace = true }
 pezkuwi-primitives.workspace = true
@@ -153,6 +154,7 @@ std = [
 	"pallet-asset-rate/std",
 	"pallet-authority-discovery/std",
 	"pallet-assets/std",
+	"pallet-asset-conversion/std",
 	"pallet-authorship/std",
 	"pallet-babe/std",
 	"pallet-bags-list/std",
@@ -206,6 +208,7 @@ std = [
 	"pallet-pez-rewards/std",
 	"pallet-welati/std",
 	"pallet-validator-pool/std",
+	"pallet-token-wrapper/std",
 	"pallet-nfts/std",
 	"pallet-xcm/std",
 	"pezkuwi-parachain-primitives/std",
@@ -255,6 +258,7 @@ runtime-benchmarks = [
 	"pallet-beefy-mmr/runtime-benchmarks",
 	"pallet-bounties/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
+	"pallet-asset-conversion/runtime-benchmarks",
 	"pallet-child-bounties/runtime-benchmarks",
 	"pallet-collective/runtime-benchmarks",
 	"pallet-conviction-voting/runtime-benchmarks",
@@ -310,6 +314,7 @@ runtime-benchmarks = [
 	"pallet-pez-rewards/runtime-benchmarks",
 	"pallet-welati/runtime-benchmarks",
 	"pallet-validator-pool/runtime-benchmarks",
+	"pallet-token-wrapper/runtime-benchmarks",
 
 ]
 try-runtime = [
@@ -323,6 +328,7 @@ try-runtime = [
 	"pallet-authorship/try-runtime",
 	"pallet-babe/try-runtime",
 	"pallet-balances/try-runtime",
+	"pallet-asset-conversion/try-runtime",
 	"pallet-beefy-mmr/try-runtime",
 	"pallet-beefy/try-runtime",
 	"pallet-bounties/try-runtime",
@@ -364,6 +370,7 @@ try-runtime = [
 	"pezkuwi-runtime-parachains/try-runtime",
 	"sp-runtime/try-runtime",
 	"pallet-validator-pool/try-runtime",
+	"pallet-token-wrapper/try-runtime",
 ]
 metadata-hash = ["substrate-wasm-builder/metadata-hash"]
 fast-runtime = ["pezkuwichain-constants/fast-runtime"]
