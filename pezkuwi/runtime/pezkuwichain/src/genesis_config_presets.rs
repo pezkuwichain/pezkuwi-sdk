@@ -40,7 +40,7 @@ use alloc::string::ToString;
 use sp_runtime::traits::AccountIdConversion;
 use sp_core::Pair;
 use crate::{
-	AssetsConfig, BabeConfig, BalancesConfig, ConfigurationConfig,
+	AssetsConfig, AssetConversion, BabeConfig, BalancesConfig, ConfigurationConfig,
 	RegistrarConfig, RuntimeGenesisConfig, SessionConfig, SessionKeys, SudoConfig,
 	StakingConfig, BABE_GENESIS_EPOCH_CONFIG, PezTreasuryConfig, PezRewardsConfig,
 	TokenWrapperPalletId,

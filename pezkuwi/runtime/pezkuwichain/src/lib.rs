@@ -487,7 +487,7 @@ impl pallet_asset_conversion::Config for Runtime {
     type PoolAssetId = u32;
     type PoolAssets = Assets;
     type PoolSetupFee = PoolSetupFee;
-    type PoolSetupFeeAsset = ConstU32<0>;
+    type PoolSetupFeeAsset = ();
     type PoolSetupFeeTarget = frame_support::traits::tokens::imbalance::ResolveAssetTo<TreasuryAccountId, Assets>;
     type PalletId = AssetConversionPalletId;
     type LPFee = sp_runtime::traits::ConstU32<30>;
