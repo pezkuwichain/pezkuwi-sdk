@@ -102,7 +102,7 @@ use sp_genesis_builder::PresetId;
 use frame_support::{
 	construct_runtime, derive_impl,
 	genesis_builder_helper::{build_state, get_preset},
-	parameter_types,
+	ord_parameter_types, parameter_types,
 	traits::{
 		AsEnsureOriginWithArg, fungible::HoldConsideration, tokens::UnityOrOuterConversion,
 		Contains, EitherOf, EitherOfDiverse, EnsureOrigin, EnsureOriginWithArg, EverythingBut,
@@ -114,7 +114,7 @@ use frame_support::{
 };
 use frame_support::traits::Currency; // Currency ve Imbalance trait'lerini import ediyoruz
 use pallet_nfts::PalletFeatures;
-use frame_system::{EnsureRoot, EnsureSigned};
+use frame_system::{EnsureRoot, EnsureSigned, EnsureSignedBy};
 
 use pallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
 use pallet_identity::legacy::IdentityInfo;
@@ -426,6 +426,9 @@ impl pallet_preimage::Config for Runtime {
 	>;
 }
 
+/// Instance type for PoolAssets (third instance of pallet_assets)
+pub type PoolAssetsInstance = pallet_assets::Instance3;
+
 impl pallet_assets::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
@@ -445,6 +448,33 @@ impl pallet_assets::Config for Runtime {
 	type CallbackHandle = ();
 	type WeightInfo = ();
 	type Holder = ();
+	type RemoveItemsLimit = ConstU32<1000>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
+}
+
+// PoolAssets (Instance3) - For AssetConversion LP tokens
+// Note: AssetConversionOrigin is defined below with AssetConversion config
+
+impl pallet_assets::Config<PoolAssetsInstance> for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = Balance;
+	type AssetId = u32;
+	type AssetIdParameter = codec::Compact<u32>;
+	type Currency = Balances;
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSignedBy<AssetConversionOrigin, AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<0>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type WeightInfo = ();
+	type Holder = ();
+	type CallbackHandle = ();
 	type RemoveItemsLimit = ConstU32<1000>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
@@ -471,9 +501,13 @@ parameter_types! {
 	pub const LiquidityWithdrawalFee: sp_runtime::Permill = sp_runtime::Permill::from_percent(0);
 	pub const MaxSwapPathLength: u32 = 4;
 	pub const MintMinLiquidity: Balance = 100;
-	pub const PoolSetupFee: Balance = 10 * CENTS;
+	pub const PoolSetupFee: Balance = 0; // No fee for development
 	pub const Native: u32 = 9999;
 	pub TreasuryAccountId: AccountId = Treasury::account_id();
+}
+
+ord_parameter_types! {
+	pub const AssetConversionOrigin: AccountId = AccountIdConversion::<AccountId>::into_account_truncating(&AssetConversionPalletId::get());
 }
 
 impl pallet_asset_conversion::Config for Runtime {
@@ -485,7 +519,7 @@ impl pallet_asset_conversion::Config for Runtime {
     type PoolId = (u32, u32);
     type PoolLocator = pallet_asset_conversion::Ascending<AccountId, u32, pallet_asset_conversion::AccountIdConverter<AssetConversionPalletId, (u32, u32)>>;
     type PoolAssetId = u32;
-    type PoolAssets = Assets;
+    type PoolAssets = PoolAssets;
     type PoolSetupFee = PoolSetupFee;
     type PoolSetupFeeAsset = ();
     type PoolSetupFeeTarget = frame_support::traits::tokens::imbalance::ResolveAssetTo<TreasuryAccountId, Assets>;
@@ -495,7 +529,7 @@ impl pallet_asset_conversion::Config for Runtime {
     type MaxSwapPathLength = MaxSwapPathLength;
     type MintMinLiquidity = MintMinLiquidity;
     type WeightInfo = ();
-    
+
     #[cfg(feature = "runtime-benchmarks")]
     type BenchmarkHelper = ();
 }
@@ -2040,6 +2074,7 @@ construct_runtime! {
 		ChildBounties: pallet_child_bounties = 40,
 
 		Assets: pallet_assets = 36,
+		PoolAssets: pallet_assets::<Instance3> = 77,
 		AssetConversion: pallet_asset_conversion = 37,
 		TokenWrapper: pallet_token_wrapper = 76,
 
