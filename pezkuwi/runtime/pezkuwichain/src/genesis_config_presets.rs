@@ -57,7 +57,7 @@ use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use sp_consensus_babe::AuthorityId as BabeId;
 use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
 use sp_consensus_grandpa::AuthorityId as GrandpaId;
-use sp_core::{crypto::get_public_from_string_or_panic, sr25519};
+use sp_core::{crypto::{get_public_from_string_or_panic, Ss58Codec}, sr25519};
 use sp_genesis_builder::PresetId;
 use sp_runtime::Perbill;
 use crate::CouncilConfig;
@@ -121,15 +121,31 @@ fn get_from_seed<TPublic: sp_core::Public>(seed: &str) -> <TPublic::Pair as sp_c
 		.public()
 }
 
-fn account_id_from_hex(hex: &str) -> AccountId {
-	get_public_from_string_or_panic::<sr25519::Public>(hex).into()
+fn account_id_from_ss58(ss58_address: &str) -> AccountId {
+	sr25519::Public::from_ss58check(ss58_address)
+		.expect("Invalid SS58 address")
+		.into()
 }
 
 fn key_from_hex<TPublic: sp_core::Public>(hex: &str) -> <TPublic::Pair as sp_core::Pair>::Public
 where
 	<TPublic::Pair as sp_core::Pair>::Public: From<TPublic>,
 {
-	get_public_from_string_or_panic::<TPublic>(hex)
+	// Remove 0x prefix if present
+	let hex_str = hex.trim_start_matches("0x");
+
+	// Manual hex decode
+	let mut bytes = alloc::vec![0u8; hex_str.len() / 2];
+	for i in 0..bytes.len() {
+		let byte_str = &hex_str[i * 2..i * 2 + 2];
+		bytes[i] = u8::from_str_radix(byte_str, 16)
+			.expect("Invalid hex character");
+	}
+
+	// Convert bytes to public key
+	TPublic::try_from(&bytes[..])
+		.expect("Invalid public key bytes")
+		.into()
 }
 
 fn parse_validators_from_json(
@@ -158,8 +174,8 @@ fn parse_validators_from_json(
 		.iter()
 		.map(|v| {
 			(
-				account_id_from_hex(v["stash"].as_str().expect("stash required")),
-				account_id_from_hex(v["controller"].as_str().expect("controller required")),
+				account_id_from_ss58(v["stash"].as_str().expect("stash required")),
+				account_id_from_ss58(v["controller"].as_str().expect("controller required")),
 				key_from_hex::<BabeId>(v["babe"].as_str().expect("babe required")),
 				key_from_hex::<GrandpaId>(v["grandpa"].as_str().expect("grandpa required")),
 				key_from_hex::<ValidatorId>(v["para_validator"].as_str().expect("para_validator required")),
@@ -184,12 +200,12 @@ fn pezkuwichain_session_keys(
 
 fn standard_accounts() -> StandardAccounts {
 	use hex_literal::hex;
-	
+
 	StandardAccounts {
-		founder: hex!["d2fe55a51763b6b8e047c1a644bb2b610df40dff4bae4ccd9c8e3a185d4abc1d"].into(),
-		presale: hex!["fc260ea19d6d7cd2cae4a7fc6c323c97f0208597427da14c93f66a83da90d352"].into(),
-		treasury: hex!["1cbf1dd9a54cbc28aa9f31085e375456130e449ad4a2babc3a3d5e4fbfb4c816"].into(),
-		incentives: hex!["6d6f646c70792f696e6374760000000000000000000000000000000000000000"].into(),
+		founder: hex!["cc3609424c65a68f2292a1836e07922d983b19a8b89cbb742b929814d0fb567c"].into(),
+		presale: hex!["924cfd7943ca2bb889bb261a0b69dd1086552e5f301c77eadae8bdf021626b3a"].into(),
+		treasury: hex!["3445069326041a003e046847f74f43ce743acec6fefbb2fdb034b53e6a09b909"].into(),
+		incentives: hex!["681724195f8b0444675ecdfa8af1f7173b33c8aba2caf4646e31e399d299ea7e"].into(),
 	}
 }
 
@@ -384,14 +400,17 @@ fn pezkuwichain_real_genesis(
 				}, true, 1),
 				// PEZ - Asset ID 1
 				(1, accounts.founder.clone(), true, 1),
+				// wUSDT - Asset ID 2 (for beta testnet pools)
+				(2, accounts.founder.clone(), true, 1),
 			],
 			metadata: vec![
 				(0, b"Wrapped HEZ".to_vec(), b"wHEZ".to_vec(), 12),
 				(1, b"Pez Token".to_vec(), b"PEZ".to_vec(), 12),
+				(2, b"Wrapped USDT".to_vec(), b"wUSDT".to_vec(), 6),
 			],
 			accounts: vec![
 				// wHEZ starts at 0 (minted on wrap)
-				
+
 				// ============================================================================
 				// 💰 PEZ TOKEN DISTRIBUTION (5B Total)
 				// ============================================================================
@@ -401,8 +420,11 @@ fn pezkuwichain_real_genesis(
 				(1, accounts.presale.clone(), 93_750_000 * HEZ),
 				// Founder: 1.875% of 5B = 93,750,000 PEZ
 				(1, accounts.founder.clone(), 93_750_000 * HEZ),
+
+				// wUSDT for testing pools (1M wUSDT with 6 decimals)
+				(2, accounts.founder.clone(), 1_000_000 * 1_000_000),
 			],
-			next_asset_id: Some(2),
+			next_asset_id: Some(3),
 		},
 		
 		pez_treasury: PezTreasuryConfig {
