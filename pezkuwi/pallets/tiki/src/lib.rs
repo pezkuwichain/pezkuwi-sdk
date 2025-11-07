@@ -36,7 +36,7 @@ pub mod pallet {
     pub struct Pallet<T>(_);
 
     #[pallet::config]
-    pub trait Config: frame_system::Config + pallet_nfts::Config<ItemId = u32> + pallet_identity::Config {
+    pub trait Config: frame_system::Config + pallet_nfts::Config<ItemId = u32> + pallet_identity_kyc::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
         type WeightInfo: weights::WeightInfo;
@@ -252,20 +252,17 @@ pub mod pallet {
         #[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
         pub fn apply_for_citizenship(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
-            
-            // Kullanıcının KYC'sinin tamamlanmış olup olmadığını kontrol et
-            if let Some(registration) = pallet_identity::IdentityOf::<T>::get(&who) {
-                ensure!(
-                    Self::has_valid_kyc(&who, &registration),
-                    Error::<T>::KycNotCompleted
-                );
-                
-                // Vatandaşlık NFT'si bas
-                Self::mint_citizen_nft_for_user(&who)?;
-            } else {
-                return Err(Error::<T>::KycNotCompleted.into());
-            }
-            
+
+            // Kullanıcının KYC'sinin onaylanmış olup olmadığını kontrol et
+            let kyc_status = pallet_identity_kyc::Pallet::<T>::kyc_status_of(&who);
+            ensure!(
+                kyc_status == pallet_identity_kyc::types::KycLevel::Approved,
+                Error::<T>::KycNotCompleted
+            );
+
+            // Vatandaşlık NFT'si bas
+            Self::mint_citizen_nft_for_user(&who)?;
+
             Ok(())
         }
 
@@ -297,10 +294,10 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// KYC tamamlanan yeni kullanıcıları kontrol eder ve vatandaşlık NFT'si basar
         fn check_and_mint_citizen_nfts() {
-            // Identity pallet'teki tüm kayıtlı kullanıcıları kontrol et
-            for (account, registration) in pallet_identity::IdentityOf::<T>::iter() {
-                // KYC tamamlanmış mı kontrol et (judgement var mı)
-                if Self::has_valid_kyc(&account, &registration) {
+            // KYC pallet'teki tüm onaylanmış kullanıcıları kontrol et
+            for (account, kyc_status) in pallet_identity_kyc::KycStatuses::<T>::iter() {
+                // KYC onaylanmış mı kontrol et
+                if kyc_status == pallet_identity_kyc::types::KycLevel::Approved {
                     // Vatandaşlık NFT'si var mı kontrol et
                     if Self::citizen_nft(&account).is_none() {
                         // NFT bas (hata durumunda log et ama devam et)
@@ -312,23 +309,6 @@ pub mod pallet {
             }
         }
 
-        /// Kullanıcının geçerli KYC'si var mı kontrol eder
-        fn has_valid_kyc(
-            _account: &T::AccountId,
-            registration: &pallet_identity::Registration<
-                <<T as pallet_identity::Config>::Currency as frame_support::traits::Currency<T::AccountId>>::Balance,
-                <T as pallet_identity::Config>::MaxRegistrars,
-                <T as pallet_identity::Config>::IdentityInformation,
-            >,
-        ) -> bool
-        where
-            T: pallet_identity::Config,
-        {
-            // En az bir onaylanmış judgement var mı kontrol et
-            registration.judgements.iter().any(|(_, judgement)| {
-                matches!(judgement, pallet_identity::Judgement::KnownGood | pallet_identity::Judgement::Reasonable)
-            })
-        }
 
         /// Belirli bir kullanıcı için vatandaşlık NFT'si basar
         pub fn mint_citizen_nft_for_user(user: &T::AccountId) -> DispatchResult {
@@ -514,12 +494,11 @@ pub mod pallet {
         /// KYC sonrası otomatik Hemwelatî rolü verme
         pub fn auto_grant_citizenship(account: &T::AccountId) -> DispatchResult {
             // KYC kontrolü
-            if let Some(registration) = pallet_identity::IdentityOf::<T>::get(account) {
-                if Self::has_valid_kyc(account, &registration) {
-                    // Vatandaşlık NFT'si yoksa bas
-                    if Self::citizen_nft(account).is_none() {
-                        Self::mint_citizen_nft_for_user(account)?;
-                    }
+            let kyc_status = pallet_identity_kyc::Pallet::<T>::kyc_status_of(account);
+            if kyc_status == pallet_identity_kyc::types::KycLevel::Approved {
+                // Vatandaşlık NFT'si yoksa bas
+                if Self::citizen_nft(account).is_none() {
+                    Self::mint_citizen_nft_for_user(account)?;
                 }
             }
             Ok(())

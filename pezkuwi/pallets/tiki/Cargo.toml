@@ -21,6 +21,7 @@ frame-benchmarking = { default-features = false, optional = true, workspace = tr
 log = { default-features = false, workspace = true }
 pallet-nfts = { default-features = false, workspace = true }
 pallet-identity = { default-features = false, workspace = true }
+pallet-identity-kyc = { path = "../identity-kyc", default-features = false }
 sp-runtime = { default-features = false, workspace = true }
 sp-std = { default-features = false, workspace = true }
 serde = { version = "1.0", default-features = false, features = ["derive"] }
@@ -42,6 +43,7 @@ std = [
 	"log/std",
 	"pallet-balances/std",
 	"pallet-identity/std",
+	"pallet-identity-kyc/std",
 	"pallet-nfts/std",
 	"scale-info/std",
 	"sp-core/std",
@@ -57,6 +59,7 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-identity/runtime-benchmarks",
+	"pallet-identity-kyc/runtime-benchmarks",
 	"pallet-nfts/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]
@@ -65,5 +68,6 @@ try-runtime = [
 	"frame-system/try-runtime",
 	"pallet-balances/try-runtime",
 	"pallet-identity/try-runtime",
+	"pallet-identity-kyc/try-runtime",
 	"pallet-nfts/try-runtime",
 ]

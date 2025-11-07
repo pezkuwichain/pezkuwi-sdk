@@ -15,13 +15,14 @@ type Block = frame_system::mocking::MockBlock<Test>;
 pub type AccountId = u64;
 pub type Balance = u128;
 
-// Runtime'ı oluştur - Identity pallet'ini de ekle
+// Runtime'ı oluştur - Identity ve IdentityKyc pallet'lerini de ekle
 construct_runtime!(
 	pub enum Test
 	{
 		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
 		Balances: pallet_balances::{Pallet, Call, Storage, Event<T>},
 		Identity: pallet_identity::{Pallet, Call, Storage, Event<T>},
+		IdentityKyc: pallet_identity_kyc::{Pallet, Call, Storage, Event<T>},
 		Nfts: pallet_nfts::{Pallet, Call, Storage, Event<T>},
 		Tiki: pallet_tiki::{Pallet, Call, Storage, Event<T>},
 	}
@@ -118,6 +119,22 @@ parameter_types! {
 	pub const MaxAdditionalFields: u32 = 10;
 }
 
+// pallet_identity_kyc::Config parameters
+parameter_types! {
+	pub const KycApplicationDepositAmount: Balance = 100;
+	pub const MaxCidLength: u32 = 100;
+}
+
+impl pallet_identity_kyc::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type WeightInfo = ();
+	type KycApprovalOrigin = frame_system::EnsureRoot<AccountId>;
+	type KycApplicationDeposit = KycApplicationDepositAmount;
+	type MaxStringLength = ConstU32<50>;
+	type MaxCidLength = MaxCidLength;
+}
+
 parameter_types! {
 	pub Features: pallet_nfts::PalletFeatures = pallet_nfts::PalletFeatures::default();
 }
@@ -167,54 +184,27 @@ impl crate::Config for Test {
 }
 
 // Helper functions for tests
-pub fn setup_identity_for_user(account: AccountId) {
-    use pallet_identity::{Data, Judgement};
-    use pallet_identity::legacy::IdentityInfo;
-    
-    let info = IdentityInfo {
-        additional: Default::default(),
-        display: Data::Raw(b"Test User".to_vec().try_into().unwrap()),
-        legal: Data::None,
-        web: Data::None,
-        riot: Data::None,
-        email: Data::None,
-        pgp_fingerprint: None,
-        image: Data::None,
-        twitter: Data::None,
-    };
-    
-    // Registrar olarak kullanılacak hesaba balance ver
-    let _ = Balances::force_set_balance(RuntimeOrigin::root(), 1, 10000);
-    
+pub fn setup_kyc_for_user(account: AccountId) {
+    // Give balance to user for deposit
+    let _ = Balances::force_set_balance(RuntimeOrigin::root(), account, 10000);
+
     // Set identity
-    assert_ok!(Identity::set_identity(
+    assert_ok!(IdentityKyc::set_identity(
         RuntimeOrigin::signed(account),
-        Box::new(info)
+        b"Test User".to_vec().try_into().unwrap(),
+        b"test@example.com".to_vec().try_into().unwrap()
     ));
-    
-    // Add registrar (account 1) - sadece bir kez eklenmesi için kontrol
-    if pallet_identity::Registrars::<Test>::get().is_empty() {
-        assert_ok!(Identity::add_registrar(
-            RuntimeOrigin::root(),
-            1
-        ));
-    }
-    
-    // Request judgement first
-    assert_ok!(Identity::request_judgement(
-        RuntimeOrigin::signed(account),
-        0, // registrar index
-        1000 // max fee
+
+    // Approve KYC as root
+    assert_ok!(IdentityKyc::approve_kyc(
+        RuntimeOrigin::root(),
+        account
     ));
-    
-    // Provide judgement - registrar tarafından
-    assert_ok!(Identity::provide_judgement(
-        RuntimeOrigin::signed(1), // registrar account
-        0, // registrar index
-        account, // target account
-        Judgement::KnownGood,
-        H256::zero()
-    ));
+}
+
+// Legacy function - kept for backwards compatibility
+pub fn setup_identity_for_user(account: AccountId) {
+    setup_kyc_for_user(account);
 }
 
 pub fn advance_blocks(blocks: u64) {

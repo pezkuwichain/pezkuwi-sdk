@@ -13475,6 +13475,7 @@ dependencies = [
  "log",
  "pallet-balances",
  "pallet-identity",
+ "pallet-identity-kyc",
  "pallet-nfts",
  "parity-scale-codec",
  "scale-info",
