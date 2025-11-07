@@ -5284,7 +5284,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d162beedaa69905488a8da94f5ac3edb4dd4788b732fadb7bd120b2625c1976"
 dependencies = [
  "data-encoding",
- "syn 2.0.104",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -14536,7 +14536,7 @@ version = "22.0.0"
 dependencies = [
  "assert_cmd",
  "color-eyre",
- "nix 0.29.0",
+ "nix 0.30.1",
  "pezkuwi-cli",
  "pezkuwi-core-primitives",
  "pezkuwi-node-core-pvf",
@@ -15220,7 +15220,7 @@ dependencies = [
  "futures",
  "landlock",
  "libc",
- "nix 0.29.0",
+ "nix 0.30.1",
  "parity-scale-codec",
  "pezkuwi-parachain-primitives",
  "pezkuwi-primitives",
@@ -15245,7 +15245,7 @@ dependencies = [
  "cfg-if",
  "cpu-time",
  "libc",
- "nix 0.29.0",
+ "nix 0.30.1",
  "parity-scale-codec",
  "pezkuwi-node-core-pvf-common",
  "pezkuwi-node-primitives",
@@ -15263,7 +15263,7 @@ dependencies = [
  "cfg-if",
  "criterion",
  "libc",
- "nix 0.29.0",
+ "nix 0.30.1",
  "parity-scale-codec",
  "pezkuwi-node-core-pvf-common",
  "pezkuwi-primitives",
@@ -15497,7 +15497,7 @@ dependencies = [
  "futures-timer",
  "jsonrpsee",
  "log",
- "nix 0.29.0",
+ "nix 0.30.1",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc",
  "pallet-transaction-payment-rpc-runtime-api",
@@ -24456,7 +24456,7 @@ dependencies = [
  "jsonrpsee",
  "kitchensink-runtime",
  "log",
- "nix 0.29.0",
+ "nix 0.30.1",
  "node-primitives",
  "node-rpc",
  "node-testing",
@@ -24760,7 +24760,7 @@ version = "0.1.0"
 dependencies = [
  "assert_cmd",
  "futures",
- "nix 0.29.0",
+ "nix 0.30.1",
  "node-primitives",
  "regex",
  "sc-cli",
