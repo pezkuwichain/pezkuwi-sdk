@@ -41,7 +41,7 @@ impl frame_system::Config for Test {
     type BaseCallFilter = Everything;
     type BlockWeights = ();
     type BlockLength = ();
-    type DbWeight = ();
+    type DbWeight = frame_support::weights::constants::RocksDbWeight;
     type RuntimeOrigin = RuntimeOrigin;
     type RuntimeCall = RuntimeCall;
     type Nonce = u64;
@@ -347,7 +347,7 @@ parameter_types! {
 
 impl pallet_welati::Config for Test {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = crate::weights::WeightInfo<Test>;
+    type WeightInfo = ();
     type Randomness = MockRandomness;
     type RuntimeCall = RuntimeCall;
     type TrustScoreSource = MockTrustProvider; // Mock provider kullan

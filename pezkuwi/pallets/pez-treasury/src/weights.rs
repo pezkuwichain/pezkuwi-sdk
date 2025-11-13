@@ -26,9 +26,16 @@
 use frame_support::{traits::Get, weights::Weight};
 use core::marker::PhantomData;
 
-/// Weight functions for `pallet_pez_treasury`.
-pub struct WeightInfo<T>(PhantomData<T>);
-impl<T: frame_system::Config> crate::WeightInfo for WeightInfo<T> {
+/// Weight functions needed for `pallet_pez_treasury`.
+pub trait WeightInfo {
+	fn initialize_treasury() -> Weight;
+	fn force_genesis_distribution() -> Weight;
+	fn release_monthly_funds() -> Weight;
+}
+
+/// Weights for `pallet_pez_treasury` using the Substrate node and recommended hardware.
+pub struct SubstrateWeight<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Storage: `PezTreasury::TreasuryStartBlock` (r:1 w:1)
 	/// Proof: `PezTreasury::TreasuryStartBlock` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	/// Storage: `PezTreasury::NextReleaseMonth` (r:0 w:1)
@@ -86,5 +93,24 @@ impl<T: frame_system::Config> crate::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 8817))
 			.saturating_add(T::DbWeight::get().reads(10))
 			.saturating_add(T::DbWeight::get().writes(9))
+	}
+}
+
+// For backwards compatibility and tests.
+impl WeightInfo for () {
+	fn initialize_treasury() -> Weight {
+		Weight::from_parts(9_471_000, 1489)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(1))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn force_genesis_distribution() -> Weight {
+		Weight::from_parts(70_607_000, 8817)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(8))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(8))
+	}
+	fn release_monthly_funds() -> Weight {
+		Weight::from_parts(96_837_000, 8817)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(10))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(9))
 	}
 }

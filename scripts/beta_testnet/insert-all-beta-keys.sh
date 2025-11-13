@@ -20,8 +20,6 @@ echo -e "${YELLOW}⚠️  SECURITY CHECK${NC}"
 echo "This script will insert validator keys for 8 validators."
 echo "Make sure all validators are running before proceeding."
 echo ""
-read -p "Press Ctrl+C to cancel, or Enter to continue..."
-echo ""
 
 # Function to insert key
 insert_key() {
@@ -35,7 +33,7 @@ insert_key() {
 
     echo -e "${GREEN}Validator ${validator_num}: Inserting ${key_type} key...${NC}"
 
-    result=$(curl -s -H "Content-Type: application/json" \
+    result=$(curl -s --max-time 10 -H "Content-Type: application/json" \
         -d "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"author_insertKey\",\"params\":[\"${key_type}\",\"${seed}\",\"${public_key}\"]}" \
         "$rpc_url")
 

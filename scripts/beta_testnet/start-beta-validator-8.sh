@@ -23,7 +23,7 @@ fi
 mkdir -p "$BASE_PATH"
 
 nohup "$BINARY" \
-    --chain pezkuwichain-beta-testnet \
+    --chain /home/mamostehp/Pezkuwi-SDK/chainspecs/beta-testnet-raw.json \
     --base-path "$BASE_PATH" \
     --validator \
     --name "Validator-beta-8" \

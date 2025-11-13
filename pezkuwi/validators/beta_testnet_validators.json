@@ -1,0 +1,84 @@
+{
+  "beta": [
+    {
+      "stash": "5FeU3s4bmLTjs2SiDWWTXprmcSespxHtdAJgUHTbjhGqx8Cn",
+      "controller": "5FeU3s4bmLTjs2SiDWWTXprmcSespxHtdAJgUHTbjhGqx8Cn",
+      "babe": "0x9e7490cfe0dd32860282dd4e74b5c40c9237fb6e478066c334c931742308e008",
+      "grandpa": "0x16da26f049b37e9b03d14439457ac164f14f5174b1f10ddab2e0dc3ef7903675",
+      "para_validator": "0xc62b764ea84411f550818a41a6abacddb9388cefbc22412f2bee335e9709a717",
+      "para_assignment": "0xa4c75d886439ae7d764cc600051af1d2128d2a8a1cdf3d642eda76824ccaf518",
+      "authority_discovery": "0x66e821a23729878d8b7d04c69ec0fed9b0f5facae48917c1b83a4ad15cf00720",
+      "beefy": "0x0281ba169080b261add0cd22bfb47477eddab854caa17423b12ddeed6504b04aef"
+    },
+    {
+      "stash": "5GP5QB3FNRQzHLebVNP1miqnK8Jykm4ppgGx886n4qQ2mUCq",
+      "controller": "5GP5QB3FNRQzHLebVNP1miqnK8Jykm4ppgGx886n4qQ2mUCq",
+      "babe": "0xbef3df377441fe6ad64b81e84c8d201bc5c0bc2bb2e1a85f1e84927c62c5572b",
+      "grandpa": "0x806cfed7a6d025bc2e7a195bcd5ac50317f824ce6971cf30f95c6a621d6e55bf",
+      "para_validator": "0xfca6fd2976ae3ea397b15cdc5b0b044fe90a2094328edfa013db80cf04ba1a67",
+      "para_assignment": "0xfaad0803c450bf084ca3035bd1d69481db58444b32dd0eaa55de69a5314b0559",
+      "authority_discovery": "0x7aeed77ed10108ead6c58dd45dd987aba28ea6e9cdf90f8893112c08bb0d4251",
+      "beefy": "0x020177ca58f45047c737e6e02adba1ac3520eb881ea38ad39751d32d7c89d5efaa"
+    },
+    {
+      "stash": "5CyLzx6TdhVi6nDQCKEvpJWja37xAGmdhEX6VfqjjnDigKET",
+      "controller": "5CyLzx6TdhVi6nDQCKEvpJWja37xAGmdhEX6VfqjjnDigKET",
+      "babe": "0x2825cb78cb345b078a189e6a280916f7771df991113e587b9a0694df33abe909",
+      "grandpa": "0xcf2862bbfabf42dfc361e2fd0ee860e55e80f093ad767679d9687e822a04c7a4",
+      "para_validator": "0x4cdb404f66b7409a6e7fee2eab92aa738c8cbd37d1343b0e0818deb4637d3e0e",
+      "para_assignment": "0xf054e7834c042696fbbf56d17247924836a6957cc6ec8366455c9b459b51fa4d",
+      "authority_discovery": "0xd2c4ffc56fd8504f5fde789d3ba895f65c0c7200f68cfe789a4316e68277e72f",
+      "beefy": "0x023792b160a004c98d56afc29843ee9aa567a80129794373df9b3f4d883cfd4dfc"
+    },
+    {
+      "stash": "5FNR7S8W3JjhBCUMYQFbidYD3AB5s5ZNHXHCaARNuJVa4CvZ",
+      "controller": "5FNR7S8W3JjhBCUMYQFbidYD3AB5s5ZNHXHCaARNuJVa4CvZ",
+      "babe": "0x9236bf5cde2e1ce44cd2eceece98b876750cb39a8887bcc1d7c0b72c186b4f6c",
+      "grandpa": "0x4d7787f6d6b189b64286efdf524a5d73be1eaf4a4b1d245529090b698285a0d4",
+      "para_validator": "0xb27fea579fdc321ebac8975717c17a7b4036bb06549c41ac803c888b9104a256",
+      "para_assignment": "0x9ef9bf97dfc3d22cd4e17a331165afbf0a562a9a86e776592c64ba87c4162d0a",
+      "authority_discovery": "0x6abffb32a990117c3d8c74f090b287d5888af97b61a3964a2c54cddc614e4d71",
+      "beefy": "0x02ca2cac4bd7d21c1c3f7b256233827d8546471d83e1eeb37408767adc66bac7d0"
+    },
+    {
+      "stash": "5Eh11V1pXJ3UuBZQ6RBjZiE3ceHnyGHtXDFHiFQLzDExND8q",
+      "controller": "5Eh11V1pXJ3UuBZQ6RBjZiE3ceHnyGHtXDFHiFQLzDExND8q",
+      "babe": "0x74270a49be316a233279af6480ac8de5479bc45426e884fbdb50c6247e62d44b",
+      "grandpa": "0x9ae1139d89f5ae5e9a56a7a7d1375c49b742315c25712128fad16c841da2dba9",
+      "para_validator": "0xf49d1b0ebff5fbf31cba037085552fd78e4218a19045cdd5f2e1f73840156a75",
+      "para_assignment": "0xb8f786ac5db52f3713ca1ff58f8d708332f2c0556d55a62195a52d4ca1bb2e7e",
+      "authority_discovery": "0x3e1c338ba320b747769d2d40ece3fc3da306b90096ab381bad1be6bc5a813d57",
+      "beefy": "0x033cae08ede6b1c3597dfce1f38c5ceddc4b69d045de4b51f17e2e8fce1cda27ca"
+    },
+    {
+      "stash": "5HbvWWiB7oC7fcf3fBQPgnNTNHBTghA8JeCuTcyQnEM9QXJG",
+      "controller": "5HbvWWiB7oC7fcf3fBQPgnNTNHBTghA8JeCuTcyQnEM9QXJG",
+      "babe": "0xf4fc5deb49aa9178f622e711a9d453d967507231a6e2d62d726ce7279316970a",
+      "grandpa": "0x7eb7cfb7ac00f11ed7f63697cdb5d0562bba6b90c1901fa00365db075bab05e9",
+      "para_validator": "0x5a3fa17b77d3afc3dd1e0b7bf1d2faf95ba14eb2ee370476e5f2f78a8175a957",
+      "para_assignment": "0x4e232e6efb3be2c4f638fac57330f606fc54bbc3b8d490a5bb520c67c0d7f248",
+      "authority_discovery": "0x244d0ea5c6b4a4f4e23912aab77498689e9f355edb63a82ebfc9b9bb08176f0d",
+      "beefy": "0x0338f2ef200a5048b35fcfae936a2dd5dffdabc77eb61d707de35f9eba8b3d37e3"
+    },
+    {
+      "stash": "5ERrCHrqj1UY5sT66hdc1nv31GxMW1GWMGE3jaRKpH3DbYws",
+      "controller": "5ERrCHrqj1UY5sT66hdc1nv31GxMW1GWMGE3jaRKpH3DbYws",
+      "babe": "0x6898b08fe0c6dfe79750598765efe06cbfaef01da9b110599d05a5b4824ddf38",
+      "grandpa": "0x57f18c1620086209773c6d8243af3eae873a63cda0c64cc3bcb02ff3ee41a863",
+      "para_validator": "0x1e0ee1b33614379148cd69bb79fb2d21c98a8837bab912e96b72e5a2bbb46d01",
+      "para_assignment": "0x48f66d8b963b576da719b2350a0242c624b720439ed764c206107647d8a6d872",
+      "authority_discovery": "0xe462edbb26c14d1772570ce751ace21b271b0f0f472fc434c84f708b9bb42309",
+      "beefy": "0x03e783496d6ff583a60ec44ef9fe7ea375c9e31841a1f7fe48a8eaec0093826d78"
+    },
+    {
+      "stash": "5DvHydpptkAWnQUmJR1gs75Y9gj9mETU2ydX2jPawea5XQP6",
+      "controller": "5DvHydpptkAWnQUmJR1gs75Y9gj9mETU2ydX2jPawea5XQP6",
+      "babe": "0x520e1de89062667c8980666fd8cc83914d43ce5dd69fa4db2bec7a23bec16e61",
+      "grandpa": "0x7bab34ff06d0e24da37e861bc9683381934e390febe05cec2060b5d4b9c8d746",
+      "para_validator": "0x4e169330a7089ffc0be8f85edb9b5c35556bee1a0111f14dc7ee00cd43478232",
+      "para_assignment": "0xdc8556675a56246d3227c4544e58a602df65b154e09086c0b2b0aa879dfab249",
+      "authority_discovery": "0x1ec224f7441c0f95d817ccbf0cce3d1cdbd0ffb0f8169654672570dbd6e66608",
+      "beefy": "0x030bd33780a8a632630c3dd75624c4e6d1ff3fdfa58d88ddebe087e237cc0cd11d"
+    }
+  ]
+}

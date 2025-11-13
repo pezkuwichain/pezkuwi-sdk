@@ -26,9 +26,18 @@
 use frame_support::{traits::Get, weights::Weight};
 use core::marker::PhantomData;
 
-/// Weight functions for `pallet_tiki`.
-pub struct WeightInfo<T>(PhantomData<T>);
-impl<T: frame_system::Config> pallet_tiki::WeightInfo for WeightInfo<T> {
+/// Weight functions needed for `pallet_tiki`.
+pub trait WeightInfo {
+	fn grant_tiki() -> Weight;
+	fn revoke_tiki() -> Weight;
+	fn force_mint_citizen_nft() -> Weight;
+	fn grant_earned_role() -> Weight;
+	fn grant_elected_role() -> Weight;
+}
+
+/// Weights for `pallet_tiki` using the Substrate node and recommended hardware.
+pub struct SubstrateWeight<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Storage: `Tiki::CitizenNft` (r:1 w:0)
 	/// Proof: `Tiki::CitizenNft` (`max_values`: None, `max_size`: Some(52), added: 2527, mode: `MaxEncodedLen`)
 	/// Storage: `Tiki::UserTikis` (r:1 w:1)
@@ -146,5 +155,34 @@ impl<T: frame_system::Config> pallet_tiki::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 3812))
 			.saturating_add(T::DbWeight::get().reads(6))
 			.saturating_add(T::DbWeight::get().writes(3))
+	}
+}
+
+// For backwards compatibility and tests.
+impl WeightInfo for () {
+	fn grant_tiki() -> Weight {
+		Weight::from_parts(72_656_000, 3812)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(6))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn revoke_tiki() -> Weight {
+		Weight::from_parts(70_998_000, 3812)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(6))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn force_mint_citizen_nft() -> Weight {
+		Weight::from_parts(92_374_000, 6067)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(10))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(10))
+	}
+	fn grant_earned_role() -> Weight {
+		Weight::from_parts(72_681_000, 3812)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(6))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn grant_elected_role() -> Weight {
+		Weight::from_parts(68_220_000, 3812)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(6))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
 	}
 }

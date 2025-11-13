@@ -26,9 +26,21 @@
 use frame_support::{traits::Get, weights::Weight};
 use core::marker::PhantomData;
 
-/// Weight functions for `pallet_welati`.
-pub struct WeightInfo<T>(PhantomData<T>);
-impl<T: frame_system::Config> crate::WeightInfo for WeightInfo<T> {
+/// Weight functions needed for `pallet_welati`.
+pub trait WeightInfo {
+	fn initiate_election() -> Weight;
+	fn register_candidate() -> Weight;
+	fn cast_vote() -> Weight;
+	fn finalize_election() -> Weight;
+	fn nominate_official() -> Weight;
+	fn approve_appointment() -> Weight;
+	fn submit_proposal() -> Weight;
+	fn vote_on_proposal() -> Weight;
+}
+
+/// Weights for `pallet_welati` using the Substrate node and recommended hardware.
+pub struct SubstrateWeight<T>(PhantomData<T>);
+impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Storage: `Welati::NextElectionId` (r:1 w:1)
 	/// Proof: `Welati::NextElectionId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
 	/// Storage: `Welati::ActiveElections` (r:0 w:1)
@@ -164,5 +176,49 @@ impl<T: frame_system::Config> crate::WeightInfo for WeightInfo<T> {
 			.saturating_add(Weight::from_parts(0, 12542))
 			.saturating_add(T::DbWeight::get().reads(3))
 			.saturating_add(T::DbWeight::get().writes(2))
+	}
+}
+
+// For backwards compatibility and tests.
+impl WeightInfo for () {
+	fn initiate_election() -> Weight {
+		Weight::from_parts(12_265_000, 1489)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(1))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(2))
+	}
+	fn register_candidate() -> Weight {
+		Weight::from_parts(21_958_000, 32819)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(2))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(2))
+	}
+	fn cast_vote() -> Weight {
+		Weight::from_parts(29_505_000, 32819)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(3))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn finalize_election() -> Weight {
+		Weight::from_parts(28_574_000, 32819)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(2))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn nominate_official() -> Weight {
+		Weight::from_parts(26_238_000, 3638)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(5))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn approve_appointment() -> Weight {
+		Weight::from_parts(27_599_000, 13584)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(3))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(3))
+	}
+	fn submit_proposal() -> Weight {
+		Weight::from_parts(18_168_000, 12542)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(3))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(2))
+	}
+	fn vote_on_proposal() -> Weight {
+		Weight::from_parts(23_225_000, 12542)
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().reads(3))
+			.saturating_add(frame_support::weights::constants::RocksDbWeight::get().writes(2))
 	}
 }

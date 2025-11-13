@@ -1,0 +1,5 @@
+Error: 
+   0: [91mInvalid input: Error parsing spec file: EOF while parsing a value at line 1 column 0[0m
+
+Backtrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.
+Run with RUST_BACKTRACE=full to include source snippets.
