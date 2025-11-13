@@ -1,0 +1,82 @@
+# Promtail Configuration for PezkuwiChain Log Shipping
+# Version: 1.0
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # PezkuwiChain node logs
+  - job_name: pezkuwi-node
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: pezkuwi-node
+          host: localhost
+          __path__: /pezkuwi/logs/*log
+
+    pipeline_stages:
+      # Parse log level
+      - regex:
+          expression: '^(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) (?P<level>\w+)'
+      - labels:
+          level:
+
+      # Extract component
+      - regex:
+          expression: '\[(?P<component>[\w\-:]+)\]'
+      - labels:
+          component:
+
+      # Extract error messages
+      - match:
+          selector: '{level="ERROR"}'
+          stages:
+            - regex:
+                expression: 'error: (?P<error_msg>.*)'
+            - labels:
+                error_type:
+
+  # System logs
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: system
+          __path__: /var/log/syslog
+
+  # Docker container logs
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+
+    relabel_configs:
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: 'container'
+      - source_labels: ['__meta_docker_container_log_stream']
+        target_label: 'stream'
+
+  # Audit logs
+  - job_name: audit
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: audit
+          __path__: /var/log/audit/audit.log
+
+    pipeline_stages:
+      - regex:
+          expression: 'type=(?P<audit_type>\w+)'
+      - labels:
+          audit_type:

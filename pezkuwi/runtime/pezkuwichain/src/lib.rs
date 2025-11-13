@@ -1282,7 +1282,7 @@ parameter_types! {
 impl pallet_pez_treasury::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Assets = Assets; // Using this instead of `Currency = Balances`
-    type WeightInfo = pallet_pez_treasury::weights::WeightInfo<Runtime>;
+    type WeightInfo = (); // TODO: Generate weights via benchmarking
     type PezAssetId = PezAssetId; // Binding the newly added asset ID
     type TreasuryPalletId = PezTreasuryPalletId;
     type IncentivePotId = PezIncentivePotId;
@@ -2423,7 +2423,7 @@ type KycProviderForWelati = IdentityKyc;
 
 impl pallet_welati::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_welati::weights::WeightInfo<Runtime>;
+	type WeightInfo = (); // TODO: Generate weights via benchmarking
 	type Randomness = pallet_babe::RandomnessFromOneEpochAgo<Runtime>;
 	type RuntimeCall = RuntimeCall;
 	type TrustScoreSource = Trust;

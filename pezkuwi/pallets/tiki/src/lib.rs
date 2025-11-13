@@ -120,6 +120,7 @@ mod tests;
 mod benchmarking;
 pub mod weights;
 pub use weights::*;
+pub mod migrations; // Storage migrations
 pub mod ensure; // For origin validation
 
 #[frame_support::pallet]
@@ -130,6 +131,7 @@ pub mod pallet {
     use sp_runtime::traits::StaticLookup;
 
     #[pallet::pallet]
+    #[pallet::storage_version(migrations::STORAGE_VERSION)]
     pub struct Pallet<T>(_);
 
     #[pallet::config]
@@ -439,7 +441,7 @@ pub mod pallet {
 
             // Update storage
             CitizenNft::<T>::insert(user, next_id_u32);
-            NextItemId::<T>::put(next_id_u32 + 1);
+            NextItemId::<T>::put(next_id_u32.saturating_add(1));
 
 
             // Automatically add Welati role

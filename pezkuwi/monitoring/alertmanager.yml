@@ -1,0 +1,141 @@
+# Alertmanager Configuration for PezkuwiChain
+# Version: 1.0
+
+global:
+  resolve_timeout: 5m
+  slack_api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+
+# Templates for notifications
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Route configuration
+route:
+  group_by: ['alertname', 'cluster', 'severity']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+
+  routes:
+    # Critical alerts go to PagerDuty and Slack immediately
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      continue: true
+      group_wait: 0s
+
+    # High severity to Slack
+    - match:
+        severity: high
+      receiver: 'high-alerts'
+      continue: true
+
+    # Medium severity to email
+    - match:
+        severity: medium
+      receiver: 'medium-alerts'
+
+    # Security alerts to dedicated channel
+    - match:
+        component: security
+      receiver: 'security-alerts'
+      continue: true
+
+# Inhibition rules - suppress certain alerts when others are firing
+inhibit_rules:
+  # Suppress all alerts if node is down
+  - source_match:
+      alertname: 'NodeDown'
+    target_match_re:
+      alertname: '.*'
+    equal: ['node']
+
+  # Suppress finalization lag if block production stopped
+  - source_match:
+      alertname: 'BlockProductionStopped'
+    target_match:
+      alertname: 'FinalizationLag'
+    equal: ['node']
+
+# Receiver configurations
+receivers:
+  # Default receiver
+  - name: 'default'
+    email_configs:
+      - to: 'ops@pezkuwi.network'
+        from: 'alertmanager@pezkuwi.network'
+        smarthost: 'smtp.gmail.com:587'
+        auth_username: 'alertmanager@pezkuwi.network'
+        auth_password: 'changeme'
+        headers:
+          Subject: '[PezkuwiChain] {{ .GroupLabels.alertname }}'
+
+  # Critical alerts - PagerDuty + Slack
+  - name: 'critical-alerts'
+    pagerduty_configs:
+      - service_key: 'YOUR_PAGERDUTY_SERVICE_KEY'
+        description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+    slack_configs:
+      - channel: '#pezkuwi-critical'
+        title: ':rotating_light: CRITICAL: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Runbook:* {{ .Annotations.runbook }}
+          *Severity:* {{ .Labels.severity }}
+          *Node:* {{ .Labels.node }}
+          {{ end }}
+        send_resolved: true
+        color: 'danger'
+
+  # High severity alerts - Slack
+  - name: 'high-alerts'
+    slack_configs:
+      - channel: '#pezkuwi-alerts'
+        title: ':warning: HIGH: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Runbook:* {{ .Annotations.runbook }}
+          *Node:* {{ .Labels.node }}
+          {{ end }}
+        send_resolved: true
+        color: 'warning'
+
+  # Medium severity - Email only
+  - name: 'medium-alerts'
+    email_configs:
+      - to: 'ops@pezkuwi.network'
+        from: 'alertmanager@pezkuwi.network'
+        smarthost: 'smtp.gmail.com:587'
+        auth_username: 'alertmanager@pezkuwi.network'
+        auth_password: 'changeme'
+        headers:
+          Subject: '[PezkuwiChain][MEDIUM] {{ .GroupLabels.alertname }}'
+
+  # Security alerts
+  - name: 'security-alerts'
+    slack_configs:
+      - channel: '#pezkuwi-security'
+        title: ':shield: SECURITY: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Runbook:* {{ .Annotations.runbook }}
+          *Component:* {{ .Labels.component }}
+          {{ end }}
+        send_resolved: true
+        color: '#FF0000'
+    email_configs:
+      - to: 'security@pezkuwi.network'
+        from: 'alertmanager@pezkuwi.network'
+        smarthost: 'smtp.gmail.com:587'
+        auth_username: 'alertmanager@pezkuwi.network'
+        auth_password: 'changeme'
+        headers:
+          Subject: '[PezkuwiChain][SECURITY] {{ .GroupLabels.alertname }}'
+          Priority: 'urgent'

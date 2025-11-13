@@ -138,6 +138,7 @@
 pub use pallet::*;
 pub mod weights;
 pub mod types;
+pub mod migrations; // Storage migrations
 
 #[cfg(test)]
 mod mock;
@@ -158,6 +159,34 @@ pub trait WeightInfo {
     fn approve_appointment() -> Weight;
     fn submit_proposal() -> Weight;
     fn vote_on_proposal() -> Weight;
+}
+
+// Unit type implementation for tests
+impl WeightInfo for () {
+    fn initiate_election() -> Weight {
+        Weight::from_parts(12_265_000, 1489)
+    }
+    fn register_candidate() -> Weight {
+        Weight::from_parts(21_958_000, 32819)
+    }
+    fn cast_vote() -> Weight {
+        Weight::from_parts(29_505_000, 32819)
+    }
+    fn finalize_election() -> Weight {
+        Weight::from_parts(28_574_000, 32819)
+    }
+    fn nominate_official() -> Weight {
+        Weight::from_parts(26_238_000, 3638)
+    }
+    fn approve_appointment() -> Weight {
+        Weight::from_parts(27_599_000, 13584)
+    }
+    fn submit_proposal() -> Weight {
+        Weight::from_parts(21_824_000, 12542)
+    }
+    fn vote_on_proposal() -> Weight {
+        Weight::from_parts(23_225_000, 12542)
+    }
 }
 use frame_support::{
 	dispatch::{GetDispatchInfo, PostDispatchInfo},
@@ -183,6 +212,7 @@ pub mod pallet {
     use super::*;
 
     #[pallet::pallet]
+    #[pallet::storage_version(migrations::STORAGE_VERSION)]
     pub struct Pallet<T>(_);
 
     #[pallet::config]
@@ -264,11 +294,11 @@ pub mod pallet {
     pub type ActiveElections<T: Config> =
         StorageMap<_, Blake2_128Concat, u32, ElectionInfo<T>, OptionQuery>;
 
-    /// Sonraki seçim ID'si
+    /// Next election ID
     #[pallet::storage]
     pub type NextElectionId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-    /// Seçim adaylarını tutan storage
+    /// Storage holding election candidates
     #[pallet::storage]
     pub type ElectionCandidates<T: Config> = StorageDoubleMap<
         _,
@@ -278,7 +308,7 @@ pub mod pallet {
         OptionQuery
     >;
 
-    /// Seçim oylarını tutan storage
+    /// Storage holding election votes
     #[pallet::storage]
     pub type ElectionVotes<T: Config> = StorageDoubleMap<
         _,
@@ -288,19 +318,19 @@ pub mod pallet {
         OptionQuery
     >;
 
-    /// Seçim sonuçlarını tutan storage
+    /// Storage holding election results
     #[pallet::storage]
     pub type ElectionResults<T: Config> =
         StorageMap<_, Blake2_128Concat, u32, ElectionResult<T>, OptionQuery>;
 
-    /// Seçim bölgelerini tutan storage
+    /// Storage holding electoral districts
     #[pallet::storage]
     pub type ElectoralDistrictConfig<T: Config> =
         StorageMap<_, Blake2_128Concat, u32, ElectoralDistrict, ValueQuery>;
 
-    // --- ATAMA SİSTEMİ STORAGE ---
+    // --- APPOINTMENT SYSTEM STORAGE ---
 
-    /// Bekleyen atamaları tutan storage
+    /// Storage holding pending nominations
     #[pallet::storage]
     pub type PendingNominations<T: Config> = StorageDoubleMap<
         _,
@@ -310,27 +340,27 @@ pub mod pallet {
         OptionQuery
     >;
 
-    /// Atama süreçlerini tutan storage
+    /// Storage holding appointment processes
     #[pallet::storage]
     pub type AppointmentProcesses<T: Config> =
         StorageMap<_, Blake2_128Concat, u32, AppointmentProcess<T>, OptionQuery>;
 
-    /// Sonraki atama süreci ID'si
+    /// Next appointment process ID
     #[pallet::storage]
     pub type NextAppointmentId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-    // --- KOLLEKTİF KARAR STORAGE ---
+    // --- COLLECTIVE DECISION STORAGE ---
 
-    /// Aktif teklifleri tutan storage
+    /// Storage holding active proposals
     #[pallet::storage]
     pub type ActiveProposals<T: Config> =
         StorageMap<_, Blake2_128Concat, u32, CollectiveProposal<T>, OptionQuery>;
 
-    /// Sonraki teklif ID'si
+    /// Next proposal ID
     #[pallet::storage]
     pub type NextProposalId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-    /// Kollektif oyları tutan storage
+    /// Storage holding collective votes
     #[pallet::storage]
     pub type CollectiveVotes<T: Config> = StorageDoubleMap<
         _,
@@ -340,7 +370,7 @@ pub mod pallet {
         OptionQuery
     >;
 
-    /// Yönetişim metriklerini tutan storage
+    /// Storage holding governance metrics
     #[pallet::storage]
     pub type GovernanceStats<T: Config> =
         StorageValue<_, GovernanceMetrics<T>, OptionQuery>;
@@ -349,8 +379,8 @@ pub mod pallet {
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        // --- SEÇİM EVENTS ---
-        /// Seçim başlatıldı
+        // --- ELECTION EVENTS ---
+        /// Election started
         ElectionStarted {
             election_id: u32,
             election_type: ElectionType,
@@ -358,14 +388,14 @@ pub mod pallet {
             end_block: BlockNumberFor<T>,
         },
 
-        /// Aday kaydı yapıldı
+        /// Candidate registered
         CandidateRegistered {
             election_id: u32,
             candidate: T::AccountId,
             deposit_paid: u128,
         },
 
-        /// Oy kullanıldı
+        /// Vote cast
         VoteCast {
             election_id: u32,
             voter: T::AccountId,
@@ -373,7 +403,7 @@ pub mod pallet {
             district_id: Option<u32>,
         },
 
-        /// Seçim tamamlandı
+        /// Election finalized
         ElectionFinalized {
             election_id: u32,
             winners: Vec<T::AccountId>,
@@ -381,8 +411,8 @@ pub mod pallet {
             turnout_percentage: u8,
         },
 
-        // --- ATAMA EVENTS ---
-        /// Nominasyon yapıldı
+        // --- APPOINTMENT EVENTS ---
+        /// Official nominated
         OfficialNominated {
             process_id: u32,
             nominator: T::AccountId,
@@ -390,7 +420,7 @@ pub mod pallet {
             role: OfficialRole,
         },
 
-        /// Atama onaylandı
+        /// Appointment approved
         AppointmentApproved {
             process_id: u32,
             approver: T::AccountId,
@@ -398,7 +428,7 @@ pub mod pallet {
             role: OfficialRole,
         },
 
-        /// Atama reddedildi
+        /// Appointment rejected
         AppointmentRejected {
             process_id: u32,
             rejector: T::AccountId,
@@ -407,8 +437,8 @@ pub mod pallet {
             reason: BoundedVec<u8, ConstU32<500>>,
         },
 
-        // --- KOLLEKTİF KARAR EVENTS ---
-        /// Teklif sunuldu
+        // --- COLLECTIVE DECISION EVENTS ---
+        /// Proposal submitted
         ProposalSubmitted {
             proposal_id: u32,
             proposer: T::AccountId,
@@ -416,14 +446,14 @@ pub mod pallet {
             voting_deadline: BlockNumberFor<T>,
         },
 
-        /// Kollektif oy kullanıldı
+        /// Collective vote cast
         CollectiveVoteCast {
             proposal_id: u32,
             voter: T::AccountId,
             vote: VoteChoice,
         },
 
-        /// Teklif sonuçlandı
+        /// Proposal finalized
         ProposalFinalized {
             proposal_id: u32,
             result: ProposalStatus,
@@ -432,21 +462,21 @@ pub mod pallet {
             abstain_votes: u32,
         },
 
-        // --- YÖNETİŞİM EVENTS ---
-        /// Parlamento güncelleendi
+        // --- GOVERNANCE EVENTS ---
+        /// Parliament updated
         ParliamentUpdated {
             new_members: Vec<T::AccountId>,
             term_start: BlockNumberFor<T>,
         },
 
-        /// Dîwan üyesi atandı
+        /// Diwan member appointed
         DiwanMemberAppointed {
             member: T::AccountId,
             appointed_by: AppointmentAuthority<T>,
             specialization: ConstitutionalSpecialization,
         },
 
-        /// Veto uygulandı
+        /// Veto applied
         VetoApplied {
             proposal_id: u32,
             vetoed_by: T::AccountId,
@@ -456,12 +486,12 @@ pub mod pallet {
 
     #[pallet::error]
     pub enum Error<T> {
-        // Genel hatalar
+        // General errors
         InsufficientTrustScore,
         MissingRequiredTiki,
         NotACitizen,
 
-        // Seçim hataları
+        // Election errors
         ElectionNotFound,
         ElectionNotActive,
         ElectionAlreadyStarted,
@@ -478,7 +508,7 @@ pub mod pallet {
         TooManyCandidates,
         InvalidInitialCandidates,
 
-        // Atama hataları
+        // Appointment errors
         NotAuthorizedToNominate,
         NotAuthorizedToApprove,
         AppointmentProcessNotFound,
@@ -486,7 +516,7 @@ pub mod pallet {
         AppointmentAlreadyProcessed,
         RoleAlreadyFilled,
 
-        // Kollektif karar hataları
+        // Collective decision errors
         ProposalNotFound,
         ProposalNotActive,
         NotAuthorizedToPropose,
@@ -495,7 +525,7 @@ pub mod pallet {
         QuorumNotMet,
         ProposalExecutionFailed,
 
-        // Sistem hataları
+        // System errors
         ParliamentFull,
         DiwanFull,
         InvalidElectionType,
@@ -506,7 +536,7 @@ pub mod pallet {
     // --- Extrinsics ---
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// Yeni bir seçim başlatır.
+        /// Initiates a new election
         #[pallet::call_index(0)]
         #[pallet::weight(<T as pallet::Config>::WeightInfo::initiate_election())]
         pub fn initiate_election(
@@ -594,7 +624,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Seçime aday ol
+        /// Register as election candidate
         #[pallet::call_index(1)]
         #[pallet::weight(<T as pallet::Config>::WeightInfo::register_candidate())]
         pub fn register_candidate(
@@ -641,7 +671,7 @@ pub mod pallet {
             let required_endorsements = Self::get_required_endorsements(&election.election_type);
             ensure!(endorsers.len() as u32 >= required_endorsements, Error::<T>::InsufficientEndorsements);
 
-            // ENDORSER KYC KONTROLÜNÜ TEST VE BENCHMARK İÇİN BYPASS ET
+            // BYPASS ENDORSER KYC CHECK FOR TESTS AND BENCHMARKS
             #[cfg(not(any(test, feature = "runtime-benchmarks")))]
             {
                 for endorser in &endorsers {
@@ -684,7 +714,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Oy ver
+        /// Cast vote
         #[pallet::call_index(2)]
         #[pallet::weight(<T as pallet::Config>::WeightInfo::cast_vote())]
         pub fn cast_vote(
@@ -704,7 +734,7 @@ pub mod pallet {
                 Error::<T>::VotingPeriodNotStarted
             );
 
-            // KYC KONTROLÜNÜ TEST VE BENCHMARK İÇİN BYPASS ET
+            // BYPASS KYC CHECK FOR TESTS AND BENCHMARKS
             #[cfg(not(any(test, feature = "runtime-benchmarks")))]
             {
                 ensure!(
@@ -759,7 +789,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Seçimi sonlandırır ve kazananları belirler
+        /// Finalizes election and determines winners
         #[pallet::call_index(3)]
         #[pallet::weight(<T as pallet::Config>::WeightInfo::finalize_election())]
         pub fn finalize_election(
@@ -861,7 +891,7 @@ pub mod pallet {
 
             // Create new appointment process
             let process_id = NextAppointmentId::<T>::get();
-            NextAppointmentId::<T>::mutate(|id| *id += 1);
+            NextAppointmentId::<T>::mutate(|id| *id = id.saturating_add(1));
 
             let current_block = frame_system::Pallet::<T>::block_number();
             let deadline = current_block + BlockNumberFor::<T>::from(14400u32 * 7u32); // 7 days
@@ -1063,11 +1093,11 @@ pub mod pallet {
             ActiveProposals::<T>::mutate(proposal_id, |proposal_opt| {
                 if let Some(proposal) = proposal_opt {
                     match vote {
-                        VoteChoice::Aye => proposal.aye_votes += 1,
-                        VoteChoice::Nay => proposal.nay_votes += 1,
-                        VoteChoice::Abstain => proposal.abstain_votes += 1,
+                        VoteChoice::Aye => proposal.aye_votes = proposal.aye_votes.saturating_add(1),
+                        VoteChoice::Nay => proposal.nay_votes = proposal.nay_votes.saturating_add(1),
+                        VoteChoice::Abstain => proposal.abstain_votes = proposal.abstain_votes.saturating_add(1),
                     }
-                    proposal.votes_cast += 1;
+                    proposal.votes_cast = proposal.votes_cast.saturating_add(1);
                 }
             });
 
@@ -1120,7 +1150,7 @@ pub mod pallet {
 
     // ====== HELPER FUNCTIONS ======
     impl<T: Config> Pallet<T> {
-        /// Serok origin kontrolü
+        /// Serok origin check
         pub fn ensure_serok(origin: OriginFor<T>) -> Result<T::AccountId, DispatchError> {
             let who = ensure_signed(origin)?;
             let current_serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok)
@@ -1129,7 +1159,7 @@ pub mod pallet {
             Ok(who)
         }
 
-        /// Çağrıyı yapanın Parlamento Üyesi olup olmadığını kontrol eder.
+        /// Checks if caller is a Parliament member
         pub fn ensure_parliament_member(origin: OriginFor<T>) -> Result<T::AccountId, DispatchError> {
             let who = ensure_signed(origin)?;
             let is_member = ParliamentMembers::<T>::get().iter().any(|m| m.account == who);
@@ -1137,7 +1167,7 @@ pub mod pallet {
             Ok(who)
         }
 
-        /// Seçim türüne göre minimum Trust Puanı
+        /// Minimum Trust Score by election type
         pub fn get_required_trust_score(election_type: &ElectionType) -> u128 {
             match election_type {
                 ElectionType::Presidential => 600,
@@ -1147,7 +1177,7 @@ pub mod pallet {
             }
         }
 
-        /// Seçim türüne göre gerekli Tiki
+        /// Required Tiki by election type
         pub fn get_required_tiki(election_type: &ElectionType) -> Option<Tiki> {
             match election_type {
                 ElectionType::Presidential | ElectionType::Parliamentary => Some(Tiki::Welati),
@@ -1156,7 +1186,7 @@ pub mod pallet {
             }
         }
 
-        /// Gerekli destekçi sayısı
+        /// Required number of endorsers
         pub fn get_required_endorsements(election_type: &ElectionType) -> u32 {
             match election_type {
                 ElectionType::Presidential => T::PresidentialEndorsements::get(),
@@ -1165,7 +1195,7 @@ pub mod pallet {
             }
         }
 
-        /// Minimum katılım oranı
+        /// Minimum turnout rate
         pub fn get_minimum_turnout(election_type: &ElectionType) -> u8 {
             match election_type {
                 ElectionType::Presidential => 50,
@@ -1174,7 +1204,7 @@ pub mod pallet {
             }
         }
 
-        /// Oy ağırlığı hesapla
+        /// Calculate vote weight
         pub fn calculate_vote_weight(voter: &T::AccountId, election_type: &ElectionType) -> u32 {
             match election_type {
                 ElectionType::Presidential | ElectionType::Parliamentary => 1,
@@ -1186,12 +1216,12 @@ pub mod pallet {
             }
         }
 
-        /// Toplam vatandaş sayısı
+        /// Total citizen count
         fn get_total_citizen_count() -> u32 {
             T::CitizenSource::citizen_count()
         }
 
-        /// Seçim kazananlarını hesaplar veya ikinci tur gerekip gerekmediğini belirler.
+        /// Calculates election winners or determines if runoff is needed
         fn calculate_election_winners(
             election_id: u32,
             election: &ElectionInfo<T>,
@@ -1265,7 +1295,7 @@ pub mod pallet {
             }
         }
 
-        /// Kazananları pozisyonlara ata
+        /// Assign winners to positions
         fn assign_election_winners(
             election_type: &ElectionType,
             winners: &[T::AccountId]
@@ -1312,7 +1342,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Teklif verme yetkisi kontrolü
+        /// Check proposal authority
         fn can_propose(proposer: &T::AccountId, decision_type: &CollectiveDecisionType) -> Result<bool, Error<T>> {
             match decision_type {
                 CollectiveDecisionType::ExecutiveDecision => {
@@ -1329,7 +1359,7 @@ pub mod pallet {
             }
         }
 
-        /// Oylama eşiği hesapla
+        /// Calculate voting threshold
         fn get_voting_threshold(decision_type: &CollectiveDecisionType) -> u32 {
             match decision_type {
                 CollectiveDecisionType::ParliamentSimpleMajority => {
@@ -1355,7 +1385,7 @@ pub mod pallet {
 
 // ====== ORIGIN IMPLEMENTATIONS ======
 
-/// Serok origin kontrolü için
+/// For Serok origin check
 pub struct EnsureSerok<T>(sp_std::marker::PhantomData<T>);
 
 impl<T: pallet::Config> EnsureOrigin<<T as frame_system::Config>::RuntimeOrigin> for EnsureSerok<T> {
@@ -1383,7 +1413,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as frame_system::Config>::RuntimeOrigin>
     }
 }
 
-/// Parlementer origin kontrolü için
+/// For Parliament member origin check
 pub struct EnsureParlementer<T>(sp_std::marker::PhantomData<T>);
 
 impl<T: pallet::Config> EnsureOrigin<<T as frame_system::Config>::RuntimeOrigin> for EnsureParlementer<T> {
@@ -1420,7 +1450,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as frame_system::Config>::RuntimeOrigin>
     }
 }
 
-/// Dîwan origin kontrolü için
+/// For Diwan origin check
 pub struct EnsureDiwan<T>(sp_std::marker::PhantomData<T>);
 
 impl<T: pallet::Config> EnsureOrigin<<T as frame_system::Config>::RuntimeOrigin> for EnsureDiwan<T> {

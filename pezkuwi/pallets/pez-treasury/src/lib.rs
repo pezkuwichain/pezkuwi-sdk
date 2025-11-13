@@ -73,7 +73,21 @@ pub trait WeightInfo {
     fn release_monthly_funds() -> Weight;
 }
 
+// Unit type implementation for tests
+impl WeightInfo for () {
+    fn initialize_treasury() -> Weight {
+        Weight::from_parts(9_471_000, 1489)
+    }
+    fn force_genesis_distribution() -> Weight {
+        Weight::from_parts(70_607_000, 8817)
+    }
+    fn release_monthly_funds() -> Weight {
+        Weight::from_parts(96_837_000, 8817)
+    }
+}
+
 pub mod weights;
+pub mod migrations; // Storage migrations
 
 #[cfg(test)]
 mod mock;
@@ -104,16 +118,17 @@ pub mod pallet {
     use frame_system::pallet_prelude::*;
     // use sp_runtime::traits::CheckedDiv;
 
-    pub const HALVING_PERIOD_MONTHS: u32 = 48; // 4 yıl = 48 ay
-    pub const BLOCKS_PER_MONTH: u32 = 432_000; // ~30 gün * 24 saat * 60 dakika * 10 blok/dakika
+    pub const HALVING_PERIOD_MONTHS: u32 = 48; // 4 years = 48 months
+    pub const BLOCKS_PER_MONTH: u32 = 432_000; // ~30 days * 24 hours * 60 minutes * 10 blocks/minute
     pub const HALVING_PERIOD_BLOCKS: u32 = HALVING_PERIOD_MONTHS * BLOCKS_PER_MONTH;
 
-    pub const TOTAL_SUPPLY: u128 = 5_000_000_000 * 1_000_000_000_000; // 5 milyar PEZ (12 decimal)
+    pub const TOTAL_SUPPLY: u128 = 5_000_000_000 * 1_000_000_000_000; // 5 billion PEZ (12 decimal)
     pub const TREASURY_ALLOCATION: u128 = 4_812_500_000 * 1_000_000_000_000; // %96.25
     pub const PRESALE_ALLOCATION: u128 = 93_750_000 * 1_000_000_000_000; // %1.875
     pub const FOUNDER_ALLOCATION: u128 = 93_750_000 * 1_000_000_000_000; // %1.875
 
     #[pallet::pallet]
+    #[pallet::storage_version(migrations::STORAGE_VERSION)]
     pub struct Pallet<T>(_);
 
     #[pallet::config]
@@ -373,10 +388,12 @@ pub mod pallet {
             );
 
             let blocks_passed = current_block.saturating_sub(start_block);
-            let months_passed: u32 = (blocks_passed / BLOCKS_PER_MONTH.into()).try_into().unwrap_or(0);
+            let months_passed: u32 = (blocks_passed / BLOCKS_PER_MONTH.into())
+                .try_into()
+                .map_err(|_| Error::<T>::InvalidHalvingPeriod)?;
 
-            // 0. ayı serbest bırakmak için months_passed >= 1 olmalı (next_month + 1)
-            // 1. ayı serbest bırakmak için months_passed >= 2 olmalı
+            // To release month 0, months_passed must be >= 1 (next_month + 1)
+            // To release month 1, months_passed must be >= 2
             ensure!(months_passed >= next_month + 1, Error::<T>::ReleaseTooEarly);
 
             let mut halving_data = HalvingInfo::<T>::get();
@@ -385,8 +402,10 @@ pub mod pallet {
                 months_passed.saturating_sub(halving_data.current_period * HALVING_PERIOD_MONTHS);
 
             if current_period_passed_months >= HALVING_PERIOD_MONTHS {
-                halving_data.current_period += 1;
-                halving_data.monthly_amount = halving_data.monthly_amount / 2u32.into();
+                halving_data.current_period = halving_data.current_period.saturating_add(1);
+                halving_data.monthly_amount = halving_data.monthly_amount
+                    .checked_div(&2u32.into())
+                    .ok_or(Error::<T>::InvalidHalvingPeriod)?;
                 halving_data.period_start_block = current_block;
 
                 Self::deposit_event(Event::NewHalvingPeriod {
@@ -396,7 +415,10 @@ pub mod pallet {
             }
 
             let monthly_amount = halving_data.monthly_amount;
-            let incentive_amount = monthly_amount * 75u32.into() / 100u32.into();
+            let incentive_amount = monthly_amount
+                .checked_mul(&75u32.into())
+                .and_then(|v| v.checked_div(&100u32.into()))
+                .ok_or(Error::<T>::InvalidHalvingPeriod)?;
             let government_amount = monthly_amount.saturating_sub(incentive_amount);
 
             let treasury_account = Self::treasury_account_id();

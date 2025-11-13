@@ -1,0 +1,223 @@
+# Prometheus Alert Rules for PezkuwiChain
+# Version: 1.0
+# Last Updated: 2025-11-13
+
+groups:
+  - name: pezkuwi_node_alerts
+    interval: 30s
+    rules:
+      # Critical: Node is down
+      - alert: NodeDown
+        expr: up{job="pezkuwi-node"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: node
+        annotations:
+          summary: "PezkuwiChain node {{ $labels.node }} is down"
+          description: "Node {{ $labels.node }} ({{ $labels.instance }}) has been down for more than 2 minutes."
+          runbook: "https://docs.pezkuwi.network/runbooks/node-down"
+
+      # Critical: No new blocks being produced
+      - alert: BlockProductionStopped
+        expr: rate(substrate_block_height{status="best"}[5m]) == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: consensus
+        annotations:
+          summary: "Block production stopped on {{ $labels.node }}"
+          description: "No new blocks have been produced in the last 5 minutes on {{ $labels.node }}."
+          runbook: "https://docs.pezkuwi.network/runbooks/block-production-stopped"
+
+      # Critical: Finalization lag
+      - alert: FinalizationLag
+        expr: (substrate_block_height{status="best"} - substrate_block_height{status="finalized"}) > 50
+        for: 10m
+        labels:
+          severity: critical
+          component: consensus
+        annotations:
+          summary: "Finalization lag on {{ $labels.node }}"
+          description: "Finalization is {{ $value }} blocks behind on {{ $labels.node }}. This may indicate consensus issues."
+          runbook: "https://docs.pezkuwi.network/runbooks/finalization-lag"
+
+      # High: Low peer count
+      - alert: LowPeerCount
+        expr: substrate_sub_libp2p_peers_count < 5
+        for: 5m
+        labels:
+          severity: high
+          component: network
+        annotations:
+          summary: "Low peer count on {{ $labels.node }}"
+          description: "Node {{ $labels.node }} has only {{ $value }} peers connected."
+          runbook: "https://docs.pezkuwi.network/runbooks/low-peer-count"
+
+      # High: High transaction pool size
+      - alert: HighTransactionPool
+        expr: substrate_sub_txpool_validations_scheduled > 10000
+        for: 10m
+        labels:
+          severity: high
+          component: txpool
+        annotations:
+          summary: "High transaction pool size on {{ $labels.node }}"
+          description: "Transaction pool has {{ $value }} pending transactions on {{ $labels.node }}."
+          runbook: "https://docs.pezkuwi.network/runbooks/high-txpool"
+
+      # Medium: Validator not in active set
+      - alert: ValidatorNotActive
+        expr: substrate_node_roles{role="authority"} == 0 and on(instance) up{node_type="validator"} == 1
+        for: 30m
+        labels:
+          severity: medium
+          component: validator
+        annotations:
+          summary: "Validator {{ $labels.node }} not in active set"
+          description: "Validator {{ $labels.node }} is not in the active validator set."
+          runbook: "https://docs.pezkuwi.network/runbooks/validator-inactive"
+
+  - name: pezkuwi_system_alerts
+    interval: 30s
+    rules:
+      # Critical: High CPU usage
+      - alert: HighCPUUsage
+        expr: 100 - (avg by (hostname) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 10m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "High CPU usage on {{ $labels.hostname }}"
+          description: "CPU usage is {{ $value }}% on {{ $labels.hostname }}."
+          runbook: "https://docs.pezkuwi.network/runbooks/high-cpu"
+
+      # Critical: Low disk space
+      - alert: LowDiskSpace
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 10
+        for: 5m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "Low disk space on {{ $labels.hostname }}"
+          description: "Disk space is {{ $value }}% remaining on {{ $labels.hostname }}."
+          runbook: "https://docs.pezkuwi.network/runbooks/low-disk-space"
+
+      # High: High memory usage
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 10m
+        labels:
+          severity: high
+          component: system
+        annotations:
+          summary: "High memory usage on {{ $labels.hostname }}"
+          description: "Memory usage is {{ $value }}% on {{ $labels.hostname }}."
+          runbook: "https://docs.pezkuwi.network/runbooks/high-memory"
+
+      # High: System load
+      - alert: HighSystemLoad
+        expr: node_load15 / count(node_cpu_seconds_total{mode="idle"}) without (cpu, mode) > 2
+        for: 10m
+        labels:
+          severity: high
+          component: system
+        annotations:
+          summary: "High system load on {{ $labels.hostname }}"
+          description: "15-minute load average is {{ $value }} on {{ $labels.hostname }}."
+          runbook: "https://docs.pezkuwi.network/runbooks/high-load"
+
+  - name: pezkuwi_pallet_alerts
+    interval: 1m
+    rules:
+      # Critical: Treasury balance too low
+      - alert: TreasuryBalanceLow
+        expr: pez_treasury_balance < 1000000000000000  # 1M PEZ with 12 decimals
+        for: 1h
+        labels:
+          severity: critical
+          component: treasury
+        annotations:
+          summary: "Treasury balance critically low"
+          description: "Treasury balance is {{ $value }} which is below the safe threshold."
+          runbook: "https://docs.pezkuwi.network/runbooks/treasury-low"
+
+      # High: Election not finalized
+      - alert: ElectionNotFinalized
+        expr: welati_active_elections_count > 0 and welati_election_overdue == 1
+        for: 2h
+        labels:
+          severity: high
+          component: governance
+        annotations:
+          summary: "Election past deadline"
+          description: "Election {{ $labels.election_id }} is past its finalization deadline."
+          runbook: "https://docs.pezkuwi.network/runbooks/election-overdue"
+
+      # Medium: High NFT minting rate
+      - alert: HighNFTMintingRate
+        expr: rate(tiki_nfts_minted_total[1h]) > 100
+        for: 30m
+        labels:
+          severity: medium
+          component: tiki
+        annotations:
+          summary: "High NFT minting rate detected"
+          description: "NFT minting rate is {{ $value }} per hour, which may indicate spam."
+          runbook: "https://docs.pezkuwi.network/runbooks/high-minting-rate"
+
+  - name: pezkuwi_database_alerts
+    interval: 30s
+    rules:
+      # Critical: Database down
+      - alert: DatabaseDown
+        expr: up{job="postgres"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "Database connection failed for more than 2 minutes."
+          runbook: "https://docs.pezkuwi.network/runbooks/database-down"
+
+      # High: High database connections
+      - alert: HighDatabaseConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.8
+        for: 10m
+        labels:
+          severity: high
+          component: database
+        annotations:
+          summary: "High database connection usage"
+          description: "Database is using {{ $value | humanizePercentage }} of max connections."
+          runbook: "https://docs.pezkuwi.network/runbooks/high-db-connections"
+
+  - name: pezkuwi_security_alerts
+    interval: 1m
+    rules:
+      # Critical: Unusual transaction rate
+      - alert: UnusualTransactionRate
+        expr: rate(substrate_sub_txpool_validations_finished[5m]) > 1000
+        for: 10m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Unusual transaction rate detected on {{ $labels.node }}"
+          description: "Transaction rate is {{ $value }} tx/s, which may indicate an attack."
+          runbook: "https://docs.pezkuwi.network/runbooks/unusual-tx-rate"
+
+      # High: Failed transactions spike
+      - alert: FailedTransactionSpike
+        expr: rate(substrate_sub_txpool_validations_invalid[5m]) > 100
+        for: 5m
+        labels:
+          severity: high
+          component: security
+        annotations:
+          summary: "High rate of failed transactions on {{ $labels.node }}"
+          description: "Failed transaction rate is {{ $value }} tx/s."
+          runbook: "https://docs.pezkuwi.network/runbooks/failed-tx-spike"
