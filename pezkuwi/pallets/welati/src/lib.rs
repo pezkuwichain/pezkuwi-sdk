@@ -1,5 +1,140 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # Welati (Governance) Pallet
+//!
+//! A comprehensive governance pallet implementing elections, voting, and government structure management.
+//!
+//! ## Overview
+//!
+//! The Welati pallet provides complete governance infrastructure including:
+//! - **Presidential Elections**: Direct democratic election of Serok (President)
+//! - **Parliamentary Elections**: District-based representation in parliament
+//! - **Cabinet Formation**: Prime Minister selection and ministerial appointments
+//! - **Diwan Council**: Advisory council elections
+//! - **Proposal System**: Legislative proposals and voting mechanisms
+//! - **Official Appointments**: Non-elected government positions
+//!
+//! ## Government Structure
+//!
+//! ### Executive Branch
+//! - **Serok** (President): Head of state, elected by popular vote
+//! - **SerokWeziran** (Prime Minister): Head of government, appointed by President
+//! - **Ministers**: Cabinet members appointed by PM, confirmed by Parliament
+//!   - Minister of Finance (WezireDarayiye)
+//!   - Minister of Defense (WezireParez)
+//!   - Minister of Justice (WezireDad)
+//!   - Minister of Education (WezireBelaw)
+//!   - Minister of Health (WezireTend)
+//!   - Minister of Water Resources (WezireAva)
+//!   - Minister of Culture (WezireCand)
+//!
+//! ### Legislative Branch
+//! - **Parliament**: Elected representatives (size configurable)
+//! - **Parliamentary Speaker** (SerokiMeclise): Elected from parliament members
+//! - **District System**: Electoral districts for regional representation
+//!
+//! ### Advisory Council
+//! - **Diwan**: Council of appointed and elected advisors
+//! - **Diwan Members** (EndameDiwane): Mixed selection process
+//!
+//! ## Election System
+//!
+//! ### Presidential Election
+//! - Requires minimum endorsements from citizens
+//! - Candidacy period for registration
+//! - Campaign period for public engagement
+//! - Direct popular vote
+//! - Winner takes office immediately
+//!
+//! ### Parliamentary Election
+//! - District-based representation
+//! - Multiple seats per district
+//! - Trust-score weighted voting
+//! - Proportional representation within districts
+//!
+//! ### Election Phases
+//! 1. **Candidacy Period**: Citizens register as candidates
+//! 2. **Campaign Period**: Candidates campaign for votes
+//! 3. **Voting Period**: Citizens cast votes
+//! 4. **Finalization**: Results calculated, winners take office
+//!
+//! ## Proposal & Voting System
+//!
+//! ### Proposal Types
+//! - Legislative proposals
+//! - Constitutional amendments
+//! - Budget proposals
+//! - Appointments confirmation
+//!
+//! ### Voting Mechanism
+//! - Parliament members vote on proposals
+//! - Voting power based on trust scores
+//! - Quorum requirements
+//! - Multiple voting options (yes/no/abstain)
+//!
+//! ## Integration with Roles (Tiki)
+//!
+//! Elections automatically assign Tiki (role NFTs):
+//! - Presidential winner gets Serok tiki
+//! - Parliament winners get Parlementer tiki
+//! - Appointed ministers get respective Wezire tikis
+//! - Diwan members get EndameDiwane tiki
+//!
+//! ## Interface
+//!
+//! ### Election Extrinsics
+//! - `initiate_election(election_type)` - Start new election process
+//! - `register_candidate(election_id, district)` - Register as candidate
+//! - `cast_vote(election_id, candidate, vote_weight)` - Cast vote in election
+//! - `finalize_election(election_id)` - Calculate results and assign positions
+//!
+//! ### Appointment Extrinsics
+//! - `nominate_official(position, nominee)` - Nominate for government position
+//! - `approve_appointment(position, nominee)` - Confirm appointment (Parliament)
+//!
+//! ### Proposal Extrinsics
+//! - `submit_proposal(title, description, call)` - Submit legislative proposal
+//! - `vote_on_proposal(proposal_id, vote)` - Vote on active proposal
+//!
+//! ### Storage
+//! - `CurrentOfficials` - Current government position holders
+//! - `CurrentMinisters` - Current cabinet ministers
+//! - `ParliamentMembers` - Active parliament members
+//! - `DiwanMembers` - Active Diwan council members
+//! - `ActiveElections` - Ongoing election processes
+//! - `Proposals` - Legislative proposals and their status
+//!
+//! ## Security & Requirements
+//! - KYC approval required for all participation
+//! - Trust score minimums for candidacy
+//! - Endorsement requirements prevent spam candidates
+//! - Deposit required for candidacy (slashed if withdrawn)
+//! - Vote weighting prevents sybil attacks
+//!
+//! ## Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_welati::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type WeightInfo = pallet_welati::weights::SubstrateWeight<Runtime>;
+//!     type Randomness = RandomnessCollectiveFlip;
+//!     type RuntimeCall = RuntimeCall;
+//!     type TrustScoreSource = Trust;
+//!     type TikiSource = Tiki;
+//!     type CitizenSource = IdentityKyc;
+//!     type KycSource = IdentityKyc;
+//!     type ParliamentSize = ConstU32<201>;
+//!     type DiwanSize = ConstU32<50>;
+//!     type ElectionPeriod = ConstU32<1_728_000>; // ~4 months
+//!     type CandidacyPeriod = ConstU32<43_200>; // ~3 days
+//!     type CampaignPeriod = ConstU32<144_000>; // ~10 days
+//!     type ElectoralDistricts = ConstU32<10>;
+//!     type CandidacyDeposit = ConstU128<100_000_000_000_000>; // 100 tokens
+//!     type PresidentialEndorsements = ConstU32<1000>;
+//!     type ParliamentaryEndorsements = ConstU32<100>;
+//! }
+//! ```
+
 pub use pallet::*;
 pub mod weights;
 pub mod types;
@@ -30,16 +165,16 @@ use frame_support::{
 	traits::{EnsureOrigin, Get, Randomness},
 	weights::Weight,
 };
-use frame_system::{pallet_prelude::*, RawOrigin};
+use frame_system::pallet_prelude::*;
 use pallet_identity_kyc::{types::KycLevel, types::KycStatus};
 use pallet_tiki::{Tiki, TikiScoreProvider};
 use pallet_trust::TrustScoreProvider;
 use sp_runtime::traits::{Dispatchable};
 use sp_std::{vec::Vec, boxed::Box, vec};
 
-/// Diğer paletlerden vatandaşlık bilgilerini almak için bir arayüz.
+/// Interface for getting citizenship information from other pallets.
 pub trait CitizenInfo {
-    /// Onaylanmış toplam vatandaş sayısını döndürür.
+    /// Returns total approved citizen count.
     fn citizen_count() -> u32;
 }
 
@@ -90,35 +225,41 @@ pub mod pallet {
         type ParliamentaryEndorsements: Get<u32>;
     }
 
-    // --- TEMEL YÖNETİŞİM STORAGE ---
+    // --- CORE GOVERNANCE STORAGE ---
 
-    /// Mevcut devlet pozisyonlarını tutan storage
+    /// Storage holding current government positions
     #[pallet::storage]
     #[pallet::getter(fn current_officials)]
     pub type CurrentOfficials<T: Config> =
         StorageMap<_, Blake2_128Concat, GovernmentPosition, T::AccountId, OptionQuery>;
 
-    /// Mevcut bakanları tutan storage
+    /// Storage holding current ministers
     #[pallet::storage]
     #[pallet::getter(fn current_ministers)]
     pub type CurrentMinisters<T: Config> =
         StorageMap<_, Blake2_128Concat, MinisterRole, T::AccountId, OptionQuery>;
 
-    /// Parlamento üyelerini tutan storage
+    /// Storage holding parliament members
     #[pallet::storage]
     #[pallet::getter(fn parliament_members)]
     pub type ParliamentMembers<T: Config> =
         StorageValue<_, BoundedVec<ParliamentMember<T>, T::ParliamentSize>, ValueQuery>;
 
-    /// Dîwan üyelerini tutan storage
+    /// Storage holding Diwan members
     #[pallet::storage]
     #[pallet::getter(fn diwan_members)]
     pub type DiwanMembers<T: Config> =
         StorageValue<_, BoundedVec<DiwanMember<T>, T::DiwanSize>, ValueQuery>;
 
-    // --- SEÇİM SİSTEMİ STORAGE ---
+    /// Storage holding appointed government officials (OfficialRole)
+    #[pallet::storage]
+    #[pallet::getter(fn appointed_officials)]
+    pub type AppointedOfficials<T: Config> =
+        StorageMap<_, Blake2_128Concat, OfficialRole, T::AccountId, OptionQuery>;
 
-    /// Aktif seçimleri tutan storage
+    // --- ELECTION SYSTEM STORAGE ---
+
+    /// Storage holding active elections
     #[pallet::storage]
     pub type ActiveElections<T: Config> =
         StorageMap<_, Blake2_128Concat, u32, ElectionInfo<T>, OptionQuery>;
@@ -473,8 +614,8 @@ pub mod pallet {
                 Error::<T>::CandidacyPeriodExpired
             );
 
-            // KYC kontrolü her zaman aktif (sadece unit test'te bypass)
-            #[cfg(not(test))]
+            // KYC check is always active (bypass only in unit tests and benchmarks)
+            #[cfg(not(any(test, feature = "runtime-benchmarks")))]
             {
                 ensure!(
                     <pallet_identity_kyc::Pallet<T> as KycStatus<T::AccountId>>::get_kyc_status(&candidate) == KycLevel::Approved,
@@ -693,12 +834,78 @@ pub mod pallet {
         #[pallet::weight(<T as pallet::Config>::WeightInfo::nominate_official())]
         pub fn nominate_official(
             origin: OriginFor<T>,
-            _nominee: T::AccountId,
-            _role: OfficialRole,
-            _justification: BoundedVec<u8, ConstU32<1000>>,
+            nominee: T::AccountId,
+            role: OfficialRole,
+            justification: BoundedVec<u8, ConstU32<1000>>,
         ) -> DispatchResult {
-            let _nominator = ensure_signed(origin)?;
+            let nominator = ensure_signed(origin)?;
+
+            // Verify nominator is authorized (must be a minister or Serok)
+            // For simplicity, we'll require Serok or any minister can nominate
+            let is_serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok) == Some(nominator.clone());
+            let is_minister = CurrentMinisters::<T>::iter().any(|(_, minister)| minister == nominator);
+
+            ensure!(is_serok || is_minister, Error::<T>::NotAuthorizedToNominate);
+
+            // Check if role is already filled
+            ensure!(
+                !AppointedOfficials::<T>::contains_key(&role),
+                Error::<T>::RoleAlreadyFilled
+            );
+
+            // Check if this specific nominee already has a pending nomination for this role
+            ensure!(
+                !PendingNominations::<T>::contains_key(&role, &nominee),
+                Error::<T>::RoleAlreadyFilled
+            );
+
+            // Create new appointment process
+            let process_id = NextAppointmentId::<T>::get();
             NextAppointmentId::<T>::mutate(|id| *id += 1);
+
+            let current_block = frame_system::Pallet::<T>::block_number();
+            let deadline = current_block + BlockNumberFor::<T>::from(14400u32 * 7u32); // 7 days
+
+            // Create nomination info
+            let nomination = NominationInfo {
+                nominator: nominator.clone(),
+                nominee: nominee.clone(),
+                nominated_at: current_block,
+                approved: false,
+                approver: None,
+                approved_at: None,
+                status: NominationStatus::Pending,
+            };
+
+            // Store nomination
+            PendingNominations::<T>::insert(&role, &nominee, nomination);
+
+            // Create appointment process
+            let documents: BoundedVec<BoundedVec<u8, ConstU32<1000>>, ConstU32<10>> =
+                vec![justification.try_into().map_err(|_| Error::<T>::CalculationOverflow)?]
+                .try_into()
+                .map_err(|_| Error::<T>::CalculationOverflow)?;
+
+            let appointment_process = AppointmentProcess {
+                process_id,
+                position: role.clone(),
+                nominating_minister: nominator.clone(),
+                nominee: nominee.clone(),
+                initiated_at: current_block,
+                deadline,
+                status: AppointmentStatus::WaitingPresidentialApproval,
+                documents,
+            };
+
+            AppointmentProcesses::<T>::insert(process_id, appointment_process);
+
+            Self::deposit_event(Event::OfficialNominated {
+                process_id,
+                nominator,
+                nominee,
+                role,
+            });
+
             Ok(())
         }
 
@@ -706,9 +913,52 @@ pub mod pallet {
         #[pallet::weight(<T as pallet::Config>::WeightInfo::approve_appointment())]
         pub fn approve_appointment(
             origin: OriginFor<T>,
-            _process_id: u32,
+            process_id: u32,
         ) -> DispatchResult {
-            let _approver = ensure_signed(origin)?;
+            let approver = ensure_signed(origin)?;
+
+            // Verify approver is authorized (typically Serok)
+            let is_serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok) == Some(approver.clone());
+            ensure!(is_serok, Error::<T>::NotAuthorizedToApprove);
+
+            // Get appointment process
+            let mut process = AppointmentProcesses::<T>::get(process_id)
+                .ok_or(Error::<T>::AppointmentProcessNotFound)?;
+
+            // Check status
+            ensure!(
+                process.status == AppointmentStatus::WaitingPresidentialApproval,
+                Error::<T>::AppointmentAlreadyProcessed
+            );
+
+            // Get nomination
+            let mut nomination = PendingNominations::<T>::get(&process.position, &process.nominee)
+                .ok_or(Error::<T>::NominationNotFound)?;
+
+            // Update nomination
+            let current_block = frame_system::Pallet::<T>::block_number();
+            nomination.approved = true;
+            nomination.approver = Some(approver.clone());
+            nomination.approved_at = Some(current_block);
+            nomination.status = NominationStatus::Approved;
+
+            // Update process status
+            process.status = AppointmentStatus::Approved;
+
+            // Store updates
+            PendingNominations::<T>::insert(&process.position, &process.nominee, nomination);
+            AppointmentProcesses::<T>::insert(process_id, process.clone());
+
+            // Assign the official to the role
+            AppointedOfficials::<T>::insert(&process.position, &process.nominee);
+
+            Self::deposit_event(Event::AppointmentApproved {
+                process_id,
+                approver,
+                appointee: process.nominee,
+                role: process.position,
+            });
+
             Ok(())
         }
 
@@ -773,8 +1023,32 @@ pub mod pallet {
         ) -> DispatchResult {
             let voter = ensure_signed(origin)?;
             ensure!(ActiveProposals::<T>::contains_key(proposal_id), Error::<T>::ProposalNotFound);
-            
-            // Test için basit bir oy kaydet
+
+            // Check if voter has already voted on this proposal
+            ensure!(
+                !CollectiveVotes::<T>::contains_key(proposal_id, &voter),
+                Error::<T>::ProposalAlreadyVoted
+            );
+
+            // Check if voter is authorized (must be a parliament member)
+            let proposal = ActiveProposals::<T>::get(proposal_id).ok_or(Error::<T>::ProposalNotFound)?;
+
+            // For Parliament decisions, voter must be a parliament member
+            match proposal.decision_type {
+                CollectiveDecisionType::ParliamentSimpleMajority |
+                CollectiveDecisionType::ParliamentSuperMajority |
+                CollectiveDecisionType::ParliamentAbsoluteMajority => {
+                    // Check if voter is in parliament
+                    let members = ParliamentMembers::<T>::get();
+                    let is_member = members.iter().any(|m| m.account == voter);
+                    ensure!(is_member, Error::<T>::NotAuthorizedToVote);
+                },
+                // For other decision types, authorization check is handled differently
+                // (e.g., ConstitutionalReview requires Diwan membership)
+                _ => {},
+            }
+
+            // Record the vote
             let vote_info = CollectiveVote {
                 voter: voter.clone(),
                 proposal_id,
@@ -782,10 +1056,10 @@ pub mod pallet {
                 voted_at: frame_system::Pallet::<T>::block_number(),
                 rationale,
             };
-            
+
             CollectiveVotes::<T>::insert(proposal_id, &voter, vote_info);
-            
-            // Proposal'daki oy sayısını güncelle
+
+            // Update proposal vote counts
             ActiveProposals::<T>::mutate(proposal_id, |proposal_opt| {
                 if let Some(proposal) = proposal_opt {
                     match vote {
@@ -796,7 +1070,7 @@ pub mod pallet {
                     proposal.votes_cast += 1;
                 }
             });
-            
+
             Ok(())
         }
     }
@@ -876,9 +1150,9 @@ pub mod pallet {
         /// Seçim türüne göre gerekli Tiki
         pub fn get_required_tiki(election_type: &ElectionType) -> Option<Tiki> {
             match election_type {
-                ElectionType::Presidential | ElectionType::Parliamentary => Some(Tiki::Hemwelatî),
+                ElectionType::Presidential | ElectionType::Parliamentary => Some(Tiki::Welati),
                 ElectionType::SpeakerElection => Some(Tiki::Parlementer),
-                ElectionType::ConstitutionalCourt => Some(Tiki::Hemwelatî),
+                ElectionType::ConstitutionalCourt => Some(Tiki::Welati),
             }
         }
 

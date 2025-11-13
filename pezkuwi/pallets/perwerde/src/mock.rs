@@ -83,7 +83,7 @@ parameter_types! {
 	pub const MaxCourseNameLength: u32 = 100;
 	pub const MaxCourseDescLength: u32 = 500;
 	pub const MaxCourseLinkLength: u32 = 200;
-	pub const MaxStudentsPerCourse: u32 = 1000;
+	pub const MaxStudentsPerCourse: u32 = 100; // Reduced for test performance
 }
 
 // --- KESİN ÇÖZÜM BURADA BAŞLIYOR ---

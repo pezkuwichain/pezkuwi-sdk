@@ -1,12 +1,96 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # Perwerde (Education) Pallet
+//!
+//! A pallet for managing educational courses, student enrollments, and achievement tracking.
+//!
+//! ## Overview
+//!
+//! The Perwerde pallet implements an on-chain educational platform where:
+//! - Educators create and manage courses with IPFS-linked content
+//! - Students enroll in courses and track their progress
+//! - Course completion earns points that contribute to trust scores
+//! - Educational achievements are permanently recorded on-chain
+//!
+//! ## Core Features
+//!
+//! ### Course Management
+//! - Admins create courses with name, description, and content links (IPFS)
+//! - Courses can be active or archived
+//! - Each course has a unique ID and owner
+//! - Course metadata is immutable after creation
+//!
+//! ### Student Enrollment
+//! - Students enroll in active courses
+//! - One enrollment per student per course
+//! - Enrollment history tracked with block numbers
+//! - Students can be enrolled in multiple courses simultaneously
+//!
+//! ### Completion & Points
+//! - Course owners mark student completions
+//! - Points awarded upon completion
+//! - Points contribute to Perwerde score for trust calculation
+//! - Completion timestamps recorded permanently
+//!
+//! ## Perwerde Score System
+//!
+//! The Perwerde score is derived from total education points:
+//! - Each completed course awards points
+//! - Points accumulate over time
+//! - Score used by `pallet-trust` for composite trust calculation
+//! - Higher education achievement improves ecosystem standing
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `create_course(name, description, content_link)` - Create new educational course (admin)
+//! - `enroll_student(course_id)` - Enroll in an active course (user)
+//! - `mark_course_completed(student, course_id, points)` - Award completion points (course owner)
+//! - `archive_course(course_id)` - Archive a course (course owner)
+//!
+//! ### Storage
+//!
+//! - `Courses` - Course metadata indexed by course ID
+//! - `NextCourseId` - Auto-incrementing course ID counter
+//! - `Enrollments` - Student enrollment records (student, course_id) → Enrollment
+//! - `StudentCourses` - Per-student list of enrolled course IDs
+//!
+//! ### Integration
+//!
+//! - Implements `PerwerdeScoreProvider` trait for `pallet-trust`
+//! - Education scores contribute to validator eligibility
+//! - Course completion history visible to governance
+//!
+//! ## Security Features
+//!
+//! - Only course owners can mark completions
+//! - Active courses required for enrollment
+//! - No duplicate enrollments
+//! - Maximum courses per student limit
+//! - Admin-only course creation
+//!
+//! ## Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_perwerde::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type AdminOrigin = EnsureRoot<AccountId>;
+//!     type WeightInfo = pallet_perwerde::weights::SubstrateWeight<Runtime>;
+//!     type MaxCourseNameLength = ConstU32<128>;
+//!     type MaxCourseDescLength = ConstU32<512>;
+//!     type MaxCourseLinkLength = ConstU32<256>;
+//!     type MaxStudentsPerCourse = ConstU32<100>;
+//! }
+//! ```
+
 pub use pallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 pub mod weights;
 
-// Bu modüller sadece `std` ortamında derlenmelidir.
+// These modules should only be compiled in `std` environment.
 #[cfg(all(feature = "std", any(test, feature = "runtime-benchmarks")))]
 pub mod mock;
 
@@ -108,6 +192,7 @@ pub mod pallet {
 		CourseNotActive,
 		CourseAlreadyCompleted,
 		NotCourseOwner,
+		TooManyCourses,
 	}
 
 	#[pallet::call]
@@ -123,19 +208,13 @@ pub mod pallet {
 			let owner = T::AdminOrigin::ensure_origin(origin)?;
 			let course_id = NextCourseId::<T>::get();
 
-			let bounded_name: BoundedVec<u8, T::MaxCourseNameLength> =
-				name.try_into().expect("Name too long");
-			let bounded_desc: BoundedVec<u8, T::MaxCourseDescLength> =
-				description.try_into().expect("Description too long");
-			let bounded_link: BoundedVec<u8, T::MaxCourseLinkLength> =
-				content_link.try_into().expect("Link too long");
-
+			// Parameters are already bounded, no conversion needed
 			let course = Course {
 				id: course_id,
 				owner: owner.clone(),
-				name: bounded_name,
-				description: bounded_desc,
-				content_link: bounded_link,
+				name,
+				description,
+				content_link,
 				status: CourseStatus::Active,
 				created_at: frame_system::Pallet::<T>::block_number(),
 			};
@@ -164,9 +243,9 @@ pub mod pallet {
 			};
 
 			Enrollments::<T>::insert((&student, course_id), enrollment);
-			StudentCourses::<T>::mutate(&student, |courses| {
-				courses.try_push(course_id).expect("Student has too many courses");
-			});
+			StudentCourses::<T>::try_mutate(&student, |courses| {
+				courses.try_push(course_id).map_err(|_| Error::<T>::TooManyCourses)
+			})?;
 
 			Self::deposit_event(Event::StudentEnrolled { student, course_id });
 			Ok(())

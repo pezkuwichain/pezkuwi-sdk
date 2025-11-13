@@ -400,7 +400,7 @@ pub struct AppointmentProcess<T: frame_system::Config> {
     /// Mevcut durum
     pub status: AppointmentStatus,
     /// Ek belgeler/gerekçe
-    pub documents: BoundedVec<BoundedVec<u8, ConstU32<100>>, ConstU32<10>>,
+    pub documents: BoundedVec<BoundedVec<u8, ConstU32<1000>>, ConstU32<10>>,
 }
 
 /// Atama süreci durumları
@@ -904,10 +904,10 @@ impl GovernmentPositionInfo for GovernmentPosition {
 
     fn required_tiki(&self) -> Option<Tiki> {
         match self {
-            GovernmentPosition::Serok => Some(Tiki::Hemwelatî),
-            GovernmentPosition::Parlementer => Some(Tiki::Hemwelatî),
+            GovernmentPosition::Serok => Some(Tiki::Welati),
+            GovernmentPosition::Parlementer => Some(Tiki::Welati),
             GovernmentPosition::MeclisBaskanı => Some(Tiki::Parlementer),
-            GovernmentPosition::EndameDiwane => Some(Tiki::Hemwelatî),
+            GovernmentPosition::EndameDiwane => Some(Tiki::Welati),
         }
     }
 

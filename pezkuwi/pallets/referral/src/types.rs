@@ -23,11 +23,6 @@ pub trait InviterProvider<AccountId> {
 	fn get_inviter(who: &AccountId) -> Option<AccountId>;
 }
 
-/// KYC onaylandığında tetiklenecek eylemleri tanımlayan arayüz.
-pub trait OnKycApproved<AccountId> {
-	fn on_kyc_approved(who: &AccountId);
-}
-
 /// Bir hesabın referans puanını hesaplayan arayüz.
 pub trait ReferralScoreProvider<AccountId> {
 	type Score;

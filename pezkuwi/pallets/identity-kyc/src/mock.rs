@@ -79,6 +79,22 @@ parameter_types! {
 	pub const MaxCidLen: u32 = 128;
 }
 
+// Mock implementation for OnKycApproved hook
+pub struct MockOnKycApproved;
+impl crate::types::OnKycApproved<AccountId> for MockOnKycApproved {
+	fn on_kyc_approved(_who: &AccountId) {
+		// No-op for tests
+	}
+}
+
+// Mock implementation for CitizenNftProvider
+pub struct MockCitizenNftProvider;
+impl crate::types::CitizenNftProvider<AccountId> for MockCitizenNftProvider {
+	fn mint_citizen_nft(_who: &AccountId) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
+}
+
 impl crate::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
@@ -87,6 +103,8 @@ impl crate::Config for Test {
 	type KycApplicationDeposit = KycApplicationDepositAmount;
 	type MaxStringLength = MaxStringLen;
 	type MaxCidLength = MaxCidLen;
+	type OnKycApproved = MockOnKycApproved;
+	type CitizenNftProvider = MockCitizenNftProvider;
 }
 
 pub fn new_test_ext() -> sp_io::TestExternalities {

@@ -1,8 +1,102 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # Staking Score Pallet
+//!
+//! A pallet for calculating time-weighted staking scores based on stake amount and duration.
+//!
+//! ## Overview
+//!
+//! The Staking Score pallet calculates reputation scores from staking behavior by considering:
+//! - **Stake Amount**: How much a user has staked
+//! - **Stake Duration**: How long tokens have been staked
+//! - **Nomination Count**: Number of validators nominated
+//! - **Unlocking Chunks**: Pending unstake operations
+//!
+//! These metrics combine to produce a staking score that contributes to the composite
+//! trust score in `pallet-trust`.
+//!
+//! ## Score Calculation
+//!
+//! ```text
+//! staking_score = base_score + time_bonus
+//!
+//! where:
+//! base_score = (staked_amount / UNITS) * 10
+//! time_bonus = (months_staked * staked_amount * 0.05) / UNITS
+//! ```
+//!
+//! ### Time-Based Rewards
+//! - First month: Base score only
+//! - Each additional month: +5% bonus on staked amount
+//! - Maximum benefit achieved through long-term commitment
+//! - Score increases linearly with time
+//!
+//! ## Workflow
+//!
+//! 1. User stakes tokens via main staking pallet
+//! 2. User calls `start_score_tracking()` to begin time tracking
+//! 3. Tracking start block is recorded
+//! 4. `pallet-trust` queries staking score via `StakingScoreProvider` trait
+//! 5. Score calculation uses current block number vs. start block
+//! 6. Time bonus accumulates automatically each month
+//!
+//! ## Integration with Staking
+//!
+//! This pallet does not handle staking operations directly. It:
+//! - Reads staking data from main staking pallet via `StakingInfoProvider`
+//! - Tracks when users want to start earning time bonuses
+//! - Calculates scores on-demand without modifying staking state
+//!
+//! ## Score Components
+//!
+//! ### Staked Amount
+//! - Primary factor in score calculation
+//! - Measured in balance units (UNITS = 10^12)
+//! - Higher stake = higher base score
+//!
+//! ### Duration
+//! - Measured in months (30 days * 24 hours * 60 min * 10 blocks/min)
+//! - ~432,000 blocks per month
+//! - Compounds monthly for long-term stakers
+//!
+//! ### Additional Metrics
+//! - Nomination count (contributes to complexity score)
+//! - Unlocking chunks (indicates unstaking activity)
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `start_score_tracking()` - Begin time-based score accumulation (user, one-time)
+//!
+//! ### Storage
+//!
+//! - `StakingStartBlock` - Block number when user started score tracking
+//!
+//! ### Trait Implementations
+//!
+//! - `StakingScoreProvider` - Query staking scores for trust calculation
+//!
+//! ## Dependencies
+//!
+//! This pallet requires:
+//! - Main staking pallet implementing `StakingInfoProvider`
+//! - `pallet-trust` as consumer of staking scores
+//!
+//! ## Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_staking_score::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type Balance = Balance;
+//!     type StakingInfo = Staking; // Main staking pallet
+//!     type WeightInfo = pallet_staking_score::weights::SubstrateWeight<Runtime>;
+//! }
+//! ```
+
 pub use pallet::*;
 
-// Benchmarking için mock staking info provider - BUNU EKLEYİN
+// Mock staking info provider for benchmarking - ADD THIS
 #[cfg(feature = "runtime-benchmarks")]
 pub struct BenchmarkStakingInfoProvider;
 
@@ -12,7 +106,7 @@ where
     Balance: From<u128>,
 {
     fn get_staking_details(_who: &AccountId) -> Option<StakingDetails<Balance>> {
-        // Benchmarking için her zaman geçerli bir stake döndür
+        // Always return valid stake for benchmarking
         Some(StakingDetails {
             staked_amount: (1000u128 * UNITS).into(),
             nominations_count: 5,
@@ -33,7 +127,7 @@ pub mod weights;
 
 #[frame_support::pallet]
 pub mod pallet {
-	use super::weights::WeightInfo; // WeightInfo'yu üst modülden doğru şekilde import ediyoruz.
+	use super::weights::WeightInfo; // Properly importing WeightInfo from parent module.
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use sp_runtime::{traits::{Saturating, Zero}, Perbill};
@@ -49,12 +143,12 @@ pub mod pallet {
 	#[pallet::config]
 	pub trait Config: frame_system::Config + TypeInfo
 	where
-		// BlockNumber'ın u32'den dönüştürülebilir olduğunu garanti ediyoruz.
+		// Ensuring BlockNumber is convertible from u32.
 		BlockNumberFor<Self>: From<u32>,
 	{
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
-		/// Staking için kullanılacak bakiye tipi.
-		/// Gerekli olan tüm matematiksel ve karşılaştırma özelliklerini ekliyoruz.
+		/// Balance type to be used for staking.
+		/// Adding all required mathematical and comparison properties.
 		type Balance: Member
 			+ Parameter
 			+ MaxEncodedLen
@@ -63,11 +157,11 @@ pub mod pallet {
 			+ PartialOrd
 			+ Saturating
 			+ Zero
-			+ Div<Output = Self::Balance> // Bölme işleminin sonucunun da Balance olduğunu belirtiyoruz.
+			+ Div<Output = Self::Balance> // Specifying that division result is also Balance.
 			+ From<u128>;
-		/// Staking verilerini okumak için kullanılacak arayüz.
+		/// Interface to be used for reading staking data.
 		type StakingInfo: StakingInfoProvider<Self::AccountId, Self::Balance>;
-		/// Extrinsic'lerin ağırlıklarını sağlamak için.
+		/// To provide extrinsic weights.
 		type WeightInfo: WeightInfo;
 	}
 
@@ -79,7 +173,7 @@ pub mod pallet {
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
-		/// Bir kullanıcı, süreye dayalı puanlamayı başlattı.
+		/// A user started time-based scoring.
 		ScoreTrackingStarted { who: T::AccountId, start_block: BlockNumberFor<T> },
 	}
 

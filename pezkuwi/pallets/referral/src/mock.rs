@@ -76,6 +76,15 @@ impl pallet_balances::Config for Test {
 }
 
 // pallet_identity_kyc için konfigürasyon
+
+// Mock implementation for CitizenNftProvider
+pub struct MockCitizenNftProvider;
+impl pallet_identity_kyc::types::CitizenNftProvider<u64> for MockCitizenNftProvider {
+	fn mint_citizen_nft(_who: &u64) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
+}
+
 impl pallet_identity_kyc::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
@@ -84,6 +93,8 @@ impl pallet_identity_kyc::Config for Test {
 	type KycApprovalOrigin = frame_system::EnsureRoot<u64>;
 	type Currency = Balances;
 	type KycApplicationDeposit = ConstU128<100>;
+	type OnKycApproved = Referral;
+	type CitizenNftProvider = MockCitizenNftProvider;
 }
 
 // Nihayet, pallet_referral için konfigürasyon

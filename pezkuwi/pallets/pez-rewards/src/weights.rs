@@ -63,7 +63,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Proof: `PezRewards::EpochInfo` (`max_values`: Some(1), `max_size`: Some(12), added: 507, mode: `MaxEncodedLen`)
 	/// Storage: `PezRewards::EpochStatus` (r:0 w:1)
 	/// Proof: `PezRewards::EpochStatus` (`max_values`: None, `max_size`: Some(21), added: 2496, mode: `MaxEncodedLen`)
-	fn initialize_rewards_system() -> Weight { // Değerler Turn 56'dan
+	fn initialize_rewards_system() -> Weight { // Values from Turn 56
 		// Proof Size summary in bytes:
 		//  Measured:  `213`
 		//  Estimated: `1502`
@@ -81,7 +81,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Proof: `Trust::TrustScores` (`max_values`: None, `max_size`: Some(64), added: 2539, mode: `MaxEncodedLen`)
 	/// Storage: `PezRewards::UserEpochScores` (r:0 w:1)
 	/// Proof: `PezRewards::UserEpochScores` (`max_values`: None, `max_size`: Some(84), added: 2559, mode: `MaxEncodedLen`)
-	fn record_trust_score() -> Weight { // Değerler Turn 56'dan
+	fn record_trust_score() -> Weight { // Values from Turn 56
 		// Proof Size summary in bytes:
 		//  Measured:  `333`
 		//  Estimated: `3529`
@@ -103,7 +103,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Proof: `PezRewards::UserEpochScores` (`max_values`: None, `max_size`: Some(84), added: 2559, mode: `MaxEncodedLen`)
 	/// Storage: `PezRewards::EpochRewardPools` (r:0 w:1)
 	/// Proof: `PezRewards::EpochRewardPools` (`max_values`: None, `max_size`: Some(80), added: 2555, mode: `MaxEncodedLen`)
-	fn finalize_epoch() -> Weight { // Değerler Turn 56'dan
+	fn finalize_epoch() -> Weight { // Values from Turn 56
 		// Proof Size summary in bytes:
 		//  Measured:  `745`
 		//  Estimated: `507927`
@@ -125,7 +125,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Proof: `Assets::Asset` (`max_values`: None, `max_size`: Some(210), added: 2685, mode: `MaxEncodedLen`)
 	/// Storage: `Assets::Account` (r:2 w:2)
 	/// Proof: `Assets::Account` (`max_values`: None, `max_size`: Some(134), added: 2609, mode: `MaxEncodedLen`)
-	fn claim_reward() -> Weight { // Değerler Turn 56'dan
+	fn claim_reward() -> Weight { // Values from Turn 56
 		// Proof Size summary in bytes:
 		//  Measured:  `1123`
 		//  Estimated: `6208`
@@ -145,7 +145,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	/// Proof: `Assets::Asset` (`max_values`: None, `max_size`: Some(210), added: 2685, mode: `MaxEncodedLen`)
 	/// Storage: `System::Account` (r:2 w:2)
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
-	fn close_epoch() -> Weight { // Değerler Turn 56'dan
+	fn close_epoch() -> Weight { // Values from Turn 56
 		// Proof Size summary in bytes:
 		//  Measured:  `1119`
 		//  Estimated: `6208`
@@ -157,7 +157,7 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 	}
 	/// Storage: `PezRewards::ParliamentaryNftOwners` (r:0 w:1)
 	/// Proof: `PezRewards::ParliamentaryNftOwners` (`max_values`: None, `max_size`: Some(52), added: 2527, mode: `MaxEncodedLen`)
-	fn register_parliamentary_nft_owner() -> Weight { // Değerler Turn 56'dan
+	fn register_parliamentary_nft_owner() -> Weight { // Values from Turn 56
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
 		//  Estimated: `0`
@@ -174,7 +174,7 @@ impl WeightInfo for () {
 	/// Proof: `PezRewards::EpochStatus` (`max_values`: None, `max_size`: Some(21), added: 2496, mode: `MaxEncodedLen`)
 	/// Storage: `PezRewards::EpochInfo` (r:0 w:1)
 	/// Proof: `PezRewards::EpochInfo` (`max_values`: Some(1), `max_size`: Some(12), added: 507, mode: `MaxEncodedLen`)
-	fn initialize_rewards_system() -> Weight { // Değerler Turn 56'dan (RocksDbWeight ile)
+	fn initialize_rewards_system() -> Weight { // Values from Turn 56 (RocksDbWeight ile)
 		// Proof Size summary in bytes:
 		//  Measured:  `213`
 		//  Estimated: `1502`
@@ -192,7 +192,7 @@ impl WeightInfo for () {
 	/// Proof: `Trust::TrustScores` (`max_values`: None, `max_size`: Some(64), added: 2539, mode: `MaxEncodedLen`)
 	/// Storage: `PezRewards::UserEpochScores` (r:0 w:1)
 	/// Proof: `PezRewards::UserEpochScores` (`max_values`: None, `max_size`: Some(84), added: 2559, mode: `MaxEncodedLen`)
-	fn record_trust_score() -> Weight { // Değerler Turn 56'dan (RocksDbWeight ile)
+	fn record_trust_score() -> Weight { // Values from Turn 56 (RocksDbWeight ile)
 		// Proof Size summary in bytes:
 		//  Measured:  `333`
 		//  Estimated: `3529`
@@ -214,7 +214,7 @@ impl WeightInfo for () {
 	/// Proof: `PezRewards::UserEpochScores` (`max_values`: None, `max_size`: Some(84), added: 2559, mode: `MaxEncodedLen`)
 	/// Storage: `PezRewards::EpochRewardPools` (r:0 w:1)
 	/// Proof: `PezRewards::EpochRewardPools` (`max_values`: None, `max_size`: Some(80), added: 2555, mode: `MaxEncodedLen`)
-	fn finalize_epoch() -> Weight { // Değerler Turn 56'dan (RocksDbWeight ile)
+	fn finalize_epoch() -> Weight { // Values from Turn 56 (RocksDbWeight ile)
 		// Proof Size summary in bytes:
 		//  Measured:  `745`
 		//  Estimated: `507927`
@@ -236,7 +236,7 @@ impl WeightInfo for () {
 	/// Proof: `Assets::Asset` (`max_values`: None, `max_size`: Some(210), added: 2685, mode: `MaxEncodedLen`)
 	/// Storage: `Assets::Account` (r:2 w:2)
 	/// Proof: `Assets::Account` (`max_values`: None, `max_size`: Some(134), added: 2609, mode: `MaxEncodedLen`)
-	fn claim_reward() -> Weight { // Değerler Turn 56'dan (RocksDbWeight ile)
+	fn claim_reward() -> Weight { // Values from Turn 56 (RocksDbWeight ile)
 		// Proof Size summary in bytes:
 		//  Measured:  `1123`
 		//  Estimated: `6208`
@@ -256,7 +256,7 @@ impl WeightInfo for () {
 	/// Proof: `Assets::Asset` (`max_values`: None, `max_size`: Some(210), added: 2685, mode: `MaxEncodedLen`)
 	/// Storage: `System::Account` (r:2 w:2)
 	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
-	fn close_epoch() -> Weight { // Değerler Turn 56'dan (RocksDbWeight ile)
+	fn close_epoch() -> Weight { // Values from Turn 56 (RocksDbWeight ile)
 		// Proof Size summary in bytes:
 		//  Measured:  `1119`
 		//  Estimated: `6208`
@@ -268,7 +268,7 @@ impl WeightInfo for () {
 	}
 	/// Storage: `PezRewards::ParliamentaryNftOwners` (r:0 w:1)
 	/// Proof: `PezRewards::ParliamentaryNftOwners` (`max_values`: None, `max_size`: Some(52), added: 2527, mode: `MaxEncodedLen`)
-	fn register_parliamentary_nft_owner() -> Weight { // Değerler Turn 56'dan (RocksDbWeight ile)
+	fn register_parliamentary_nft_owner() -> Weight { // Values from Turn 56 (RocksDbWeight ile)
 		// Proof Size summary in bytes:
 		//  Measured:  `0`
 		//  Estimated: `0`

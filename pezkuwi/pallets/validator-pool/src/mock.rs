@@ -167,15 +167,16 @@ impl Randomness<H256, BlockNumber> for MockRandomness {
     }
 }
 
-// Test implementations for trait dependencies - FIXED
-impl TikiScoreProvider<AccountId> for TestTikiProvider {
-    fn get_tiki_score(who: &AccountId) -> u32 {
+// Test implementations for trait dependencies
+pub struct TestTrustProvider;
+impl TrustScoreProvider<AccountId> for TestTrustProvider {
+    fn trust_score_of(who: &AccountId) -> u128 {
         match who {
-            _ => 1, 
+            1..=15 => 1000, // Test users with high trust (threshold: 450)
+            _ => 100,       // Others have insufficient trust
         }
     }
 }
-
 
 pub struct TestTikiProvider;
 impl TikiScoreProvider<AccountId> for TestTikiProvider {

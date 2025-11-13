@@ -15,6 +15,8 @@ frame_support::construct_runtime!(
 	pub enum Test
 	{
 		System: frame_system,
+		Balances: pallet_balances,
+		IdentityKyc: pallet_identity_kyc,
 		TrustPallet: pallet_trust,
 	}
 );
@@ -37,13 +39,54 @@ impl system::Config for Test {
 	type BlockHashCount = ConstU64<250>;
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = ();
+	type AccountData = pallet_balances::AccountData<u128>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = ConstU16<42>;
 	type OnSetCode = ();
 	type MaxConsumers = frame_support::traits::ConstU32<16>;
+}
+
+impl pallet_balances::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = ();
+	type Balance = u128;
+	type DustRemoval = ();
+	type ExistentialDeposit = frame_support::traits::ConstU128<1>;
+	type AccountStore = System;
+	type ReserveIdentifier = [u8; 8];
+	type RuntimeHoldReason = ();
+	type RuntimeFreezeReason = ();
+	type FreezeIdentifier = ();
+	type MaxLocks = frame_support::traits::ConstU32<10>;
+	type MaxReserves = frame_support::traits::ConstU32<10>;
+	type MaxFreezes = frame_support::traits::ConstU32<10>;
+	type DoneSlashHandler = ();
+}
+
+pub struct NoOpOnKycApproved;
+impl pallet_identity_kyc::types::OnKycApproved<u64> for NoOpOnKycApproved {
+	fn on_kyc_approved(_who: &u64) {}
+}
+
+pub struct NoOpCitizenNftProvider;
+impl pallet_identity_kyc::types::CitizenNftProvider<u64> for NoOpCitizenNftProvider {
+	fn mint_citizen_nft(_who: &u64) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+}
+
+impl pallet_identity_kyc::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type KycApprovalOrigin = frame_system::EnsureRoot<u64>;
+	type WeightInfo = ();
+	type OnKycApproved = NoOpOnKycApproved;
+	type CitizenNftProvider = NoOpCitizenNftProvider;
+	type KycApplicationDeposit = frame_support::traits::ConstU128<100>;
+	type MaxStringLength = frame_support::traits::ConstU32<128>;
+	type MaxCidLength = frame_support::traits::ConstU32<64>;
 }
 
 parameter_types! {

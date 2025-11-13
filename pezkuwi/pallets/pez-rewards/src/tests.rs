@@ -1,4 +1,4 @@
-// tests.rs (v11 - Son Hata Düzeltmeleri)
+// tests.rs (v11 - Final Bug Fixes)
 
 use crate::{mock::*, Error, Event, EpochState};
 use frame_support::{
@@ -23,7 +23,7 @@ fn initialize_rewards_system_works() {
 		assert_eq!(epoch_info.epoch_start_block, 1);
 		assert_eq!(PezRewards::epoch_status(0), EpochState::Open);
 		
-		// HATA DÜZELTME E0599: lib.rs v2 ile eşleşiyor
+		// BUG FIX E0599: Matches lib.rs v2
 		System::assert_has_event(Event::NewEpochStarted { epoch_index: 0, start_block: 1 }.into());
 	});
 }
@@ -33,7 +33,7 @@ fn cannot_initialize_twice() {
 	new_test_ext().execute_with(|| {
 		assert_noop!(
 			PezRewards::initialize_rewards_system(RuntimeOrigin::root()),
-			Error::<Test>::AlreadyInitialized // HATA DÜZELTME E0599: lib.rs v2 ile eşleşiyor
+			Error::<Test>::AlreadyInitialized // BUG FIX E0599: Matches lib.rs v2
 		);
 	});
 }
@@ -85,10 +85,10 @@ fn cannot_record_score_for_closed_epoch() {
 		advance_blocks(crate::CLAIM_PERIOD_BLOCKS as u64 + 1);
 		assert_ok!(PezRewards::close_epoch(RuntimeOrigin::root(), 0));
 
-		// FIX: Dave şimdi epoch 1'de kayıt yapıyor (epoch 1 Open)
+		// FIX: Dave now registering in epoch 1 (epoch 1 Open)
 		assert_ok!(PezRewards::record_trust_score(RuntimeOrigin::signed(dave())));
 		
-		// Epoch 1'de dave'in skoru kaydedilmiş olmalı
+		// Dave's score should be recorded in epoch 1
 		assert_eq!(PezRewards::get_user_trust_score_for_epoch(1, &dave()), Some(0));
 	});
 }
@@ -112,7 +112,7 @@ fn getter_functions_work_correctly() {
 		advance_blocks(crate::BLOCKS_PER_EPOCH as u64);
 		assert_ok!(PezRewards::finalize_epoch(RuntimeOrigin::root()));
 		assert!(PezRewards::get_epoch_reward_pool(0).is_some());
-		// FIX: Finalize sonrası ClaimPeriod olmalı
+		// FIX: Should be ClaimPeriod after finalize
 		assert_eq!(PezRewards::epoch_status(0), EpochState::ClaimPeriod);
 		
 		assert_ok!(PezRewards::claim_reward(RuntimeOrigin::signed(alice()), 0));
@@ -150,7 +150,7 @@ fn finalize_epoch_calculates_rewards_correctly() {
 
 		let reward_pool = PezRewards::get_epoch_reward_pool(0).unwrap();
 		
-		// FIX: Parliamentary reward düşülmüş hali (90%)
+		// FIX: Reduced amount after parliamentary reward (90%)
 		let trust_score_pool = initial_pot_balance * 90u128 / 100;
 		
 		assert_eq!(reward_pool.total_reward_pool, trust_score_pool);
@@ -190,7 +190,7 @@ fn finalize_epoch_fails_if_already_finalized_or_closed() {
 		advance_blocks(crate::BLOCKS_PER_EPOCH as u64);
 		assert_ok!(PezRewards::finalize_epoch(RuntimeOrigin::root()));
 		
-		// FIX: İkinci finalize epoch 1'i finalize etmeye çalışır (henüz bitmemiş)
+		// FIX: Second finalize tries to finalize epoch 1 (not finished yet)
 		assert_noop!(
 			PezRewards::finalize_epoch(RuntimeOrigin::root()),
 			Error::<Test>::EpochNotFinished
@@ -212,8 +212,8 @@ fn finalize_epoch_no_participants() {
 		assert_eq!(reward_pool.participants_count, 0);
 		assert_eq!(reward_pool.reward_per_trust_point, 0);
 
-		// FIX: NFT owner register edilmemiş, parliamentary reward dağıtılmaz
-		// Pot'ta tüm balance kalır (%100)
+		// FIX: NFT owner not registered, parliamentary reward not distributed
+		// All balance remains in pot (100%)
 		let pot_balance_after = pez_balance(&incentive_pot);
 		assert_eq!(pot_balance_after, pot_balance_before);
 	});
@@ -223,7 +223,7 @@ fn finalize_epoch_no_participants() {
 fn finalize_epoch_zero_trust_score_participant() {
 	new_test_ext().execute_with(|| {
 		assert_ok!(PezRewards::record_trust_score(RuntimeOrigin::signed(dave()))); // Skor 0
-		// FIX: Artık 0 skorlar kaydediliyor
+		// FIX: Zero scores are now being recorded
 		assert_eq!(PezRewards::get_user_trust_score_for_epoch(0, &dave()), Some(0));
 
 		let incentive_pot = PezRewards::incentive_pot_account_id();
@@ -237,12 +237,12 @@ fn finalize_epoch_zero_trust_score_participant() {
 		assert_eq!(reward_pool.participants_count, 1);
 		assert_eq!(reward_pool.reward_per_trust_point, 0);
 
-		// FIX: NFT owner register edilmemiş, parliamentary reward dağıtılmaz
-		// Pot'ta tüm balance kalır (%100)
+		// FIX: NFT owner not registered, parliamentary reward not distributed
+		// All balance remains in pot (100%)
 		let pot_balance_after = pez_balance(&incentive_pot);
 		assert_eq!(pot_balance_after, pot_balance_before);
 		
-		// FIX: NoTrustScoreForEpoch yerine NoRewardToClaim (0 score var ama ödül 0)
+		// FIX: NoRewardToClaim instead of NoTrustScoreForEpoch (0 score exists but reward is 0)
 		assert_noop!(
 			PezRewards::claim_reward(RuntimeOrigin::signed(dave()), 0),
 			Error::<Test>::NoRewardToClaim
@@ -325,7 +325,7 @@ fn claim_reward_fails_if_not_participant() {
 		advance_blocks(crate::BLOCKS_PER_EPOCH as u64);
 		assert_ok!(PezRewards::finalize_epoch(RuntimeOrigin::root()));
 
-		// FIX: Bob kaydolmamış, NoTrustScoreForEpoch hatası almalı
+		// FIX: Bob not registered, should get NoTrustScoreForEpoch error
 		assert_noop!(
 			PezRewards::claim_reward(RuntimeOrigin::signed(bob()), 0),
 			Error::<Test>::NoTrustScoreForEpoch
@@ -337,7 +337,7 @@ fn claim_reward_fails_if_not_participant() {
 fn claim_reward_fails_if_epoch_not_finalized() {
 	new_test_ext().execute_with(|| {
 		assert_ok!(PezRewards::record_trust_score(RuntimeOrigin::signed(alice())));
-		// FIX: Finalize edilmemiş epoch -> ClaimPeriodExpired hatası (Open state)
+		// FIX: Unfinalized epoch -> ClaimPeriodExpired error (Open state)
 		assert_noop!(
 			PezRewards::claim_reward(RuntimeOrigin::signed(alice()), 0),
 			Error::<Test>::ClaimPeriodExpired
@@ -356,7 +356,7 @@ fn claim_reward_fails_if_claim_period_over() {
 		
 		assert_noop!(
 			PezRewards::claim_reward(RuntimeOrigin::signed(alice()), 0),
-			Error::<Test>::ClaimPeriodExpired // HATA DÜZELTME E0599
+			Error::<Test>::ClaimPeriodExpired // BUG FIX E0599
 		);
 	});
 }
@@ -370,7 +370,7 @@ fn claim_reward_fails_if_epoch_closed() {
 		advance_blocks(crate::CLAIM_PERIOD_BLOCKS as u64 + 1);
 		assert_ok!(PezRewards::close_epoch(RuntimeOrigin::root(), 0));
 		
-		// FIX: Epoch Closed -> ClaimPeriodExpired hatası
+		// FIX: Epoch Closed -> ClaimPeriodExpired error
 		assert_noop!(
 			PezRewards::claim_reward(RuntimeOrigin::signed(alice()), 0),
 			Error::<Test>::ClaimPeriodExpired
@@ -392,7 +392,7 @@ fn claim_reward_fails_if_pot_insufficient_during_claim() {
 			Preservation::Expendable, Precision::Exact, Fortitude::Polite
 		));
 
-		// FIX: Arithmetic Underflow hatası bekleniyor
+		// FIX: Arithmetic Underflow error expected
 		assert!(PezRewards::claim_reward(RuntimeOrigin::signed(alice()), 0).is_err());
 	});
 }
@@ -404,7 +404,7 @@ fn claim_reward_fails_for_wrong_epoch() {
 		advance_blocks(crate::BLOCKS_PER_EPOCH as u64);
 		assert_ok!(PezRewards::finalize_epoch(RuntimeOrigin::root()));
 		
-		// FIX: Epoch 1 henüz finalize edilmemiş -> ClaimPeriodExpired
+		// FIX: Epoch 1 not yet finalized -> ClaimPeriodExpired
 		assert_noop!(
 			PezRewards::claim_reward(RuntimeOrigin::signed(alice()), 1),
 			Error::<Test>::ClaimPeriodExpired
@@ -444,8 +444,8 @@ fn close_epoch_works_after_claim_period() {
 		let clawback_recipient = ClawbackRecipient::get();
 		let balance_before = pez_balance(&clawback_recipient);
 		
-		// FIX: Pot'ta kalan balance = başlangıç - bob'un claim'i
-		// (NFT owner yok, parliamentary reward dağıtılmadı)
+		// FIX: Remaining balance in pot = initial - bob's claim
+		// (No NFT owner, parliamentary reward not distributed)
 		let pot_balance_before_close = pez_balance(&incentive_pot);
 		let expected_unclaimed = pot_balance_before_close;
 
@@ -454,7 +454,7 @@ fn close_epoch_works_after_claim_period() {
 		assert_ok!(PezRewards::close_epoch(RuntimeOrigin::root(), 0));
 
 		let balance_after = pez_balance(&clawback_recipient);
-		// FIX: Tüm kalan pot (alice'in reward'ı dahil) geri alınmalı
+		// FIX: All remaining pot (including alice's reward) should be clawed back
 		assert_eq!(balance_after, balance_before + expected_unclaimed);
 
 		assert_eq!(PezRewards::epoch_status(0), EpochState::Closed);
@@ -480,7 +480,7 @@ fn close_epoch_fails_before_claim_period_ends() {
 		advance_blocks(crate::CLAIM_PERIOD_BLOCKS as u64 -1);
 		assert_noop!(
 			PezRewards::close_epoch(RuntimeOrigin::root(), 0),
-			Error::<Test>::ClaimPeriodExpired // HATA DÜZELTME E0599
+			Error::<Test>::ClaimPeriodExpired // BUG FIX E0599
 		);
 	});
 }
@@ -508,7 +508,7 @@ fn close_epoch_fails_if_not_finalized() {
 		advance_blocks(crate::CLAIM_PERIOD_BLOCKS as u64 + 1);
 		assert_noop!(
 			PezRewards::close_epoch(RuntimeOrigin::root(), 0),
-			Error::<Test>::EpochAlreadyClosed // Finalize edilmediyse de bu hata döner
+			Error::<Test>::EpochAlreadyClosed // This error returns even if not finalized
 		);
 	});
 }
@@ -568,7 +568,7 @@ fn parliamentary_reward_division_precision() {
 		let current_balance = pez_balance(&incentive_pot);
 		assert_ok!(Assets::burn_from(PezAssetId::get(), &incentive_pot, current_balance, Preservation::Expendable, Precision::Exact, Fortitude::Polite));
 		
-		// FIX: Daha büyük miktar koy (BelowMinimum hatası almaması için)
+		// FIX: Put larger amount (to avoid BelowMinimum error)
 		fund_incentive_pot(100_000);
 
 		let dave_balance_before = pez_balance(&dave());

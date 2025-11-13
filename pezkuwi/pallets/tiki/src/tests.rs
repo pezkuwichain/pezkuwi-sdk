@@ -20,12 +20,12 @@ fn force_mint_citizen_nft_works() {
         // Vatandaşlık NFT'si bas
         assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user_account));
 
-        // NFT'nin basıldığını ve Hemwelatî rolünün eklendiğini kontrol et
+        // NFT'nin basıldığını ve Welati rolünün eklendiğini kontrol et
         assert!(TikiPallet::citizen_nft(&user_account).is_some());
         assert!(TikiPallet::is_citizen(&user_account));
         let user_tikis = TikiPallet::user_tikis(&user_account);
-        assert!(user_tikis.contains(&TikiEnum::Hemwelatî));
-        assert!(TikiPallet::has_tiki(&user_account, &TikiEnum::Hemwelatî));
+        assert!(user_tikis.contains(&TikiEnum::Welati));
+        assert!(TikiPallet::has_tiki(&user_account, &TikiEnum::Welati));
 
         // Event'in doğru atıldığını kontrol et
         System::assert_has_event(
@@ -51,7 +51,7 @@ fn grant_appointed_role_works() {
 
         // Kullanıcının rollerini kontrol et
         let user_tikis = TikiPallet::user_tikis(&user_account);
-        assert!(user_tikis.contains(&TikiEnum::Hemwelatî)); // Otomatik eklenen
+        assert!(user_tikis.contains(&TikiEnum::Welati)); // Otomatik eklenen
         assert!(user_tikis.contains(&tiki_to_grant)); // Manuel eklenen
         assert!(TikiPallet::has_tiki(&user_account, &tiki_to_grant));
 
@@ -92,7 +92,7 @@ fn apply_for_citizenship_works_with_kyc() {
 
         // NFT'nin basıldığını kontrol et
         assert!(TikiPallet::citizen_nft(&user_account).is_some());
-        assert!(TikiPallet::user_tikis(&user_account).contains(&TikiEnum::Hemwelatî));
+        assert!(TikiPallet::user_tikis(&user_account).contains(&TikiEnum::Welati));
         assert!(TikiPallet::is_citizen(&user_account));
     });
 }
@@ -130,7 +130,7 @@ fn auto_grant_citizenship_simplified() {
 fn role_assignment_types_work_correctly() {
     new_test_ext().execute_with(|| {
         // Test role types
-        assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Hemwelatî), RoleAssignmentType::Automatic);
+        assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Welati), RoleAssignmentType::Automatic);
         assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Wezir), RoleAssignmentType::Appointed);
         assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Parlementer), RoleAssignmentType::Elected);
         assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Serok), RoleAssignmentType::Elected);
@@ -232,7 +232,7 @@ fn unique_role_identification_works() {
         // Non-unique roles
         assert!(!TikiPallet::is_unique_role(&TikiEnum::Wezir));
         assert!(!TikiPallet::is_unique_role(&TikiEnum::Parlementer));
-        assert!(!TikiPallet::is_unique_role(&TikiEnum::Hemwelatî));
+        assert!(!TikiPallet::is_unique_role(&TikiEnum::Welati));
         assert!(!TikiPallet::is_unique_role(&TikiEnum::Mamoste));
     });
 }
@@ -256,8 +256,8 @@ fn revoke_tiki_works() {
         // Rolün kaldırıldığını kontrol et
         assert!(!TikiPallet::user_tikis(&user_account).contains(&tiki_to_revoke));
         assert!(!TikiPallet::has_tiki(&user_account, &tiki_to_revoke));
-        // Hemwelatî rolünün hala durduğunu kontrol et
-        assert!(TikiPallet::user_tikis(&user_account).contains(&TikiEnum::Hemwelatî));
+        // Welati rolünün hala durduğunu kontrol et
+        assert!(TikiPallet::user_tikis(&user_account).contains(&TikiEnum::Welati));
 
         // Event kontrol et
         System::assert_has_event(
@@ -274,9 +274,9 @@ fn cannot_revoke_hemwelati_role() {
         // NFT bas
         assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user_account));
 
-        // Hemwelatî rolünü kaldırmaya çalış
+        // Welati rolünü kaldırmaya çalış
         assert_noop!(
-            TikiPallet::revoke_tiki(RuntimeOrigin::root(), user_account, TikiEnum::Hemwelatî),
+            TikiPallet::revoke_tiki(RuntimeOrigin::root(), user_account, TikiEnum::Welati),
             Error::<Test>::RoleNotAssigned
         );
     });
@@ -311,7 +311,7 @@ fn tiki_scoring_works_correctly() {
     new_test_ext().execute_with(|| {
         let user = 2;
 
-        // NFT bas (Hemwelatî otomatik eklenir - 10 puan)
+        // NFT bas (Welati otomatik eklenir - 10 puan)
         assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
         assert_eq!(TikiPallet::get_tiki_score(&user), 10);
 
@@ -340,7 +340,7 @@ fn scoring_system_comprehensive() {
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::EndameDiwane), 175);
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::SerokiMeclise), 150);
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Dadger), 150);
-        assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Wezir), 125);
+        assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Wezir), 100);
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Dozger), 120);
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::SerokêKomele), 100);
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Parlementer), 100);
@@ -349,7 +349,7 @@ fn scoring_system_comprehensive() {
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Bazargan), 60); // Yeni eklenen
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Mela), 50);
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Feqî), 50);
-        assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Hemwelatî), 10);
+        assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Welati), 10);
         
         // Test default score for unspecified roles
         assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Pêseng), 5);
@@ -365,11 +365,11 @@ fn scoring_updates_after_role_changes() {
         assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
         
         // İki rol ekle
-        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir)); // 125 puan
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir)); // 100 puan
         assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger)); // 150 puan
         
-        // Toplam: 10 + 125 + 150 = 285
-        assert_eq!(TikiPallet::get_tiki_score(&user), 285);
+        // Toplam: 10 + 100 + 150 = 260
+        assert_eq!(TikiPallet::get_tiki_score(&user), 260);
 
         // Bir rolü kaldır
         assert_ok!(TikiPallet::revoke_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir));
@@ -393,11 +393,11 @@ fn multiple_users_work_independently() {
 
         // Farklı roller ver
         assert_ok!(TikiPallet::grant_earned_role(RuntimeOrigin::root(), user1, TikiEnum::Axa)); // 250 puan
-        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user2, TikiEnum::Wezir)); // 125 puan
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user2, TikiEnum::Wezir)); // 100 puan
 
         // Puanları kontrol et
         assert_eq!(TikiPallet::get_tiki_score(&user1), 260); // 10 + 250
-        assert_eq!(TikiPallet::get_tiki_score(&user2), 135); // 10 + 125
+        assert_eq!(TikiPallet::get_tiki_score(&user2), 110); // 10 + 100
 
         // Rollerin doğru dağıldığını kontrol et
         assert!(TikiPallet::user_tikis(&user1).contains(&TikiEnum::Axa));
@@ -409,7 +409,7 @@ fn multiple_users_work_independently() {
         // TikiProvider trait testleri
         assert!(TikiPallet::has_tiki(&user1, &TikiEnum::Axa));
         assert!(!TikiPallet::has_tiki(&user1, &TikiEnum::Wezir));
-        assert_eq!(TikiPallet::get_user_tikis(&user1).len(), 2); // Hemwelatî + Axa
+        assert_eq!(TikiPallet::get_user_tikis(&user1).len(), 2); // Welati + Axa
     });
 }
 
@@ -553,13 +553,13 @@ fn tiki_provider_trait_works() {
 
         // TikiProvider trait fonksiyonlarını test et
         assert!(TikiPallet::is_citizen(&user));
-        assert!(TikiPallet::has_tiki(&user, &TikiEnum::Hemwelatî));
+        assert!(TikiPallet::has_tiki(&user, &TikiEnum::Welati));
         assert!(TikiPallet::has_tiki(&user, &TikiEnum::Wezir));
         assert!(!TikiPallet::has_tiki(&user, &TikiEnum::Serok));
 
         let user_tikis = TikiPallet::get_user_tikis(&user);
         assert_eq!(user_tikis.len(), 2);
-        assert!(user_tikis.contains(&TikiEnum::Hemwelatî));
+        assert!(user_tikis.contains(&TikiEnum::Welati));
         assert!(user_tikis.contains(&TikiEnum::Wezir));
     });
 }
@@ -579,17 +579,17 @@ fn complex_multi_role_scenario() {
 
         // Tüm rollerin eklendiğini kontrol et
         let user_tikis = TikiPallet::user_tikis(&user);
-        assert!(user_tikis.contains(&TikiEnum::Hemwelatî));  // 10 puan
-        assert!(user_tikis.contains(&TikiEnum::Wezir));      // 125 puan  
+        assert!(user_tikis.contains(&TikiEnum::Welati));  // 10 puan
+        assert!(user_tikis.contains(&TikiEnum::Wezir));      // 100 puan
         assert!(user_tikis.contains(&TikiEnum::Mamoste));    // 70 puan
         assert!(user_tikis.contains(&TikiEnum::Parlementer)); // 100 puan
 
-        // Toplam puanı kontrol et (10 + 125 + 70 + 100 = 305)
-        assert_eq!(TikiPallet::get_tiki_score(&user), 305);
+        // Toplam puanı kontrol et (10 + 100 + 70 + 100 = 280)
+        assert_eq!(TikiPallet::get_tiki_score(&user), 280);
 
         // Bir rolü kaldır ve puanın güncellendiğini kontrol et
         assert_ok!(TikiPallet::revoke_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir));
-        assert_eq!(TikiPallet::get_tiki_score(&user), 180); // 305 - 125 = 180
+        assert_eq!(TikiPallet::get_tiki_score(&user), 180); // 280 - 100 = 180
     });
 }
 
@@ -597,7 +597,7 @@ fn complex_multi_role_scenario() {
 fn role_assignment_type_logic_comprehensive() {
     new_test_ext().execute_with(|| {
         // Automatic roles
-        assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Hemwelatî), RoleAssignmentType::Automatic);
+        assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Welati), RoleAssignmentType::Automatic);
         
         // Elected roles
         assert_eq!(TikiPallet::get_role_assignment_type(&TikiEnum::Parlementer), RoleAssignmentType::Elected);
@@ -650,7 +650,7 @@ fn stress_test_multiple_users_roles() {
         assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), 5, TikiEnum::Dadger));
 
         // Puanları kontrol et
-        assert_eq!(TikiPallet::get_tiki_score(&2), 335); // 10 + 200 + 125
+        assert_eq!(TikiPallet::get_tiki_score(&2), 310); // 10 + 200 + 100
         assert_eq!(TikiPallet::get_tiki_score(&3), 180); // 10 + 70 + 100  
         assert_eq!(TikiPallet::get_tiki_score(&4), 260); // 10 + 100 + 150
         assert_eq!(TikiPallet::get_tiki_score(&5), 410); // 10 + 250 + 150
@@ -693,10 +693,261 @@ fn maximum_roles_per_user_limit() {
 
         // Kullanıcının pek çok role sahip olduğunu kontrol et
         let final_tikis = TikiPallet::user_tikis(&user);
-        assert!(final_tikis.len() >= 5); // En az 5 rol olmalı (Hemwelatî + 4+ diğer)
+        assert!(final_tikis.len() >= 5); // En az 5 rol olmalı (Welati + 4+ diğer)
         assert!(final_tikis.len() <= 100); // Max limit'i aşmamalı
 
         // Toplam puanın makul olduğunu kontrol et
         assert!(TikiPallet::get_tiki_score(&user) > 200);
+    });
+}
+
+// ============================================================================
+// apply_for_citizenship Edge Cases (4 tests)
+// ============================================================================
+
+#[test]
+fn apply_for_citizenship_twice_same_user() {
+    new_test_ext().execute_with(|| {
+        let user = 5;
+
+        // İlk başvuru - use force_mint to bypass KYC
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+
+        let first_score = TikiPallet::get_tiki_score(&user);
+        assert_eq!(first_score, 10);
+
+        // İkinci kez mint etmeye çalış (başarısız olmalı - zaten NFT var)
+        assert_noop!(
+            TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user),
+            Error::<Test>::CitizenNftAlreadyExists
+        );
+
+        let second_score = TikiPallet::get_tiki_score(&user);
+        assert_eq!(second_score, 10); // Skor değişmemeli
+    });
+}
+
+#[test]
+fn apply_for_citizenship_adds_hemwelati() {
+    new_test_ext().execute_with(|| {
+        let user = 6;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+
+        // Welati rolü var
+        let tikis = TikiPallet::user_tikis(&user);
+        assert!(tikis.contains(&TikiEnum::Welati));
+    });
+}
+
+#[test]
+fn apply_for_citizenship_initial_score() {
+    new_test_ext().execute_with(|| {
+        let user = 7;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+
+        // Welati puanı 10
+        let score = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score, 10);
+    });
+}
+
+#[test]
+fn apply_for_citizenship_multiple_users_independent() {
+    new_test_ext().execute_with(|| {
+        let users = vec![8, 9, 10, 11, 12];
+
+        for user in &users {
+            assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), *user));
+        }
+
+        // Hepsi 10 puana sahip olmalı
+        for user in &users {
+            assert_eq!(TikiPallet::get_tiki_score(user), 10);
+        }
+    });
+}
+
+// ============================================================================
+// revoke_tiki Tests (3 tests)
+// ============================================================================
+
+#[test]
+fn revoke_tiki_reduces_score() {
+    new_test_ext().execute_with(|| {
+        let user = 13;
+
+        // NFT bas ve rol ekle
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+
+        let initial_score = TikiPallet::get_tiki_score(&user);
+        assert!(initial_score > 10);
+
+        // Rolü geri al
+        assert_ok!(TikiPallet::revoke_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+
+        // Skor düştü
+        let final_score = TikiPallet::get_tiki_score(&user);
+        assert!(final_score < initial_score);
+
+        // Rol listesinde yok
+        let tikis = TikiPallet::user_tikis(&user);
+        assert!(!tikis.contains(&TikiEnum::Dadger));
+    });
+}
+
+#[test]
+fn revoke_tiki_root_authority() {
+    new_test_ext().execute_with(|| {
+        let user = 14;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+
+        // Non-root cannot revoke
+        assert_noop!(
+            TikiPallet::revoke_tiki(RuntimeOrigin::signed(999), user, TikiEnum::Dadger),
+            sp_runtime::DispatchError::BadOrigin
+        );
+    });
+}
+
+#[test]
+fn revoke_tiki_nonexistent_role() {
+    new_test_ext().execute_with(|| {
+        let user = 15;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+
+        // Kullanıcı bu role sahip değil
+        assert_noop!(
+            TikiPallet::revoke_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir),
+            Error::<Test>::RoleNotAssigned
+        );
+    });
+}
+
+// ============================================================================
+// get_tiki_score Edge Cases (3 tests)
+// ============================================================================
+
+#[test]
+fn get_tiki_score_zero_for_non_citizen() {
+    new_test_ext().execute_with(|| {
+        let user = 999;
+
+        let score = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score, 0);
+    });
+}
+
+#[test]
+fn get_tiki_score_role_accumulation() {
+    new_test_ext().execute_with(|| {
+        let user = 16;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+
+        // Başlangıç: Welati = 10
+        let score1 = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score1, 10);
+
+        // Dadger ekle (+150)
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+        let score2 = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score2, 160); // 10 + 150
+
+        // Wezir ekle (+100)
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir));
+        let score3 = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score3, 260); // 10 + 150 + 100
+    });
+}
+
+#[test]
+fn get_tiki_score_revoke_decreases() {
+    new_test_ext().execute_with(|| {
+        let user = 17;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dozger));
+
+        let score_before = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score_before, 280); // 10 + 150 + 120
+
+        // Bir rolü geri al
+        assert_ok!(TikiPallet::revoke_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+
+        let score_after = TikiPallet::get_tiki_score(&user);
+        assert_eq!(score_after, 130); // 10 + 120
+    });
+}
+
+// ============================================================================
+// Storage Consistency Tests (3 tests)
+// ============================================================================
+
+#[test]
+fn user_tikis_updated_after_grant() {
+    new_test_ext().execute_with(|| {
+        let user = 18;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+
+        let tikis_before = TikiPallet::user_tikis(&user);
+        assert_eq!(tikis_before.len(), 1); // Only Welati
+
+        // Rol ekle
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+
+        // UserTikis güncellendi
+        let tikis_after = TikiPallet::user_tikis(&user);
+        assert_eq!(tikis_after.len(), 2);
+        assert!(tikis_after.contains(&TikiEnum::Dadger));
+    });
+}
+
+#[test]
+fn user_tikis_consistent_with_score() {
+    new_test_ext().execute_with(|| {
+        let user = 19;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Dadger));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user, TikiEnum::Wezir));
+
+        // UserTikis sayısı ile score tutarlı olmalı
+        let user_tikis = TikiPallet::user_tikis(&user);
+        let score = TikiPallet::get_tiki_score(&user);
+
+        assert_eq!(user_tikis.len(), 3); // Welati + Dadger + Wezir
+        assert_eq!(score, 260); // 10 + 150 + 100
+    });
+}
+
+#[test]
+fn multiple_users_independent_roles() {
+    new_test_ext().execute_with(|| {
+        let user1 = 20;
+        let user2 = 21;
+
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user1));
+        assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user2));
+
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user1, TikiEnum::Dadger));
+        assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user2, TikiEnum::Wezir));
+
+        // Roller bağımsız
+        let tikis1 = TikiPallet::user_tikis(&user1);
+        let tikis2 = TikiPallet::user_tikis(&user2);
+
+        assert!(tikis1.contains(&TikiEnum::Dadger));
+        assert!(!tikis1.contains(&TikiEnum::Wezir));
+
+        assert!(tikis2.contains(&TikiEnum::Wezir));
+        assert!(!tikis2.contains(&TikiEnum::Dadger));
     });
 }

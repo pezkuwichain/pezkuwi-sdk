@@ -196,7 +196,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("pezkuwichain-v1.0"),
 	authoring_version: 0,
-	spec_version: 1_018_001,
+	spec_version: 1_018_002,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 26,
@@ -237,21 +237,21 @@ parameter_types! {
 }
 
 parameter_types! {
-	// pallet-nfts için temel depozito miktarları.
+	// Basic deposit amounts for pallet-nfts.
 	pub const NftsCollectionDeposit: Balance = 10 * UNITS;
 	pub const NftsItemDeposit: Balance = 1 * UNITS;
 	pub const NftsMetadataDepositBase: Balance = 1 * UNITS;
 	pub const NftsAttributeDepositBase: Balance = 1 * UNITS;
 	pub const NftsDepositPerByte: Balance = 1 * CENTS;
 
-	// pallet-tiki için koleksiyon ID'si.
+	// Collection ID for pallet-tiki.
 	pub const TikiCollectionIdConstant: u32 = 42;
 	pub Features: PalletFeatures = PalletFeatures::all_enabled();
 	pub const MaxTikisPerUser: u32 = 100;
 }
 
 parameter_types! {
-	// pallet-welati için sabitler
+	// Constants for pallet-welati
 	pub const ParliamentSize: u32 = 201;
 	pub const DiwanSize: u32 = 11;
 	pub const ElectionPeriod: BlockNumber = 432_000;
@@ -264,7 +264,7 @@ parameter_types! {
 }
 
 parameter_types! {
-	// pallet-perwerde için sabitler
+	// Constants for pallet-perwerde
 	pub const MaxAdmins: u32 = 10;
 	pub const MaxCourseNameLength: u32 = 100;
 	pub const MaxCourseDescLength: u32 = 500;
@@ -645,7 +645,7 @@ impl pallet_session::Config for Runtime {
     type ValidatorIdOf = ValidatorIdOf;
     type ShouldEndSession = Babe;
     type NextSessionRotation = Babe;
-    // Geçici olarak ValidatorManager kullan, sonra ValidatorPool'a geçeriz
+    // Temporarily use ValidatorManager, then switch to ValidatorPool
     type SessionManager = pallet_session::historical::NoteHistoricalRoot<Self, ValidatorManager>;
     type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
     type Keys = SessionKeys;
@@ -664,7 +664,7 @@ impl pallet_session::historical::Config for Runtime {
 	type FullIdentification = ();
 	type FullIdentificationOf = FullIdentificationOf;
 }
-// REWARD_CURVE sabitini, versiyon uyumsuzluklarını önlemek için doğrudan tanımlıyoruz.
+// Defining REWARD_CURVE constant directly to prevent version incompatibilities.
 const REWARD_CURVE_POINTS: [(Perbill, Perbill); 3] = [
 	(Perbill::from_percent(0), Perbill::from_percent(0)),
 	(Perbill::from_percent(50), Perbill::from_percent(10)),
@@ -677,11 +677,11 @@ const REWARD_CURVE: sp_runtime::curve::PiecewiseLinear<'static> = sp_runtime::cu
 
 parameter_types! {
 	pub const SessionsPerEra: SessionIndex = 6;
-	pub const BondingDuration: sp_staking::EraIndex = 24 * 28; // 28 gün
-	pub const SlashDeferDuration: sp_staking::EraIndex = 24 * 7; // 7 gün
+	pub const BondingDuration: sp_staking::EraIndex = 112; // 28 days
+	pub const SlashDeferDuration: sp_staking::EraIndex = 28; // 7 days
 	pub const HistoryDepth: u32 = 84;
 	pub const MaxWinners: u32 = 100;
-	// Election provider için sınırlar. Tipleri açıkça `SizeBound` ve `CountBound` olarak sarmalıyoruz.
+	// Limits for election provider. Explicitly wrapping types as `SizeBound` and `CountBound`.
 	pub const ElectionBounds: frame_election_provider_support::bounds::ElectionBounds =
 		frame_election_provider_support::bounds::ElectionBounds {
 			voters: frame_election_provider_support::bounds::DataProviderBounds {
@@ -706,31 +706,31 @@ impl frame_election_provider_support::onchain::Config for OnChainSeqPhragmen {
 	type Bounds = ElectionBounds;
 }
 
-// Staking için OnUnbalanced handler'ları ve gerekli importlar
+// OnUnbalanced handlers for Staking and required imports
 use frame_support::traits::fungible;
 
-// Staking'den gelen yeni `fungible::Imbalance`'ı, Treasury'nin anladığı eski `Currency::NegativeImbalance`'a çevirir.
+// Converts new `fungible::Imbalance` from Staking to old `Currency::NegativeImbalance` that Treasury understands.
 pub struct StakingRewardRemainder;
 impl OnUnbalanced<fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>> for StakingRewardRemainder {
 	fn on_unbalanced(amount: fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>) {
 		let value = amount.peek();
-		// Treasury'nin beklediği tipte yeni bir Imbalance oluşturuyoruz.
+		// Creating new Imbalance of type expected by Treasury.
 		let treasury_imbalance = <Balances as Currency<AccountId>>::NegativeImbalance::new(value);
 		<Treasury as OnUnbalanced<_>>::on_unbalanced(treasury_imbalance);
-		// Orijinal Imbalance'ı tüketiyoruz.
+		// Consuming original Imbalance.
 		let _ = amount.drop_zero();
 	}
 }
 
-// Staking'den gelen yeni `fungible::Imbalance`'ı, Treasury'nin anladığı eski `Currency::NegativeImbalance`'a çevirir.
+// Converts new `fungible::Imbalance` from Staking to old `Currency::NegativeImbalance` that Treasury understands.
 pub struct StakingSlash;
 impl OnUnbalanced<fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>> for StakingSlash {
 	fn on_unbalanced(amount: fungible::Imbalance<Balance, fungible::DecreaseIssuance<AccountId, Balances>, fungible::IncreaseIssuance<AccountId, Balances>>) {
 		let value = amount.peek();
-		// Treasury'nin beklediği tipte yeni bir Imbalance oluşturuyoruz.
+		// Creating new Imbalance of type expected by Treasury.
 		let treasury_imbalance = <Balances as Currency<AccountId>>::NegativeImbalance::new(value);
 		<Treasury as OnUnbalanced<_>>::on_unbalanced(treasury_imbalance);
-		// Orijinal Imbalance'ı tüketiyoruz.
+		// Consuming original Imbalance.
 		let _ = amount.drop_zero();
 	}
 }
@@ -743,11 +743,11 @@ impl OnUnbalanced<fungible::Imbalance<Balance, fungible::IncreaseIssuance<Accoun
 	}
 }
 
-// pallet_staking::Config için BenchmarkingConfig implementasyonu
+// BenchmarkingConfig implementation for pallet_staking::Config
 pub struct PezkuwiStakingBenchmarkingConfig;
 impl pallet_staking::BenchmarkingConfig for PezkuwiStakingBenchmarkingConfig {
-	type MaxValidators = frame_support::traits::ConstU32<1000>; // Artırılmış değer
-	type MaxNominators = frame_support::traits::ConstU32<1000>; // Artırılmış değer
+	type MaxValidators = frame_support::traits::ConstU32<1000>; // Increased value
+	type MaxNominators = frame_support::traits::ConstU32<1000>; // Increased value
 }
 impl pallet_staking::Config for Runtime {
 	type Currency = Balances;
@@ -854,7 +854,7 @@ impl pallet_treasury::Config for Runtime {
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
 }
 parameter_types! {
-	// `sp_staking::CoreStaking` artık kullanılmadığı için sabit bir eşik listesi tanımlıyoruz.
+	// `sp_staking::CoreStaking` is no longer used, so we define a fixed threshold list.
 	pub const VoterBagThresholds: &'static [u64] = &[
 		10 * HEZ as u64,
 		20 * HEZ as u64,
@@ -872,7 +872,7 @@ pub type VoterBagsListInstance = pallet_bags_list::Instance1;
 impl pallet_bags_list::Config<VoterBagsListInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_bags_list::weights::SubstrateWeight<Runtime>;
-	// Artık gerçek `Staking` paletini bağlıyoruz.
+	// Now we are binding the real `Staking` pallet.
 	type ScoreProvider = Staking;
 	type BagThresholds = VoterBagThresholds;
 	type Score = u64;
@@ -1139,14 +1139,25 @@ impl pallet_tiki::Config for Runtime {
     type Tiki = pallet_tiki::Tiki;
 }
 
+// ============================================================================
+// IDENTITY-KYC PALLET CONFIGURATION
+// ============================================================================
+// NOTE: MaxStringLength is set to 256 for mainnet (allows full 98-byte hash strings).
+// Beta testnet is currently running old runtime with MaxStringLength=50.
+// Frontend uses shortened hash (45 bytes) for beta compatibility.
+// This config (256) will be active when mainnet runtime is deployed.
+// See: /web/src/components/citizenship/NewCitizenApplicationSecure.tsx:208-231
+// ============================================================================
 impl pallet_identity_kyc::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
     type WeightInfo = pallet_identity_kyc::weights::SubstrateWeight<Runtime>;
     type KycApprovalOrigin = EnsureRoot<AccountId>;
     type KycApplicationDeposit = KycApplicationDepositAmount;
-    type MaxStringLength = ConstU32<50>;
+    type MaxStringLength = ConstU32<256>; // Beta: 50 (old runtime), Mainnet: 256 (this value)
     type MaxCidLength = ConstU32<128>;
+    type OnKycApproved = pallet_referral::Pallet<Runtime>;
+    type CitizenNftProvider = Tiki;
 }
 
 impl pallet_referral::Config for Runtime {
@@ -1178,14 +1189,14 @@ impl pallet_perwerde::Config for Runtime {
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 } */
 
-/// Staking verilerini `pallet-staking-score`'un anlayacağı formata çeviren adaptör.
+/// Adapter that converts Staking data to a format that `pallet-staking-score` understands.
 pub struct StakingDataProvider;
 
 impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for StakingDataProvider {
 	fn get_staking_details(
 		who: &AccountId,
 	) -> Option<pallet_staking_score::StakingDetails<Balance>> {
-		// `ledger` fonksiyonu artık `Result` döndürüyor ve `StakingAccount` parametresi alıyor.
+		// `ledger` function now returns `Result` and takes `StakingAccount` parameter.
 		if let Ok(ledger) = pallet_staking::Pallet::<Runtime>::ledger(
 			sp_staking::StakingAccount::Stash(who.clone()),
 		) {
@@ -1199,13 +1210,13 @@ impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for StakingDa
 				unlocking_chunks_count,
 			})
 		} else {
-			// Eğer `ledger` alınamazsa (örn. hesap mevcut değil), stake yok demektir.
+			// If `ledger` cannot be fetched (e.g., account does not exist), there is no stake.
 			None
 		}
 	}
 }
 
-// Mock provider SADECE test ortamında
+// Mock provider ONLY for test environment
 #[cfg(all(test, feature = "runtime-benchmarks"))]
 pub struct MockStakingInfoProvider;
 
@@ -1220,7 +1231,7 @@ impl pallet_staking_score::StakingInfoProvider<AccountId, Balance> for MockStaki
 	}
 }
 
-// Güvenli provider selection
+// Safe provider selection
 #[cfg(all(test, feature = "runtime-benchmarks"))]
 type StakingInfoForScore = MockStakingInfoProvider;
 
@@ -1231,7 +1242,7 @@ impl pallet_staking_score::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
 	type WeightInfo = pallet_staking_score::weights::SubstrateWeight<Runtime>;
-	/// Conditional olarak adaptörü bağlıyoruz.
+	/// Conditionally binding the adapter.
 	type StakingInfo = StakingInfoForScore; // ← SADECE BU SATIR 
 		
 }
@@ -1240,12 +1251,12 @@ use pallet_tiki::TikiScoreProvider;
 use hex_literal::hex;
 
 parameter_types! {
-	// Trust pallet için sabitler
+	// Constants for Trust pallet
 	pub const TrustScoreMultiplierBase: u128 = 1000;
-	pub const TrustUpdateInterval: BlockNumber = 24 * 60 * 10; // 24 saat (6 saniye/block varsayımı ile)
+	pub const TrustUpdateInterval: BlockNumber = 24 * 60 * 10; // 24 hours (assuming 6 seconds/block)
 }
 parameter_types! {
-    // PEZ Treasury ve Rewards için parameter types
+    // Parameter types for PEZ Treasury and Rewards
     pub const PezTreasuryPalletId: PalletId = PalletId(*b"py/pztrs");
     pub const PezIncentivePotId: PalletId = PalletId(*b"py/pzinc");
     pub const PezGovernmentPotId: PalletId = PalletId(*b"py/pzgov");
@@ -1265,14 +1276,14 @@ parameter_types! {
 
 // PEZ Treasury Config
 parameter_types! {
-    pub const PezAssetId: u32 = 1; // PEZ Token'ımızın ID'si 1 olacak
+    pub const PezAssetId: u32 = 1; // PEZ Token ID will be 1
 }
 
 impl pallet_pez_treasury::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type Assets = Assets; // `Currency = Balances` yerine bunu kullanıyoruz
-    type WeightInfo = pallet_pez_treasury::weights::SubstrateWeight<Runtime>;
-    type PezAssetId = PezAssetId; // Yeni eklediğimiz asset ID'sini bağlıyoruz
+    type Assets = Assets; // Using this instead of `Currency = Balances`
+    type WeightInfo = pallet_pez_treasury::weights::WeightInfo<Runtime>;
+    type PezAssetId = PezAssetId; // Binding the newly added asset ID
     type TreasuryPalletId = PezTreasuryPalletId;
     type IncentivePotId = PezIncentivePotId;
     type GovernmentPotId = PezGovernmentPotId;
@@ -1284,9 +1295,9 @@ impl pallet_pez_treasury::Config for Runtime {
 // PEZ Rewards Config
 impl pallet_pez_rewards::Config for Runtime {
     type RuntimeEvent = RuntimeEvent;
-    type Assets = Assets; // `Currency = Balances` yerine bunu kullanıyoruz
+    type Assets = Assets; // Using this instead of `Currency = Balances`
     type WeightInfo = pallet_pez_rewards::weights::SubstrateWeight<Runtime>;
-    type PezAssetId = PezAssetId; // Yeni eklediğimiz asset ID'sini bağlıyoruz
+    type PezAssetId = PezAssetId; // Binding the newly added asset ID
     type TrustScoreSource = Trust;
     type IncentivePotId = PezIncentivePotId;
     type ClawbackRecipient = QaziMuhammedAccount;
@@ -2093,7 +2104,7 @@ construct_runtime! {
 		// Referral module
 		Referral: pallet_referral::{Pallet, Call, Storage, Event<T>} = 47,
 
-		// Perwerde (Eğitim) module
+		// Perwerde (Education) module
 		Perwerde: pallet_perwerde::{Pallet, Call, Storage, Event<T>} = 48,
 
 		// Staking Score module
@@ -2174,7 +2185,7 @@ construct_runtime! {
 	}
 }
 
-// runtime/pezkuwichain/src/lib.rs içindeki setup_automated_scheduling fonksiyonunu DÜZELT:
+// Fix setup_automated_scheduling function in runtime/pezkuwichain/src/lib.rs:
 
 impl Runtime {
     /// Runtime-specific implementation for parliamentary NFT distribution
@@ -2211,12 +2222,12 @@ impl Runtime {
     }
 
     pub fn setup_automated_scheduling() -> sp_runtime::DispatchResult {
-        // Aylık treasury release scheduling
+        // Monthly treasury release scheduling
         let treasury_call = RuntimeCall::PezTreasury(
             pallet_pez_treasury::Call::release_monthly_funds {}
         );
         
-        // DOĞRU API kullanımı:
+        // CORRECT API usage:
         Scheduler::schedule(
             RuntimeOrigin::root(),
             432_000u32.into(), // when (block number)
@@ -2225,7 +2236,7 @@ impl Runtime {
             treasury_call.into(),
         )?;
 
-        // Aylık epoch finalization scheduling with parliamentary distribution
+        // Monthly epoch finalization scheduling with parliamentary distribution
         let epoch_call = RuntimeCall::PezRewards(
             pallet_pez_rewards::Call::finalize_epoch {}
         );
@@ -2251,14 +2262,14 @@ impl Runtime {
             parliamentary_call.into(),
         )?;
 
-        // Haftalık clawback scheduling (1 hafta offset ile)
+        // Weekly clawback scheduling (with 1 week offset)
         let clawback_call = RuntimeCall::PezRewards(
             pallet_pez_rewards::Call::close_epoch { epoch_index: 0 }
         );
         
         Scheduler::schedule(
             RuntimeOrigin::root(),
-            532_800u32.into(), // 1 hafta sonra başla
+            532_800u32.into(), // Start after 1 week
             Some((432_000u32.into(), u32::MAX)),
             61,
             clawback_call.into(),
@@ -2306,7 +2317,7 @@ pub type UncheckedSignaturePayload =
 pub type Migrations = migrations::Unreleased;
 
 
-// Hemwelatî (Citizenship) Provider - KYC paletinden
+// Welati (Citizenship) Provider - KYC paletinden
 pub struct CitizenshipProvider;
 impl pallet_trust::CitizenshipStatusProvider<AccountId> for CitizenshipProvider {
 	fn is_citizen(who: &AccountId) -> bool {
@@ -2318,7 +2329,7 @@ impl pallet_trust::CitizenshipStatusProvider<AccountId> for CitizenshipProvider 
 pub struct ReferralProvider;
 impl pallet_trust::ReferralScoreProvider<AccountId> for ReferralProvider {
 	fn get_referral_score(who: &AccountId) -> u32 {
-		pallet_referral::ReferralCount::<Runtime>::get(who).saturating_mul(10) // Her referral için 10 puan
+		pallet_referral::ReferralCount::<Runtime>::get(who).saturating_mul(10) // 10 points per referral
 	}
 }
 
@@ -2326,7 +2337,7 @@ impl pallet_trust::ReferralScoreProvider<AccountId> for ReferralProvider {
 pub struct PerwerdeProvider;
 impl pallet_trust::PerwerdeScoreProvider<AccountId> for PerwerdeProvider {
 	fn get_perwerde_score(who: &AccountId) -> u32 {
-		// pallet-perwerde'nin kendi içindeki public 'get_perwerde_score' fonksiyonunu çağırıyoruz.
+		// Calling the public 'get_perwerde_score' function inside pallet-perwerde.
 		pallet_perwerde::Pallet::<Runtime>::get_perwerde_score(who)
 	}
 }
@@ -2346,7 +2357,7 @@ impl pallet_trust::Config for Runtime {
 	type ScoreMultiplierBase = TrustScoreMultiplierBase;
 	type UpdateInterval = TrustUpdateInterval;
 
-	// Provider'ları bağla
+	// Bind Providers
 	type StakingScoreSource = StakingScore;
 	type ReferralScoreSource = ReferralProvider;
 	type PerwerdeScoreSource = PerwerdeProvider;
@@ -2359,7 +2370,7 @@ pub struct ValidatorPoolTrustAdapter;
 impl pallet_validator_pool::TrustScoreProvider<AccountId> for ValidatorPoolTrustAdapter {
 	fn trust_score_of(who: &AccountId) -> u128 {
 		pallet_trust::Pallet::<Runtime>::calculate_trust_score(who)
-			.unwrap_or(0) // Hata durumunda 0 döndür
+			.unwrap_or(0) // Return 0 on error
 	}
 }
 
@@ -2392,7 +2403,7 @@ impl pallet_welati::CitizenInfo for MockCitizenInfo {
 	}
 }
 
-// Mock KYC provider SADECE test ortamında
+// Mock KYC provider ONLY for test environment
 #[cfg(all(test, feature = "runtime-benchmarks"))]
 pub struct MockKycProvider;
 
@@ -2403,7 +2414,7 @@ impl pallet_identity_kyc::types::KycStatus<AccountId> for MockKycProvider {
 	}
 }
 
-// Güvenli KYC provider selection
+// Safe KYC provider selection
 #[cfg(all(test, feature = "runtime-benchmarks"))]
 type KycProviderForWelati = MockKycProvider;
 
@@ -2687,7 +2698,7 @@ mod benches {
 		[pallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pallet_xcm_benchmarks::fungible, pallet_xcm_benchmarks::fungible::Pallet::<Runtime>]
 		[pallet_xcm_benchmarks::generic, pallet_xcm_benchmarks::generic::Pallet::<Runtime>]
-		// Bizim özel paletlerimiz
+		// Our custom pallets
 		[pallet_tiki, Tiki]
 		[pallet_welati, Welati]
 		[pallet_identity_kyc, IdentityKyc]

@@ -49,10 +49,31 @@ fn force_genesis_distribution_requires_root() {
 fn force_genesis_distribution_works_with_root() {
     new_test_ext().execute_with(|| {
         assert_ok!(PezTreasury::force_genesis_distribution(RuntimeOrigin::root()));
-        
+
         assert!(Assets::balance(PezAssetId::get(), treasury_account()) > 0);
         assert!(Assets::balance(PezAssetId::get(), presale()) > 0);
         assert!(Assets::balance(PezAssetId::get(), founder()) > 0);
+    });
+}
+
+#[test]
+fn genesis_distribution_can_only_happen_once() {
+    new_test_ext().execute_with(|| {
+        // First call should succeed
+        assert_ok!(PezTreasury::do_genesis_distribution());
+
+        // Verify flag is set
+        assert!(PezTreasury::genesis_distribution_done());
+
+        // Second call should fail
+        assert_noop!(
+            PezTreasury::do_genesis_distribution(),
+            Error::<Test>::GenesisDistributionAlreadyDone
+        );
+
+        // Verify balances didn't double
+        let treasury_amount = 4_812_500_000 * 1_000_000_000_000u128;
+        assert_pez_balance(treasury_account(), treasury_amount);
     });
 }
 

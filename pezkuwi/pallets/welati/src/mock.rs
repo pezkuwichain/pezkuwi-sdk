@@ -188,11 +188,25 @@ parameter_types! {
     pub const MaxCidLength: u32 = 64;
 }
 
+pub struct NoOpOnKycApproved;
+impl pallet_identity_kyc::types::OnKycApproved<AccountId> for NoOpOnKycApproved {
+	fn on_kyc_approved(_who: &AccountId) {}
+}
+
+pub struct NoOpCitizenNftProvider;
+impl pallet_identity_kyc::types::CitizenNftProvider<AccountId> for NoOpCitizenNftProvider {
+	fn mint_citizen_nft(_who: &AccountId) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+}
+
 impl pallet_identity_kyc::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type Currency = Balances;
     type KycApprovalOrigin = frame_system::EnsureRoot<AccountId>;
     type WeightInfo = ();
+	type OnKycApproved = NoOpOnKycApproved;
+	type CitizenNftProvider = NoOpCitizenNftProvider;
     type KycApplicationDeposit = KycApplicationDeposit;
     type MaxStringLength = MaxStringLength;
     type MaxCidLength = MaxCidLength;
@@ -333,7 +347,7 @@ parameter_types! {
 
 impl pallet_welati::Config for Test {
     type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = ();
+    type WeightInfo = crate::weights::WeightInfo<Test>;
     type Randomness = MockRandomness;
     type RuntimeCall = RuntimeCall;
     type TrustScoreSource = MockTrustProvider; // Mock provider kullan

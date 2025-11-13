@@ -1,23 +1,28 @@
 //! Benchmarking setup for pallet-referral
 
-use super::*;
-#[allow(unused_imports)]
-use crate::Pallet as Referral;
-use frame_benchmarking::{benchmarks, account};
-use frame_system::RawOrigin;
-use sp_runtime::traits::StaticLookup;
+#![cfg(feature = "runtime-benchmarks")]
 
-benchmarks! {
-	initiate_referral {
+use super::*;
+use crate::Pallet as Referral;
+use frame_benchmarking::v2::*;
+use frame_system::RawOrigin;
+
+#[benchmarks]
+mod benchmarks {
+	use super::*;
+
+	#[benchmark]
+	fn initiate_referral() {
 		let referrer: T::AccountId = account("referrer", 0, 0);
 		let referred: T::AccountId = account("referred", 0, 1);
-		
-		// `referred` hesabının daha önce davet edilmediğinden emin olalım.
+
+		// Ensure the `referred` account has not been referred before
 		PendingReferrals::<T>::remove(&referred);
 		Referrals::<T>::remove(&referred);
 
-	}: _(RawOrigin::Signed(referrer.clone()), referred.clone())
-	verify {
+		#[extrinsic_call]
+		initiate_referral(RawOrigin::Signed(referrer.clone()), referred.clone());
+
 		assert_eq!(PendingReferrals::<T>::get(&referred), Some(referrer));
 	}
 

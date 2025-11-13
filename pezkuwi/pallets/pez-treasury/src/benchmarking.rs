@@ -33,6 +33,9 @@ mod benchmarks {
 
 	#[benchmark]
 	fn force_genesis_distribution() {
+		// Clear the flag to allow benchmark run (tests the new storage operation)
+		crate::GenesisDistributionDone::<T>::kill();
+
 		#[block]
 		{
 			PezTreasury::<T>::do_genesis_distribution().unwrap();
@@ -53,20 +56,25 @@ mod benchmarks {
 		crate::TreasuryStartBlock::<T>::kill();
 		crate::HalvingInfo::<T>::kill();
 		crate::NextReleaseMonth::<T>::kill();
+		crate::GenesisDistributionDone::<T>::kill();
 		// Deprecated `remove_all` yerine `clear` kullanılıyor.
 		crate::MonthlyReleases::<T>::clear(u32::MAX, None);
 
+		// First do genesis distribution to properly fund the treasury
+		PezTreasury::<T>::do_genesis_distribution().unwrap();
 		PezTreasury::<T>::do_initialize_treasury().unwrap();
+
 		let treasury_account = PezTreasury::<T>::treasury_account_id();
 		let initial_monthly_amount = PezTreasury::<T>::halving_info().monthly_amount;
 		let incentive_amount = initial_monthly_amount * 75u32.into() / 100u32.into();
         let government_amount = initial_monthly_amount.saturating_sub(incentive_amount);
 
-		// Benchmark öncesi hazine hesabına yeterli PEZ token'ı mint et
+		// Ensure treasury has MORE than enough balance for the release
+		// Mint additional 10x the monthly amount to ensure sufficient balance
 		let _ = T::Assets::mint_into(
 			T::PezAssetId::get(),
 			&treasury_account,
-			initial_monthly_amount,
+			initial_monthly_amount * 10u32.into(),
 		);
 
 		let current_block = frame_system::Pallet::<T>::block_number();

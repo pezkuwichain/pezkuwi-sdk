@@ -1,5 +1,102 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # Tiki (Role) Pallet
+//!
+//! A pallet for managing citizenship and role-based NFTs with automated and governance-driven assignment.
+//!
+//! ## Overview
+//!
+//! The Tiki pallet implements a comprehensive role management system using non-transferable NFTs
+//! to represent citizenship status and various roles within the ecosystem. Each role grants
+//! specific permissions, rights, and social standing.
+//!
+//! ## Core Concepts
+//!
+//! ### Citizenship NFT
+//! - Automatically minted upon KYC approval
+//! - Represents "Welati" (Citizen) status
+//! - Non-transferable and permanent
+//! - Required prerequisite for all other roles
+//!
+//! ### Role Types (Tiki)
+//!
+//! Roles are assigned through different mechanisms:
+//!
+//! 1. **Automatic** - System-assigned upon conditions (e.g., Citizenship after KYC)
+//! 2. **Appointed** - Admin-assigned governmental positions (e.g., Ministers, Judges)
+//! 3. **Elected** - Community-voted positions (e.g., Parliament members)
+//! 4. **Earned** - Achievement-based roles (e.g., Educator, Expert)
+//!
+//! ### Role Categories
+//!
+//! - **Governance**: Serok (President), SerokWeziran (Prime Minister), Ministers
+//! - **Judicial**: Dadger (Judge), Dozger (Prosecutor), Hiquqnas (Lawyer)
+//! - **Administrative**: Qeydkar (Registrar), Xezinedar (Treasurer), OperatorêTorê (Network Operator)
+//! - **Educational**: Mamoste (Teacher), Perwerdekar (Educator), Rewsenbîr (Intellectual)
+//! - **Economic**: Bazargan (Merchant), Navbeynkar (Mediator)
+//! - **Community**: Parlementer (Parliament Member), ModeratorêCivakê (Community Moderator)
+//! - **Expert**: Axa (Elder/Expert), Pêseng (Pioneer), Hekem (Wise), Sêwirmend (Counselor)
+//!
+//! ## NFT Implementation
+//!
+//! - Built on top of `pallet-nfts` for standard NFT functionality
+//! - All Tiki NFTs are non-transferable (soulbound)
+//! - Transfer attempts are blocked automatically via hooks
+//! - Each role is represented by a unique NFT item in the TikiCollectionId
+//!
+//! ## Role Management
+//!
+//! ### Granting Roles
+//! - Some roles are unique (only one holder at a time)
+//! - Users can hold multiple compatible roles
+//! - Maximum roles per user is configurable
+//! - Trust score requirements for certain roles
+//!
+//! ### Revoking Roles
+//! - Admin can revoke appointed roles
+//! - Automatic revocation on condition changes
+//! - Role history maintained for governance transparency
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `grant_tiki(who, tiki, assignment_type)` - Assign a role to a user (admin)
+//! - `revoke_tiki(who, tiki)` - Remove a role from a user (admin)
+//! - `force_mint_citizen_nft(who)` - Manually mint citizenship NFT (admin)
+//!
+//! ### Storage
+//!
+//! - `CitizenNft` - Mapping of accounts to their citizenship NFT IDs
+//! - `UserTikis` - List of roles held by each user
+//! - `TikiHolder` - Reverse mapping for unique roles to their holders
+//! - `NextItemId` - Counter for NFT item ID generation
+//!
+//! ### Hooks
+//!
+//! - `on_initialize` - Automatic citizenship NFT minting for newly approved KYC users
+//! - NFT transfer blocking for all Tiki NFTs
+//!
+//! ## Dependencies
+//!
+//! This pallet requires integration with:
+//! - `pallet-identity-kyc` - KYC status and approval notifications
+//! - `pallet-nfts` - Underlying NFT infrastructure
+//! - `pallet-trust` - Trust score verification for role eligibility
+//!
+//! ## Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_tiki::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type AdminOrigin = EnsureRoot<AccountId>;
+//!     type WeightInfo = pallet_tiki::weights::SubstrateWeight<Runtime>;
+//!     type TikiCollectionId = ConstU32<1>; // Tiki collection ID
+//!     type MaxTikisPerUser = ConstU32<20>; // Max 20 roles per user
+//!     type Tiki = pallet_tiki::Tiki;
+//! }
+//! ```
+
 extern crate alloc;
 
 pub use pallet::*;
@@ -23,7 +120,7 @@ mod tests;
 mod benchmarking;
 pub mod weights;
 pub use weights::*;
-pub mod ensure; // Origin validation için
+pub mod ensure; // For origin validation
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -41,41 +138,41 @@ pub mod pallet {
         type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
         type WeightInfo: weights::WeightInfo;
 
-        /// Tiki (Rol) NFT'lerının tutulduğu koleksiyonun ID'si.
+        /// Collection ID holding Tiki (Role) NFTs.
         #[pallet::constant]
         type TikiCollectionId: Get<Self::CollectionId>;
 
-        /// Bir kullanıcının sahip olabileceği maksimum Tiki (rol) sayısı için teknik üst sınır.
+        /// Technical upper limit for maximum number of Tikis (roles) a user can hold.
         #[pallet::constant]
         type MaxTikisPerUser: Get<u32>;
 
-        /// Palet içerisinde kullanılacak Tiki enum tipi.
+        /// Tiki enum type to be used within the pallet.
         type Tiki: Parameter + From<Tiki> + Into<u32> + MaxEncodedLen + TypeInfo + Copy + MaybeSerializeDeserialize + 'static;
     }
 
     #[derive(Serialize, Deserialize, Encode, Decode, DecodeWithMemTracking, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen, Copy)]
     pub enum RoleAssignmentType {
-        /// Otomatik olarak verilen roller (KYC sonrası Hemwelatî gibi)
+        /// Automatically assigned roles (like Welati after KYC)
         Automatic,
-        /// Admin tarafından atanan roller (Wezir, Dadger gibi)
+        /// Admin-assigned roles (like Wezir, Dadger)
         Appointed,
-        /// Topluluk tarafından seçilen roller (Parlementer gibi) - pallet-voting tarafından verilir
+        /// Community-elected roles (like Parlementer) - assigned by pallet-voting
         Elected,
-        /// Kazanılabilen roller (Axa, sınavla alınan roller)
+        /// Earned roles (Axa, roles obtained through exams)
         Earned,
     }
 
     #[derive(Serialize, Deserialize, Encode, Decode, DecodeWithMemTracking, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen, Copy)]
     #[repr(u32)]
     pub enum Tiki {
-        Hemwelatî, Parlementer, SerokiMeclise, Serok, Wezir, EndameDiwane, Dadger,
+        Welati, Parlementer, SerokiMeclise, Serok, Wezir, EndameDiwane, Dadger,
         Dozger, Hiquqnas, Noter, Xezinedar, Bacgir, GerinendeyeCavkaniye, OperatorêTorê,
         PisporêEwlehiyaSîber, GerinendeyeDaneye, Berdevk, Qeydkar, Balyoz, Navbeynkar,
         ParêzvaneÇandî, Mufetîs, KalîteKontrolker, Mela, Feqî, Perwerdekar, Rewsenbîr,
         RêveberêProjeyê, SerokêKomele, ModeratorêCivakê, Axa, Pêseng, Sêwirmend, Hekem, Mamoste,
-        // Yeni eklenen ekonomik roller
+        // Newly added economic roles
         Bazargan,
-        // hukumet rolleri 
+        // Government roles
         SerokWeziran, WezireDarayiye, WezireParez, WezireDad, WezireBelaw, WezireTend, WezireAva, WezireCand, 
 
     }
@@ -86,67 +183,67 @@ pub mod pallet {
         }
     }
 
-    /// Her kullanıcının Vatandaşlık NFT'sinin ID'sini tutar
+    /// Holds citizenship NFT ID for each user
     #[pallet::storage]
     #[pallet::getter(fn citizen_nft)]
     pub type CitizenNft<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u32, OptionQuery>;
 
-    /// Her kullanıcının sahip olduğu Tiki'lerin (rollerin) listesi
+    /// List of Tikis (roles) owned by each user
     #[pallet::storage]
     #[pallet::getter(fn user_tikis)]
     pub type UserTikis<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BoundedVec<Tiki, T::MaxTikisPerUser>, ValueQuery>;
 
-    /// Belirli bir Tiki'nin hangi kullanıcıya ait olduğunu gösterir (benzersiz roller için)
+    /// Shows which user a specific Tiki belongs to (for unique roles)
     #[pallet::storage]
     #[pallet::getter(fn tiki_holder)]
     pub type TikiHolder<T: Config> = StorageMap<_, Blake2_128Concat, Tiki, T::AccountId, OptionQuery>;
 
-    /// Bir sonraki NFT için kullanılacak Item ID
+    /// Item ID to be used for next NFT
     #[pallet::storage]
     #[pallet::getter(fn next_item_id)]
     pub type NextItemId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
     #[pallet::error]
     pub enum Error<T> {
-        /// Rol zaten başka birine ait
+        /// Role already belongs to someone else
         RoleAlreadyTaken,
-        /// Belirtilen kişi bu rolün sahibi değil
+        /// Specified person is not the holder of this role
         NotTheHolder,
-        /// Rol atanmamış
+        /// Role not assigned
         RoleNotAssigned,
-        /// Bir kullanıcı maksimum rol sayısına ulaştı
+        /// A user has reached maximum role count
         ExceedsMaxRolesPerUser,
-        /// KYC tamamlanmamış
+        /// KYC not completed
         KycNotCompleted,
-        /// Vatandaşlık NFT'si zaten mevcut
+        /// Citizenship NFT already exists
         CitizenNftAlreadyExists,
-        /// Vatandaşlık NFT'si bulunamadı
+        /// Citizenship NFT not found
         CitizenNftNotFound,
-        /// Kullanıcı zaten bu role sahip
+        /// User already has this role
         UserAlreadyHasRole,
-        /// Yeterli Trust Puanı yok
+        /// Insufficient Trust Score
         InsufficientTrustScore,
-        /// Bu rol türü bu yöntemle verilemez
+        /// This role type cannot be assigned with this method
         InvalidRoleAssignmentMethod,
     }
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        /// Yeni vatandaşlık NFT'si basıldı
+        /// New citizenship NFT minted
         CitizenNftMinted { who: T::AccountId, nft_id: u32 },
-        /// Yeni Tiki (rol) eklendi
+        /// New Tiki (role) granted
         TikiGranted { who: T::AccountId, tiki: Tiki },
-        /// Tiki (rol) kaldırıldı
+        /// Tiki (role) revoked
         TikiRevoked { who: T::AccountId, tiki: Tiki },
-        /// NFT transfer'i engellendi
+        /// NFT transfer blocked
         TransferBlocked { collection_id: T::CollectionId, item_id: u32, from: T::AccountId, to: T::AccountId },
     }
 
     #[pallet::hooks]
     impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
         fn on_initialize(_block_number: BlockNumberFor<T>) -> Weight {
-            // KYC tamamlanan yeni kullanıcıları kontrol et ve vatandaşlık NFT'si bas
+            // Check newly KYC-approved users and mint citizenship NFT
             Self::check_and_mint_citizen_nfts();
             
             T::DbWeight::get().reads_writes(10, 5)
@@ -165,8 +262,8 @@ pub mod pallet {
         ) -> DispatchResult {
             T::AdminOrigin::ensure_origin(origin)?;
             let dest_account = T::Lookup::lookup(dest)?;
-            
-            // Rolün atanabilir olup olmadığını kontrol et
+
+            // Check if the role can be appointed
             ensure!(
                 Self::can_grant_role_type(&tiki, &RoleAssignmentType::Appointed),
                 Error::<T>::InvalidRoleAssignmentMethod
@@ -191,7 +288,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Manual olarak vatandaşlık NFT'si basma (test/acil durum için)
+        /// Manually mint citizenship NFT (for testing/emergency)
         #[pallet::call_index(2)]
         #[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
         pub fn force_mint_citizen_nft(
@@ -205,7 +302,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Seçim sistemi tarafından rol verme (pallet-voting'den çağrılır)
+        /// Grant role through election system (called from pallet-voting)
         #[pallet::call_index(3)]
         #[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
         pub fn grant_elected_role(
@@ -213,10 +310,10 @@ pub mod pallet {
             dest: <T::Lookup as StaticLookup>::Source,
             tiki: Tiki,
         ) -> DispatchResult {
-            T::AdminOrigin::ensure_origin(origin)?; // pallet-voting Root origin ile çağıracak
+            T::AdminOrigin::ensure_origin(origin)?; // pallet-voting will call with Root origin
             let dest_account = T::Lookup::lookup(dest)?;
-            
-            // Rolün seçilebilir olup olmadığını kontrol et
+
+            // Check if the role can be granted through election
             ensure!(
                 Self::can_grant_role_type(&tiki, &RoleAssignmentType::Elected),
                 Error::<T>::InvalidRoleAssignmentMethod
@@ -226,7 +323,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Sınav/test sistemi tarafından rol verme
+        /// Grant role through exam/test system
         #[pallet::call_index(4)]
         #[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
         pub fn grant_earned_role(
@@ -234,10 +331,10 @@ pub mod pallet {
             dest: <T::Lookup as StaticLookup>::Source,
             tiki: Tiki,
         ) -> DispatchResult {
-            T::AdminOrigin::ensure_origin(origin)?; // Şimdilik admin, sonra exam pallet
+            T::AdminOrigin::ensure_origin(origin)?; // For now admin, later exam pallet
             let dest_account = T::Lookup::lookup(dest)?;
-            
-            // Rolün kazanılabilir olup olmadığını kontrol et
+
+            // Check if the role can be earned
             ensure!(
                 Self::can_grant_role_type(&tiki, &RoleAssignmentType::Earned),
                 Error::<T>::InvalidRoleAssignmentMethod
@@ -247,26 +344,26 @@ pub mod pallet {
             Ok(())
         }
 
-        /// KYC tamamlandıktan sonra vatandaşlık başvurusu
+        /// Apply for citizenship after KYC completion
         #[pallet::call_index(5)]
         #[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
         pub fn apply_for_citizenship(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            // Kullanıcının KYC'sinin onaylanmış olup olmadığını kontrol et
+            // Check if user's KYC is approved
             let kyc_status = pallet_identity_kyc::Pallet::<T>::kyc_status_of(&who);
             ensure!(
                 kyc_status == pallet_identity_kyc::types::KycLevel::Approved,
                 Error::<T>::KycNotCompleted
             );
 
-            // Vatandaşlık NFT'si bas
+            // Mint citizenship NFT
             Self::mint_citizen_nft_for_user(&who)?;
 
             Ok(())
         }
 
-        /// Transfer engelleme sistemi için NFT transfer'i kontrol et
+        /// Check NFT transfer for transfer blocking system
         #[pallet::call_index(6)]
         #[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
         pub fn check_transfer_permission(
@@ -290,17 +387,17 @@ pub mod pallet {
         }
     }
 
-    // Pallet'in yardımcı fonksiyonları
+    // Pallet's helper functions
     impl<T: Config> Pallet<T> {
-        /// KYC tamamlanan yeni kullanıcıları kontrol eder ve vatandaşlık NFT'si basar
+        /// Checks newly KYC-completed users and mints citizenship NFT
         fn check_and_mint_citizen_nfts() {
-            // KYC pallet'teki tüm onaylanmış kullanıcıları kontrol et
+            // Check all approved users in KYC pallet
             for (account, kyc_status) in pallet_identity_kyc::KycStatuses::<T>::iter() {
-                // KYC onaylanmış mı kontrol et
+                // Check if KYC is approved
                 if kyc_status == pallet_identity_kyc::types::KycLevel::Approved {
-                    // Vatandaşlık NFT'si var mı kontrol et
+                    // Check if citizenship NFT exists
                     if Self::citizen_nft(&account).is_none() {
-                        // NFT bas (hata durumunda log et ama devam et)
+                        // Mint NFT (log error but continue on failure)
                         if let Err(_) = Self::mint_citizen_nft_for_user(&account) {
                             log::warn!("Failed to mint citizen NFT for account: {:?}", account);
                         }
@@ -310,15 +407,25 @@ pub mod pallet {
         }
 
 
-        /// Belirli bir kullanıcı için vatandaşlık NFT'si basar
+        /// Mints citizenship NFT for specific user
         pub fn mint_citizen_nft_for_user(user: &T::AccountId) -> DispatchResult {
-            // Zaten NFT'si var mı kontrol et
+            // Check if NFT already exists
             ensure!(Self::citizen_nft(user).is_none(), Error::<T>::CitizenNftAlreadyExists);
 
             let collection_id = T::TikiCollectionId::get();
             let next_id_u32 = Self::next_item_id();
-            
-            // NFT'yi mint et
+
+            // Mint the NFT - use force_mint in benchmarks to bypass balance/origin requirements
+            #[cfg(feature = "runtime-benchmarks")]
+            pallet_nfts::Pallet::<T>::force_mint(
+                T::RuntimeOrigin::from(frame_system::RawOrigin::Root),
+                collection_id,
+                next_id_u32,
+                T::Lookup::unlookup(user.clone()),
+                Default::default(),
+            )?;
+
+            #[cfg(not(feature = "runtime-benchmarks"))]
             pallet_nfts::Pallet::<T>::mint(
                 T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(user.clone())),
                 collection_id,
@@ -327,88 +434,101 @@ pub mod pallet {
                 None,
             )?;
 
-            // NFT'yi transfer edilemez yap
+            // Make NFT non-transferable
             Self::lock_nft_transfer(&collection_id, &next_id_u32)?;
 
-            // Storage'ı güncelle
+            // Update storage
             CitizenNft::<T>::insert(user, next_id_u32);
             NextItemId::<T>::put(next_id_u32 + 1);
-            
-            // Hemwelatî rolünü otomatik ekle
+
+
+            // Automatically add Welati role
             UserTikis::<T>::mutate(user, |tikis| {
-                let _ = tikis.try_push(Tiki::Hemwelatî);
+                let _ = tikis.try_push(Tiki::Welati);
             });
 
-            // NFT metadata'sını ayarla
+            // Set NFT metadata
             Self::update_nft_metadata(user)?;
 
             Self::deposit_event(Event::CitizenNftMinted { who: user.clone(), nft_id: next_id_u32 });
             Ok(())
         }
 
-        /// Internal rol verme fonksiyonu (kod tekrarını önlemek için)
+        /// Internal role granting function (to avoid code duplication)
         pub fn internal_grant_role(dest_account: &T::AccountId, tiki: Tiki) -> DispatchResult {
-            // Vatandaşlık NFT'sinin olup olmadığını kontrol et
+            // Check if citizenship NFT exists
             ensure!(Self::citizen_nft(dest_account).is_some(), Error::<T>::CitizenNftNotFound);
-            
-            // Eğer bu rol benzersiz ise (tek kişiye ait olabilir), kontrol et
+
+            // If this role is unique (can belong to only one person), check
             if Self::is_unique_role(&tiki) {
                 ensure!(Self::tiki_holder(&tiki).is_none(), Error::<T>::RoleAlreadyTaken);
             }
-            
-            // Kullanıcının zaten bu role sahip olup olmadığını kontrol et
+
+            // Check if user already has this role
             let user_tikis = Self::user_tikis(dest_account);
             ensure!(!user_tikis.contains(&tiki), Error::<T>::UserAlreadyHasRole);
 
-            // Kullanıcının Tiki listesine ekle
+            // Add to user's Tiki list
             UserTikis::<T>::try_mutate(dest_account, |tikis| {
                 tikis.try_push(tiki).map_err(|_| Error::<T>::ExceedsMaxRolesPerUser)
             })?;
 
-            // Eğer benzersiz rol ise, TikiHolder'a da ekle
+            // If unique role, also add to TikiHolder
             if Self::is_unique_role(&tiki) {
                 TikiHolder::<T>::insert(&tiki, dest_account);
             }
 
-            // NFT metadata'sını güncelle
+            // Update NFT metadata
             Self::update_nft_metadata(dest_account)?;
 
             Self::deposit_event(Event::TikiGranted { who: dest_account.clone(), tiki });
             Ok(())
         }
 
-        /// Internal rol kaldırma fonksiyonu
+        /// Internal role revocation function
         pub fn internal_revoke_role(target_account: &T::AccountId, tiki: Tiki) -> DispatchResult {
-            // Kullanıcının bu role sahip olup olmadığını kontrol et
+            // Check if user has this role
             let user_tikis = Self::user_tikis(target_account);
             let _position = user_tikis.iter().position(|&r| r == tiki)
                 .ok_or(Error::<T>::RoleNotAssigned)?;
 
-            // Hemwelatî rolü kaldırılamaz
-            ensure!(tiki != Tiki::Hemwelatî, Error::<T>::RoleNotAssigned);
+            // Welati role cannot be removed
+            ensure!(tiki != Tiki::Welati, Error::<T>::RoleNotAssigned);
 
-            // Kullanıcının Tiki listesinden kaldır
+            // Remove from user's Tiki list
             UserTikis::<T>::mutate(target_account, |tikis| {
                 if let Some(pos) = tikis.iter().position(|&r| r == tiki) {
                     tikis.swap_remove(pos);
                 }
             });
 
-            // Eğer benzersiz rol ise, TikiHolder'dan da kaldır
+            // If unique role, also remove from TikiHolder
             if Self::is_unique_role(&tiki) {
                 TikiHolder::<T>::remove(&tiki);
             }
 
-            // NFT metadata'sını güncelle
+            // Update NFT metadata
             Self::update_nft_metadata(target_account)?;
             
             Self::deposit_event(Event::TikiRevoked { who: target_account.clone(), tiki });
             Ok(())
         }
 
-        /// NFT'yi transfer edilemez hale getirir
+        /// Makes NFT non-transferable
         fn lock_nft_transfer(collection_id: &T::CollectionId, item_id: &u32) -> DispatchResult {
-            // NFT'yi lock attribute'u ile işaretle
+            // Mark NFT with lock attribute - use force_set_attribute in benchmarks to bypass deposits
+            #[cfg(feature = "runtime-benchmarks")]
+            let _ = pallet_nfts::Pallet::<T>::force_set_attribute(
+                T::RuntimeOrigin::from(frame_system::RawOrigin::Root),
+                None,
+                *collection_id,
+                Some(*item_id),
+                pallet_nfts::AttributeNamespace::Pallet,
+                b"locked".to_vec().try_into().map_err(|_| DispatchError::Other("Key too long"))?,
+                b"true".to_vec().try_into().map_err(|_| DispatchError::Other("Value too long"))?,
+            );
+
+            #[cfg(not(feature = "runtime-benchmarks"))]
             let _ = pallet_nfts::Pallet::<T>::set_attribute(
                 T::RuntimeOrigin::from(frame_system::RawOrigin::Root),
                 *collection_id,
@@ -421,22 +541,22 @@ pub mod pallet {
             Ok(())
         }
 
-        /// NFT'nin metadata'sını kullanıcının rollerine göre günceller
+        /// Updates NFT metadata based on user's roles
         fn update_nft_metadata(user: &T::AccountId) -> DispatchResult {
             let nft_id_u32 = Self::citizen_nft(user).ok_or(Error::<T>::CitizenNftNotFound)?;
             let collection_id = T::TikiCollectionId::get();
             let user_tikis = Self::user_tikis(user);
 
             let total_score = Self::get_tiki_score(user);
-            
-            // Kısa metadata - sadece temel bilgiler
+
+            // Short metadata - only basic information
             let metadata = format!(
                 r#"{{"citizen":true,"roles":{},"score":{}}}"#,
                 user_tikis.len(),
                 total_score
             );
 
-            // Set metadata - hata durumunda log et ama çökme
+            // Set metadata - log error but don't crash
             if let Err(_) = pallet_nfts::Pallet::<T>::set_metadata(
                 T::RuntimeOrigin::from(frame_system::RawOrigin::Root),
                 collection_id,
@@ -449,7 +569,7 @@ pub mod pallet {
             Ok(())
         }
 
-        /// Belirli bir rolün benzersiz (tek kişiye ait) olup olmadığını kontrol eder
+        /// Checks if a specific role is unique (can belong to only one person)
         pub fn is_unique_role(tiki: &Tiki) -> bool {
             match tiki {
                 Tiki::Serok | Tiki::SerokiMeclise | Tiki::Xezinedar | Tiki::Balyoz => true,
@@ -457,41 +577,41 @@ pub mod pallet {
             }
         }
 
-        /// Belirli bir rolün atama türünü döndürür
+        /// Returns the assignment type of a specific role
         pub fn get_role_assignment_type(tiki: &Tiki) -> RoleAssignmentType {
             match tiki {
-                // Otomatik roller
-                Tiki::Hemwelatî => RoleAssignmentType::Automatic,
-                
-                // Seçilen roller
+                // Automatic roles
+                Tiki::Welati => RoleAssignmentType::Automatic,
+
+                // Elected roles
                 Tiki::Parlementer | Tiki::SerokiMeclise | Tiki::Serok => RoleAssignmentType::Elected,
-                
-                // Kazanılan roller (pallet-referral tarafından otomatik verilir)
-                Tiki::Axa | Tiki::Mamoste | Tiki::Rewsenbîr | 
+
+                // Earned roles (automatically given by pallet-referral)
+                Tiki::Axa | Tiki::Mamoste | Tiki::Rewsenbîr |
                 Tiki::SerokêKomele | Tiki::ModeratorêCivakê => RoleAssignmentType::Earned,
-                
-                // Atanan roller (varsayılan)
+
+                // Appointed roles (default)
                 _ => RoleAssignmentType::Appointed,
             }
         }
 
-        /// Belirli bir rolün veriliş şeklini kontrol eder
+        /// Checks the granting method of a specific role
         pub fn can_grant_role_type(tiki: &Tiki, assignment_type: &RoleAssignmentType) -> bool {
             let required_type = Self::get_role_assignment_type(tiki);
             match (&required_type, assignment_type) {
-                // Otomatik roller sadece sistem tarafından verilebilir
+                // Automatic roles can only be given by the system
                 (RoleAssignmentType::Automatic, RoleAssignmentType::Automatic) => true,
-                // Atanan roller admin tarafından verilebilir
+                // Appointed roles can be given by admin
                 (RoleAssignmentType::Appointed, RoleAssignmentType::Appointed) => true,
-                // Seçilen roller seçim sistemi tarafından verilebilir
+                // Elected roles can be given by election system
                 (RoleAssignmentType::Elected, RoleAssignmentType::Elected) => true,
-                // Kazanılan roller sınav/test sistemi tarafından verilebilir
+                // Earned roles can be given by exam/test system
                 (RoleAssignmentType::Earned, RoleAssignmentType::Earned) => true,
                 _ => false,
             }
         }
 
-        /// KYC sonrası otomatik Hemwelatî rolü verme
+        /// KYC sonrası otomatik Welati rolü verme
         pub fn auto_grant_citizenship(account: &T::AccountId) -> DispatchResult {
             // KYC kontrolü
             let kyc_status = pallet_identity_kyc::Pallet::<T>::kyc_status_of(account);
@@ -610,9 +730,15 @@ impl<T: Config> Pallet<T> {
             Tiki::Bazargan => 60, // Yeni eklenen ekonomik rol
 
             // Temel Vatandaşlık ve Diğerleri
-            Tiki::Hemwelatî => 10,
+            Tiki::Welati => 10,
             // Yukarıdaki listede olmayan diğer tüm roller 5 puan alır.
             _ => 5,
         }
     }
+}
+// CitizenNftProvider trait implementation for pallet-identity-kyc integration
+impl<T: Config> pallet_identity_kyc::types::CitizenNftProvider<T::AccountId> for Pallet<T> {
+	fn mint_citizen_nft(who: &T::AccountId) -> sp_runtime::DispatchResult {
+		Self::mint_citizen_nft_for_user(who)
+	}
 }

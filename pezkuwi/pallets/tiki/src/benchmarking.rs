@@ -6,14 +6,16 @@ use crate::Pallet as Tiki;
 use frame_benchmarking::v2::*;
 use frame_system::RawOrigin;
 // Gerekli trait'leri import ediyoruz
-use frame_support::traits::Get;
+use frame_support::traits::{Get, Currency};
 use sp_runtime::traits::StaticLookup;
 use sp_std::vec;
+use pallet_balances::Pallet as Balances;
 
 // Gerekli trait kısıtlamalarını ana benchmarks bloğuna ekliyoruz.
 #[benchmarks(
 	where
 		T::CollectionId: Copy + Default + PartialOrd,
+		T: pallet_balances::Config,
 )]
 mod benchmarks {
 	use super::*;
@@ -22,10 +24,16 @@ mod benchmarks {
 	fn ensure_collection_exists<T: Config>()
 	where
 		T::CollectionId: Copy + Default + PartialOrd,
+		T: pallet_balances::Config,
 	{
 		let collection_id = T::TikiCollectionId::get();
 		// Koleksiyon sahibi olarak fonlanmış `whitelisted_caller`'ı kullanıyoruz.
 		let caller: T::AccountId = whitelisted_caller();
+
+		// Fund the caller account with sufficient balance for NFT deposits
+		// Use a very large balance to ensure all deposit requirements can be met
+		let funding = Balances::<T>::minimum_balance() * 1_000_000_000u32.into();
+		Balances::<T>::make_free_balance_be(&caller, funding);
 
 		// `while` döngüsü, 'Step' trait'ine olan ihtiyacı ortadan kaldırır.
 		while pallet_nfts::NextCollectionId::<T>::get().unwrap_or_default() <= collection_id {
@@ -45,8 +53,15 @@ mod benchmarks {
     fn ensure_citizen_nft<T: Config>(who: T::AccountId) -> Result<(), DispatchError>
     where
         T::CollectionId: Copy + Default + PartialOrd,
+        T: pallet_balances::Config,
     {
         ensure_collection_exists::<T>();
+
+        // Fund the user account with sufficient balance for NFT deposits
+        // Use a very large balance to ensure all deposit requirements can be met
+        let funding = Balances::<T>::minimum_balance() * 1_000_000_000u32.into();
+        Balances::<T>::make_free_balance_be(&who, funding);
+
         if Tiki::<T>::citizen_nft(&who).is_none() {
             Tiki::<T>::mint_citizen_nft_for_user(&who)?;
         }

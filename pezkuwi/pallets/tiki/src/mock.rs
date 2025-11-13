@@ -125,6 +125,22 @@ parameter_types! {
 	pub const MaxCidLength: u32 = 100;
 }
 
+// Mock implementation for OnKycApproved hook
+pub struct MockOnKycApproved;
+impl pallet_identity_kyc::types::OnKycApproved<AccountId> for MockOnKycApproved {
+	fn on_kyc_approved(_who: &AccountId) {
+		// No-op for tests
+	}
+}
+
+// Mock implementation for CitizenNftProvider
+pub struct MockCitizenNftProvider;
+impl pallet_identity_kyc::types::CitizenNftProvider<AccountId> for MockCitizenNftProvider {
+	fn mint_citizen_nft(_who: &AccountId) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
+}
+
 impl pallet_identity_kyc::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
@@ -133,6 +149,8 @@ impl pallet_identity_kyc::Config for Test {
 	type KycApplicationDeposit = KycApplicationDepositAmount;
 	type MaxStringLength = ConstU32<50>;
 	type MaxCidLength = MaxCidLength;
+	type OnKycApproved = MockOnKycApproved;
+	type CitizenNftProvider = MockCitizenNftProvider;
 }
 
 parameter_types! {

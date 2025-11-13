@@ -1,94 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # PEZ Rewards Pallet
-//!
-//! A pallet for distributing PEZ token rewards based on trust scores with epoch-based mechanics.
-//!
-//! ## Overview
-//!
-//! This pallet implements a sophisticated reward distribution system that incentivizes
-//! ecosystem participation through trust-based rewards. The system operates in monthly
-//! epochs with automatic reward calculation, distribution, and clawback mechanisms.
-//!
-//! ## Core Mechanisms
-//!
-//! ### Epoch System
-//!
-//! - **Duration**: 1 month (~432,000 blocks at 10 blocks/minute)
-//! - **States**: Open → ClaimPeriod → Closed
-//! - **Claim Window**: 1 week after epoch finalization (~100,800 blocks)
-//! - **Automatic Progression**: Scheduler-driven state transitions
-//!
-//! ### Reward Distribution
-//!
-//! 1. **Trust Score Recording**: Users record their trust scores during the Open epoch
-//! 2. **Epoch Finalization**: Total pool and per-trust-point rewards calculated
-//! 3. **Claim Period**: Users claim proportional rewards based on their trust scores
-//! 4. **Clawback**: Unclaimed rewards returned to designated recipient after claim period
-//!
-//! ### Parliamentary NFT Rewards
-//!
-//! - **Allocation**: 10% of each epoch's incentive pool reserved for NFT holders
-//! - **NFT Collection**: ID 100 with 201 Parliamentary NFTs
-//! - **Automatic Distribution**: Pro-rata distribution to all NFT holders at epoch finalization
-//!
-//! ## Reward Calculation Formula
-//!
-//! ```text
-//! user_reward = (user_trust_score / total_trust_score) * epoch_reward_pool
-//! ```
-//!
-//! Where:
-//! - `epoch_reward_pool` = Incentive pot balance - 10% parliamentary allocation
-//! - `total_trust_score` = Sum of all recorded trust scores in epoch
-//! - `user_trust_score` = User's trust score snapshot from epoch
-//!
-//! ## Interface
-//!
-//! ### User Extrinsics
-//!
-//! - `record_trust_score()` - Record current trust score for active epoch
-//! - `claim_reward(epoch_index)` - Claim reward from a finalized epoch (within claim period)
-//!
-//! ### Privileged Extrinsics
-//!
-//! - `initialize_rewards_system()` - Start the first epoch (one-time, root)
-//! - `finalize_epoch()` - Calculate rewards and start claim period (scheduler/root)
-//! - `close_epoch(epoch_index)` - Close claim period and claw back unclaimed rewards (scheduler/root)
-//!
-//! ### Storage
-//!
-//! - `EpochInfo` - Current epoch metadata (index, start block, completion count)
-//! - `EpochRewardPools` - Historical reward pool data for each epoch
-//! - `UserEpochScores` - User trust score snapshots per epoch
-//! - `ClaimedRewards` - Tracking claimed rewards per user per epoch
-//! - `EpochStatus` - Current state (Open/ClaimPeriod/Closed) for each epoch
-//! - `ParliamentaryNftOwners` - Mapping of Parliamentary NFT IDs to owners
-//!
-//! ## Dependencies
-//!
-//! This pallet requires integration with:
-//! - `pallet-trust` - Trust score provider
-//! - `pallet-pez-treasury` - Incentive pot funding source
-//! - `pallet-nfts` - Parliamentary NFT collection (optional)
-//!
-//! ## Runtime Integration Example
-//!
-//! ```ignore
-//! impl pallet_pez_rewards::Config for Runtime {
-//!     type RuntimeEvent = RuntimeEvent;
-//!     type Assets = Assets;
-//!     type PezAssetId = ConstU32<1>; // PEZ asset ID
-//!     type WeightInfo = pallet_pez_rewards::weights::SubstrateWeight<Runtime>;
-//!     type TrustScoreSource = Trust;
-//!     type IncentivePotId = IncentivePotId;
-//!     type ClawbackRecipient = ClawbackRecipient; // Governance account
-//!     type ForceOrigin = EnsureRoot<AccountId>;
-//!     type CollectionId = u32;
-//!     type ItemId = u32;
-//! }
-//! ```
-
 pub use pallet::*;
 
 pub mod weights;
@@ -402,14 +313,14 @@ pub mod pallet {
 	}
 
 	impl<T: Config> Pallet<T> {
-		/// Return incentive pot account
+		/// Teşvik pot hesabını döndür
 		pub fn incentive_pot_account_id() -> T::AccountId {
 			<T as Config>::IncentivePotId::get().into_account_truncating()
 		}
 
-		/// Initialize reward system
+		/// Ödül sistemini başlat
 		pub fn do_initialize_rewards_system() -> DispatchResult {
-			// GUARD: Check if already initialized
+			// GUARD: Zaten initialize edilmiş mi kontrol et
 			if EpochInfo::<T>::exists() {
 				return Err(Error::<T>::AlreadyInitialized.into());
 			}
@@ -433,20 +344,20 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Record user's trust score for current epoch
+		/// Kullanıcının trust puanını mevcut epoch için kaydet
 		pub fn do_record_trust_score(who: &T::AccountId) -> DispatchResult {
 			let epoch_data = EpochInfo::<T>::get();
 			let current_epoch = epoch_data.current_epoch;
 
-			// Scores can only be recorded in open epochs
+			// Sadece açık epoch'larda puan kaydedilebilir
 			let epoch_state = EpochStatus::<T>::get(current_epoch);
 			ensure!(epoch_state == EpochState::Open, Error::<T>::EpochAlreadyClosed);
 
-			// Get trust score
+			// Trust puanını al
 			let trust_score = <T as Config>::TrustScoreSource::trust_score_of(who);
 			let trust_score_u128: u128 = trust_score.into();
 
-			// FIX: Also record zero scores (tests expect this)
+			// FIX: Sıfır skorları da kaydet (testler bunu bekliyor)
 			UserEpochScores::<T>::insert(current_epoch, who, trust_score_u128);
 
 			Self::deposit_event(Event::TrustScoreRecorded {
@@ -458,24 +369,24 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Finalize epoch and calculate reward pool
+		/// Epoch'u sonlandır ve ödül havuzunu hesapla
 		pub fn do_finalize_epoch() -> DispatchResult {
 			let mut epoch_data = EpochInfo::<T>::get();
 			let current_epoch = epoch_data.current_epoch;
 			let current_block = frame_system::Pallet::<T>::block_number();
 
-			// Check if epoch has finished
+			// Epoch'un bitip bitmediğini kontrol et
 			let epoch_duration = current_block.saturating_sub(epoch_data.epoch_start_block);
 			ensure!(
 				epoch_duration >= BLOCKS_PER_EPOCH.into(),
 				Error::<T>::EpochNotFinished
 			);
 
-			// GUARD: Epoch already finalized?
+			// GUARD: Epoch zaten finalize edilmiş mi?
 			let epoch_state = EpochStatus::<T>::get(current_epoch);
 			ensure!(epoch_state == EpochState::Open, Error::<T>::EpochAlreadyClosed);
 
-			// Get incentive pot balance
+			// Teşvik pot bakiyesini al
 			let incentive_pot = Self::incentive_pot_account_id();
 			let total_reward_pool = T::Assets::balance(T::PezAssetId::get(), &incentive_pot);
 
@@ -487,10 +398,10 @@ pub mod pallet {
 			// Parliamentary rewards distribute et (10%)
 			Self::distribute_parliamentary_rewards(current_epoch, total_reward_pool)?;
 
-			// Remaining 90% for trust score rewards
+			// Kalan 90% trust score rewards için
 			let trust_score_pool = total_reward_pool * 90u32.into() / 100u32.into();
 
-			// Calculate total trust score of all users in this epoch
+			// Bu epoch'taki tüm kullanıcıların toplam trust puanını hesapla
 			let mut total_trust_score = 0u128;
 			let mut participants_count = 0u32;
 
@@ -511,7 +422,7 @@ pub mod pallet {
 			// Talep son tarihini belirle (1 hafta sonra)
 			let claim_deadline = current_block.saturating_add(CLAIM_PERIOD_BLOCKS.into());
 
-			// Save reward pool information
+			// Ödül havuzu bilgilerini kaydet
 			let reward_pool = EpochRewardPool {
 				epoch_index: current_epoch,
 				total_reward_pool: trust_score_pool,
@@ -523,10 +434,10 @@ pub mod pallet {
 
 			EpochRewardPools::<T>::insert(current_epoch, reward_pool);
 			
-			// FIX: Set epoch state to ClaimPeriod (not Closed!)
+			// FIX: Epoch state'ini ClaimPeriod yap (Closed değil!)
 			EpochStatus::<T>::insert(current_epoch, EpochState::ClaimPeriod);
 
-			// Start new epoch
+			// Yeni epoch başlat
 			let new_epoch = epoch_data.current_epoch.saturating_add(1);
 			epoch_data.current_epoch = new_epoch;
 			epoch_data.epoch_start_block = current_block;
@@ -534,7 +445,7 @@ pub mod pallet {
 			EpochInfo::<T>::put(epoch_data);
 			EpochStatus::<T>::insert(new_epoch, EpochState::Open);
 
-			// FIX: Show trust_score_pool in event (not total_reward_pool)
+			// FIX: Event'te trust_score_pool göster (total_reward_pool değil)
 			Self::deposit_event(Event::EpochRewardPoolCalculated {
 				epoch_index: current_epoch,
 				total_pool: trust_score_pool,  // ← 90% pool
@@ -579,7 +490,7 @@ pub mod pallet {
 				.checked_mul(&user_trust_balance)
 				.ok_or(Error::<T>::CalculationOverflow)?;
 
-			// FIX: If reward is 0, there is nothing to claim
+			// FIX: Eğer reward 0 ise, claim edilecek bir şey yok
 			ensure!(reward_amount > Zero::zero(), Error::<T>::NoRewardToClaim);
 
 			let incentive_pot = Self::incentive_pot_account_id();
@@ -601,7 +512,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Close epoch and claw back unclaimed rewards
+		/// Epoch'u kapat ve talep edilmemiş ödülleri geri al
 		pub fn do_close_epoch(epoch_index: u32) -> DispatchResult {
 			let current_block = frame_system::Pallet::<T>::block_number();
 
@@ -626,7 +537,7 @@ pub mod pallet {
 					&incentive_pot,
 					&clawback_recipient,
 					remaining_balance,
-					Preservation::Expendable, // Allow source account to be deleted even if it has no tokens during fund transfer
+					Preservation::Expendable, // Fon transfer edilirken kaynak hesabın token'ı olmasa bile silinmesine izin ver
 				)?;
 			}
 
@@ -641,22 +552,22 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Return current epoch information
+		/// Mevcut epoch bilgilerini döndür
 		pub fn get_current_epoch_info() -> EpochData<T> {
 			EpochInfo::<T>::get()
 		}
 
-		/// Return reward pool information for specific epoch
+		/// Belirli bir epoch için ödül havuzu bilgilerini döndür
 		pub fn get_epoch_reward_pool(epoch_index: u32) -> Option<EpochRewardPool<T>> {
 			EpochRewardPools::<T>::get(epoch_index)
 		}
 
-		/// Return user's trust score for specific epoch
+		/// Kullanıcının belirli bir epoch'taki trust puanını döndür
 		pub fn get_user_trust_score_for_epoch(epoch_index: u32, who: &T::AccountId) -> Option<u128> {
 			UserEpochScores::<T>::get(epoch_index, who)
 		}
 
-		/// Return reward amount claimed by user from specific epoch
+		/// Kullanıcının belirli bir epoch'tan talep ettiği ödül miktarını döndür
 		pub fn get_claimed_reward(epoch_index: u32, who: &T::AccountId) -> Option<BalanceOf<T>> {
 			ClaimedRewards::<T>::get(epoch_index, who)
 		}
@@ -678,7 +589,7 @@ pub mod pallet {
 						&incentive_pot,
 						&owner,
 						per_nft_reward,
-						Preservation::Expendable, // Allow source account to be deleted even if it has no tokens during fund transfer
+						Preservation::Expendable, // Fon transfer edilirken kaynak hesabın token'ı olmasa bile silinmesine izin ver
 					)?;
 
 					Self::deposit_event(Event::ParliamentaryNftRewardDistributed {
@@ -702,7 +613,7 @@ pub mod pallet {
 		pub fn do_register_parliamentary_nft_owner(nft_id: u32, owner: T::AccountId) {
 			ParliamentaryNftOwners::<T>::insert(nft_id, owner.clone());
 
-			// NEW: Emit event
+			// YENİ: Event emit et
 			Self::deposit_event(Event::ParliamentaryOwnerRegistered {
 				nft_id,
 				owner,

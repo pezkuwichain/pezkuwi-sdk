@@ -1,6 +1,77 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # PEZ Treasury Pallet
+//!
+//! A pallet for managing the PEZ token distribution and treasury with automated halving mechanics.
+//!
+//! ## Overview
+//!
+//! This pallet manages the complete lifecycle of PEZ token distribution including:
+//!
+//! - **Genesis Distribution**: One-time initial distribution to treasury, presale, and founder accounts
+//! - **Halving Mechanism**: Automatic reduction of monthly releases every 48 months (4 years)
+//! - **Monthly Releases**: Scheduled distribution to incentive and government pots
+//! - **Multi-Pot System**: Separate accounts for treasury, incentive rewards, and governance
+//!
+//! ## Token Economics
+//!
+//! - **Total Supply**: 5,000,000,000 PEZ (5 billion tokens)
+//! - **Treasury Allocation**: 96.25% (4,812,500,000 PEZ)
+//! - **Presale Allocation**: 1.875% (93,750,000 PEZ)
+//! - **Founder Allocation**: 1.875% (93,750,000 PEZ)
+//!
+//! ## Halving Schedule
+//!
+//! - **Halving Period**: Every 48 months (4 years)
+//! - **Period Duration**: 20,736,000 blocks (~4 years at 10 blocks/minute)
+//! - **Distribution**: 70% to Incentive Pot, 30% to Government Pot
+//! - **Automatic Halving**: Monthly release amount halves at the start of each new period
+//!
+//! ## Security Features
+//!
+//! - **One-Time Genesis**: Genesis distribution can only occur once (protected by storage flag)
+//! - **Privileged Operations**: All extrinsics require privileged origin (root or governance)
+//! - **Block-Based Scheduling**: Monthly releases based on block numbers for determinism
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `force_genesis_distribution()` - Perform initial token distribution (one-time only, privileged)
+//! - `initialize_treasury()` - Initialize the halving mechanism and start monthly releases (privileged)
+//! - `release_monthly_funds()` - Release monthly funds to incentive and government pots (privileged)
+//!
+//! ### Storage
+//!
+//! - `HalvingInfo` - Current halving period data and monthly release amount
+//! - `MonthlyReleases` - Historical record of all monthly distributions
+//! - `GenesisDistributionDone` - Flag to prevent duplicate genesis distribution
+//!
+//! ### Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_pez_treasury::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type Assets = Assets;
+//!     type WeightInfo = pallet_pez_treasury::weights::SubstrateWeight<Runtime>;
+//!     type PezAssetId = ConstU32<1>; // PEZ asset ID
+//!     type TreasuryPalletId = TreasuryPalletId;
+//!     type IncentivePotId = IncentivePotId;
+//!     type GovernmentPotId = GovernmentPotId;
+//!     type PresaleAccount = PresaleAccount;
+//!     type FounderAccount = FounderAccount;
+//!     type ForceOrigin = EnsureRoot<AccountId>;
+//! }
+//! ```
+
 pub use pallet::*;
+
+/// Weight functions trait for this pallet.
+pub trait WeightInfo {
+    fn initialize_treasury() -> Weight;
+    fn force_genesis_distribution() -> Weight;
+    fn release_monthly_funds() -> Weight;
+}
 
 pub mod weights;
 
@@ -19,6 +90,7 @@ use frame_support::{
         tokens::Preservation,
         Get,
     },
+    weights::Weight,
     PalletId,
 };
 use frame_system::pallet_prelude::BlockNumberFor;
@@ -27,7 +99,7 @@ use sp_runtime::traits::{AccountIdConversion, Saturating, Zero};
 
 #[frame_support::pallet]
 pub mod pallet {
-    use super::{*, weights::WeightInfo};
+    use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
     // use sp_runtime::traits::CheckedDiv;
@@ -48,7 +120,7 @@ pub mod pallet {
     pub trait Config: frame_system::Config + TypeInfo {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         type Assets: Mutate<Self::AccountId>;
-        type WeightInfo: weights::WeightInfo;
+        type WeightInfo: crate::WeightInfo;
 
         #[pallet::constant]
         type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;
@@ -90,6 +162,10 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn treasury_start_block)]
     pub type TreasuryStartBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
+
+    #[pallet::storage]
+    #[pallet::getter(fn genesis_distribution_done)]
+    pub type GenesisDistributionDone<T: Config> = StorageValue<_, bool, ValueQuery>;
 
     #[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
     #[scale_info(skip_type_params(T))]
@@ -153,6 +229,7 @@ pub mod pallet {
         InsufficientTreasuryBalance,
         InvalidHalvingPeriod,
         ReleaseTooEarly,
+        GenesisDistributionAlreadyDone,
     }
 
     #[pallet::genesis_config]
@@ -210,6 +287,12 @@ pub mod pallet {
         }
 
         pub fn do_genesis_distribution() -> DispatchResult {
+            // SECURITY: Ensure genesis distribution can only happen once
+            ensure!(
+                !GenesisDistributionDone::<T>::get(),
+                Error::<T>::GenesisDistributionAlreadyDone
+            );
+
             let treasury_account = Self::treasury_account_id();
             let presale_account = T::PresaleAccount::get();
             let founder_account = T::FounderAccount::get();
@@ -224,6 +307,9 @@ pub mod pallet {
             T::Assets::mint_into(T::PezAssetId::get(), &treasury_account, treasury_amount)?;
             T::Assets::mint_into(T::PezAssetId::get(), &presale_account, presale_amount)?;
             T::Assets::mint_into(T::PezAssetId::get(), &founder_account, founder_amount)?;
+
+            // Mark genesis distribution as completed
+            GenesisDistributionDone::<T>::put(true);
 
             Self::deposit_event(Event::GenesisDistributionCompleted {
                 treasury_amount,

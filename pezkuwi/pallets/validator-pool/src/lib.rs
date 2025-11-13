@@ -1,5 +1,64 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # Validator Pool Pallet
+//!
+//! A pallet for managing a decentralized validator pool with multi-category validation.
+//!
+//! ## Overview
+//!
+//! This pallet provides a flexible validator pool system that supports four distinct
+//! validator categories, each with unique requirements and reward mechanisms:
+//!
+//! - **Community Validators**: Require referral system participation
+//! - **Trust Validators**: Require minimum trust score (verified reputation)
+//! - **Tiki Validators**: Require minimum tiki score (engagement metrics)
+//! - **Stake Validators**: Require minimum stake amount (economic security)
+//!
+//! ## Features
+//!
+//! - Multi-category validator pool management
+//! - Era-based validator rotation and selection
+//! - Performance tracking (blocks produced, missed, reputation)
+//! - Weighted random selection based on category and performance
+//! - Configurable pool parameters (max validators, pool size, stake requirements)
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `join_validator_pool(category)` - Join the validator pool in a specific category
+//! - `leave_validator_pool()` - Leave the validator pool
+//! - `update_performance_metrics(validator, blocks_produced, blocks_missed)` - Update validator performance (privileged)
+//! - `force_new_era()` - Force start a new era with validator selection (privileged)
+//! - `update_category(new_category)` - Switch to a different validator category
+//! - `set_pool_parameters(...)` - Configure pool parameters (privileged)
+//!
+//! ### Dependencies
+//!
+//! This pallet requires integration with:
+//! - `pallet-trust` - Trust score provider
+//! - `pallet-tiki` - Tiki score provider
+//! - `pallet-referral` - Referral system provider
+//! - `pallet-perwerde` - Perwerde score provider
+//!
+//! ### Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_validator_pool::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type WeightInfo = pallet_validator_pool::weights::SubstrateWeight<Runtime>;
+//!     type Randomness = RandomnessCollectiveFlip;
+//!     type TrustSource = Trust;
+//!     type TikiSource = Tiki;
+//!     type ReferralSource = Referral;
+//!     type PerwerdeSource = Perwerde;
+//!     type PoolManagerOrigin = EnsureRoot<AccountId>;
+//!     type MaxValidators = ConstU32<100>;
+//!     type MaxPoolSize = ConstU32<500>;
+//!     type MinStakeAmount = ConstU128<1_000_000_000_000>; // 1 token
+//! }
+//! ```
+
 pub use pallet::*;
 pub mod weights;
 pub mod types;

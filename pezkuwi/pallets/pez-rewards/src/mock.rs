@@ -44,7 +44,7 @@ type Balance = u128;
 type BlockNumber = u64;
 type Weight = frame_support::weights::Weight;
 
-// Runtime'ı yapılandır
+// Configure runtime
 construct_runtime!(
 	pub enum Test
 	{
@@ -211,7 +211,7 @@ pub fn dave() -> H256 { H256::from_low_u64_be(4) }
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
-	// HATA DÜZELTMESİ: dev_accounts field'ı eklendi (Option tipi)
+	// BUG FIX: dev_accounts field added (Option type)
 	pallet_balances::GenesisConfig::<Test> {
 		balances: vec![
 			(alice(), 1_000_000_000_000_000),
@@ -220,7 +220,7 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 			(dave(), 1_000_000_000_000_000),
 			(ClawbackRecipient::get(), 1_000_000_000_000_000),
 		],
-		dev_accounts: None, // Test ortamı için dev account'a gerek yok
+		dev_accounts: None, // No need for dev account in test environment
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
@@ -250,7 +250,7 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	ext
 }
 
-// --- Blok İlerletme Helper ---
+// --- Block Advancement Helper ---
 pub fn advance_blocks(n: BlockNumber) {
 	let target = System::block_number() + n;
 	while System::block_number() < target {
@@ -262,7 +262,7 @@ pub fn advance_blocks(n: BlockNumber) {
 	}
 }
 
-// --- Diğer Helper Fonksiyonlar ---
+// --- Other Helper Functions ---
 pub fn pez_balance(account: &H256) -> Balance {
 	Assets::balance(PezAssetId::get(), account)
 }

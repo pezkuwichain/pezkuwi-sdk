@@ -12,6 +12,8 @@ pub enum KycLevel {
 	Pending,
 	/// Başvuru onaylandı.
 	Approved,
+	/// Başvuru reddedildi (pending state'den).
+	Rejected,
 	/// Onaylanmış KYC iptal edildi.
 	Revoked,
 }
@@ -124,4 +126,18 @@ pub trait KycStatus<AccountId> {
 /// Bir hesabın kimlik bilgilerini sorgulamak için arayüz.
 pub trait IdentityInfoProvider<AccountId, MaxStringLength: Get<u32>> {
 	fn get_identity_info(who: &AccountId) -> Option<IdentityInfo<MaxStringLength>>;
+}
+
+/// KYC onaylandığında tetiklenecek eylemleri tanımlayan arayüz.
+/// Bu trait identity-kyc palletinde tanımlanır ve diğer palletler (örn. referral)
+/// tarafından implement edilir, böylece circular dependency oluşmaz.
+pub trait OnKycApproved<AccountId> {
+	fn on_kyc_approved(who: &AccountId);
+}
+
+/// Vatandaşlık NFT'si mintlemek için arayüz.
+/// Bu trait identity-kyc palletinde tanımlanır ve tiki pallet tarafından
+/// implement edilir, böylece circular dependency oluşmaz.
+pub trait CitizenNftProvider<AccountId> {
+	fn mint_citizen_nft(who: &AccountId) -> sp_runtime::DispatchResult;
 }

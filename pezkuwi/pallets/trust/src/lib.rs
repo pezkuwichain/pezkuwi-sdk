@@ -1,5 +1,96 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+//! # Trust Score Pallet
+//!
+//! A pallet for calculating and managing composite trust scores based on multiple ecosystem metrics.
+//!
+//! ## Overview
+//!
+//! The Trust Score pallet aggregates multiple reputation and activity metrics to produce
+//! a unified trust score for each citizen. This score is used throughout the ecosystem for:
+//!
+//! - Validator pool eligibility (trust-based validators)
+//! - Reward distribution weighting (pez-rewards)
+//! - Governance participation rights
+//! - Social reputation tracking
+//!
+//! ## Trust Score Components
+//!
+//! The trust score is calculated from four primary sources:
+//!
+//! 1. **Staking Score**: Economic security through token staking
+//! 2. **Referral Score**: Network growth contribution via referrals
+//! 3. **Perwerde Score**: Educational achievement and verification
+//! 4. **Tiki Score**: Social engagement and platform activity
+//!
+//! ## Score Calculation
+//!
+//! ```text
+//! trust_score = (staking_score + referral_score + perwerde_score + tiki_score) * multiplier
+//! ```
+//!
+//! Where:
+//! - Each component score is normalized and weighted
+//! - The multiplier is configurable via `ScoreMultiplierBase`
+//! - Citizenship status is required (KYC approved)
+//!
+//! ## Update Mechanisms
+//!
+//! ### Automatic Updates
+//! - Periodic batch updates scheduled at `UpdateInterval` (e.g., daily)
+//! - Processes all citizens in batches to manage computational load
+//! - Maintains update progress across blocks for large user bases
+//!
+//! ### Manual Updates
+//! - Individual score recalculation via privileged call
+//! - Full batch update trigger (root only)
+//! - Component change hooks from other pallets
+//!
+//! ## Storage
+//!
+//! - `TrustScores` - Per-account trust score mapping
+//! - `TotalActiveTrustScore` - Aggregate trust score across all citizens
+//! - `BatchUpdateInProgress` - Flag for ongoing batch update process
+//! - `LastProcessedAccount` - Checkpoint for resumable batch updates
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `force_recalculate_trust_score(who)` - Manually recalculate specific user's score (root)
+//! - `update_all_trust_scores()` - Trigger batch update of all citizens (root)
+//!
+//! ### Trait Implementations
+//!
+//! - `TrustScoreProvider` - Query trust scores from other pallets
+//! - `TrustScoreUpdater` - Receive notifications of component changes
+//!
+//! ## Dependencies
+//!
+//! This pallet requires integration with:
+//! - `pallet-identity-kyc` - Citizenship status verification
+//! - `pallet-staking-score` - Staking metrics provider
+//! - `pallet-referral` - Referral score provider
+//! - `pallet-perwerde` - Education score provider
+//! - `pallet-tiki` - Social engagement provider
+//!
+//! ## Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_trust::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type WeightInfo = pallet_trust::weights::SubstrateWeight<Runtime>;
+//!     type Score = u128;
+//!     type ScoreMultiplierBase = ConstU128<100>;
+//!     type UpdateInterval = ConstU32<14400>; // ~1 day in blocks
+//!     type StakingScoreSource = StakingScore;
+//!     type ReferralScoreSource = Referral;
+//!     type PerwerdeScoreSource = Perwerde;
+//!     type TikiScoreSource = Tiki;
+//!     type CitizenshipSource = IdentityKyc;
+//! }
+//! ```
+
 pub use pallet::*;
 
 pub mod weights;
@@ -59,7 +150,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: frame_system::Config + pallet_identity_kyc::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type WeightInfo: WeightInfo;
 
@@ -68,7 +159,7 @@ pub mod pallet {
 		#[pallet::constant]
 		type ScoreMultiplierBase: Get<u128>;
 
-		/// Trust score güncellemelerinin yapılacağı block aralığı (örn. günlük)
+		/// Block interval for Trust score updates (e.g. daily)
 		#[pallet::constant]
 		type UpdateInterval: Get<BlockNumberFor<Self>>;
 
@@ -96,15 +187,15 @@ pub mod pallet {
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
-		/// Bir kullanıcının Trust Puanı başarıyla güncellendi.
+		/// A user's Trust Score was successfully updated.
 		TrustScoreUpdated { who: T::AccountId, old_score: T::Score, new_score: T::Score },
-		/// Zincirdeki toplam aktif Trust Puanı güncellendi.
+		/// Total active Trust Score on chain updated.
 		TotalTrustScoreUpdated { new_total: T::Score },
-		/// Bir batch Trust Puanı güncellemesi tamamlandı.
+		/// A batch Trust Score update completed.
 		BulkTrustScoreUpdate { count: u32 },
-		/// Tüm Trust Puanları güncellemesi tamamlandı.
+		/// All Trust Scores update completed.
 		AllTrustScoresUpdated { total_updated: u32 },
-		/// Periyodik Trust Puanı güncellemesi sonraki defa için schedule edildi.
+		/// Periodic Trust Score update scheduled for next time.
 		PeriodicUpdateScheduled { next_block: BlockNumberFor<T> },
 	}
 
@@ -128,31 +219,31 @@ pub mod pallet {
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if self.start_periodic_updates {
-				// İlk periyodik güncellemeyi 1 gün sonraya schedule et
+				// Schedule first periodic update for 1 day later
 				let _first_update_block = frame_system::Pallet::<T>::block_number() + T::UpdateInterval::get();
 				
-				// Note: Genesis build sırasında scheduler kullanılamayabilir
-				// Bu durumda manual başlatma gerekir veya runtime'da schedule edilir
-				// Şimdilik sadece flag'i işaretliyoruz
+				// Note: Scheduler may not be available during Genesis build
+				// In this case, manual start required or scheduled in runtime
+				// For now, we are just marking the flag
 			}
 		}
 	}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		/// Belirli bir kullanıcının Trust Puanını manuel olarak yeniden hesaplamak için.
+		/// To manually recalculate a specific user's Trust Score.
 		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::force_recalculate_trust_score())]
+		#[pallet::weight(<T as Config>::WeightInfo::force_recalculate_trust_score())]
 		pub fn force_recalculate_trust_score(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			ensure_root(origin)?;
 			Self::update_score_for_account(&who)?;
 			Ok(())
 		}
 
-		/// Tüm vatandaşların Trust Puanlarını toplu olarak günceller
-		/// Büyük kullanıcı tabanı için batch'ler halinde çalışır
+		/// Updates Trust Scores of all citizens in bulk
+		/// Works in batches for large user base
 		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::update_all_trust_scores())]
+		#[pallet::weight(<T as Config>::WeightInfo::update_all_trust_scores())]
 		pub fn update_all_trust_scores(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			
@@ -160,39 +251,38 @@ pub mod pallet {
 			let mut updated_count = 0u32;
 			let mut all_processed = true;
 			
-			// Son işlenen hesabı al (yoksa baştan başla)
+			// Get last processed account (or start from beginning)
 			let start_key = LastProcessedAccount::<T>::get();
 			let mut found_start = start_key.is_none();
-			
-			// Tüm hesapları tara (gerçek implementasyonda KYC paletinden gelecek)
-			// Şimdilik mock veriler kullanıyoruz - Bu kısmı gerçek implementasyonda değiştireceğiz
-			let mock_accounts: sp_std::vec::Vec<T::AccountId> = sp_std::vec![];
-			
-			for account in mock_accounts.iter() {
-				// Eğer başlangıç noktasını arıyorsak
+
+			// Iterate over all accounts with KYC status from identity-kyc pallet
+			// Only process accounts with Approved KYC status (citizens)
+			for (account, kyc_level) in pallet_identity_kyc::KycStatuses::<T>::iter() {
+				// If we are looking for the starting point
 				if !found_start {
-					if Some(account) == start_key.as_ref() {
+					if Some(&account) == start_key.as_ref() {
 						found_start = true;
 					}
 					continue;
 				}
-				
-				// Batch limiti doldu mu?
+
+				// Is batch limit full?
 				if updated_count >= batch_size {
-					// Son işlenen hesabı kaydet
+					// Save last processed account
 					LastProcessedAccount::<T>::put(account.clone());
 					all_processed = false;
 					break;
 				}
-				
-				// Vatandaş mı kontrol et ve güncelle
-				if T::CitizenshipSource::is_citizen(account) {
-					let _ = Self::update_score_for_account(account);
+
+				// Only process accounts with Approved KYC (citizens)
+				// We already have kyc_level from iterator, no need for redundant lookup
+				if kyc_level == pallet_identity_kyc::types::KycLevel::Approved {
+					let _ = Self::update_score_for_account(&account);
 					updated_count += 1;
 				}
 			}
 			
-			// Eğer tüm hesaplar işlendiyse, başa dön
+			// If all accounts processed, return to start
 			if all_processed {
 				LastProcessedAccount::<T>::kill();
 				BatchUpdateInProgress::<T>::put(false);
@@ -207,7 +297,7 @@ pub mod pallet {
 
 		/// Periyodik güncellemeyi başlatan function
 		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::periodic_trust_score_update())]
+		#[pallet::weight(<T as Config>::WeightInfo::periodic_trust_score_update())]
 		pub fn periodic_trust_score_update(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			
@@ -275,13 +365,15 @@ pub mod pallet {
 
 		/// Kullanıcı sayısına göre dinamik batch size hesaplar
 		fn calculate_optimal_batch_size() -> u32 {
-			// Mock implementation - gerçekte KYC paletinden alınacak
-			let total_users = 100u32; // Placeholder
-			
+			// Count total users with KYC from identity-kyc pallet
+			let total_users = pallet_identity_kyc::KycStatuses::<T>::iter()
+				.filter(|(_, level)| *level == pallet_identity_kyc::types::KycLevel::Approved)
+				.count() as u32;
+
 			match total_users {
 				0..=100 => total_users,           // Az kullanıcı varsa hepsini işle
 				101..=1000 => 100,                // Orta: 100'lük batch'ler
-				1001..=10000 => 200,              // Çok: 200'lük batch'ler  
+				1001..=10000 => 200,              // Çok: 200'lük batch'ler
 				_ => 500,                         // Çok fazla: 500'lük batch'ler
 			}
 		}

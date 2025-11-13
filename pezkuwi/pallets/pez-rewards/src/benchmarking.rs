@@ -11,11 +11,11 @@ use frame_support::traits::{
 	Get, Currency,
 };
 use frame_system::{RawOrigin, Pallet as System};
-use sp_runtime::traits::{Saturating, Bounded, StaticLookup, Zero}; // AccountIdConversion kaldırıldı
+use sp_runtime::traits::{Saturating, Bounded, StaticLookup, Zero}; // AccountIdConversion removed
 
 const SEED: u32 = 0;
 
-// Yardımcı fonksiyon: Testler için ödül havuzunu ve epoch durumunu ayarlar.
+// Helper function: Sets up reward pool and epoch state for tests
 fn setup_reward_pool<T: Config>(epoch_index: u32) {
 	let incentive_pot = PezRewards::<T>::incentive_pot_account_id();
 	let amount: BalanceOf<T> = 1_000_000u32.into();
@@ -56,9 +56,9 @@ mod benchmarks {
 	#[benchmark]
 	fn record_trust_score() {
 		let caller: T::AccountId = account("test_account", 0, SEED);
-		let score_to_insert = 100u128; // Mock provider'ın döndürmesi gereken değer
+		let score_to_insert = 100u128; // Value that mock provider should return
 
-		// Manuel Kurulum: Epoch 0'ı Açık olarak ayarla
+		// Manual Setup: Set Epoch 0 as Open
 		let epoch_data = crate::EpochData {
 			current_epoch: 0,
 			epoch_start_block: Zero::zero(),
@@ -67,16 +67,16 @@ mod benchmarks {
 		crate::EpochInfo::<T>::put(epoch_data);
 		crate::EpochStatus::<T>::insert(0, crate::EpochState::Open);
 
-		// Benchmark bloğu: Fonksiyonu çağır VE depolamayı manuel olarak taklit et
+		// Benchmark block: Call function AND manually simulate storage
 		#[block]
 		{
-			// Asıl fonksiyonu yine de çağırıyoruz (ağırlığı ölçmek için)
+			// Still calling the actual function (to measure weight)
 			let _ = PezRewards::<T>::do_record_trust_score(&caller);
-			// WORKAROUND: Depolama yazmasını manuel olarak burada yapıyoruz
+			// WORKAROUND: Manually doing storage write here
 			crate::UserEpochScores::<T>::insert(0, caller.clone(), score_to_insert);
 		}
 
-		// Doğrulama: Şimdi kaydın var olması GEREKİR
+		// Verification: Record MUST exist now
 		assert!(
 			crate::UserEpochScores::<T>::contains_key(0, &caller),
 			"UserEpochScores should contain key (0, caller) after manual insert workaround"
