@@ -18,7 +18,7 @@ VALIDATORS_JSON="$HOME/Pezkuwi-SDK/pezkuwi/runtime/validators/beta_testnet_valid
 VALIDATOR_NAME=$(jq -r ".beta[$((VALIDATOR_NUM - 1))].name" "$VALIDATORS_JSON")
 
 # Port configuration
-RPC_PORT=$((9933 + VALIDATOR_NUM - 1))
+RPC_PORT=$((9944 + VALIDATOR_NUM - 1))
 WS_PORT=$((9944 + VALIDATOR_NUM - 1))
 P2P_PORT=$((30333 + VALIDATOR_NUM - 1))
 
