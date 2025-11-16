@@ -63,8 +63,8 @@ pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-node-core-pvf = { features = ["test-utils"], default-features = true, workspace = true }
 rococo-runtime = { workspace = true }
 
-test-parachain-adder = { workspace = true }
-test-parachain-halt = { workspace = true }
+# test-parachain-adder = { workspace = true }
+# test-parachain-halt = { workspace = true }
 
 [target.'cfg(target_os = "linux")'.dev-dependencies]
 libc = { workspace = true }

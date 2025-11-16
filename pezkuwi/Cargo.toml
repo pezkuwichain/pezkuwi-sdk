@@ -12,7 +12,7 @@ path = "src/bin/prepare-worker.rs"
 
 [package]
 name = "pezkuwi"
-description = "Implementation of a `https://pezkuwi.network` node in Rust based on the Substrate framework."
+description = "Implementation of a `https://network.pezkuwichain.io` node in Rust based on the Substrate framework."
 license = "Kurdistan Talent Institute License"
 rust-version = "1.64.0"
 readme = "README.md"
@@ -85,11 +85,11 @@ ci-only-tests = ["pezkuwi-node-core-pvf/ci-only-tests"]
 # Configuration for building a .deb package - for use with `cargo-deb`
 [package.metadata.deb]
 name = "pezkuwi"
-extended-description = "Implementation of a https://pezkuwi.network node in Rust based on the Substrate framework."
+extended-description = "Implementation of a https://network.pezkuwichain.io node in Rust based on the Substrate framework."
 section = "misc"
 maintainer = "security@parity.io"
 license-file = ["LICENSE", "0"]
-# https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html
+# https://github.com/pezkuwichain/pezkuwi-sdk
 maintainer-scripts = "scripts/packaging/deb-maintainer-scripts"
 assets = [
 	[

@@ -96,7 +96,7 @@ bash start-all-beta-validators.sh
 ### Bootnode Peer ID
 Validator 2-8, Validator 1'e (bootnode) şu peer ID ile bağlanır:
 ```
-12D3KooWRuAqJ3w5U7yJPcMXERqMPHVUWACCqhwgD7WwvfUjAhMW
+grep "Local node identity" /tmp/beta-validator-1.log | tail -1
 ```
 
 ⚠️ **Dikkat:** Eğer database temizlenirse (`rm -rf /tmp/beta-validator-1`), bu peer ID değişir ve validator 2-8'in scriptleri güncellenmeli!
@@ -116,7 +116,7 @@ sed -i 's/ESKİ_PEER_ID/YENİ_PEER_ID/g' start-beta-validator-{2..8}.sh
 
 | Validator | RPC Port | P2P Port | Endpoint |
 |-----------|----------|----------|----------|
-| Validator 1 (Bootnode) | 9944 | 30333 | ws://127.0.0.1:9944 |
+| Validator 1 (Bootnode) | 9944 | 30333 | ws:// degeri yaz |
 | Validator 2 | 9945 | 30334 | ws://127.0.0.1:9945 |
 | Validator 3 | 9946 | 30335 | ws://127.0.0.1:9946 |
 | Validator 4 | 9947 | 30336 | ws://127.0.0.1:9947 |
@@ -126,7 +126,7 @@ sed -i 's/ESKİ_PEER_ID/YENİ_PEER_ID/g' start-beta-validator-{2..8}.sh
 | Validator 8 | 9951 | 30340 | ws://127.0.0.1:9951 |
 
 ### Log Dosyaları
-Her validator'ın logu ayrı dosyada:
+Her validator'ın logu ayrı dosyada: ( eger yoksa olustur )
 ```
 /tmp/beta-validator-1.log
 /tmp/beta-validator-2.log

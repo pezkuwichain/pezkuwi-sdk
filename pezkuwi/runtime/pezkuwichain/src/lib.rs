@@ -123,11 +123,11 @@ use pallet_balances;
 use pallet_sudo;
 use pallet_collective;
 use pallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
-use sp_core::{ConstU128, ConstU8, Get, OpaqueMetadata, H256};
+use sp_core::{ConstBool, ConstU32, ConstU128, ConstU8, Get, OpaqueMetadata, H256};
 use sp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{
-		AccountIdConversion, BlakeTwo256, Block as BlockT, ConstU32, ConvertInto, IdentityLookup,
+		AccountIdConversion, BlakeTwo256, Block as BlockT, ConvertInto, IdentityLookup,
 		Keccak256, OpaqueKeys, SaturatedConversion, Verify,
 	},
 	transaction_validity::{TransactionPriority, TransactionSource, TransactionValidity},
@@ -2007,6 +2007,49 @@ impl OnSwap for SwapLeases {
 	}
 }
 
+// Contracts configuration
+parameter_types! {
+    pub const DepositPerItem: Balance = deposit(1, 0);
+    pub const DepositPerByte: Balance = deposit(0, 1);
+    pub const DefaultDepositLimit: Balance = deposit(1024, 1024 * 1024);
+    pub Schedule: pallet_contracts::Schedule<Runtime> = Default::default();
+    pub const CodeHashLockupDepositPercent: Perbill = Perbill::from_percent(0);
+    pub const MaxDelegateDependencies: u32 = 32;
+}
+
+impl pallet_contracts::Config for Runtime {
+    type Time = Timestamp;
+    type Randomness = pallet_babe::RandomnessFromOneEpochAgo<Runtime>;
+    type Currency = Balances;
+    type RuntimeEvent = RuntimeEvent;
+    type RuntimeCall = RuntimeCall;
+    type CallFilter = frame_support::traits::Nothing;
+    type DepositPerItem = DepositPerItem;
+    type DepositPerByte = DepositPerByte;
+    type DefaultDepositLimit = DefaultDepositLimit;
+    type CallStack = [pallet_contracts::Frame<Self>; 5];
+    type WeightPrice = pallet_transaction_payment::Pallet<Self>;
+    type WeightInfo = pallet_contracts::weights::SubstrateWeight<Self>;
+    type ChainExtension = ();
+    type Schedule = Schedule;
+    type AddressGenerator = pallet_contracts::DefaultAddressGenerator;
+    type MaxCodeLen = ConstU32<{ 123 * 1024 }>;
+    type MaxStorageKeyLen = ConstU32<128>;
+    type UnsafeUnstableInterface = ConstBool<false>;
+    type UploadOrigin = EnsureSigned<Self::AccountId>;
+    type InstantiateOrigin = EnsureSigned<Self::AccountId>;
+    type MaxDebugBufferLen = ConstU32<{ 2 * 1024 * 1024 }>;
+    type CodeHashLockupDepositPercent = CodeHashLockupDepositPercent;
+    type MaxDelegateDependencies = MaxDelegateDependencies;
+    type RuntimeHoldReason = RuntimeHoldReason;
+    type Debug = ();
+    type Environment = ();
+    type Migrations = ();
+    type Xcm = ();
+	type MaxTransientStorageSize = ConstU32<{ 1 * 1024 * 1024 }>;
+	type ApiVersion = ();
+}
+
 construct_runtime! {
 	pub enum Runtime
 	{
@@ -2154,6 +2197,9 @@ construct_runtime! {
 
 		// Pallet for sending XCM.
 		XcmPallet: pallet_xcm = 99,
+
+		// Smart Contracts
+		Contracts: pallet_contracts = 104,
 
 		// BEEFY Bridges support.
 		Beefy: pallet_beefy = 240,
@@ -2698,6 +2744,7 @@ mod benches {
 		[pallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pallet_xcm_benchmarks::fungible, pallet_xcm_benchmarks::fungible::Pallet::<Runtime>]
 		[pallet_xcm_benchmarks::generic, pallet_xcm_benchmarks::generic::Pallet::<Runtime>]
+		[pallet-contracts, Contracts]
 		// Our custom pallets
 		[pallet_tiki, Tiki]
 		[pallet_welati, Welati]

@@ -39,6 +39,7 @@ pallet-bounties.workspace = true
 pallet-child-bounties.workspace = true
 pallet-collective = { workspace = true, default-features = false }
 pallet-conviction-voting.workspace = true
+pallet-contracts = { workspace = true, default-features = false }
 pallet-democracy.workspace = true
 pallet-elections-phragmen.workspace = true
 pallet-grandpa.workspace = true
@@ -165,6 +166,7 @@ std = [
 	"pallet-child-bounties/std",
 	"pallet-collective/std",
 	"pallet-conviction-voting/std",
+	"pallet-contracts/std",
 	"pallet-democracy/std",
 	"pallet-elections-phragmen/std",
 	"pallet-grandpa/std",
@@ -262,6 +264,7 @@ runtime-benchmarks = [
 	"pallet-child-bounties/runtime-benchmarks",
 	"pallet-collective/runtime-benchmarks",
 	"pallet-conviction-voting/runtime-benchmarks",
+	"pallet-contracts/runtime-benchmarks",
 	"pallet-democracy/runtime-benchmarks",
 	"pallet-elections-phragmen/runtime-benchmarks",
 	"pallet-grandpa/runtime-benchmarks",
@@ -334,6 +337,7 @@ try-runtime = [
 	"pallet-bounties/try-runtime",
 	"pallet-child-bounties/try-runtime",
 	"pallet-conviction-voting/try-runtime",
+	"pallet-contracts/try-runtime",
 	"pallet-democracy/try-runtime",
 	"pallet-elections-phragmen/try-runtime",
 	"pallet-grandpa/try-runtime",

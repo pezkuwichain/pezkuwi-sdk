@@ -1,9 +1,9 @@
 [workspace.package]
 authors = ["Kurdistan Tech Ministry <tech@kurdistan.gov>"]
 edition = "2021"
-homepage = "https://pezkuwichain.network"
+homepage = "https://pezkuwichain.io"
 license = "Kurdistan Talent Institute License"
-repository = "https://github.com/kurdistan-tech/pezkuwichain.git"
+repository = "https://github.com/pezkuwichain/pezkuwi-sdk.git"
 
 [workspace]
 resolver = "2"
@@ -154,8 +154,6 @@ members = [
 	"cumulus/test/runtime",
 	"cumulus/test/service",
 	"cumulus/xcm/xcm-emulator",
-	"cumulus/zombienet/zombienet-sdk",
-	"cumulus/zombienet/zombienet-sdk-helpers",
 	"docs/sdk",
 	"docs/sdk/packages/guides/first-pallet",
 	"docs/sdk/packages/guides/first-runtime",
@@ -211,12 +209,6 @@ members = [
 	"pezkuwi/node/tracking-allocator",
 	"pezkuwi/node/zombienet-backchannel",
 	"pezkuwi/parachain",
-	"pezkuwi/parachain/test-parachains",
-	"pezkuwi/parachain/test-parachains/adder",
-	"pezkuwi/parachain/test-parachains/adder/collator",
-	"pezkuwi/parachain/test-parachains/halt",
-	"pezkuwi/parachain/test-parachains/undying",
-	"pezkuwi/parachain/test-parachains/undying/collator",
 	"pezkuwi/primitives",
 	"pezkuwi/primitives/test-helpers",
 	"pezkuwi/rpc",
@@ -247,7 +239,6 @@ members = [
 	"pezkuwi/xcm/xcm-simulator",
 	"pezkuwi/xcm/xcm-simulator/example",
 	"pezkuwi/xcm/xcm-simulator/fuzzer",
-	"pezkuwi/zombienet-sdk-tests",
 	"substrate/bin/node/bench",
 	"substrate/bin/node/cli",
 	"substrate/bin/node/inspect",
@@ -346,7 +337,6 @@ members = [
 	"substrate/frame/child-bounties",
 	"substrate/frame/collective",
 	"substrate/frame/contracts",
-	"substrate/frame/contracts/fixtures",
 	"substrate/frame/contracts/mock-network",
 	"substrate/frame/contracts/proc-macro",
 	"substrate/frame/contracts/uapi",
@@ -412,12 +402,6 @@ members = [
 	"substrate/frame/recovery",
 	"substrate/frame/referenda",
 	"substrate/frame/remark",
-	"substrate/frame/revive",
-	"substrate/frame/revive/fixtures",
-	"substrate/frame/revive/mock-network",
-	"substrate/frame/revive/proc-macro",
-	"substrate/frame/revive/rpc",
-	"substrate/frame/revive/uapi",
 	"substrate/frame/root-offences",
 	"substrate/frame/root-testing",
 	"substrate/frame/safe-mode",
@@ -560,7 +544,11 @@ members = [
 	"templates/zombienet",
 	"umbrella",
 ]
-
+exclude = [
+    "polkadot",
+    "cumulus/zombienet/zombienet-sdk-helpers",
+    "pezkuwi/zombienet-sdk-tests",
+]
 default-members = [
 	"cumulus/pezkuwi-omni-node",
 	"cumulus/pezkuwi-parachain",
@@ -1228,7 +1216,7 @@ sc-transaction-pool = { path = "substrate/client/transaction-pool", default-feat
 sc-transaction-pool-api = { path = "substrate/client/transaction-pool/api", default-features = false }
 sc-utils = { path = "substrate/client/utils", default-features = false }
 scale-info = { version = "2.11.6", default-features = false, features = ["bitvec"] }
-schemars = { version = "0.8.13", default-features = false }
+schemars = { version = "=0.8.22", default-features = false }
 schnellru = { version = "0.2.3" }
 schnorrkel = { version = "0.11.4", default-features = false }
 seccompiler = { version = "0.4.0" }
@@ -1363,9 +1351,9 @@ tar = { version = "0.4" }
 tempfile = { version = "3.8.1" }
 test-log = { version = "0.2.14" }
 test-pallet = { path = "substrate/frame/support/test/pallet", default-features = false, package = "frame-support-test-pallet" }
-test-parachain-adder = { path = "pezkuwi/parachain/test-parachains/adder" }
-test-parachain-halt = { path = "pezkuwi/parachain/test-parachains/halt" }
-test-parachain-undying = { path = "pezkuwi/parachain/test-parachains/undying" }
+# test-parachain-adder = { path = "pezkuwi/parachain/test-parachains/adder" }
+# test-parachain-halt = { path = "pezkuwi/parachain/test-parachains/halt" }
+# test-parachain-undying = { path = "pezkuwi/parachain/test-parachains/undying" }
 test-runtime-constants = { path = "pezkuwi/runtime/test-runtime/constants", default-features = false }
 testnet-parachains-constants = { path = "cumulus/parachains/runtimes/constants", default-features = false }
 thiserror = { version = "1.0.64" }
