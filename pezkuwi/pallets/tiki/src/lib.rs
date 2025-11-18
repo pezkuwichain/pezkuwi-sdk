@@ -247,7 +247,7 @@ pub mod pallet {
         fn on_initialize(_block_number: BlockNumberFor<T>) -> Weight {
             // Check newly KYC-approved users and mint citizenship NFT
             Self::check_and_mint_citizen_nfts();
-            
+
             T::DbWeight::get().reads_writes(10, 5)
         }
     }
@@ -742,5 +742,29 @@ impl<T: Config> Pallet<T> {
 impl<T: Config> pallet_identity_kyc::types::CitizenNftProvider<T::AccountId> for Pallet<T> {
 	fn mint_citizen_nft(who: &T::AccountId) -> sp_runtime::DispatchResult {
 		Self::mint_citizen_nft_for_user(who)
+	}
+
+	fn mint_citizen_nft_confirmed(who: &T::AccountId) -> sp_runtime::DispatchResult {
+		// For self-confirmation, we use the same mint function with force_mint
+		Self::mint_citizen_nft_for_user(who)
+	}
+
+	fn burn_citizen_nft(who: &T::AccountId) -> sp_runtime::DispatchResult {
+		use frame_support::traits::Get;
+		// Get the citizen NFT item ID
+		let item_id = Self::citizen_nft(who).ok_or(Error::<T>::CitizenNftNotFound)?;
+		let collection_id = T::TikiCollectionId::get();
+
+		// Burn the NFT using pallet_nfts burn function
+		pallet_nfts::Pallet::<T>::burn(
+			T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(who.clone())),
+			collection_id,
+			item_id,
+		)?;
+
+		// Remove from our storage
+		CitizenNft::<T>::remove(who);
+
+		Ok(())
 	}
 }
