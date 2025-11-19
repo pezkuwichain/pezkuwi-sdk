@@ -192,6 +192,43 @@ pub mod pallet {
 			Self::deposit_event(Event::ReferralInitiated { referrer, referred });
 			Ok(())
 		}
+
+		/// Sudo-only extrinsic to manually confirm a referral (for fixing historical data).
+		/// This bypasses the normal KYC approval flow and directly confirms the referral.
+		#[pallet::call_index(1)]
+		#[pallet::weight(<T as Config>::WeightInfo::force_confirm_referral())]
+		pub fn force_confirm_referral(
+			origin: OriginFor<T>,
+			referrer: T::AccountId,
+			referred: T::AccountId,
+		) -> DispatchResult {
+			ensure_root(origin)?;
+			ensure!(referrer != referred, Error::<T>::SelfReferral);
+			ensure!(!Referrals::<T>::contains_key(&referred), Error::<T>::AlreadyReferred);
+
+			// Increment referrer's count
+			let new_count = ReferralCount::<T>::get(&referrer).saturating_add(1);
+			ReferralCount::<T>::insert(&referrer, new_count);
+
+			// Create and store referral info
+			let referral_info = ReferralInfo {
+				referrer: referrer.clone(),
+				created_at: frame_system::Pallet::<T>::block_number(),
+			};
+			Referrals::<T>::insert(referred.clone(), referral_info);
+
+			// Remove from pending if it exists
+			PendingReferrals::<T>::remove(&referred);
+
+			// Emit event
+			Self::deposit_event(Event::ReferralConfirmed {
+				referrer,
+				referred,
+				new_referrer_count: new_count,
+			});
+
+			Ok(())
+		}
 	}
 
 	// --- Trait Implementasyonları ---
@@ -228,11 +265,18 @@ pub mod pallet {
 		fn get_referral_score(who: &T::AccountId) -> RawScore {
 			let referral_count = ReferralCount::<T>::get(who);
 
+			// New scoring system with max 500 points:
+			// 0 referrals = 0 points
+			// 1-10 referrals = count * 10 points (10, 20, 30, ..., 100)
+			// 11-50 referrals = 100 + (count - 10) * 5 points (105, 110, ..., 300)
+			// 51-100 referrals = 300 + (count - 50) * 4 points (304, 308, ..., 500)
+			// 101+ referrals = 500 points (maximum)
 			let score = match referral_count {
 				0 => 0,
-				1..=5 => referral_count * 4,
-				6..=20 => 20 + ((referral_count - 5) * 2),
-				_ => 50, // Örnek olarak basitleştirildi, detaylı mantık eklenebilir.
+				1..=10 => referral_count * 10,
+				11..=50 => 100 + ((referral_count - 10) * 5),
+				51..=100 => 300 + ((referral_count - 50) * 4),
+				_ => 500, // Maximum score capped at 500
 			};
 
 			score.into()

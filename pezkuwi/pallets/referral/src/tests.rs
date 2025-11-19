@@ -2,6 +2,7 @@ use super::*;
 use crate::{mock::*, Error, Event, ReferralCount, PendingReferrals};
 use pallet_identity_kyc::types::OnKycApproved;
 use frame_support::{assert_noop, assert_ok};
+use sp_runtime::DispatchError;
 
 type ReferralPallet = Pallet<Test>;
 
@@ -97,11 +98,11 @@ fn on_kyc_approved_hook_does_nothing_when_no_referral() {
 }
 
 // ============================================================================
-// Referral Score Calculation Tests (3 tests)
+// Referral Score Calculation Tests (4 tests)
 // ============================================================================
 
 #[test]
-fn referral_score_tier_0_to_5() {
+fn referral_score_tier_0_to_10() {
 	use crate::types::ReferralScoreProvider;
 
 	new_test_ext().execute_with(|| {
@@ -112,49 +113,78 @@ fn referral_score_tier_0_to_5() {
 
 		// Simulate 1 referral
 		ReferralCount::<Test>::insert(&referrer, 1);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 4); // 1 * 4
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 10); // 1 * 10
 
-		// 5 referrals = 20 score
+		// 5 referrals = 50 score
 		ReferralCount::<Test>::insert(&referrer, 5);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 20); // 5 * 4
-	});
-}
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 50); // 5 * 10
 
-#[test]
-fn referral_score_tier_6_to_20() {
-	use crate::types::ReferralScoreProvider;
-
-	new_test_ext().execute_with(|| {
-		let referrer = 1;
-
-		// 6 referrals: 20 + (1 * 2) = 22
-		ReferralCount::<Test>::insert(&referrer, 6);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 22);
-
-		// 10 referrals: 20 + (5 * 2) = 30
+		// 10 referrals = 100 score
 		ReferralCount::<Test>::insert(&referrer, 10);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 30);
-
-		// 20 referrals: 20 + (15 * 2) = 50
-		ReferralCount::<Test>::insert(&referrer, 20);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 50);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 100); // 10 * 10
 	});
 }
 
 #[test]
-fn referral_score_capped_at_50() {
+fn referral_score_tier_11_to_50() {
 	use crate::types::ReferralScoreProvider;
 
 	new_test_ext().execute_with(|| {
 		let referrer = 1;
 
-		// 21+ referrals capped at 50
-		ReferralCount::<Test>::insert(&referrer, 21);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 50);
+		// 11 referrals: 100 + (1 * 5) = 105
+		ReferralCount::<Test>::insert(&referrer, 11);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 105);
 
-		// Even 100 referrals = 50
+		// 20 referrals: 100 + (10 * 5) = 150
+		ReferralCount::<Test>::insert(&referrer, 20);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 150);
+
+		// 50 referrals: 100 + (40 * 5) = 300
+		ReferralCount::<Test>::insert(&referrer, 50);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 300);
+	});
+}
+
+#[test]
+fn referral_score_tier_51_to_100() {
+	use crate::types::ReferralScoreProvider;
+
+	new_test_ext().execute_with(|| {
+		let referrer = 1;
+
+		// 51 referrals: 300 + (1 * 4) = 304
+		ReferralCount::<Test>::insert(&referrer, 51);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 304);
+
+		// 75 referrals: 300 + (25 * 4) = 400
+		ReferralCount::<Test>::insert(&referrer, 75);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 400);
+
+		// 100 referrals: 300 + (50 * 4) = 500
 		ReferralCount::<Test>::insert(&referrer, 100);
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 50);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 500);
+	});
+}
+
+#[test]
+fn referral_score_capped_at_500() {
+	use crate::types::ReferralScoreProvider;
+
+	new_test_ext().execute_with(|| {
+		let referrer = 1;
+
+		// 101+ referrals capped at 500
+		ReferralCount::<Test>::insert(&referrer, 101);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 500);
+
+		// Even 200 referrals = 500
+		ReferralCount::<Test>::insert(&referrer, 200);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 500);
+
+		// Even 1000 referrals = 500
+		ReferralCount::<Test>::insert(&referrer, 1000);
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 500);
 	});
 }
 
@@ -301,7 +331,7 @@ fn complete_referral_flow_integration() {
 
 		// Step 4: Verify trait implementations
 		assert_eq!(ReferralPallet::get_inviter(&referred), Some(referrer));
-		assert_eq!(ReferralPallet::get_referral_score(&referrer), 4); // 1 * 4
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 10); // 1 * 10
 	});
 }
 
@@ -343,5 +373,117 @@ fn storage_consistency_multiple_operations() {
 		assert_eq!(Referrals::<Test>::get(referred1).unwrap().referrer, referrer1);
 		assert_eq!(Referrals::<Test>::get(referred2).unwrap().referrer, referrer1);
 		assert_eq!(Referrals::<Test>::get(referred3).unwrap().referrer, referrer2);
+	});
+}
+
+// ============================================================================
+// Force Confirm Referral Tests (3 tests)
+// ============================================================================
+
+#[test]
+fn force_confirm_referral_works() {
+	use crate::types::{InviterProvider, ReferralScoreProvider};
+
+	new_test_ext().execute_with(|| {
+		let referrer = 1;
+		let referred = 2;
+
+		// Force confirm referral (sudo-only)
+		assert_ok!(ReferralPallet::force_confirm_referral(
+			RuntimeOrigin::root(),
+			referrer,
+			referred
+		));
+
+		// Verify storage updates
+		assert_eq!(ReferralCount::<Test>::get(referrer), 1);
+		assert!(Referrals::<Test>::contains_key(referred));
+		assert_eq!(Referrals::<Test>::get(referred).unwrap().referrer, referrer);
+
+		// Verify trait implementations
+		assert_eq!(ReferralPallet::get_inviter(&referred), Some(referrer));
+		assert_eq!(ReferralPallet::get_referral_score(&referrer), 10); // 1 * 10
+	});
+}
+
+#[test]
+fn force_confirm_referral_requires_root() {
+	new_test_ext().execute_with(|| {
+		let referrer = 1;
+		let referred = 2;
+
+		// Non-root origin should fail
+		assert_noop!(
+			ReferralPallet::force_confirm_referral(
+				RuntimeOrigin::signed(referrer),
+				referrer,
+				referred
+			),
+			DispatchError::BadOrigin
+		);
+	});
+}
+
+#[test]
+fn force_confirm_referral_prevents_self_referral() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Self-referral should fail
+		assert_noop!(
+			ReferralPallet::force_confirm_referral(
+				RuntimeOrigin::root(),
+				user,
+				user
+			),
+			Error::<Test>::SelfReferral
+		);
+	});
+}
+
+#[test]
+fn force_confirm_referral_prevents_duplicate() {
+	new_test_ext().execute_with(|| {
+		let referrer = 1;
+		let referred = 2;
+
+		// First force confirm succeeds
+		assert_ok!(ReferralPallet::force_confirm_referral(
+			RuntimeOrigin::root(),
+			referrer,
+			referred
+		));
+
+		// Second force confirm for same referred should fail
+		assert_noop!(
+			ReferralPallet::force_confirm_referral(
+				RuntimeOrigin::root(),
+				referrer,
+				referred
+			),
+			Error::<Test>::AlreadyReferred
+		);
+	});
+}
+
+#[test]
+fn force_confirm_referral_removes_pending() {
+	new_test_ext().execute_with(|| {
+		let referrer = 1;
+		let referred = 2;
+
+		// Setup pending referral first
+		assert_ok!(ReferralPallet::initiate_referral(RuntimeOrigin::signed(referrer), referred));
+		assert_eq!(PendingReferrals::<Test>::get(referred), Some(referrer));
+
+		// Force confirm should remove pending
+		assert_ok!(ReferralPallet::force_confirm_referral(
+			RuntimeOrigin::root(),
+			referrer,
+			referred
+		));
+
+		assert_eq!(PendingReferrals::<Test>::get(referred), None);
+		assert_eq!(ReferralCount::<Test>::get(referrer), 1);
 	});
 }

@@ -26,5 +26,22 @@ mod benchmarks {
 		assert_eq!(PendingReferrals::<T>::get(&referred), Some(referrer));
 	}
 
+	#[benchmark]
+	fn force_confirm_referral() {
+		let referrer: T::AccountId = account("referrer", 0, 0);
+		let referred: T::AccountId = account("referred", 0, 1);
+
+		// Ensure clean state
+		PendingReferrals::<T>::remove(&referred);
+		Referrals::<T>::remove(&referred);
+		ReferralCount::<T>::remove(&referrer);
+
+		#[extrinsic_call]
+		force_confirm_referral(RawOrigin::Root, referrer.clone(), referred.clone());
+
+		assert!(Referrals::<T>::contains_key(&referred));
+		assert_eq!(ReferralCount::<T>::get(&referrer), 1);
+	}
+
 	impl_benchmark_test_suite!(Referral, crate::mock::new_test_ext(), crate::mock::Test);
 }

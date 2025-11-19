@@ -2744,7 +2744,7 @@ mod benches {
 		[pallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pallet_xcm_benchmarks::fungible, pallet_xcm_benchmarks::fungible::Pallet::<Runtime>]
 		[pallet_xcm_benchmarks::generic, pallet_xcm_benchmarks::generic::Pallet::<Runtime>]
-		[pallet-contracts, Contracts]
+		[pallet_contracts, Contracts]
 		// Our custom pallets
 		[pallet_tiki, Tiki]
 		[pallet_welati, Welati]

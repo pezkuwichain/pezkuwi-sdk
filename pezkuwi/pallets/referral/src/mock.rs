@@ -83,6 +83,14 @@ impl pallet_identity_kyc::types::CitizenNftProvider<u64> for MockCitizenNftProvi
 	fn mint_citizen_nft(_who: &u64) -> sp_runtime::DispatchResult {
 		Ok(())
 	}
+
+	fn mint_citizen_nft_confirmed(_who: &u64) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
+
+	fn burn_citizen_nft(_who: &u64) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
 }
 
 impl pallet_identity_kyc::Config for Test {
