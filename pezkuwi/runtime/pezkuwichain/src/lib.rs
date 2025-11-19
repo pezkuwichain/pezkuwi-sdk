@@ -1163,7 +1163,7 @@ impl pallet_identity_kyc::Config for Runtime {
 impl pallet_referral::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_referral::weights::SubstrateWeight<Runtime>;
-	
+	type DefaultReferrer = QaziMuhammedAccount; // Founder as default referrer
 }
 
 impl pallet_perwerde::Config for Runtime {

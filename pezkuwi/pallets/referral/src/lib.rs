@@ -124,6 +124,10 @@ pub mod pallet {
 	pub trait Config: frame_system::Config + pallet_identity_kyc::Config + TypeInfo {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type WeightInfo: weights::WeightInfo;
+
+		/// Default referrer account - used when no referrer is specified
+		/// This allows automatic assignment of founder as referrer for users without invitations
+		type DefaultReferrer: Get<Self::AccountId>;
 	}
 
 	// --- Storage Items ---
@@ -154,7 +158,7 @@ pub mod pallet {
 		pub created_at: BlockNumberFor<T>,
 	}
 
-	// --- Olaylar (Events) ---
+	// --- Events ---
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
@@ -164,7 +168,7 @@ pub mod pallet {
 		ReferralConfirmed { referrer: T::AccountId, referred: T::AccountId, new_referrer_count: u32 },
 	}
 
-	// --- Hatalar (Errors) ---
+	// --- Errors ---
 	#[pallet::error]
 	pub enum Error<T> {
 		/// A user cannot invite themselves.
@@ -173,10 +177,10 @@ pub mod pallet {
 		AlreadyReferred,
 	}
 
-	// --- Extrinsics (Callables) ---
+	// --- Extrinsics ---
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		/// Başka bir kullanıcıyı sisteme davet etmek için bir referans kaydı başlatır.
+		/// Initiates a referral record to invite another user to the system.
 		#[pallet::call_index(0)]
 		#[pallet::weight(<T as Config>::WeightInfo::initiate_referral())]
 		pub fn initiate_referral(
@@ -231,30 +235,35 @@ pub mod pallet {
 		}
 	}
 
-	// --- Trait Implementasyonları ---
+	// --- Trait Implementations ---
 
 	impl<T: Config> OnKycApproved<T::AccountId> for Pallet<T> {
 		fn on_kyc_approved(who: &T::AccountId) {
-			// Güvenlik kontrolü: Referansı onaylamadan önce kullanıcının KYC durumunun
-			// gerçekten "Approved" olduğunu zincir üzerinde teyit et.
-			// Artık pallet_identity_kyc'nin depolama alanına doğrudan erişiyoruz.
+			// Security check: Verify on-chain that the user's KYC status is actually
+			// "Approved" before confirming the referral.
+			// We now directly access pallet_identity_kyc's storage.
 			if pallet_identity_kyc::Pallet::<T>::get_kyc_status(who) == pallet_identity_kyc::types::KycLevel::Approved {
-				if let Some(referrer) = PendingReferrals::<T>::take(who) {
-					let new_count = ReferralCount::<T>::get(&referrer).saturating_add(1);
-                    ReferralCount::<T>::insert(&referrer, new_count);
+				// Determine the referrer: either from pending referral or use default (founder)
+				let referrer = PendingReferrals::<T>::take(who)
+					.unwrap_or_else(|| T::DefaultReferrer::get());
 
-					let referral_info = ReferralInfo {
-						referrer: referrer.clone(),
-						created_at: frame_system::Pallet::<T>::block_number(),
-					};
-					Referrals::<T>::insert(who.clone(), referral_info);
+				// Increment referrer's count
+				let new_count = ReferralCount::<T>::get(&referrer).saturating_add(1);
+				ReferralCount::<T>::insert(&referrer, new_count);
 
-					Self::deposit_event(Event::ReferralConfirmed {
-						referrer,
-						referred: who.clone(),
-						new_referrer_count: new_count,
-					});
-				}
+				// Create and store referral info
+				let referral_info = ReferralInfo {
+					referrer: referrer.clone(),
+					created_at: frame_system::Pallet::<T>::block_number(),
+				};
+				Referrals::<T>::insert(who.clone(), referral_info);
+
+				// Emit confirmation event
+				Self::deposit_event(Event::ReferralConfirmed {
+					referrer,
+					referred: who.clone(),
+					new_referrer_count: new_count,
+				});
 			}
 		}
 	}

@@ -23,7 +23,7 @@ frame_support::construct_runtime!(
 	}
 );
 
-// frame_system için modern konfigürasyon
+// Modern configuration for frame_system
 impl system::Config for Test {
 	type BaseCallFilter = Everything;
 	type BlockWeights = ();
@@ -57,7 +57,7 @@ impl system::Config for Test {
     type PostTransactions = ();
 }
 
-// pallet_balances için konfigürasyon
+// Configuration for pallet_balances
 impl pallet_balances::Config for Test {
 	type Balance = u128;
 	type DustRemoval = ();
@@ -75,7 +75,7 @@ impl pallet_balances::Config for Test {
 	type DoneSlashHandler = ();
 }
 
-// pallet_identity_kyc için konfigürasyon
+// Configuration for pallet_identity_kyc
 
 // Mock implementation for CitizenNftProvider
 pub struct MockCitizenNftProvider;
@@ -105,17 +105,26 @@ impl pallet_identity_kyc::Config for Test {
 	type CitizenNftProvider = MockCitizenNftProvider;
 }
 
-// Nihayet, pallet_referral için konfigürasyon
+// Default referrer for testing (account 999 as mock founder)
+pub struct DefaultReferrerAccount;
+impl frame_support::traits::Get<u64> for DefaultReferrerAccount {
+	fn get() -> u64 {
+		999 // Mock founder account
+	}
+}
+
+// Configuration for pallet_referral
 impl pallet_referral::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
+	type DefaultReferrer = DefaultReferrerAccount;
 }
 
-// Testler için başlangıç durumu oluşturan fonksiyon
+// Helper function to create initial state for tests
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	let mut storage = system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
-	// Test için başlangıç bakiyeleri
+	// Initial balances for testing
 	pallet_balances::GenesisConfig::<Test> {
 		balances: vec![(1, 10_000), (2, 10_000), (3, 10_000)],
 		dev_accounts: None,
