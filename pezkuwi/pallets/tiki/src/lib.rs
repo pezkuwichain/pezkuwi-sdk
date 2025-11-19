@@ -428,12 +428,12 @@ pub mod pallet {
             )?;
 
             #[cfg(not(feature = "runtime-benchmarks"))]
-            pallet_nfts::Pallet::<T>::mint(
-                T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(user.clone())),
+            pallet_nfts::Pallet::<T>::force_mint(
+                T::RuntimeOrigin::from(frame_system::RawOrigin::Root),
                 collection_id,
                 next_id_u32,
                 T::Lookup::unlookup(user.clone()),
-                None,
+                Default::default(),
             )?;
 
             // Make NFT non-transferable
