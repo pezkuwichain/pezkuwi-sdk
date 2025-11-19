@@ -140,4 +140,10 @@ pub trait OnKycApproved<AccountId> {
 /// implement edilir, böylece circular dependency oluşmaz.
 pub trait CitizenNftProvider<AccountId> {
 	fn mint_citizen_nft(who: &AccountId) -> sp_runtime::DispatchResult;
+
+	/// Mint citizen NFT with self-confirmation (uses force_mint internally)
+	fn mint_citizen_nft_confirmed(who: &AccountId) -> sp_runtime::DispatchResult;
+
+	/// Burn citizen NFT when user renounces citizenship
+	fn burn_citizen_nft(who: &AccountId) -> sp_runtime::DispatchResult;
 }

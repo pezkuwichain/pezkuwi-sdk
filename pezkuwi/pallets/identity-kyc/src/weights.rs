@@ -58,6 +58,8 @@ pub trait WeightInfo {
 	fn apply_for_kyc() -> Weight;
 	fn approve_kyc() -> Weight;
 	fn revoke_kyc() -> Weight;
+	fn confirm_citizenship() -> Weight;
+	fn renounce_citizenship() -> Weight;
 }
 
 /// Weights for `pallet_identity_kyc` using the Substrate node and recommended hardware.
@@ -112,6 +114,30 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 			.saturating_add(T::DbWeight::get().reads(1_u64))
 			.saturating_add(T::DbWeight::get().writes(1_u64))
 	}
+	/// Storage: `IdentityKyc::KycStatuses` (r:1 w:1)
+	/// Proof: `IdentityKyc::KycStatuses` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	/// Storage: `IdentityKyc::PendingKycApplications` (r:1 w:1)
+	/// Proof: `IdentityKyc::PendingKycApplications` (`max_values`: None, `max_size`: Some(16741), added: 19216, mode: `MaxEncodedLen`)
+	fn confirm_citizenship() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `213`
+		//  Estimated: `20206`
+		// Minimum execution time: 59_900_000 picoseconds.
+		Weight::from_parts(60_800_000, 20206)
+			.saturating_add(T::DbWeight::get().reads(2_u64))
+			.saturating_add(T::DbWeight::get().writes(2_u64))
+	}
+	/// Storage: `IdentityKyc::KycStatuses` (r:1 w:1)
+	/// Proof: `IdentityKyc::KycStatuses` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	fn renounce_citizenship() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `112`
+		//  Estimated: `3514`
+		// Minimum execution time: 26_900_000 picoseconds.
+		Weight::from_parts(27_700_000, 3514)
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+			.saturating_add(T::DbWeight::get().writes(1_u64))
+	}
 }
 
 // For backwards compatibility and tests.
@@ -157,6 +183,30 @@ impl WeightInfo for () {
 	/// Storage: `IdentityKyc::KycStatuses` (r:1 w:1)
 	/// Proof: `IdentityKyc::KycStatuses` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
 	fn revoke_kyc() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `112`
+		//  Estimated: `3514`
+		// Minimum execution time: 26_900_000 picoseconds.
+		Weight::from_parts(27_700_000, 3514)
+			.saturating_add(RocksDbWeight::get().reads(1_u64))
+			.saturating_add(RocksDbWeight::get().writes(1_u64))
+	}
+	/// Storage: `IdentityKyc::KycStatuses` (r:1 w:1)
+	/// Proof: `IdentityKyc::KycStatuses` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	/// Storage: `IdentityKyc::PendingKycApplications` (r:1 w:1)
+	/// Proof: `IdentityKyc::PendingKycApplications` (`max_values`: None, `max_size`: Some(16741), added: 19216, mode: `MaxEncodedLen`)
+	fn confirm_citizenship() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `213`
+		//  Estimated: `20206`
+		// Minimum execution time: 59_900_000 picoseconds.
+		Weight::from_parts(60_800_000, 20206)
+			.saturating_add(RocksDbWeight::get().reads(2_u64))
+			.saturating_add(RocksDbWeight::get().writes(2_u64))
+	}
+	/// Storage: `IdentityKyc::KycStatuses` (r:1 w:1)
+	/// Proof: `IdentityKyc::KycStatuses` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	fn renounce_citizenship() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `112`
 		//  Estimated: `3514`

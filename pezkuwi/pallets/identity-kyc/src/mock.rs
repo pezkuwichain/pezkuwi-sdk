@@ -93,6 +93,14 @@ impl crate::types::CitizenNftProvider<AccountId> for MockCitizenNftProvider {
 	fn mint_citizen_nft(_who: &AccountId) -> sp_runtime::DispatchResult {
 		Ok(())
 	}
+
+	fn mint_citizen_nft_confirmed(_who: &AccountId) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
+
+	fn burn_citizen_nft(_who: &AccountId) -> sp_runtime::DispatchResult {
+		Ok(())
+	}
 }
 
 impl crate::Config for Test {

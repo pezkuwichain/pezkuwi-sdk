@@ -1,4 +1,4 @@
-use crate::{mock::*, Error, Event};
+use crate::{mock::*, Error, Event, PendingKycApplications};
 use frame_support::{assert_noop, assert_ok, BoundedVec};
 use sp_runtime::DispatchError;
 
@@ -380,6 +380,291 @@ fn multiple_users_kyc_flow() {
 		assert!(IdentityKycPallet::pending_application_of(user1).is_none());
 		assert!(IdentityKycPallet::pending_application_of(user2).is_none());
 		assert!(IdentityKycPallet::pending_application_of(user3).is_none());
+	});
+}
+
+// ============================================================================
+// confirm_citizenship Tests - Self-confirmation for Welati NFT
+// ============================================================================
+
+#[test]
+fn confirm_citizenship_works() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Identity set et ve KYC başvurusu yap
+		assert_ok!(IdentityKycPallet::set_identity(
+			RuntimeOrigin::signed(user),
+			vec![].try_into().unwrap(),
+			vec![].try_into().unwrap()
+		));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(
+			RuntimeOrigin::signed(user),
+			vec![].try_into().unwrap(),
+			vec![].try_into().unwrap()
+		));
+
+		// Başlangıç durumunu doğrula
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Pending);
+		assert_eq!(Balances::reserved_balance(user), KycApplicationDepositAmount::get());
+		assert!(IdentityKycPallet::pending_application_of(user).is_some());
+
+		// Eylem: Kullanıcı kendi vatandaşlığını onaylar (self-confirmation)
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+
+		// Doğrulamalar
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Approved);
+		assert_eq!(Balances::reserved_balance(user), 0); // Deposit iade edildi
+		assert_eq!(IdentityKycPallet::pending_application_of(user), None); // Application temizlendi
+		System::assert_last_event(Event::CitizenshipConfirmed { who: user }.into());
+	});
+}
+
+#[test]
+fn confirm_citizenship_fails_when_not_pending() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Sadece identity set et, başvuru yapma
+		assert_ok!(IdentityKycPallet::set_identity(
+			RuntimeOrigin::signed(user),
+			vec![].try_into().unwrap(),
+			vec![].try_into().unwrap()
+		));
+
+		// NotStarted durumunda confirm_citizenship başarısız olmalı
+		assert_noop!(
+			IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)),
+			Error::<Test>::CannotConfirmInCurrentState
+		);
+	});
+}
+
+#[test]
+fn confirm_citizenship_fails_when_already_approved() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Başvuru yap ve Root ile onayla
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::approve_kyc(RuntimeOrigin::root(), user));
+
+		// Approved durumunda tekrar confirm_citizenship başarısız olmalı
+		assert_noop!(
+			IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)),
+			Error::<Test>::CannotConfirmInCurrentState
+		);
+	});
+}
+
+#[test]
+fn confirm_citizenship_fails_when_no_pending_application() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Identity set et ve başvuru yap
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+
+		// Başvuruyu manuel olarak temizle (bu normalde olmamalı ama güvenlik kontrolü için)
+		PendingKycApplications::<Test>::remove(user);
+
+		// Pending application olmadan confirm_citizenship başarısız olmalı
+		assert_noop!(
+			IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)),
+			Error::<Test>::KycApplicationNotFound
+		);
+	});
+}
+
+#[test]
+fn confirm_citizenship_calls_hooks() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+
+		// Onayla - bu OnKycApproved hook'unu ve CitizenNftProvider::mint_citizen_nft_confirmed'i çağırmalı
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+
+		// Mock implementasyonlar başarılı olduğunda, KYC Approved durumunda olmalı
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Approved);
+		System::assert_last_event(Event::CitizenshipConfirmed { who: user }.into());
+	});
+}
+
+#[test]
+fn confirm_citizenship_unreserves_deposit_correctly() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+		let initial_balance = Balances::free_balance(user);
+
+		// Başvuru yap
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+
+		assert_eq!(Balances::reserved_balance(user), KycApplicationDepositAmount::get());
+
+		// Self-confirm
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+
+		// Deposit tamamen iade edildi
+		assert_eq!(Balances::reserved_balance(user), 0);
+		assert_eq!(Balances::free_balance(user), initial_balance);
+	});
+}
+
+// ============================================================================
+// renounce_citizenship Tests - Free exit from citizenship
+// ============================================================================
+
+#[test]
+fn renounce_citizenship_works() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Vatandaş ol (başvur ve onayla)
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+
+		// Doğrula: Vatandaşlık onaylandı
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Approved);
+
+		// Eylem: Vatandaşlıktan çık (renounce)
+		assert_ok!(IdentityKycPallet::renounce_citizenship(RuntimeOrigin::signed(user)));
+
+		// Doğrulamalar
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::NotStarted); // Reset to NotStarted
+		System::assert_last_event(Event::CitizenshipRenounced { who: user }.into());
+	});
+}
+
+#[test]
+fn renounce_citizenship_fails_when_not_citizen() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Sadece identity set et, vatandaş değil
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+
+		// NotStarted durumunda renounce başarısız olmalı
+		assert_noop!(
+			IdentityKycPallet::renounce_citizenship(RuntimeOrigin::signed(user)),
+			Error::<Test>::NotACitizen
+		);
+	});
+}
+
+#[test]
+fn renounce_citizenship_fails_when_pending() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Başvuru yap ama onaylanma
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+
+		// Pending durumunda renounce başarısız olmalı (henüz vatandaş değil)
+		assert_noop!(
+			IdentityKycPallet::renounce_citizenship(RuntimeOrigin::signed(user)),
+			Error::<Test>::NotACitizen
+		);
+	});
+}
+
+#[test]
+fn renounce_citizenship_fails_when_rejected() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Başvuru yap ve reddet
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::reject_kyc(RuntimeOrigin::root(), user));
+
+		// Rejected durumunda renounce başarısız olmalı (zaten vatandaş değil)
+		assert_noop!(
+			IdentityKycPallet::renounce_citizenship(RuntimeOrigin::signed(user)),
+			Error::<Test>::NotACitizen
+		);
+	});
+}
+
+#[test]
+fn renounce_citizenship_calls_burn_hook() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// Kurulum: Vatandaş ol
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+
+		// Renounce - bu CitizenNftProvider::burn_citizen_nft'yi çağırmalı
+		assert_ok!(IdentityKycPallet::renounce_citizenship(RuntimeOrigin::signed(user)));
+
+		// Mock implementasyon başarılı olduğunda, KYC NotStarted durumunda olmalı
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::NotStarted);
+		System::assert_last_event(Event::CitizenshipRenounced { who: user }.into());
+	});
+}
+
+#[test]
+fn renounce_citizenship_allows_reapplication() {
+	new_test_ext().execute_with(|| {
+		let user = 1;
+
+		// İlk döngü: Vatandaş ol
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Approved);
+
+		// Vatandaşlıktan çık
+		assert_ok!(IdentityKycPallet::renounce_citizenship(RuntimeOrigin::signed(user)));
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::NotStarted);
+
+		// İkinci döngü: Tekrar başvur (özgür dünya - free world principle)
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Pending);
+
+		// Tekrar onaylayabilmeli
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user)));
+		assert_eq!(IdentityKycPallet::kyc_status_of(user), crate::KycLevel::Approved);
+	});
+}
+
+// ============================================================================
+// Integration Tests - confirm_citizenship vs approve_kyc
+// ============================================================================
+
+#[test]
+fn confirm_citizenship_and_approve_kyc_both_work() {
+	new_test_ext().execute_with(|| {
+		let user1 = 1; // Self-confirmation kullanacak
+		let user2 = 2; // Admin approval kullanacak
+
+		// User1: Self-confirmation
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user1), b"User1".to_vec().try_into().unwrap(), b"user1@test.com".to_vec().try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user1), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(user1)));
+
+		// User2: Admin approval
+		assert_ok!(IdentityKycPallet::set_identity(RuntimeOrigin::signed(user2), b"User2".to_vec().try_into().unwrap(), b"user2@test.com".to_vec().try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::apply_for_kyc(RuntimeOrigin::signed(user2), vec![].try_into().unwrap(), vec![].try_into().unwrap()));
+		assert_ok!(IdentityKycPallet::approve_kyc(RuntimeOrigin::root(), user2));
+
+		// Her iki kullanıcı da Approved durumunda olmalı
+		assert_eq!(IdentityKycPallet::kyc_status_of(user1), crate::KycLevel::Approved);
+		assert_eq!(IdentityKycPallet::kyc_status_of(user2), crate::KycLevel::Approved);
+
+		// Her ikisi de deposits iade edilmiş olmalı
+		assert_eq!(Balances::reserved_balance(user1), 0);
+		assert_eq!(Balances::reserved_balance(user2), 0);
 	});
 }
 

@@ -183,6 +183,10 @@ pub mod pallet {
 		KycApproved { who: T::AccountId },
 		KycRejected { who: T::AccountId },
 		KycRevoked { who: T::AccountId },
+		/// User confirmed their own citizenship application
+		CitizenshipConfirmed { who: T::AccountId },
+		/// User renounced their citizenship
+		CitizenshipRenounced { who: T::AccountId },
 	}
 
 	#[pallet::error]
@@ -194,6 +198,10 @@ pub mod pallet {
 		CannotRevokeKycInCurrentState,
 		CannotApproveKycInCurrentState,
 		CannotRejectKycInCurrentState,
+		/// Cannot confirm citizenship in current state (must be Pending)
+		CannotConfirmInCurrentState,
+		/// User is not a citizen (cannot renounce)
+		NotACitizen,
 	}
 
 	#[pallet::call]
@@ -309,6 +317,71 @@ pub mod pallet {
 			);
 			KycStatuses::<T>::insert(&who, KycLevel::Revoked);
 			Self::deposit_event(Event::KycRevoked { who }); // Publish event without 'reviewer'
+			Ok(())
+		}
+
+		/// User confirms their own citizenship application (self-confirmation)
+		/// Only for Welati (Citizen) NFT - no admin approval required
+		#[pallet::call_index(5)]
+		#[pallet::weight(T::WeightInfo::approve_kyc())] // Similar weight to approve_kyc
+		pub fn confirm_citizenship(origin: OriginFor<T>) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+
+			// Must be in Pending state
+			ensure!(
+				KycStatuses::<T>::get(&who) == KycLevel::Pending,
+				Error::<T>::CannotConfirmInCurrentState
+			);
+
+			// Must have pending application
+			ensure!(
+				PendingKycApplications::<T>::contains_key(&who),
+				Error::<T>::KycApplicationNotFound
+			);
+
+			// Unreserve deposit
+			let deposit = T::KycApplicationDeposit::get();
+			T::Currency::unreserve(&who, deposit);
+
+			// Remove pending application
+			PendingKycApplications::<T>::remove(&who);
+
+			// Update KYC status to Approved
+			KycStatuses::<T>::insert(&who, KycLevel::Approved);
+
+			// Mint citizen NFT using self-confirmation method (force_mint internally)
+			if let Err(e) = T::CitizenNftProvider::mint_citizen_nft_confirmed(&who) {
+				log::warn!("Failed to mint citizen NFT for {:?}: {:?}", who, e);
+				// Don't fail the confirmation if NFT minting fails
+			}
+
+			// Call referral hook
+			T::OnKycApproved::on_kyc_approved(&who);
+
+			Self::deposit_event(Event::CitizenshipConfirmed { who });
+			Ok(())
+		}
+
+		/// User renounces their citizenship (burns Citizen NFT)
+		/// Allows users to freely exit citizenship
+		#[pallet::call_index(6)]
+		#[pallet::weight(T::WeightInfo::revoke_kyc())] // Similar weight to revoke_kyc
+		pub fn renounce_citizenship(origin: OriginFor<T>) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+
+			// Must be a citizen (Approved status)
+			ensure!(
+				KycStatuses::<T>::get(&who) == KycLevel::Approved,
+				Error::<T>::NotACitizen
+			);
+
+			// Burn citizen NFT
+			T::CitizenNftProvider::burn_citizen_nft(&who)?;
+
+			// Reset KYC status to None
+			KycStatuses::<T>::insert(&who, KycLevel::NotStarted);
+
+			Self::deposit_event(Event::CitizenshipRenounced { who });
 			Ok(())
 		}
 	}

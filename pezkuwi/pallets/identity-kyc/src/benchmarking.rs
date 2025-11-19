@@ -82,5 +82,45 @@ mod benchmarks {
 		assert_eq!(KycStatuses::<T>::get(&user), KycLevel::Revoked);
 	}
 
+	#[benchmark]
+	fn confirm_citizenship() {
+		let caller: T::AccountId = whitelisted_caller();
+		// Before calling `confirm_citizenship`, user must have a pending application
+		// 1. Create identity
+		let name: BoundedVec<u8, T::MaxStringLength> = vec![0u8; T::MaxStringLength::get() as usize].try_into().unwrap();
+		let email: BoundedVec<u8, T::MaxStringLength> = vec![0u8; T::MaxStringLength::get() as usize].try_into().unwrap();
+		IdentityKyc::<T>::set_identity(RawOrigin::Signed(caller.clone()).into(), name, email).unwrap();
+		// 2. Apply for KYC
+		let cids: BoundedVec<BoundedVec<u8, T::MaxCidLength>, T::MaxCidLength> = vec![vec![0u8; T::MaxCidLength::get() as usize].try_into().unwrap()].try_into().unwrap();
+		let notes: BoundedVec<u8, T::MaxStringLength> = vec![0u8; T::MaxStringLength::get() as usize].try_into().unwrap();
+		IdentityKyc::<T>::apply_for_kyc(RawOrigin::Signed(caller.clone()).into(), cids, notes).unwrap();
+
+		#[extrinsic_call]
+		confirm_citizenship(RawOrigin::Signed(caller.clone()));
+
+		assert_eq!(KycStatuses::<T>::get(&caller), KycLevel::Approved);
+	}
+
+	#[benchmark]
+	fn renounce_citizenship() {
+		let caller: T::AccountId = whitelisted_caller();
+		// Before calling `renounce_citizenship`, user must be a citizen (Approved)
+		// 1. Create identity
+		let name: BoundedVec<u8, T::MaxStringLength> = vec![0u8; T::MaxStringLength::get() as usize].try_into().unwrap();
+		let email: BoundedVec<u8, T::MaxStringLength> = vec![0u8; T::MaxStringLength::get() as usize].try_into().unwrap();
+		IdentityKyc::<T>::set_identity(RawOrigin::Signed(caller.clone()).into(), name, email).unwrap();
+		// 2. Apply for KYC
+		let cids: BoundedVec<BoundedVec<u8, T::MaxCidLength>, T::MaxCidLength> = vec![vec![0u8; T::MaxCidLength::get() as usize].try_into().unwrap()].try_into().unwrap();
+		let notes: BoundedVec<u8, T::MaxStringLength> = vec![0u8; T::MaxStringLength::get() as usize].try_into().unwrap();
+		IdentityKyc::<T>::apply_for_kyc(RawOrigin::Signed(caller.clone()).into(), cids, notes).unwrap();
+		// 3. Confirm citizenship (self-confirmation)
+		IdentityKyc::<T>::confirm_citizenship(RawOrigin::Signed(caller.clone()).into()).unwrap();
+
+		#[extrinsic_call]
+		renounce_citizenship(RawOrigin::Signed(caller.clone()));
+
+		assert_eq!(KycStatuses::<T>::get(&caller), KycLevel::NotStarted);
+	}
+
 	impl_benchmark_test_suite!(IdentityKyc, crate::mock::new_test_ext(), crate::mock::Test);
 }
