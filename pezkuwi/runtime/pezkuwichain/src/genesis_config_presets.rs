@@ -499,21 +499,29 @@ fn pezkuwichain_testnet_genesis(
 					wrapper_pallet_id
 				}, true, 1),
 				(1, root_key.clone(), true, 1),
+				// wUSDT - Asset ID 1000 (bridged stablecoin)
+				(WUSDT_ASSET_ID, root_key.clone(), true, WUSDT_MIN_BALANCE),
 			],
 			metadata: vec![
 				(0, b"Wrapped HEZ".to_vec(), b"wHEZ".to_vec(), 12),
 				(1, b"Pez Token".to_vec(), b"PEZ".to_vec(), 12),
+				(WUSDT_ASSET_ID, b"Wrapped USDT".to_vec(), b"wUSDT".to_vec(), WUSDT_DECIMALS as u8),
 			],
 			accounts: {
 				// Equal distribution for testing
 				const TOTAL_PEZ_SUPPLY: u128 = 5_000_000_000 * HEZ;
 				let pez_per_validator = TOTAL_PEZ_SUPPLY / initial_authorities.len() as u128;
-				initial_authorities
+				let mut accounts = initial_authorities
 					.iter()
 					.map(|x| (1, x.0.clone(), pez_per_validator))
-					.collect()
+					.collect::<Vec<_>>();
+
+				// wUSDT for testing pools (1M wUSDT with 6 decimals = 1M * 10^6)
+				accounts.push((WUSDT_ASSET_ID, root_key.clone(), 1_000_000 * 1_000_000));
+
+				accounts
 			},
-			next_asset_id: Some(2),
+			next_asset_id: Some(1001),
 		},
 		
 		pez_treasury: PezTreasuryConfig {
