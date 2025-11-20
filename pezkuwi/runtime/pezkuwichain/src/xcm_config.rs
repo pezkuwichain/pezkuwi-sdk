@@ -96,9 +96,59 @@ pub type LocalAssetTransactor = FungibleAdapter<
 	LocalCheckAccount,
 >;
 
-// TODO: Foreign asset transactor for Asset Hub USDT → wUSDT (Asset ID 1000)
-// This will be implemented after XCM basicsare working with native assets only
-// For now, we focus on getting XCM communication established with Asset Hub
+/// Foreign asset transactor - handles Asset Hub USDT → wUSDT (Asset ID 1000)
+/// TODO: Commented out due to type inference issue - see SESSION_HANDOFF.md for details
+/*
+use xcm_builder::{FungiblesAdapter, NoChecking, MatchedConvertedConcreteId};
+use xcm_executor::traits::{JustTry, MaybeEquivalence};
+
+/// Custom converter: Asset Hub USDT Location → wUSDT Asset ID (1000)
+pub struct AssetHubUsdtToWUsdt;
+impl MaybeEquivalence<Location, crate::AssetId> for AssetHubUsdtToWUsdt {
+	fn convert(location: &Location) -> Option<crate::AssetId> {
+		if location == &AssetHubUsdtLocation::get() {
+			Some(1000) // wUSDT asset ID
+		} else {
+			None
+		}
+	}
+	fn convert_back(asset_id: &crate::AssetId) -> Option<Location> {
+		if *asset_id == 1000 {
+			Some(AssetHubUsdtLocation::get())
+		} else {
+			None
+		}
+	}
+}
+
+/// Converter: Asset Hub USDT Location → Our wUSDT Asset ID (1000)
+/// Uses MatchedConvertedConcreteId pattern from Penpal parachain example
+pub type ForeignAssetsConvertedConcreteId = MatchedConvertedConcreteId<
+	crate::AssetId,
+	Balance,
+	Equals<AssetHubUsdtLocation>,
+	AssetHubUsdtToWUsdt,
+	JustTry,
+>;
+
+pub type ForeignFungiblesTransactor = FungiblesAdapter<
+	// Use pallet_assets for foreign assets
+	crate::Assets,
+	// Match and convert Asset Hub USDT location
+	ForeignAssetsConvertedConcreteId,
+	// Convert XCM Location to AccountId
+	LocationConverter,
+	// Account ID type
+	AccountId,
+	// No additional checks needed
+	NoChecking,
+	// Tracking account
+	CheckAccount,
+>;
+
+/// Combined asset transactors (native HEZ + foreign USDT)
+pub type AssetTransactors = (LocalAssetTransactor, ForeignFungiblesTransactor);
+*/
 
 /// The means that we convert the XCM message origin location into a local dispatch origin.
 type LocalOriginConverter = (
@@ -207,7 +257,7 @@ impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
 	type XcmEventEmitter = XcmPallet;
-	type AssetTransactor = LocalAssetTransactor;
+	type AssetTransactor = LocalAssetTransactor; // TODO: Use AssetTransactors when type inference fixed
 	type OriginConverter = LocalOriginConverter;
 	type IsReserve = ();
 	type IsTeleporter = TrustedTeleporters;
