@@ -111,7 +111,7 @@ pub mod pallet {
 	use super::*;
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
-	use pallet_identity_kyc::types::{KycStatus, OnKycApproved};
+	use pallet_identity_kyc::types::{KycLevel, KycStatus, OnKycApproved};
 	use crate::types::{
 		InviterProvider, ReferralScoreProvider, RawScore
 	};
