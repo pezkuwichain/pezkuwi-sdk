@@ -25,28 +25,29 @@ cd /home/mamostehp/Pezkuwi-SDK/pezkuwi
 
 ## 📍 WHERE WE LEFT OFF
 
-**Date:** 2025-11-20 17:25 UTC
-
-**Current Phase:** Building SDK (Stage 2 - Full Workspace)
-- Background Job: `c26e47`
-- Command: `cargo build --release --workspace`
-- Log: `/tmp/full_sdk_build.log`
-- Started: ~17:15 UTC
-- Expected completion: ~17:25-17:30 UTC
+**Date:** 2025-11-20 23:05 UTC
+**Current Phase:** ✅ Dev Mode LEVEL 1 Complete - Ready for Local Testnet
+**Git Commit:** `7b98d06e54` - wUSDT genesis fix + LEVEL 1 testing
+**Next Step:** Local Testnet (Alice + Bob, 2 validators)
 
 **What's Done:**
-✅ wUSDT Asset ID aligned (1000) across SDK & frontend
-✅ Genesis config updated
-✅ Runtime build successful (5m 38s)
-✅ Frontend committed (pwap repo, commit `65126b4`)
-✅ Documentation created (DEPLOYMENT_ROADMAP.md)
+✅ **CRITICAL BUG FIXED:** Dev genesis missing wUSDT (added to `pezkuwichain_testnet_genesis()`)
+✅ Runtime + binary rebuilt (2m 19s + 2m 52s)
+✅ Dev node tested (#86+ blocks, stable)
+✅ wUSDT Asset ID 1000 exists in storage
+✅ **LEVEL 1 FUNCTIONAL TESTS PASSED:**
+  - ✅ Alice initial: 1,000,000 wUSDT
+  - ✅ Transfer: Alice → Bob (10 wUSDT)
+  - ✅ Bob received: 10 wUSDT
+  - ✅ Alice remaining: 999,990 wUSDT
+  - ✅ TX hash: 0x0c152fb6aacff3677402b102eb66438f379874f43e154865c982a26bec808925
 
 **What's Next:**
-1. Wait for full SDK build to complete (~5 more minutes)
-2. Test dev mode: `./target/release/pezkuwichain-node --dev --tmp`
-3. Verify wUSDT Asset ID 1000 exists and works
-4. Commit SDK changes
-5. Move to local testnet (Alice+Bob)
+1. Kill dev node, start Local testnet (Alice + Bob)
+2. Verify 2-node networking (peer discovery, GRANDPA finality)
+3. Test wUSDT transfer between Alice & Bob nodes
+4. Commit local testnet validation
+5. Move to Alfa testnet (4 validators)
 
 ---
 
