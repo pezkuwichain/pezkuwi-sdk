@@ -5,7 +5,7 @@ use super::*;
 #[allow(unused)]
 use crate::Pallet as Presale;
 use frame_benchmarking::v2::*;
-use frame_support::traits::fungibles::Mutate;
+use frame_support::traits::{fungibles::Mutate, Get};
 use frame_system::RawOrigin;
 use sp_runtime::traits::Zero;
 
@@ -28,11 +28,11 @@ mod benchmarks {
         let amount: u128 = 100_000_000; // 100 wUSDT
 
         // Fund caller with wUSDT
-        let asset_id: T::AssetId = T::WUsdtAssetId::get().into();
+        let asset_id = T::WUsdtAssetId::get();
         <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
-            asset_id,
+            asset_id.clone(),
             &caller,
-            1_000_000_000,
+            1_000_000_000u128.try_into().ok().unwrap(),
         )
         .ok();
 
@@ -48,15 +48,15 @@ mod benchmarks {
     #[benchmark]
     fn finalize_presale(n: Linear<1, 100>) {
         // Setup: Create n contributors
-        let asset_id_wusdt: T::AssetId = T::WUsdtAssetId::get().into();
-        let asset_id_pez: T::AssetId = T::PezAssetId::get().into();
+        let asset_id_wusdt = T::WUsdtAssetId::get();
+        let asset_id_pez = T::PezAssetId::get();
         let treasury = Pallet::<T>::account_id();
 
         // Fund treasury with PEZ
         <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
-            asset_id_pez,
+            asset_id_pez.clone(),
             &treasury,
-            100_000_000_000_000_000_000,
+            100_000_000_000_000_000_000u128.try_into().ok().unwrap(),
         )
         .ok();
 
@@ -69,9 +69,9 @@ mod benchmarks {
 
             // Fund contributor
             <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
-                asset_id_wusdt,
+                asset_id_wusdt.clone(),
                 &contributor,
-                1_000_000_000,
+                1_000_000_000u128.try_into().ok().unwrap(),
             )
             .ok();
 

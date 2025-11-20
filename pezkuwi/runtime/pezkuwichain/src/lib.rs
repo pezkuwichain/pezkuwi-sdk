@@ -2778,6 +2778,7 @@ mod benches {
 		[pallet_pez_treasury, PezTreasury]
 		[pallet_pez_rewards, PezRewards]
 		[pallet_validator_pool, ValidatorPool]
+		[pallet_presale, Presale]
 	);
 }
 
