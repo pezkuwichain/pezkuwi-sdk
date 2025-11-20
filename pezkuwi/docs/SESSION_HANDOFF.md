@@ -22,10 +22,16 @@
 
 ## 📍 WHERE WE LEFT OFF
 
-**Date:** 2025-11-20 23:45 UTC
-**Current Phase:** 🚧 XCM Bridge Implementation - Polkadot Asset Hub Integration
-**Git Commit:** `07e10834ec` - Dev LEVEL 1 complete + documentation
-**Next Step:** Configure XCM for Asset Hub USDT → PezkuwiChain wUSDT
+**Date:** 2025-11-20 (Updated after XCM research)
+**Current Phase:** 🚧 XCM Bridge Implementation - Asset Hub Integration (RESEARCH PHASE)
+**Git Commit:** `a5d69d68f3` - SESSION_HANDOFF updated with correct XCM strategy
+**Next Step:** Research and implement ForeignAssetTransactor for Asset Hub USDT → wUSDT
+
+**XCM Status:**
+- ✅ Asset Hub USDT location configured (xcm_config.rs:62-70)
+- ⚠️ ForeignAssetTransactor needs advanced implementation
+- ✅ Runtime compiles successfully with basic XCM (native assets only)
+- 📝 Foreign asset support requires trait bound research (MatchesFungibles complexity)
 
 ## 🌉 CRITICAL: wUSDT BRIDGE STRATEGY
 
@@ -52,8 +58,33 @@ PezkuwiChain (wUSDT Asset ID 1000)
 
 ## 📋 XCM IMPLEMENTATION PLAN
 
-**Current Status:** XCM infrastructure exists in runtime
+**Current Status:** XCM infrastructure exists in runtime, foreign asset integration pending
 **Location:** `/home/mamostehp/Pezkuwi-SDK/pezkuwi/runtime/pezkuwichain/src/xcm_config.rs`
+
+### ⚠️ TECHNICAL CHALLENGE: ForeignAssetTransactor Trait Bounds
+
+**Problem Encountered (2025-11-20):**
+Implementing `FungiblesAdapter` for Asset Hub USDT → wUSDT mapping hit complex trait bound issues:
+- `ConvertedConcreteId<AssetId, Balance, Converter, JustTry>` doesn't satisfy `MatchesFungibles<u32, u128>`
+- XCM v5 `Location` type needs precise mapping to `pallet_assets` AssetId
+- Type mismatches between `xcm::v5::AssetId` and local `u32` AssetId
+
+**Attempted Solutions:**
+1. Custom `ConvertLocation` trait impl → Missing `MatchesFungibles` bound
+2. `ConvertedConcreteId` with custom converter → Type mismatch errors
+3. Various combinations of xcm_builder helpers → Trait bound conflicts
+
+**Current Approach:**
+- Asset Hub USDT location defined (xcm_config.rs:62-70) ✅
+- ForeignAssetTransactor commented out with TODO ⚠️
+- Runtime compiles with LocalAssetTransactor only (native HEZ token) ✅
+- Foreign asset support requires deeper XCM trait research 📝
+
+**Next Steps for Future Claude:**
+1. Study working examples in Polkadot-SDK parachains (Asset Hub, Bridge Hub)
+2. Check if `staging-xcm-builder` has updated helpers for Asset ID conversion
+3. Consider alternative: Create custom XCM handler that manually manages asset mapping
+4. OR: Start with simpler XCM use case (native token teleport) before foreign assets
 
 ### Step 1: Add Asset Hub USDT Location
 ```rust

@@ -58,6 +58,16 @@ parameter_types! {
 	pub CheckAccount: AccountId = XcmPallet::check_account();
 	pub LocalCheckAccount: (AccountId, MintLocation) = (CheckAccount::get(), MintLocation::Local);
 	pub TreasuryAccount: AccountId = Treasury::account_id();
+
+	// Asset Hub USDT configuration
+	pub AssetHubUsdtLocation: Location = Location::new(
+		1, // Parent (Relay chain)
+		[
+			Parachain(ASSET_HUB_ID), // Asset Hub parachain ID (1000)
+			PalletInstance(50),       // pallet_assets instance
+			GeneralIndex(1984),       // USDT asset ID on Asset Hub
+		]
+	);
 }
 
 pub type LocationConverter = (
@@ -85,6 +95,10 @@ pub type LocalAssetTransactor = FungibleAdapter<
 	// We track our teleports in/out to keep total issuance correct.
 	LocalCheckAccount,
 >;
+
+// TODO: Foreign asset transactor for Asset Hub USDT → wUSDT (Asset ID 1000)
+// This will be implemented after XCM basicsare working with native assets only
+// For now, we focus on getting XCM communication established with Asset Hub
 
 /// The means that we convert the XCM message origin location into a local dispatch origin.
 type LocalOriginConverter = (
