@@ -495,6 +495,25 @@ impl pallet_token_wrapper::Config for Runtime {
     type WrapperAssetId = WrapperAssetId;
 }
 
+// Presale Config
+parameter_types! {
+	pub const PresalePalletId: frame_support::PalletId = frame_support::PalletId(*b"py/prsal");
+	pub const ConversionRate: u128 = 20; // 1 wUSDT = 20 PEZ
+	pub const PresaleDuration: BlockNumber = 45 * 24 * 60 * 10; // 45 days (6s blocks)
+	pub const MaxContributors: u32 = 10000; // Maximum 10,000 contributors
+}
+
+impl pallet_presale::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type PalletId = PresalePalletId;
+	type WUsdtAssetId = WUsdtAssetId;
+	type PezAssetId = PezAssetId;
+	type ConversionRate = ConversionRate;
+	type PresaleDuration = PresaleDuration;
+	type MaxContributors = MaxContributors;
+	type PresaleWeightInfo = pallet_presale::weights::SubstrateWeight<Runtime>;
+}
+
 // AssetConversion Config - Send Fees to Treasury Account
 parameter_types! {
 	pub const AssetConversionPalletId: frame_support::PalletId = frame_support::PalletId(*b"py/ascon");
@@ -1277,6 +1296,7 @@ parameter_types! {
 // PEZ Treasury Config
 parameter_types! {
     pub const PezAssetId: u32 = 1; // PEZ Token ID will be 1
+    pub const WUsdtAssetId: u32 = 2; // wUSDT Token ID
 }
 
 impl pallet_pez_treasury::Config for Runtime {
@@ -2162,7 +2182,9 @@ construct_runtime! {
 
 		// Validator Pool System
     	ValidatorPool: pallet_validator_pool = 103,
-        
+
+		// Presale System
+		Presale: pallet_presale::{Pallet, Call, Storage, Event<T>} = 105,
 
 		// pub type NisCounterpartInstance = pallet_balances::Instance2;
 		NisCounterpartBalances: pallet_balances::<Instance2> = 45,

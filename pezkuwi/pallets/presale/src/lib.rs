@@ -38,15 +38,18 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
+    use super::*;
     use frame_support::{
         dispatch::DispatchResult,
         pallet_prelude::*,
         traits::{fungibles::{Inspect, Mutate}, tokens::Preservation},
         PalletId,
+        BoundedVec,
     };
     use frame_system::pallet_prelude::*;
     use sp_runtime::traits::{AccountIdConversion, Zero, CheckedMul, CheckedDiv};
     use sp_std::vec::Vec;
+    use codec::{Encode, Decode, MaxEncodedLen};
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
@@ -62,11 +65,11 @@ pub mod pallet {
 
         /// wUSDT asset ID (should be 2)
         #[pallet::constant]
-        type WUsdtAssetId: Get<u32>;
+        type WUsdtAssetId: Get<<Self as pallet_assets::Config>::AssetId>;
 
         /// PEZ asset ID (should be 1)
         #[pallet::constant]
-        type PezAssetId: Get<u32>;
+        type PezAssetId: Get<<Self as pallet_assets::Config>::AssetId>;
 
         /// Conversion rate: 1 wUSDT = X PEZ (e.g., 100)
         #[pallet::constant]
@@ -76,8 +79,12 @@ pub mod pallet {
         #[pallet::constant]
         type PresaleDuration: Get<BlockNumberFor<Self>>;
 
+        /// Maximum number of contributors
+        #[pallet::constant]
+        type MaxContributors: Get<u32>;
+
         /// Weight information for extrinsics in this pallet.
-        type WeightInfo: WeightInfo;
+        type PresaleWeightInfo: crate::weights::WeightInfo;
     }
 
     /// Contributions mapping: AccountId => wUSDT amount (6 decimals)
@@ -94,7 +101,7 @@ pub mod pallet {
     /// List of all contributors
     #[pallet::storage]
     #[pallet::getter(fn contributors)]
-    pub type Contributors<T: Config> = StorageValue<_, Vec<T::AccountId>, ValueQuery>;
+    pub type Contributors<T: Config> = StorageValue<_, BoundedVec<T::AccountId, T::MaxContributors>, ValueQuery>;
 
     /// Is presale currently active
     #[pallet::storage]
@@ -155,6 +162,8 @@ pub mod pallet {
         AlreadyStarted,
         /// Insufficient PEZ balance in treasury
         InsufficientPezBalance,
+        /// Too many contributors (reached MaxContributors limit)
+        TooManyContributors,
     }
 
     #[pallet::call]
@@ -163,7 +172,7 @@ pub mod pallet {
         ///
         /// This will set the start block and activate the presale for 45 days.
         #[pallet::call_index(0)]
-        #[pallet::weight(T::WeightInfo::start_presale())]
+        #[pallet::weight(T::PresaleWeightInfo::start_presale())]
         pub fn start_presale(origin: OriginFor<T>) -> DispatchResult {
             ensure_root(origin)?;
             ensure!(!PresaleActive::<T>::get(), Error::<T>::AlreadyStarted);
@@ -187,7 +196,7 @@ pub mod pallet {
         ///
         /// * `amount` - Amount of wUSDT to contribute (with 6 decimals)
         #[pallet::call_index(1)]
-        #[pallet::weight(T::WeightInfo::contribute())]
+        #[pallet::weight(T::PresaleWeightInfo::contribute())]
         pub fn contribute(
             origin: OriginFor<T>,
             #[pallet::compact] amount: u128,
@@ -208,14 +217,16 @@ pub mod pallet {
 
             // Transfer wUSDT from user to pallet treasury
             let treasury = Self::account_id();
-            let asset_id: T::AssetId = T::WUsdtAssetId::get().into();
+            let asset_id = T::WUsdtAssetId::get();
+            let amount_balance = amount.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
 
             // Use pallet_assets to transfer
             <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
                 asset_id,
                 &who,
                 &treasury,
-                amount,
+                amount_balance,
                 Preservation::Preserve,
             )?;
 
@@ -223,7 +234,11 @@ pub mod pallet {
             let current_contribution = Contributions::<T>::get(&who);
             if current_contribution == Zero::zero() {
                 // New contributor
-                Contributors::<T>::append(who.clone());
+                Contributors::<T>::try_mutate(|contributors| -> DispatchResult {
+                    contributors.try_push(who.clone())
+                        .map_err(|_| Error::<T>::TooManyContributors)?;
+                    Ok(())
+                })?;
             }
 
             let new_total = current_contribution
@@ -247,7 +262,7 @@ pub mod pallet {
         /// After 45 days, this distributes PEZ tokens to all contributors
         /// based on their wUSDT contributions.
         #[pallet::call_index(2)]
-        #[pallet::weight(T::WeightInfo::finalize_presale(Contributors::<T>::get().len() as u32))]
+        #[pallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get().len() as u32))]
         pub fn finalize_presale(origin: OriginFor<T>) -> DispatchResult {
             ensure_root(origin)?;
             ensure!(PresaleActive::<T>::get(), Error::<T>::PresaleNotActive);
@@ -261,7 +276,7 @@ pub mod pallet {
 
             let treasury = Self::account_id();
             let total_raised = TotalRaised::<T>::get();
-            let pez_asset_id: T::AssetId = T::PezAssetId::get().into();
+            let pez_asset_id = T::PezAssetId::get();
 
             // Distribute PEZ to all contributors
             for contributor in Contributors::<T>::get().iter() {
@@ -272,13 +287,15 @@ pub mod pallet {
 
                 // Calculate PEZ amount
                 let pez_amount = Self::calculate_pez(wusdt_amount)?;
+                let pez_balance = pez_amount.try_into()
+                    .map_err(|_| Error::<T>::ArithmeticOverflow)?;
 
                 // Transfer PEZ from treasury to contributor
                 <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
-                    pez_asset_id,
+                    pez_asset_id.clone(),
                     &treasury,
                     contributor,
-                    pez_amount,
+                    pez_balance,
                     Preservation::Preserve,
                 )?;
 
@@ -295,7 +312,7 @@ pub mod pallet {
 
         /// Emergency pause (sudo only)
         #[pallet::call_index(3)]
-        #[pallet::weight(T::WeightInfo::emergency_pause())]
+        #[pallet::weight(T::PresaleWeightInfo::emergency_pause())]
         pub fn emergency_pause(origin: OriginFor<T>) -> DispatchResult {
             ensure_root(origin)?;
             Paused::<T>::put(true);
@@ -305,7 +322,7 @@ pub mod pallet {
 
         /// Emergency unpause (sudo only)
         #[pallet::call_index(4)]
-        #[pallet::weight(T::WeightInfo::emergency_unpause())]
+        #[pallet::weight(T::PresaleWeightInfo::emergency_unpause())]
         pub fn emergency_unpause(origin: OriginFor<T>) -> DispatchResult {
             ensure_root(origin)?;
             Paused::<T>::put(false);

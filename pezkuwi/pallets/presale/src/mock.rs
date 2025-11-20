@@ -90,8 +90,9 @@ parameter_types! {
     pub const PresalePalletId: PalletId = PalletId(*b"py/prsal");
     pub const WUsdtAssetId: u32 = 2;
     pub const PezAssetId: u32 = 1;
-    pub const ConversionRate: u128 = 100;
+    pub const ConversionRate: u128 = 20;
     pub const PresaleDuration: u64 = 100; // 100 blocks for testing
+    pub const MaxContributors: u32 = 10000;
 }
 
 impl pallet_presale::Config for Test {
@@ -101,7 +102,8 @@ impl pallet_presale::Config for Test {
     type PezAssetId = PezAssetId;
     type ConversionRate = ConversionRate;
     type PresaleDuration = PresaleDuration;
-    type WeightInfo = ();
+    type MaxContributors = MaxContributors;
+    type PresaleWeightInfo = ();
 }
 
 // Build genesis storage according to the mock runtime.

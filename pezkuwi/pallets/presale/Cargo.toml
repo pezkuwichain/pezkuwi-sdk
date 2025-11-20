@@ -1,27 +1,35 @@
 [package]
 name = "pallet-presale"
-version = "0.1.0"
-edition = "2021"
-authors = ["PezkuwiChain Team"]
+version = "1.0.0"
 description = "PEZ token presale pallet - accepts wUSDT, distributes PEZ"
-license = "MIT-0"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = ["derive"] }
-scale-info = { version = "2.0.0", default-features = false, features = ["derive"] }
+codec = { package = "parity-scale-codec", version = "3.6.12", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { default-features = false, features = ["derive"], workspace = true }
 
-# Substrate
-frame-support = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-frame-system = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-sp-std = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-sp-runtime = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-sp-core = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-sp-io = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-pallet-assets = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
-pallet-balances = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
+frame-support = { default-features = false, workspace = true }
+frame-system = { default-features = false, workspace = true }
+frame-benchmarking = { default-features = false, optional = true, workspace = true }
+sp-runtime = { default-features = false, workspace = true }
+sp-std = { default-features = false, workspace = true }
+sp-core = { workspace = true, default-features = false }
+sp-io = { workspace = true, default-features = false }
 
-# Benchmarking
-frame-benchmarking = { default-features = false, optional = true, git = "https://github.com/paritytech/polkadot-sdk.git", branch = "stable2407" }
+pallet-assets = { default-features = false, workspace = true }
+
+[dev-dependencies]
+sp-core = { workspace = true }
+sp-io = { workspace = true }
+pallet-balances = { workspace = true }
 
 [features]
 default = ["std"]
@@ -35,7 +43,6 @@ std = [
     "sp-core/std",
     "sp-io/std",
     "pallet-assets/std",
-    "pallet-balances/std",
     "frame-benchmarking?/std",
 ]
 runtime-benchmarks = [
@@ -43,6 +50,8 @@ runtime-benchmarks = [
     "frame-support/runtime-benchmarks",
     "frame-system/runtime-benchmarks",
     "pallet-assets/runtime-benchmarks",
-    "pallet-balances/runtime-benchmarks",
 ]
-try-runtime = ["frame-support/try-runtime"]
+try-runtime = [
+    "frame-support/try-runtime",
+    "frame-system/try-runtime",
+]

@@ -12384,6 +12384,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-presale"
+version = "1.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "pallet-assets",
+ "pallet-balances",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core 36.1.0",
+ "sp-io",
+ "sp-runtime",
+ "sp-std 14.0.0",
+]
+
+[[package]]
 name = "pallet-proxy"
 version = "40.1.0"
 dependencies = [
@@ -16257,6 +16274,7 @@ dependencies = [
  "pallet-pez-rewards",
  "pallet-pez-treasury",
  "pallet-preimage",
+ "pallet-presale",
  "pallet-proxy",
  "pallet-ranked-collective",
  "pallet-recovery",

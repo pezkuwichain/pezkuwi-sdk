@@ -88,6 +88,7 @@ pallet-pez-rewards = { path = "../../pallets/pez-rewards", default-features = fa
 pallet-welati = { path = "../../pallets/welati", default-features = false }
 pallet-validator-pool = { path = "../../pallets/validator-pool", default-features = false }
 pallet-token-wrapper = { path = "../../pallets/token-wrapper", default-features = false }
+pallet-presale = { path = "../../pallets/presale", default-features = false }
 
 pallet-nfts = { default-features = false, workspace = true }
 pezkuwi-primitives.workspace = true
@@ -211,6 +212,7 @@ std = [
 	"pallet-welati/std",
 	"pallet-validator-pool/std",
 	"pallet-token-wrapper/std",
+	"pallet-presale/std",
 	"pallet-nfts/std",
 	"pallet-xcm/std",
 	"pezkuwi-parachain-primitives/std",
@@ -318,6 +320,7 @@ runtime-benchmarks = [
 	"pallet-welati/runtime-benchmarks",
 	"pallet-validator-pool/runtime-benchmarks",
 	"pallet-token-wrapper/runtime-benchmarks",
+	"pallet-presale/runtime-benchmarks",
 
 ]
 try-runtime = [
