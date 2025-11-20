@@ -7,30 +7,106 @@
 ## ⚡ QUICK START (For New Claude)
 
 ```bash
-# 1. Read roadmap first
-cat /home/mamostehp/Pezkuwi-SDK/pezkuwi/docs/DEPLOYMENT_ROADMAP.md
+# 1. Read this document CAREFULLY
+# 2. Read BRIDGE strategy below
+# 3. Read XCM configuration docs
 
-# 2. Check build status
-cat /tmp/full_sdk_build.log | tail -50
+# Current binary location:
+/home/mamostehp/Pezkuwi-SDK/target/release/pezkuwi
 
-# 3. Verify node binary
-ls -lh /home/mamostehp/Pezkuwi-SDK/pezkuwi/target/release/pezkuwichain-node
-
-# 4. If build complete, start testing
-cd /home/mamostehp/Pezkuwi-SDK/pezkuwi
-./target/release/pezkuwichain-node --dev --tmp
+# Runtime location:
+/home/mamostehp/Pezkuwi-SDK/pezkuwi/runtime/pezkuwichain
 ```
 
 ---
 
 ## 📍 WHERE WE LEFT OFF
 
-**Date:** 2025-11-20 23:05 UTC
-**Current Phase:** ✅ Dev Mode LEVEL 1 Complete - Ready for Local Testnet
-**Git Commit:** `7b98d06e54` - wUSDT genesis fix + LEVEL 1 testing
-**Next Step:** Local Testnet (Alice + Bob, 2 validators)
+**Date:** 2025-11-20 23:45 UTC
+**Current Phase:** 🚧 XCM Bridge Implementation - Polkadot Asset Hub Integration
+**Git Commit:** `07e10834ec` - Dev LEVEL 1 complete + documentation
+**Next Step:** Configure XCM for Asset Hub USDT → PezkuwiChain wUSDT
 
-**What's Done:**
+## 🌉 CRITICAL: wUSDT BRIDGE STRATEGY
+
+⚠️ **DO NOT CREATE CUSTOM BRIDGE PALLET** ⚠️
+
+**Correct Approach (From Day 1):**
+```
+Polkadot Asset Hub (USDT)
+        ↓ (XCM Reserve Transfer)
+PezkuwiChain (wUSDT Asset ID 1000)
+```
+
+**Why XCM + Asset Hub:**
+1. ✅ Native Polkadot ecosystem integration
+2. ✅ Secure (backed by relay chain)
+3. ✅ No external chain complexity (no TRON/ETH initially)
+4. ✅ XCM infrastructure already in runtime
+5. ✅ Less work, more reliable
+
+**Phase 2 (Current):** XCM + Asset Hub USDT
+**Phase 4 (Future):** External chains (TRON/ETH/BSC) if needed
+
+---
+
+## 📋 XCM IMPLEMENTATION PLAN
+
+**Current Status:** XCM infrastructure exists in runtime
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezkuwi/runtime/pezkuwichain/src/xcm_config.rs`
+
+### Step 1: Add Asset Hub USDT Location
+```rust
+// In xcm_config.rs
+parameter_types! {
+    pub AssetHubLocation: Location = Location::new(1, [Parachain(1000)]);
+    pub UsdtLocation: Location = Location::new(
+        1,
+        [Parachain(1000), GeneralIndex(1984)] // Asset Hub USDT asset ID
+    );
+}
+```
+
+### Step 2: Configure ForeignAssetTransactor
+```rust
+// Use FungiblesAdapter for pallet_assets
+pub type ForeignAssetTransactor = FungiblesAdapter<
+    Assets,  // pallet_assets
+    ConvertedConcreteId<AssetId, Balance, UsdtLocationToAssetId, JustTry>,
+    LocationConverter,
+    AccountId,
+    NoChecking,
+    CheckingAccount,
+>;
+
+// Combine with LocalAssetTransactor
+pub type AssetTransactors = (LocalAssetTransactor, ForeignAssetTransactor);
+```
+
+### Step 3: Handle Incoming USDT → wUSDT
+When XCM receives USDT from Asset Hub:
+1. Deposit to pallet_assets (Asset ID 1000 = wUSDT)
+2. User sees wUSDT in balance
+
+### Step 4: Handle Outgoing wUSDT → USDT
+When user withdraws wUSDT:
+1. Burn wUSDT (Asset ID 1000)
+2. XCM sends reserve transfer back to Asset Hub
+3. User receives USDT on Asset Hub
+
+### Testing Flow (Rococo Testnet):
+```bash
+# 1. Connect to Rococo Asset Hub
+# 2. Get test USDT
+# 3. XCM transfer to PezkuwiChain
+# 4. Verify wUSDT balance
+# 5. Withdraw wUSDT → Asset Hub USDT
+```
+
+---
+
+## ✅ WHAT'S DONE
+
 ✅ **CRITICAL BUG FIXED:** Dev genesis missing wUSDT (added to `pezkuwichain_testnet_genesis()`)
 ✅ Runtime + binary rebuilt (2m 19s + 2m 52s)
 ✅ Dev node tested (#86+ blocks, stable)
