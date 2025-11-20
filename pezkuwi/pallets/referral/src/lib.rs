@@ -111,7 +111,7 @@ pub mod pallet {
 	use super::*;
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
-	use pallet_identity_kyc::types::{KycLevel, KycStatus, OnKycApproved};
+	use pallet_identity_kyc::types::{KycStatus, OnKycApproved};
 	use crate::types::{
 		InviterProvider, ReferralScoreProvider, RawScore
 	};
@@ -245,7 +245,7 @@ pub mod pallet {
 			if pallet_identity_kyc::Pallet::<T>::get_kyc_status(who) == pallet_identity_kyc::types::KycLevel::Approved {
 				// Determine the referrer: either from pending referral or use default (founder)
 				let referrer = PendingReferrals::<T>::take(who)
-					.unwrap_or_else(|| T::DefaultReferrer::get());
+					.unwrap_or_else(T::DefaultReferrer::get);
 
 				// Increment referrer's count
 				let new_count = ReferralCount::<T>::get(&referrer).saturating_add(1);
@@ -280,15 +280,13 @@ pub mod pallet {
 			// 11-50 referrals = 100 + (count - 10) * 5 points (105, 110, ..., 300)
 			// 51-100 referrals = 300 + (count - 50) * 4 points (304, 308, ..., 500)
 			// 101+ referrals = 500 points (maximum)
-			let score = match referral_count {
+			match referral_count {
 				0 => 0,
 				1..=10 => referral_count * 10,
 				11..=50 => 100 + ((referral_count - 10) * 5),
 				51..=100 => 300 + ((referral_count - 50) * 4),
 				_ => 500, // Maximum score capped at 500
-			};
-
-			score.into()
+			}
 		}
 	}
 

@@ -179,9 +179,9 @@ pub mod pallet {
 
     }
 
-    impl Into<u32> for Tiki {
-        fn into(self) -> u32 {
-            self as u32
+    impl From<Tiki> for u32 {
+        fn from(val: Tiki) -> Self {
+            val as u32
         }
     }
 
@@ -400,7 +400,7 @@ pub mod pallet {
                     // Check if citizenship NFT exists
                     if Self::citizen_nft(&account).is_none() {
                         // Mint NFT (log error but continue on failure)
-                        if let Err(_) = Self::mint_citizen_nft_for_user(&account) {
+                        if Self::mint_citizen_nft_for_user(&account).is_err() {
                             log::warn!("Failed to mint citizen NFT for account: {:?}", account);
                         }
                     }
@@ -463,7 +463,7 @@ pub mod pallet {
 
             // If this role is unique (can belong to only one person), check
             if Self::is_unique_role(&tiki) {
-                ensure!(Self::tiki_holder(&tiki).is_none(), Error::<T>::RoleAlreadyTaken);
+                ensure!(Self::tiki_holder(tiki).is_none(), Error::<T>::RoleAlreadyTaken);
             }
 
             // Check if user already has this role
@@ -477,7 +477,7 @@ pub mod pallet {
 
             // If unique role, also add to TikiHolder
             if Self::is_unique_role(&tiki) {
-                TikiHolder::<T>::insert(&tiki, dest_account);
+                TikiHolder::<T>::insert(tiki, dest_account);
             }
 
             // Update NFT metadata
@@ -506,7 +506,7 @@ pub mod pallet {
 
             // If unique role, also remove from TikiHolder
             if Self::is_unique_role(&tiki) {
-                TikiHolder::<T>::remove(&tiki);
+                TikiHolder::<T>::remove(tiki);
             }
 
             // Update NFT metadata
@@ -559,12 +559,12 @@ pub mod pallet {
             );
 
             // Set metadata - log error but don't crash
-            if let Err(_) = pallet_nfts::Pallet::<T>::set_metadata(
+            if pallet_nfts::Pallet::<T>::set_metadata(
                 T::RuntimeOrigin::from(frame_system::RawOrigin::Root),
                 collection_id,
                 nft_id_u32,
                 metadata.as_bytes().to_vec().try_into().map_err(|_| DispatchError::Other("Metadata too long"))?,
-            ) {
+            ).is_err() {
                 log::warn!("Failed to set metadata for NFT: {:?}", nft_id_u32);
             }
 
@@ -573,10 +573,7 @@ pub mod pallet {
 
         /// Checks if a specific role is unique (can belong to only one person)
         pub fn is_unique_role(tiki: &Tiki) -> bool {
-            match tiki {
-                Tiki::Serok | Tiki::SerokiMeclise | Tiki::Xezinedar | Tiki::Balyoz => true,
-                _ => false,
-            }
+            matches!(tiki, Tiki::Serok | Tiki::SerokiMeclise | Tiki::Xezinedar | Tiki::Balyoz)
         }
 
         /// Returns the assignment type of a specific role

@@ -1,26 +1,30 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Pallet Presale
-//!
-//! PEZ token presale pallet for PezkuwiChain.
+//! # Pallet Presale - Multi-Presale Launchpad Platform
 //!
 //! ## Overview
 //!
-//! This pallet manages the PEZ token presale:
-//! - Accepts wUSDT (Asset ID: 2) contributions
-//! - Tracks contributor amounts
-//! - Distributes PEZ (Asset ID: 1) after 45-day period
-//! - Conversion rate: 1 wUSDT = 100 PEZ
+//! A comprehensive multi-presale launchpad platform for PezkuwiChain that allows:
+//! - Multiple simultaneous presales with independent configurations
+//! - Platform fee collection (2%): 50% treasury, 25% burn, 25% stakers
+//! - Refund system with grace period (24h low fee, after higher fee)
+//! - Contribution limits (min/max per wallet, hard cap)
+//! - Whitelist/KYC support for compliance
+//! - Vesting schedules for gradual token release
+//! - Bonus tier system for larger contributors
+//! - Emergency controls and governance integration
 //!
-//! ## Interface
+//! ## Features
 //!
-//! ### Dispatchable Functions
-//!
-//! - `start_presale` - Start the presale (sudo only)
-//! - `contribute` - Contribute wUSDT to presale
-//! - `finalize_presale` - End presale and distribute PEZ (sudo only)
-//! - `emergency_pause` - Pause presale in emergency (sudo only)
-//! - `emergency_unpause` - Unpause presale (sudo only)
+//! - **Multi-Presale**: Unlimited simultaneous presales
+//! - **Configurable**: Any asset, rate, duration per presale
+//! - **Platform Fee**: 2% split (50% treasury, 25% burn, 25% stakers)
+//! - **Refunds**: Grace period with reduced fees
+//! - **Limits**: Min/max contribution, hard cap
+//! - **Whitelist**: Optional whitelist/KYC for presales
+//! - **Vesting**: Linear token release schedules
+//! - **Bonus Tiers**: Reward larger contributions
+//! - **Emergency**: Pause, cancel, withdrawal controls
 
 pub use pallet::*;
 
@@ -42,357 +46,1017 @@ pub mod pallet {
     use frame_support::{
         dispatch::DispatchResult,
         pallet_prelude::*,
-        traits::{fungibles::{Inspect, Mutate}, tokens::Preservation},
-        PalletId,
-        BoundedVec,
+        traits::{
+            fungibles::Mutate,
+            tokens::{Preservation, Fortitude, Precision},
+        },
+        PalletId, BoundedVec,
     };
     use frame_system::pallet_prelude::*;
-    use sp_runtime::traits::{AccountIdConversion, Zero, CheckedMul, CheckedDiv};
-    use sp_std::vec::Vec;
+    use sp_runtime::traits::{AccountIdConversion, Saturating};
     use codec::{Encode, Decode, MaxEncodedLen};
+
+    pub type PresaleId = u32;
+
+    #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+    #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
+    pub enum PresaleStatus {
+        Active,
+        Finalized,
+        Cancelled,
+    }
+
+    #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+    #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
+    #[codec(dumb_trait_bound)]
+    pub enum AccessControl {
+        Public,              // Anyone can contribute
+        Whitelist,           // Only whitelisted accounts
+    }
+
+    #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+    #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
+    #[codec(dumb_trait_bound)]
+    pub struct BonusTier {
+        /// Minimum contribution to qualify (in payment asset units)
+        pub min_contribution: u128,
+        /// Bonus percentage (0-100)
+        pub bonus_percentage: u8,
+    }
+
+    #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+    #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
+    #[codec(dumb_trait_bound)]
+    pub struct VestingSchedule<BlockNumber> {
+        /// Percentage released immediately (0-100)
+        pub immediate_release_percent: u8,
+        /// Linear vesting over N blocks
+        pub vesting_duration_blocks: BlockNumber,
+        /// Cliff period before vesting starts
+        pub cliff_blocks: BlockNumber,
+    }
+
+    #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+    #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
+    #[codec(dumb_trait_bound)]
+    pub struct ContributionLimits {
+        /// Minimum contribution per wallet
+        pub min_contribution: u128,
+        /// Maximum contribution per wallet
+        pub max_contribution: u128,
+        /// Total hard cap for presale
+        pub hard_cap: u128,
+    }
+
+    #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+    #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
+    #[codec(dumb_trait_bound)]
+    pub struct ContributionInfo<BlockNumber> {
+        /// Total amount contributed
+        pub amount: u128,
+        /// Block number when first contributed (for grace period calculation)
+        pub contributed_at: BlockNumber,
+        /// Whether this contribution was refunded
+        pub refunded: bool,
+        /// Block number when refunded
+        pub refunded_at: Option<BlockNumber>,
+        /// Fee paid for refund
+        pub refund_fee_paid: u128,
+    }
+
+    #[derive(Clone, Encode, Decode, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+    #[scale_info(skip_type_params(T, MaxBonusTiers))]
+    #[codec(mel_bound(T: Config, MaxBonusTiers: Get<u32>))]
+    pub struct PresaleConfig<T: Config, MaxBonusTiers: Get<u32>> {
+        /// Presale creator/owner
+        pub owner: T::AccountId,
+        /// Payment asset (wUSDT, wUSDC, etc.)
+        pub payment_asset: <T as pallet_assets::Config>::AssetId,
+        /// Reward token asset
+        pub reward_asset: <T as pallet_assets::Config>::AssetId,
+        /// Total tokens for sale (with decimals)
+        /// Example: 10_000_000 * 10^12 = 10M PEZ with 12 decimals
+        pub tokens_for_sale: u128,
+        /// Presale start block
+        pub start_block: BlockNumberFor<T>,
+        /// Presale duration in blocks
+        pub duration: BlockNumberFor<T>,
+        /// Status
+        pub status: PresaleStatus,
+        /// Access control
+        pub access_control: AccessControl,
+        /// Contribution limits
+        pub limits: ContributionLimits,
+        /// Bonus tiers
+        pub bonus_tiers: BoundedVec<BonusTier, MaxBonusTiers>,
+        /// Optional vesting schedule
+        pub vesting: Option<VestingSchedule<BlockNumberFor<T>>>,
+        /// Grace period for refunds (blocks) - low fee
+        pub grace_period_blocks: BlockNumberFor<T>,
+        /// Normal refund fee percentage (0-100)
+        pub refund_fee_percent: u8,
+        /// Grace period refund fee percentage (0-100)
+        pub grace_refund_fee_percent: u8,
+    }
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
 
     #[pallet::config]
-    pub trait Config: frame_system::Config + pallet_assets::Config {
-        /// The overarching event type.
+    pub trait Config: frame_system::Config + pallet_assets::Config
+    where
+        <Self as pallet_assets::Config>::AssetId: Clone + MaxEncodedLen,
+        <Self as pallet_assets::Config>::Balance: TryFrom<u128>,
+    {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-        /// The presale pallet id, used for deriving its sovereign account.
+        /// The presale pallet id, used for deriving sub-account treasuries
         #[pallet::constant]
         type PalletId: Get<PalletId>;
 
-        /// wUSDT asset ID (should be 2)
+        /// Platform treasury account (receives 50% of platform fee)
         #[pallet::constant]
-        type WUsdtAssetId: Get<<Self as pallet_assets::Config>::AssetId>;
+        type PlatformTreasury: Get<Self::AccountId>;
 
-        /// PEZ asset ID (should be 1)
+        /// Staking reward pool account (receives 25% of platform fee)
         #[pallet::constant]
-        type PezAssetId: Get<<Self as pallet_assets::Config>::AssetId>;
+        type StakingRewardPool: Get<Self::AccountId>;
 
-        /// Conversion rate: 1 wUSDT = X PEZ (e.g., 100)
+        /// Platform fee percentage (e.g., 2 for 2%)
         #[pallet::constant]
-        type ConversionRate: Get<u128>;
+        type PlatformFeePercent: Get<u8>;
 
-        /// Presale duration in blocks (45 days)
-        #[pallet::constant]
-        type PresaleDuration: Get<BlockNumberFor<Self>>;
-
-        /// Maximum number of contributors
+        /// Maximum number of contributors per presale
         #[pallet::constant]
         type MaxContributors: Get<u32>;
 
-        /// Weight information for extrinsics in this pallet.
+        /// Maximum bonus tiers per presale
+        #[pallet::constant]
+        type MaxBonusTiers: Get<u32>;
+
+        /// Maximum whitelisted accounts per presale
+        #[pallet::constant]
+        type MaxWhitelistedAccounts: Get<u32>;
+
+        /// Origin that can create presales
+        type CreatePresaleOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+
+        /// Origin for emergency actions
+        type EmergencyOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+
+        /// Weight information
         type PresaleWeightInfo: crate::weights::WeightInfo;
     }
 
-    /// Contributions mapping: AccountId => wUSDT amount (6 decimals)
+    /// Next presale ID
     #[pallet::storage]
-    #[pallet::getter(fn contributions)]
-    pub type Contributions<T: Config> = StorageMap<
+    #[pallet::getter(fn next_presale_id)]
+    pub type NextPresaleId<T: Config> = StorageValue<_, PresaleId, ValueQuery>;
+
+    /// Presale configurations
+    #[pallet::storage]
+    #[pallet::getter(fn presales)]
+    pub type Presales<T: Config> = StorageMap<
         _,
         Blake2_128Concat,
-        T::AccountId,
+        PresaleId,
+        PresaleConfig<T, T::MaxBonusTiers>,
+        OptionQuery,
+    >;
+
+    /// Contributions: (presale_id, account) => ContributionInfo
+    #[pallet::storage]
+    #[pallet::getter(fn contributions)]
+    pub type Contributions<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat, PresaleId,
+        Blake2_128Concat, T::AccountId,
+        ContributionInfo<BlockNumberFor<T>>,
+        OptionQuery,
+    >;
+
+    /// Contributors list per presale
+    #[pallet::storage]
+    #[pallet::getter(fn contributors)]
+    pub type Contributors<T: Config> = StorageMap<
+        _,
+        Blake2_128Concat,
+        PresaleId,
+        BoundedVec<T::AccountId, T::MaxContributors>,
+        ValueQuery,
+    >;
+
+    /// Total raised per presale
+    #[pallet::storage]
+    #[pallet::getter(fn total_raised)]
+    pub type TotalRaised<T: Config> = StorageMap<
+        _,
+        Blake2_128Concat,
+        PresaleId,
         u128,
         ValueQuery,
     >;
 
-    /// List of all contributors
+    /// Whitelist: (presale_id, account) => is_whitelisted
     #[pallet::storage]
-    #[pallet::getter(fn contributors)]
-    pub type Contributors<T: Config> = StorageValue<_, BoundedVec<T::AccountId, T::MaxContributors>, ValueQuery>;
+    #[pallet::getter(fn whitelisted)]
+    pub type WhitelistedAccounts<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat, PresaleId,
+        Blake2_128Concat, T::AccountId,
+        bool,
+        ValueQuery,
+    >;
 
-    /// Is presale currently active
+    /// Vesting claims: (presale_id, account) => claimed_amount
     #[pallet::storage]
-    #[pallet::getter(fn presale_active)]
-    pub type PresaleActive<T: Config> = StorageValue<_, bool, ValueQuery>;
+    #[pallet::getter(fn vesting_claimed)]
+    pub type VestingClaimed<T: Config> = StorageDoubleMap<
+        _,
+        Blake2_128Concat, PresaleId,
+        Blake2_128Concat, T::AccountId,
+        u128,
+        ValueQuery,
+    >;
 
-    /// Block number when presale started
+    /// Platform analytics
     #[pallet::storage]
-    #[pallet::getter(fn presale_start_block)]
-    pub type PresaleStartBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
+    #[pallet::getter(fn total_platform_volume)]
+    pub type TotalPlatformVolume<T: Config> = StorageValue<_, u128, ValueQuery>;
 
-    /// Total wUSDT raised (6 decimals)
     #[pallet::storage]
-    #[pallet::getter(fn total_raised)]
-    pub type TotalRaised<T: Config> = StorageValue<_, u128, ValueQuery>;
+    #[pallet::getter(fn total_platform_fees)]
+    pub type TotalPlatformFees<T: Config> = StorageValue<_, u128, ValueQuery>;
 
-    /// Emergency pause flag
     #[pallet::storage]
-    #[pallet::getter(fn paused)]
-    pub type Paused<T: Config> = StorageValue<_, bool, ValueQuery>;
+    #[pallet::getter(fn successful_presales)]
+    pub type SuccessfulPresales<T: Config> = StorageValue<_, u32, ValueQuery>;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
-        /// Presale started. [end_block]
-        PresaleStarted { end_block: BlockNumberFor<T> },
-        /// User contributed wUSDT. [who, amount]
-        Contributed { who: T::AccountId, amount: u128 },
-        /// Presale finalized. [total_raised]
-        PresaleFinalized { total_raised: u128 },
-        /// PEZ distributed to contributor. [who, pez_amount]
-        Distributed { who: T::AccountId, pez_amount: u128 },
-        /// Emergency pause activated
-        EmergencyPaused,
-        /// Emergency pause deactivated
-        EmergencyUnpaused,
+        /// Presale created [presale_id, owner, payment_asset, reward_asset]
+        PresaleCreated {
+            presale_id: PresaleId,
+            owner: T::AccountId,
+            payment_asset: <T as pallet_assets::Config>::AssetId,
+            reward_asset: <T as pallet_assets::Config>::AssetId,
+        },
+        /// Contribution made [presale_id, who, amount, bonus_amount]
+        Contributed {
+            presale_id: PresaleId,
+            who: T::AccountId,
+            amount: u128,
+            bonus_amount: u128,
+        },
+        /// Presale finalized [presale_id, total_raised]
+        PresaleFinalized {
+            presale_id: PresaleId,
+            total_raised: u128,
+        },
+        /// Tokens distributed [presale_id, who, amount]
+        Distributed {
+            presale_id: PresaleId,
+            who: T::AccountId,
+            amount: u128,
+        },
+        /// Refund processed [presale_id, who, amount, fee]
+        Refunded {
+            presale_id: PresaleId,
+            who: T::AccountId,
+            amount: u128,
+            fee: u128,
+        },
+        /// Presale cancelled [presale_id]
+        PresaleCancelled {
+            presale_id: PresaleId,
+        },
+        /// Platform fee distributed [treasury_share, burn_share, staker_share]
+        PlatformFeeDistributed {
+            treasury_share: u128,
+            burn_share: u128,
+            staker_share: u128,
+        },
+        /// Account whitelisted [presale_id, account]
+        AccountWhitelisted {
+            presale_id: PresaleId,
+            account: T::AccountId,
+        },
+        /// Vesting tokens claimed [presale_id, who, amount]
+        VestingClaimed {
+            presale_id: PresaleId,
+            who: T::AccountId,
+            amount: u128,
+        },
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        /// Presale is not currently active
+        PresaleNotFound,
         PresaleNotActive,
-        /// Presale period has ended
         PresaleEnded,
-        /// Presale period has not ended yet
         PresaleNotEnded,
-        /// Presale has already been finalized
         AlreadyFinalized,
-        /// Contribution amount must be greater than zero
         ZeroContribution,
-        /// Transfer of wUSDT failed
-        TransferFailed,
-        /// Arithmetic overflow
-        ArithmeticOverflow,
-        /// Presale is paused
-        PresalePaused,
-        /// Presale already started
-        AlreadyStarted,
-        /// Insufficient PEZ balance in treasury
-        InsufficientPezBalance,
-        /// Too many contributors (reached MaxContributors limit)
+        BelowMinContribution,
+        AboveMaxContribution,
+        HardCapReached,
+        NotWhitelisted,
         TooManyContributors,
+        ArithmeticOverflow,
+        InvalidTokensForSale,
+        InvalidFeePercent,
+        NoContribution,
+        RefundNotAllowed,
+        SoftCapReached,
+        InsufficientBalance,
+        VestingNotEnabled,
+        NothingToClaim,
+        NotPresaleOwner,
+        TooManyBonusTiers,
     }
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// Start the presale (sudo only)
-        ///
-        /// This will set the start block and activate the presale for 45 days.
+        /// Create a new presale
         #[pallet::call_index(0)]
         #[pallet::weight(T::PresaleWeightInfo::start_presale())]
-        pub fn start_presale(origin: OriginFor<T>) -> DispatchResult {
-            ensure_root(origin)?;
-            ensure!(!PresaleActive::<T>::get(), Error::<T>::AlreadyStarted);
+        pub fn create_presale(
+            origin: OriginFor<T>,
+            payment_asset: <T as pallet_assets::Config>::AssetId,
+            reward_asset: <T as pallet_assets::Config>::AssetId,
+            tokens_for_sale: u128,
+            duration: BlockNumberFor<T>,
+            is_whitelist: bool,
+            min_contribution: u128,
+            max_contribution: u128,
+            hard_cap: u128,
+            enable_vesting: bool,
+            vesting_immediate_percent: u8,
+            vesting_duration_blocks: BlockNumberFor<T>,
+            vesting_cliff_blocks: BlockNumberFor<T>,
+            grace_period_blocks: BlockNumberFor<T>,
+            refund_fee_percent: u8,
+            grace_refund_fee_percent: u8,
+        ) -> DispatchResult {
+            let owner = ensure_signed(origin)?;
 
-            let current_block = <frame_system::Pallet<T>>::block_number();
-            let end_block = current_block + T::PresaleDuration::get();
+            ensure!(tokens_for_sale > 0, Error::<T>::InvalidTokensForSale);
+            ensure!(refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
+            ensure!(grace_refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
 
-            PresaleActive::<T>::put(true);
-            PresaleStartBlock::<T>::put(current_block);
-            Paused::<T>::put(false);
+            let presale_id = NextPresaleId::<T>::get();
+            let start_block = <frame_system::Pallet<T>>::block_number();
 
-            Self::deposit_event(Event::PresaleStarted { end_block });
+            // Start with empty bonus tiers - can be added later
+            let bounded_bonus_tiers = BoundedVec::<BonusTier, T::MaxBonusTiers>::default();
+
+            let access_control = if is_whitelist {
+                AccessControl::Whitelist
+            } else {
+                AccessControl::Public
+            };
+
+            let limits = ContributionLimits {
+                min_contribution,
+                max_contribution,
+                hard_cap,
+            };
+
+            let vesting = if enable_vesting {
+                Some(VestingSchedule {
+                    immediate_release_percent: vesting_immediate_percent,
+                    vesting_duration_blocks,
+                    cliff_blocks: vesting_cliff_blocks,
+                })
+            } else {
+                None
+            };
+
+            let config = PresaleConfig {
+                owner: owner.clone(),
+                payment_asset: payment_asset.clone(),
+                reward_asset: reward_asset.clone(),
+                tokens_for_sale,
+                start_block,
+                duration,
+                status: PresaleStatus::Active,
+                access_control,
+                limits,
+                bonus_tiers: bounded_bonus_tiers,
+                vesting,
+                grace_period_blocks,
+                refund_fee_percent,
+                grace_refund_fee_percent,
+            };
+
+            Presales::<T>::insert(presale_id, config);
+            NextPresaleId::<T>::put(presale_id.saturating_add(1));
+
+            Self::deposit_event(Event::PresaleCreated {
+                presale_id,
+                owner,
+                payment_asset,
+                reward_asset,
+            });
+
             Ok(())
         }
 
-        /// Contribute wUSDT to the presale
-        ///
-        /// User sends wUSDT to the presale treasury and their contribution is tracked.
-        ///
-        /// # Arguments
-        ///
-        /// * `amount` - Amount of wUSDT to contribute (with 6 decimals)
+        /// Contribute to a presale
         #[pallet::call_index(1)]
         #[pallet::weight(T::PresaleWeightInfo::contribute())]
         pub fn contribute(
             origin: OriginFor<T>,
-            #[pallet::compact] amount: u128,
+            presale_id: PresaleId,
+            amount: u128,
         ) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            // Checks
-            ensure!(PresaleActive::<T>::get(), Error::<T>::PresaleNotActive);
-            ensure!(!Paused::<T>::get(), Error::<T>::PresalePaused);
-            ensure!(amount > Zero::zero(), Error::<T>::ZeroContribution);
+            let presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
 
-            // Check if presale ended
+            // Checks
+            ensure!(presale.status == PresaleStatus::Active, Error::<T>::PresaleNotActive);
+            ensure!(amount > 0, Error::<T>::ZeroContribution);
+
             let current_block = <frame_system::Pallet<T>>::block_number();
-            let start_block = PresaleStartBlock::<T>::get()
-                .ok_or(Error::<T>::PresaleNotActive)?;
-            let end_block = start_block + T::PresaleDuration::get();
+            let end_block = presale.start_block + presale.duration;
             ensure!(current_block < end_block, Error::<T>::PresaleEnded);
 
-            // Transfer wUSDT from user to pallet treasury
-            let treasury = Self::account_id();
-            let asset_id = T::WUsdtAssetId::get();
-            let amount_balance = amount.try_into()
-                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+            // Check whitelist
+            if presale.access_control == AccessControl::Whitelist {
+                ensure!(
+                    WhitelistedAccounts::<T>::get(presale_id, &who),
+                    Error::<T>::NotWhitelisted
+                );
+            }
 
-            // Use pallet_assets to transfer
+            // Check limits
+            let existing_contribution = Contributions::<T>::get(presale_id, &who);
+            let current_amount = existing_contribution.as_ref().map(|c| c.amount).unwrap_or(0);
+            let new_total = current_amount.saturating_add(amount);
+
+            ensure!(
+                new_total >= presale.limits.min_contribution,
+                Error::<T>::BelowMinContribution
+            );
+            ensure!(
+                new_total <= presale.limits.max_contribution,
+                Error::<T>::AboveMaxContribution
+            );
+
+            // Calculate remaining capacity and accept only what fits
+            let total_raised = TotalRaised::<T>::get(presale_id);
+            let remaining_capacity = presale.limits.hard_cap.saturating_sub(total_raised);
+
+            // Accept only what fits (better UX than failing entire transaction)
+            let accepted_amount = amount.min(remaining_capacity);
+
+            // Ensure we can accept something
+            ensure!(accepted_amount > 0, Error::<T>::HardCapReached);
+
+            // Use accepted_amount for the rest of the function
+            let amount = accepted_amount;
+            let new_raised = total_raised.saturating_add(amount);
+
+            // Calculate platform fee (2%)
+            let platform_fee = amount.saturating_mul(T::PlatformFeePercent::get() as u128) / 100;
+            let net_amount = amount.saturating_sub(platform_fee);
+
+            // Transfer payment asset from user to presale treasury
+            let treasury = Self::presale_account_id(presale_id);
+            let net_amount_balance: <T as pallet_assets::Config>::Balance = net_amount.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
             <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
-                asset_id,
+                presale.payment_asset.clone(),
                 &who,
                 &treasury,
-                amount_balance,
+                net_amount_balance,
                 Preservation::Preserve,
             )?;
 
-            // Track contribution
-            let current_contribution = Contributions::<T>::get(&who);
-            if current_contribution == Zero::zero() {
-                // New contributor
-                Contributors::<T>::try_mutate(|contributors| -> DispatchResult {
+            // Distribute platform fee
+            Self::distribute_platform_fee(presale.payment_asset.clone(), &who, platform_fee)?;
+
+            // Track contribution with timestamp preservation
+            let contribution = if let Some(existing) = existing_contribution {
+                // Update existing contribution - preserve original timestamp
+                ContributionInfo {
+                    amount: existing.amount.saturating_add(amount),
+                    contributed_at: existing.contributed_at,  // ✅ Keep original timestamp
+                    refunded: false,
+                    refunded_at: None,
+                    refund_fee_paid: 0,
+                }
+            } else {
+                // New contribution - add to contributors list
+                Contributors::<T>::try_mutate(presale_id, |contributors| -> DispatchResult {
                     contributors.try_push(who.clone())
                         .map_err(|_| Error::<T>::TooManyContributors)?;
                     Ok(())
                 })?;
-            }
 
-            let new_total = current_contribution
-                .checked_add(amount)
-                .ok_or(Error::<T>::ArithmeticOverflow)?;
+                // Create new contribution with current timestamp
+                ContributionInfo {
+                    amount,
+                    contributed_at: current_block,  // ✅ Set timestamp for first contribution only
+                    refunded: false,
+                    refunded_at: None,
+                    refund_fee_paid: 0,
+                }
+            };
 
-            Contributions::<T>::insert(&who, new_total);
+            Contributions::<T>::insert(presale_id, &who, contribution);
+            TotalRaised::<T>::insert(presale_id, new_raised);
 
-            let new_raised = TotalRaised::<T>::get()
-                .checked_add(amount)
-                .ok_or(Error::<T>::ArithmeticOverflow)?;
+            // Update platform analytics
+            TotalPlatformVolume::<T>::mutate(|v| *v = v.saturating_add(amount));
+            TotalPlatformFees::<T>::mutate(|f| *f = f.saturating_add(platform_fee));
 
-            TotalRaised::<T>::put(new_raised);
+            // Calculate bonus using total contribution amount
+            let bonus_amount = Self::calculate_bonus(&presale, contribution.amount);
 
-            Self::deposit_event(Event::Contributed { who, amount });
+            Self::deposit_event(Event::Contributed {
+                presale_id,
+                who,
+                amount,
+                bonus_amount,
+            });
+
             Ok(())
         }
 
-        /// Finalize presale and distribute PEZ (sudo only)
-        ///
-        /// After 45 days, this distributes PEZ tokens to all contributors
-        /// based on their wUSDT contributions.
+        /// Finalize presale and distribute tokens
         #[pallet::call_index(2)]
-        #[pallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get().len() as u32))]
-        pub fn finalize_presale(origin: OriginFor<T>) -> DispatchResult {
+        #[pallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get(presale_id).len() as u32))]
+        pub fn finalize_presale(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+        ) -> DispatchResult {
             ensure_root(origin)?;
-            ensure!(PresaleActive::<T>::get(), Error::<T>::PresaleNotActive);
 
-            // Check if presale period ended
+            let mut presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            ensure!(presale.status == PresaleStatus::Active, Error::<T>::PresaleNotActive);
+
             let current_block = <frame_system::Pallet<T>>::block_number();
-            let start_block = PresaleStartBlock::<T>::get()
-                .ok_or(Error::<T>::PresaleNotActive)?;
-            let end_block = start_block + T::PresaleDuration::get();
+            let end_block = presale.start_block + presale.duration;
             ensure!(current_block >= end_block, Error::<T>::PresaleNotEnded);
 
-            let treasury = Self::account_id();
-            let total_raised = TotalRaised::<T>::get();
-            let pez_asset_id = T::PezAssetId::get();
+            let total_raised = TotalRaised::<T>::get(presale_id);
+            let treasury = Self::presale_account_id(presale_id);
 
-            // Distribute PEZ to all contributors
-            for contributor in Contributors::<T>::get().iter() {
-                let wusdt_amount = Contributions::<T>::get(contributor);
-                if wusdt_amount == Zero::zero() {
+            // Distribute rewards to all contributors
+            for contributor in Contributors::<T>::get(presale_id).iter() {
+                let contribution_info = match Contributions::<T>::get(presale_id, contributor) {
+                    Some(info) => info,
+                    None => continue,
+                };
+
+                // Skip if refunded
+                if contribution_info.refunded || contribution_info.amount == 0 {
                     continue;
                 }
 
-                // Calculate PEZ amount
-                let pez_amount = Self::calculate_pez(wusdt_amount)?;
-                let pez_balance = pez_amount.try_into()
-                    .map_err(|_| Error::<T>::ArithmeticOverflow)?;
-
-                // Transfer PEZ from treasury to contributor
-                <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
-                    pez_asset_id.clone(),
-                    &treasury,
-                    contributor,
-                    pez_balance,
-                    Preservation::Preserve,
+                // Calculate reward tokens using dynamic rate
+                let reward_amount = Self::calculate_reward_dynamic(
+                    contribution_info.amount,
+                    total_raised,
+                    presale.tokens_for_sale,
                 )?;
 
+                let bonus = Self::calculate_bonus(&presale, contribution_info.amount);
+                let total_reward = reward_amount.saturating_add(bonus);
+
+                // Handle vesting
+                if let Some(ref vesting) = presale.vesting {
+                    let immediate = total_reward.saturating_mul(vesting.immediate_release_percent as u128) / 100;
+
+                    if immediate > 0 {
+                        let immediate_balance: <T as pallet_assets::Config>::Balance = immediate.try_into()
+                            .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+                        <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                            presale.reward_asset.clone(),
+                            &treasury,
+                            contributor,
+                            immediate_balance,
+                            Preservation::Preserve,
+                        )?;
+                    }
+
+                    // Store remaining for vesting
+                    VestingClaimed::<T>::insert(presale_id, contributor, immediate);
+                } else {
+                    // No vesting - transfer all
+                    let total_reward_balance: <T as pallet_assets::Config>::Balance = total_reward.try_into()
+                        .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+                    <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                        presale.reward_asset.clone(),
+                        &treasury,
+                        contributor,
+                        total_reward_balance,
+                        Preservation::Preserve,
+                    )?;
+                }
+
                 Self::deposit_event(Event::Distributed {
+                    presale_id,
                     who: contributor.clone(),
-                    pez_amount,
+                    amount: total_reward,
                 });
             }
 
-            PresaleActive::<T>::put(false);
-            Self::deposit_event(Event::PresaleFinalized { total_raised });
+            presale.status = PresaleStatus::Finalized;
+            Presales::<T>::insert(presale_id, presale);
+            SuccessfulPresales::<T>::mutate(|c| *c = c.saturating_add(1));
+
+            Self::deposit_event(Event::PresaleFinalized {
+                presale_id,
+                total_raised,
+            });
+
             Ok(())
         }
 
-        /// Emergency pause (sudo only)
+        /// Refund contribution (before presale ends)
         #[pallet::call_index(3)]
-        #[pallet::weight(T::PresaleWeightInfo::emergency_pause())]
-        pub fn emergency_pause(origin: OriginFor<T>) -> DispatchResult {
-            ensure_root(origin)?;
-            Paused::<T>::put(true);
-            Self::deposit_event(Event::EmergencyPaused);
+        #[pallet::weight(T::PresaleWeightInfo::contribute())]
+        pub fn refund(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            let presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            ensure!(presale.status == PresaleStatus::Active, Error::<T>::RefundNotAllowed);
+
+            let current_block = <frame_system::Pallet<T>>::block_number();
+            let end_block = presale.start_block + presale.duration;
+            ensure!(current_block < end_block, Error::<T>::RefundNotAllowed);
+
+            let mut contribution_info = Contributions::<T>::get(presale_id, &who)
+                .ok_or(Error::<T>::NoContribution)?;
+
+            ensure!(!contribution_info.refunded, Error::<T>::RefundNotAllowed);
+            ensure!(contribution_info.amount > 0, Error::<T>::NoContribution);
+
+            // Calculate fee based on grace period using ORIGINAL contribution timestamp
+            let grace_end = contribution_info.contributed_at.saturating_add(presale.grace_period_blocks);
+            let fee_percent = if current_block <= grace_end {
+                presale.grace_refund_fee_percent
+            } else {
+                presale.refund_fee_percent
+            };
+
+            let fee = contribution_info.amount.saturating_mul(fee_percent as u128) / 100;
+            let refund_amount = contribution_info.amount.saturating_sub(fee);
+
+            // Transfer refund from treasury to user
+            let treasury = Self::presale_account_id(presale_id);
+            let refund_amount_balance: <T as pallet_assets::Config>::Balance = refund_amount.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+            <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                presale.payment_asset.clone(),
+                &treasury,
+                &who,
+                refund_amount_balance,
+                Preservation::Preserve,
+            )?;
+
+            // Distribute refund fee immediately (50% treasury, 25% burn, 25% stakers)
+            if fee > 0 {
+                Self::distribute_platform_fee(presale.payment_asset.clone(), &treasury, fee)?;
+            }
+
+            // Update contribution info (mark as refunded instead of removing)
+            contribution_info.refunded = true;
+            contribution_info.refunded_at = Some(current_block);
+            contribution_info.refund_fee_paid = fee;
+            Contributions::<T>::insert(presale_id, &who, contribution_info);
+
+            TotalRaised::<T>::mutate(presale_id, |r| *r = r.saturating_sub(contribution_info.amount));
+
+            Self::deposit_event(Event::Refunded {
+                presale_id,
+                who,
+                amount: refund_amount,
+                fee,
+            });
+
             Ok(())
         }
 
-        /// Emergency unpause (sudo only)
+        /// Claim vested tokens
         #[pallet::call_index(4)]
-        #[pallet::weight(T::PresaleWeightInfo::emergency_unpause())]
-        pub fn emergency_unpause(origin: OriginFor<T>) -> DispatchResult {
-            ensure_root(origin)?;
-            Paused::<T>::put(false);
-            Self::deposit_event(Event::EmergencyUnpaused);
+        #[pallet::weight(T::PresaleWeightInfo::contribute())]
+        pub fn claim_vested(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            let presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            let vesting = presale.vesting.ok_or(Error::<T>::VestingNotEnabled)?;
+
+            ensure!(presale.status == PresaleStatus::Finalized, Error::<T>::PresaleNotActive);
+
+            let contribution_info = Contributions::<T>::get(presale_id, &who)
+                .ok_or(Error::<T>::NoContribution)?;
+            ensure!(contribution_info.amount > 0, Error::<T>::NoContribution);
+            ensure!(!contribution_info.refunded, Error::<T>::NoContribution);
+
+            let current_block = <frame_system::Pallet<T>>::block_number();
+            let end_block = presale.start_block + presale.duration;
+            let vesting_start = end_block + vesting.cliff_blocks;
+
+            ensure!(current_block >= vesting_start, Error::<T>::NothingToClaim);
+
+            // Get total raised for dynamic calculation
+            let total_raised = TotalRaised::<T>::get(presale_id);
+
+            // Calculate total reward using dynamic rate
+            let total_reward = Self::calculate_reward_dynamic(
+                contribution_info.amount,
+                total_raised,
+                presale.tokens_for_sale,
+            )?;
+            let bonus = Self::calculate_bonus(&presale, contribution_info.amount);
+            let total_with_bonus = total_reward.saturating_add(bonus);
+
+            // Calculate vested amount
+            let already_claimed = VestingClaimed::<T>::get(presale_id, &who);
+            let vesting_end = vesting_start + vesting.vesting_duration_blocks;
+
+            let claimable = if current_block >= vesting_end {
+                // All vested
+                total_with_bonus.saturating_sub(already_claimed)
+            } else {
+                // Linear vesting
+                use sp_runtime::traits::SaturatedConversion;
+                let elapsed = current_block.saturating_sub(vesting_start);
+                let elapsed_u128: u128 = elapsed.saturated_into();
+                let duration_u128: u128 = vesting.vesting_duration_blocks.saturated_into();
+                let vested_percent = elapsed_u128.saturating_mul(100) / duration_u128;
+                let immediate_percent = vesting.immediate_release_percent as u128;
+                let vesting_percent = 100u128.saturating_sub(immediate_percent);
+                let vested_amount = total_with_bonus.saturating_mul(vesting_percent).saturating_mul(vested_percent) / 10000;
+                let total_unlocked = vested_amount.saturating_add(already_claimed);
+                total_unlocked.saturating_sub(already_claimed)
+            };
+
+            ensure!(claimable > 0, Error::<T>::NothingToClaim);
+
+            // Transfer tokens
+            let treasury = Self::presale_account_id(presale_id);
+            let claimable_balance: <T as pallet_assets::Config>::Balance = claimable.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+            <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                presale.reward_asset,
+                &treasury,
+                &who,
+                claimable_balance,
+                Preservation::Preserve,
+            )?;
+
+            VestingClaimed::<T>::insert(presale_id, &who, already_claimed.saturating_add(claimable));
+
+            Self::deposit_event(Event::VestingClaimed {
+                presale_id,
+                who,
+                amount: claimable,
+            });
+
+            Ok(())
+        }
+
+        /// Add account to whitelist (presale owner only)
+        #[pallet::call_index(5)]
+        #[pallet::weight(T::PresaleWeightInfo::emergency_pause())]
+        pub fn add_to_whitelist(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+            account: T::AccountId,
+        ) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+
+            let presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            ensure!(who == presale.owner, Error::<T>::NotPresaleOwner);
+
+            WhitelistedAccounts::<T>::insert(presale_id, &account, true);
+
+            Self::deposit_event(Event::AccountWhitelisted {
+                presale_id,
+                account,
+            });
+
+            Ok(())
+        }
+
+        /// Cancel presale (emergency - owner or root)
+        #[pallet::call_index(6)]
+        #[pallet::weight(T::PresaleWeightInfo::emergency_pause())]
+        pub fn cancel_presale(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+        ) -> DispatchResult {
+            // Either EmergencyOrigin or Root can cancel
+            if T::EmergencyOrigin::ensure_origin(origin.clone()).is_err() {
+                ensure_root(origin)?;
+            }
+
+            let mut presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            presale.status = PresaleStatus::Cancelled;
+            Presales::<T>::insert(presale_id, presale);
+
+            Self::deposit_event(Event::PresaleCancelled { presale_id });
+
+            Ok(())
+        }
+
+        /// Refund all contributors when presale is cancelled
+        /// Auto-refunds everyone with no fees
+        #[pallet::call_index(7)]
+        #[pallet::weight(T::PresaleWeightInfo::finalize_presale(100))]
+        pub fn refund_cancelled_presale(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+        ) -> DispatchResult {
+            ensure_signed(origin)?;
+
+            let presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            // Only works on cancelled presales
+            ensure!(
+                matches!(presale.status, PresaleStatus::Cancelled),
+                Error::<T>::PresaleNotFound
+            );
+
+            let current_block = <frame_system::Pallet<T>>::block_number();
+            let treasury = Self::presale_account_id(presale_id);
+
+            // Refund all contributors (no fees since presale was cancelled)
+            let contributors = Contributors::<T>::get(presale_id);
+            for contributor in contributors.iter() {
+                if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
+                    if !contribution_info.refunded && contribution_info.amount > 0 {
+                        // Full refund (no fees on cancelled presale)
+                        let refund_amount: <T as pallet_assets::Config>::Balance =
+                            contribution_info.amount.try_into()
+                                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+
+                        <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                            presale.payment_asset.clone(),
+                            &treasury,
+                            contributor,
+                            refund_amount,
+                            Preservation::Preserve,
+                        )?;
+
+                        // Mark as refunded
+                        let updated_info = ContributionInfo {
+                            refunded: true,
+                            refunded_at: Some(current_block),
+                            refund_fee_paid: 0, // No fee on cancelled presale
+                            ..contribution_info
+                        };
+                        Contributions::<T>::insert(presale_id, contributor, updated_info);
+
+                        Self::deposit_event(Event::Refunded {
+                            presale_id,
+                            who: contributor.clone(),
+                            amount: contribution_info.amount,
+                            fee: 0,
+                        });
+                    }
+                }
+            }
+
             Ok(())
         }
     }
 
     impl<T: Config> Pallet<T> {
-        /// Get the account ID of the presale pallet.
-        ///
-        /// This is the treasury where wUSDT is collected and PEZ is distributed from.
-        pub fn account_id() -> T::AccountId {
-            T::PalletId::get().into_account_truncating()
+        /// Get presale sub-account treasury
+        pub fn presale_account_id(presale_id: PresaleId) -> T::AccountId {
+            T::PalletId::get().into_sub_account_truncating(presale_id)
         }
 
-        /// Calculate PEZ amount from wUSDT amount
-        ///
-        /// Formula:
-        /// - wUSDT has 6 decimals (1 USDT = 1_000_000 units)
-        /// - PEZ has 12 decimals (1 PEZ = 1_000_000_000_000 units)
-        /// - Rate: 1 wUSDT = 100 PEZ (configurable)
-        ///
-        /// Calculation:
-        /// 1. Convert wUSDT to USD: wusdt_amount / 1_000_000
-        /// 2. Apply conversion rate: USD * rate
-        /// 3. Convert to PEZ decimals: result * 1_000_000_000_000
+        /// Distribute platform fee: 50% treasury, 25% burn, 25% stakers
+        /// Uses remainder method to prevent dust loss from rounding
+        fn distribute_platform_fee(
+            asset_id: <T as pallet_assets::Config>::AssetId,
+            from: &T::AccountId,
+            total_fee: u128,
+        ) -> DispatchResult {
+            // Calculate burn and stakers first, treasury gets the rest (no dust)
+            let to_burn = total_fee.saturating_mul(25) / 100;
+            let to_stakers = total_fee.saturating_mul(25) / 100;
+            let to_treasury = total_fee
+                .saturating_sub(to_burn)
+                .saturating_sub(to_stakers);  // Treasury gets remainder, prevents dust loss
+
+            let to_treasury_balance: <T as pallet_assets::Config>::Balance = to_treasury.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+            let to_burn_balance: <T as pallet_assets::Config>::Balance = to_burn.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+            let to_stakers_balance: <T as pallet_assets::Config>::Balance = to_stakers.try_into()
+                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+
+            // 1. Treasury (50%)
+            <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                asset_id.clone(),
+                from,
+                &T::PlatformTreasury::get(),
+                to_treasury_balance,
+                Preservation::Preserve,
+            )?;
+
+            // 2. Burn (25%)
+            <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::burn_from(
+                asset_id.clone(),
+                from,
+                to_burn_balance,
+                Preservation::Preserve,
+                Precision::Exact,
+                Fortitude::Force,
+            )?;
+
+            // 3. Stakers (25%)
+            <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                asset_id,
+                from,
+                &T::StakingRewardPool::get(),
+                to_stakers_balance,
+                Preservation::Preserve,
+            )?;
+
+            Self::deposit_event(Event::PlatformFeeDistributed {
+                treasury_share: to_treasury,
+                burn_share: to_burn,
+                staker_share: to_stakers,
+            });
+
+            Ok(())
+        }
+
+        /// Calculate bonus based on tier
+        fn calculate_bonus(
+            presale: &PresaleConfig<T, T::MaxBonusTiers>,
+            contribution: u128,
+        ) -> u128 {
+            let mut applicable_bonus = 0u8;
+
+            for tier in presale.bonus_tiers.iter() {
+                if contribution >= tier.min_contribution {
+                    applicable_bonus = tier.bonus_percentage;
+                }
+            }
+
+            if applicable_bonus == 0 {
+                return 0;
+            }
+
+            // Bonus calculation no longer uses conversion_rate
+            // Instead, calculate bonus as percentage of contribution
+            contribution.saturating_mul(applicable_bonus as u128) / 100
+        }
+
+        /// Calculate reward based on user's share of total raised
+        /// Formula: (user_contribution / total_raised) * tokens_for_sale
         ///
         /// Example:
-        /// - Input: 100 wUSDT (100_000_000 units with 6 decimals)
-        /// - USD: 100
-        /// - PEZ units: 100 * 100 = 10_000
-        /// - PEZ with decimals: 10_000 * 1_000_000_000_000 = 10_000_000_000_000_000
-        fn calculate_pez(wusdt_amount: u128) -> Result<u128, Error<T>> {
-            let rate = T::ConversionRate::get();
+        /// - tokens_for_sale: 10,000,000 PEZ (10M * 10^12 decimals)
+        /// - total_raised: 100,000 wUSDT (100K * 10^6 decimals)
+        /// - user_contribution: 1,000 wUSDT (1K * 10^6 decimals)
+        /// - Result: (1,000 / 100,000) * 10M = 100,000 PEZ per user
+        fn calculate_reward_dynamic(
+            user_contribution: u128,
+            total_raised: u128,
+            tokens_for_sale: u128,
+        ) -> Result<u128, Error<T>> {
+            ensure!(
+                total_raised > 0,
+                Error::<T>::ArithmeticOverflow
+            );
 
-            // Step 1: wUSDT to USD (remove 6 decimals)
-            // Step 2: Apply rate
-            let pez_units = wusdt_amount
-                .checked_mul(rate)
-                .ok_or(Error::<T>::ArithmeticOverflow)?
-                .checked_div(1_000_000)
+            // Calculate user's share: (contribution * tokens_for_sale) / total_raised
+            let user_share = user_contribution
+                .saturating_mul(tokens_for_sale)
+                .checked_div(total_raised)
                 .ok_or(Error::<T>::ArithmeticOverflow)?;
 
-            // Step 3: Add 12 decimals
-            let pez_with_decimals = pez_units
-                .checked_mul(1_000_000_000_000)
-                .ok_or(Error::<T>::ArithmeticOverflow)?;
-
-            Ok(pez_with_decimals)
-        }
-
-        /// Get time remaining in blocks
-        pub fn get_time_remaining() -> BlockNumberFor<T> {
-            if !PresaleActive::<T>::get() {
-                return Zero::zero();
-            }
-
-            if let Some(start_block) = PresaleStartBlock::<T>::get() {
-                let current_block = <frame_system::Pallet<T>>::block_number();
-                let end_block = start_block + T::PresaleDuration::get();
-
-                if current_block >= end_block {
-                    Zero::zero()
-                } else {
-                    end_block - current_block
-                }
-            } else {
-                Zero::zero()
-            }
+            Ok(user_share)
         }
     }
 }

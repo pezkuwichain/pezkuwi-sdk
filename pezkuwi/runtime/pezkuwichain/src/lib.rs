@@ -495,22 +495,28 @@ impl pallet_token_wrapper::Config for Runtime {
     type WrapperAssetId = WrapperAssetId;
 }
 
-// Presale Config
+// Presale Config - Multi-Presale Launchpad Platform
 parameter_types! {
 	pub const PresalePalletId: frame_support::PalletId = frame_support::PalletId(*b"py/prsal");
-	pub const ConversionRate: u128 = 20; // 1 wUSDT = 20 PEZ
-	pub const PresaleDuration: BlockNumber = 45 * 24 * 60 * 10; // 45 days (6s blocks)
-	pub const MaxContributors: u32 = 10000; // Maximum 10,000 contributors
+	pub const PlatformFeePercent: u8 = 2; // 2% platform fee
+	pub const MaxContributors: u32 = 10000; // Max contributors per presale
+	pub const MaxBonusTiers: u32 = 5; // Max bonus tiers per presale
+	pub const MaxWhitelistedAccounts: u32 = 10000; // Max whitelist per presale
+	pub PlatformTreasuryAccount: AccountId = Treasury::account_id();
+	pub StakingRewardPoolAccount: AccountId = AccountId::from([0u8; 32]); // TODO: Set real staking pool
 }
 
 impl pallet_presale::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type PalletId = PresalePalletId;
-	type WUsdtAssetId = WUsdtAssetId;
-	type PezAssetId = PezAssetId;
-	type ConversionRate = ConversionRate;
-	type PresaleDuration = PresaleDuration;
+	type PlatformTreasury = PlatformTreasuryAccount;
+	type StakingRewardPool = StakingRewardPoolAccount;
+	type PlatformFeePercent = PlatformFeePercent;
 	type MaxContributors = MaxContributors;
+	type MaxBonusTiers = MaxBonusTiers;
+	type MaxWhitelistedAccounts = MaxWhitelistedAccounts;
+	type CreatePresaleOrigin = EnsureSigned<AccountId>;
+	type EmergencyOrigin = EnsureRoot<AccountId>;
 	type PresaleWeightInfo = pallet_presale::weights::SubstrateWeight<Runtime>;
 }
 

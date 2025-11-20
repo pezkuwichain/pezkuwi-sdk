@@ -227,8 +227,10 @@ pub mod pallet {
 	}
 
 	#[derive(Encode, Decode, Clone, Copy, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
-	pub enum EpochState {
-		Open,        // Active epoch - scores being collected
+	#[derive(Default)]
+ pub enum EpochState {
+		#[default]
+  Open,        // Active epoch - scores being collected
 		ClaimPeriod, // Claim period - claims can be made for 1 week
 		Closed,      // Closed - unclaimed rewards have been clawed back
 	}
@@ -243,11 +245,7 @@ pub mod pallet {
 		}
 	}
 
-	impl Default for EpochState {
-		fn default() -> Self {
-			EpochState::Open
-		}
-	}
+	
 
 	// Part to be added to Event enum in lib.rs (around line ~174)
 
@@ -444,7 +442,7 @@ pub mod pallet {
 
 			// Get trust score
 			let trust_score = <T as Config>::TrustScoreSource::trust_score_of(who);
-			let trust_score_u128: u128 = trust_score.into();
+			let trust_score_u128: u128 = trust_score;
 
 			// FIX: Also record zero scores (tests expect this)
 			UserEpochScores::<T>::insert(current_epoch, who, trust_score_u128);

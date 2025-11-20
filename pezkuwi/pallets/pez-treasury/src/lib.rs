@@ -394,7 +394,7 @@ pub mod pallet {
 
             // To release month 0, months_passed must be >= 1 (next_month + 1)
             // To release month 1, months_passed must be >= 2
-            ensure!(months_passed >= next_month + 1, Error::<T>::ReleaseTooEarly);
+            ensure!(months_passed > next_month, Error::<T>::ReleaseTooEarly);
 
             let mut halving_data = HalvingInfo::<T>::get();
 

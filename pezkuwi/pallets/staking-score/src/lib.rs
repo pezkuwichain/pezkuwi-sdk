@@ -268,7 +268,7 @@ pub mod pallet {
 			};
 
 			// Süreye dayalı çarpanı ve duration'ı hesapla.
-			let (duration_multiplier, duration_for_return) = match StakingStartBlock::<T>::get(who) {
+			let (_duration_multiplier, duration_for_return) = match StakingStartBlock::<T>::get(who) {
 				// Eğer kullanıcı `start_score_tracking` çağırdıysa...
 				Some(start_block) => {
 					let current_block = frame_system::Pallet::<T>::block_number();

@@ -28,7 +28,7 @@ pub mod v1 {
             );
 
             if current == StorageVersion::new(0) {
-                let migrated;
+                
                 let mut weight = Weight::zero();
 
                 // Example migration logic for treasury storage
@@ -40,7 +40,7 @@ pub mod v1 {
                 let has_treasury_start = if TreasuryStartBlock::<T>::get().is_some() { 1u64 } else { 0u64 };
                 let has_genesis_done = if GenesisDistributionDone::<T>::get() { 1u64 } else { 0u64 };
 
-                migrated = monthly_releases_count + has_halving_info + has_treasury_start + has_genesis_done;
+                let migrated = monthly_releases_count + has_halving_info + has_treasury_start + has_genesis_done;
 
                 // Update storage version
                 STORAGE_VERSION.put::<Pallet<T>>();
