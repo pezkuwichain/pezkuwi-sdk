@@ -53,6 +53,7 @@ use alloc::collections::BTreeMap;
 use frame_support::build_struct_json_patch;
 use pezkuwi_primitives::{AccountId, AssignmentId, SchedulerParams, ValidatorId};
 use pezkuwichain_constants::currency::UNITS as HEZ;
+use pezkuwichain_constants::assets::{WUSDT_ASSET_ID, WUSDT_DECIMALS, WUSDT_MIN_BALANCE};
 use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use sp_consensus_babe::AuthorityId as BabeId;
 use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
@@ -400,13 +401,13 @@ fn pezkuwichain_real_genesis(
 				}, true, 1),
 				// PEZ - Asset ID 1
 				(1, accounts.founder.clone(), true, 1),
-				// wUSDT - Asset ID 2 (for beta testnet pools)
-				(2, accounts.founder.clone(), true, 1),
+				// wUSDT - Asset ID 1000 (bridged stablecoin)
+				(WUSDT_ASSET_ID, accounts.founder.clone(), true, WUSDT_MIN_BALANCE),
 			],
 			metadata: vec![
 				(0, b"Wrapped HEZ".to_vec(), b"wHEZ".to_vec(), 12),
 				(1, b"Pez Token".to_vec(), b"PEZ".to_vec(), 12),
-				(2, b"Wrapped USDT".to_vec(), b"wUSDT".to_vec(), 6),
+				(WUSDT_ASSET_ID, b"Wrapped USDT".to_vec(), b"wUSDT".to_vec(), WUSDT_DECIMALS as u8),
 			],
 			accounts: vec![
 				// wHEZ starts at 0 (minted on wrap)
@@ -421,10 +422,10 @@ fn pezkuwichain_real_genesis(
 				// Founder: 1.875% of 5B = 93,750,000 PEZ
 				(1, accounts.founder.clone(), 93_750_000 * HEZ),
 
-				// wUSDT for testing pools (1M wUSDT with 6 decimals)
-				(2, accounts.founder.clone(), 1_000_000 * 1_000_000),
+				// wUSDT for testing pools (1M wUSDT with 6 decimals = 1M * 10^6)
+				(WUSDT_ASSET_ID, accounts.founder.clone(), 1_000_000 * 1_000_000),
 			],
-			next_asset_id: Some(3),
+			next_asset_id: Some(1001),
 		},
 		
 		pez_treasury: PezTreasuryConfig {
