@@ -137,6 +137,20 @@ pub mod system_parachain {
 /// Rococo Treasury pallet instance.
 pub const TREASURY_PALLET_ID: u8 = 18;
 
+/// Asset IDs for wrapped tokens
+pub mod assets {
+	/// wUSDT (Wrapped USDT) asset ID
+	/// This is a bridged stablecoin pegged 1:1 to USDT
+	/// Decimals: 6 (matching USDT standard)
+	pub const WUSDT_ASSET_ID: u32 = 1000;
+
+	/// wUSDT decimals (USDT standard is 6 decimals)
+	pub const WUSDT_DECIMALS: u32 = 6;
+
+	/// Minimum balance for wUSDT to prevent dust
+	pub const WUSDT_MIN_BALANCE: u128 = 1_000; // 0.001 USDT
+}
+
 #[cfg(test)]
 mod tests {
 	use super::{
