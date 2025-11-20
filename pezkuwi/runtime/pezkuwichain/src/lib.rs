@@ -429,6 +429,10 @@ impl pallet_preimage::Config for Runtime {
 /// Instance type for PoolAssets (third instance of pallet_assets)
 pub type PoolAssetsInstance = pallet_assets::Instance3;
 
+/// Instance type for ForeignAssets (second instance of pallet_assets)
+/// Used for assets received via XCM (e.g., Asset Hub USDT → wUSDT)
+pub type ForeignAssetsInstance = pallet_assets::Instance2;
+
 impl pallet_assets::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
@@ -463,6 +467,32 @@ impl pallet_assets::Config<PoolAssetsInstance> for Runtime {
 	type AssetIdParameter = codec::Compact<u32>;
 	type Currency = Balances;
 	type CreateOrigin = AsEnsureOriginWithArg<EnsureSignedBy<AssetConversionOrigin, AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<0>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type WeightInfo = ();
+	type Holder = ();
+	type CallbackHandle = ();
+	type RemoveItemsLimit = ConstU32<1000>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
+}
+
+// ForeignAssets (Instance2) - For foreign assets received via XCM
+// Used for Asset Hub USDT → wUSDT (Asset ID 1000)
+impl pallet_assets::Config<ForeignAssetsInstance> for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = Balance;
+	type AssetId = u32;
+	type AssetIdParameter = u32;
+	type Currency = Balances;
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
 	type ForceOrigin = EnsureRoot<AccountId>;
 	type AssetDeposit = AssetDeposit;
 	type AssetAccountDeposit = ConstU128<0>;
@@ -2154,6 +2184,7 @@ construct_runtime! {
 		ChildBounties: pallet_child_bounties = 40,
 
 		Assets: pallet_assets = 36,
+		ForeignAssets: pallet_assets::<Instance2> = 78,
 		PoolAssets: pallet_assets::<Instance3> = 77,
 		AssetConversion: pallet_asset_conversion = 37,
 		TokenWrapper: pallet_token_wrapper = 76,

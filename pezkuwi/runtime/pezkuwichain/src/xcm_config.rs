@@ -97,22 +97,22 @@ pub type LocalAssetTransactor = FungibleAdapter<
 >;
 
 /// Foreign asset transactor - handles Asset Hub USDT → wUSDT (Asset ID 1000)
-/// TODO: Commented out due to type inference issue - see SESSION_HANDOFF.md for details
-/*
+/// Uses separate ForeignAssets pallet instance to avoid type inference issues
 use xcm_builder::{FungiblesAdapter, NoChecking, MatchedConvertedConcreteId};
-use xcm_executor::traits::{JustTry, MaybeEquivalence};
+use xcm_executor::traits::JustTry;
+use sp_runtime::traits::MaybeEquivalence;
 
 /// Custom converter: Asset Hub USDT Location → wUSDT Asset ID (1000)
 pub struct AssetHubUsdtToWUsdt;
-impl MaybeEquivalence<Location, crate::AssetId> for AssetHubUsdtToWUsdt {
-	fn convert(location: &Location) -> Option<crate::AssetId> {
+impl MaybeEquivalence<Location, u32> for AssetHubUsdtToWUsdt {
+	fn convert(location: &Location) -> Option<u32> {
 		if location == &AssetHubUsdtLocation::get() {
 			Some(1000) // wUSDT asset ID
 		} else {
 			None
 		}
 	}
-	fn convert_back(asset_id: &crate::AssetId) -> Option<Location> {
+	fn convert_back(asset_id: &u32) -> Option<Location> {
 		if *asset_id == 1000 {
 			Some(AssetHubUsdtLocation::get())
 		} else {
@@ -124,7 +124,7 @@ impl MaybeEquivalence<Location, crate::AssetId> for AssetHubUsdtToWUsdt {
 /// Converter: Asset Hub USDT Location → Our wUSDT Asset ID (1000)
 /// Uses MatchedConvertedConcreteId pattern from Penpal parachain example
 pub type ForeignAssetsConvertedConcreteId = MatchedConvertedConcreteId<
-	crate::AssetId,
+	u32,
 	Balance,
 	Equals<AssetHubUsdtLocation>,
 	AssetHubUsdtToWUsdt,
@@ -132,8 +132,8 @@ pub type ForeignAssetsConvertedConcreteId = MatchedConvertedConcreteId<
 >;
 
 pub type ForeignFungiblesTransactor = FungiblesAdapter<
-	// Use pallet_assets for foreign assets
-	crate::Assets,
+	// Use separate ForeignAssets pallet instance
+	crate::ForeignAssets,
 	// Match and convert Asset Hub USDT location
 	ForeignAssetsConvertedConcreteId,
 	// Convert XCM Location to AccountId
@@ -148,7 +148,6 @@ pub type ForeignFungiblesTransactor = FungiblesAdapter<
 
 /// Combined asset transactors (native HEZ + foreign USDT)
 pub type AssetTransactors = (LocalAssetTransactor, ForeignFungiblesTransactor);
-*/
 
 /// The means that we convert the XCM message origin location into a local dispatch origin.
 type LocalOriginConverter = (
@@ -257,7 +256,7 @@ impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
 	type XcmEventEmitter = XcmPallet;
-	type AssetTransactor = LocalAssetTransactor; // TODO: Use AssetTransactors when type inference fixed
+	type AssetTransactor = AssetTransactors; // Now supports both native HEZ and foreign USDT
 	type OriginConverter = LocalOriginConverter;
 	type IsReserve = ();
 	type IsTeleporter = TrustedTeleporters;
