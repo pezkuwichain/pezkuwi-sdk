@@ -47,3 +47,14 @@ node_modules/
 # Ignore temporary test files
 beta-testnet/
 chainspecs/
+
+# Build artifacts and binaries
+pezkuwi/pezkuwichain-node
+target/
+
+# Large hex files (genesis and wasm)
+*.hex
+
+# Chain specs (regeneratable)
+*-spec.json
+*-raw.json

@@ -10,7 +10,7 @@
     "report": "node scripts/generate-report.js"
   },
   "dependencies": {
-    "@polkadot/api": "^10.9.1",
+    "@polkadot/api": "^10.13.1",
     "@polkadot/keyring": "^12.3.2",
     "chalk": "^5.3.0"
   }
