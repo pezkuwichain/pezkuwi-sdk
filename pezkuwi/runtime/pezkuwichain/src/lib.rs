@@ -533,7 +533,9 @@ parameter_types! {
 	pub const MaxBonusTiers: u32 = 5; // Max bonus tiers per presale
 	pub const MaxWhitelistedAccounts: u32 = 10000; // Max whitelist per presale
 	pub PlatformTreasuryAccount: AccountId = Treasury::account_id();
-	pub StakingRewardPoolAccount: AccountId = AccountId::from([0u8; 32]); // TODO: Set real staking pool
+	pub StakingRewardPoolAccount: AccountId = AccountId::from(
+		hex_literal::hex!("4a96d42a059cc84473b39fe49fe4187e26eb50ccab724724f6c3c32329806c32")
+	); // Staking pool: 5DkWCugHD3nshFUCj4Yhqw8tLHentaPksL9eqMmQG9zQW3BV
 }
 
 impl pallet_presale::Config for Runtime {
@@ -1332,7 +1334,7 @@ parameter_types! {
 // PEZ Treasury Config
 parameter_types! {
     pub const PezAssetId: u32 = 1; // PEZ Token ID will be 1
-    pub const WUsdtAssetId: u32 = 2; // wUSDT Token ID
+    pub const WUsdtAssetId: u32 = 1000; // wUSDT Token ID (matches WUSDT_ASSET_ID in constants)
 }
 
 impl pallet_pez_treasury::Config for Runtime {

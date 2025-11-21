@@ -203,10 +203,10 @@ fn standard_accounts() -> StandardAccounts {
 	use hex_literal::hex;
 
 	StandardAccounts {
-		founder: hex!["cc3609424c65a68f2292a1836e07922d983b19a8b89cbb742b929814d0fb567c"].into(),
-		presale: hex!["924cfd7943ca2bb889bb261a0b69dd1086552e5f301c77eadae8bdf021626b3a"].into(),
-		treasury: hex!["3445069326041a003e046847f74f43ce743acec6fefbb2fdb034b53e6a09b909"].into(),
-		incentives: hex!["681724195f8b0444675ecdfa8af1f7173b33c8aba2caf4646e31e399d299ea7e"].into(),
+		founder: hex!["c0c6403050931c67e13edfa4a558a9c3d4ae64f04b0fd8cb57b2f796c668a068"].into(), // 5GRTwhBCAPR2un27NxMw9uyHFmXdfJa1EJx8TNZxJWjAFmyc
+		presale: hex!["924cfd7943ca2bb889bb261a0b69dd1086552e5f301c77eadae8bdf021626b3a"].into(), // Unchanged
+		treasury: hex!["ca3393764525378c54d83478b88453091c27031ba8de693d64da16ac21277359"].into(), // 5GdprKXDvoXAryJa6YH8WMdjRprFU4584TDX2FEG8AqYDnV9
+		incentives: hex!["681724195f8b0444675ecdfa8af1f7173b33c8aba2caf4646e31e399d299ea7e"].into(), // Unchanged
 	}
 }
 

@@ -61,9 +61,13 @@ pub mod pallet {
     #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
     #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
     pub enum PresaleStatus {
-        Active,
-        Finalized,
-        Cancelled,
+        Pending,       // Not started yet
+        Active,        // Ongoing
+        Paused,        // Emergency paused (future feature)
+        Successful,    // Ended, soft cap reached
+        Failed,        // Ended, soft cap NOT reached
+        Cancelled,     // Emergency cancelled
+        Finalized,     // Tokens distributed (after Successful)
     }
 
     #[derive(Clone, Copy, Encode, Decode, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
@@ -104,7 +108,9 @@ pub mod pallet {
         pub min_contribution: u128,
         /// Maximum contribution per wallet
         pub max_contribution: u128,
-        /// Total hard cap for presale
+        /// Minimum funding target (soft cap) - presale succeeds if reached
+        pub soft_cap: u128,
+        /// Maximum funding target (hard cap) - presale stops when reached
         pub hard_cap: u128,
     }
 
@@ -348,6 +354,30 @@ pub mod pallet {
             who: T::AccountId,
             amount: u128,
         },
+        /// Presale succeeded [presale_id, total_raised, soft_cap]
+        PresaleSuccessful {
+            presale_id: PresaleId,
+            total_raised: u128,
+            soft_cap: u128,
+        },
+        /// Presale failed [presale_id, total_raised, soft_cap]
+        PresaleFailed {
+            presale_id: PresaleId,
+            total_raised: u128,
+            soft_cap: u128,
+        },
+        /// Batch refund completed [presale_id, refunded_count, total_refunded]
+        BatchRefundCompleted {
+            presale_id: PresaleId,
+            refunded_count: u32,
+            total_refunded: u128,
+        },
+        /// Presale extended [presale_id, additional_blocks, new_end_block]
+        PresaleExtended {
+            presale_id: PresaleId,
+            additional_blocks: BlockNumberFor<T>,
+            new_end_block: BlockNumberFor<T>,
+        },
     }
 
     #[pallet::error]
@@ -374,6 +404,11 @@ pub mod pallet {
         NothingToClaim,
         NotPresaleOwner,
         TooManyBonusTiers,
+        // New errors for soft cap
+        PresaleNotFailed,
+        PresaleNotSuccessful,
+        SoftCapNotReached,
+        InvalidSoftCap,
     }
 
     #[pallet::call]
@@ -390,6 +425,7 @@ pub mod pallet {
             is_whitelist: bool,
             min_contribution: u128,
             max_contribution: u128,
+            soft_cap: u128,
             hard_cap: u128,
             enable_vesting: bool,
             vesting_immediate_percent: u8,
@@ -402,6 +438,8 @@ pub mod pallet {
             let owner = ensure_signed(origin)?;
 
             ensure!(tokens_for_sale > 0, Error::<T>::InvalidTokensForSale);
+            ensure!(soft_cap > 0, Error::<T>::InvalidTokensForSale);
+            ensure!(soft_cap <= hard_cap, Error::<T>::InvalidTokensForSale);
             ensure!(refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
             ensure!(grace_refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
 
@@ -420,6 +458,7 @@ pub mod pallet {
             let limits = ContributionLimits {
                 min_contribution,
                 max_contribution,
+                soft_cap,
                 hard_cap,
             };
 
@@ -574,20 +613,19 @@ pub mod pallet {
             TotalPlatformVolume::<T>::mutate(|v| *v = v.saturating_add(amount));
             TotalPlatformFees::<T>::mutate(|f| *f = f.saturating_add(platform_fee));
 
-            // Calculate bonus using total contribution amount
-            let bonus_amount = Self::calculate_bonus(&presale, contribution.amount);
-
+            // Note: Bonus amount cannot be accurately calculated until finalization
+            // when total_raised is known. We emit 0 here and calculate during distribution.
             Self::deposit_event(Event::Contributed {
                 presale_id,
                 who,
                 amount,
-                bonus_amount,
+                bonus_amount: 0,
             });
 
             Ok(())
         }
 
-        /// Finalize presale and distribute tokens
+        /// Finalize presale - checks soft cap and sets status to Successful or Failed
         #[pallet::call_index(2)]
         #[pallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get(presale_id).len() as u32))]
         pub fn finalize_presale(
@@ -606,7 +644,21 @@ pub mod pallet {
             ensure!(current_block >= end_block, Error::<T>::PresaleNotEnded);
 
             let total_raised = TotalRaised::<T>::get(presale_id);
-            let treasury = Self::presale_account_id(presale_id);
+
+            // ✅ CHECK SOFT CAP - Set status accordingly
+            if total_raised >= presale.limits.soft_cap {
+                // SUCCESS: Soft cap reached - distribute tokens
+                presale.status = PresaleStatus::Successful;
+                Presales::<T>::insert(presale_id, &presale);
+
+                Self::deposit_event(Event::PresaleSuccessful {
+                    presale_id,
+                    total_raised,
+                    soft_cap: presale.limits.soft_cap,
+                });
+
+                // Now distribute tokens to contributors
+                let treasury = Self::presale_account_id(presale_id);
 
             // Distribute rewards to all contributors
             for contributor in Contributors::<T>::get(presale_id).iter() {
@@ -627,7 +679,7 @@ pub mod pallet {
                     presale.tokens_for_sale,
                 )?;
 
-                let bonus = Self::calculate_bonus(&presale, contribution_info.amount);
+                let bonus = Self::calculate_bonus(&presale, contribution_info.amount, reward_amount);
                 let total_reward = reward_amount.saturating_add(bonus);
 
                 // Handle vesting
@@ -668,14 +720,25 @@ pub mod pallet {
                 });
             }
 
-            presale.status = PresaleStatus::Finalized;
-            Presales::<T>::insert(presale_id, presale);
-            SuccessfulPresales::<T>::mutate(|c| *c = c.saturating_add(1));
+                presale.status = PresaleStatus::Finalized;
+                Presales::<T>::insert(presale_id, presale);
+                SuccessfulPresales::<T>::mutate(|c| *c = c.saturating_add(1));
 
-            Self::deposit_event(Event::PresaleFinalized {
-                presale_id,
-                total_raised,
-            });
+                Self::deposit_event(Event::PresaleFinalized {
+                    presale_id,
+                    total_raised,
+                });
+            } else {
+                // FAILED: Soft cap NOT reached - enable refunds
+                presale.status = PresaleStatus::Failed;
+                Presales::<T>::insert(presale_id, &presale);
+
+                Self::deposit_event(Event::PresaleFailed {
+                    presale_id,
+                    total_raised,
+                    soft_cap: presale.limits.soft_cap,
+                });
+            }
 
             Ok(())
         }
@@ -786,7 +849,7 @@ pub mod pallet {
                 total_raised,
                 presale.tokens_for_sale,
             )?;
-            let bonus = Self::calculate_bonus(&presale, contribution_info.amount);
+            let bonus = Self::calculate_bonus(&presale, contribution_info.amount, total_reward);
             let total_with_bonus = total_reward.saturating_add(bonus);
 
             // Calculate vested amount
@@ -944,6 +1007,91 @@ pub mod pallet {
 
             Ok(())
         }
+
+        /// Batch refund for FAILED presales (soft cap not reached)
+        /// Anyone can call this to help refund contributors
+        /// Processes refunds in batches to avoid gas limits
+        #[pallet::call_index(8)]
+        #[pallet::weight(T::PresaleWeightInfo::finalize_presale(*batch_size))]
+        pub fn batch_refund_failed_presale(
+            origin: OriginFor<T>,
+            presale_id: PresaleId,
+            start_index: u32,
+            batch_size: u32,
+        ) -> DispatchResult {
+            ensure_signed(origin)?;  // Anyone can trigger
+
+            let presale = Presales::<T>::get(presale_id)
+                .ok_or(Error::<T>::PresaleNotFound)?;
+
+            // Only works on FAILED presales (soft cap not reached)
+            ensure!(
+                presale.status == PresaleStatus::Failed,
+                Error::<T>::PresaleNotFailed
+            );
+
+            let current_block = <frame_system::Pallet<T>>::block_number();
+            let treasury = Self::presale_account_id(presale_id);
+            let contributors = Contributors::<T>::get(presale_id);
+
+            // Calculate end index (don't exceed array length)
+            let end_index = start_index.saturating_add(batch_size).min(contributors.len() as u32);
+
+            let mut refunded_count = 0u32;
+            let mut total_refunded = 0u128;
+
+            // Process batch
+            for i in start_index..end_index {
+                let contributor = &contributors[i as usize];
+
+                if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
+                    // Skip if already refunded or zero amount
+                    if !contribution_info.refunded && contribution_info.amount > 0 {
+                        // Full refund (NO FEE for failed presale)
+                        let refund_amount: <T as pallet_assets::Config>::Balance =
+                            contribution_info.amount
+                                .try_into()
+                                .map_err(|_| Error::<T>::ArithmeticOverflow)?;
+
+                        <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+                            presale.payment_asset.clone(),
+                            &treasury,
+                            contributor,
+                            refund_amount,
+                            Preservation::Preserve,
+                        )?;
+
+                        // Mark as refunded
+                        Contributions::<T>::try_mutate(presale_id, contributor, |maybe_info| {
+                            if let Some(info) = maybe_info {
+                                info.refunded = true;
+                                info.refunded_at = Some(current_block);
+                                info.refund_fee_paid = 0;  // No fee!
+                            }
+                            Ok::<_, Error<T>>(())
+                        })?;
+
+                        refunded_count += 1;
+                        total_refunded = total_refunded.saturating_add(contribution_info.amount);
+
+                        Self::deposit_event(Event::Refunded {
+                            presale_id,
+                            who: contributor.clone(),
+                            amount: contribution_info.amount,
+                            fee: 0,
+                        });
+                    }
+                }
+            }
+
+            Self::deposit_event(Event::BatchRefundCompleted {
+                presale_id,
+                refunded_count,
+                total_refunded,
+            });
+
+            Ok(())
+        }
     }
 
     impl<T: Config> Pallet<T> {
@@ -1014,6 +1162,7 @@ pub mod pallet {
         fn calculate_bonus(
             presale: &PresaleConfig<T, T::MaxBonusTiers>,
             contribution: u128,
+            user_reward: u128,
         ) -> u128 {
             let mut applicable_bonus = 0u8;
 
@@ -1027,9 +1176,9 @@ pub mod pallet {
                 return 0;
             }
 
-            // Bonus calculation no longer uses conversion_rate
-            // Instead, calculate bonus as percentage of contribution
-            contribution.saturating_mul(applicable_bonus as u128) / 100
+            // Bonus calculation based on PEZ reward tokens, not USDT contribution
+            // Returns bonus in PEZ tokens as percentage of user's reward allocation
+            user_reward.saturating_mul(applicable_bonus as u128) / 100
         }
 
         /// Calculate reward based on user's share of total raised
