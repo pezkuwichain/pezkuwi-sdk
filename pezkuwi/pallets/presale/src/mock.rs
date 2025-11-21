@@ -1,7 +1,7 @@
 use crate as pallet_presale;
 use frame_support::{
 	parameter_types,
-	traits::{ConstU128, ConstU32, ConstU64, ConstU8},
+	traits::{ConstU128, ConstU16, ConstU32, ConstU64},
 	PalletId,
 };
 use sp_core::H256;
@@ -44,9 +44,16 @@ impl frame_system::Config for Test {
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
-	type SS58Prefix = ();
+	type SS58Prefix = ConstU16<42>;
 	type OnSetCode = ();
 	type MaxConsumers = ConstU32<16>;
+	type RuntimeTask = ();
+	type ExtensionsWeightInfo = ();
+	type SingleBlockMigrations = ();
+	type MultiBlockMigrator = ();
+	type PreInherents = ();
+	type PostInherents = ();
+	type PostTransactions = ();
 }
 
 impl pallet_balances::Config for Test {
@@ -63,6 +70,7 @@ impl pallet_balances::Config for Test {
 	type MaxFreezes = ();
 	type RuntimeHoldReason = ();
 	type RuntimeFreezeReason = ();
+	type DoneSlashHandler = ();
 }
 
 impl pallet_assets::Config for Test {
@@ -71,10 +79,10 @@ impl pallet_assets::Config for Test {
 	type AssetId = u32;
 	type AssetIdParameter = u32;
 	type Currency = Balances;
-	type CreateOrigin = frame_support::traits::AsEnsureOriginWithArg<frame_system::EnsureRoot<u64>>;
+	type CreateOrigin = frame_support::traits::AsEnsureOriginWithArg<frame_system::EnsureSigned<u64>>;
 	type ForceOrigin = frame_system::EnsureRoot<u64>;
 	type AssetDeposit = ConstU128<1>;
-	type AssetAccountDeposit = ConstU128<10>;
+	type AssetAccountDeposit = ConstU128<0>; // No deposit required for test environment
 	type MetadataDepositBase = ConstU128<1>;
 	type MetadataDepositPerByte = ConstU128<1>;
 	type ApprovalDeposit = ConstU128<1>;
@@ -84,6 +92,9 @@ impl pallet_assets::Config for Test {
 	type WeightInfo = ();
 	type RemoveItemsLimit = ConstU32<1000>;
 	type CallbackHandle = ();
+	type Holder = ();
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 parameter_types! {
@@ -107,7 +118,7 @@ impl pallet_presale::Config for Test {
 	type MaxWhitelistedAccounts = MaxWhitelistedAccounts;
 	type CreatePresaleOrigin = frame_system::EnsureSigned<u64>;
 	type EmergencyOrigin = frame_system::EnsureRoot<u64>;
-	type PresaleWeightInfo = ();
+	type PresaleWeightInfo = crate::weights::SubstrateWeight<Test>;
 }
 
 // Build genesis storage according to the mock runtime.
@@ -124,6 +135,7 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 			(999, 1_000_000_000_000_000), // Platform Treasury
 			(998, 1_000_000_000_000_000), // Staking Pool
 		],
+		dev_accounts: None,
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
@@ -140,7 +152,7 @@ pub fn create_assets() {
 	// Create PEZ asset (ID: 1)
 	assert_ok!(Assets::force_create(
 		RuntimeOrigin::root(),
-		1.into(),
+		1u32,
 		1, // Alice as admin
 		true,
 		1
@@ -149,7 +161,7 @@ pub fn create_assets() {
 	// Create wUSDT asset (ID: 2)
 	assert_ok!(Assets::force_create(
 		RuntimeOrigin::root(),
-		2.into(),
+		2u32,
 		1, // Alice as admin
 		true,
 		1
@@ -170,6 +182,20 @@ pub fn mint_assets(asset_id: u32, account: u64, amount: u128) {
 
 // Helper to get presale sub-account treasury for a specific presale ID
 pub fn presale_treasury(presale_id: u32) -> u64 {
-	use sp_runtime::traits::AccountIdConversion;
-	PresalePalletId::get().into_sub_account_truncating(presale_id)
+	use sp_io::hashing::blake2_256;
+
+	// Create a unique account ID for each presale by hashing pallet_id + presale_id
+	// This matches the logic in pallet_presale::Pallet::presale_account_id
+	let pallet_id = PresalePalletId::get();
+	let mut buf = Vec::new();
+	buf.extend_from_slice(&pallet_id.0[..]);
+	buf.extend_from_slice(&presale_id.to_le_bytes());
+	let hash = blake2_256(&buf);
+
+	// Convert hash to u64 (since Test uses u64 as AccountId)
+	// Take first 8 bytes and convert to u64
+	u64::from_le_bytes([
+		hash[0], hash[1], hash[2], hash[3],
+		hash[4], hash[5], hash[6], hash[7],
+	])
 }

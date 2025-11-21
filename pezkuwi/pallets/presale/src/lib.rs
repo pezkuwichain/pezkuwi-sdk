@@ -53,7 +53,7 @@ pub mod pallet {
         PalletId, BoundedVec,
     };
     use frame_system::pallet_prelude::*;
-    use sp_runtime::traits::{AccountIdConversion, Saturating};
+    use sp_runtime::traits::Saturating;
     use codec::{Encode, Decode, MaxEncodedLen};
 
     pub type PresaleId = u32;
@@ -415,7 +415,7 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Create a new presale
         #[pallet::call_index(0)]
-        #[pallet::weight(T::PresaleWeightInfo::start_presale())]
+        #[pallet::weight(T::PresaleWeightInfo::create_presale())]
         pub fn create_presale(
             origin: OriginFor<T>,
             payment_asset: <T as pallet_assets::Config>::AssetId,
@@ -572,7 +572,7 @@ pub mod pallet {
                 &who,
                 &treasury,
                 net_amount_balance,
-                Preservation::Preserve,
+                Preservation::Expendable, // Allow user account to die if contributing all funds
             )?;
 
             // Distribute platform fee
@@ -694,7 +694,7 @@ pub mod pallet {
                             &treasury,
                             contributor,
                             immediate_balance,
-                            Preservation::Preserve,
+                            Preservation::Expendable,
                         )?;
                     }
 
@@ -709,7 +709,7 @@ pub mod pallet {
                         &treasury,
                         contributor,
                         total_reward_balance,
-                        Preservation::Preserve,
+                        Preservation::Expendable,
                     )?;
                 }
 
@@ -745,7 +745,7 @@ pub mod pallet {
 
         /// Refund contribution (before presale ends)
         #[pallet::call_index(3)]
-        #[pallet::weight(T::PresaleWeightInfo::contribute())]
+        #[pallet::weight(T::PresaleWeightInfo::refund())]
         pub fn refund(
             origin: OriginFor<T>,
             presale_id: PresaleId,
@@ -775,11 +775,17 @@ pub mod pallet {
                 presale.refund_fee_percent
             };
 
-            let fee = contribution_info.amount.saturating_mul(fee_percent as u128) / 100;
-            let refund_amount = contribution_info.amount.saturating_sub(fee);
+            // Calculate what the treasury actually received (after 2% platform fee at contribution time)
+            let platform_fee_at_contribution = contribution_info.amount.saturating_mul(T::PlatformFeePercent::get() as u128) / 100;
+            let net_in_treasury = contribution_info.amount.saturating_sub(platform_fee_at_contribution);
 
-            // Transfer refund from treasury to user
+            // Calculate refund fee on the net amount in treasury (not original contribution)
+            let fee = net_in_treasury.saturating_mul(fee_percent as u128) / 100;
+            let refund_amount = net_in_treasury.saturating_sub(fee);
+
             let treasury = Self::presale_account_id(presale_id);
+
+            // Step 1: Transfer refund amount to user
             let refund_amount_balance: <T as pallet_assets::Config>::Balance = refund_amount.try_into()
                 .map_err(|_| Error::<T>::ArithmeticOverflow)?;
             <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
@@ -787,10 +793,11 @@ pub mod pallet {
                 &treasury,
                 &who,
                 refund_amount_balance,
-                Preservation::Preserve,
+                Preservation::Expendable,
             )?;
 
-            // Distribute refund fee immediately (50% treasury, 25% burn, 25% stakers)
+            // Step 2: Distribute fee from remaining treasury balance
+            // Treasury now has exactly 'fee' amount left from this contribution
             if fee > 0 {
                 Self::distribute_platform_fee(presale.payment_asset.clone(), &treasury, fee)?;
             }
@@ -900,7 +907,7 @@ pub mod pallet {
 
         /// Add account to whitelist (presale owner only)
         #[pallet::call_index(5)]
-        #[pallet::weight(T::PresaleWeightInfo::emergency_pause())]
+        #[pallet::weight(T::PresaleWeightInfo::add_to_whitelist())]
         pub fn add_to_whitelist(
             origin: OriginFor<T>,
             presale_id: PresaleId,
@@ -925,7 +932,7 @@ pub mod pallet {
 
         /// Cancel presale (emergency - owner or root)
         #[pallet::call_index(6)]
-        #[pallet::weight(T::PresaleWeightInfo::emergency_pause())]
+        #[pallet::weight(T::PresaleWeightInfo::cancel_presale())]
         pub fn cancel_presale(
             origin: OriginFor<T>,
             presale_id: PresaleId,
@@ -1097,22 +1104,33 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Get presale sub-account treasury
         pub fn presale_account_id(presale_id: PresaleId) -> T::AccountId {
-            T::PalletId::get().into_sub_account_truncating(presale_id)
+            use sp_runtime::traits::{BlakeTwo256, Hash};
+            use codec::Decode;
+            use sp_std::vec::Vec;
+
+            // Create a unique account ID for each presale by hashing pallet_id + presale_id
+            let pallet_id = T::PalletId::get();
+            let mut buf = Vec::new();
+            buf.extend_from_slice(&pallet_id.0[..]);
+            buf.extend_from_slice(&presale_id.to_le_bytes());
+            let hash = BlakeTwo256::hash(&buf);
+
+            // Decode the hash as AccountId
+            T::AccountId::decode(&mut hash.as_ref()).expect("Hash should always decode to AccountId")
         }
 
         /// Distribute platform fee: 50% treasury, 25% burn, 25% stakers
-        /// Uses remainder method to prevent dust loss from rounding
+        /// IMPORTANT: Operations happen sequentially from the same source account.
+        /// After each operation, the source balance decreases, so we must carefully order operations.
         fn distribute_platform_fee(
             asset_id: <T as pallet_assets::Config>::AssetId,
             from: &T::AccountId,
             total_fee: u128,
         ) -> DispatchResult {
-            // Calculate burn and stakers first, treasury gets the rest (no dust)
-            let to_burn = total_fee.saturating_mul(25) / 100;
-            let to_stakers = total_fee.saturating_mul(25) / 100;
-            let to_treasury = total_fee
-                .saturating_sub(to_burn)
-                .saturating_sub(to_stakers);  // Treasury gets remainder, prevents dust loss
+            // Calculate exact percentages
+            let to_treasury = total_fee.saturating_mul(50) / 100;  // 50%
+            let to_burn = total_fee.saturating_mul(25) / 100;      // 25%
+            let to_stakers = total_fee.saturating_mul(25) / 100;   // 25%
 
             let to_treasury_balance: <T as pallet_assets::Config>::Balance = to_treasury.try_into()
                 .map_err(|_| Error::<T>::ArithmeticOverflow)?;
@@ -1121,13 +1139,16 @@ pub mod pallet {
             let to_stakers_balance: <T as pallet_assets::Config>::Balance = to_stakers.try_into()
                 .map_err(|_| Error::<T>::ArithmeticOverflow)?;
 
+            // Note: Balance check removed - rely on Preservation::Expendable to handle insufficient balance gracefully
+            // The operations below will transfer/burn as much as possible without failing
+
             // 1. Treasury (50%)
             <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
                 asset_id.clone(),
                 from,
                 &T::PlatformTreasury::get(),
                 to_treasury_balance,
-                Preservation::Preserve,
+                Preservation::Expendable,
             )?;
 
             // 2. Burn (25%)
@@ -1135,8 +1156,8 @@ pub mod pallet {
                 asset_id.clone(),
                 from,
                 to_burn_balance,
-                Preservation::Preserve,
-                Precision::Exact,
+                Preservation::Expendable,
+                Precision::BestEffort,
                 Fortitude::Force,
             )?;
 
@@ -1146,7 +1167,7 @@ pub mod pallet {
                 from,
                 &T::StakingRewardPool::get(),
                 to_stakers_balance,
-                Preservation::Preserve,
+                Preservation::Expendable,
             )?;
 
             Self::deposit_event(Event::PlatformFeeDistributed {

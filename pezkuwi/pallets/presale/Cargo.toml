@@ -22,8 +22,6 @@ frame-system = { default-features = false, workspace = true }
 frame-benchmarking = { default-features = false, optional = true, workspace = true }
 sp-runtime = { default-features = false, workspace = true }
 sp-std = { default-features = false, workspace = true }
-sp-core = { workspace = true, default-features = false }
-sp-io = { workspace = true, default-features = false }
 
 pallet-assets = { default-features = false, workspace = true }
 
@@ -42,9 +40,10 @@ std = [
     "frame-system/std",
     "sp-std/std",
     "sp-runtime/std",
+    "pallet-assets/std",
+    "pallet-balances/std",
     "sp-core/std",
     "sp-io/std",
-    "pallet-assets/std",
     "frame-benchmarking?/std",
 ]
 runtime-benchmarks = [
