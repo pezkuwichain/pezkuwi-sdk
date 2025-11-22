@@ -58,3 +58,5 @@ target/
 # Chain specs (regeneratable)
 *-spec.json
 *-raw.json
+bin/
+*.log
