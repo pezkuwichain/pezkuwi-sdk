@@ -75,6 +75,14 @@ impl pallet_identity_kyc::types::CitizenNftProvider<u64> for NoOpCitizenNftProvi
 	fn mint_citizen_nft(_who: &u64) -> Result<(), sp_runtime::DispatchError> {
 		Ok(())
 	}
+
+	fn mint_citizen_nft_confirmed(_who: &u64) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+
+	fn burn_citizen_nft(_who: &u64) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
 }
 
 impl pallet_identity_kyc::Config for Test {

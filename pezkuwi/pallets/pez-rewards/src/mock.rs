@@ -51,6 +51,7 @@ construct_runtime!(
 		System: frame_system,
 		Balances: pallet_balances,
 		Assets: pallet_assets,
+		IdentityKyc: pallet_identity_kyc,
 		Trust: pallet_trust,
 		PezRewards: pallet_pez_rewards,
 	}
@@ -148,6 +149,45 @@ impl pallet_assets::Config for Test {
 	type Holder = ();
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
+}
+
+// --- pallet_identity_kyc::Config ---
+pub struct NoOpOnKycApproved;
+impl pallet_identity_kyc::types::OnKycApproved<H256> for NoOpOnKycApproved {
+	fn on_kyc_approved(_who: &H256) {}
+}
+
+pub struct NoOpCitizenNftProvider;
+impl pallet_identity_kyc::types::CitizenNftProvider<H256> for NoOpCitizenNftProvider {
+	fn mint_citizen_nft(_who: &H256) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+
+	fn mint_citizen_nft_confirmed(_who: &H256) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+
+	fn burn_citizen_nft(_who: &H256) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+}
+
+parameter_types! {
+	pub const KycApplicationDeposit: Balance = 100;
+	pub const MaxStringLength: u32 = 128;
+	pub const MaxCidLength: u32 = 128;
+}
+
+impl pallet_identity_kyc::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type KycApprovalOrigin = EnsureRoot<H256>;
+	type WeightInfo = ();
+	type OnKycApproved = NoOpOnKycApproved;
+	type CitizenNftProvider = NoOpCitizenNftProvider;
+	type KycApplicationDeposit = KycApplicationDeposit;
+	type MaxStringLength = MaxStringLength;
+	type MaxCidLength = MaxCidLength;
 }
 
 // --- pallet_trust::Config ---

@@ -198,6 +198,14 @@ impl pallet_identity_kyc::types::CitizenNftProvider<AccountId> for NoOpCitizenNf
 	fn mint_citizen_nft(_who: &AccountId) -> Result<(), sp_runtime::DispatchError> {
 		Ok(())
 	}
+
+	fn mint_citizen_nft_confirmed(_who: &AccountId) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
+
+	fn burn_citizen_nft(_who: &AccountId) -> Result<(), sp_runtime::DispatchError> {
+		Ok(())
+	}
 }
 
 impl pallet_identity_kyc::Config for Test {
@@ -233,9 +241,14 @@ impl pallet_staking_score::Config for Test {
 }
 
 // Referral Configuration
+parameter_types! {
+    pub const DefaultReferrerAccount: AccountId = 1;
+}
+
 impl pallet_referral::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
+    type DefaultReferrer = DefaultReferrerAccount;
 }
 
 // Tiki Configuration
