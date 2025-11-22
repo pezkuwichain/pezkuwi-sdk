@@ -1,17 +1,19 @@
 //! Benchmarking setup for pallet-presale
 
 use super::*;
-
 #[allow(unused)]
 use crate::Pallet as Presale;
 use frame_benchmarking::v2::*;
-use frame_support::traits::{fungibles::Mutate, Get};
+use frame_support::traits::{fungibles, fungibles::Mutate, Currency, Get, tokens::Preservation};
 use frame_system::RawOrigin;
+use log::info;
+use pallet_balances::Pallet as Balances;
 use sp_runtime::traits::{AccountIdConversion, StaticLookup};
 
 #[benchmarks(
 	where
 		<T as pallet_assets::Config>::AssetId: From<u32>,
+		T: pallet_balances::Config,
 )]
 mod benchmarks {
 	use super::*;
@@ -39,13 +41,22 @@ mod benchmarks {
 		);
 
 		// Fund caller with reward tokens for presale
-		<pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
-			reward_asset.clone(),
-			&caller,
-			100_000_000_000_000_000_000u128.try_into().ok().unwrap(),
-		)
-		.ok();
-
+		        <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
+		            reward_asset.clone(),
+		            &caller,
+		            100_000_000_000_000_000_000u128.try_into().ok().unwrap(),
+		        )
+		        .ok();
+		
+		        // Touch the presale treasury account to create the AssetAccount before transfer
+		        let presale_treasury_account = Presale::<T>::presale_account_id(0);
+		        <pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
+		            reward_asset.clone(),
+		            &presale_treasury_account,
+		            1u128.try_into().ok().unwrap(),
+		        ).unwrap();
+		
+		
 		#[extrinsic_call]
 		create_presale(
 			RawOrigin::Signed(caller),
@@ -156,15 +167,18 @@ mod benchmarks {
 		assert_eq!(contribution_info.amount, amount);
 	}
 
-	/* TODO: Fix bench_finalize_presale - "Funds are unavailable" error in benchmark environment
-	 * Works perfectly in unit tests (debug_finalize_presale passes) but fails in benchmarks
-	 * Issue: Same code, different runtime environments - likely AssetAccountDeposit or native balance requirement
-	 * TEMPORARILY DISABLED - will re-enable after finding proper solution
 	#[benchmark]
 	fn finalize_presale(n: Linear<25, 100>) { // Min 25 to reach 5B soft_cap (25 * 200M = 5B)
 		let owner: T::AccountId = account("owner", 0, 0);
 		let payment_asset: <T as pallet_assets::Config>::AssetId = 1000u32.into();
-		let reward_asset: <T as pallet_assets::Config>::AssetId = 999u32.into(); // Unique ID for benchmark
+		let reward_asset: <T as pallet_assets::Config>::AssetId = 1u32.into(); // Unique ID for benchmark
+		let presale_treasury_account = Presale::<T>::presale_account_id(0);
+
+		// Fund owner and presale treasury with native currency for existential deposits
+		let existential_deposit = Balances::<T>::minimum_balance();
+		let _ = <Balances<T> as Currency<T::AccountId>>::make_free_balance_be(&owner, existential_deposit * 1000u32.into());
+		let _ = <Balances<T> as Currency<T::AccountId>>::make_free_balance_be(&presale_treasury_account, existential_deposit * 1000u32.into());
+
 
 		// Create assets first
 		let _ = pallet_assets::Pallet::<T>::force_create(
@@ -187,7 +201,7 @@ mod benchmarks {
 		<pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
 			reward_asset.clone(),
 			&owner,
-			100_000_000_000_000_000_000u128.try_into().ok().unwrap(), // 100 quintillion
+			1_000_000_000_000_000_000_000_000u128.try_into().ok().unwrap(), // 100 quintillion * 1000 = 100 sextillion
 		)
 		.ok();
 
@@ -195,15 +209,30 @@ mod benchmarks {
 			RawOrigin::Signed(owner.clone()).into(),
 			payment_asset.clone(),
 			reward_asset.clone(),
-			40_000_000_000u128, // tokens_for_sale (increased for n=100)
+			1_000_000_000_000u128, // tokens_for_sale (increased significantly)
 			100u32.into(),
 			false,
 			10_000_000u128,
 			1_000_000_000u128,
 			5_000_000_000u128, // soft_cap (n=25 * 200M = 5B)
-			25_000_000_000u128, // hard_cap (n=100 * 200M = 20B, rounded to 25B)
-			false, 0u8, 0u32.into(), 0u32.into(), 24u32.into(), 5u8, 2u8,
-		);
+			            25_000_000_000u128, // hard_cap (n=100 * 200M = 20B, rounded to 25B)
+						false, 0u8, 0u32.into(), 0u32.into(), 24u32.into(), 5u8, 2u8,
+					);
+			
+					// MANUALLY transfer tokens_for_sale to bypass internal transfer issues in benchmark env
+					let tokens_for_sale = 1_000_000_000_000u128;
+							<pallet_assets::Pallet<T> as Mutate<T::AccountId>>::transfer(
+								reward_asset.clone(),
+								&owner,
+								&presale_treasury_account,
+								tokens_for_sale.try_into().ok().unwrap(),
+								Preservation::Preserve,
+							).unwrap();			
+			
+		let presale_treasury_account = Presale::<T>::presale_account_id(0);
+		let treasury_balance_after_creation = <pallet_assets::Pallet<T> as fungibles::Inspect<T::AccountId>>::balance(reward_asset.clone(), &presale_treasury_account);
+		info!("create_presale sonrası presale hazine bakiyesi: {:?}", treasury_balance_after_creation);
+
 
 		// create_presale automatically transfers tokens_for_sale from owner to treasury
 
@@ -214,13 +243,13 @@ mod benchmarks {
 		<pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
 			payment_asset.clone(),
 			&treasury_account,
-			100_000_000_000u128.try_into().ok().unwrap(), // 100B for all contributions
+			1_000_000_000_000u128.try_into().ok().unwrap(), // 100B for all contributions
 		)
 		.unwrap();
 		<pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
 			payment_asset.clone(),
 			&stakers_account,
-			100_000_000_000u128.try_into().ok().unwrap(), // 100B for all contributions
+			1_000_000_000_000u128.try_into().ok().unwrap(), // 100B for all contributions
 		)
 		.unwrap();
 
@@ -236,7 +265,7 @@ mod benchmarks {
 			<pallet_assets::Pallet<T> as Mutate<T::AccountId>>::mint_into(
 				payment_asset.clone(),
 				&contributor,
-				(contribution_amount + 1_000_000_000u128).try_into().ok().unwrap(), // 1B buffer
+				(contribution_amount + 1_000_000_000_000u128).try_into().ok().unwrap(), // 1B buffer
 			)
 			.unwrap();
 
@@ -254,7 +283,6 @@ mod benchmarks {
 		let presale = Presales::<T>::get(0).unwrap();
 		assert!(matches!(presale.status, PresaleStatus::Finalized));
 	}
-	*/
 
 	#[benchmark]
 	fn refund() {

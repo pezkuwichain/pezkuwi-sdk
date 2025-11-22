@@ -16,6 +16,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { package = "parity-scale-codec", version = "3.6.12", default-features = false, features = ["derive", "max-encoded-len"] }
 scale-info = { default-features = false, features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
+log = { version = "0.4.14", default-features = false }
 
 frame-support = { default-features = false, workspace = true }
 frame-system = { default-features = false, workspace = true }
@@ -24,6 +25,7 @@ sp-runtime = { default-features = false, workspace = true }
 sp-std = { default-features = false, workspace = true }
 
 pallet-assets = { default-features = false, workspace = true }
+pallet-balances = { default-features = false, workspace = true, optional = true }
 
 [dev-dependencies]
 sp-core = { workspace = true }
@@ -36,12 +38,13 @@ std = [
     "codec/std",
     "scale-info/std",
     "serde/std",
+    "log/std",
     "frame-support/std",
     "frame-system/std",
     "sp-std/std",
     "sp-runtime/std",
     "pallet-assets/std",
-    "pallet-balances/std",
+    "pallet-balances?/std",
     "sp-core/std",
     "sp-io/std",
     "frame-benchmarking?/std",
@@ -51,6 +54,8 @@ runtime-benchmarks = [
     "frame-support/runtime-benchmarks",
     "frame-system/runtime-benchmarks",
     "pallet-assets/runtime-benchmarks",
+    "pallet-balances",
+    "log/std",
 ]
 try-runtime = [
     "frame-support/try-runtime",
