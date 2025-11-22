@@ -1,0 +1,138 @@
+[package]
+name = "pezkuwi-parachain-runtime"
+description = "TeyrChain Runtime - PezkuwiChain built with Substrate and Cumulus."
+version = "0.1.0"
+license = "Unlicense"
+authors.workspace = true
+homepage.workspace = true
+repository.workspace = true
+edition.workspace = true
+publish = false
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[build-dependencies]
+docify = { workspace = true }
+substrate-wasm-builder = { optional = true, workspace = true, default-features = true }
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+cumulus-pallet-parachain-system.workspace = true
+docify = { workspace = true }
+hex-literal = { optional = true, workspace = true, default-features = true }
+log = { workspace = true }
+pallet-parachain-template.workspace = true
+
+# NFTs - Required for pallet-tiki
+pallet-nfts = { default-features = false, workspace = true }
+
+# Assets - Required for pallet-presale and custom pallets
+pallet-assets = { default-features = false, workspace = true }
+
+# Custom PezkuwiChain Pallets - Batch 1
+pallet-tiki = { path = "../../pallets/tiki", default-features = false }
+pallet-identity-kyc = { path = "../../pallets/identity-kyc", default-features = false }
+pallet-referral = { path = "../../pallets/referral", default-features = false }
+
+# Custom PezkuwiChain Pallets - Batch 2
+pallet-perwerde = { path = "../../pallets/perwerde", default-features = false }
+
+# Custom PezkuwiChain Pallets - Batch 3
+pallet-presale = { path = "../../pallets/presale", default-features = false }
+
+# Custom PezkuwiChain Pallets - Batch 4
+pallet-token-wrapper = { path = "../../pallets/token-wrapper", default-features = false }
+pallet-welati = { path = "../../pallets/welati", default-features = false }
+pallet-staking-score = { path = "../../pallets/staking-score", default-features = false }
+
+# Custom PezkuwiChain Pallets - Batch 5
+pallet-trust = { path = "../../pallets/trust", default-features = false }
+pallet-pez-treasury = { path = "../../pallets/pez-treasury", default-features = false }
+pallet-pez-rewards = { path = "../../pallets/pez-rewards", default-features = false }
+pallet-validator-pool = { path = "../../pallets/validator-pool", default-features = false }
+
+pezkuwi-sdk = { workspace = true, features = ["cumulus-pallet-aura-ext", "cumulus-pallet-session-benchmarking", "cumulus-pallet-weight-reclaim", "cumulus-pallet-xcm", "cumulus-pallet-xcmp-queue", "cumulus-primitives-aura", "cumulus-primitives-core", "cumulus-primitives-utility", "pallet-aura", "pallet-authorship", "pallet-balances", "pallet-collator-selection", "pallet-message-queue", "pallet-session", "pallet-sudo", "pallet-timestamp", "pallet-transaction-payment", "pallet-transaction-payment-rpc-runtime-api", "pallet-xcm", "parachains-common", "pezkuwi-parachain-primitives", "pezkuwi-runtime-common", "runtime", "staging-parachain-info", "staging-xcm", "staging-xcm-builder", "staging-xcm-executor"], default-features = false }
+scale-info = { features = ["derive"], workspace = true }
+serde_json = { workspace = true, default-features = false, features = ["alloc"] }
+smallvec = { workspace = true, default-features = true }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"cumulus-pallet-parachain-system/std",
+	"log/std",
+	"pallet-parachain-template/std",
+	"pallet-nfts/std",
+	"pallet-assets/std",
+	"pallet-tiki/std",
+	"pallet-identity-kyc/std",
+	"pallet-referral/std",
+	"pallet-perwerde/std",
+	"pallet-presale/std",
+	"pallet-token-wrapper/std",
+	"pallet-welati/std",
+	"pallet-staking-score/std",
+	"pallet-trust/std",
+	"pallet-pez-treasury/std",
+	"pallet-pez-rewards/std",
+	"pallet-validator-pool/std",
+	"pezkuwi-sdk/std",
+	"scale-info/std",
+	"serde_json/std",
+	"substrate-wasm-builder",
+]
+
+runtime-benchmarks = [
+	"cumulus-pallet-parachain-system/runtime-benchmarks",
+	"pallet-parachain-template/runtime-benchmarks",
+	"pallet-nfts/runtime-benchmarks",
+	"pallet-assets/runtime-benchmarks",
+	"pallet-tiki/runtime-benchmarks",
+	"pallet-identity-kyc/runtime-benchmarks",
+	"pallet-referral/runtime-benchmarks",
+	"pallet-perwerde/runtime-benchmarks",
+	"pallet-presale/runtime-benchmarks",
+	"pallet-token-wrapper/runtime-benchmarks",
+	"pallet-welati/runtime-benchmarks",
+	"pallet-staking-score/runtime-benchmarks",
+	"pallet-trust/runtime-benchmarks",
+	"pallet-pez-treasury/runtime-benchmarks",
+	"pallet-pez-rewards/runtime-benchmarks",
+	"pallet-validator-pool/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
+]
+
+try-runtime = [
+	"cumulus-pallet-parachain-system/try-runtime",
+	"pallet-parachain-template/try-runtime",
+	"pallet-nfts/try-runtime",
+	"pallet-assets/try-runtime",
+	"pallet-tiki/try-runtime",
+	"pallet-identity-kyc/try-runtime",
+	"pallet-referral/try-runtime",
+	"pallet-perwerde/try-runtime",
+	"pallet-presale/try-runtime",
+	"pallet-token-wrapper/try-runtime",
+	"pallet-welati/try-runtime",
+	"pallet-staking-score/try-runtime",
+	"pallet-trust/try-runtime",
+	"pallet-pez-treasury/try-runtime",
+	"pallet-pez-rewards/try-runtime",
+	"pallet-validator-pool/try-runtime",
+	"pezkuwi-sdk/try-runtime",
+]
+
+# Enable the metadata hash generation.
+#
+# This is hidden behind a feature because it increases the compile time.
+# The wasm binary needs to be compiled twice, once to fetch the metadata,
+# generate the metadata hash and then a second time with the
+# `RUNTIME_METADATA_HASH` environment variable set for the `CheckMetadataHash`
+# extension.
+metadata-hash = ["substrate-wasm-builder/metadata-hash"]
+
+# A convenience feature for enabling things when doing a build
+# for an on-chain release.
+on-chain-release-build = ["metadata-hash"]
