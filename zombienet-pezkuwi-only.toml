@@ -1,0 +1,38 @@
+[settings]
+timeout = 1000
+provider = "native"
+
+[relaychain]
+default_command = "./bin/polkadot"
+default_args = [ "-lparachain=debug" ]
+chain = "rococo-local"
+
+  [[relaychain.nodes]]
+  name = "alice"
+  validator = true
+  rpc_port = 9933
+  args = ["-lxcm=trace", "--rpc-cors=all", "--unsafe-rpc-external"]
+
+  [[relaychain.nodes]]
+  name = "bob"
+  validator = true
+  rpc_port = 9934
+  args = ["-lxcm=trace", "--rpc-cors=all", "--unsafe-rpc-external"]
+
+# Pezkuwi Parachain (Para ID 2000)
+# Use the relay chain directly with --parachain-id flag
+[[parachains]]
+id = 2000
+
+  [parachains.collator]
+  name = "pezkuwi-collator"
+  command = "./target/release/pezkuwi"
+  rpc_port = 9977
+  args = [
+    "--chain=chain-specs/alfa/alfa-raw.json",
+    "--force-authoring",
+    "-lparachain=debug",
+    "-lxcm=trace",
+    "--rpc-cors=all",
+    "--unsafe-rpc-external"
+  ]

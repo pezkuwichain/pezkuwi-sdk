@@ -1,0 +1,50 @@
+[settings]
+timeout = 1000
+provider = "native"
+
+[relaychain]
+default_command = "./bin/polkadot"
+default_args = [ "-lparachain=debug" ]
+chain = "rococo-local"
+
+  [[relaychain.nodes]]
+  name = "alice"
+  validator = true
+  ws_port = 9944
+  rpc_port = 9933
+
+  [[relaychain.nodes]]
+  name = "bob"
+  validator = true
+  ws_port = 9945
+  rpc_port = 9934
+
+# Asset Hub (Para ID 1000) - holds USDT
+[[parachains]]
+id = 1000
+chain = "asset-hub-rococo-local"
+
+  [parachains.collator]
+  name = "asset-hub"
+  command = "./bin/polkadot-parachain"
+  ws_port = 9966
+  rpc_port = 9955
+  args = [
+    "-lparachain=debug",
+    "-lxcm=trace"
+  ]
+
+# Pezkuwi Parachain (Para ID 2000)
+[[parachains]]
+id = 2000
+chain = "chain-specs/alfa/alfa-raw.json"
+
+  [parachains.collator]
+  name = "pezkuwi-collator"
+  command = "./target/release/pezkuwi"
+  ws_port = 9988
+  rpc_port = 9977
+  args = [
+    "-lparachain=debug",
+    "-lxcm=trace"
+  ]
