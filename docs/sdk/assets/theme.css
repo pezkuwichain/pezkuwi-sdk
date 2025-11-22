@@ -39,7 +39,7 @@ body.sdk-docs {
 }
 
 html[data-theme="light"] .sidebar-crate > .logo-container > img {
-  content: url("https://raw.githubusercontent.com/paritytech/pezkuwi-sdk/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png");
+  content: url("https://github.com/pezkuwichain/pwap/blob/main/shared/images/Pezkuwi_Logo_Horizontal_Pink_Black.png");
 }
 
 /* Custom styles for blockquotes */
