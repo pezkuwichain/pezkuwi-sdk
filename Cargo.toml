@@ -220,6 +220,7 @@ members = [
 	"pezkuwi/runtime/rococo/constants",
 	"pezkuwi/runtime/pezkuwichain",
 	"pezkuwi/runtime/pezkuwichain/constants",
+	"pezkuwi/runtime/parachain",
 	"pezkuwi/runtime/test-runtime",
 	"pezkuwi/runtime/test-runtime/constants",
 	"pezkuwi/runtime/westend",
