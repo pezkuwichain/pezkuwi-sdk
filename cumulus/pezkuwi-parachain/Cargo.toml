@@ -1,10 +1,10 @@
 [package]
-name = "pezkuwi-parachain-bin"
+name = "teyrchain-collator"
 version = "6.0.0"
 authors.workspace = true
 edition.workspace = true
 build = "build.rs"
-description = "Runs a pezkuwi parachain node"
+description = "TeyrChain collator node - Kurdish blockchain parachain"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
@@ -14,7 +14,7 @@ publish = false
 workspace = true
 
 [[bin]]
-name = "pezkuwi-parachain"
+name = "teyrchain-collator"
 path = "src/main.rs"
 
 [dependencies]

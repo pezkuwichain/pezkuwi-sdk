@@ -1,6 +1,6 @@
 [package]
-name = "pezkuwi-parachain-runtime"
-description = "TeyrChain Runtime - PezkuwiChain built with Substrate and Cumulus."
+name = "teyrchain-runtime"
+description = "TeyrChain - Kurdistan blockchain network built on Substrate and Cumulus"
 version = "0.1.0"
 license = "Unlicense"
 authors.workspace = true

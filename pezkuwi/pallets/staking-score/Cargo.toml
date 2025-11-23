@@ -10,7 +10,7 @@ publish = false
 repository.workspace = true
 
 [dependencies]
-codec = { package = "parity-scale-codec", default-features = false, features = ["derive"], workspace = true }
+codec = { workspace = true, default-features = false, features = ["derive"] }
 scale-info = { default-features = false, features = ["derive"], workspace = true }
 frame-support = { default-features = false, workspace = true }
 frame-system = { default-features = false, workspace = true }
@@ -32,7 +32,7 @@ sp-runtime = { workspace = true, features = ["std"] }
 frame-support = { workspace = true, features = ["std"] }
 frame-system = { workspace = true, features = ["std"] }
 pallet-balances = { workspace = true, features = ["std"] }
-pezkuwi-primitives = { workspace = true, path = "../../primitives", features = ["std"] }
+pezkuwi-primitives = { workspace = true, features = ["std"] }
 pallet-staking = { workspace = true, features = ["std", "runtime-benchmarks"] }
 pallet-session = { workspace = true, features = ["std"] }
 pallet-timestamp = { workspace = true, features = ["std"] }

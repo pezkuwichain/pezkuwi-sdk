@@ -312,7 +312,7 @@ version = "1.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40c48f72fd53cd289104fc64099abca73db4166ad86ea0b4341abe65af83dadc"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -323,7 +323,7 @@ checksum = "291e6a250ff86cd4a820112fb8898808a366d8f9f58ce16d1f538353ad55747d"
 dependencies = [
  "anstyle",
  "once_cell_polyfill",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -1737,9 +1737,9 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "base64ct"
-version = "1.8.0"
+version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "55248b47b0caf0546f7988906588779981c43bb1bc9d0c44087278f80cdb44ba"
+checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
 name = "binary-merkle-tree"
@@ -3359,9 +3359,9 @@ dependencies = [
 
 [[package]]
 name = "comfy-table"
-version = "7.2.1"
+version = "7.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b03b7db8e0b4b2fdad6c551e634134e99ec000e5c8c3b6856c65e8bbaded7a3b"
+checksum = "4a65ebfec4fb190b6f90e944a817d60499ee0744e582530e2c9900a22e591d9a"
 dependencies = [
  "unicode-segmentation",
  "unicode-width",
@@ -5792,7 +5792,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -7504,11 +7504,11 @@ dependencies = [
 
 [[package]]
 name = "home"
-version = "0.5.12"
+version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc627f471c528ff0c4a49e1d5e60450c8f6461dd6d10ba9dcd3a61d3dff7728d"
+checksum = "589533453244b0995c858700322199b2becb13b627df2851f64a2775d024abcf"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -8139,7 +8139,7 @@ checksum = "3640c1c38b8e4e43584d8df18be5fc6b0aa314ce6ebf51b53313d4306cca8e46"
 dependencies = [
  "hermit-abi 0.5.2",
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -9369,9 +9369,9 @@ checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
 
 [[package]]
 name = "linked_hash_set"
-version = "0.1.6"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "984fb35d06508d1e69fc91050cceba9c0b748f983e6739fa2c7a9237154c52c8"
+checksum = "bae85b5be22d9843c80e5fc80e9b64c8a3b1f98f867c709956eca3efff4e92e2"
 dependencies = [
  "linked-hash-map",
 ]
@@ -10420,7 +10420,7 @@ version = "0.50.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -10754,7 +10754,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7d8fae84b431384b68627d0f9b3b1245fcf9f46f6c0e3dc902e9dce64edd1967"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -15125,40 +15125,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pezkuwi-parachain-bin"
-version = "6.0.0"
-dependencies = [
- "asset-hub-rococo-runtime",
- "asset-hub-westend-runtime",
- "bridge-hub-rococo-runtime",
- "bridge-hub-westend-runtime",
- "collectives-westend-runtime",
- "color-eyre",
- "coretime-rococo-runtime",
- "coretime-westend-runtime",
- "cumulus-primitives-core",
- "glutton-westend-runtime",
- "hex-literal",
- "log",
- "parachains-common",
- "penpal-runtime",
- "people-rococo-runtime",
- "people-westend-runtime",
- "pezkuwi-omni-node-lib",
- "rococo-parachain-runtime",
- "sc-chain-spec",
- "sc-cli",
- "sc-service",
- "serde",
- "serde_json",
- "sp-core 36.1.0",
- "sp-genesis-builder",
- "sp-keyring",
- "staging-xcm",
- "substrate-build-script-utils",
-]
-
-[[package]]
 name = "pezkuwi-parachain-primitives"
 version = "16.1.0"
 dependencies = [
@@ -15171,37 +15137,6 @@ dependencies = [
  "sp-core 36.1.0",
  "sp-runtime",
  "sp-weights",
-]
-
-[[package]]
-name = "pezkuwi-parachain-runtime"
-version = "0.1.0"
-dependencies = [
- "cumulus-pallet-parachain-system",
- "docify",
- "hex-literal",
- "log",
- "pallet-assets",
- "pallet-identity-kyc",
- "pallet-nfts",
- "pallet-parachain-template",
- "pallet-perwerde",
- "pallet-pez-rewards",
- "pallet-pez-treasury",
- "pallet-presale",
- "pallet-referral",
- "pallet-staking-score",
- "pallet-tiki",
- "pallet-token-wrapper",
- "pallet-trust",
- "pallet-validator-pool",
- "pallet-welati",
- "parity-scale-codec",
- "pezkuwi-sdk",
- "scale-info",
- "serde_json",
- "smallvec",
- "substrate-wasm-builder",
 ]
 
 [[package]]
@@ -18198,14 +18133,13 @@ dependencies = [
 
 [[package]]
 name = "ruint"
-version = "1.17.0"
+version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a68df0380e5c9d20ce49534f292a36a7514ae21350726efe1865bdb1fa91d278"
+checksum = "9ecb38f82477f20c5c3d62ef52d7c4e536e38ea9b73fb570a20c5cae0e14bcf6"
 dependencies = [
  "alloy-rlp",
  "ark-ff 0.3.0",
  "ark-ff 0.4.2",
- "ark-ff 0.5.0",
  "bytes",
  "fastrlp 0.3.1",
  "fastrlp 0.4.0",
@@ -18219,7 +18153,7 @@ dependencies = [
  "rand 0.9.2",
  "rlp 0.5.2",
  "ruint-macro",
- "serde_core",
+ "serde",
  "valuable",
  "zeroize",
 ]
@@ -18341,7 +18275,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.11.0",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -24246,7 +24180,7 @@ dependencies = [
  "getrandom 0.3.4",
  "once_cell",
  "rustix 1.1.2",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -24337,6 +24271,71 @@ dependencies = [
  "sp-runtime",
  "staging-xcm",
  "westend-runtime-constants",
+]
+
+[[package]]
+name = "teyrchain-collator"
+version = "6.0.0"
+dependencies = [
+ "asset-hub-rococo-runtime",
+ "asset-hub-westend-runtime",
+ "bridge-hub-rococo-runtime",
+ "bridge-hub-westend-runtime",
+ "collectives-westend-runtime",
+ "color-eyre",
+ "coretime-rococo-runtime",
+ "coretime-westend-runtime",
+ "cumulus-primitives-core",
+ "glutton-westend-runtime",
+ "hex-literal",
+ "log",
+ "parachains-common",
+ "penpal-runtime",
+ "people-rococo-runtime",
+ "people-westend-runtime",
+ "pezkuwi-omni-node-lib",
+ "rococo-parachain-runtime",
+ "sc-chain-spec",
+ "sc-cli",
+ "sc-service",
+ "serde",
+ "serde_json",
+ "sp-core 36.1.0",
+ "sp-genesis-builder",
+ "sp-keyring",
+ "staging-xcm",
+ "substrate-build-script-utils",
+]
+
+[[package]]
+name = "teyrchain-runtime"
+version = "0.1.0"
+dependencies = [
+ "cumulus-pallet-parachain-system",
+ "docify",
+ "hex-literal",
+ "log",
+ "pallet-assets",
+ "pallet-identity-kyc",
+ "pallet-nfts",
+ "pallet-parachain-template",
+ "pallet-perwerde",
+ "pallet-pez-rewards",
+ "pallet-pez-treasury",
+ "pallet-presale",
+ "pallet-referral",
+ "pallet-staking-score",
+ "pallet-tiki",
+ "pallet-token-wrapper",
+ "pallet-trust",
+ "pallet-validator-pool",
+ "pallet-welati",
+ "parity-scale-codec",
+ "pezkuwi-sdk",
+ "scale-info",
+ "serde_json",
+ "smallvec",
+ "substrate-wasm-builder",
 ]
 
 [[package]]
@@ -26184,7 +26183,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
