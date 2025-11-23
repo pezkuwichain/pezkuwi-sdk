@@ -170,7 +170,7 @@ cargo build --release --features try-runtime
 ./target/release/pezkuwi try-runtime \
     --runtime ./target/release/wbuild/pezkuwichain-runtime/pezkuwichain_runtime.wasm \
     on-runtime-upgrade \
-    live --uri wss://pezkuwi.network:443
+    live --uri wss://network.pezkuwichain.io:443
 ```
 
 ## Adding New Migrations

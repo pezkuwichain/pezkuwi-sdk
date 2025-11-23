@@ -16,7 +16,7 @@ groups:
         annotations:
           summary: "PezkuwiChain node {{ $labels.node }} is down"
           description: "Node {{ $labels.node }} ({{ $labels.instance }}) has been down for more than 2 minutes."
-          runbook: "https://docs.pezkuwi.network/runbooks/node-down"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/node-down"
 
       # Critical: No new blocks being produced
       - alert: BlockProductionStopped
@@ -28,7 +28,7 @@ groups:
         annotations:
           summary: "Block production stopped on {{ $labels.node }}"
           description: "No new blocks have been produced in the last 5 minutes on {{ $labels.node }}."
-          runbook: "https://docs.pezkuwi.network/runbooks/block-production-stopped"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/block-production-stopped"
 
       # Critical: Finalization lag
       - alert: FinalizationLag
@@ -40,7 +40,7 @@ groups:
         annotations:
           summary: "Finalization lag on {{ $labels.node }}"
           description: "Finalization is {{ $value }} blocks behind on {{ $labels.node }}. This may indicate consensus issues."
-          runbook: "https://docs.pezkuwi.network/runbooks/finalization-lag"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/finalization-lag"
 
       # High: Low peer count
       - alert: LowPeerCount
@@ -52,7 +52,7 @@ groups:
         annotations:
           summary: "Low peer count on {{ $labels.node }}"
           description: "Node {{ $labels.node }} has only {{ $value }} peers connected."
-          runbook: "https://docs.pezkuwi.network/runbooks/low-peer-count"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/low-peer-count"
 
       # High: High transaction pool size
       - alert: HighTransactionPool
@@ -64,7 +64,7 @@ groups:
         annotations:
           summary: "High transaction pool size on {{ $labels.node }}"
           description: "Transaction pool has {{ $value }} pending transactions on {{ $labels.node }}."
-          runbook: "https://docs.pezkuwi.network/runbooks/high-txpool"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/high-txpool"
 
       # Medium: Validator not in active set
       - alert: ValidatorNotActive
@@ -76,7 +76,7 @@ groups:
         annotations:
           summary: "Validator {{ $labels.node }} not in active set"
           description: "Validator {{ $labels.node }} is not in the active validator set."
-          runbook: "https://docs.pezkuwi.network/runbooks/validator-inactive"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/validator-inactive"
 
   - name: pezkuwi_system_alerts
     interval: 30s
@@ -91,7 +91,7 @@ groups:
         annotations:
           summary: "High CPU usage on {{ $labels.hostname }}"
           description: "CPU usage is {{ $value }}% on {{ $labels.hostname }}."
-          runbook: "https://docs.pezkuwi.network/runbooks/high-cpu"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/high-cpu"
 
       # Critical: Low disk space
       - alert: LowDiskSpace
@@ -103,7 +103,7 @@ groups:
         annotations:
           summary: "Low disk space on {{ $labels.hostname }}"
           description: "Disk space is {{ $value }}% remaining on {{ $labels.hostname }}."
-          runbook: "https://docs.pezkuwi.network/runbooks/low-disk-space"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/low-disk-space"
 
       # High: High memory usage
       - alert: HighMemoryUsage
@@ -115,7 +115,7 @@ groups:
         annotations:
           summary: "High memory usage on {{ $labels.hostname }}"
           description: "Memory usage is {{ $value }}% on {{ $labels.hostname }}."
-          runbook: "https://docs.pezkuwi.network/runbooks/high-memory"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/high-memory"
 
       # High: System load
       - alert: HighSystemLoad
@@ -127,7 +127,7 @@ groups:
         annotations:
           summary: "High system load on {{ $labels.hostname }}"
           description: "15-minute load average is {{ $value }} on {{ $labels.hostname }}."
-          runbook: "https://docs.pezkuwi.network/runbooks/high-load"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/high-load"
 
   - name: pezkuwi_pallet_alerts
     interval: 1m
@@ -142,7 +142,7 @@ groups:
         annotations:
           summary: "Treasury balance critically low"
           description: "Treasury balance is {{ $value }} which is below the safe threshold."
-          runbook: "https://docs.pezkuwi.network/runbooks/treasury-low"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/treasury-low"
 
       # High: Election not finalized
       - alert: ElectionNotFinalized
@@ -154,7 +154,7 @@ groups:
         annotations:
           summary: "Election past deadline"
           description: "Election {{ $labels.election_id }} is past its finalization deadline."
-          runbook: "https://docs.pezkuwi.network/runbooks/election-overdue"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/election-overdue"
 
       # Medium: High NFT minting rate
       - alert: HighNFTMintingRate
@@ -166,7 +166,7 @@ groups:
         annotations:
           summary: "High NFT minting rate detected"
           description: "NFT minting rate is {{ $value }} per hour, which may indicate spam."
-          runbook: "https://docs.pezkuwi.network/runbooks/high-minting-rate"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/high-minting-rate"
 
   - name: pezkuwi_database_alerts
     interval: 30s
@@ -181,7 +181,7 @@ groups:
         annotations:
           summary: "PostgreSQL database is down"
           description: "Database connection failed for more than 2 minutes."
-          runbook: "https://docs.pezkuwi.network/runbooks/database-down"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/database-down"
 
       # High: High database connections
       - alert: HighDatabaseConnections
@@ -193,7 +193,7 @@ groups:
         annotations:
           summary: "High database connection usage"
           description: "Database is using {{ $value | humanizePercentage }} of max connections."
-          runbook: "https://docs.pezkuwi.network/runbooks/high-db-connections"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/high-db-connections"
 
   - name: pezkuwi_security_alerts
     interval: 1m
@@ -208,7 +208,7 @@ groups:
         annotations:
           summary: "Unusual transaction rate detected on {{ $labels.node }}"
           description: "Transaction rate is {{ $value }} tx/s, which may indicate an attack."
-          runbook: "https://docs.pezkuwi.network/runbooks/unusual-tx-rate"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/unusual-tx-rate"
 
       # High: Failed transactions spike
       - alert: FailedTransactionSpike
@@ -220,4 +220,4 @@ groups:
         annotations:
           summary: "High rate of failed transactions on {{ $labels.node }}"
           description: "Failed transaction rate is {{ $value }} tx/s."
-          runbook: "https://docs.pezkuwi.network/runbooks/failed-tx-spike"
+          runbook: "https://docs.network.pezkuwichain.io/runbooks/failed-tx-spike"

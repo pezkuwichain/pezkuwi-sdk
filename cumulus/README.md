@@ -8,8 +8,8 @@ If you only want to run a **Pezkuwi Parachain Node**, check out our [container s
 
 ## Cumulus SDK
 
-A set of tools for writing [Substrate](https://substrate.io/)-based [Pezkuwi](https://wiki.pezkuwi.network/en/)
-[parachains](https://wiki.pezkuwi.network/docs/en/learn-parachains). Refer to the included [overview](docs/overview.md)
+A set of tools for writing [Substrate](https://substrate.io/)-based [Pezkuwi](https://wiki.network.pezkuwichain.io/en/)
+[parachains](https://wiki.network.pezkuwichain.io/docs/en/learn-parachains). Refer to the included [overview](docs/overview.md)
 for architectural details, and the [Connect to a relay chain how-to
 guide](https://docs.substrate.io/reference/how-to-guides/parachains/connect-to-a-relay-chain/) for a guided walk-through
 of using these tools.
@@ -24,13 +24,13 @@ Cumulus clouds are shaped sort of like dots; together they form a system that is
 
 [`parachain-consensus`](https://github.com/paritytech/polkadot-sdk/blob/master/cumulus/client/consensus/common/src/parachain_consensus.rs)
 is a [consensus engine](https://docs.substrate.io/v3/advanced/consensus) for Substrate that follows a Pezkuwi [relay
-chain](https://wiki.pezkuwi.network/docs/en/learn-architecture#relay-chain). This will run a Pezkuwi node internally,
+chain](https://wiki.network.pezkuwichain.io/docs/en/learn-architecture#relay-chain). This will run a Pezkuwi node internally,
 and dictate to the client and synchronization algorithms which chain to follow,
-[finalize](https://wiki.pezkuwi.network/docs/en/learn-consensus#probabilistic-vs-provable-finality), and treat as best.
+[finalize](https://wiki.network.pezkuwichain.io/docs/en/learn-consensus#probabilistic-vs-provable-finality), and treat as best.
 
 ### Collator
 
-A Pezkuwi [collator](https://wiki.pezkuwi.network/docs/en/learn-collator) for the parachain is implemented by the
+A Pezkuwi [collator](https://wiki.network.pezkuwichain.io/docs/en/learn-collator) for the parachain is implemented by the
 `pezkuwi-parachain` binary (previously called `pezkuwi-collator`).
 
 You may run `pezkuwi-parachain` locally after building it or using one of the container option described

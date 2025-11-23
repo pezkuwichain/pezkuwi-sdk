@@ -18,7 +18,7 @@
 //! > Made with *Substrate*, for *Pezkuwi*.
 //!
 //! [![github]](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/fast-unstake) -
-//! [![pezkuwi]](https://pezkuwi.network)
+//! [![pezkuwi]](https://network.pezkuwichain.io)
 //!
 //! [pezkuwi]: https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
@@ -39,7 +39,7 @@
 //! *Being exposed with validator* from the point of view of the staking system means earning
 //! rewards with the validator, and also being at the risk of slashing with the validator. This is
 //! equivalent to the "Active Nominator" role explained in
-//! [here](https://pezkuwi.network/blog/staking-update-february-2022/).
+//! [here](https://network.pezkuwichain.io/blog/staking-update-february-2022/).
 //!
 //! Stakers who are certain about NOT being exposed can register themselves with
 //! [`Pallet::register_fast_unstake`]. This will chill, fully unbond the staker and place them

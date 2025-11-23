@@ -4,7 +4,7 @@
 //!
 //! ## Learn More and Get Involved
 //!
-//! - [Pezkuwi Forum](https://forum.pezkuwi.network/)
+//! - [Pezkuwi Forum](https://forum.network.pezkuwichain.io/)
 //! - [Pezkuwi Parachains](https://parachains.info/)
 //! - [Pezkuwi (multi-chain) Explorer: Subscan](https://subscan.io/)
 //! - Pezkuwi Fellowship
@@ -12,9 +12,9 @@
 //!     - [Runtimes](https://github.com/pezkuwi-fellows/runtimes)
 //!     - [RFCs](https://github.com/pezkuwi-fellows/rfcs)
 //! 	- [Dashboard](https://pezkuwi-fellows.github.io/dashboard/)
-//! - [Pezkuwi Specs](http://spec.pezkuwi.network)
+//! - [Pezkuwi Specs](http://spec.network.pezkuwichain.io)
 //! - [The Pezkuwi Parachain Host Implementers' Guide](https://paritytech.github.io/pezkuwi-sdk/book/)
-//! - [Whitepaper](https://www.pezkuwi.network/whitepaper/)
+//! - [Whitepaper](https://www.network.pezkuwichain.io/whitepaper/)
 //! - [JAM Graypaper](https://graypaper.com)
 //!
 //! ## Alternative Node Implementations 🌈
@@ -54,7 +54,7 @@
 //!   the validity of the block execution of multiple parachains using the same set of validators as
 //!   the Relay Chain. In practice, this means that the shards (parachains) share the same economic
 //!   security as the Relay Chain.
-//!   Learn about this process called [Approval Checking](https://pezkuwi.network/blog/pezkuwi-v1-0-sharding-and-economic-security#approval-checking-and-finality).
+//!   Learn about this process called [Approval Checking](https://network.pezkuwichain.io/blog/pezkuwi-v1-0-sharding-and-economic-security#approval-checking-and-finality).
 //! * A framework to build blockchains: In order to materialize the ecosystem of parachains, an easy
 //!   blockchain framework must exist. This is [Substrate](crate::pezkuwi_sdk::substrate),
 //!   [FRAME](crate::pezkuwi_sdk::frame_runtime) and [Cumulus](crate::pezkuwi_sdk::cumulus).
@@ -93,4 +93,4 @@
 //! - RFC#5: [Coretime-interface](https://github.com/pezkuwi-fellows/RFCs/blob/main/text/0005-coretime-interface.md):
 //!   Interface for manipulating the usage of cores on the Pezkuwi Ubiquitous Computer.
 //!
-//! Learn more about [Pezkuwi as a Computational Resource](https://wiki.pezkuwi.network/docs/pezkuwi-direction#pezkuwi-as-a-computational-resource).
+//! Learn more about [Pezkuwi as a Computational Resource](https://wiki.network.pezkuwichain.io/docs/pezkuwi-direction#pezkuwi-as-a-computational-resource).

@@ -18,7 +18,7 @@
 //! > Made with *Substrate*, for *Pezkuwi*.
 //!
 //! [![github]](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/sudo)
-//! [![pezkuwi]](https://pezkuwi.network)
+//! [![pezkuwi]](https://network.pezkuwichain.io)
 //!
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //! [pezkuwi]: https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white

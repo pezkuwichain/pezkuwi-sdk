@@ -474,7 +474,7 @@ cargo build --release --features try-runtime
 ./target/release/pezkuwi try-runtime \
     --runtime ./target/release/wbuild/pezkuwichain-runtime/pezkuwichain_runtime.wasm \
     on-runtime-upgrade \
-    live --uri wss://pezkuwi.network:443 \
+    live --uri wss://network.pezkuwichain.io:443 \
     --checks all
 ```
 
@@ -680,7 +680,7 @@ Conduct retrospective after every incident:
 **DO NOT** open public GitHub issues for security vulnerabilities.
 
 **Instead**:
-1. Email: security@pezkuwi.network
+1. Email: security@network.pezkuwichain.io
 2. Include: Detailed description, steps to reproduce, impact assessment
 3. Allow 90 days for fix before public disclosure
 

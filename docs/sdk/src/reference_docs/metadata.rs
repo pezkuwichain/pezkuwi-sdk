@@ -21,5 +21,5 @@
 //!
 //! A few noteworthy tools that inspect the (FRAME-based) metadata of a chain:
 //!
-//! - <https://wiki.pezkuwi.network/docs/metadata>
+//! - <https://wiki.network.pezkuwichain.io/docs/metadata>
 //! - <https://paritytech.github.io/subxt-explorer/>

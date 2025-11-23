@@ -14,7 +14,7 @@ The general internal structure is:
 ## System Parachains
 
 The `runtimes` directory includes many, but is not limited to,
-[system parachains](https://wiki.pezkuwi.network/docs/learn-system-chains). Likewise, not all
+[system parachains](https://wiki.network.pezkuwichain.io/docs/learn-system-chains). Likewise, not all
 system parachains are in this repo.
 
 ## Releases

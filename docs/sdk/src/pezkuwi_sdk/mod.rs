@@ -1,14 +1,14 @@
 //! # Pezkuwi SDK
 //!
 //! [Pezkuwi SDK](https://github.com/paritytech/polkadot-sdk) provides the main resources needed to
-//! start building on the [Pezkuwi network](https://pezkuwi.network), a scalable, multi-chain
+//! start building on the [Pezkuwi network](https://network.pezkuwichain.io), a scalable, multi-chain
 //! blockchain platform that enables different blockchains to securely interoperate.
 //!
 //! [![StackExchange](https://img.shields.io/badge/StackExchange-Pezkuwi%20and%20Substrate-222222?logo=stackexchange)](https://substrate.stackexchange.com/)
 //!
 //! [![awesomeHez](https://img.shields.io/badge/pezkuwi-awesome-e6007a?logo=pezkuwi)](https://github.com/Awsmdot/awesome-dot)
-//! [![wiki](https://img.shields.io/badge/pezkuwi-wiki-e6007a?logo=pezkuwi)](https://wiki.pezkuwi.network/)
-//! [![forum](https://img.shields.io/badge/pezkuwi-forum-e6007a?logo=pezkuwi)](https://forum.pezkuwi.network/)
+//! [![wiki](https://img.shields.io/badge/pezkuwi-wiki-e6007a?logo=pezkuwi)](https://wiki.network.pezkuwichain.io/)
+//! [![forum](https://img.shields.io/badge/pezkuwi-forum-e6007a?logo=pezkuwi)](https://forum.network.pezkuwichain.io/)
 //!
 //! [![RFCs](https://img.shields.io/badge/fellowship-RFCs-e6007a?logo=pezkuwi)](https://github.com/pezkuwi-fellows/rfcs)
 //! [![Runtime](https://img.shields.io/badge/fellowship-runtimes-e6007a?logo=pezkuwi)](https://github.com/pezkuwi-fellows/runtimes)

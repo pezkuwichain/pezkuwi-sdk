@@ -3,7 +3,7 @@
 ℹ️ A node -  in Pezkuwi - is a binary executable, whose primary purpose is to execute the [runtime](../runtime/README.md).
 
 🔗 It communicates with other nodes in the network, and aims for
-[consensus](https://wiki.pezkuwi.network/docs/learn-consensus) among them.
+[consensus](https://wiki.network.pezkuwichain.io/docs/learn-consensus) among them.
 
 ⚙️ It acts as a remote procedure call (RPC) server, allowing interaction with the blockchain.
 

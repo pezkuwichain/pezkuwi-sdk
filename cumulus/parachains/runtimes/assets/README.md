@@ -17,9 +17,9 @@ Asset Hub must stay fully aligned with the Relay Chain it is connected to. As su
 the Relay Chain's governance origins as its own.
 
 See
-[the article on Asset Hub as common good parachain](https://www.parity.io/blog/statemint-generic-assets-chain-proposing-a-common-good-parachain-to-pezkuwi-governance/)
+[the article on Asset Hub as common good parachain](https://www.parity.pezkuwichain.io/blog/statemint-generic-assets-chain-proposing-a-common-good-parachain-to-pezkuwi-governance/)
 for a higher level description.
 
 Wallets, custodians, etc. should see
-[the Pezkuwi Wiki's Integration Guide](https://wiki.pezkuwi.network/docs/build-integrate-assets)
+[the Pezkuwi Wiki's Integration Guide](https://wiki.network.pezkuwichain.io/docs/build-integrate-assets)
 for details about support.

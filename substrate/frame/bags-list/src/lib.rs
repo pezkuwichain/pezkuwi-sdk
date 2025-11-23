@@ -18,7 +18,7 @@
 //! > Made with *Substrate*, for *Pezkuwi*.
 //!
 //! [![github]](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/bags-list) -
-//! [![pezkuwi]](https://pezkuwi.network)
+//! [![pezkuwi]](https://network.pezkuwichain.io)
 //!
 //! [pezkuwi]:
 //!     https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white
@@ -54,7 +54,7 @@
 //! can be used.
 //!
 //! Additional reading, about how this pallet is used in the context of Pezkuwi's staking system:
-//! <https://pezkuwi.network/blog/staking-update-september-2021/#bags-list-in-depth>
+//! <https://network.pezkuwichain.io/blog/staking-update-september-2021/#bags-list-in-depth>
 //!
 //! ## Examples
 //!

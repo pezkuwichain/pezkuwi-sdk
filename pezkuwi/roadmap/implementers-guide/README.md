@@ -32,4 +32,4 @@ open http://localhost:3000
 
 ## Specification
 
-See also the Pezkuwi specification [hosted](https://spec.pezkuwi.network/), and its [source](https://github.com/w3f/pezkuwi-spec).
+See also the Pezkuwi specification [hosted](https://spec.network.pezkuwichain.io/), and its [source](https://github.com/pezkuwi-fellows/Pezkuwi-SDK/pezkuwi-spec).

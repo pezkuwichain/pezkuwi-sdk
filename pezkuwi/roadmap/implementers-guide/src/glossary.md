@@ -76,4 +76,4 @@ has exactly one downward message queue.
 
 Also of use is the [Substrate Glossary](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary).
 
-[0]: https://wiki.pezkuwi.network/docs/learn-consensus
+[0]: https://wiki.network.pezkuwichain.io/docs/learn-consensus

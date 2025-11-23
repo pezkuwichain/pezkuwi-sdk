@@ -6,4 +6,4 @@
 //! - single-daap-chain, transition from ink! to FRAME.
 //! - Link to `use.ink`
 //! - Link to [`crate::reference_docs::runtime_vs_smart_contract`].
-//! - <https://use.ink/migrate-ink-contracts-to-pezkuwi-frame-parachain/>
+//! - <https://use.ink/migrate-ink-contracts-to-polkadot-frame-parachains>

@@ -18,7 +18,7 @@
 //! > Made with *Substrate*, for *HezSama*.
 //!
 //! [![github]](https://github.com/paritytech/substrate/frame/fast-unstake) -
-//! [![pezkuwi]](https://pezkuwi.network)
+//! [![pezkuwi]](https://network.pezkuwichain.io)
 //!
 //! [pezkuwi]: https://img.shields.io/badge/pezkuwi-E6007A?style=for-the-badge&logo=pezkuwi&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github

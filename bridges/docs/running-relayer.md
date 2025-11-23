@@ -332,7 +332,7 @@ docker run \
 ```
 
 You can find more info on configuring Prometheus and Grafana in the
-[Monitor your node](https://wiki.pezkuwi.network/docs/maintain-guides-how-to-monitor-your-node)
+[Monitor your node](https://wiki.network.pezkuwichain.io/docs/maintain-guides-how-to-monitor-your-node)
 guide from Pezkuwi wiki.
 
 We have our own set of Grafana dashboards and alerts. You may use them for inspiration.

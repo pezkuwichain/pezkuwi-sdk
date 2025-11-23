@@ -53,7 +53,7 @@ at its relay chain. Obviously, the relay chain block, where it is accepted, must
 GRANDPA gadget.
 
 That said, the bridge parachains pallet accepts storage proof of one or several parachain heads, inserted to the
-[`Heads`](https://github.com/paritytech/pezkuwi/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
+[`Heads`](https://github.com/paritytech/polkadot/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
 map of the [`paras`
 pallet](https://github.com/paritytech/pezkuwi/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras).
 To verify this storage proof, the pallet uses relay chain header, imported earlier by the bridge GRANDPA pallet.
@@ -122,7 +122,7 @@ code](../relays/finality/).
 
 The relay connects to the source _relay_ chain and the target chain nodes. It doesn't need to connect to the tracked
 parachain nodes. The relay looks at the
-[`Heads`](https://github.com/paritytech/pezkuwi/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
+[`Heads`](https://github.com/paritytech/polkadot/blob/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras/mod.rs#L642)
 map of the [`paras`
 pallet](https://github.com/paritytech/pezkuwi/tree/1a034bd6de0e76721d19aed02a538bcef0787260/runtime/parachains/src/paras)
 in source chain, and compares the value with the best parachain head, stored in the bridge parachains pallet at the

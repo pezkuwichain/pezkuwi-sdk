@@ -4,4 +4,4 @@
 
 ## [GitHub](https://github.com/paritytech/pezkuwi)
 
-## [Pezkuwi Wiki](https://wiki.pezkuwi.network/)
+## [Pezkuwi Wiki](https://wiki.network.pezkuwichain.io/)

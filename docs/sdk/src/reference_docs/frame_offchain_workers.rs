@@ -109,6 +109,6 @@
 //!
 //! ## Further References
 //!
-//! - <https://forum.pezkuwi.network/t/offchain-workers-design-assumptions-vulnerabilities/2548>
+//! - <https://forum.network.pezkuwichain.io/t/offchain-workers-design-assumptions-vulnerabilities/2548>
 //! - <https://substrate.stackexchange.com/questions/11058/how-can-i-create-ocw-that-wont-activates-every-block-but-will-activates-only-w/11060#11060>
 //! - [Offchain worker example](https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame/examples/offchain-worker)

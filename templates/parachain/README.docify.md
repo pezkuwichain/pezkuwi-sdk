@@ -5,7 +5,7 @@
 <img height="70px" alt="Pezkuwi SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_White.png#gh-dark-mode-only"/>
 <img height="70px" alt="Pezkuwi SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
 
-> This is a template for creating a [parachain](https://wiki.pezkuwi.network/docs/learn-parachains) based on Pezkuwi SDK.
+> This is a template for creating a [parachain](https://wiki.network.pezkuwichain.io/docs/learn-parachains) based on Pezkuwi SDK.
 >
 > This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/paritytech/polkadot-sdk).
 
@@ -33,7 +33,7 @@
 
 ## Intro
 
-- ⏫ This template provides a starting point to build a [parachain](https://wiki.pezkuwi.network/docs/learn-parachains).
+- ⏫ This template provides a starting point to build a [parachain](https://wiki.network.pezkuwichain.io/docs/learn-parachains).
 
 - ☁️ It is based on the
   [Cumulus](https://paritytech.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/cumulus/index.html) framework.
@@ -41,7 +41,7 @@
 - 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
   such as a [Balances pallet](https://paritytech.github.io/pezkuwi-sdk/master/pallet_balances/index.html).
 
-- 👉 Learn more about parachains [here](https://wiki.pezkuwi.network/docs/learn-parachains)
+- 👉 Learn more about parachains [here](https://wiki.network.pezkuwichain.io/docs/learn-parachains)
 
 ## Template Structure
 

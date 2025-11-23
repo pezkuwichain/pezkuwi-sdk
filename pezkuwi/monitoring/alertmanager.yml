@@ -63,10 +63,10 @@ receivers:
   # Default receiver
   - name: 'default'
     email_configs:
-      - to: 'ops@pezkuwi.network'
-        from: 'alertmanager@pezkuwi.network'
+      - to: 'ops@network.pezkuwichain.io'
+        from: 'alertmanager@network.pezkuwichain.io'
         smarthost: 'smtp.gmail.com:587'
-        auth_username: 'alertmanager@pezkuwi.network'
+        auth_username: 'alertmanager@network.pezkuwichain.io'
         auth_password: 'changeme'
         headers:
           Subject: '[PezkuwiChain] {{ .GroupLabels.alertname }}'
@@ -108,10 +108,10 @@ receivers:
   # Medium severity - Email only
   - name: 'medium-alerts'
     email_configs:
-      - to: 'ops@pezkuwi.network'
-        from: 'alertmanager@pezkuwi.network'
+      - to: 'ops@network.pezkuwichain.io'
+        from: 'alertmanager@network.pezkuwichain.io'
         smarthost: 'smtp.gmail.com:587'
-        auth_username: 'alertmanager@pezkuwi.network'
+        auth_username: 'alertmanager@network.pezkuwichain.io'
         auth_password: 'changeme'
         headers:
           Subject: '[PezkuwiChain][MEDIUM] {{ .GroupLabels.alertname }}'
@@ -131,10 +131,10 @@ receivers:
         send_resolved: true
         color: '#FF0000'
     email_configs:
-      - to: 'security@pezkuwi.network'
-        from: 'alertmanager@pezkuwi.network'
+      - to: 'security@network.pezkuwichain.io'
+        from: 'alertmanager@network.pezkuwichain.io'
         smarthost: 'smtp.gmail.com:587'
-        auth_username: 'alertmanager@pezkuwi.network'
+        auth_username: 'alertmanager@network.pezkuwichain.io'
         auth_password: 'changeme'
         headers:
           Subject: '[PezkuwiChain][SECURITY] {{ .GroupLabels.alertname }}'

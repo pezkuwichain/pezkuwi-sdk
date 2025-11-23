@@ -165,7 +165,7 @@ cd ..
     --runtime ./target/release/wbuild/pezkuwichain-runtime/pezkuwichain_runtime.wasm \
     on-runtime-upgrade \
     live \
-    --uri wss://pezkuwi.network:443
+    --uri wss://network.pezkuwichain.io:443
 ```
 
 ### 3. Test Migrations
@@ -176,7 +176,7 @@ cd ..
     --runtime ./target/release/wbuild/pezkuwichain-runtime/pezkuwichain_runtime.wasm \
     on-runtime-upgrade \
     live \
-    --uri wss://pezkuwi.network:443 \
+    --uri wss://network.pezkuwichain.io:443 \
     --checks all
 
 # Expected output:
@@ -195,7 +195,7 @@ cargo build --release
 
 # 2. Submit upgrade on testnet
 polkadot-js-api \
-    --ws wss://testnet.pezkuwi.network \
+    --ws wss://testnet.network.pezkuwichain.io \
     --sudo \
     --seed "//Alice" \
     tx.sudo.sudoUncheckedWeight \
@@ -222,7 +222,7 @@ polkadot-js-api \
 
 // Or via CLI:
 polkadot-js-api \
-    --ws wss://testnet.pezkuwi.network \
+    --ws wss://testnet.network.pezkuwichain.io \
     --sudo \
     --seed "//Alice" \
     tx.sudo.sudoUncheckedWeight \
@@ -340,7 +340,7 @@ Week +1: Post-Upgrade Review
 
 ```bash
 # Via polkadot-js-api
-polkadot-js-api --ws wss://pezkuwi.network query.system.lastRuntimeUpgrade
+polkadot-js-api --ws wss://network.pezkuwichain.io query.system.lastRuntimeUpgrade
 
 # Expected output:
 # {

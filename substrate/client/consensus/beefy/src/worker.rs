@@ -361,7 +361,7 @@ impl<B: Block, AuthorityId: AuthorityIdBound> PersistedState<B, AuthorityId> {
 				target: LOG_TARGET,
 				"🥩 for session starting at block {:?} no BEEFY authority key found in store, \
 				you must generate valid session keys \
-				(https://wiki.pezkuwi.network/docs/maintain-guides-how-to-validate-pezkuwi#generating-the-session-keys)",
+				(https://wiki.network.pezkuwichain.io/docs/maintain-guides-how-to-validate-pezkuwi#generating-the-session-keys)",
 				new_session_start,
 			);
 			metric_inc!(metrics, beefy_no_authority_found_in_store);

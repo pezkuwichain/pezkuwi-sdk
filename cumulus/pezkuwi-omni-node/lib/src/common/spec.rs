@@ -96,7 +96,7 @@ fn warn_if_slow_hardware(hwbench: &sc_sysinfo::HwBench) {
 	{
 		log::warn!(
 			"⚠️  The hardware does not meet the minimal requirements {} for role 'Authority' find out more at:\n\
-			https://wiki.pezkuwi.network/docs/maintain-guides-how-to-validate-pezkuwi#reference-hardware",
+			https://wiki.network.pezkuwichain.io/docs/maintain-guides-how-to-validate-pezkuwi#reference-hardware",
 			err
 		);
 	}

@@ -72,6 +72,6 @@
 //!
 //! ## Future
 //!
-//! - [XCQ](https://forum.pezkuwi.network/t/cross-consensus-query-language-xcq/7583) will be a good
+//! - [XCQ](https://forum.network.pezkuwichain.io/t/cross-consensus-query-language-xcq/7583) will be a good
 //! solution for most of the query needs.
 //! - [New JSON-RPC Specification](https://github.com/paritytech/json-rpc-interface-spec)

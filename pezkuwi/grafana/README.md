@@ -29,14 +29,14 @@ This is very important as not all users have similar depth of understanding of t
 # Prerequisites
 
 Before you continue make sure you have Grafana set up, or otherwise follow this
-[guide](https://wiki.pezkuwi.network/docs/maintain-guides-how-to-monitor-your-node).
+[guide](https://wiki.network.pezkuwichain.io/docs/maintain-guides-how-to-monitor-your-node).
 
 You might also need to [setup Loki](https://grafana.com/go/webinar/loki-getting-started/).
 
 # Alerting
 
 Alerts are currently out of the scope of the dashboards, but their setup can be done manually or automated
-(see [installing and configuring Alert Manager](https://wiki.pezkuwi.network/docs/maintain-guides-how-to-monitor-your-node#installing-and-configuring-alertmanager-optional))
+(see [installing and configuring Alert Manager](https://wiki.network.pezkuwichain.io/docs/maintain-guides-how-to-monitor-your-node#installing-and-configuring-alertmanager-optional))
 
 # Dashboards
 

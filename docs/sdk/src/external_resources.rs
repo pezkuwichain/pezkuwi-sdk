@@ -11,4 +11,4 @@
 //! - [HEZ Code School](https://dotcodeschool.com/)
 //! - [Pezkuwi Developers Github Organization](https://github.com/pezkuwi-developers/)
 //! - [Pezkuwi Blockchain Academy](https://github.com/Pezkuwi-Blockchain-Academy)
-//! - [Pezkuwi Wiki](https://wiki.pezkuwi.network/)
+//! - [Pezkuwi Wiki](https://wiki.network.pezkuwichain.io/)
