@@ -1346,7 +1346,7 @@ substrate-wasm-builder = { path = "substrate/utils/wasm-builder", default-featur
 subxt = { version = "0.38.1", default-features = false }
 subxt-metadata = { version = "0.38.0", default-features = false }
 subxt-signer = { version = "0.38" }
-syn = { version = "2.0.87" }
+syn = { version = "2.0.111" }
 sysinfo = { version = "0.30" }
 tar = { version = "0.4" }
 tempfile = { version = "3.8.1" }
