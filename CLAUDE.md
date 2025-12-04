@@ -76,7 +76,7 @@ Pezkuwi blockchain'i mainnet'e taşımak. Her test aşamasında (dev → local �
 - [ ] Alice hesabında genesis token'ları görülmeli (HEZ, PEZ)
 
 ### Test Aşamaları Sırası
-1. **DEV** (1 validator - Alice) ← ŞU AN BURADAYIZ
+1. **DEV** (1 validator - Alice) <- ŞU AN BURADAYIZ
 2. **LOCAL** (2 validator - Alice + Bob)
 3. **ALPHA** (4 validator)
 4. **BETA** (8 validator)
@@ -93,6 +93,261 @@ Her aşamada:
 ```
 
 **ÖNEMLİ:** Ekranda geçici başarı görmek yeterli DEĞİL. Kalıcı çözümler, tam testler, sonra ilerleme.
+
+---
+
+## 📁 CODEBASE STRUCTURE
+
+### Ana Dizinler
+
+```
+pezkuwi-sdk/
+├── pezkuwi/              # Relay chain node ve runtime (ana blockchain)
+│   ├── cli/              # Command-line interface
+│   ├── node/             # Node implementation (subsystems, networking)
+│   ├── runtime/          # Relay chain runtimes
+│   │   ├── pezkuwichain/ # Production relay chain runtime
+│   │   ├── zagros/       # Test relay chain runtime
+│   │   └── common/       # Shared runtime code
+│   ├── pallets/          # Relay chain specific pallets
+│   │   └── validator-pool/ # Validator pool management
+│   ├── primitives/       # Core types and traits
+│   ├── xcm/              # Cross-chain messaging
+│   └── zombienet_tests/  # E2E tests with Zombienet
+│
+├── cumulus/              # Teyrchain (parachain) framework
+│   ├── client/           # Teyrchain client components
+│   ├── pallets/          # Cumulus-specific pallets
+│   │   ├── teyrchain-system/   # Core teyrchain pallet
+│   │   ├── collator-selection/ # Collator management
+│   │   └── xcmp-queue/         # Cross-chain message queue
+│   ├── teyrchains/       # Teyrchain runtimes and custom pallets
+│   │   ├── runtimes/     # System teyrchain runtimes
+│   │   │   ├── assets/   # Asset Hub (asset-hub-pezkuwichain, asset-hub-zagros)
+│   │   │   ├── people/   # People Chain (people-pezkuwichain, people-zagros)
+│   │   │   ├── bridge-hubs/    # Bridge Hub runtimes
+│   │   │   ├── coretime/       # Coretime runtimes
+│   │   │   └── collectives/    # Collectives runtime
+│   │   ├── pallets/      # Custom Pezkuwi pallets (12 total)
+│   │   │   ├── identity-kyc/   # KYC and identity verification
+│   │   │   ├── welati/         # Democratic governance
+│   │   │   ├── perwerde/       # Educational platform
+│   │   │   ├── presale/        # Token presale mechanism
+│   │   │   ├── tiki/           # NFT-based citizenship
+│   │   │   ├── trust/          # Peer-to-peer trust system
+│   │   │   ├── referral/       # Referral incentive system
+│   │   │   ├── pez-treasury/   # Community treasury
+│   │   │   ├── pez-rewards/    # Staking rewards distribution
+│   │   │   ├── staking-score/  # Reputation metrics
+│   │   │   ├── token-wrapper/  # Asset wrapping
+│   │   │   └── teyrchain-info/ # Teyrchain metadata
+│   │   └── integration-tests/  # Emulated integration tests
+│   ├── pezkuwi-omni-node/      # Universal teyrchain node
+│   └── pezkuwi-teyrchain/      # Teyrchain binary
+│
+├── substrate/            # Blockchain framework (Substrate)
+│   ├── frame/            # FRAME pallets (~100 pallets)
+│   │   ├── balances/     # Token balances
+│   │   ├── staking/      # NPoS staking
+│   │   ├── identity/     # On-chain identity
+│   │   ├── democracy/    # Democratic governance
+│   │   ├── treasury/     # On-chain treasury
+│   │   ├── contracts/    # Smart contracts (ink!)
+│   │   └── ...           # Many more standard pallets
+│   ├── client/           # Client-side components
+│   │   ├── cli/          # Command-line interface
+│   │   ├── consensus/    # Consensus implementations (BABE, GRANDPA, Aura)
+│   │   ├── network/      # P2P networking
+│   │   ├── db/           # Database backend
+│   │   └── rpc/          # RPC server
+│   ├── primitives/       # Core primitives
+│   └── bin/              # Binary utilities (subkey, chain-spec-builder)
+│
+├── bridges/              # Cross-chain bridges
+│   ├── modules/          # Bridge pallets
+│   ├── primitives/       # Bridge primitives
+│   ├── snowbridge/       # Ethereum bridge
+│   └── relays/           # Bridge relay implementations
+│
+├── templates/            # Project templates
+│   ├── teyrchain/        # Teyrchain template
+│   ├── solochain/        # Standalone chain template
+│   ├── minimal/          # Minimal template
+│   └── zombienet/        # Zombienet config templates
+│
+├── umbrella/             # Umbrella crate (pezkuwi-sdk)
+├── docs/                 # Documentation
+├── docker/               # Docker configurations
+├── scripts/              # Build and utility scripts
+└── prdoc/                # PR documentation
+```
+
+### Key Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `Cargo.toml` | Workspace root, all crate members |
+| `.config/taplo.toml` | TOML formatting rules |
+| `.config/zepter.yaml` | Feature propagation checks |
+| `.config/nextest.toml` | Test runner configuration |
+| `.config/lychee.toml` | Link checker configuration |
+| `.rustfmt.toml` | Rust formatting (tabs, 100 char width) |
+| `.cargo/config.toml` | Cargo build settings |
+| `.github/.markdownlint.yaml` | Markdown linting rules |
+
+---
+
+## 🛠️ BUILD COMMANDS
+
+### Basic Build
+```bash
+# Debug build
+cargo build
+
+# Release build
+cargo build --release
+
+# Build specific binary
+cargo build --release -p pezkuwi        # Relay chain node
+cargo build --release -p pezkuwi-teyrchain  # Teyrchain collator
+
+# Build with features
+cargo build --release --features runtime-benchmarks
+cargo build --release --features try-runtime
+```
+
+### Run Node
+```bash
+# Dev mode (single validator)
+./target/release/pezkuwi --dev
+
+# With specific chain spec
+./target/release/pezkuwi --chain pezkuwichain-dev
+
+# Teyrchain collator
+./target/release/pezkuwi-teyrchain --dev
+```
+
+### Testing
+```bash
+# Run all tests
+cargo test
+
+# Run specific crate tests
+cargo test -p pallet-identity-kyc
+cargo test -p asset-hub-pezkuwichain-runtime
+
+# Run with nextest (faster)
+cargo nextest run
+
+# Run runtime benchmarks
+cargo test --release --features runtime-benchmarks
+```
+
+### Formatting & Linting
+```bash
+# Format Rust code
+cargo +nightly fmt --all
+
+# Format TOML files
+taplo format --config .config/taplo.toml
+
+# Check TOML format
+taplo format --check --config .config/taplo.toml
+
+# Run Clippy
+cargo clippy --all-targets --all-features
+
+# Check feature propagation
+zepter run check
+
+# Fix feature propagation
+zepter run default
+```
+
+### Umbrella Crate
+```bash
+# Regenerate umbrella crate
+python3 scripts/generate-umbrella.py --sdk . --version 0.1.0
+cargo +nightly fmt -p pezkuwi-sdk
+```
+
+---
+
+## 🔧 CI/CD WORKFLOWS
+
+### Quick Checks (`checks-quick.yml`)
+Fast checks that run on every PR:
+- `fmt` - Rust formatting check
+- `check-toml-format` - TOML formatting (taplo)
+- `check-zepter` - Feature propagation
+- `check-workspace` - Workspace integrity
+- `check-markdown` - Markdown linting
+- `check-umbrella` - Umbrella crate correctness
+- `check-dependency-rules` - Dependency constraints
+
+### Main Checks (`checks.yml`)
+- Clippy lints
+- Documentation builds
+- Try-runtime checks
+
+### Tests (`tests-*.yml`)
+- `tests-linux-stable.yml` - Main test suite
+- `tests-misc.yml` - Miscellaneous tests
+- `tests-evm.yml` - EVM-related tests
+
+### Zombienet Tests
+- `zombienet_pezkuwi.yml` - Relay chain E2E tests
+- `zombienet_cumulus.yml` - Teyrchain E2E tests
+- `zombienet_substrate.yml` - Substrate E2E tests
+
+### Release Workflows
+- `release-*` - Release automation
+- `build-publish-images.yml` - Docker image builds
+
+---
+
+## 📦 CUSTOM PALLETS (12 Total)
+
+Located in `cumulus/teyrchains/pallets/`:
+
+| Pallet | Purpose | Location |
+|--------|---------|----------|
+| `presale` | Multi-round token launches with vesting | `cumulus/teyrchains/pallets/presale` |
+| `identity-kyc` | Decentralized KYC verification | `cumulus/teyrchains/pallets/identity-kyc` |
+| `welati` | Democratic governance | `cumulus/teyrchains/pallets/welati` |
+| `perwerde` | Educational platform | `cumulus/teyrchains/pallets/perwerde` |
+| `pez-treasury` | Community treasury with halving | `cumulus/teyrchains/pallets/pez-treasury` |
+| `pez-rewards` | Trust-based staking rewards | `cumulus/teyrchains/pallets/pez-rewards` |
+| `staking-score` | Reputation-based metrics | `cumulus/teyrchains/pallets/staking-score` |
+| `trust` | Peer-to-peer trust system | `cumulus/teyrchains/pallets/trust` |
+| `referral` | Multi-level referral system | `cumulus/teyrchains/pallets/referral` |
+| `tiki` | NFT-based citizenship (4-tier) | `cumulus/teyrchains/pallets/tiki` |
+| `token-wrapper` | Asset wrapping for XCM | `cumulus/teyrchains/pallets/token-wrapper` |
+| `teyrchain-info` | Teyrchain metadata | `cumulus/teyrchains/pallets/teyrchain-info` |
+
+Plus relay chain pallet:
+| `validator-pool` | Validator pool management | `pezkuwi/pallets/validator-pool` |
+
+---
+
+## 🌐 RUNTIMES
+
+### Relay Chain Runtimes
+| Runtime | Path | Purpose |
+|---------|------|---------|
+| `pezkuwichain` | `pezkuwi/runtime/pezkuwichain` | Production relay chain |
+| `zagros` | `pezkuwi/runtime/zagros` | Test relay chain |
+
+### System Teyrchain Runtimes
+| Runtime | Path | Teyrchain ID |
+|---------|------|--------------|
+| `asset-hub-pezkuwichain` | `cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain` | 1000 |
+| `asset-hub-zagros` | `cumulus/teyrchains/runtimes/assets/asset-hub-zagros` | 1000 |
+| `people-pezkuwichain` | `cumulus/teyrchains/runtimes/people/people-pezkuwichain` | 1004 |
+| `people-zagros` | `cumulus/teyrchains/runtimes/people/people-zagros` | 1004 |
+| `bridge-hub-pezkuwichain` | `cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain` | 1002 |
+| `coretime-pezkuwichain` | `cumulus/teyrchains/runtimes/coretime/coretime-pezkuwichain` | 1005 |
 
 ---
 
@@ -123,7 +378,7 @@ dosyasını oku. Diğer koordinasyon dosyaları:
 
 ## Commit Kuralları
 
-- Commit mesajlarına `🤖 Generated with [Claude Code]` ve `Co-Authored-By: Claude` **EKLEME**
+- Commit mesajlarına `Generated with [Claude Code]` ve `Co-Authored-By: Claude` **EKLEME**
 - Sadece düz commit mesajı yaz
 
 ## Proje Bilgileri
@@ -143,9 +398,59 @@ dosyasını oku. Diğer koordinasyon dosyaları:
 
 ---
 
+## 🧪 ZOMBIENET TESTING
+
+### Running Zombienet Tests
+```bash
+# Install zombienet
+npm i -g @parity/zombienet
+
+# Run a test
+zombienet test --provider native path/to/test.zndsl
+
+# Spawn a network
+zombienet spawn path/to/network.toml
+```
+
+### Test Configs Location
+- Pezkuwi tests: `.github/zombienet-tests/zombienet_pezkuwi_tests.yml`
+- Cumulus tests: `.github/zombienet-tests/zombienet_cumulus_tests.yml`
+- Substrate tests: `.github/zombienet-tests/zombienet_substrate_tests.yml`
+
+### Example Network Config (DOĞRU TERMINOLOJI):
+```toml
+[settings]
+timeout = 1000
+
+[relaychain]
+chain = "pezkuwichain-dev"
+default_command = "./target/release/pezkuwi"
+default_args = ["-lteyrchain=debug"]
+
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+
+[[teyrchains]]
+id = 1000
+chain = "asset-hub-pezkuwichain-dev"
+cumulus_based = true
+
+[[teyrchains.collators]]
+name = "asset-hub-collator"
+command = "./target/release/pezkuwi-teyrchain"
+args = ["-lteyrchain=debug"]
+```
+
+---
+
 ## ✅ CI/CD QUICK-CHECKS DÜZELTMELERİ TAMAMLANDI
 
-**Son güncelleme:** 2025-11-29
+**Son güncelleme:** 2025-12-04
 
 ### Tamamlanan İşler
 
@@ -180,7 +485,36 @@ dosyasını oku. Diğer koordinasyon dosyaları:
 - Tüm Cargo.toml dosyaları (taplo format)
 - Umbrella crate dosyaları
 
-### Sonraki Adım
-Commit atılıp push edilmeli - CI/CD artık geçmeli.
+---
+
+## 📝 DEVELOPMENT CONVENTIONS
+
+### Rust Style
+- **Formatter**: `rustfmt` with nightly
+- **Tab style**: Hard tabs (not spaces)
+- **Max line width**: 100 characters
+- **Import style**: Crate-level granularity
+
+### TOML Style
+- **Formatter**: `taplo`
+- **Key ordering**: Alphabetical in dependencies
+- **Tab style**: Hard tabs
+
+### Commit Messages
+- Use conventional commits: `fix:`, `feat:`, `chore:`, `docs:`, etc.
+- Keep first line under 72 characters
+- Reference issues when applicable
+
+### Feature Flags
+Standard features to propagate:
+- `std` - Standard library support
+- `runtime-benchmarks` - Benchmarking support
+- `try-runtime` - Try-runtime testing
+
+### Adding New Crates
+1. Add to `Cargo.toml` workspace members
+2. Run `python3 scripts/generate-umbrella.py`
+3. Run `cargo +nightly fmt -p pezkuwi-sdk`
+4. Ensure feature propagation with `zepter run check`
 
 ---
