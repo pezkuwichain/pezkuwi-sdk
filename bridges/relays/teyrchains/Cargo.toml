@@ -24,3 +24,10 @@ relay-substrate-client = { workspace = true }
 [dev-dependencies]
 relay-substrate-client = { features = ["test-helpers"], workspace = true }
 sp-core = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"relay-substrate-client/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks"
+]

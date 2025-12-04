@@ -34,5 +34,8 @@ std = [
 	"scale-info/std",
 	"sp-mmr-primitives/std",
 ]
-runtime-benchmarks = ["frame/runtime-benchmarks"]
+runtime-benchmarks = [
+	"frame/runtime-benchmarks",
+	"sp-mmr-primitives/runtime-benchmarks"
+]
 try-runtime = ["frame/try-runtime"]

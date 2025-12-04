@@ -20,3 +20,10 @@ futures = { workspace = true }
 num-traits = { workspace = true, default-features = true }
 relay-utils = { workspace = true }
 tracing = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"finality-relay/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks"
+]

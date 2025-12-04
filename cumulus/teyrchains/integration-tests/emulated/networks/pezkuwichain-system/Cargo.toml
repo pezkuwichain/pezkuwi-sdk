@@ -19,3 +19,14 @@ emulated-integration-tests-common = { workspace = true }
 penpal-emulated-chain = { workspace = true }
 people-pezkuwichain-emulated-chain = { workspace = true }
 pezkuwichain-emulated-chain = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-hub-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"bridge-hub-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"coretime-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"penpal-emulated-chain/runtime-benchmarks",
+	"people-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"pezkuwichain-emulated-chain/runtime-benchmarks"
+]

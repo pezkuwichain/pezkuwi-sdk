@@ -44,3 +44,7 @@ std = [
 	"scale-info/std",
 	"serde_json/std",
 ]
+runtime-benchmarks = [
+	"pallet-minimal-template/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks"
+]

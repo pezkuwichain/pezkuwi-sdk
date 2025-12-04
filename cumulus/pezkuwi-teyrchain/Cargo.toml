@@ -86,6 +86,11 @@ runtime-benchmarks = [
 	"pezkuwichain-teyrchain-runtime/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 	"yet-another-teyrchain-runtime/runtime-benchmarks",
+	"cumulus-client-consensus-aura/runtime-benchmarks",
+	"sc-chain-spec/runtime-benchmarks",
+	"sc-cli/runtime-benchmarks",
+	"sp-genesis-builder/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezkuwi-omni-node-lib/try-runtime",

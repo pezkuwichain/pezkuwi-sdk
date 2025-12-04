@@ -79,6 +79,8 @@ runtime-benchmarks = [
 	"rand",
 	"sp-runtime/runtime-benchmarks",
 	"strum",
+	"remote-externalities?/runtime-benchmarks",
+	"sp-npos-elections/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-election-provider-support/try-runtime",

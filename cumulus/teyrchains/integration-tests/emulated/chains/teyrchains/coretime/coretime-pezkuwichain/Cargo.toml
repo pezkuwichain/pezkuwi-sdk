@@ -23,3 +23,13 @@ testnet-teyrchains-constants = { features = [
 	"pezkuwichain",
 ], workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"coretime-pezkuwichain-runtime/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"testnet-teyrchains-constants/runtime-benchmarks"
+]

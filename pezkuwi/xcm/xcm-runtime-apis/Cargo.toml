@@ -59,4 +59,6 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks"
 ]

@@ -39,3 +39,6 @@ std = [
 	"sp-mixnet/std",
 ]
 try-runtime = ["frame/try-runtime"]
+runtime-benchmarks = [
+	"frame/runtime-benchmarks"
+]

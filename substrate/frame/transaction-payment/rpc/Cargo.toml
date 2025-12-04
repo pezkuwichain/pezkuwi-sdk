@@ -29,3 +29,11 @@ sp-core = { workspace = true, default-features = true }
 sp-rpc = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
 sp-weights = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

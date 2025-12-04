@@ -58,6 +58,11 @@ impl NetworkConfig {
         self.teyrchains.iter().collect::<Vec<_>>()
     }
 
+    /// Backward compatibility alias for teyrchains() - for external crates using Polkadot SDK terminology.
+    pub fn parachains(&self) -> Vec<&TeyrchainConfig> {
+        self.teyrchains()
+    }
+
     /// The HRMP channels of the network.
     pub fn hrmp_channels(&self) -> Vec<&HrmpChannelConfig> {
         self.hrmp_channels.iter().collect::<Vec<_>>()

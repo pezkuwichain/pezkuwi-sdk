@@ -22,3 +22,12 @@ pezkuwi-primitives = { workspace = true, default-features = true }
 sp-blockchain = { workspace = true, default-features = true }
 sp-inherents = { workspace = true, default-features = true }
 thiserror = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-overseer/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

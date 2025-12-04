@@ -24,3 +24,13 @@ sc-service = { workspace = true, default-features = false }
 sp-blockchain = { workspace = true, default-features = true }
 sp-core = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-service/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sc-chain-spec/runtime-benchmarks",
+	"sc-cli/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks"
+]

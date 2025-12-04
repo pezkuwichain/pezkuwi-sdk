@@ -37,3 +37,16 @@ pezkuwi-primitives-test-helpers = { workspace = true }
 sc-keystore = { workspace = true, default-features = true }
 sp-keyring = { workspace = true, default-features = true }
 sp-tracing = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-node-network-protocol/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

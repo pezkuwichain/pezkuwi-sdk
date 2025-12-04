@@ -29,3 +29,11 @@ jsonrpsee = { features = ["jsonrpsee-types", "ws-client"], workspace = true }
 sp-core = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
 tokio = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"sc-rpc-api/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

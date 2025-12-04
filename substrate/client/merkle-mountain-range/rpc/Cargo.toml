@@ -30,3 +30,11 @@ sp-runtime = { workspace = true, default-features = true }
 
 [dev-dependencies]
 serde_json = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sp-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-mmr-primitives/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

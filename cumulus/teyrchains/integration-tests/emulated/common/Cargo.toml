@@ -58,3 +58,39 @@ bp-messages = { workspace = true, default-features = true }
 bp-xcm-bridge-hub = { workspace = true, default-features = true }
 pallet-bridge-messages = { workspace = true, default-features = true }
 pallet-xcm-bridge-hub = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-test-utils/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-xcm-bridge-hub/runtime-benchmarks",
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-asset-conversion/runtime-benchmarks",
+	"pallet-assets/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-bridge-messages/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pallet-whitelist/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"pallet-xcm-bridge-hub/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sc-consensus-grandpa/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus-beefy/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-emulator/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks"
+]

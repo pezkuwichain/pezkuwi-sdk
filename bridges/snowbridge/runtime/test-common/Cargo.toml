@@ -97,5 +97,8 @@ runtime-benchmarks = [
 	"sp-runtime/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"teyrchains-runtimes-test-utils/runtime-benchmarks"
 ]
 fast-runtime = []

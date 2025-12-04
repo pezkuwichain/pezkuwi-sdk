@@ -25,3 +25,10 @@ sp-runtime-interface-test-wasm-deprecated = { workspace = true }
 sp-state-machine = { workspace = true, default-features = true }
 tracing = { workspace = true, default-features = true }
 tracing-core = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-executor/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks"
+]

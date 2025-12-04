@@ -45,3 +45,18 @@ url = { workspace = true }
 
 [dev-dependencies]
 portpicker = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-relay-chain-interface/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-rpc-api/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-version/runtime-benchmarks"
+]

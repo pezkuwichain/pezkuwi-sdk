@@ -69,4 +69,7 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"sc-client-db/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"frame-support-procedural/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks"
 ]

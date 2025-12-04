@@ -67,3 +67,36 @@ rstest = { workspace = true }
 sp-keyring = { workspace = true }
 sp-tracing = { workspace = true }
 sp-version = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-client-collator/runtime-benchmarks",
+	"cumulus-client-consensus-common/runtime-benchmarks",
+	"cumulus-client-consensus-proposer/runtime-benchmarks",
+	"cumulus-client-teyrchain-inherent/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-test-client/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"cumulus-relay-chain-interface/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sc-consensus-aura/runtime-benchmarks",
+	"sc-consensus-babe/runtime-benchmarks",
+	"sc-consensus-slots/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-block-builder/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-timestamp/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks",
+	"sp-version/runtime-benchmarks"
+]

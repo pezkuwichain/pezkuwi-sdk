@@ -45,3 +45,12 @@ std = [
 # Test runtimes specific features.
 pezkuwichain = ["pezkuwichain-runtime-constants"]
 zagros = ["zagros-runtime-constants"]
+runtime-benchmarks = [
+	"cumulus-primitives-core/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"pezkuwichain-runtime-constants?/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime-constants?/runtime-benchmarks"
+]

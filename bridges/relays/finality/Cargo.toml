@@ -23,3 +23,9 @@ tracing = { workspace = true }
 
 [dev-dependencies]
 parking_lot = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks"
+]

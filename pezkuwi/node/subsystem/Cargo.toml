@@ -14,3 +14,6 @@ workspace = true
 [dependencies]
 pezkuwi-node-subsystem-types = { workspace = true, default-features = true }
 pezkuwi-overseer = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = []

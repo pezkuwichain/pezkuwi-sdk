@@ -30,3 +30,19 @@ zagros-runtime = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 teyrchains-common = { workspace = true, default-features = true }
 zagros-system-emulated-network = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-identity/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
+	"zagros-system-emulated-network/runtime-benchmarks"
+]

@@ -36,3 +36,11 @@ sp-tracing = { workspace = true, default-features = true }
 
 log = { workspace = true, default-features = true }
 rand = { features = ["small_rng"], workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-nomination-pools/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

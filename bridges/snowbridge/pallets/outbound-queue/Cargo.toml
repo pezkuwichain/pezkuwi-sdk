@@ -71,6 +71,8 @@ runtime-benchmarks = [
 	"pallet-message-queue/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"snowbridge-merkle-tree/runtime-benchmarks",
+	"snowbridge-outbound-queue-primitives/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

@@ -32,3 +32,17 @@ sp-runtime = { workspace = true, default-features = true }
 cumulus-client-consensus-common = { workspace = true, default-features = true }
 cumulus-primitives-core = { workspace = true, default-features = true }
 cumulus-relay-chain-interface = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-client-consensus-common/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"cumulus-relay-chain-interface/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-block-builder/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks"
+]

@@ -16,7 +16,7 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-array-bytes = { optional = true, workspace = true, default-features = true }
+array-bytes = { workspace = true, default-features = true }
 codec = { workspace = true }
 frame-benchmarking = { optional = true, workspace = true }
 frame-support = { workspace = true }
@@ -49,12 +49,13 @@ std = [
 	"sp-runtime/std",
 ]
 runtime-benchmarks = [
-	"array-bytes",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-transaction-storage-proof/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

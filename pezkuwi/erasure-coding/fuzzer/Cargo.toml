@@ -22,3 +22,10 @@ path = "src/reconstruct.rs"
 [[bin]]
 name = "round_trip"
 path = "src/round_trip.rs"
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-erasure-coding/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks"
+]

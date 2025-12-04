@@ -64,3 +64,16 @@ tempfile = { workspace = true }
 [features]
 default = ["rocksdb"]
 rocksdb = ["sc-client-db/rocksdb"]
+runtime-benchmarks = [
+	"sc-client-api/runtime-benchmarks",
+	"sc-client-db/runtime-benchmarks",
+	"sc-mixnet/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
+	"sc-tracing/runtime-benchmarks",
+	"sc-transaction-pool/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-version/runtime-benchmarks"
+]

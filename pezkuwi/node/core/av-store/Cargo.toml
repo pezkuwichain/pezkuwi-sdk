@@ -36,3 +36,16 @@ pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives-test-helpers = { workspace = true }
 sp-core = { workspace = true, default-features = true }
 sp-keyring = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-erasure-coding/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

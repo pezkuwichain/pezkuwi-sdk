@@ -91,6 +91,7 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"bp-xcm-bridge-hub-router?/runtime-benchmarks"
 ]
 try-runtime = [
 	"cumulus-pallet-teyrchain-system/try-runtime",

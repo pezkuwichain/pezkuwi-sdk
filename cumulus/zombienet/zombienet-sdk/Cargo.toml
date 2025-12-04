@@ -29,3 +29,10 @@ rstest = { workspace = true }
 
 [features]
 zombie-ci = []
+runtime-benchmarks = [
+	"cumulus-zombienet-sdk-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sc-statement-store/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-statement-store/runtime-benchmarks"
+]

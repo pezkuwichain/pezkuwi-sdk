@@ -42,3 +42,13 @@ std = [
 	"sp-std/std",
 	"teyrchains-common/std",
 ]
+runtime-benchmarks = [
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"sp-api/runtime-benchmarks"
+]

@@ -32,3 +32,11 @@ thiserror = { workspace = true }
 
 [build-dependencies]
 prost-build = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-client-api/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

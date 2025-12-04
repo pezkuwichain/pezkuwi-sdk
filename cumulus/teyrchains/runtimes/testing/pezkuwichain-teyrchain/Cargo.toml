@@ -140,6 +140,23 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"cumulus-pallet-aura-ext/runtime-benchmarks",
+	"cumulus-pallet-xcm/runtime-benchmarks",
+	"cumulus-ping/runtime-benchmarks",
+	"frame-executive/runtime-benchmarks",
+	"pallet-aura/runtime-benchmarks",
+	"pallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-block-builder/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"sp-genesis-builder/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-offchain/runtime-benchmarks",
+	"sp-session/runtime-benchmarks",
+	"sp-transaction-pool/runtime-benchmarks",
+	"sp-version/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks"
 ]
 
 # A feature that should be enabled when the runtime should be built for on-chain

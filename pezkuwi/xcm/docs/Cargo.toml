@@ -34,3 +34,17 @@ simple-mermaid = { workspace = true }
 
 [dev-dependencies]
 test-log = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"pallet-balances/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks"
+]

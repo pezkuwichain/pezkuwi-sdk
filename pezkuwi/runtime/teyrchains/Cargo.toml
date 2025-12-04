@@ -143,6 +143,15 @@ runtime-benchmarks = [
 	"static_assertions",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"pallet-authority-discovery/runtime-benchmarks",
+	"pallet-authorship/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-runtime-metrics/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-session/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-election-provider-support?/try-runtime",

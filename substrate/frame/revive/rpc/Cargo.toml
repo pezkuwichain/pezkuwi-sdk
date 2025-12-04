@@ -66,3 +66,16 @@ git2 = { workspace = true }
 revive-dev-runtime = { workspace = true, default-features = true }
 sp-io = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pallet-revive/runtime-benchmarks",
+	"revive-dev-node/runtime-benchmarks",
+	"revive-dev-runtime/runtime-benchmarks",
+	"sc-cli/runtime-benchmarks",
+	"sc-rpc/runtime-benchmarks",
+	"sc-rpc-api/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-timestamp/runtime-benchmarks"
+]

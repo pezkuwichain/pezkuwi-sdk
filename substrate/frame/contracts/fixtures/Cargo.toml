@@ -21,3 +21,9 @@ parity-wasm = { workspace = true }
 tempfile = { workspace = true }
 toml = { workspace = true }
 twox-hash = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-system/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

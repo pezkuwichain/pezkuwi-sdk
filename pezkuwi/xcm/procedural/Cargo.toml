@@ -28,3 +28,9 @@ trybuild = { features = ["diff"], workspace = true }
 xcm = { workspace = true, default-features = true, features = ["std"] }
 # For testing macros.
 frame-support = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"xcm/runtime-benchmarks"
+]

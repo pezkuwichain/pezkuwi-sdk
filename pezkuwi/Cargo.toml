@@ -101,7 +101,16 @@ tokio = { workspace = true, default-features = true }
 substrate-build-script-utils = { workspace = true, default-features = true }
 
 [features]
-runtime-benchmarks = ["pezkuwi-cli/runtime-benchmarks"]
+runtime-benchmarks = [
+	"pezkuwi-cli/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"pezkuwi-node-core-pvf/runtime-benchmarks",
+	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
+	"pezkuwi-node-core-pvf-execute-worker/runtime-benchmarks",
+	"pezkuwi-node-core-pvf-prepare-worker/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"substrate-rpc-client/runtime-benchmarks"
+]
 try-runtime = ["pezkuwi-cli/try-runtime"]
 fast-runtime = ["pezkuwi-cli/fast-runtime"]
 runtime-metrics = ["pezkuwi-cli/runtime-metrics"]

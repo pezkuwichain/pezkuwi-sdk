@@ -69,6 +69,7 @@ runtime-benchmarks = [
 	"pallet-balances/runtime-benchmarks",
 	"rand",
 	"sp-runtime/runtime-benchmarks",
+	"sp-npos-elections/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-election-provider-support/try-runtime",

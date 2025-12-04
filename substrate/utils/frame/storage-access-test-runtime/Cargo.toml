@@ -39,4 +39,6 @@ std = [
 runtime-benchmarks = [
 	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks"
 ]

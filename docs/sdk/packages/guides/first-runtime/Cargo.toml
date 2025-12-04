@@ -58,3 +58,13 @@ std = [
 
 	"substrate-wasm-builder",
 ]
+runtime-benchmarks = [
+	"pallet-balances/runtime-benchmarks",
+	"pallet-sudo/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-transaction-payment/runtime-benchmarks",
+	"pallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"first-pallet/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks"
+]

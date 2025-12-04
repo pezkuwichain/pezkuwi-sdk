@@ -31,3 +31,10 @@ thiserror = { workspace = true }
 
 [target.'cfg(not(target_os = "unknown"))'.dependencies]
 zstd = { workspace = true, default-features = false }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks"
+]

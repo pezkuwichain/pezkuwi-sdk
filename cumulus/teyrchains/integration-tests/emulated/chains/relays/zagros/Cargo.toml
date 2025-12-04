@@ -28,3 +28,18 @@ zagros-runtime-constants = { workspace = true }
 # Cumulus
 emulated-integration-tests-common = { workspace = true }
 teyrchains-common = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pallet-staking/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sc-consensus-grandpa/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus-beefy/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks"
+]

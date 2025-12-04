@@ -46,4 +46,7 @@ runtime-benchmarks = [
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks"
 ]

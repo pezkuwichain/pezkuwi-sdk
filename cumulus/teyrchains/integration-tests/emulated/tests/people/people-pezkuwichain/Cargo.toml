@@ -25,3 +25,16 @@ asset-test-utils = { workspace = true, default-features = true }
 emulated-integration-tests-common = { workspace = true }
 pezkuwichain-system-emulated-network = { workspace = true }
 teyrchains-common = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-test-utils/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pezkuwichain-system-emulated-network/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks"
+]

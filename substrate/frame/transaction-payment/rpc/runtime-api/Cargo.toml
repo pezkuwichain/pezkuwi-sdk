@@ -31,3 +31,8 @@ std = [
 	"sp-runtime/std",
 	"sp-weights/std",
 ]
+runtime-benchmarks = [
+	"pallet-transaction-payment/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

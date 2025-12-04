@@ -19,3 +19,8 @@ sp-runtime = { workspace = true }
 [features]
 default = ["std"]
 std = ["frame-support/std", "pezkuwi-primitives/std", "sp-runtime/std"]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

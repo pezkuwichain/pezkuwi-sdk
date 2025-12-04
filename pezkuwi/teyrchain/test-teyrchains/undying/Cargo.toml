@@ -34,3 +34,7 @@ std = [
 	"pezkuwi-teyrchain-primitives/std",
 	"sp-io/std",
 ]
+runtime-benchmarks = [
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks"
+]

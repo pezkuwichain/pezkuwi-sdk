@@ -50,3 +50,22 @@ pezkuwi-node-subsystem-test-helpers = { workspace = true }
 cumulus-test-client = { workspace = true }
 cumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
 cumulus-test-runtime = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-client-consensus-common/runtime-benchmarks",
+	"cumulus-client-network/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-test-client/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"cumulus-test-runtime/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks"
+]

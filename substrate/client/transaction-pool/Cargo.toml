@@ -68,3 +68,19 @@ tracing-subscriber = { workspace = true }
 txtesttool = { workspace = true }
 zombienet-configuration = { workspace = true }
 zombienet-sdk = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-zombienet-sdk-helpers/runtime-benchmarks",
+	"sc-block-builder/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-transaction-pool-api/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-transaction-pool/runtime-benchmarks",
+	"substrate-test-runtime/runtime-benchmarks",
+	"substrate-test-runtime-client/runtime-benchmarks",
+	"substrate-test-runtime-transaction-pool/runtime-benchmarks"
+]

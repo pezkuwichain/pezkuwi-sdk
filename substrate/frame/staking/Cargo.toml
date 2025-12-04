@@ -85,6 +85,9 @@ runtime-benchmarks = [
 	"rand_chacha",
 	"sp-runtime/runtime-benchmarks",
 	"sp-staking/runtime-benchmarks",
+	"pallet-authorship/runtime-benchmarks",
+	"pallet-staking-reward-curve/runtime-benchmarks",
+	"sp-npos-elections/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-election-provider-support/try-runtime",

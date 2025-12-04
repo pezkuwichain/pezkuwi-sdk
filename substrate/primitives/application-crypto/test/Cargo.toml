@@ -25,3 +25,4 @@ substrate-test-runtime-client = { workspace = true }
 
 [features]
 bls-experimental = ["substrate-test-runtime-client/bls-experimental"]
+runtime-benchmarks = []

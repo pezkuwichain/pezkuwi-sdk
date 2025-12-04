@@ -65,4 +65,8 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"frame-executive/runtime-benchmarks",
+	"frame-try-runtime/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks"
 ]

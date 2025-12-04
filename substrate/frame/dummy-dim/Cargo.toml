@@ -52,6 +52,7 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-people/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"sp-api/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

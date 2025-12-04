@@ -36,3 +36,15 @@ sp-state-machine = { workspace = true, default-features = true }
 
 [dev-dependencies]
 substrate-test-runtime-client = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-client-api/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"substrate-test-runtime-client/runtime-benchmarks"
+]

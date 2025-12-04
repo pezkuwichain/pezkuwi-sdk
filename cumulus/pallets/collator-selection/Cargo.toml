@@ -50,6 +50,9 @@ runtime-benchmarks = [
 	"pallet-timestamp/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-staking/runtime-benchmarks",
+	"pallet-aura/runtime-benchmarks",
+	"pallet-authorship/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks"
 ]
 std = [
 	"codec/std",

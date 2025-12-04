@@ -70,3 +70,25 @@ std = [
 	"xcm-runtime-apis/std",
 	"xcm/std",
 ]
+runtime-benchmarks = [
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collator-selection/runtime-benchmarks",
+	"pallet-session/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks"
+]

@@ -44,3 +44,32 @@ sp-runtime = { workspace = true, default-features = true }
 sp-statement-store = { workspace = true, default-features = true }
 substrate-frame-rpc-system = { workspace = true, default-features = true }
 substrate-state-trie-migration-rpc = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"mmr-rpc/runtime-benchmarks",
+	"node-primitives/runtime-benchmarks",
+	"pallet-transaction-payment-rpc/runtime-benchmarks",
+	"sc-chain-spec/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-consensus-babe/runtime-benchmarks",
+	"sc-consensus-babe-rpc/runtime-benchmarks",
+	"sc-consensus-beefy/runtime-benchmarks",
+	"sc-consensus-beefy-rpc/runtime-benchmarks",
+	"sc-consensus-grandpa/runtime-benchmarks",
+	"sc-consensus-grandpa-rpc/runtime-benchmarks",
+	"sc-mixnet/runtime-benchmarks",
+	"sc-rpc/runtime-benchmarks",
+	"sc-sync-state-rpc/runtime-benchmarks",
+	"sc-transaction-pool-api/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-block-builder/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus-beefy/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-statement-store/runtime-benchmarks",
+	"substrate-frame-rpc-system/runtime-benchmarks",
+	"substrate-state-trie-migration-rpc/runtime-benchmarks"
+]

@@ -91,6 +91,9 @@ runtime-benchmarks = [
 	"sp-runtime/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"pallet-authorship/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks"
 ]
 
 try-runtime = [

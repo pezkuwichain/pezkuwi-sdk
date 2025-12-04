@@ -53,3 +53,11 @@ std = [
 	"serde_json/std",
 	"substrate-wasm-builder",
 ]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sc-chain-spec/runtime-benchmarks",
+	"sp-genesis-builder/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks"
+]

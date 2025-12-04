@@ -36,3 +36,16 @@ sp-keyring = { workspace = true, default-features = true }
 sp-keystore = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
 tokio = { features = ["sync"], workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-client-api/runtime-benchmarks",
+	"sc-client-db/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sc-executor/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

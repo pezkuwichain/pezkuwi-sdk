@@ -41,4 +41,6 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"bp-relayers/runtime-benchmarks",
+	"snowbridge-outbound-queue-primitives/runtime-benchmarks"
 ]

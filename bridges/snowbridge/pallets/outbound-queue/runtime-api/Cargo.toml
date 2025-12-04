@@ -37,3 +37,10 @@ std = [
 	"sp-api/std",
 	"sp-std/std",
 ]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"snowbridge-core/runtime-benchmarks",
+	"snowbridge-merkle-tree/runtime-benchmarks",
+	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
+	"sp-api/runtime-benchmarks"
+]

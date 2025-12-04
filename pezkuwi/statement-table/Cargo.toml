@@ -15,3 +15,9 @@ workspace = true
 codec = { features = ["derive"], workspace = true }
 gum = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-primitives/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

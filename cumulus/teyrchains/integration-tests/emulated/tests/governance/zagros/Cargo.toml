@@ -31,3 +31,19 @@ asset-hub-zagros-runtime = { workspace = true }
 collectives-zagros-runtime = { workspace = true }
 zagros-runtime = { workspace = true }
 zagros-system-emulated-network = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-hub-zagros-runtime/runtime-benchmarks",
+	"collectives-zagros-runtime/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-utility/runtime-benchmarks",
+	"pallet-whitelist/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
+	"zagros-system-emulated-network/runtime-benchmarks"
+]

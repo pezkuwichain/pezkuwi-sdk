@@ -38,8 +38,13 @@ where
 
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<T::RuntimeOrigin, ()> {
-		use frame_benchmarking::account;
-		let zero_account: T::AccountId = account("tiki_holder", 0, 0);
+		// Use TrailingZeroInput to generate a deterministic account for benchmarking
+		// This avoids needing frame_benchmarking::account when only frame-support's
+		// runtime-benchmarks feature is enabled but not pallet-tiki's
+		use codec::Decode;
+		use sp_runtime::traits::TrailingZeroInput;
+		let zero_account = T::AccountId::decode(&mut TrailingZeroInput::zeroes())
+			.expect("infinite length input; no invalid inputs for type; qed");
 		Ok(T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(zero_account)))
 	}
 }

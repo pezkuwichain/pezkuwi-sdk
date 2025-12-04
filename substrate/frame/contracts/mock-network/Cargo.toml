@@ -77,4 +77,7 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"pallet-contracts-fixtures/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks"
 ]

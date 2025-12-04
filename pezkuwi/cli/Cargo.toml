@@ -64,6 +64,11 @@ runtime-benchmarks = [
 	"pezkuwi-service?/runtime-benchmarks",
 	"sc-service?/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"sc-cli?/runtime-benchmarks",
+	"sc-sysinfo/runtime-benchmarks",
+	"sc-tracing?/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks"
 ]
 full-node = ["pezkuwi-service/full-node"]
 try-runtime = ["pezkuwi-service?/try-runtime", "sp-runtime/try-runtime"]

@@ -45,3 +45,20 @@ sp-timestamp = { workspace = true }
 sp-tracing = { workspace = true, default-features = true }
 sp-trie = { workspace = true, default-features = true }
 tempfile = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"kitchensink-runtime/runtime-benchmarks",
+	"node-primitives/runtime-benchmarks",
+	"node-testing/runtime-benchmarks",
+	"sc-basic-authorship/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-transaction-pool/runtime-benchmarks",
+	"sc-transaction-pool-api/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-timestamp/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks"
+]

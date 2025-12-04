@@ -51,6 +51,8 @@ runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"frame-election-provider-solution-type/runtime-benchmarks",
+	"sp-npos-elections/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

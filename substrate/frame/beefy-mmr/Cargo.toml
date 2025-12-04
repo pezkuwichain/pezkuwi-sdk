@@ -78,4 +78,9 @@ runtime-benchmarks = [
 	"pallet-session/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-staking/runtime-benchmarks",
+	"binary-merkle-tree/runtime-benchmarks",
+	"pallet-beefy/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-consensus-beefy/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks"
 ]

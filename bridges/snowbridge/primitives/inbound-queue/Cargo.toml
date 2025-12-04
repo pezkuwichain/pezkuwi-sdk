@@ -73,6 +73,8 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"snowbridge-beacon-primitives/runtime-benchmarks",
+	"snowbridge-verification-primitives/runtime-benchmarks"
 ]
 try-runtime = [
 	"assets-common/try-runtime",

@@ -36,3 +36,12 @@ sc-rpc = { features = [
 ], workspace = true, default-features = true }
 substrate-test-runtime-client = { workspace = true }
 tokio = { features = ["macros"], workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-consensus-beefy/runtime-benchmarks",
+	"sc-rpc/runtime-benchmarks",
+	"sp-consensus-beefy/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"substrate-test-runtime-client/runtime-benchmarks"
+]

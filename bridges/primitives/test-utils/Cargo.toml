@@ -42,3 +42,12 @@ std = [
 	"sp-std/std",
 	"sp-trie/std",
 ]
+runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-consensus-grandpa/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks"
+]

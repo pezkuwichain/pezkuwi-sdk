@@ -30,3 +30,12 @@ rand = { workspace = true }
 rstest = { workspace = true }
 sp-core = { workspace = true, default-features = true }
 sp-tracing = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

@@ -56,3 +56,15 @@ pezkuwi-primitives-test-helpers = { workspace = true }
 [features]
 default = []
 experimental-collator-protocol = ["async-trait", "tokio"]
+runtime-benchmarks = [
+	"pezkuwi-node-network-protocol/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

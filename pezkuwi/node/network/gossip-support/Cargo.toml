@@ -41,3 +41,16 @@ assert_matches = { workspace = true }
 async-trait = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
 quickcheck = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-node-network-protocol/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

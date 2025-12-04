@@ -51,3 +51,13 @@ pezkuwi-subsystem-bench = { workspace = true }
 # If not enabled, the dispute coordinator will do nothing.
 disputes = []
 subsystem-benchmarks = []
+runtime-benchmarks = [
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-subsystem-bench/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

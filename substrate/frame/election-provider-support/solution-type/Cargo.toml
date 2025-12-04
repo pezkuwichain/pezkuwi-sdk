@@ -35,3 +35,9 @@ frame-election-provider-support = { workspace = true, default-features = true, f
 ] }
 frame-support = { workspace = true, default-features = true }
 trybuild = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-election-provider-support/runtime-benchmarks",
+	"frame-support/runtime-benchmarks"
+]

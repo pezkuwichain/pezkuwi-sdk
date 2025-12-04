@@ -52,3 +52,10 @@ tempfile = { workspace = true }
 # This feature is used to export test code to other crates without putting it in the production build.
 test-utils = []
 jemalloc-allocator = []
+runtime-benchmarks = [
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sc-executor/runtime-benchmarks",
+	"gum/runtime-benchmarks"
+]

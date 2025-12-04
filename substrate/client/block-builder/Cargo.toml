@@ -28,3 +28,15 @@ sp-trie = { workspace = true, default-features = true }
 [dev-dependencies]
 sp-state-machine = { workspace = true, default-features = true }
 substrate-test-runtime-client = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"sp-api/runtime-benchmarks",
+	"sp-block-builder/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks",
+	"substrate-test-runtime-client/runtime-benchmarks"
+]

@@ -24,3 +24,9 @@ honggfuzz = { workspace = true }
 pallet-bags-list = { features = [
 	"fuzz",
 ], workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-election-provider-support/runtime-benchmarks",
+	"pallet-bags-list/runtime-benchmarks"
+]

@@ -31,6 +31,13 @@ zombienet-sdk = { workspace = true }
 [features]
 zombie-metadata = []
 zombie-ci = []
+runtime-benchmarks = [
+	"asset-hub-zagros-runtime/runtime-benchmarks",
+	"cumulus-zombienet-sdk-helpers/runtime-benchmarks",
+	"pallet-revive/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sc-executor/runtime-benchmarks"
+]
 
 [build-dependencies]
 sc-executor = { workspace = true, default-features = true }

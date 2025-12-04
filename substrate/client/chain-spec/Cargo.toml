@@ -44,3 +44,17 @@ sp-application-crypto = { features = ["serde"], workspace = true }
 sp-consensus-babe = { features = ["serde"], workspace = true }
 sp-keyring = { workspace = true, default-features = true }
 substrate-test-runtime = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-client-api/runtime-benchmarks",
+	"sc-executor/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-genesis-builder/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"substrate-test-runtime/runtime-benchmarks"
+]

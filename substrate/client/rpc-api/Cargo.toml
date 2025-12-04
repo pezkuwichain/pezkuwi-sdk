@@ -33,3 +33,12 @@ sp-rpc = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
 sp-version = { workspace = true, default-features = true }
 thiserror = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-chain-spec/runtime-benchmarks",
+	"sc-mixnet/runtime-benchmarks",
+	"sc-transaction-pool-api/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-version/runtime-benchmarks"
+]

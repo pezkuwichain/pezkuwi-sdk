@@ -91,3 +91,27 @@ try-runtime = [
 	"teyrchain-info/try-runtime",
 	"teyrchains-common/try-runtime",
 ]
+runtime-benchmarks = [
+	"assets-common/runtime-benchmarks",
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-asset-conversion/runtime-benchmarks",
+	"pallet-assets/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collator-selection/runtime-benchmarks",
+	"pallet-session/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"pallet-xcm-bridge-hub-router/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"teyrchains-runtimes-test-utils/runtime-benchmarks"
+]

@@ -41,3 +41,9 @@ rand = { features = [
 ], workspace = true, default-features = true }
 sp-npos-elections = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sp-npos-elections/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

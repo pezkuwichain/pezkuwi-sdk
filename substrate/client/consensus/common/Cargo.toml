@@ -35,3 +35,13 @@ thiserror = { workspace = true }
 
 [dev-dependencies]
 sp-test-primitives = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"sc-client-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-test-primitives/runtime-benchmarks"
+]

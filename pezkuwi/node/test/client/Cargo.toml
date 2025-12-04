@@ -45,4 +45,15 @@ runtime-benchmarks = [
 	"pezkuwi-test-service/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"sc-block-builder/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-timestamp/runtime-benchmarks",
+	"substrate-test-client/runtime-benchmarks"
 ]

@@ -24,3 +24,7 @@ std = [
 	"pallet-staking-async-ah-client/std",
 	"scale-info/std",
 ]
+runtime-benchmarks = [
+	"pallet-staking-async-ah-client/runtime-benchmarks",
+	"frame/runtime-benchmarks"
+]

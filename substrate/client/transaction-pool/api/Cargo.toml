@@ -25,3 +25,9 @@ thiserror = { workspace = true }
 
 [dev-dependencies]
 serde_json = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"sp-blockchain/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

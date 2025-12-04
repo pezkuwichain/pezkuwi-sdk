@@ -97,6 +97,19 @@ runtime-benchmarks = [
 	"frame-system-benchmarking/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"frame-executive?/runtime-benchmarks",
+	"frame-try-runtime?/runtime-benchmarks",
+	"sp-api?/runtime-benchmarks",
+	"sp-block-builder?/runtime-benchmarks",
+	"sp-consensus-aura?/runtime-benchmarks",
+	"sp-consensus-grandpa?/runtime-benchmarks",
+	"sp-genesis-builder?/runtime-benchmarks",
+	"sp-inherents?/runtime-benchmarks",
+	"sp-keyring?/runtime-benchmarks",
+	"sp-offchain?/runtime-benchmarks",
+	"sp-session?/runtime-benchmarks",
+	"sp-transaction-pool?/runtime-benchmarks",
+	"sp-version?/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-executive/try-runtime",

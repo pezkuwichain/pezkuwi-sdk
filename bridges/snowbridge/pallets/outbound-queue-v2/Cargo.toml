@@ -89,6 +89,11 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"bp-relayers/runtime-benchmarks",
+	"snowbridge-beacon-primitives/runtime-benchmarks",
+	"snowbridge-merkle-tree/runtime-benchmarks",
+	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
+	"snowbridge-verification-primitives/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

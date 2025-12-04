@@ -70,6 +70,7 @@ runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
 	"rand",
 	"rand_pcg",
+	"node-primitives/runtime-benchmarks"
 ]
 try-runtime = [
 	"pallet-example-mbm/try-runtime",

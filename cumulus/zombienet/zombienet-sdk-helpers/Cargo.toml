@@ -17,3 +17,9 @@ tokio = { workspace = true, features = ["rt-multi-thread", "macros", "time"] }
 zombienet-sdk = { workspace = true }
 futures = { workspace = true }
 zombienet-configuration = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-primitives-core/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks"
+]

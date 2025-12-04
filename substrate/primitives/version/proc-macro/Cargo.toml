@@ -27,3 +27,6 @@ syn = { features = ["extra-traits", "fold", "full", "visit"], workspace = true }
 
 [dev-dependencies]
 sp-version = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = []

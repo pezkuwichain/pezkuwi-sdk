@@ -29,3 +29,11 @@ sp-arithmetic = { workspace = true, default-features = true }
 sp-runtime = { workspace = true, default-features = true }
 # used by generate_solution_type:
 frame-support = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"frame-election-provider-solution-type/runtime-benchmarks",
+	"frame-election-provider-support/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks"
+]

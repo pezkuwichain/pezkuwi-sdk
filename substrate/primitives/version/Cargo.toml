@@ -43,3 +43,6 @@ std = [
 
 # Serde support without relying on std features.
 serde = ["dep:serde", "impl-serde", "sp-runtime/serde"]
+runtime-benchmarks = [
+	"sp-runtime/runtime-benchmarks"
+]

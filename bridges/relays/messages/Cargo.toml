@@ -28,3 +28,10 @@ sp-arithmetic = { workspace = true, default-features = true }
 
 [dev-dependencies]
 sp-core = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"bp-messages/runtime-benchmarks",
+	"finality-relay/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks"
+]

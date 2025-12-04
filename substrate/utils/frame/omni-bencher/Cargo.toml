@@ -26,3 +26,14 @@ cumulus-test-runtime = { workspace = true }
 sc-chain-spec = { workspace = true }
 sp-genesis-builder = { workspace = true, default-features = true }
 tempfile = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-test-runtime/runtime-benchmarks",
+	"frame-benchmarking-cli/runtime-benchmarks",
+	"sc-chain-spec/runtime-benchmarks",
+	"sc-cli/runtime-benchmarks",
+	"sp-genesis-builder/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-statement-store/runtime-benchmarks"
+]

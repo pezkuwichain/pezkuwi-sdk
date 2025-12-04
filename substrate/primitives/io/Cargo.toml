@@ -122,3 +122,4 @@ bandersnatch-experimental = [
 	"sp-core/bandersnatch-experimental",
 	"sp-keystore/bandersnatch-experimental",
 ]
+runtime-benchmarks = []

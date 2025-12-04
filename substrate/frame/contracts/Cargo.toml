@@ -30,9 +30,9 @@ smallvec = { features = ["const_generics"], workspace = true }
 wasmi = { workspace = true }
 
 # Only used in benchmarking to generate contract code
-rand = { optional = true, workspace = true }
-rand_pcg = { optional = true, workspace = true }
-wasm-instrument = { optional = true, workspace = true }
+rand = { workspace = true }
+rand_pcg = { workspace = true }
+wasm-instrument = { workspace = true }
 
 # Substrate Dependencies
 environmental = { workspace = true }
@@ -83,7 +83,7 @@ std = [
 	"pallet-proxy/std",
 	"pallet-timestamp/std",
 	"pallet-utility/std",
-	"rand?/std",
+	"rand/std",
 	"scale-info/std",
 	"serde",
 	"sp-api/std",
@@ -91,7 +91,7 @@ std = [
 	"sp-io/std",
 	"sp-keystore/std",
 	"sp-runtime/std",
-	"wasm-instrument?/std",
+	"wasm-instrument/std",
 	"wasmi/std",
 	"xcm-builder/std",
 	"xcm/std",
@@ -104,12 +104,12 @@ runtime-benchmarks = [
 	"pallet-proxy/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"pallet-utility/runtime-benchmarks",
-	"rand",
-	"rand_pcg",
 	"sp-runtime/runtime-benchmarks",
-	"wasm-instrument",
 	"xcm-builder/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
+	"pallet-contracts-fixtures/runtime-benchmarks",
+	"pallet-insecure-randomness-collective-flip/runtime-benchmarks",
+	"sp-api/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

@@ -17,3 +17,9 @@ clap = { features = ["derive"], workspace = true }
 generate-bags = { workspace = true, default-features = true }
 
 zagros-runtime = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"generate-bags/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks"
+]

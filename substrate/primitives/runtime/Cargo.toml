@@ -52,7 +52,13 @@ substrate-test-runtime-client = { workspace = true }
 zstd = { workspace = true }
 
 [features]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"binary-merkle-tree/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks",
+	"substrate-test-runtime-client/runtime-benchmarks"
+]
 try-runtime = []
 default = ["std"]
 std = [

@@ -95,3 +95,8 @@ pub use teyrchain::{
 pub use relaychain::{RelaychainConfig, RelaychainConfigBuilder};
 // re-export shared
 pub use shared::{node::NodeConfig, types};
+
+// Backward compatibility aliases for external crates that use Polkadot SDK terminology
+// These allow zombienet-orchestrator and other external crates to work with our renamed types
+pub type ParachainConfig = TeyrchainConfig;
+pub type ParachainConfigBuilder<S, C> = TeyrchainConfigBuilder<S, C>;

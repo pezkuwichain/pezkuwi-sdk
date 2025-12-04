@@ -188,6 +188,11 @@ impl TeyrchainConfig {
         self.onboard_as_teyrchain
     }
 
+    /// Backward compatibility alias for onboard_as_teyrchain() - for external crates using Polkadot SDK terminology.
+    pub fn onboard_as_parachain(&self) -> bool {
+        self.onboard_as_teyrchain()
+    }
+
     /// The initial balance of the teyrchain account.
     pub fn initial_balance(&self) -> u128 {
         self.initial_balance.0

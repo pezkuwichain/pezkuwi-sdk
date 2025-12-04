@@ -42,3 +42,9 @@ std = [
 	"sp-std/std",
 	"xcm/std",
 ]
+runtime-benchmarks = [
+	"bp-messages/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"xcm/runtime-benchmarks"
+]

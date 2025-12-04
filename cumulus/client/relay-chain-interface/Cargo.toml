@@ -28,3 +28,15 @@ codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 jsonrpsee-core = { workspace = true }
 thiserror = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-primitives-core/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-version/runtime-benchmarks"
+]
