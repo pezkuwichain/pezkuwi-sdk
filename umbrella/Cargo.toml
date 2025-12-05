@@ -88,7 +88,6 @@ std = [
 	"pallet-delegated-staking?/std",
 	"pallet-democracy?/std",
 	"pallet-derivatives?/std",
-	"pallet-tiki?/std",
 	"pallet-dev-mode?/std",
 	"pallet-dummy-dim?/std",
 	"pallet-election-provider-multi-block?/std",

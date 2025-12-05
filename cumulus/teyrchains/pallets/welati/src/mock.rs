@@ -141,6 +141,8 @@ impl pallet_nfts::Config for Test {
 	type OffchainPublic = sp_runtime::testing::UintAuthorityId;
 	type WeightInfo = ();
 	type BlockNumberProvider = System;
+	#[cfg(feature = "runtime-benchmarks")]
+	type Helper = ();
 }
 
 // Identity Configuration - MINIMAL for pallet-tiki dependency
@@ -179,6 +181,8 @@ impl pallet_identity::Config for Test {
 	type UsernameAuthorityOrigin = frame_system::EnsureRoot<AccountId>;
 	type OffchainSignature = sp_runtime::testing::TestSignature;
 	type SigningPublicKey = sp_runtime::testing::UintAuthorityId;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 // Identity KYC Configuration
