@@ -141,9 +141,9 @@ fn finalize_epoch_calculates_rewards_correctly() {
 		assert_ok!(PezRewards::record_trust_score(RuntimeOrigin::signed(bob()))); // 50
 		assert_ok!(PezRewards::record_trust_score(RuntimeOrigin::signed(charlie()))); // 75
 		let total_trust: u128 = 100 + 50 + 75;
-		let expected_deadline = System::block_number() +
-			crate::BLOCKS_PER_EPOCH as u64 +
-			crate::CLAIM_PERIOD_BLOCKS as u64;
+		let expected_deadline = System::block_number()
+			+ crate::BLOCKS_PER_EPOCH as u64
+			+ crate::CLAIM_PERIOD_BLOCKS as u64;
 
 		let incentive_pot = PezRewards::incentive_pot_account_id();
 		let initial_pot_balance = pez_balance(&incentive_pot);

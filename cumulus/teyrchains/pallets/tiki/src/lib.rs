@@ -676,15 +676,16 @@ pub mod pallet {
 				Tiki::Welati => RoleAssignmentType::Automatic,
 
 				// Elected roles
-				Tiki::Parlementer | Tiki::SerokiMeclise | Tiki::Serok =>
-					RoleAssignmentType::Elected,
+				Tiki::Parlementer | Tiki::SerokiMeclise | Tiki::Serok => {
+					RoleAssignmentType::Elected
+				},
 
 				// Earned roles (automatically given by pallet-referral)
-				Tiki::Axa |
-				Tiki::Mamoste |
-				Tiki::Rewsenbîr |
-				Tiki::SerokêKomele |
-				Tiki::ModeratorêCivakê => RoleAssignmentType::Earned,
+				Tiki::Axa
+				| Tiki::Mamoste
+				| Tiki::Rewsenbîr
+				| Tiki::SerokêKomele
+				| Tiki::ModeratorêCivakê => RoleAssignmentType::Earned,
 
 				// Appointed roles (default)
 				_ => RoleAssignmentType::Appointed,

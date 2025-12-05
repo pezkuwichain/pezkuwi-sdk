@@ -303,8 +303,8 @@ fn update_all_trust_scores_emits_event() {
 
 		let events = System::events();
 		let bulk_update_event = events.iter().any(|event| {
-			matches!(event.event, RuntimeEvent::TrustPallet(Event::BulkTrustScoreUpdate { .. })) ||
-				matches!(
+			matches!(event.event, RuntimeEvent::TrustPallet(Event::BulkTrustScoreUpdate { .. }))
+				|| matches!(
 					event.event,
 					RuntimeEvent::TrustPallet(Event::AllTrustScoresUpdated { .. })
 				)

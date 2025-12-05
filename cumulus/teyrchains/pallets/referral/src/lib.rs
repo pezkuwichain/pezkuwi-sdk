@@ -262,8 +262,8 @@ pub mod pallet {
 		fn on_kyc_approved(who: &T::AccountId, referrer: &T::AccountId) {
 			// Security check: Verify on-chain that the user's KYC status is actually
 			// "Approved" before confirming the referral.
-			if pallet_identity_kyc::Pallet::<T>::get_kyc_status(who) ==
-				pallet_identity_kyc::types::KycLevel::Approved
+			if pallet_identity_kyc::Pallet::<T>::get_kyc_status(who)
+				== pallet_identity_kyc::types::KycLevel::Approved
 			{
 				// Check if this referral already exists (prevent double-counting)
 				if Referrals::<T>::contains_key(who) {

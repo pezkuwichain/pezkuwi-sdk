@@ -41,10 +41,10 @@ pub mod v1 {
 				let has_genesis_done =
 					if GenesisDistributionDone::<T>::get() { 1u64 } else { 0u64 };
 
-				let migrated = monthly_releases_count +
-					has_halving_info +
-					has_treasury_start +
-					has_genesis_done;
+				let migrated = monthly_releases_count
+					+ has_halving_info
+					+ has_treasury_start
+					+ has_genesis_done;
 
 				// Update storage version
 				STORAGE_VERSION.put::<Pallet<T>>();

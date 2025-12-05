@@ -51,10 +51,12 @@ impl FromStr for BridgeHubRuntimeType {
 			zagros::BRIDGE_HUB_ZAGROS_LOCAL => Ok(BridgeHubRuntimeType::ZagrosLocal),
 			zagros::BRIDGE_HUB_ZAGROS_DEVELOPMENT => Ok(BridgeHubRuntimeType::ZagrosDevelopment),
 			pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN => Ok(BridgeHubRuntimeType::Pezkuwichain),
-			pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_LOCAL =>
-				Ok(BridgeHubRuntimeType::PezkuwichainLocal),
-			pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_DEVELOPMENT =>
-				Ok(BridgeHubRuntimeType::PezkuwichainDevelopment),
+			pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_LOCAL => {
+				Ok(BridgeHubRuntimeType::PezkuwichainLocal)
+			},
+			pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_DEVELOPMENT => {
+				Ok(BridgeHubRuntimeType::PezkuwichainDevelopment)
+			},
 			_ => Err(format!("Value '{}' is not configured yet", value)),
 		}
 	}
@@ -96,14 +98,15 @@ impl BridgeHubRuntimeType {
 				|_| (),
 				ChainType::Local,
 			))),
-			BridgeHubRuntimeType::PezkuwichainDevelopment =>
+			BridgeHubRuntimeType::PezkuwichainDevelopment => {
 				Ok(Box::new(pezkuwichain::local_config(
 					pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_DEVELOPMENT,
 					"Pezkuwichain BridgeHub Development",
 					"pezkuwichain-dev",
 					|_| (),
 					ChainType::Development,
-				))),
+				)))
+			},
 			other => Err(std::format!("No default config present for {:?}", other)),
 		}
 	}

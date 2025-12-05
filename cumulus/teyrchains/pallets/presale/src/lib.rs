@@ -632,8 +632,8 @@ pub mod pallet {
 					// Handle vesting
 					if let Some(ref vesting) = presale.vesting {
 						let immediate = total_reward
-							.saturating_mul(vesting.immediate_release_percent as u128) /
-							100;
+							.saturating_mul(vesting.immediate_release_percent as u128)
+							/ 100;
 
 						if immediate > 0 {
 							let immediate_balance: T::Balance =
@@ -814,10 +814,9 @@ pub mod pallet {
 				let vested_percent = elapsed_u128.saturating_mul(100) / duration_u128;
 				let immediate_percent = vesting.immediate_release_percent as u128;
 				let vesting_percent = 100u128.saturating_sub(immediate_percent);
-				let vested_amount = total_with_bonus
-					.saturating_mul(vesting_percent)
-					.saturating_mul(vested_percent) /
-					10000;
+				let vested_amount =
+					total_with_bonus.saturating_mul(vesting_percent).saturating_mul(vested_percent)
+						/ 10000;
 				let total_unlocked = vested_amount.saturating_add(already_claimed);
 				total_unlocked.saturating_sub(already_claimed)
 			};

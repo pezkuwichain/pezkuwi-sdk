@@ -109,9 +109,9 @@ where
 			self.authority_set.inner().pending_changes().cloned().collect();
 
 		for pending_change in pending_changes {
-			if pending_change.delay_kind == DelayKind::Finalized &&
-				pending_change.effective_number() > chain_info.finalized_number &&
-				pending_change.effective_number() <= chain_info.best_number
+			if pending_change.delay_kind == DelayKind::Finalized
+				&& pending_change.effective_number() > chain_info.finalized_number
+				&& pending_change.effective_number() <= chain_info.best_number
 			{
 				let effective_block_hash = if !pending_change.delay.is_zero() {
 					self.select_chain
@@ -683,7 +683,7 @@ where
 					);
 				}
 			},
-			None =>
+			None => {
 				if needs_justification {
 					debug!(
 						target: LOG_TARGET,
@@ -692,7 +692,8 @@ where
 					);
 
 					imported_aux.needs_justification = true;
-				},
+				}
+			},
 		}
 
 		Ok(ImportResult::Imported(imported_aux))
@@ -797,8 +798,9 @@ where
 		let justification = match justification {
 			Err(e) => {
 				return match e {
-					sp_blockchain::Error::OutdatedJustification =>
-						Err(ConsensusError::OutdatedJustification),
+					sp_blockchain::Error::OutdatedJustification => {
+						Err(ConsensusError::OutdatedJustification)
+					},
 					_ => Err(ConsensusError::ClientImport(e.to_string())),
 				};
 			},
@@ -830,7 +832,7 @@ where
 				// send the command to the voter
 				let _ = self.send_voter_commands.unbounded_send(command);
 			},
-			Err(CommandOrError::Error(e)) =>
+			Err(CommandOrError::Error(e)) => {
 				return Err(match e {
 					Error::Grandpa(error) => ConsensusError::ClientImport(error.to_string()),
 					Error::Network(error) => ConsensusError::ClientImport(error),
@@ -840,7 +842,8 @@ where
 					Error::Signing(error) => ConsensusError::ClientImport(error),
 					Error::Timer(error) => ConsensusError::ClientImport(error.to_string()),
 					Error::RuntimeApi(error) => ConsensusError::ClientImport(error.to_string()),
-				}),
+				})
+			},
 			Ok(_) => {
 				assert!(
 					!enacts_change,

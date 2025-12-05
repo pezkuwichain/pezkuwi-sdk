@@ -335,8 +335,9 @@ impl PeerData {
 	fn is_inactive(&self, policy: &crate::CollatorEvictionPolicy) -> bool {
 		match self.state {
 			PeerState::Connected(connected_at) => connected_at.elapsed() >= policy.undeclared,
-			PeerState::Collating(ref state) =>
-				state.last_active.elapsed() >= policy.inactive_collator,
+			PeerState::Collating(ref state) => {
+				state.last_active.elapsed() >= policy.inactive_collator
+			},
 		}
 	}
 }
@@ -540,8 +541,8 @@ impl State {
 				acc + blocked_collations
 					.iter()
 					.filter(|pc| {
-						pc.candidate_receipt.descriptor.para_id() == *para_id &&
-							pc.candidate_receipt.descriptor.relay_parent() == *relay_parent
+						pc.candidate_receipt.descriptor.para_id() == *para_id
+							&& pc.candidate_receipt.descriptor.relay_parent() == *relay_parent
 					})
 					.count()
 			});
@@ -747,14 +748,16 @@ async fn notify_collation_seconded(
 ) {
 	let statement = statement.into();
 	let wire_message = match version {
-		CollationVersion::V1 =>
+		CollationVersion::V1 => {
 			CollationProtocols::V1(protocol_v1::CollationProtocol::CollatorProtocol(
 				protocol_v1::CollatorProtocolMessage::CollationSeconded(relay_parent, statement),
-			)),
-		CollationVersion::V2 =>
+			))
+		},
+		CollationVersion::V2 => {
 			CollationProtocols::V2(protocol_v2::CollationProtocol::CollatorProtocol(
 				protocol_v2::CollatorProtocolMessage::CollationSeconded(relay_parent, statement),
-			)),
+			))
+		},
 	};
 	sender
 		.send_message(NetworkBridgeTxMessage::SendCollationMessage(vec![peer_id], wire_message))
@@ -879,8 +882,8 @@ async fn process_incoming_peer_message<Context>(
 	use sp_runtime::traits::AppVerify;
 
 	match msg {
-		CollationProtocols::V1(V1::Declare(collator_id, para_id, signature)) |
-		CollationProtocols::V2(V2::Declare(collator_id, para_id, signature)) => {
+		CollationProtocols::V1(V1::Declare(collator_id, para_id, signature))
+		| CollationProtocols::V2(V2::Declare(collator_id, para_id, signature)) => {
 			if collator_peer_id(&state.peer_data, &collator_id).is_some() {
 				modify_reputation(
 					&mut state.reputation,
@@ -1022,8 +1025,8 @@ async fn process_incoming_peer_message<Context>(
 				}
 			}
 		},
-		CollationProtocols::V1(V1::CollationSeconded(..)) |
-		CollationProtocols::V2(V2::CollationSeconded(..)) => {
+		CollationProtocols::V1(V1::CollationSeconded(..))
+		| CollationProtocols::V2(V2::CollationSeconded(..)) => {
 			gum::warn!(
 				target: LOG_TARGET,
 				peer_id = ?origin,
@@ -1053,9 +1056,9 @@ fn hold_off_asset_hub_collation_if_needed(
 	let peer_is_invulnerable = state.ah_invulnerables.contains(&peer_id);
 	let invulnerables_set_is_empty = state.ah_invulnerables.is_empty();
 
-	if maybe_para_id != Some(ASSET_HUB_PARA_ID) ||
-		peer_is_invulnerable ||
-		invulnerables_set_is_empty
+	if maybe_para_id != Some(ASSET_HUB_PARA_ID)
+		|| peer_is_invulnerable
+		|| invulnerables_set_is_empty
 	{
 		gum::trace!(
 			target: LOG_TARGET,
@@ -1269,8 +1272,8 @@ fn ensure_seconding_limit_is_respected(
 	for path in paths {
 		let mut cq_state = ClaimQueueState::new();
 		for ancestor in &path {
-			let seconded_and_pending = state.seconded_and_pending_for_para(&ancestor, &para_id) +
-				state.in_waiting_queue_for_para(relay_parent, &para_id);
+			let seconded_and_pending = state.seconded_and_pending_for_para(&ancestor, &para_id)
+				+ state.in_waiting_queue_for_para(relay_parent, &para_id);
 			cq_state.add_leaf(
 				&ancestor,
 				&state
@@ -1847,9 +1850,11 @@ async fn process_msg<Context>(
 			let candidate_hash = fetched_collation.candidate_hash;
 			let id = match state.fetched_candidates.entry(fetched_collation) {
 				Entry::Occupied(entry)
-					if entry.get().pending_collation.commitments_hash ==
-						Some(candidate_receipt.commitments_hash) =>
-					entry.remove().collator_id,
+					if entry.get().pending_collation.commitments_hash
+						== Some(candidate_receipt.commitments_hash) =>
+				{
+					entry.remove().collator_id
+				},
 				Entry::Occupied(_) => {
 					gum::error!(
 						target: LOG_TARGET,
@@ -2400,10 +2405,10 @@ async fn handle_collation_fetch_response(
 			Err(None)
 		},
 		Ok(
-			request_v1::CollationFetchingResponse::Collation(receipt, _) |
-			request_v2::CollationFetchingResponse::Collation(receipt, _) |
-			request_v1::CollationFetchingResponse::CollationWithParentHeadData { receipt, .. } |
-			request_v2::CollationFetchingResponse::CollationWithParentHeadData { receipt, .. },
+			request_v1::CollationFetchingResponse::Collation(receipt, _)
+			| request_v2::CollationFetchingResponse::Collation(receipt, _)
+			| request_v1::CollationFetchingResponse::CollationWithParentHeadData { receipt, .. }
+			| request_v2::CollationFetchingResponse::CollationWithParentHeadData { receipt, .. },
 		) if receipt.descriptor().para_id() != pending_collation.para_id => {
 			gum::debug!(
 				target: LOG_TARGET,
@@ -2550,8 +2555,8 @@ fn get_next_collation_to_fetch(
 	// to replace it.
 	if let Some((collator_id, maybe_candidate_hash)) = rp_state.collations.fetching_from.as_ref() {
 		// If a candidate hash was saved previously, `finished_one` must include this too.
-		if collator_id != &finished_one.0 &&
-			maybe_candidate_hash.map_or(true, |hash| Some(&hash) != finished_one.1.as_ref())
+		if collator_id != &finished_one.0
+			&& maybe_candidate_hash.map_or(true, |hash| Some(&hash) != finished_one.1.as_ref())
 		{
 			gum::trace!(
 				target: LOG_TARGET,

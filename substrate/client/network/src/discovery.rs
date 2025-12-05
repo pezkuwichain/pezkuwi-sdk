@@ -583,8 +583,9 @@ impl DiscoveryBehaviour {
 		let ip = match addr.iter().next() {
 			Some(Protocol::Ip4(ip)) => IpNetwork::from(ip),
 			Some(Protocol::Ip6(ip)) => IpNetwork::from(ip),
-			Some(Protocol::Dns(_)) | Some(Protocol::Dns4(_)) | Some(Protocol::Dns6(_)) =>
-				return true,
+			Some(Protocol::Dns(_)) | Some(Protocol::Dns4(_)) | Some(Protocol::Dns6(_)) => {
+				return true
+			},
 			_ => return false,
 		};
 		ip.is_global()
@@ -938,7 +939,7 @@ impl NetworkBehaviour for DiscoveryBehaviour {
 						// We are not interested in this event at the moment.
 					},
 					KademliaEvent::InboundRequest { request } => match request {
-						libp2p::kad::InboundRequest::PutRecord { record: Some(record), .. } =>
+						libp2p::kad::InboundRequest::PutRecord { record: Some(record), .. } => {
 							return Poll::Ready(ToSwarm::GenerateEvent(
 								DiscoveryOut::PutRecordRequest(
 									record.key,
@@ -946,7 +947,8 @@ impl NetworkBehaviour for DiscoveryBehaviour {
 									record.publisher.map(Into::into),
 									record.expires,
 								),
-							)),
+							))
+						},
 						_ => {},
 					},
 					KademliaEvent::OutboundQueryProgressed {
@@ -1416,8 +1418,8 @@ mod tests {
 							match e {
 								SwarmEvent::Behaviour(behavior) => {
 									match behavior {
-										DiscoveryOut::UnroutablePeer(other) |
-										DiscoveryOut::Discovered(other) => {
+										DiscoveryOut::UnroutablePeer(other)
+										| DiscoveryOut::Discovered(other) => {
 											// Call `add_self_reported_address` to simulate identify
 											// happening.
 											let addr = swarms

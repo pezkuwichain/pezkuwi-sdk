@@ -44,8 +44,9 @@ impl<T: Config> BuiltinPrecompile for System<T> {
 	) -> Result<Vec<u8>, Error> {
 		use ISystem::ISystemCalls;
 		match input {
-			ISystemCalls::terminate(_) if env.is_read_only() =>
-				Err(crate::Error::<T>::StateChangeDenied.into()),
+			ISystemCalls::terminate(_) if env.is_read_only() => {
+				Err(crate::Error::<T>::StateChangeDenied.into())
+			},
 			ISystemCalls::hashBlake256(ISystem::hashBlake256Call { input }) => {
 				env.gas_meter_mut().charge(RuntimeCosts::HashBlake256(input.len() as u32))?;
 				let output = sp_io::hashing::blake2_256(input.as_bytes_ref());

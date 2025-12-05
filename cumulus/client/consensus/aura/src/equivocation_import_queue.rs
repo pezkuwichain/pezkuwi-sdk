@@ -177,8 +177,8 @@ where
 					let relay_parent =
 						match CumulusDigestItem::find_relay_block_identifier(pre_header.digest()) {
 							None => Default::default(),
-							Some(RelayBlockIdentifier::ByHash(h)) |
-							Some(RelayBlockIdentifier::ByStorageRoot {
+							Some(RelayBlockIdentifier::ByHash(h))
+							| Some(RelayBlockIdentifier::ByStorageRoot {
 								storage_root: h, ..
 							}) => h,
 						};
@@ -219,11 +219,12 @@ where
 						post_hash, slot
 					));
 				},
-				Err(e) =>
+				Err(e) => {
 					return Err(format!(
 						"Rejecting block ({:?}) with invalid seal ({:?})",
 						post_hash, e
-					)),
+					))
+				},
 			}
 		}
 

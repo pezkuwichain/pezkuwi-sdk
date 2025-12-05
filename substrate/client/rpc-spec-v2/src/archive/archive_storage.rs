@@ -234,8 +234,9 @@ where
 			};
 
 			let maybe_result = match operation_type {
-				ArchiveStorageDiffOperationType::Added =>
-					self.fetch_storage(hash, key.clone(), maybe_child_trie.clone(), fetch_type)?,
+				ArchiveStorageDiffOperationType::Added => {
+					self.fetch_storage(hash, key.clone(), maybe_child_trie.clone(), fetch_type)?
+				},
 				ArchiveStorageDiffOperationType::Deleted => self.fetch_storage(
 					previous_hash,
 					key.clone(),
@@ -373,7 +374,7 @@ where
 	let mut b = right.next();
 
 	core::iter::from_fn(move || match (a.take(), b.take()) {
-		(Some(a_value), Some(b_value)) =>
+		(Some(a_value), Some(b_value)) => {
 			if a_value < b_value {
 				b = Some(b_value);
 				a = left.next();
@@ -389,7 +390,8 @@ where
 				b = right.next();
 
 				Some(Diff::Equal(a_value))
-			},
+			}
+		},
 		(Some(a_value), None) => {
 			a = left.next();
 			Some(Diff::Added(a_value))

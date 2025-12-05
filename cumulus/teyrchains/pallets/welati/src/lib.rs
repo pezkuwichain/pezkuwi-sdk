@@ -1098,9 +1098,9 @@ pub mod pallet {
 
 			// For Parliament decisions, voter must be a parliament member
 			match proposal.decision_type {
-				CollectiveDecisionType::ParliamentSimpleMajority |
-				CollectiveDecisionType::ParliamentSuperMajority |
-				CollectiveDecisionType::ParliamentAbsoluteMajority => {
+				CollectiveDecisionType::ParliamentSimpleMajority
+				| CollectiveDecisionType::ParliamentSuperMajority
+				| CollectiveDecisionType::ParliamentAbsoluteMajority => {
 					// Check if voter is in parliament
 					let members = ParliamentMembers::<T>::get();
 					let is_member = members.iter().any(|m| m.account == voter);
@@ -1126,12 +1126,15 @@ pub mod pallet {
 			ActiveProposals::<T>::mutate(proposal_id, |proposal_opt| {
 				if let Some(proposal) = proposal_opt {
 					match vote {
-						VoteChoice::Aye =>
-							proposal.aye_votes = proposal.aye_votes.saturating_add(1),
-						VoteChoice::Nay =>
-							proposal.nay_votes = proposal.nay_votes.saturating_add(1),
-						VoteChoice::Abstain =>
-							proposal.abstain_votes = proposal.abstain_votes.saturating_add(1),
+						VoteChoice::Aye => {
+							proposal.aye_votes = proposal.aye_votes.saturating_add(1)
+						},
+						VoteChoice::Nay => {
+							proposal.nay_votes = proposal.nay_votes.saturating_add(1)
+						},
+						VoteChoice::Abstain => {
+							proposal.abstain_votes = proposal.abstain_votes.saturating_add(1)
+						},
 					}
 					proposal.votes_cast = proposal.votes_cast.saturating_add(1);
 				}
@@ -1349,14 +1352,15 @@ pub mod pallet {
 			winners: &[T::AccountId],
 		) -> Result<(), Error<T>> {
 			match election_type {
-				ElectionType::Presidential =>
+				ElectionType::Presidential => {
 					if let Some(winner) = winners.first() {
 						CurrentOfficials::<T>::insert(GovernmentPosition::Serok, winner);
-					},
+					}
+				},
 				ElectionType::Parliamentary => {
 					let current_block = frame_system::Pallet::<T>::block_number();
-					let term_end = current_block +
-						BlockNumberFor::<T>::from(4u32 * 365u32 * 24u32 * 60u32 * 10u32);
+					let term_end = current_block
+						+ BlockNumberFor::<T>::from(4u32 * 365u32 * 24u32 * 60u32 * 10u32);
 
 					let parliament_members: Result<BoundedVec<_, _>, _> = winners
 						.iter()
@@ -1381,10 +1385,11 @@ pub mod pallet {
 						term_start: current_block,
 					});
 				},
-				ElectionType::SpeakerElection =>
+				ElectionType::SpeakerElection => {
 					if let Some(winner) = winners.first() {
 						CurrentOfficials::<T>::insert(GovernmentPosition::MeclisBaskanı, winner);
-					},
+					}
+				},
 				_ => {},
 			}
 			Ok(())
@@ -1396,15 +1401,16 @@ pub mod pallet {
 			decision_type: &CollectiveDecisionType,
 		) -> Result<bool, Error<T>> {
 			match decision_type {
-				CollectiveDecisionType::ExecutiveDecision =>
-					Ok(CurrentOfficials::<T>::get(GovernmentPosition::Serok) ==
-						Some(proposer.clone())),
+				CollectiveDecisionType::ExecutiveDecision => {
+					Ok(CurrentOfficials::<T>::get(GovernmentPosition::Serok)
+						== Some(proposer.clone()))
+				},
 				_ => {
 					let is_parliamentarian = ParliamentMembers::<T>::get()
 						.iter()
 						.any(|member| member.account == *proposer);
-					let is_president = CurrentOfficials::<T>::get(GovernmentPosition::Serok) ==
-						Some(proposer.clone());
+					let is_president = CurrentOfficials::<T>::get(GovernmentPosition::Serok)
+						== Some(proposer.clone());
 
 					Ok(is_parliamentarian || is_president)
 				},
@@ -1414,12 +1420,15 @@ pub mod pallet {
 		/// Calculate voting threshold
 		fn get_voting_threshold(decision_type: &CollectiveDecisionType) -> u32 {
 			match decision_type {
-				CollectiveDecisionType::ParliamentSimpleMajority =>
-					(T::ParliamentSize::get() / 2) + 1,
-				CollectiveDecisionType::ParliamentSuperMajority =>
-					(T::ParliamentSize::get() * 2) / 3,
-				CollectiveDecisionType::ParliamentAbsoluteMajority =>
-					(T::ParliamentSize::get() * 3) / 4,
+				CollectiveDecisionType::ParliamentSimpleMajority => {
+					(T::ParliamentSize::get() / 2) + 1
+				},
+				CollectiveDecisionType::ParliamentSuperMajority => {
+					(T::ParliamentSize::get() * 2) / 3
+				},
+				CollectiveDecisionType::ParliamentAbsoluteMajority => {
+					(T::ParliamentSize::get() * 3) / 4
+				},
 				CollectiveDecisionType::ConstitutionalReview => (T::DiwanSize::get() * 2) / 3,
 				CollectiveDecisionType::ConstitutionalUnanimous => T::DiwanSize::get(),
 				_ => T::ParliamentSize::get() / 2 + 1,
@@ -1552,10 +1561,10 @@ impl<T: Config> Pallet<T> {
 	/// Check if an account is any type of governance member
 	/// Used for fee exemption in governance-related transactions
 	pub fn is_governance_member(who: &T::AccountId) -> bool {
-		Self::is_serok(who) ||
-			Self::is_parliament_member(who) ||
-			Self::is_diwan_member(who) ||
-			Self::is_minister(who)
+		Self::is_serok(who)
+			|| Self::is_parliament_member(who)
+			|| Self::is_diwan_member(who)
+			|| Self::is_minister(who)
 	}
 
 	/// Check if account is Serok (President)

@@ -156,10 +156,12 @@ async fn run_iteration<Context>(
 			},
 			FromOrchestra::Signal(OverseerSignal::BlockFinalized(..)) => {},
 			FromOrchestra::Communication { msg } => match msg {
-				ProspectiveTeyrchainsMessage::IntroduceSecondedCandidate(request, tx) =>
-					handle_introduce_seconded_candidate(view, request, tx, metrics).await,
-				ProspectiveTeyrchainsMessage::CandidateBacked(para, candidate_hash) =>
-					handle_candidate_backed(view, para, candidate_hash, metrics).await,
+				ProspectiveTeyrchainsMessage::IntroduceSecondedCandidate(request, tx) => {
+					handle_introduce_seconded_candidate(view, request, tx, metrics).await
+				},
+				ProspectiveTeyrchainsMessage::CandidateBacked(para, candidate_hash) => {
+					handle_candidate_backed(view, para, candidate_hash, metrics).await
+				},
 				ProspectiveTeyrchainsMessage::GetBackableCandidates(
 					relay_parent,
 					para,
@@ -167,12 +169,15 @@ async fn run_iteration<Context>(
 					ancestors,
 					tx,
 				) => answer_get_backable_candidates(&view, relay_parent, para, count, ancestors, tx),
-				ProspectiveTeyrchainsMessage::GetHypotheticalMembership(request, tx) =>
-					answer_hypothetical_membership_request(&view, request, tx, metrics),
-				ProspectiveTeyrchainsMessage::GetMinimumRelayParents(relay_parent, tx) =>
-					answer_minimum_relay_parents_request(&view, relay_parent, tx),
-				ProspectiveTeyrchainsMessage::GetProspectiveValidationData(request, tx) =>
-					answer_prospective_validation_data_request(&view, request, tx),
+				ProspectiveTeyrchainsMessage::GetHypotheticalMembership(request, tx) => {
+					answer_hypothetical_membership_request(&view, request, tx, metrics)
+				},
+				ProspectiveTeyrchainsMessage::GetMinimumRelayParents(relay_parent, tx) => {
+					answer_minimum_relay_parents_request(&view, relay_parent, tx)
+				},
+				ProspectiveTeyrchainsMessage::GetProspectiveValidationData(request, tx) => {
+					answer_prospective_validation_data_request(&view, request, tx)
+				},
 			},
 		}
 	}

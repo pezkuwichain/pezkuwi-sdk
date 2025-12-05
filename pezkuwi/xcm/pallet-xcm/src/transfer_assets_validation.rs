@@ -77,9 +77,9 @@ impl<T: Config> Pallet<T> {
 		// is being attempted.
 		let is_reserve_transfer = matches!(
 			transfer_type,
-			TransferType::LocalReserve |
-				TransferType::DestinationReserve |
-				TransferType::RemoteReserve(_)
+			TransferType::LocalReserve
+				| TransferType::DestinationReserve
+				| TransferType::RemoteReserve(_)
 		);
 
 		if !is_reserve_transfer {
@@ -122,9 +122,9 @@ impl<T: Config> Pallet<T> {
 						NetworkId::Pezkuwi | NetworkId::Kusama => true,
 						NetworkId::ByGenesis(genesis_hash) => {
 							// Check if this is Zagros by genesis hash
-							*genesis_hash == xcm::v5::ZAGROS_GENESIS_HASH ||
-								*genesis_hash == PASEO_GENESIS_HASH ||
-								*genesis_hash == xcm::v5::PEZKUWICHAIN_GENESIS_HASH // Used in tests.
+							*genesis_hash == xcm::v5::ZAGROS_GENESIS_HASH
+								|| *genesis_hash == PASEO_GENESIS_HASH
+								|| *genesis_hash == xcm::v5::PEZKUWICHAIN_GENESIS_HASH // Used in tests.
 						},
 						_ => false,
 					};
@@ -144,9 +144,9 @@ impl<T: Config> Pallet<T> {
 						NetworkId::Pezkuwi | NetworkId::Kusama => true,
 						NetworkId::ByGenesis(genesis_hash) => {
 							// Check if this is Zagros by genesis hash
-							*genesis_hash == xcm::v5::ZAGROS_GENESIS_HASH ||
-								*genesis_hash == PASEO_GENESIS_HASH ||
-								*genesis_hash == xcm::v5::PEZKUWICHAIN_GENESIS_HASH // Used in tests.
+							*genesis_hash == xcm::v5::ZAGROS_GENESIS_HASH
+								|| *genesis_hash == PASEO_GENESIS_HASH
+								|| *genesis_hash == xcm::v5::PEZKUWICHAIN_GENESIS_HASH // Used in tests.
 						},
 						_ => false,
 					};

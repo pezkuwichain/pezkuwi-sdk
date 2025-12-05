@@ -84,9 +84,9 @@ impl AccumulateReceipt {
 		// Account for the size of the list header.
 		let topics_list_header_length = topics_len + rlp::length_of_length(topics_len);
 		// Compute the total payload length of the log.
-		let payload_length = rlp::Encodable::length(&contract.0) +
-			rlp::Encodable::length(&data) +
-			topics_list_header_length;
+		let payload_length = rlp::Encodable::length(&contract.0)
+			+ rlp::Encodable::length(&data)
+			+ topics_list_header_length;
 
 		let header = rlp::Header { list: true, payload_length };
 		header.encode(&mut self.encoding);
@@ -112,10 +112,10 @@ impl AccumulateReceipt {
 
 		let header = rlp::Header {
 			list: true,
-			payload_length: rlp::Encodable::length(&status) +
-				rlp::Encodable::length(&gas) +
-				rlp::Encodable::length(&bloom.bloom) +
-				list_header_length,
+			payload_length: rlp::Encodable::length(&status)
+				+ rlp::Encodable::length(&gas)
+				+ rlp::Encodable::length(&bloom.bloom)
+				+ list_header_length,
 		};
 
 		let mut encoded = transaction_type;

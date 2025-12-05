@@ -537,8 +537,8 @@ fn finalize_presale_works() {
 			let contributor_pez = Assets::balance(1, i);
 			// Allow for small rounding differences (within 0.1%)
 			assert!(
-				contributor_pez >= expected_pez - 10_000_000_000_000_000 &&
-					contributor_pez <= expected_pez + 10_000_000_000_000_000,
+				contributor_pez >= expected_pez - 10_000_000_000_000_000
+					&& contributor_pez <= expected_pez + 10_000_000_000_000_000,
 				"Contributor {} PEZ: {} (expected ~{})",
 				i,
 				contributor_pez,

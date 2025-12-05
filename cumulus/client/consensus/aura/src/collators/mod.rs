@@ -138,7 +138,7 @@ async fn check_validation_code_or_log(
 	};
 
 	match state_validation_code_hash {
-		Some(state) =>
+		Some(state) => {
 			if state != *local_validation_code_hash {
 				tracing::warn!(
 					target: super::LOG_TARGET,
@@ -148,7 +148,8 @@ async fn check_validation_code_or_log(
 					relay_validation_code_hash = ?state,
 					"Teyrchain code doesn't match validation code stored in the relay chain state.",
 				);
-			},
+			}
+		},
 		None => {
 			tracing::warn!(
 				target: super::LOG_TARGET,
@@ -183,8 +184,8 @@ async fn scheduling_lookahead(
 		)
 		.unwrap_or_default();
 
-	if teyrchain_host_runtime_api_version <
-		RuntimeApiRequest::SCHEDULING_LOOKAHEAD_RUNTIME_REQUIREMENT
+	if teyrchain_host_runtime_api_version
+		< RuntimeApiRequest::SCHEDULING_LOOKAHEAD_RUNTIME_REQUIREMENT
 	{
 		return None;
 	}
