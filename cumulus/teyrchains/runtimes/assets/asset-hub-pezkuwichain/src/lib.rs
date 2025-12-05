@@ -46,7 +46,7 @@ use sp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{AccountIdConversion, BlakeTwo256, Block as BlockT, Saturating, Verify},
 	transaction_validity::{TransactionSource, TransactionValidity},
-	ApplyExtrinsicResult, Permill,
+	ApplyExtrinsicResult, Permill, Perquintill,
 };
 use testnet_teyrchains_constants::pezkuwichain::snowbridge::EthereumNetwork;
 
@@ -1072,6 +1072,52 @@ impl pallet_asset_rewards::Config for Runtime {
 	type BenchmarkHelper = PalletAssetRewardsBenchmarkHelper;
 }
 
+// -----------------------------------------------------------------------------
+// NIS Pallet
+// -----------------------------------------------------------------------------
+parameter_types! {
+	pub const QueueCount: u32 = 10;
+	pub const MaxQueueLen: u32 = 100;
+	pub const FifoQueueLen: u32 = 50;
+	pub const NisBasePeriod: BlockNumber = 30 * DAYS;
+	pub const MinBid: Balance = 10 * UNITS;
+	pub const MinReceipt: Perquintill = Perquintill::from_percent(1);
+	pub const IntakePeriod: BlockNumber = 10;
+	pub MaxIntakeWeight: Weight = RuntimeBlockWeights::get().max_block / 10;
+	pub const ThawThrottle: (Perquintill, BlockNumber) = (Perquintill::from_percent(25), 5);
+	pub Target: Perquintill = Perquintill::zero();
+	pub const NisPalletId: PalletId = PalletId(*b"py/nis  ");
+}
+
+use frame_support::traits::fungible::ItemOf;
+use pallet_nis::WithMaximumOf;
+
+impl pallet_nis::Config for Runtime {
+	type WeightInfo = pallet_nis::weights::SubstrateWeight<Runtime>;
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type CurrencyBalance = Balance;
+	type FundOrigin = frame_system::EnsureSigned<AccountId>;
+	type Counterpart = ItemOf<Assets, PezAssetId, AccountId>;
+	type CounterpartAmount = WithMaximumOf<ConstU128<{ u128::MAX }>>;
+	type Deficit = ();
+	type IgnoredIssuance = ();
+	type Target = Target;
+	type PalletId = NisPalletId;
+	type QueueCount = QueueCount;
+	type MaxQueueLen = MaxQueueLen;
+	type FifoQueueLen = FifoQueueLen;
+	type BasePeriod = NisBasePeriod;
+	type MinBid = MinBid;
+	type MinReceipt = MinReceipt;
+	type IntakePeriod = IntakePeriod;
+	type MaxIntakeWeight = MaxIntakeWeight;
+	type ThawThrottle = ThawThrottle;
+	type RuntimeHoldReason = RuntimeHoldReason;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkSetup = ();
+}
+
 // =============================================================================
 // PezkuwiChain Custom Asset Hub Pallets Configuration
 // =============================================================================
@@ -1203,6 +1249,8 @@ construct_runtime!(
 		PoolAssetsFreezer: pallet_assets_freezer::<Instance3> = 59,
 
 		AssetRewards: pallet_asset_rewards = 60,
+
+		Nis: pallet_nis = 61,
 
 		// PezkuwiChain Custom Pallets
 		PezTreasury: pallet_pez_treasury = 70,

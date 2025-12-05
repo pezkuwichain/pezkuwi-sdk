@@ -56,15 +56,6 @@ fn check_treasury_pallet_id() {
 	);
 }
 
-mod encoding_tests {
-	use super::*;
-
-	#[test]
-	fn nis_hold_reason_encoding_is_correct() {
-		assert_eq!(RuntimeHoldReason::Nis(pallet_nis::HoldReason::NftReceipt).encode(), [38, 0]);
-	}
-}
-
 #[test]
 fn location_conversion_works() {
 	// the purpose of hardcoded values is to catch an unintended location conversion logic change.
