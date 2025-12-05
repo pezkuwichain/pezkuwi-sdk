@@ -33,5 +33,5 @@ sp-core = { workspace = true }
 runtime-benchmarks = [
 	"bp-messages/runtime-benchmarks",
 	"finality-relay/runtime-benchmarks",
-	"relay-utils/runtime-benchmarks"
+	"relay-utils/runtime-benchmarks",
 ]

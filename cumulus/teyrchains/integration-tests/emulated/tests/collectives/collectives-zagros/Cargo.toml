@@ -42,6 +42,7 @@ runtime-benchmarks = [
 	"collectives-zagros-runtime/runtime-benchmarks",
 	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
 	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
@@ -52,9 +53,8 @@ runtime-benchmarks = [
 	"pallet-xcm/runtime-benchmarks",
 	"pezkuwi-runtime-common/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 	"zagros-runtime-constants/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"zagros-system-emulated-network/runtime-benchmarks"
+	"zagros-system-emulated-network/runtime-benchmarks",
 ]

@@ -63,9 +63,10 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-staking/runtime-benchmarks",
 	"sp-session/runtime-benchmarks",
+	"sp-staking/runtime-benchmarks",
 	"sp-state-machine/runtime-benchmarks",
-	"sp-trie?/runtime-benchmarks"
+	"sp-trie?/runtime-benchmarks",
 ]

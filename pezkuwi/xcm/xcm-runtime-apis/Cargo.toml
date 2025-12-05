@@ -56,9 +56,10 @@ runtime-benchmarks = [
 	"pallet-assets/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks"
 ]

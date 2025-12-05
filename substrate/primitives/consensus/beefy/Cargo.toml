@@ -68,6 +68,7 @@ bls-experimental = [
 ]
 runtime-benchmarks = [
 	"sp-api/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-mmr-primitives/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

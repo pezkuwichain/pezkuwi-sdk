@@ -29,7 +29,8 @@ cumulus-relay-chain-interface = { workspace = true, default-features = true }
 [features]
 runtime-benchmarks = [
 	"cumulus-relay-chain-interface/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks"
+	"sp-consensus/runtime-benchmarks",
 ]

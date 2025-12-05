@@ -198,13 +198,13 @@ cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
 runtime-benchmarks = [
 	"kitchensink-runtime/runtime-benchmarks",
 	"node-inspect?/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks",
 	"node-primitives/runtime-benchmarks",
 	"node-rpc/runtime-benchmarks",
 	"node-testing/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
 	"sc-service-test/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"substrate-cli-test-utils/runtime-benchmarks"
+	"substrate-cli-test-utils/runtime-benchmarks",
 ]
 try-runtime = [
 	"kitchensink-runtime/try-runtime",

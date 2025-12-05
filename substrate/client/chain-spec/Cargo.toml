@@ -53,8 +53,9 @@ runtime-benchmarks = [
 	"sp-blockchain/runtime-benchmarks",
 	"sp-consensus-babe/runtime-benchmarks",
 	"sp-genesis-builder/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-state-machine/runtime-benchmarks",
-	"substrate-test-runtime/runtime-benchmarks"
+	"substrate-test-runtime/runtime-benchmarks",
 ]

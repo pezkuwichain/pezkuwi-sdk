@@ -71,5 +71,6 @@ serde = [
 ]
 runtime-benchmarks = [
 	"sp-api/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime-interface/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 ]

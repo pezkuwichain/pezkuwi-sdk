@@ -43,5 +43,5 @@ runtime-benchmarks = [
 	"sp-consensus/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-state-machine/runtime-benchmarks",
-	"sp-test-primitives/runtime-benchmarks"
+	"sp-test-primitives/runtime-benchmarks",
 ]

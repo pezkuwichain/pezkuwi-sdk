@@ -33,7 +33,8 @@ runtime-benchmarks = [
 	"pezkuwi-erasure-coding/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-client-api/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks"
+	"sp-keyring/runtime-benchmarks",
 ]

@@ -38,5 +38,5 @@ std = [
 runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"snowbridge-merkle-tree/runtime-benchmarks",
-	"sp-api/runtime-benchmarks"
+	"sp-api/runtime-benchmarks",
 ]

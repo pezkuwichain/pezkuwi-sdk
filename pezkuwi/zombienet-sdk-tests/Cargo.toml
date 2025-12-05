@@ -36,7 +36,9 @@ runtime-benchmarks = [
 	"cumulus-zombienet-sdk-helpers/runtime-benchmarks",
 	"pallet-revive/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sc-executor/runtime-benchmarks"
+	"sc-executor/runtime-benchmarks",
+	"sc-runtime-utilities/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 ]
 
 [build-dependencies]

@@ -27,5 +27,5 @@ path = "src/round_trip.rs"
 runtime-benchmarks = [
 	"pezkuwi-erasure-coding/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks"
+	"pezkuwi-primitives/runtime-benchmarks",
 ]

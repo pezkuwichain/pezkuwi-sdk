@@ -86,7 +86,6 @@ mod pallet_xcm_origin {
 			Err(outer)
 		}
 
-		#[cfg(feature = "runtime-benchmarks")]
 		fn try_successful_origin() -> Result<O, ()> {
 			Ok(O::from(Origin(Location::new(1, [Teyrchain(2000)]))))
 		}

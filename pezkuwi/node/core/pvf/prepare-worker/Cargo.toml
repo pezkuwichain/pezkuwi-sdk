@@ -47,8 +47,8 @@ jemalloc-allocator = [
 	"pezkuwi-node-core-pvf-common/jemalloc-allocator",
 ]
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwichain-runtime/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

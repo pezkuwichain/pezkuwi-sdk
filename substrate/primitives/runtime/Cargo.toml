@@ -55,9 +55,10 @@ zstd = { workspace = true }
 runtime-benchmarks = [
 	"binary-merkle-tree/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-state-machine/runtime-benchmarks",
 	"sp-trie/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]
 try-runtime = []
 default = ["std"]

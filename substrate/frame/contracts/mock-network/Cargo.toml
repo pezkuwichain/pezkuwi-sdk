@@ -66,6 +66,7 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
+	"pallet-contracts-fixtures/runtime-benchmarks",
 	"pallet-contracts/runtime-benchmarks",
 	"pallet-message-queue/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
@@ -73,11 +74,11 @@ runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"pallet-contracts-fixtures/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks"
 ]

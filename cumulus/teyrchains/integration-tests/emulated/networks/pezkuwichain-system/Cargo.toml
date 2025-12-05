@@ -28,5 +28,5 @@ runtime-benchmarks = [
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"penpal-emulated-chain/runtime-benchmarks",
 	"people-pezkuwichain-emulated-chain/runtime-benchmarks",
-	"pezkuwichain-emulated-chain/runtime-benchmarks"
+	"pezkuwichain-emulated-chain/runtime-benchmarks",
 ]

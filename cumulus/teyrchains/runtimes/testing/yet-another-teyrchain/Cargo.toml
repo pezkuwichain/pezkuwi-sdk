@@ -69,6 +69,7 @@ std = [
 runtime-benchmarks = [
 	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
+	"substrate-wasm-builder?/runtime-benchmarks",
 ]
 
 # A feature that should be enabled when the runtime should be built for on-chain

@@ -89,7 +89,6 @@ impl pallet_uniques::Config for Runtime {
 	type ValueLimit = ConstU32<128>;
 	type Locker = ();
 	type WeightInfo = ();
-	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = UniquesHelper;
 }
 
@@ -111,9 +110,16 @@ impl EnsureOriginWithArg<RuntimeOrigin, Location> for ForeignCreators {
 			.ok_or(o)
 	}
 
-	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin(a: &Location) -> Result<RuntimeOrigin, ()> {
-		Ok(pallet_xcm::Origin::Xcm(a.clone()).into())
+		#[cfg(feature = "runtime-benchmarks")]
+		{
+			Ok(pallet_xcm::Origin::Xcm(a.clone()).into())
+		}
+		#[cfg(not(feature = "runtime-benchmarks"))]
+		{
+			let _ = a;
+			Err(())
+		}
 	}
 }
 

@@ -35,5 +35,5 @@ runtime-benchmarks = [
 	"frame-election-provider-solution-type/runtime-benchmarks",
 	"frame-election-provider-support/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

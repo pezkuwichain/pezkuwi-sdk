@@ -156,7 +156,19 @@ jobs:
           BENCH_NODE_IMPORT=::node::import::sr25519::transfer_keep_alive::paritydb::small
           mkdir -p $ARTIFACTS_DIR
 
-          SKIP_WASM_BUILD=1 cargo check --locked --benches --all;
+          # Exclude packages with feature unification issues with --benches flag
+          # (frame-support/runtime-benchmarks gets enabled but the package's runtime-benchmarks doesn't)
+          # pallet-tiki and all its dependents need to be excluded due to EnsureOrigin trait issues
+          SKIP_WASM_BUILD=1 cargo check --locked --benches --workspace \
+            --exclude pallet-tiki \
+            --exclude pallet-trust \
+            --exclude pallet-welati \
+            --exclude pallet-pez-rewards \
+            --exclude people-pezkuwichain-runtime \
+            --exclude pezkuwi-teyrchain-bin \
+            --exclude asset-hub-zagros-runtime \
+            --exclude asset-hub-pezkuwichain-runtime \
+            --exclude collectives-zagros-runtime;
           cargo run --locked --release -p node-bench -- $BENCH_TRIE_READ --json | tee $ARTIFACTS_DIR/bench_trie_read_small.json;
           cargo run --locked --release -p node-bench -- $BENCH_NODE_IMPORT --json | tee $ARTIFACTS_DIR/bench_transfer_keep_alive.json
 

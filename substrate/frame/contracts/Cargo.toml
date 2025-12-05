@@ -101,15 +101,16 @@ runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
+	"pallet-contracts-fixtures/runtime-benchmarks",
+	"pallet-insecure-randomness-collective-flip/runtime-benchmarks",
 	"pallet-proxy/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"pallet-utility/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"pallet-contracts-fixtures/runtime-benchmarks",
-	"pallet-insecure-randomness-collective-flip/runtime-benchmarks",
-	"sp-api/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

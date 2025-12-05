@@ -30,13 +30,13 @@ pezkuwichain-system-emulated-network = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"pallet-broker/runtime-benchmarks",
 	"pallet-message-queue/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwichain-runtime-constants/runtime-benchmarks",
+	"pezkuwichain-system-emulated-network/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezkuwichain-runtime-constants/runtime-benchmarks",
-	"pezkuwichain-system-emulated-network/runtime-benchmarks"
 ]

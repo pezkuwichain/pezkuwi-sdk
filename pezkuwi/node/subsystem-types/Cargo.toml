@@ -47,5 +47,5 @@ runtime-benchmarks = [
 	"sp-authority-discovery/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
 	"sp-consensus-babe/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

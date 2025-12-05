@@ -66,8 +66,8 @@ runtime-benchmarks = [
 	"bp-runtime/runtime-benchmarks",
 	"finality-relay/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
-	"pallet-transaction-payment/runtime-benchmarks",
 	"pallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pallet-transaction-payment/runtime-benchmarks",
 	"pallet-utility/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 	"sc-chain-spec/runtime-benchmarks",
@@ -77,5 +77,5 @@ runtime-benchmarks = [
 	"sp-runtime/runtime-benchmarks",
 	"sp-trie/runtime-benchmarks",
 	"sp-version/runtime-benchmarks",
-	"xcm/runtime-benchmarks"
+	"xcm/runtime-benchmarks",
 ]

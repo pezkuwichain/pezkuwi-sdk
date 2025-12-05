@@ -34,5 +34,5 @@ std = [
 ]
 runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
-	"snowbridge-beacon-primitives/runtime-benchmarks"
+	"snowbridge-beacon-primitives/runtime-benchmarks",
 ]

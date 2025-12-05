@@ -73,7 +73,8 @@ runtime-benchmarks = [
 	"pallet-balances/runtime-benchmarks",
 	"pallet-transaction-payment/runtime-benchmarks",
 	"sp-inherents/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-version/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

@@ -22,5 +22,5 @@ clap = { features = ["derive"], workspace = true }
 [features]
 runtime-benchmarks = [
 	"generate-bags/runtime-benchmarks",
-	"kitchensink-runtime/runtime-benchmarks"
+	"kitchensink-runtime/runtime-benchmarks",
 ]

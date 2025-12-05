@@ -36,10 +36,10 @@ rand_chacha = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-authority-discovery/runtime-benchmarks",
 	"sc-network/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

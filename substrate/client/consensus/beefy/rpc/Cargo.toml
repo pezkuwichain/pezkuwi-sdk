@@ -43,5 +43,5 @@ runtime-benchmarks = [
 	"sc-rpc/runtime-benchmarks",
 	"sp-consensus-beefy/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

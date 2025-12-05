@@ -50,6 +50,7 @@ runtime-benchmarks = [
 	"pezkuwi-cli/runtime-benchmarks",
 	"pezkuwi-node-core-pvf/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-service/runtime-benchmarks",
 	"pezkuwi-test-service/runtime-benchmarks",
@@ -57,5 +58,5 @@ runtime-benchmarks = [
 	"sc-cli/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"test-teyrchain-adder/runtime-benchmarks"
+	"test-teyrchain-adder/runtime-benchmarks",
 ]

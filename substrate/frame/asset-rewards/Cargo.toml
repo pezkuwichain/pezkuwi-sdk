@@ -63,8 +63,9 @@ runtime-benchmarks = [
 	"pallet-assets-freezer/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-api/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

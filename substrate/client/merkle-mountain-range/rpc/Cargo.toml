@@ -36,5 +36,5 @@ runtime-benchmarks = [
 	"sp-api/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
 	"sp-mmr-primitives/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

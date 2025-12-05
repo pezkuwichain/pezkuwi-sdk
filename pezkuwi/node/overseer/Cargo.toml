@@ -43,13 +43,13 @@ expand = ["orchestra/expand"]
 futures_channel = ["metered/futures_channel", "orchestra/futures_channel"]
 jemalloc-allocator = ["dep:tikv-jemalloc-ctl"]
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-node-metrics/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-types/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-client-api/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

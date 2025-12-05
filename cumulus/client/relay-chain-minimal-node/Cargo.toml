@@ -64,13 +64,13 @@ runtime-benchmarks = [
 	"pezkuwi-service/runtime-benchmarks",
 	"sc-authority-discovery/runtime-benchmarks",
 	"sc-client-api/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
 	"sc-network-common/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
 	"sc-tracing/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks",
 	"sp-consensus-babe/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-consensus/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 ]

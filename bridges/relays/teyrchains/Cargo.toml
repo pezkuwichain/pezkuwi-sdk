@@ -29,5 +29,5 @@ sp-core = { workspace = true, default-features = true }
 runtime-benchmarks = [
 	"bp-pezkuwi-core/runtime-benchmarks",
 	"relay-substrate-client/runtime-benchmarks",
-	"relay-utils/runtime-benchmarks"
+	"relay-utils/runtime-benchmarks",
 ]

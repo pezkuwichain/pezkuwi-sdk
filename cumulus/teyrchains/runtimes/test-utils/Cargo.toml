@@ -85,10 +85,11 @@ runtime-benchmarks = [
 	"pallet-xcm/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"sp-consensus-aura/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"teyrchain-info/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
 	"teyrchains-common/runtime-benchmarks",
-	"xcm-runtime-apis/runtime-benchmarks"
+	"xcm-executor/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

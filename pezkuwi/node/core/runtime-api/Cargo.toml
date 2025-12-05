@@ -35,14 +35,15 @@ sp-keyring = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-node-metrics/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-types/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-consensus-babe/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

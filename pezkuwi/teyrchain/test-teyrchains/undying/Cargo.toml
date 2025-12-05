@@ -36,5 +36,7 @@ std = [
 ]
 runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks"
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"substrate-wasm-builder/runtime-benchmarks",
 ]

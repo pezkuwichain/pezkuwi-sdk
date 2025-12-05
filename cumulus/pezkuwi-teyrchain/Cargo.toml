@@ -79,18 +79,18 @@ runtime-benchmarks = [
 	"collectives-zagros-runtime/runtime-benchmarks",
 	"coretime-pezkuwichain-runtime/runtime-benchmarks",
 	"coretime-zagros-runtime/runtime-benchmarks",
+	"cumulus-client-consensus-aura/runtime-benchmarks",
 	"glutton-zagros-runtime/runtime-benchmarks",
 	"penpal-runtime/runtime-benchmarks",
 	"people-pezkuwichain-runtime/runtime-benchmarks",
 	"people-zagros-runtime/runtime-benchmarks",
 	"pezkuwichain-teyrchain-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"yet-another-teyrchain-runtime/runtime-benchmarks",
-	"cumulus-client-consensus-aura/runtime-benchmarks",
 	"sc-chain-spec/runtime-benchmarks",
 	"sc-cli/runtime-benchmarks",
 	"sp-genesis-builder/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks"
+	"sp-keyring/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"yet-another-teyrchain-runtime/runtime-benchmarks",
 ]
 try-runtime = [
 	"pezkuwi-omni-node-lib/try-runtime",

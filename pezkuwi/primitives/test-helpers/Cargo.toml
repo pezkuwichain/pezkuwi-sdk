@@ -30,5 +30,5 @@ bitvec = { features = ["alloc", "serde"], workspace = true }
 runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

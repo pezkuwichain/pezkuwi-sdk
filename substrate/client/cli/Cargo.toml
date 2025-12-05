@@ -75,5 +75,5 @@ runtime-benchmarks = [
 	"sp-blockchain/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-version/runtime-benchmarks"
+	"sp-version/runtime-benchmarks",
 ]

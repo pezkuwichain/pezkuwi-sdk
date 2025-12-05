@@ -25,5 +25,5 @@ default = ["std"]
 std = ["codec/std", "pallet-nomination-pools/std", "sp-api/std"]
 runtime-benchmarks = [
 	"pallet-nomination-pools/runtime-benchmarks",
-	"sp-api/runtime-benchmarks"
+	"sp-api/runtime-benchmarks",
 ]

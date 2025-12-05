@@ -57,9 +57,10 @@ runtime-benchmarks = [
 	"frame-metadata-hash-extension/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"kitchensink-runtime/runtime-benchmarks",
+	"node-cli/runtime-benchmarks",
 	"node-primitives/runtime-benchmarks",
-	"pallet-asset-conversion/runtime-benchmarks",
 	"pallet-asset-conversion-tx-payment/runtime-benchmarks",
+	"pallet-asset-conversion/runtime-benchmarks",
 	"pallet-revive/runtime-benchmarks",
 	"pallet-skip-feeless-payment/runtime-benchmarks",
 	"sc-block-builder/runtime-benchmarks",
@@ -76,6 +77,5 @@ runtime-benchmarks = [
 	"sp-keyring/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-timestamp/runtime-benchmarks",
-	"node-cli/runtime-benchmarks",
-	"substrate-test-client/runtime-benchmarks"
+	"substrate-test-client/runtime-benchmarks",
 ]

@@ -32,6 +32,6 @@ runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"penpal-runtime/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks"
 ]

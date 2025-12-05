@@ -36,5 +36,6 @@ zstd = { workspace = true, default-features = false }
 runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"sp-consensus-babe/runtime-benchmarks"
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus-slots/runtime-benchmarks",
 ]

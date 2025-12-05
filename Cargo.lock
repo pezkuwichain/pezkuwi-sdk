@@ -16673,7 +16673,6 @@ dependencies = [
  "pallet-state-trie-migration",
  "pallet-statement",
  "pallet-sudo",
- "pallet-tiki",
  "pallet-timestamp",
  "pallet-tips",
  "pallet-transaction-payment",

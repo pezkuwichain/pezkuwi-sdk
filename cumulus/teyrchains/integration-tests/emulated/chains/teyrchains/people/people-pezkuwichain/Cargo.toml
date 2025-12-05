@@ -31,5 +31,5 @@ runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"people-pezkuwichain-runtime/runtime-benchmarks",
 	"testnet-teyrchains-constants/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks"
+	"teyrchains-common/runtime-benchmarks",
 ]

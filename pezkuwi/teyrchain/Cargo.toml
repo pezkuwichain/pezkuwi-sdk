@@ -42,6 +42,6 @@ std = [
 	"sp-weights/std",
 ]
 runtime-benchmarks = [
+	"pezkuwi-core-primitives/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"pezkuwi-core-primitives/runtime-benchmarks"
 ]

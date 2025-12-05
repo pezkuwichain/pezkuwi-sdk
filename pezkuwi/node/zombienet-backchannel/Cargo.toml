@@ -27,4 +27,6 @@ tokio = { features = [
 tokio-tungstenite = { workspace = true }
 
 [features]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"gum/runtime-benchmarks",
+]

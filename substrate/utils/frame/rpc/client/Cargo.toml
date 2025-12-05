@@ -33,5 +33,5 @@ tokio = { features = [
 [features]
 runtime-benchmarks = [
 	"sc-rpc-api/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

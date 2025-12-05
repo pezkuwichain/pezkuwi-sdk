@@ -35,7 +35,7 @@ std = [
 	"sp-std/std",
 ]
 runtime-benchmarks = [
+	"snowbridge-beacon-primitives/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
 	"snowbridge-inbound-queue-primitives/runtime-benchmarks",
-	"snowbridge-beacon-primitives/runtime-benchmarks"
 ]

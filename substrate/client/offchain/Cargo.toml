@@ -68,11 +68,11 @@ runtime-benchmarks = [
 	"sc-client-api/runtime-benchmarks",
 	"sc-client-db/runtime-benchmarks",
 	"sc-network/runtime-benchmarks",
-	"sc-transaction-pool/runtime-benchmarks",
 	"sc-transaction-pool-api/runtime-benchmarks",
+	"sc-transaction-pool/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-consensus/runtime-benchmarks",
 	"sp-offchain/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

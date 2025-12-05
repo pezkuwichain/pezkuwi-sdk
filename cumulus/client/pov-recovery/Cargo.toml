@@ -54,18 +54,19 @@ cumulus-test-client = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"cumulus-primitives-core/runtime-benchmarks",
-	"cumulus-test-client/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
 	"cumulus-relay-chain-interface/runtime-benchmarks",
 	"cumulus-relay-chain-streams/runtime-benchmarks",
+	"cumulus-test-client/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-client-api/runtime-benchmarks",
 	"sc-consensus/runtime-benchmarks",
 	"sc-network/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
 	"sp-consensus/runtime-benchmarks",
-	"sp-version/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
+	"sp-version/runtime-benchmarks",
 ]

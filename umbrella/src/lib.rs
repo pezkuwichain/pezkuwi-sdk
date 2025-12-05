@@ -459,10 +459,6 @@ pub use pallet_democracy;
 #[cfg(feature = "pallet-derivatives")]
 pub use pallet_derivatives;
 
-/// Pezkuwi Tiki (Role NFT) Management pallet.
-#[cfg(feature = "pallet-tiki")]
-pub use pallet_tiki;
-
 /// FRAME example pallet.
 #[cfg(feature = "pallet-dev-mode")]
 pub use pallet_dev_mode;

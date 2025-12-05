@@ -30,5 +30,5 @@ runtime-benchmarks = [
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"penpal-emulated-chain/runtime-benchmarks",
 	"pezkuwichain-emulated-chain/runtime-benchmarks",
-	"zagros-emulated-chain/runtime-benchmarks"
+	"zagros-emulated-chain/runtime-benchmarks",
 ]

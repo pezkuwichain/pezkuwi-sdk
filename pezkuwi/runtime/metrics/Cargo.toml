@@ -31,5 +31,5 @@ std = [
 runtime-metrics = ["frame-benchmarking", "sp-tracing/with-tracing"]
 runtime-benchmarks = [
 	"frame-benchmarking?/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks"
+	"pezkuwi-primitives/runtime-benchmarks",
 ]

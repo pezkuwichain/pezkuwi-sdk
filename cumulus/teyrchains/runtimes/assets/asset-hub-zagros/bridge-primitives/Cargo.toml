@@ -53,7 +53,7 @@ runtime-benchmarks = [
 	"bp-runtime/runtime-benchmarks",
 	"bp-xcm-bridge-hub-router/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks"
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

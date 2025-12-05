@@ -22,4 +22,6 @@ sp-api = { workspace = true }
 [features]
 default = ["std"]
 std = ["codec/std", "sp-api/std"]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"sp-api/runtime-benchmarks",
+]

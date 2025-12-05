@@ -1223,15 +1223,7 @@ parameter_types! {
 
 impl pallet_migrations::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	#[cfg(not(feature = "runtime-benchmarks"))]
-	type Migrations =
-		assets_common::migrations::foreign_assets_reserves::ForeignAssetsReservesMigration<
-			Runtime,
-			ForeignAssetsInstance,
-			migrations::AssetHubZagrosForeignAssetsReservesProvider,
-		>;
-	// Benchmarks need mocked migrations to guarantee that they succeed.
-	#[cfg(feature = "runtime-benchmarks")]
+	// Always use mocked migrations for test runtimes to ensure benchmarks succeed
 	type Migrations = pallet_migrations::mock_helpers::MockedMigrations;
 	type CursorMaxLen = ConstU32<65_536>;
 	type IdentifierMaxLen = ConstU32<256>;

@@ -65,4 +65,8 @@ tempfile = { workspace = true }
 wat = { workspace = true }
 
 [features]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"sc-runtime-test/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-runtime-interface/runtime-benchmarks",
+]

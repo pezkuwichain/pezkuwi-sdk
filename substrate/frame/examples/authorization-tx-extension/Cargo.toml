@@ -52,8 +52,9 @@ runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"pallet-verify-signature/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

@@ -81,5 +81,5 @@ runtime-benchmarks = [
 	"sp-consensus-grandpa/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-trie/runtime-benchmarks",
-	"teyrchains-relay/runtime-benchmarks"
+	"teyrchains-relay/runtime-benchmarks",
 ]

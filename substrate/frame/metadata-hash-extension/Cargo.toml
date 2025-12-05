@@ -50,5 +50,6 @@ runtime-benchmarks = [
 	"sp-api/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-transaction-pool/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
+	"substrate-wasm-builder/runtime-benchmarks",
 ]

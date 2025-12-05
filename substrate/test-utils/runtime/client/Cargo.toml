@@ -38,5 +38,5 @@ runtime-benchmarks = [
 	"sp-consensus/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"substrate-test-client/runtime-benchmarks",
-	"substrate-test-runtime/runtime-benchmarks"
+	"substrate-test-runtime/runtime-benchmarks",
 ]

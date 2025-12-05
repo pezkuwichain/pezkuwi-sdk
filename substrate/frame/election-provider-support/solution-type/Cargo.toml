@@ -39,5 +39,5 @@ trybuild = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"frame-election-provider-support/runtime-benchmarks",
-	"frame-support/runtime-benchmarks"
+	"frame-support/runtime-benchmarks",
 ]

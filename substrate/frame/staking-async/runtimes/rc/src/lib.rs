@@ -369,10 +369,16 @@ impl EnsureOriginWithArg<RuntimeOrigin, RuntimeParametersKey> for DynamicParamet
 		.map_err(|_| origin)
 	}
 
-	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin(_key: &RuntimeParametersKey) -> Result<RuntimeOrigin, ()> {
-		// Provide the origin for the parameter returned by `Default`:
-		Ok(RuntimeOrigin::root())
+		#[cfg(feature = "runtime-benchmarks")]
+		{
+			// Provide the origin for the parameter returned by `Default`:
+			Ok(RuntimeOrigin::root())
+		}
+		#[cfg(not(feature = "runtime-benchmarks"))]
+		{
+			Err(())
+		}
 	}
 }
 
@@ -477,7 +483,6 @@ impl pallet_mmr::Config for Runtime {
 	type LeafData = pallet_beefy_mmr::Pallet<Runtime>;
 	type BlockHashProvider = pallet_mmr::DefaultBlockHashProvider<Runtime>;
 	type WeightInfo = weights::pallet_mmr::WeightInfo<Runtime>;
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = teyrchains_paras::benchmarking::mmr_setup::MmrSetup<Runtime>;
 }
 
@@ -776,9 +781,15 @@ impl frame_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 		}
 	}
 
-	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<RuntimeOrigin, ()> {
-		Ok(RuntimeOrigin::root())
+		#[cfg(feature = "runtime-benchmarks")]
+		{
+			Ok(RuntimeOrigin::root())
+		}
+		#[cfg(not(feature = "runtime-benchmarks"))]
+		{
+			Err(())
+		}
 	}
 }
 
@@ -1053,7 +1064,6 @@ impl pallet_treasury::Config for Runtime {
 	>;
 	type PayoutPeriod = PayoutSpendPeriod;
 	type BlockNumberProvider = System;
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
 }
 
@@ -1207,7 +1217,6 @@ impl pallet_identity::Config for Runtime {
 	type UsernameGracePeriod = ConstU32<{ 30 * DAYS }>;
 	type MaxSuffixLength = ConstU32<7>;
 	type MaxUsernameLength = ConstU32<32>;
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 	type WeightInfo = weights::pallet_identity::WeightInfo<Runtime>;
 }
@@ -1742,10 +1751,9 @@ parameter_types! {
 
 impl pallet_migrations::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	#[cfg(not(feature = "runtime-benchmarks"))]
-	type Migrations = pallet_identity::migration::v2::LazyMigrationV1ToV2<Runtime>;
-	// Benchmarks need mocked migrations to guarantee that they succeed.
-	#[cfg(feature = "runtime-benchmarks")]
+	// For this test runtime, always use MockedMigrations to satisfy both regular and benchmark builds.
+	// When runtime-benchmarks is enabled on frame-support (via --benches), the Migrations type must
+	// implement MockedMigrations, but LazyMigrationV1ToV2 doesn't.
 	type Migrations = pallet_migrations::mock_helpers::MockedMigrations;
 	type CursorMaxLen = ConstU32<65_536>;
 	type IdentifierMaxLen = ConstU32<256>;
@@ -1770,7 +1778,6 @@ impl pallet_asset_rate::Config for Runtime {
 	type UpdateOrigin = EnsureRoot<AccountId>;
 	type Currency = Balances;
 	type AssetKind = <Runtime as pallet_treasury::Config>::AssetKind;
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::AssetRateArguments;
 }
 

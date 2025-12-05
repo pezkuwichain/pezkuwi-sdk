@@ -32,5 +32,5 @@ harness = false
 runtime-benchmarks = [
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-trie/runtime-benchmarks"
+	"sp-trie/runtime-benchmarks",
 ]

@@ -86,6 +86,7 @@ runtime-benchmarks = [
 	"hex-literal",
 	"pallet-teyrchain-template/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
+	"substrate-wasm-builder?/runtime-benchmarks",
 ]
 try-runtime = [
 	"cumulus-pallet-teyrchain-system/try-runtime",

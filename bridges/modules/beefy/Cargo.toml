@@ -68,5 +68,6 @@ runtime-benchmarks = [
 	"pallet-beefy-mmr/runtime-benchmarks",
 	"pallet-mmr/runtime-benchmarks",
 	"sp-consensus-beefy/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 ]

@@ -41,9 +41,9 @@ runtime-benchmarks = [
 	"sc-offchain/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks",
 	"sp-consensus-beefy/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
 	"sp-mmr-primitives/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

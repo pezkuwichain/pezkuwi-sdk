@@ -1,7 +1,14 @@
-FROM docker.io/paritytech/ci-unified:latest AS builder
+FROM docker.io/paritytech/ci-unified:bullseye-1.88.0-2025-06-27-v202511141243 AS builder
 
 WORKDIR /polkadot
 COPY . /polkadot
+
+# Install build dependencies for wasm-opt-sys (binutils provides 'ar')
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    binutils \
+    build-essential \
+    cmake \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN cargo fetch
 RUN cargo build --workspace --locked --profile production -p pallet-revive-eth-rpc --bin eth-rpc

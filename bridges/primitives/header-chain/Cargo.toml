@@ -49,6 +49,6 @@ runtime-benchmarks = [
 	"bp-runtime/runtime-benchmarks",
 	"bp-test-utils/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
+	"sp-consensus-grandpa/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-consensus-grandpa/runtime-benchmarks"
 ]

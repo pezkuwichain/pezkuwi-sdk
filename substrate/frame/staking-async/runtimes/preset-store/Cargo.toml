@@ -25,6 +25,6 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
+	"frame/runtime-benchmarks",
 	"pallet-staking-async-ah-client/runtime-benchmarks",
-	"frame/runtime-benchmarks"
 ]

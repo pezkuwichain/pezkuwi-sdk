@@ -65,12 +65,13 @@ std = [
 	"substrate-wasm-builder",
 ]
 runtime-benchmarks = [
+	"node-primitives/runtime-benchmarks",
 	"pallet-example-mbm/runtime-benchmarks",
 	"pallet-example-tasks/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
 	"rand",
 	"rand_pcg",
-	"node-primitives/runtime-benchmarks"
+	"substrate-wasm-builder?/runtime-benchmarks",
 ]
 try-runtime = [
 	"pallet-example-mbm/try-runtime",

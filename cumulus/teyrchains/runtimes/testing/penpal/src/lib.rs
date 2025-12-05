@@ -486,7 +486,6 @@ impl pallet_assets::Config<TrustBackedAssetsInstance> for Runtime {
 	type CallbackHandle = ();
 	type AssetAccountDeposit = AssetAccountDeposit;
 	type RemoveItemsLimit = frame_support::traits::ConstU32<1000>;
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 }
 
@@ -526,7 +525,6 @@ impl pallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type CallbackHandle = ();
 	type AssetAccountDeposit = ForeignAssetsAssetAccountDeposit;
 	type RemoveItemsLimit = frame_support::traits::ConstU32<1000>;
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = assets_common::benchmarks::LocationAssetsBenchmarkHelper;
 }
 
@@ -565,7 +563,6 @@ impl pallet_assets::Config<PoolAssetsInstance> for Runtime {
 	type Extra = ();
 	type WeightInfo = pallet_assets::weights::SubstrateWeight<Runtime>;
 	type CallbackHandle = ();
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 }
 
@@ -623,7 +620,6 @@ impl pallet_asset_conversion::Config for Runtime {
 	type MaxSwapPathLength = ConstU32<3>;
 	type MintMinLiquidity = ConstU128<100>;
 	type WeightInfo = ();
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
 		xcm_config::RelayLocation,
 		teyrchain_info::Pallet<Runtime>,
@@ -777,10 +773,8 @@ impl pallet_collator_selection::Config for Runtime {
 	type WeightInfo = ();
 }
 
-#[cfg(feature = "runtime-benchmarks")]
 pub struct AssetTxHelper;
 
-#[cfg(feature = "runtime-benchmarks")]
 impl pallet_asset_tx_payment::BenchmarkHelperTrait<AccountId, u32, u32> for AssetTxHelper {
 	fn create_asset_id_parameter(_id: u32) -> (u32, u32) {
 		unimplemented!("Penpal uses default weights");
@@ -803,7 +797,6 @@ impl pallet_asset_tx_payment::Config for Runtime {
 		AssetsToBlockAuthor<Runtime, TrustBackedAssetsInstance>,
 	>;
 	type WeightInfo = ();
-	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = AssetTxHelper;
 }
 

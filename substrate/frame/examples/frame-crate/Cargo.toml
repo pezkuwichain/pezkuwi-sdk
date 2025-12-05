@@ -28,5 +28,5 @@ frame = { features = ["runtime"], workspace = true }
 default = ["std"]
 std = ["codec/std", "frame/std", "scale-info/std"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks"
+	"frame/runtime-benchmarks",
 ]

@@ -19,4 +19,7 @@ sp-consensus-aura = { workspace = true }
 [features]
 default = ["std"]
 std = ["sp-api/std", "sp-consensus-aura/std"]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"sp-api/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+]

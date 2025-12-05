@@ -69,15 +69,17 @@ try-runtime = [
 runtime-benchmarks = [
 	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
 	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
 	"pallet-aura/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
 	"sp-consensus-aura/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 	"sp-state-machine/runtime-benchmarks",
 	"sp-trie/runtime-benchmarks",
-	"sp-version/runtime-benchmarks"
+	"sp-version/runtime-benchmarks",
 ]

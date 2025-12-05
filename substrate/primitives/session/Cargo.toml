@@ -38,5 +38,5 @@ std = [
 runtime-benchmarks = [
 	"sp-api/runtime-benchmarks",
 	"sp-runtime?/runtime-benchmarks",
-	"sp-staking/runtime-benchmarks"
+	"sp-staking/runtime-benchmarks",
 ]

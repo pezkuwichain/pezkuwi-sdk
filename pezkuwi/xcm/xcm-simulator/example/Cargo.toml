@@ -50,9 +50,10 @@ runtime-benchmarks = [
 	"pallet-xcm/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks"
 ]

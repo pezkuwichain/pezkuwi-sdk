@@ -23,5 +23,5 @@ sp-runtime = { workspace = true }
 default = ["std"]
 std = ["sp-core/std", "sp-runtime/std"]
 runtime-benchmarks = [
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

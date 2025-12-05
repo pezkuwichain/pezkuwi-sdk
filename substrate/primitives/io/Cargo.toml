@@ -122,4 +122,8 @@ bandersnatch-experimental = [
 	"sp-core/bandersnatch-experimental",
 	"sp-keystore/bandersnatch-experimental",
 ]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"sp-runtime-interface/runtime-benchmarks",
+	"sp-state-machine?/runtime-benchmarks",
+	"sp-trie?/runtime-benchmarks",
+]

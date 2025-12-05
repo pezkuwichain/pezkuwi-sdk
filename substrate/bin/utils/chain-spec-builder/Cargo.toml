@@ -45,4 +45,7 @@ substrate-test-runtime = { workspace = true }
 [features]
 # `cargo build --feature=generate-readme` updates the `README.md` file.
 generate-readme = []
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"sc-chain-spec/runtime-benchmarks",
+	"substrate-test-runtime/runtime-benchmarks",
+]

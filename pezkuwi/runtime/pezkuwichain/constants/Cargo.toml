@@ -47,6 +47,6 @@ runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-runtime-common/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks"
 ]

@@ -25,5 +25,5 @@ twox-hash = { workspace = true, default-features = true }
 [features]
 runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

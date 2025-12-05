@@ -81,6 +81,7 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-asset-tx-payment/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
+	"pallet-authorship/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-collator-selection/runtime-benchmarks",
 	"pallet-message-queue/runtime-benchmarks",
@@ -88,12 +89,12 @@ runtime-benchmarks = [
 	"pallet-xcm/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-runtime-common/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"pallet-authorship/runtime-benchmarks",
-	"sp-consensus-aura/runtime-benchmarks",
-	"teyrchain-info/runtime-benchmarks"
 ]
 
 try-runtime = [

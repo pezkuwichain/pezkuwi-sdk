@@ -40,9 +40,9 @@ runtime-benchmarks = [
 	"pallet-message-queue/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
 	"teyrchains-common/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
-	"zagros-system-emulated-network/runtime-benchmarks"
+	"zagros-system-emulated-network/runtime-benchmarks",
 ]

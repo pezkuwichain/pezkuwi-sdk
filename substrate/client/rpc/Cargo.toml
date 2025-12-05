@@ -61,8 +61,8 @@ runtime-benchmarks = [
 	"sc-network/runtime-benchmarks",
 	"sc-rpc-api/runtime-benchmarks",
 	"sc-tracing/runtime-benchmarks",
-	"sc-transaction-pool/runtime-benchmarks",
 	"sc-transaction-pool-api/runtime-benchmarks",
+	"sc-transaction-pool/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
 	"sp-consensus/runtime-benchmarks",
@@ -71,5 +71,5 @@ runtime-benchmarks = [
 	"sp-session/runtime-benchmarks",
 	"sp-statement-store/runtime-benchmarks",
 	"sp-version/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

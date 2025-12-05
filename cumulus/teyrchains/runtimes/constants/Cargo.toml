@@ -52,5 +52,5 @@ runtime-benchmarks = [
 	"pezkuwichain-runtime-constants?/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"zagros-runtime-constants?/runtime-benchmarks"
+	"zagros-runtime-constants?/runtime-benchmarks",
 ]

@@ -32,5 +32,5 @@ std = [
 ]
 runtime-benchmarks = [
 	"sp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks"
+	"xcm/runtime-benchmarks",
 ]

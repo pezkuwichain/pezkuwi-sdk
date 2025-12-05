@@ -28,5 +28,5 @@ sp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

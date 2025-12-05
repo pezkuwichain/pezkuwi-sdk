@@ -66,6 +66,7 @@ substrate-build-script-utils = { workspace = true, default-features = true }
 default = []
 fast-runtime = ["pezkuwi-cli/fast-runtime"]
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-cli/runtime-benchmarks",
 	"pezkuwi-erasure-coding/runtime-benchmarks",
 	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
@@ -76,6 +77,6 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-types/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

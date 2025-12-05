@@ -66,5 +66,5 @@ runtime-benchmarks = [
 	"pallet-example-single-block-migrations/runtime-benchmarks",
 	"pallet-example-split/runtime-benchmarks",
 	"pallet-example-tasks/runtime-benchmarks",
-	"pallet-example-view-functions/runtime-benchmarks"
+	"pallet-example-view-functions/runtime-benchmarks",
 ]

@@ -58,5 +58,6 @@ runtime-benchmarks = [
 	"pallet-balances/runtime-benchmarks",
 	"pallet-session/runtime-benchmarks",
 	"sp-authority-discovery/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 ]

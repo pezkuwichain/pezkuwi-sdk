@@ -73,9 +73,10 @@ runtime-benchmarks = [
 	"revive-dev-node/runtime-benchmarks",
 	"revive-dev-runtime/runtime-benchmarks",
 	"sc-cli/runtime-benchmarks",
-	"sc-rpc/runtime-benchmarks",
 	"sc-rpc-api/runtime-benchmarks",
+	"sc-rpc/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-timestamp/runtime-benchmarks"
+	"sp-timestamp/runtime-benchmarks",
 ]

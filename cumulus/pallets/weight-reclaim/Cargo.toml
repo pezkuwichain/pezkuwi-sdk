@@ -51,12 +51,14 @@ std = [
 	"sp-trie/std",
 ]
 runtime-benchmarks = [
+	"cumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
+	"cumulus-primitives-storage-weight-reclaim/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"cumulus-primitives-storage-weight-reclaim/runtime-benchmarks",
-	"sp-trie/runtime-benchmarks"
+	"sp-trie/runtime-benchmarks",
 ]
 try-runtime = [
 	"frame-support/try-runtime",

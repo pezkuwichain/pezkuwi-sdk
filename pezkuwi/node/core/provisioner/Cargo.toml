@@ -34,11 +34,12 @@ sp-keystore = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"sc-consensus-slots/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

@@ -29,6 +29,8 @@ tracing-core = { workspace = true, default-features = true }
 [features]
 runtime-benchmarks = [
 	"sc-executor/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-runtime-interface/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-state-machine/runtime-benchmarks"
+	"sp-state-machine/runtime-benchmarks",
 ]

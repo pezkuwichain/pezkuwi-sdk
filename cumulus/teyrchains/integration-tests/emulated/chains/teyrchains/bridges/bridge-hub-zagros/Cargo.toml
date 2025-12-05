@@ -36,10 +36,10 @@ runtime-benchmarks = [
 	"bp-messages/runtime-benchmarks",
 	"bridge-hub-common/runtime-benchmarks",
 	"bridge-hub-zagros-runtime/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks"
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

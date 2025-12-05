@@ -62,12 +62,12 @@ runtime-benchmarks = [
 	"sc-block-builder/runtime-benchmarks",
 	"sc-client-api/runtime-benchmarks",
 	"sc-consensus/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
 	"sc-network-common/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks",
 	"sp-consensus-grandpa/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"sp-test-primitives/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

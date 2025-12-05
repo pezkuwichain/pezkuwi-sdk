@@ -53,9 +53,11 @@ tempfile = { workspace = true }
 test-utils = []
 jemalloc-allocator = []
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sc-executor-wasmtime/runtime-benchmarks",
 	"sc-executor/runtime-benchmarks",
-	"gum/runtime-benchmarks"
+	"sp-io/runtime-benchmarks",
 ]

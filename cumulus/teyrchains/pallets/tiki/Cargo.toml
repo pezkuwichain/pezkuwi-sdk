@@ -62,6 +62,7 @@ runtime-benchmarks = [
 	"pallet-identity-kyc/runtime-benchmarks",
 	"pallet-identity/runtime-benchmarks",
 	"pallet-nfts/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]
 try-runtime = [

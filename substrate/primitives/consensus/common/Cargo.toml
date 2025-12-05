@@ -33,5 +33,5 @@ default = []
 runtime-benchmarks = [
 	"sp-inherents/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"sp-state-machine/runtime-benchmarks"
+	"sp-state-machine/runtime-benchmarks",
 ]

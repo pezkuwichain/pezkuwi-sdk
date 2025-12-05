@@ -31,9 +31,9 @@ tokio = { features = ["full"], workspace = true, default-features = true }
 [features]
 try-runtime = ["node-cli/try-runtime"]
 runtime-benchmarks = [
+	"node-cli/runtime-benchmarks",
 	"node-primitives/runtime-benchmarks",
 	"sc-cli/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",
-	"node-cli/runtime-benchmarks",
-	"substrate-rpc-client/runtime-benchmarks"
+	"substrate-rpc-client/runtime-benchmarks",
 ]

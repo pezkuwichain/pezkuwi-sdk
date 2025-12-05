@@ -40,5 +40,5 @@ runtime-benchmarks = [
 	"sc-consensus-epochs/runtime-benchmarks",
 	"sc-consensus-grandpa/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

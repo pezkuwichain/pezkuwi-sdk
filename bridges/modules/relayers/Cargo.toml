@@ -68,6 +68,13 @@ std = [
 	"tracing/std",
 ]
 runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-relayers/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-test-utils/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
@@ -77,14 +84,8 @@ runtime-benchmarks = [
 	"pallet-bridge-teyrchains/runtime-benchmarks",
 	"pallet-transaction-payment/runtime-benchmarks",
 	"pallet-utility/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"bp-header-chain/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
-	"bp-relayers/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-test-utils/runtime-benchmarks",
-	"bp-teyrchains/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

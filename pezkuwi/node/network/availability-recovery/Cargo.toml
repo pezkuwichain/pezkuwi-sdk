@@ -52,15 +52,16 @@ pezkuwi-subsystem-bench = { workspace = true }
 [features]
 subsystem-benchmarks = []
 runtime-benchmarks = [
+	"gum/runtime-benchmarks",
 	"pezkuwi-erasure-coding/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-subsystem-bench/runtime-benchmarks",
 	"sc-network/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"gum/runtime-benchmarks"
 ]

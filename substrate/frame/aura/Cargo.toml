@@ -56,5 +56,6 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"sp-consensus-aura/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 ]

@@ -25,5 +25,5 @@ default = ["std"]
 std = ["codec/std", "sp-api/std", "sp-staking/std"]
 runtime-benchmarks = [
 	"sp-api/runtime-benchmarks",
-	"sp-staking/runtime-benchmarks"
+	"sp-staking/runtime-benchmarks",
 ]

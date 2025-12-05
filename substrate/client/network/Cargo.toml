@@ -119,6 +119,6 @@ runtime-benchmarks = [
 	"sp-blockchain/runtime-benchmarks",
 	"sp-consensus/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
+	"substrate-test-runtime-client/runtime-benchmarks",
 	"substrate-test-runtime/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
 ]

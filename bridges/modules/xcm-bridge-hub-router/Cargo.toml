@@ -52,14 +52,15 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
+	"bp-xcm-bridge-hub-router/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"bp-xcm-bridge-hub-router/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

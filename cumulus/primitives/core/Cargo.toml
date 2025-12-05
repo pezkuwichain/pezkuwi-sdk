@@ -42,11 +42,11 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
+	"pezkuwi-core-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"pezkuwi-core-primitives/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
-	"sp-trie/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

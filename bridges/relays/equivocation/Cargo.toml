@@ -25,5 +25,5 @@ tracing = { workspace = true }
 runtime-benchmarks = [
 	"bp-header-chain/runtime-benchmarks",
 	"finality-relay/runtime-benchmarks",
-	"relay-utils/runtime-benchmarks"
+	"relay-utils/runtime-benchmarks",
 ]

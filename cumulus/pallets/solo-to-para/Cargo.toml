@@ -52,5 +52,5 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-sudo/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-runtime/runtime-benchmarks",
 ]

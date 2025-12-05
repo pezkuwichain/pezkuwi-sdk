@@ -27,5 +27,7 @@ substrate-wasm-builder = { workspace = true, default-features = true }
 default = ["std"]
 std = ["codec/std", "pezkuwi-teyrchain-primitives/std", "sp-io/std"]
 runtime-benchmarks = [
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks"
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"substrate-wasm-builder/runtime-benchmarks",
 ]

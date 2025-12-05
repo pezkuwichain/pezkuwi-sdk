@@ -26,6 +26,6 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-bags-list-remote-tests/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
-	"zagros-runtime-constants/runtime-benchmarks"
 ]

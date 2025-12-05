@@ -33,5 +33,5 @@ default = ["std"]
 std = ["pezkuwi-sdk/std", "revive-dev-runtime/std"]
 runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
-	"revive-dev-runtime/runtime-benchmarks"
+	"revive-dev-runtime/runtime-benchmarks",
 ]

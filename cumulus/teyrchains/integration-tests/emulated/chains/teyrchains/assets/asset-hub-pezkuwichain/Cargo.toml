@@ -36,14 +36,14 @@ bp-bridge-hub-pezkuwichain = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"cumulus-primitives-core/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
 	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
 	"pezkuwichain-emulated-chain/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks"
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

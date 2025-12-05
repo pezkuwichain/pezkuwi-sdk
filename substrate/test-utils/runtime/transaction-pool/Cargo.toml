@@ -29,9 +29,9 @@ thiserror = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"sc-transaction-pool/runtime-benchmarks",
 	"sc-transaction-pool-api/runtime-benchmarks",
+	"sc-transaction-pool/runtime-benchmarks",
 	"sp-blockchain/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
-	"substrate-test-runtime-client/runtime-benchmarks"
+	"substrate-test-runtime-client/runtime-benchmarks",
 ]

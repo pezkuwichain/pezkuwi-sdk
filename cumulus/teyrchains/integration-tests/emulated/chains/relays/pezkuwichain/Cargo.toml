@@ -32,12 +32,12 @@ teyrchains-common = { workspace = true, default-features = true }
 runtime-benchmarks = [
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwichain-runtime/runtime-benchmarks",
 	"pezkuwichain-runtime-constants/runtime-benchmarks",
+	"pezkuwichain-runtime/runtime-benchmarks",
 	"sc-consensus-grandpa/runtime-benchmarks",
 	"sp-authority-discovery/runtime-benchmarks",
 	"sp-consensus-babe/runtime-benchmarks",
 	"sp-consensus-beefy/runtime-benchmarks",
 	"sp-keyring/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks"
+	"teyrchains-common/runtime-benchmarks",
 ]

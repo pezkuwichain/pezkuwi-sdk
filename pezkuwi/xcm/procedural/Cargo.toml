@@ -32,5 +32,5 @@ frame-support = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"frame-support/runtime-benchmarks",
-	"xcm/runtime-benchmarks"
+	"xcm/runtime-benchmarks",
 ]

@@ -78,6 +78,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
+	"bp-xcm-bridge-hub-router?/runtime-benchmarks",
 	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
 	"cumulus-primitives-core/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
@@ -87,11 +88,11 @@ runtime-benchmarks = [
 	"pallet-message-queue/runtime-benchmarks",
 	"pezkuwi-runtime-common/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"bp-xcm-bridge-hub-router?/runtime-benchmarks"
 ]
 try-runtime = [
 	"cumulus-pallet-teyrchain-system/try-runtime",

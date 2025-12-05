@@ -45,5 +45,5 @@ runtime-benchmarks = [
 	"sp-runtime/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
-	"zagros-system-emulated-network/runtime-benchmarks"
+	"zagros-system-emulated-network/runtime-benchmarks",
 ]

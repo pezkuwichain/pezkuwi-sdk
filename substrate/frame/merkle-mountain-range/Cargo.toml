@@ -36,6 +36,6 @@ std = [
 ]
 runtime-benchmarks = [
 	"frame/runtime-benchmarks",
-	"sp-mmr-primitives/runtime-benchmarks"
+	"sp-mmr-primitives/runtime-benchmarks",
 ]
 try-runtime = ["frame/try-runtime"]

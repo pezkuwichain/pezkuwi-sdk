@@ -69,13 +69,14 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
+	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
 	"snowbridge-pallet-system/runtime-benchmarks",
 	"snowbridge-test-utils/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
-	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

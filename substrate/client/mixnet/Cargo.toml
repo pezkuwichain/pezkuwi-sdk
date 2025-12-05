@@ -48,5 +48,6 @@ runtime-benchmarks = [
 	"sc-transaction-pool-api/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
 	"sp-consensus/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks"
+	"sp-mixnet/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
 ]

@@ -60,6 +60,8 @@ pub mod v1 {
 
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<sp_std::vec::Vec<u8>, sp_runtime::TryRuntimeError> {
+			use codec::Encode;
+
 			let current = Pallet::<T>::on_chain_storage_version();
 
 			log::info!("🔍 Pre-upgrade check for pallet-tiki");

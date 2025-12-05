@@ -41,8 +41,8 @@ runtime-metrics = []
 runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-test-service/runtime-benchmarks",
-	"sc-service/runtime-benchmarks",
 	"sc-cli/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
 	"sc-tracing/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks"
+	"sp-keyring/runtime-benchmarks",
 ]

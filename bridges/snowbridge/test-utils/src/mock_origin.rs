@@ -58,7 +58,6 @@ pub mod pallet_xcm_origin {
 			})
 		}
 
-		#[cfg(feature = "runtime-benchmarks")]
 		fn try_successful_origin() -> Result<O, ()> {
 			Ok(O::from(Origin(Location::here().into())))
 		}

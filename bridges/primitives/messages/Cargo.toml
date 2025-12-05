@@ -45,5 +45,6 @@ std = [
 runtime-benchmarks = [
 	"bp-header-chain/runtime-benchmarks",
 	"bp-runtime/runtime-benchmarks",
-	"frame-support/runtime-benchmarks"
+	"frame-support/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
 ]

@@ -28,5 +28,5 @@ pallet-bags-list = { features = [
 [features]
 runtime-benchmarks = [
 	"frame-election-provider-support/runtime-benchmarks",
-	"pallet-bags-list/runtime-benchmarks"
+	"pallet-bags-list/runtime-benchmarks",
 ]

@@ -36,5 +36,5 @@ std = [
 runtime-benchmarks = [
 	"snowbridge-core/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
-	"xcm/runtime-benchmarks"
+	"xcm/runtime-benchmarks",
 ]
