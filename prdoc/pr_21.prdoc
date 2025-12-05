@@ -1,0 +1,11 @@
+title: 'CI Fixes: Format TOML files and regenerate umbrella crate'
+doc:
+- audience: [Runtime Dev, Node Dev]
+  description: |-
+    This PR resolves critical CI failures in the checks-quick workflow by:
+    - Formatting 507 TOML files with taplo to pass check-toml-format
+    - Regenerating umbrella crate with proper feature propagation (734 issues fixed)
+    - Applying cargo fmt to ensure correct code formatting
+
+    All quick-checks workflow jobs now pass successfully.
+crates: []
