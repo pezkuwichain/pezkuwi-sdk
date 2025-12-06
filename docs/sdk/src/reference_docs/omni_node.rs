@@ -174,7 +174,7 @@
 //!   [`sc_consensus_manual_seal`] under the hood, and has no restrictions on the runtime's
 //!   consensus.
 //!
-//! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/94565) future improvement to OmniNode
+//! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/565) future improvement to OmniNode
 //! aims to make such checks automatic.
 //!
 //! ### Runtime conventions

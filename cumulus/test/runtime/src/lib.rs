@@ -151,7 +151,7 @@ const UNINCLUDED_SEGMENT_CAPACITY: u32 = 3;
 #[cfg(all(feature = "sync-backing", not(feature = "async-backing")))]
 const UNINCLUDED_SEGMENT_CAPACITY: u32 = 1;
 
-// The `+2` shouldn't be needed, https://github.com/pezkuwichain/pezkuwi-sdk/issues/94260
+// The `+2` shouldn't be needed, https://github.com/pezkuwichain/pezkuwi-sdk/issues/160
 #[cfg(all(not(feature = "sync-backing"), not(feature = "async-backing")))]
 const UNINCLUDED_SEGMENT_CAPACITY: u32 = BLOCK_PROCESSING_VELOCITY * (2 + RELAY_PARENT_OFFSET) + 2;
 
