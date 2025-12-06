@@ -1,0 +1,144 @@
+name: Upstream Issue Tracker
+
+on:
+  schedule:
+    - cron: '0 9 * * MON'  # Every Monday at 09:00 UTC
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  track-upstream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Track upstream issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_UPSTREAM_TRACKER }}
+        run: |
+          #!/bin/bash
+          set -e
+
+          REPO="pezkuwichain/pezkuwi-sdk"
+          UPSTREAM_REPO="paritytech/polkadot-sdk"
+
+          echo "🔍 Fetching tracking issues..."
+
+          # Get all our tracking issues (94-160)
+          TRACKING_ISSUES=$(gh api repos/$REPO/issues --paginate -q '.[] | select(.number >= 94 and .number <= 160) | {number, body, state}')
+
+          TOTAL=0
+          CLOSED=0
+          UPDATED=0
+          NO_CHANGE=0
+
+          REPORT=""
+          ACTION_ITEMS=""
+
+          echo "$TRACKING_ISSUES" | jq -c '.' | while read -r ISSUE; do
+            ISSUE_NUM=$(echo "$ISSUE" | jq -r '.number')
+            BODY=$(echo "$ISSUE" | jq -r '.body')
+
+            # Extract upstream issue number from body
+            UPSTREAM_NUM=$(echo "$BODY" | grep -oP 'polkadot-sdk/issues/\K\d+' || echo "")
+
+            if [ -z "$UPSTREAM_NUM" ]; then
+              echo "⚠️  Issue #$ISSUE_NUM: No upstream reference found"
+              continue
+            fi
+
+            TOTAL=$((TOTAL + 1))
+
+            echo "Checking upstream #$UPSTREAM_NUM (our #$ISSUE_NUM)..."
+
+            # Get upstream issue status
+            UPSTREAM_DATA=$(gh api repos/$UPSTREAM_REPO/issues/$UPSTREAM_NUM 2>/dev/null || echo "{}")
+
+            if [ "$UPSTREAM_DATA" = "{}" ]; then
+              echo "⚠️  Could not fetch upstream #$UPSTREAM_NUM"
+              continue
+            fi
+
+            UPSTREAM_STATE=$(echo "$UPSTREAM_DATA" | jq -r '.state')
+            UPSTREAM_UPDATED=$(echo "$UPSTREAM_DATA" | jq -r '.updated_at')
+            UPSTREAM_TITLE=$(echo "$UPSTREAM_DATA" | jq -r '.title')
+
+            # Check if status changed
+            if [ "$UPSTREAM_STATE" = "closed" ] && echo "$BODY" | grep -q "\[x\] Pending"; then
+              CLOSED=$((CLOSED + 1))
+
+              # Update our issue
+              NEW_BODY=$(echo "$BODY" | sed 's/\[x\] Pending/\[ \] Pending/' | sed 's/\[ \] Closed/\[x\] Closed/' | sed 's/\[ \] Resolved/\[x\] Resolved/')
+
+              gh api repos/$REPO/issues/$ISSUE_NUM -X PATCH -f body="$NEW_BODY" || true
+
+              # Add to action items
+              ACTION_ITEMS="$ACTION_ITEMS
+**#$ISSUE_NUM: $UPSTREAM_TITLE - CLOSED** ✅
+  → Upstream issue #$UPSTREAM_NUM closed
+  → **TODO**: Evaluate if fix needed for PezkuwiChain
+  → Link: https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM
+"
+
+              # Add comment to our issue
+              gh issue comment $ISSUE_NUM --repo $REPO --body "🔔 **Upstream Update**
+
+The upstream issue https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM has been **closed**.
+
+**Action Required:**
+- [ ] Review upstream resolution
+- [ ] Evaluate if fix applies to PezkuwiChain mainnet
+- [ ] Implement or document decision
+
+Updated status checkboxes automatically." || true
+
+            elif [ "$UPSTREAM_STATE" = "open" ]; then
+              # Check if recently updated (last 7 days)
+              UPDATED_DAYS_AGO=$(( ($(date +%s) - $(date -d "$UPSTREAM_UPDATED" +%s)) / 86400 ))
+
+              if [ $UPDATED_DAYS_AGO -lt 7 ]; then
+                UPDATED=$((UPDATED + 1))
+
+                ACTION_ITEMS="$ACTION_ITEMS
+**#$ISSUE_NUM: $UPSTREAM_TITLE - Updated** 🔄
+  → Recent activity detected (updated $UPDATED_DAYS_AGO days ago)
+  → **TODO**: Monitor for resolution
+  → Link: https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM
+"
+              else
+                NO_CHANGE=$((NO_CHANGE + 1))
+              fi
+            fi
+          done
+
+          # Build Discord report
+          REPORT="🔔 **Weekly Upstream Tracking Report**
+
+📊 **Summary:**
+- Total tracked: $TOTAL issues
+- Newly closed: $CLOSED
+- Recent activity: $UPDATED
+- No change: $NO_CHANGE
+
+$(if [ -n "$ACTION_ITEMS" ]; then echo "🎯 **Action Required:**"; echo "$ACTION_ITEMS"; else echo "✅ No action items this week"; fi)
+
+---
+*Next check: $(date -d '+7 days' '+%Y-%m-%d')*
+*View all tracking issues: https://github.com/$REPO/issues?q=is:issue+is:open+label:upstream-tracking*"
+
+          echo "$REPORT"
+
+          # Send to Discord if webhook configured
+          if [ -n "$DISCORD_WEBHOOK" ]; then
+            curl -H "Content-Type: application/json" \
+              -d "{\"content\": $(echo "$REPORT" | jq -Rs .)}" \
+              "$DISCORD_WEBHOOK" || echo "Failed to send Discord notification"
+          fi
+
+          echo "✅ Tracking complete!"
