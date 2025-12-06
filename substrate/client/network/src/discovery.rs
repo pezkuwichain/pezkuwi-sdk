@@ -414,7 +414,7 @@ impl DiscoveryBehaviour {
 			//
 			// Extract the chain-based Kademlia protocol from `kademlia.protocol_name()`
 			// when all nodes are upgraded to genesis hash and fork ID-based Kademlia:
-			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/9404.
+			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/104.
 			if !supported_protocols.iter().any(|p| {
 				p == self
 					.kademlia_protocol
