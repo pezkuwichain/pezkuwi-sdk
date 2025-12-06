@@ -103,7 +103,7 @@ pub async fn run_collation_task<Block, RClient, CS>(
 			},
 			block_import_msg = block_import_handle.next().fuse() => {
 				// TODO: Implement me.
-				// Issue: https://github.com/pezkuwichain/pezkuwi-sdk/issues/6495
+				// Issue: https://github.com/paritytech/polkadot-sdk/issues/6495
 				let _ = block_import_msg;
 			}
 		}
