@@ -63,7 +63,7 @@ packages required to compile this template - please take note of the Rust compil
 Fetch minimal template code.
 
 ```sh
-git clone https://github.com/pezkuwichain/pezkuwi-sdk-minimal-template.git minimal-template
+git clone https://github.com/pezkuwichain/pezkuwi-sdk/issues/25.git minimal-template
 
 cd minimal-template
 ```
@@ -109,7 +109,7 @@ zombienet --provider native spawn zombienet-multi-node.toml
 
 - 🌐 You can interact with your local node using the
 hosted version of the [PezkuwiChain/Substrate
-Portal](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944).
+Portal](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9944).
 
 - 🪐 A hosted version is also
 available on [IPFS](https://dotapps.io/).

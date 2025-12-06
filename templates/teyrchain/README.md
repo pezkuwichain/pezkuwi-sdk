@@ -198,8 +198,8 @@ zombienet --provider native spawn zombienet.toml
 
 - 🌐 You can interact with your local node using the
   hosted version of the Pezkuwi/Substrate Portal:
-  [relay chain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944)
-  and [teyrchain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9988).
+  [relay chain](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9944)
+  and [teyrchain](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9988).
 
 - 🪐 A hosted version is also
   available on [IPFS](https://dotapps.io/).

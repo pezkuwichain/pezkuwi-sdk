@@ -263,7 +263,7 @@ https://github.com/paritytech/revive/releases/...
 ```yaml
 # Satır 7: Yorum - parachain template
 # - https://github.com/pezkuwichain/pezkuwi-sdk-parachain-template
-# DEĞİŞTİR: - https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template
+# DEĞİŞTİR: - https://github.com/pezkuwichain/pezkuwi-sdk/issues/25
 
 # Satır 132: PSVM aracı
 cargo install --git https://github.com/paritytech/psvm psvm

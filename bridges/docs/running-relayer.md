@@ -163,7 +163,7 @@ than the `LEASE`.
 So once you have enough funds on your account and have selected the `validTill` parameter value, you
 could use the Pezkuwi JS apps to submit an extrinsic. If you want priority boost for your transactions
 on the Kusama Bridge Hub, open the
-[Pezkuwi JS Apps](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/extrinsics)
+[Pezkuwi JS Apps](https://pezkuwichain.io/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/extrinsics)
 and submit the `register` extrinsic from the `bridgeRelayers` pallet:
 
 ![Register Extrinsic](./bridge-relayers-register.png)
@@ -222,7 +222,7 @@ This requires submitting several transactions. But first, let's check that you a
 claim. For that, let's check the state of the pallet that tracks all rewards.
 
 To check your rewards at the Kusama Bridge Hub, go to the
-[Pezkuwi JS Apps](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/chainstate)
+[Pezkuwi JS Apps](https://pezkuwichain.io/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/chainstate)
 targeting Kusama Bridge Hub, select the `bridgeRelayers` pallet, choose `relayerRewards` map and
 your relayer account. Then:
 
@@ -235,7 +235,7 @@ your relayer account. Then:
 
 If check shows that you have some rewards, you can craft the claim transaction, with similar parameters.
 For that, go to `Extrinsics` tab of the
-[Pezkuwi JS Apps](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/extrinsics)
+[Pezkuwi JS Apps](https://pezkuwichain.io/?rpc=wss%3A%2F%2Fkusama-bridge-hub-rpc.polkadot.io#/extrinsics)
 and submit the following transaction (make sure to change `owner` before):
 
 ![Claim Rewards Extrinsic](./bridge-relayers-claim-rewards.png)

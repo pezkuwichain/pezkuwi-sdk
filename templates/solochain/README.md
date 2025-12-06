@@ -26,7 +26,7 @@ installation](#alternatives-installations) options.
 Fetch solochain template code:
 
 ```sh
-git clone https://github.com/pezkuwichain/pezkuwi-sdk-solochain-template.git solochain-template
+git clone https://github.com/pezkuwichain/pezkuwi-sdk/issues/25.git solochain-template
 
 cd solochain-template
 ```
@@ -109,7 +109,7 @@ db keystore network
 
 After you start the node template locally, you can interact with it using the
 hosted version of the [PezkuwiChain/Substrate
-Portal](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944)
+Portal](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9944)
 front-end by connecting to the local node endpoint. A hosted version is also
 available on [IPFS](https://dotapps.io/). You can
 also find the source code and instructions for hosting your own instance in the

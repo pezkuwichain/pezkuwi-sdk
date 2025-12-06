@@ -116,15 +116,15 @@ cd <pezkuwi-sdk-git-repo-dir>
 ```
 
 **Check relay-chain headers relaying:**
-- pezkuwichain teyrchain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
+- pezkuwichain teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
   **bridgezagrosGrandpa** - Keys: **bestFinalized()**
-- zagros teyrchain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
+- zagros teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
   **bridgepezkuwichainGrandpa** - Keys: **bestFinalized()**
 
 **Check teyrchain headers relaying:**
-- pezkuwichain teyrchain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
+- pezkuwichain teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
   **bridgezagrosTeyrchains** - Keys: **parasInfo(None)**
-- zagros teyrchain: - https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
+- zagros teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
   **bridgepezkuwichainTeyrchains** - Keys: **parasInfo(None)**
 
 ### Initialize configuration for transfer asset over bridge (TYRs/WNDs)
@@ -158,11 +158,11 @@ cd <pezkuwi-sdk-git-repo-dir>
 ```
 
 - open explorers: (see zombienets)
-	- AssetHubpezkuwichain (see events `xcmpQueue.XcmpMessageSent`, `pezkuwiXcm.Attempted`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9910#/explorer
-	- BridgeHubpezkuwichain (see `bridgezagrosMessages.MessageAccepted`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
-	- BridgeHubzagros (see `bridgepezkuwichainMessages.MessagesReceived`, `xcmpQueue.XcmpMessageSent`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8945#/explorer
-	- AssetHubzagros (see `foreignAssets.Issued`, `xcmpQueue.Success`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:9010#/explorer
-	- BridgeHubpezkuwichainc (see `bridgezagrosMessages.MessagesDelivered`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
+	- AssetHubpezkuwichain (see events `xcmpQueue.XcmpMessageSent`, `pezkuwiXcm.Attempted`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:9910#/explorer
+	- BridgeHubpezkuwichain (see `bridgezagrosMessages.MessageAccepted`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8943#/explorer
+	- BridgeHubzagros (see `bridgepezkuwichainMessages.MessagesReceived`, `xcmpQueue.XcmpMessageSent`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8945#/explorer
+	- AssetHubzagros (see `foreignAssets.Issued`, `xcmpQueue.Success`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:9010#/explorer
+	- BridgeHubpezkuwichainc (see `bridgezagrosMessages.MessagesDelivered`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8943#/explorer
 
 Do reserve withdraw transfers: (when previous is finished)
 ```
@@ -195,8 +195,8 @@ cd <pezkuwi-sdk-git-repo-dir>
 ```
 
 - open explorers: (see zombienets)
-	- BridgeHubpezkuwichain (see 2x `bridgeRelayers.RewardPaid`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8943#/explorer
-	- BridgeHubzagros (see 2x `bridgeRelayers.RewardPaid`) https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:8945#/explorer
+	- BridgeHubpezkuwichain (see 2x `bridgeRelayers.RewardPaid`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8943#/explorer
+	- BridgeHubzagros (see 2x `bridgeRelayers.RewardPaid`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8945#/explorer
 
 ## How to test local BridgeHubKusama/BridgeHubPezkuwiChain
 

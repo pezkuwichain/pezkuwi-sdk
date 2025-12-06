@@ -23,7 +23,7 @@ doc:
       and will be removed eventually.
       These new extrinsics just require you to input the encoded XCM.
       There's a new utility in PolkadotJS Apps for encoding XCMs you can use:
-      https://polkadot.js.org/apps/#/utilities/xcm
+      https://pezkuwichain.io/#/utilities/xcm
       Just pass in the encoded XCM to the new extrinsics and you're done.
 
       pallet-contracts takes the XCM encoded now as well. It follows the same API as

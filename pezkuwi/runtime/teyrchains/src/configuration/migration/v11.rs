@@ -299,7 +299,7 @@ mod tests {
 		// Example how to get new `raw_config`:
 		// We'll obtain the raw_config at a specified a block
 		// Steps:
-		// 1. Go to Pezkuwi.js -> Developer -> Chain state -> Storage: https://polkadot.js.org/apps/#/chainstate
+		// 1. Go to Pezkuwi.js -> Developer -> Chain state -> Storage: https://pezkuwichain.io/#/chainstate
 		// 2. Set these parameters:
 		//   2.1. selected state query: configuration; activeConfig():
 		//        PezkuwiRuntimeTeyrchainsConfigurationHostConfiguration
