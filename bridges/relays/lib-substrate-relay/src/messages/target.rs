@@ -58,7 +58,7 @@ pub type SubstrateMessagesDeliveryProof<C, L> =
 /// Inbound lane data - for backwards compatibility with `bp_messages::InboundLaneData` which has
 /// additional `lane_state` attribute.
 ///
-/// TODO: remove - https://github.com/paritytech/polkadot-sdk/issues/5923
+/// TODO: remove - https://github.com/pezkuwichain/pezkuwi-sdk/issues/22
 #[derive(Decode)]
 struct LegacyInboundLaneData<RelayerId> {
 	relayers: VecDeque<UnrewardedRelayer<RelayerId>>,
