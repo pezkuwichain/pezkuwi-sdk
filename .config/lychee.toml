@@ -36,8 +36,9 @@ exclude = [
 	# TODO meta issue: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/134>
 	"https://github.com/ipfs/js-ipfs-bitswap/blob/",
 	"https://github.com/paritytech/substrate/frame/fast-unstake",
-	"https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/build/custom-rpc/#public-rpcs",
-	"https://github.com/pezkuwichain/docs.pezkuwichain.io/rustdocs/latest/sp_api/macro.decl_runtime_apis.html",
+	# Exclude all github.com/pezkuwichain/docs.pezkuwichain.io/* - these are invalid GitHub paths
+	# (docs.pezkuwichain.io is a website, not a GitHub repo)
+	"https://github.com/pezkuwichain/docs.pezkuwichain.io/*",
 	"https://github.com/pezkuwichain/pezkuwi-sdk/substrate/frame/timestamp",
 	"https://github.com/zkcrypto/bls12_381/blob/e224ad4ea1babfc582ccd751c2bf128611d10936/src/test-data/mod.rs",
 	"https://polkadot.network/the-path-of-a-parachain-block/",
