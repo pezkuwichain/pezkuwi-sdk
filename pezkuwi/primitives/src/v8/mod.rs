@@ -2092,12 +2092,12 @@ pub mod node_features {
 		ElasticScalingMVP = 1,
 		/// Tells if the chunk mapping feature is enabled.
 		/// Enables the implementation of
-		/// [RFC-47](https://github.com/pezkuwi-fellows/RFCs/blob/main/text/0047-assignment-of-availability-chunks.md).
+		/// [RFC-47](https://github.com/pezkuwichain/pezkuwi-fellows/blob/main/text/0047-assignment-of-availability-chunks.md).
 		/// Must not be enabled unless all validators and collators have stopped using `req_chunk`
 		/// protocol version 1. If it is enabled, validators can start systematic chunk recovery.
 		AvailabilityChunkMapping = 2,
 		/// Enables node side support of `CoreIndex` committed candidate receipts.
-		/// See [RFC-103](https://github.com/pezkuwi-fellows/RFCs/pull/103) for details.
+		/// See [RFC-103](https://github.com/polkadot-fellows/RFCs/pull/103) for details.
 		/// Only enable if at least 2/3 of nodes support the feature.
 		CandidateReceiptV2 = 3,
 		/// First unassigned feature bit.
