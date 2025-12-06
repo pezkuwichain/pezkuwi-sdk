@@ -3,7 +3,7 @@ title: "Deprecate dmp-queue pallet"
 doc:
   - audience: Runtime Dev
     description: |
-      Schedule the DMP queue pallet for deletion. It is not needed anymore sine https://github.com/pezkuwichain/pezkuwichain-sdk/pull/1246.
+      Schedule the DMP queue pallet for deletion. It is not needed anymore sine https://github.com/paritytech/polkadot-sdk/pull/1246.
 
 crates:
   - name: cumulus-pallet-dmp-queue

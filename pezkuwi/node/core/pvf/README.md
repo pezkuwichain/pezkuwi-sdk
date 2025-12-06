@@ -43,5 +43,5 @@ another popular persistent shell, mosh, it allows scrollback.
 
 [impl-guide]: https://docs.pezkuwichain.io/sdk/book/pvf-prechecking.html#summary
 [glossary]: https://docs.pezkuwichain.io/sdk/book/glossary.html
-[testing]: https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/polkadot/doc/testing.md
+[testing]: https://github.com/paritytech/polkadot-sdk/blob/master/polkadot/doc/testing.md
 [et]: https://github.com/MisterTea/EternalTerminal

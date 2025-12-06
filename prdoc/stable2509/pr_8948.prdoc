@@ -2,7 +2,7 @@ title: make sure dispute_coordinator/approval-voting parallel can receive priori
 doc:
 - audience: Node Dev
   description: |-
-    https://github.com/pezkuwichain/pezkuwichain-sdk/pull/8834, changed relay_chain_selection to send priority messages, but did not configured 
+    https://github.com/paritytech/polkadot-sdk/pull/8834, changed relay_chain_selection to send priority messages, but did not configured 
     the subsystems to tell they can receive priority messages, with `can_receive_priority_messages` flag.
 
     If `can_receive_priority_messages` is not specified orchestra falls back when sending a priority message to the normal queue, 

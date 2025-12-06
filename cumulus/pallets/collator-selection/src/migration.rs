@@ -22,7 +22,7 @@ use alloc::vec::Vec;
 use frame_support::traits::{OnRuntimeUpgrade, UncheckedOnRuntimeUpgrade};
 use log;
 
-/// Migrate to v2. Should have been part of <https://github.com/pezkuwichain/pezkuwi-sdk/pull/1340>.
+/// Migrate to v2. Should have been part of <https://github.com/paritytech/polkadot-sdk/pull/1340>.
 pub mod v2 {
 	use super::*;
 	use frame_support::{

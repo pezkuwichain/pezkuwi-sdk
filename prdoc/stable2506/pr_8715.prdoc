@@ -2,7 +2,7 @@ title: '[AHM] Prepare For Westend Cleanup'
 doc:
 - audience: Runtime Dev
   description: |-
-    Pulling out the simple pieces of https://github.com/pezkuwichain/pezkuwichain-sdk/pull/7997 for easier review:
+    Pulling out the simple pieces of https://github.com/paritytech/polkadot-sdk/pull/7997 for easier review:
     - Fix `hypothetically` macro to use proper `Result` type
     - Add `DefensiveTruncateInto` as counter part to `DefensiveTruncateFrom`
     - Add DecodeWithMemTracking to many structs

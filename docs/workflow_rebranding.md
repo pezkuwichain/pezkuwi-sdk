@@ -234,7 +234,7 @@ image: "paritytech/tools:latest"
 ```yaml
 # Satır 24: Yorum - substrate PR referansı
 # https://github.com/paritytech/substrate/pull/3778
-# DEĞİŞTİR: https://github.com/pezkuwichain/pezkuwi-sdk/pull/XXX (veya kaldır)
+# DEĞİŞTİR: https://github.com/paritytech/polkadot-sdk/pull/XXX (veya kaldır)
 
 # Satır 204: Docker image
 paritytech/node-bench-regression-guard:latest
@@ -262,7 +262,7 @@ https://github.com/paritytech/revive/releases/...
 
 ```yaml
 # Satır 7: Yorum - parachain template
-# - https://github.com/pezkuwichain/pezkuwi-sdk-parachain-template
+# - https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template
 # DEĞİŞTİR: - https://github.com/pezkuwichain/pezkuwi-sdk/issues/25
 
 # Satır 132: PSVM aracı

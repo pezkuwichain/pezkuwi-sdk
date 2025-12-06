@@ -1,7 +1,7 @@
 title: 'EPMB/Signed: Make invulnerables non-eject-able'
 doc:
 - audience: Runtime Dev
-  description: 'Follow-up to https://github.com/pezkuwichain/pezkuwichain-sdk/pull/8877
+  description: 'Follow-up to https://github.com/paritytech/polkadot-sdk/pull/8877
     and audits: Make it such that invulnerable accounts cannot be ejected from the
     election signed queue altogether. '
 crates:

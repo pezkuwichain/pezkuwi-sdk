@@ -30,7 +30,7 @@
 //!
 //! ## Implementation
 //!
-//! A ready-to-use Rust implementation lives in the [pezkuwi-sdk repo](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/polkadot/xcm),
+//! A ready-to-use Rust implementation lives in the [pezkuwi-sdk repo](https://github.com/paritytech/polkadot-sdk/tree/master/polkadot/xcm),
 //! but will be moved to its own repo in the future.
 //!
 //! Its main components are:

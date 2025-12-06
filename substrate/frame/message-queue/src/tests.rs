@@ -285,7 +285,7 @@ fn service_queues_low_weight_defensive() {
 	});
 }
 
-/// Regression test for <https://github.com/pezkuwichain/pezkuwi-sdk/pull/1873>.
+/// Regression test for <https://github.com/paritytech/polkadot-sdk/pull/1873>.
 #[test]
 fn service_queues_regression_1873() {
 	use MessageOrigin::*;

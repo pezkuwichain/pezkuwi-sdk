@@ -93,7 +93,7 @@ doc:
 
     #### RuntimeDebug -> Debug
 
-    To facilitate debugging, a number of types' `RuntimeDebug` impl has been changed to `Debug`. See https://github.com/pezkuwichain/pezkuwichain-sdk/pull/3107
+    To facilitate debugging, a number of types' `RuntimeDebug` impl has been changed to `Debug`. See https://github.com/paritytech/polkadot-sdk/pull/3107
 
 crates:
 - name: pallet-bags-list

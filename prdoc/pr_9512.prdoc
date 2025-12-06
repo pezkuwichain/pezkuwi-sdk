@@ -32,7 +32,7 @@ doc:
     3. **Automatic cleanup**: Block mappings are pruned alongside transaction and log data
     4. **Genesis block handling**: Block 0 is built during genesis using the block storage infrastructure
 
-    Builds upon: https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9418
+    Builds upon: https://github.com/paritytech/polkadot-sdk/pull/9418
     Part of: https://github.com/paritytech/contract-issues/issues/139
 crates:
 - name: pallet-revive

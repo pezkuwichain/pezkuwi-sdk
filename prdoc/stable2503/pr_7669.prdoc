@@ -8,7 +8,7 @@ doc:
     - With a spec: github.com/davxy/bandersnatch-vrf-spec
     - Published on crates.io
 
-    https://github.com/pezkuwichain/pezkuwichain-sdk/pull/7670 follow up
+    https://github.com/paritytech/polkadot-sdk/pull/7670 follow up
 
     NOTE: this crypto is under experimental feat
 crates:

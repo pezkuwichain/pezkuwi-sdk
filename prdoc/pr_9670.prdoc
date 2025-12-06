@@ -2,7 +2,7 @@ title: Move revive fixtures into release directory
 doc:
 - audience: Runtime Dev
   description: |-
-    https://github.com/pezkuwichain/pezkuwichain-sdk/pull/8980 did fix the fellowship CI but it triggers a rebuild of the fixtures every single time you run tests. Annoying during development.
+    https://github.com/paritytech/polkadot-sdk/pull/8980 did fix the fellowship CI but it triggers a rebuild of the fixtures every single time you run tests. Annoying during development.
 
     Instead of rebuilding, we just move the fixtures into the `target/release` directory where it should be cached by the fellowship CI.
 

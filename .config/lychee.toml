@@ -26,6 +26,13 @@ exclude = [
 	# Place holders (no need to fix these):
 	"http://visitme/",
 	"https://visitme/",
+	"https://some.com/",
+	# Zombienet test placeholders:
+	"https://www.urltomysnapshot.com/",
+	"https://mycloudstorage.com/",
+	"https://www.backupsite.com/",
+	"https://storage.com/",
+	"http://test.com/",
 	# TODO meta issue: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/134>
 	"https://github.com/ipfs/js-ipfs-bitswap/blob/",
 	"https://github.com/paritytech/substrate/frame/fast-unstake",

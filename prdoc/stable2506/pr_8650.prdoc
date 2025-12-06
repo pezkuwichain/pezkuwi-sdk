@@ -17,7 +17,7 @@ doc:
     - added the `reserved_only_rejects_non_reserved_peers` test to ensure litep2p handles peers properly from different states
 
 
-    This PR has been extracted from https://github.com/pezkuwichain/pezkuwichain-sdk/pull/8461 to ease the review process
+    This PR has been extracted from https://github.com/paritytech/polkadot-sdk/pull/8461 to ease the review process
 
     cc @paritytech/networking
 crates:

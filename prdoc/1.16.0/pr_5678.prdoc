@@ -4,7 +4,7 @@ doc:
   description: |-
     Close #5677
 
-    I made a nit when I moved this code: https://github.com/pezkuwichain/pezkuwichain-sdk/blob/v1.14.0-rc1/substrate/client/service/src/lib.rs#L379-#L385 in https://github.com/pezkuwichain/pezkuwichain-sdk/pull/4792
+    I made a nit when I moved this code: https://github.com/pezkuwichain/pezkuwichain-sdk/blob/v1.14.0-rc1/substrate/client/service/src/lib.rs#L379-#L385 in https://github.com/paritytech/polkadot-sdk/pull/4792
 
     Thus:
      - (ip.is_loopback(), RpcMethods::Auto) -> allow unsafe

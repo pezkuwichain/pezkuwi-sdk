@@ -10,12 +10,12 @@ doc:
 
       This PR brings a new XCM version.
       It's an amalgamation of multiple individual PRs:
-      - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/6228
-      - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/6148
-      - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/5971
-      - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/5876
-      - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/5420
-      - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/5585
+      - https://github.com/paritytech/polkadot-sdk/pull/6228
+      - https://github.com/paritytech/polkadot-sdk/pull/6148
+      - https://github.com/paritytech/polkadot-sdk/pull/5971
+      - https://github.com/paritytech/polkadot-sdk/pull/5876
+      - https://github.com/paritytech/polkadot-sdk/pull/5420
+      - https://github.com/paritytech/polkadot-sdk/pull/5585
 
       XCMv5 reduces the potential for bugs by:
       - Removing the need to specify weight in Transact.

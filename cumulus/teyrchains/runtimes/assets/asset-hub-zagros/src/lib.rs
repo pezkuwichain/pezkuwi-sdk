@@ -1559,7 +1559,7 @@ impl frame_support::traits::OnRuntimeUpgrade for DeleteUndecodableStorage {
 /// Migration to initialize storage versions for pallets added after genesis.
 ///
 /// Ideally this would be done automatically (see
-/// <https://github.com/pezkuwichain/pezkuwi-sdk/pull/1297>), but it probably won't be ready for some
+/// <https://github.com/paritytech/polkadot-sdk/pull/1297>), but it probably won't be ready for some
 /// time and it's beneficial to get try-runtime-cli on-runtime-upgrade checks into the CI, so we're
 /// doing it manually.
 pub struct InitStorageVersions;

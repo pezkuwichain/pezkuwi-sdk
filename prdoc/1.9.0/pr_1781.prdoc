@@ -17,7 +17,7 @@ doc:
 
       To integrate this into your runtime, it is only necessary to change the return type of
       `initialize_block` to `RuntimeExecutiveMode`. For extended info please see
-      https://github.com/pezkuwichain/pezkuwichain-sdk/pull/1781.
+      https://github.com/paritytech/polkadot-sdk/pull/1781.
 
       **poll**: a new pallet hook named `poll` is added. This can be used for places where the code
       that should be executed is not deadline critical. Runtime devs are advised to skim their usage

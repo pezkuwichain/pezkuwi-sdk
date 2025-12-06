@@ -4,7 +4,7 @@ doc:
   description: |-
     Related to https://github.com/pezkuwichain/pezkuwichain-sdk/issues/8462
 
-    Follow-up for https://github.com/pezkuwichain/pezkuwichain-sdk/pull/8477
+    Follow-up for https://github.com/paritytech/polkadot-sdk/pull/8477
 
     The minimal fee factor should always be 1
 crates:

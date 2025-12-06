@@ -202,7 +202,7 @@ parameter_types! {
 #[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
 impl frame_system::Config for TestRuntime {
 	type Block = ThisChainBlock;
-	// TODO: remove when https://github.com/pezkuwichain/pezkuwi-sdk/pull/4543 merged
+	// TODO: remove when https://github.com/paritytech/polkadot-sdk/pull/4543 merged
 	type BlockHashCount = ConstU32<10>;
 	type AccountData = pallet_balances::AccountData<ThisChainBalance>;
 	type DbWeight = DbWeight;

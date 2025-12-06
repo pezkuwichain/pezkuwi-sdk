@@ -66,7 +66,7 @@ A Pezkuwi SDK based project such as this one consists of:
 Fetch teyrchain template code:
 
 ```sh
-git clone https://github.com/pezkuwichain/pezkuwi-sdk-parachain-template.git teyrchain-template
+git clone https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template.git teyrchain-template
 
 cd teyrchain-template
 ```
@@ -249,7 +249,7 @@ relay chain network (see [Teyrchain Template node](#teyrchain-template-node) set
 
 - 🔄 This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/pezkuwichain/pezkuwi-sdk).
 
-- ➡️ Any pull requests should be directed to this [source](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/templates/parachain).
+- ➡️ Any pull requests should be directed to this [source](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/templates/teyrchain).
 
 - 😇 Please refer to the monorepo's
   [contribution guidelines](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/docs/contributor/CONTRIBUTING.md) and

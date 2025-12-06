@@ -108,7 +108,7 @@ const DEFAULT_PROTOCOL_ID: &str = "sup";
 #[derive(Clone)]
 pub struct RpcHandlers {
 	// This is legacy and may be removed at some point, it was for WASM stuff before smoldot was a
-	// thing. https://github.com/pezkuwichain/pezkuwi-sdk/pull/5038#discussion_r1694971805
+	// thing. https://github.com/paritytech/polkadot-sdk/pull/5038#discussion_r1694971805
 	rpc_module: Arc<RpcModule<()>>,
 
 	// This can be used to introspect the port the RPC server is listening on. SDK consumers are

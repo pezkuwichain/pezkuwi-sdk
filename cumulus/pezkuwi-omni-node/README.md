@@ -78,6 +78,6 @@ pezkuwi-omni-node --dev --chain <chain_spec.json>
 * [`Omni Node Pezkuwi SDK Docs`](https://docs.pezkuwichain.io/sdk/master/pezkuwi_sdk_docs/reference_docs/omni_node/index.html)
 * [`Chain Spec Genesis Reference Docs`](https://docs.pezkuwichain.io/sdk/master/pezkuwi_sdk_docs/reference_docs/chain_spec_genesis/index.html)
 * `pezkuwi-teyrchain-bin`
-* [`pezkuwi-sdk-teyrchain-template`](https://github.com/pezkuwichain/pezkuwi-sdk-parachain-template)
+* [`pezkuwi-sdk-teyrchain-template`](https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template)
 * [`frame-omni-bencher`](https://crates.io/crates/frame-omni-bencher)
 * [`staging-chain-spec-builder`](https://crates.io/crates/staging-chain-spec-builder)

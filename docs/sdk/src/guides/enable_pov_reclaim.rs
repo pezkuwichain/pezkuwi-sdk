@@ -3,7 +3,7 @@
 //! This guide will teach you how to enable storage weight reclaiming for a teyrchain. The
 //! explanations in this guide assume a project structure similar to the one detailed in
 //! the [substrate documentation](crate::pezkuwi_sdk::substrate#anatomy-of-a-binary-crate). Full
-//! technical details are available in the original [pull request](https://github.com/pezkuwichain/pezkuwi-sdk/pull/3002).
+//! technical details are available in the original [pull request](https://github.com/paritytech/polkadot-sdk/pull/3002).
 //!
 //! # What is PoV reclaim?
 //! When a teyrchain submits a block to a relay chain like Pezkuwi or Kusama, it sends the block

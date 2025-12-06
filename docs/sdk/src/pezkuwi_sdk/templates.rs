@@ -17,7 +17,7 @@
 //!   (aka. solochain) that contains moderate features, such as a basic consensus engine and some
 //!   FRAME pallets. This template can act as a good starting point for those who want to launch a
 //!   solochain.
-//! - [`teyrchain-template`](https://github.com/pezkuwichain/pezkuwi-sdk-parachain-template):
+//! - [`teyrchain-template`](https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template):
 //! A teyrchain template ready to be connected to a relay-chain, such as [Paseo](https://github.com/paseo-network/.github)
 //! , Kusama  or Pezkuwi.
 //!

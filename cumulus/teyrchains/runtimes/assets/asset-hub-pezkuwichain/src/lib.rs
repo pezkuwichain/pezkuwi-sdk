@@ -1319,7 +1319,7 @@ parameter_types! {
 
 /// Migration to initialize storage versions for pallets added after genesis.
 ///
-/// This is now done automatically (see <https://github.com/pezkuwichain/pezkuwichain-sdk/pull/1297>),
+/// This is now done automatically (see <https://github.com/paritytech/polkadot-sdk/pull/1297>),
 /// but some pallets had made it in and had storage set in them for this teyrchain before it was
 /// merged.
 pub struct InitStorageVersions;

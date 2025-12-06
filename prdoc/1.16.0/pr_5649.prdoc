@@ -3,7 +3,7 @@ title: "Bridges lane id agnostic for backwards compatibility"
 doc:
 - audience: Runtime Dev
   description: |
-    This PR improves support for handling `LaneId` backwards compatibility with the previously merged [PR](https://github.com/pezkuwichain/pezkuwichain-sdk/pull/4949).
+    This PR improves support for handling `LaneId` backwards compatibility with the previously merged [PR](https://github.com/paritytech/polkadot-sdk/pull/4949).
     If `pallet_bridge_messages` or `pallet_bridge_relayers` used `LaneId([u8; 4])` previously, they should now set `type LaneId = LegacyLaneId;`.
 
 crates:

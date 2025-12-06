@@ -42,7 +42,7 @@ pub type MaxDmpMessageLenOf<T> =
 
 #[frame_support::pallet]
 #[deprecated(
-	note = "`cumulus-pallet-dmp-queue` will be removed after November 2024. It can be removed once its lazy migration completed. See <https://github.com/pezkuwichain/pezkuwi-sdk/pull/1246>."
+	note = "`cumulus-pallet-dmp-queue` will be removed after November 2024. It can be removed once its lazy migration completed. See <https://github.com/paritytech/polkadot-sdk/pull/1246>."
 )]
 pub mod pallet {
 	use super::*;

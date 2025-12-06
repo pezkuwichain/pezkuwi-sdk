@@ -8,7 +8,7 @@ doc:
 
     Fixes https://github.com/pezkuwichain/pezkuwichain-sdk/issues/7061
 
-    Continuation of https://github.com/pezkuwichain/pezkuwichain-sdk/pull/8297
+    Continuation of https://github.com/paritytech/polkadot-sdk/pull/8297
 crates:
 - name: asset-hub-rococo-runtime
   bump: major

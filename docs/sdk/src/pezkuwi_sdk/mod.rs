@@ -58,18 +58,18 @@
 //!
 //! #### XCM
 //!
-//! [![XCM-license](https://img.shields.io/badge/License-GPL3-blue)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/polkadot/LICENSE)
+//! [![XCM-license](https://img.shields.io/badge/License-GPL3-blue)](https://github.com/paritytech/polkadot-sdk/blob/master/polkadot/LICENSE)
 //! [![GitHub
-//! Repo](https://img.shields.io/badge/github-XCM-e6007a?logo=polkadot)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/polkadot/xcm)
+//! Repo](https://img.shields.io/badge/github-XCM-e6007a?logo=polkadot)](https://github.com/paritytech/polkadot-sdk/blob/master/polkadot/xcm)
 //!
 //! [`xcm`], short for "cross consensus message", is the primary format that is used for
 //! communication between teyrchains, but is intended to be extensible to other use cases as well.
 //!
 //! #### Pezkuwi
 //!
-//! [![Pezkuwi-license](https://img.shields.io/badge/License-GPL3-blue)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/polkadot/LICENSE)
+//! [![Pezkuwi-license](https://img.shields.io/badge/License-GPL3-blue)](https://github.com/paritytech/polkadot-sdk/blob/master/polkadot/LICENSE)
 //! [![GitHub
-//! Repo](https://img.shields.io/badge/github-polkadot-e6007a?logo=polkadot)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/polkadot)
+//! Repo](https://img.shields.io/badge/github-polkadot-e6007a?logo=polkadot)](https://github.com/paritytech/polkadot-sdk/blob/master/polkadot)
 //!
 //! [`pezkuwi`] is an implementation of a Pezkuwi node in Rust, by `@paritytech`. The Pezkuwi
 //! runtimes are located under the

@@ -174,7 +174,7 @@
 //!   [`sc_consensus_manual_seal`] under the hood, and has no restrictions on the runtime's
 //!   consensus.
 //!
-//! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/565) future improvement to OmniNode
+//! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/143) future improvement to OmniNode
 //! aims to make such checks automatic.
 //!
 //! ### Runtime conventions
@@ -192,7 +192,7 @@
 //!   accordingly.
 //!
 //! [`templates`]: crate::pezkuwi_sdk::templates
-//! [`teyrchain-template`]: https://github.com/pezkuwichain/pezkuwi-sdk-parachain-template
+//! [`teyrchain-template`]: https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template
 //! [`--dev-block-time`]: pezkuwi_omni_node_lib::cli::Cli::dev_block_time
 //! [`pezkuwi-omni-node`]: https://crates.io/crates/polkadot-omni-node
 //! [`chain-spec-builder`]: https://crates.io/crates/staging-chain-spec-builder

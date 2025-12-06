@@ -18,8 +18,8 @@ doc:
     The sync engine will handle the outdated justifications as invalid, but without banning the peer. This leads to increased stability of the network during authority changes, which caused frequent disconnects to versi-net in the past.
 
     ### Review Notes
-    - Main changes that verify prior SetId on failures are placed in [check_message_signature_with_buffer](https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9015/files#diff-359d7a46ea285177e5d86979f62f0f04baabf65d595c61bfe44b6fc01af70d89R458-R501)
-    - Sync engine no longer disconnects outdated justifications in [process_service_command](https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9015/files#diff-9ab3391aa82ee2b2868ece610100f84502edcf40638dba9ed6953b6e572dfba5R678-R703)
+    - Main changes that verify prior SetId on failures are placed in [check_message_signature_with_buffer](https://github.com/paritytech/polkadot-sdk/pull/9015/files#diff-359d7a46ea285177e5d86979f62f0f04baabf65d595c61bfe44b6fc01af70d89R458-R501)
+    - Sync engine no longer disconnects outdated justifications in [process_service_command](https://github.com/paritytech/polkadot-sdk/pull/9015/files#diff-9ab3391aa82ee2b2868ece610100f84502edcf40638dba9ed6953b6e572dfba5R678-R703)
 
     ### Testing Done
     - Deployed the PR to versi-net with 40 validators

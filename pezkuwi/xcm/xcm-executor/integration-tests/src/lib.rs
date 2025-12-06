@@ -327,7 +327,7 @@ fn query_response_elicits_handler() {
 /// Simulates a cross-chain message from Teyrchain to Teyrchain through Relay Chain
 /// that deposits assets into the reserve of the destination.
 /// Regression test for `DepositReserveAsset` changes in
-/// <https://github.com/pezkuwichain/pezkuwi-sdk/pull/3340>
+/// <https://github.com/paritytech/polkadot-sdk/pull/3340>
 #[test]
 fn deposit_reserve_asset_works_for_any_xcm_sender() {
 	sp_tracing::try_init_simple();

@@ -274,7 +274,7 @@ pub mod pallet {
 		type SpendFunds: SpendFunds<Self, I>;
 
 		/// DEPRECATED: associated with `spend_local` call and will be removed in May 2025.
-		/// Refer to <https://github.com/pezkuwichain/pezkuwi-sdk/pull/5961> for migration to `spend`.
+		/// Refer to <https://github.com/paritytech/polkadot-sdk/pull/5961> for migration to `spend`.
 		///
 		/// The maximum number of approvals that can wait in the spending queue.
 		///
@@ -329,14 +329,14 @@ pub mod pallet {
 	}
 
 	/// DEPRECATED: associated with `spend_local` call and will be removed in May 2025.
-	/// Refer to <https://github.com/pezkuwichain/pezkuwi-sdk/pull/5961> for migration to `spend`.
+	/// Refer to <https://github.com/paritytech/polkadot-sdk/pull/5961> for migration to `spend`.
 	///
 	/// Number of proposals that have been made.
 	#[pallet::storage]
 	pub type ProposalCount<T, I = ()> = StorageValue<_, ProposalIndex, ValueQuery>;
 
 	/// DEPRECATED: associated with `spend_local` call and will be removed in May 2025.
-	/// Refer to <https://github.com/pezkuwichain/pezkuwi-sdk/pull/5961> for migration to `spend`.
+	/// Refer to <https://github.com/paritytech/polkadot-sdk/pull/5961> for migration to `spend`.
 	///
 	/// Proposals that have been made.
 	#[pallet::storage]
@@ -354,7 +354,7 @@ pub mod pallet {
 		StorageValue<_, BalanceOf<T, I>, ValueQuery>;
 
 	/// DEPRECATED: associated with `spend_local` call and will be removed in May 2025.
-	/// Refer to <https://github.com/pezkuwichain/pezkuwi-sdk/pull/5961> for migration to `spend`.
+	/// Refer to <https://github.com/paritytech/polkadot-sdk/pull/5961> for migration to `spend`.
 	///
 	/// Proposal indices that have been approved but not yet awarded.
 	#[pallet::storage]

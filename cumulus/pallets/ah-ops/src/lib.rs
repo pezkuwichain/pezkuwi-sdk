@@ -673,7 +673,7 @@ pub mod pallet {
 	}
 }
 
-/// Backward mapping from <https://github.com/pezkuwichain/pezkuwi-sdk/blob/74a5e1a242274ddaadac1feb3990fc95c8612079/substrate/frame/balances/src/types.rs#L38>
+/// Backward mapping from <https://github.com/paritytech/polkadot-sdk/blob/74a5e1a242274ddaadac1feb3990fc95c8612079/substrate/frame/balances/src/types.rs#L38>
 pub fn map_lock_reason(reasons: LockReasons) -> LockWithdrawReasons {
 	match reasons {
 		LockReasons::All => LockWithdrawReasons::TRANSACTION_PAYMENT | LockWithdrawReasons::RESERVE,

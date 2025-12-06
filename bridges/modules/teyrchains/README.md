@@ -17,7 +17,7 @@ The main thing there is that the teyrchain generates blocks on its own, but it c
 help of its relay chain. Instead, the teyrchain collators create a block and hand it over to the relay chain
 validators. Validators validate the block and register the new teyrchain head in the
 [`Heads` map](https://github.com/pezkuwichain/pezkuwi-sdk/blob/bc5005217a8c2e7c95b9011c96d7e619879b1200/polkadot/runtime/parachains/src/paras/mod.rs#L683-L686)
-of the [`paras`](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/polkadot/runtime/parachains/src/paras) pallet,
+of the [`paras`](https://github.com/paritytech/polkadot-sdk/tree/master/polkadot/runtime/parachains/src/paras) pallet,
 deployed at the relay chain. Keep in mind that this pallet, deployed at a relay chain, is **NOT** a bridge pallet,
 even though the names are similar.
 

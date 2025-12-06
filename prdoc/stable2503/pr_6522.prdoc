@@ -3,7 +3,7 @@ title: Removes constraint in BlockNumberProvider from treasury
 doc:
 - audience: Runtime Dev
   description: |-
-    https://github.com/pezkuwichain/pezkuwichain-sdk/pull/3970 updated the treasury pallet to support
+    https://github.com/paritytech/polkadot-sdk/pull/3970 updated the treasury pallet to support
     relay chain block number provider. However, it added a constraint to the `BlockNumberProvider`
     trait to have the same block number type as `frame_system`:
 

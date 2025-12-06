@@ -4,7 +4,7 @@ doc:
   description: |-
     Related to https://github.com/pezkuwichain/pezkuwichain-sdk/issues/4255
 
-    Addresses https://github.com/pezkuwichain/pezkuwichain-sdk/pull/7902#pullrequestreview-3079855302
+    Addresses https://github.com/paritytech/polkadot-sdk/pull/7902#pullrequestreview-3079855302
 
     This PR enables us to lazily decode the block extrinsics when needed.
 

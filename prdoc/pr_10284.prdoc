@@ -6,7 +6,7 @@ doc:
     - And use the faster solver for benchmarks to speed things up
     - Remove hardcoded weights of westend.
 
-    A step to reduce the diff size in https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9925
+    A step to reduce the diff size in https://github.com/paritytech/polkadot-sdk/pull/9925
 crates:
 - name: asset-hub-westend-runtime
   bump: major

@@ -3,7 +3,7 @@ title: "Snowbridge runtime migration on Westend"
 doc:
   - audience: Runtime Dev
     description: |
-      This is a backport for https://github.com/pezkuwichain/pezkuwichain-sdk/pull/5074 which missed 
+      This is a backport for https://github.com/paritytech/polkadot-sdk/pull/5074 which missed 
       the runtime migration to initialize channels of the bridge.
 
 crates:

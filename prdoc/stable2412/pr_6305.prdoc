@@ -1,7 +1,7 @@
 title: Remove `riscv` feature flag
 doc:
 - audience: Runtime Dev
-  description: Since https://github.com/pezkuwichain/pezkuwichain-sdk/pull/6266 we no longer
+  description: Since https://github.com/paritytech/polkadot-sdk/pull/6266 we no longer
     require a custom toolchain to build the `pallet-revive-fixtures`. Hence we no
     longer have to guard the build behind a feature flag.
 crates:

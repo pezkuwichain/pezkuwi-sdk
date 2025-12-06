@@ -7,13 +7,13 @@ doc:
       - A maximum of 512 events is allowed per transaction, with the size of an event capped to `self.ext.max_value_size()`
     - A memory-efficient intermediate block builder is deserialized and serialized back to the pallet storage
       - The intermediate block builder builds the transaction and event root hashes using low level RLP encoding primitives to achieve around 90% pallet storage optimization
-      - For more details, see https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9764
+      - For more details, see https://github.com/paritytech/polkadot-sdk/pull/9764
     - A fixup is included for 7702 transaction rlp serialization/deserialization is added to ensure we can build the Ethereum block hash from live Ethereum blocks.
     - The maximum `CALL_PARAMS_MAX_SIZE` is increased to 512 to 244 to accommodate the transaction added to the Eth call
 
 
     This PR also includes benchmarking:
-    - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9496
+    - https://github.com/paritytech/polkadot-sdk/pull/9496
 
     ### Testing Done
     - pallet storage testing and capturing of events / transactions are added at `tests/block_hash.rs`
@@ -21,12 +21,12 @@ doc:
     - tested via RPC work
 
     ### Next Steps
-    - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9512
-    - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9616
-    - https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9452
+    - https://github.com/paritytech/polkadot-sdk/pull/9512
+    - https://github.com/paritytech/polkadot-sdk/pull/9616
+    - https://github.com/paritytech/polkadot-sdk/pull/9452
 
 
-    Builds upon https://github.com/pezkuwichain/pezkuwichain-sdk/pull/9413
+    Builds upon https://github.com/paritytech/polkadot-sdk/pull/9413
 
     Part of: https://github.com/paritytech/contract-issues/issues/139
 crates:
