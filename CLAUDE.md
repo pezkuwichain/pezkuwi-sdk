@@ -143,6 +143,68 @@ dosyasını oku. Diğer koordinasyon dosyaları:
 
 ---
 
+## 🔗 UPSTREAM ISSUE TRACKING SİSTEMİ
+
+**Polkadot SDK'daki issue'ları Pezkuwi SDK'ya nasıl taşıyoruz:**
+
+### Mantık
+
+Upstream Polkadot SDK'de TODO/issue referansları varsa, bunları **tracking issue** sistemi ile takip ediyoruz.
+
+### Adımlar
+
+**1. Upstream'de Kontrol Et:**
+```bash
+# Örnek: paritytech/polkadot/issues/2403 için
+grep -r "paritytech/polkadot/issues/2403" /home/mamostehp/polkadot-sdk-check/
+```
+
+**2. Tracking Issue Oluştur:**
+```bash
+gh issue create --repo pezkuwichain/pezkuwi-sdk --label "upstream-tracking" \
+  --title "[Upstream Tracking] paritytech/polkadot#2403" \
+  --body "**Upstream:** https://github.com/paritytech/polkadot/issues/2403
+
+**Status Tracking:**
+- [x] Pending - Upstream not yet resolved
+- [ ] Resolved - Fix merged upstream
+- [ ] Evaluated - Assessed if needed for PezkuwiChain
+- [ ] Applied - Fix applied to our chain
+- [ ] Closed - Upstream issue closed
+- [ ] Skipped - Not relevant for us
+
+**Last Check:** 2025-12-06
+**Next Check:** 2026-01-06
+
+**Notes:**
+ValidatorIndex From<u32> trait implementation issue.
+Periodically check upstream and update checkboxes above based on status changes."
+```
+
+**3. Koddaki Linki Güncelle:**
+```rust
+// ÖNCEKİ:
+// https://github.com/paritytech/polkadot/issues/2403
+
+// SONRA (bizim tracking issue'ya işaret et):
+// https://github.com/pezkuwichain/pezkuwi-sdk/issues/163
+```
+
+### Örnek Tamamlanmış Tracking Issue'lar
+
+- **#163** → paritytech/polkadot#2403 (ValidatorIndex)
+- **#164** → paritytech/polkadot#222 (CommittedCandidateReceipt Ord)
+- **#165** → paritytech/polkadot#7575 (ScheduledCore.collator DEPRECATED)
+- **#166** → paritytech/polkadot#6586 (SessionInfo frozen)
+
+### Neden Böyle Yapıyoruz?
+
+1. **Broken link olmasın:** Upstream issue linklerini kendi repo'muza çeviriyoruz
+2. **Takip:** Upstream'de issue çözüldü mü, bizde uygulamamız gerekiyor mu takip ediyoruz
+3. **Workflow:** `.github/workflows/upstream-issue-tracker.yml` haftalık kontrol ediyor
+
+---
+
 ## ✅ CI/CD QUICK-CHECKS DÜZELTMELERİ TAMAMLANDI
 
 **Son güncelleme:** 2025-11-29

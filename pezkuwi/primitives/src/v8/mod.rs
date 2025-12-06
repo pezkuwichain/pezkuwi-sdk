@@ -161,7 +161,7 @@ impl From<u32> for ChunkIndex {
 	}
 }
 
-// We should really get https://github.com/paritytech/pezkuwi/issues/2403 going ..
+// We should really get https://github.com/pezkuwichain/pezkuwi-sdk/issues/163 going ..
 impl From<u32> for ValidatorIndex {
 	fn from(n: u32) -> Self {
 		ValidatorIndex(n)
@@ -644,7 +644,7 @@ impl PartialOrd for CommittedCandidateReceipt {
 impl Ord for CommittedCandidateReceipt {
 	fn cmp(&self, other: &Self) -> core::cmp::Ordering {
 		// TODO: compare signatures or something more sane
-		// https://github.com/paritytech/pezkuwi/issues/222
+		// https://github.com/pezkuwichain/pezkuwi-sdk/issues/164
 		self.descriptor()
 			.para_id
 			.cmp(&other.descriptor().para_id)
@@ -1121,7 +1121,7 @@ impl<H, N> OccupiedCore<H, N> {
 pub struct ScheduledCore {
 	/// The ID of a para scheduled.
 	pub para_id: Id,
-	/// DEPRECATED: see: <https://github.com/paritytech/pezkuwi/issues/7575>
+	/// DEPRECATED: see: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/165>
 	///
 	/// Will be removed in a future version.
 	pub collator: Option<CollatorId>,
@@ -1910,7 +1910,7 @@ pub fn effective_minimum_backing_votes(
 /// Information about validator sets of a session.
 ///
 /// NOTE: `SessionInfo` is frozen. Do not include new fields, consider creating a separate runtime
-/// API. Reasoning and further outlook [here](https://github.com/paritytech/pezkuwi/issues/6586).
+/// API. Reasoning and further outlook [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/166).
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct SessionInfo {
