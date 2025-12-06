@@ -52,7 +52,7 @@ there are also local variants that can be used for testing, like `pezkuwichain-l
 local variants are available only for a build of `pezkuwi-omni-node` with
 `zagros-native` and `pezkuwichain-native` features respectively.
 
-<!-- TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/8747 -->
+<!-- TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/156 -->
 Additionaly, the `--para-id` flag can be used to set the JSON key named `para_id`. This flag is used
 by nodes to determine the teyrchain id, and it is especially useful when the teyrchain id can not be
 fetched from the runtime, when the state points to a runtime that does not implement the

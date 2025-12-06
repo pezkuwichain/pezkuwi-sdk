@@ -30,7 +30,7 @@
 //!
 //! > The notorious `service.rs` in any node template is a good example of this.
 //!
-//! A [trend](https://github.com/pezkuwichain/pezkuwi-sdk/issues/62) has already been undergoing in
+//! A [trend](https://github.com/pezkuwichain/pezkuwi-sdk/issues/97) has already been undergoing in
 //! order to de-couple the node and the runtime for a long time. The north star of this effort is
 //! twofold :
 //!
@@ -174,7 +174,7 @@
 //!   [`sc_consensus_manual_seal`] under the hood, and has no restrictions on the runtime's
 //!   consensus.
 //!
-//! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/5565) future improvement to OmniNode
+//! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/94565) future improvement to OmniNode
 //! aims to make such checks automatic.
 //!
 //! ### Runtime conventions

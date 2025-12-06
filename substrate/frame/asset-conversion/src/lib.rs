@@ -1070,7 +1070,7 @@ pub mod pallet {
 			};
 			if preservation == Preserve {
 				// TODO drop the ensure! when this issue addressed
-				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/1698
+				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/111
 				let free = T::Assets::reducible_balance(asset.clone(), who, preservation, Polite);
 				ensure!(free >= value, TokenError::NotExpendable);
 			}

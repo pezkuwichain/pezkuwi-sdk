@@ -247,7 +247,7 @@ where
 			.ok()
 			.flatten()?;
 
-		// Workaround for: https://github.com/pezkuwichain/pezkuwi-sdk/issues/64
+		// Workaround for: https://github.com/pezkuwichain/pezkuwi-sdk/issues/98
 		//
 		// We are always using the `api_version` of the parent block. The `api_version` can only
 		// change with a runtime upgrade and this is when we want to observe the old `api_version`.

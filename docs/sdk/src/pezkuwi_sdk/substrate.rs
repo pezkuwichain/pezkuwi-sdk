@@ -107,7 +107,7 @@
 //!
 //! > The above two are conventions, not rules.
 //!
-//! > See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/5> for an update on how the node side
+//! > See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/94> for an update on how the node side
 //! > components are being amalgamated.
 //!
 //! ## Teyrchain?

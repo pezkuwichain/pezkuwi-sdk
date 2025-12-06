@@ -1488,7 +1488,7 @@ pub type Migrations = (
 );
 
 /// Asset Hub Zagros has some undecodable storage, delete it.
-/// See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/2241> for more info.
+/// See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/120> for more info.
 ///
 /// First we remove the bad Hold, then the bad NFT collection.
 pub struct DeleteUndecodableStorage;

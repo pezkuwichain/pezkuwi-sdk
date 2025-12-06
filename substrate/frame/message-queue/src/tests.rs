@@ -1671,7 +1671,7 @@ fn integrity_test_checks_service_weight() {
 	});
 }
 
-/// Test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/2319>.
+/// Test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/121>.
 #[test]
 fn regression_issue_2319() {
 	build_and_execute::<Test>(|| {

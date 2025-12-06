@@ -2476,8 +2476,8 @@ pub mod pallet {
 				// accounts might have had an extra consumer increment. We know at this point no
 				// other pallet should depend on pool account so safe to do this.
 				// Refer to following issues:
-				// - https://github.com/pezkuwichain/pezkuwi-sdk/issues/4440
-				// - https://github.com/pezkuwichain/pezkuwi-sdk/issues/2037
+				// - https://github.com/pezkuwichain/pezkuwi-sdk/issues/135
+				// - https://github.com/pezkuwichain/pezkuwi-sdk/issues/116
 			}
 
 			let mut sum_unlocked_points: BalanceOf<T> = Zero::zero();

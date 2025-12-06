@@ -99,7 +99,7 @@
 //!
 //! You may notice the trait [`Currency`](`frame_support::traits::Currency`) with similar
 //! functionality is also used in the codebase, however this trait is deprecated and existing logic
-//! is in the process of being migrated to [`fungible`](`frame_support::traits::fungible`) ([tracking issue](https://github.com/pezkuwichain/pezkuwi-sdk/issues/226)).
+//! is in the process of being migrated to [`fungible`](`frame_support::traits::fungible`) ([tracking issue](https://github.com/pezkuwichain/pezkuwi-sdk/issues/102)).
 //!
 //! ## Fungible Token Trait Implementations in FRAME
 //!

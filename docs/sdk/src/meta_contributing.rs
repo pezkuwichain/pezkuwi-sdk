@@ -29,7 +29,7 @@
 //! > To achieve this, we often use [`docify`](https://github.com/sam0x17/docify), a nifty invention
 //! > of `@sam0x17`.
 //!
-//! Also see: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/991>.
+//! Also see: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/109>.
 //!
 //! ## Scope
 //!
@@ -132,7 +132,7 @@
 //! So long as not deployed in `crates.io`, please notice that all of the information in this crate,
 //! namely in [`crate::guides`] and such are compatible with the master branch of `pezkuwi-sdk`. A
 //! few solutions have been proposed to improve this, please see
-//! [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/6191).
+//! [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/146).
 //!
 //! ## How to Develop Locally
 //!

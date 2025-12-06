@@ -529,7 +529,7 @@ pub struct StakingLedger<T: Config> {
 	/// for validators.
 	///
 	/// This is deprecated as of V14 in favor of `T::ClaimedRewards` and will be removed in future.
-	/// Refer to issue <https://github.com/pezkuwichain/pezkuwi-sdk/issues/433>
+	/// Refer to issue <https://github.com/pezkuwichain/pezkuwi-sdk/issues/103>
 	pub legacy_claimed_rewards: BoundedVec<EraIndex, T::HistoryDepth>,
 
 	/// The controller associated with this ledger's stash.
@@ -1211,7 +1211,7 @@ impl<T: Config> EraInfo<T> {
 	/// non-paged rewards, and (2) `T::ClaimedRewards` for paged rewards. This function can be
 	/// removed once `T::HistoryDepth` eras have passed and none of the older non-paged rewards
 	/// are relevant/claimable.
-	// Refer tracker issue for cleanup: https://github.com/pezkuwichain/pezkuwi-sdk/issues/433
+	// Refer tracker issue for cleanup: https://github.com/pezkuwichain/pezkuwi-sdk/issues/103
 	pub(crate) fn is_rewards_claimed_with_legacy_fallback(
 		era: EraIndex,
 		ledger: &StakingLedger<T>,

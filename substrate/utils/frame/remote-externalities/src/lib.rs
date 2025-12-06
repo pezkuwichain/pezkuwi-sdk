@@ -676,7 +676,7 @@ where
 		let keys = logging::with_elapsed_async(
 			|| async {
 				// TODO: We could start downloading when having collected the first batch of keys.
-				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/2494
+				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/123
 				let keys = self
 					.rpc_get_keys_parallel(&prefix, at, Self::PARALLEL_REQUESTS)
 					.await?

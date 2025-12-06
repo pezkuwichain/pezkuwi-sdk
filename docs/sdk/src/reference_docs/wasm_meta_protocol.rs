@@ -115,7 +115,7 @@
 //! infrastructure of native code. However, neither of the two arguments strongly hold and the
 //! native runtime is being fully removed from the node-sdk.
 //!
-//! See: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/62>
+//! See: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/97>
 //!
 //! > Also, note that the flags [`sc_cli::ExecutionStrategy::Native`] is already a noop and all
 //! > chains built with Substrate only use WASM execution.

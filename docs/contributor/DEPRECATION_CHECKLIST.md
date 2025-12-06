@@ -26,7 +26,7 @@ E.g.
 ```
 
 Some pieces of code cannot be labeled as deprecated, like [reexports](https://github.com/rust-lang/rust/issues/30827)
-or [dispatchables](https://github.com/pezkuwichain/pezkuwi-sdk/issues/182#issuecomment-1691684159), for instance.
+or [dispatchables](https://github.com/pezkuwichain/pezkuwi-sdk/issues/100#issuecomment-1691684159), for instance.
 In cases like that we can only make a visible enough comment, and make sure that we [announce the deprecation properly](#announce-the-deprecation-and-removal).
 
 ## Remove usage of the deprecated code in the code base
