@@ -30,8 +30,8 @@ jobs:
 
           echo "🔍 Fetching tracking issues..."
 
-          # Get all our tracking issues (94-160)
-          TRACKING_ISSUES=$(gh api repos/$REPO/issues --paginate -q '.[] | select(.number >= 94 and .number <= 160) | {number, body, state}')
+          # Get all our tracking issues (1-300)
+          TRACKING_ISSUES=$(gh api repos/$REPO/issues --paginate -q '.[] | select(.number >= 1 and .number <= 300) | {number, body, state}')
 
           TOTAL=0
           CLOSED=0
