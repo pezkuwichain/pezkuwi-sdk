@@ -72,6 +72,6 @@ You need to set an initial superuser account as the sudo `key`.
 
 [`Call`]: ./enum.Call.html
 [`Config`]: ./trait.Config.html
-[`Origin`]: https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/build/origins/
+[`Origin`]: https://docs.pezkuwichain.io/main-docs/build/origins/
 
 License: Apache-2.0

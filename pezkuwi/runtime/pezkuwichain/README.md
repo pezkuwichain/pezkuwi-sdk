@@ -11,10 +11,10 @@ pezkuwichain_EPOCH_DURATION=10 ./pezkuwi/scripts/build-only-wasm.sh pezkuwichain
 
 ## How to run `pezkuwichain-local`
 
-The [Cumulus Tutorial](https://github.com/pezkuwichain/docs.pezkuwichain.io/tutorials/v3/cumulus/start-relay/) details building, starting, and
+The [Cumulus Tutorial](https://docs.pezkuwichain.io/tutorials/v3/cumulus/start-relay/) details building, starting, and
 testing `pezkuwichain-local` and teyrchains connecting to it.
 
 ## How to register a teyrchain on the pezkuwichain testnet
 
-The [teyrchain registration process](https://github.com/pezkuwichain/docs.pezkuwichain.io/tutorials/v3/cumulus/pezkuwichain/) on the public pezkuwichain
+The [teyrchain registration process](https://docs.pezkuwichain.io/tutorials/v3/cumulus/pezkuwichain/) on the public pezkuwichain
 testnet is also outlined.

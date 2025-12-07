@@ -5,7 +5,7 @@ and extend to build the runtime logic to suit the needs of your blockchain.
 
 ## Documentation
 
-https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/frame-pallets/
+https://docs.pezkuwichain.io/reference/frame-pallets/
 
 ## Issues
 

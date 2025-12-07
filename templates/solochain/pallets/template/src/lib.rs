@@ -17,7 +17,7 @@
 //! Each pallet section is annotated with an attribute using the `#[pallet::...]` procedural macro.
 //! This macro generates the necessary code for a pallet to be aggregated into a FRAME runtime.
 //!
-//! Learn more about FRAME macros [here](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/frame-macros/).
+//! Learn more about FRAME macros [here](https://docs.pezkuwichain.io/reference/frame-macros/).
 //!
 //! ### Pallet Sections
 //!
@@ -48,13 +48,13 @@ pub use pallet::*;
 mod mock;
 
 // This module contains the unit tests for this pallet.
-// Learn about pallet unit testing here: https://github.com/pezkuwichain/docs.pezkuwichain.io/test/unit-testing/
+// Learn about pallet unit testing here: https://docs.pezkuwichain.io/test/unit-testing/
 #[cfg(test)]
 mod tests;
 
 // Every callable function or "dispatchable" a pallet exposes must have weight values that correctly
 // estimate a dispatchable's execution time. The benchmarking module is used to calculate weights
-// for each dispatchable and generates this pallet's weight.rs file. Learn more about benchmarking here: https://github.com/pezkuwichain/docs.pezkuwichain.io/test/benchmark/
+// for each dispatchable and generates this pallet's weight.rs file. Learn more about benchmarking here: https://docs.pezkuwichain.io/test/benchmark/
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 pub mod weights;
@@ -90,7 +90,7 @@ pub mod pallet {
 	/// A storage item for this pallet.
 	///
 	/// In this template, we are declaring a storage item called `Something` that stores a single
-	/// `u32` value. Learn more about runtime storage here: <https://github.com/pezkuwichain/docs.pezkuwichain.io/build/runtime-storage/>
+	/// `u32` value. Learn more about runtime storage here: <https://docs.pezkuwichain.io/build/runtime-storage/>
 	#[pallet::storage]
 	pub type Something<T> = StorageValue<_, u32>;
 
@@ -150,7 +150,7 @@ pub mod pallet {
 		/// to storage and emits an event.
 		///
 		/// It checks that the _origin_ for this call is _Signed_ and returns a dispatch
-		/// error if it isn't. Learn more about origins here: <https://github.com/pezkuwichain/docs.pezkuwichain.io/build/origins/>
+		/// error if it isn't. Learn more about origins here: <https://docs.pezkuwichain.io/build/origins/>
 		#[pallet::call_index(0)]
 		#[pallet::weight(T::WeightInfo::do_something())]
 		pub fn do_something(origin: OriginFor<T>, something: u32) -> DispatchResult {

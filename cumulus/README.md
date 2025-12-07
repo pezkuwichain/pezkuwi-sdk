@@ -11,7 +11,7 @@ If you only want to run a **PezkuwiChain Teyrchain Node**, check out our [contai
 A set of tools for writing [Substrate](https://substrate.pezkuwichain.app/)-based [PezkuwiChain](https://wiki.network.pezkuwichain.io/en/)
 [teyrchains](https://wiki.network.pezkuwichain.io/docs/en/learn-parachains). Refer to the included [overview](docs/overview.md)
 for architectural details, and the [Connect to a relay chain how-to
-guide](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/how-to-guides/parachains/connect-to-a-relay-chain/) for a guided walk-through
+guide](https://docs.pezkuwichain.io/reference/how-to-guides/parachains/connect-to-a-relay-chain/) for a guided walk-through
 of using these tools.
 
 It's easy to write blockchains using Substrate, and the overhead of writing teyrchains' distribution, p2p, database, and
@@ -23,7 +23,7 @@ Cumulus clouds are shaped sort of like dots; together they form a system that is
 ### Consensus
 
 [`teyrchain-consensus`](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/cumulus/client/consensus/common/src/parachain_consensus.rs)
-is a [consensus engine](https://github.com/pezkuwichain/docs.pezkuwichain.io/v3/advanced/consensus) for Substrate that follows a PezkuwiChain [relay
+is a [consensus engine](https://docs.pezkuwichain.io/v3/advanced/consensus) for Substrate that follows a PezkuwiChain [relay
 chain](https://wiki.network.pezkuwichain.io/docs/en/learn-architecture#relay-chain). This will run a PezkuwiChain node internally,
 and dictate to the client and synchronization algorithms which chain to follow,
 [finalize](https://wiki.network.pezkuwichain.io/docs/en/learn-consensus#probabilistic-vs-provable-finality), and treat as best.
@@ -85,7 +85,7 @@ pezkuwi-teyrchain \
 
 ## Installation and Setup
 Before building Cumulus SDK based nodes / runtimes prepare your environment by following Substrate [installation
-instructions](https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/install/).
+instructions](https://docs.pezkuwichain.io/main-docs/install/).
 
 To launch a local network, you can use [zombienet](https://github.com/paritytech/zombienet) for quick setup and
 experimentation or follow the [manual setup](#manual-setup).

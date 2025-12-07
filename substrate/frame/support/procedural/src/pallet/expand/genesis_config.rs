@@ -90,7 +90,7 @@ pub fn expand_genesis_config(def: &mut Def) -> proc_macro2::TokenStream {
 				attrs.push(syn::parse_quote!(
 					#[doc = r"
 					Can be used to configure the
-					[genesis state](https://github.com/pezkuwichain/docs.pezkuwichain.io/build/genesis-configuration/)
+					[genesis state](https://docs.pezkuwichain.io/build/genesis-configuration/)
 					of this pallet.
 					"]
 				));

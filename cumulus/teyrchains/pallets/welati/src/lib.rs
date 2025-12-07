@@ -1496,7 +1496,6 @@ impl<T: pallet::Config> EnsureOrigin<<T as frame_system::Config>::RuntimeOrigin>
 		}
 	}
 
-	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<<T as frame_system::Config>::RuntimeOrigin, ()> {
 		let parlementer_account: T::AccountId = frame_benchmarking::account("parlementer", 0, 0);
 		let member = ParliamentMember {

@@ -58,7 +58,7 @@ impl_opaque_keys! {
 }
 
 // To learn more about runtime versioning, see:
-// https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/build/upgrade#runtime-versioning
+// https://docs.pezkuwichain.io/main-docs/build/upgrade#runtime-versioning
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("solochain-template-runtime"),

@@ -251,7 +251,7 @@ impl core::fmt::Debug for PublicError {
 
 /// Key that can be encoded to/from SS58.
 ///
-/// See <https://github.com/pezkuwichain/docs.pezkuwichain.io/v3/advanced/ss58/>
+/// See <https://docs.pezkuwichain.io/v3/advanced/ss58/>
 /// for information on the codec.
 pub trait Ss58Codec: Sized + AsMut<[u8]> + AsRef<[u8]> + ByteArray {
 	/// A format filterer, can be used to ensure that `from_ss58check` family only decode for

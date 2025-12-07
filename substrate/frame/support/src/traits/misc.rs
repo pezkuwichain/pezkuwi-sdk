@@ -1077,7 +1077,7 @@ impl<T: MaxEncodedLen> MaxEncodedLen for WrapperOpaque<T> {
 	fn max_encoded_len() -> usize {
 		let t_max_len = T::max_encoded_len();
 
-		// See scale encoding: https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/scale-codec/
+		// See scale encoding: https://docs.pezkuwichain.io/reference/scale-codec/
 		if t_max_len < 64 {
 			t_max_len + 1
 		} else if t_max_len < 2usize.pow(14) {

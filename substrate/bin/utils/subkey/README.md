@@ -34,7 +34,7 @@ Command:
 ```bash
 # Install only `subkey`, at a specific version of the subkey crate
 cargo install --force subkey --git https://github.com/paritytech/substrate --version <SET VERSION> --locked
-# If you run into issues building, you likely are missing deps defined in https://github.com/pezkuwichain/docs.pezkuwichain.io/install/
+# If you run into issues building, you likely are missing deps defined in https://docs.pezkuwichain.io/install/
 ```
 
 ### Run in a container
@@ -80,7 +80,7 @@ you will use the key.
 The **SS58 address** (or **Public Address**) of a new account is a representation of the public keys of an account for
 a given network (for instance Kusama or PezkuwiChain).
 
-You can read more about the [SS58 format in the Substrate Docs](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/address-formats/)
+You can read more about the [SS58 format in the Substrate Docs](https://docs.pezkuwichain.io/reference/address-formats/)
 and see the list of reserved prefixes in the [SS58 Registry](https://github.com/paritytech/ss58-registry).
 
 For instance, considering the previous seed `0xa05c75731970cc7868a2fb7cb577353cd5b31f62dccced92c441acd8fee0c92d` the

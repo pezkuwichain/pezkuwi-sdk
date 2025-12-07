@@ -51,7 +51,7 @@ Note: It is recommended to provide a custom `--base-path` to store the chain dat
 ./run.sh node-template --dev --ws-external --base-path=/data
 ```
 
-> To print logs follow the [Substrate debugging instructions](https://github.com/pezkuwichain/docs.pezkuwichain.io/test/debug/).
+> To print logs follow the [Substrate debugging instructions](https://docs.pezkuwichain.io/test/debug/).
 
 ```sh
 # Purge the local dev chain

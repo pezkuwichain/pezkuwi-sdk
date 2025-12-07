@@ -113,7 +113,7 @@ const MILLICENTS: u32 = 1_000_000_000;
 // - assigns a dispatch class `operational` if the argument of the call is more than 1000.
 //
 // More information can be read at:
-//   - https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/build/tx-weights-fees/
+//   - https://docs.pezkuwichain.io/main-docs/build/tx-weights-fees/
 //
 // Manually configuring weight is an advanced operation and what you really need may well be
 //   fulfilled by running the benchmarking toolchain. Refer to `benchmarking.rs` file.

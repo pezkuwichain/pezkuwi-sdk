@@ -1,6 +1,6 @@
 # Installation
 
-This guide is for reference only, please check the latest information on getting started with Substrate [here](https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/install/).
+This guide is for reference only, please check the latest information on getting started with Substrate [here](https://docs.pezkuwichain.io/main-docs/install/).
 
 This page will guide you through the **2 steps** needed to prepare a computer for **Substrate** development. Since
 Substrate is built with [the Rust programming language](https://www.rust-lang.org/), the first thing you will need to do
@@ -72,7 +72,7 @@ brew install openssl
 recommended to use [Windows Subsystem Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 (WSL) and follow the instructions for [Ubuntu/Debian](#ubuntudebian).
 Please refer to the separate
-[guide for native Windows development](https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/install/windows/).
+[guide for native Windows development](https://docs.pezkuwichain.io/main-docs/install/windows/).
 
 ## Rust developer environment
 
@@ -98,7 +98,7 @@ rustup target add wasm32-unknown-unknown --toolchain nightly
 ## Test your set-up
 
 Now the best way to ensure that you have successfully prepared a computer for Substrate development is to follow the
-steps in [our first Substrate tutorial](https://github.com/pezkuwichain/docs.pezkuwichain.io/tutorials/v3/create-your-first-substrate-chain/).
+steps in [our first Substrate tutorial](https://docs.pezkuwichain.io/tutorials/v3/create-your-first-substrate-chain/).
 
 ## Troubleshooting Substrate builds
 

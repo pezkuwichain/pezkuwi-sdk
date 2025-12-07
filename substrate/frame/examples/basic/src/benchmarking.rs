@@ -33,7 +33,7 @@ use frame_system::RawOrigin;
 // To actually run this benchmark on pallet-example-basic, we need to put this pallet into the
 //   runtime and compile it with `runtime-benchmarks` feature. The detail procedures are
 //   documented at:
-//   https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/how-to-guides/weights/add-benchmarks/
+//   https://docs.pezkuwichain.io/reference/how-to-guides/weights/add-benchmarks/
 //
 // The auto-generated weight estimate of this pallet is copied over to the `weights.rs` file.
 // The exact command of how the estimate generated is printed at the top of the file.

@@ -84,7 +84,7 @@
 //!
 //! Hopefully this should be all you need to know in order to use versioned methods in the node.
 //! For more details about how the API versioning works refer to `spi_api`
-//! documentation [here](https://github.com/pezkuwichain/docs.pezkuwichain.io/rustdocs/latest/sp_api/macro.decl_runtime_apis.html).
+//! documentation [here](https://docs.pezkuwichain.io/rustdocs/latest/sp_api/macro.decl_runtime_apis.html).
 //!
 //! # How versioned methods are used for `TeyrchainHost`
 //!

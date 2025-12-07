@@ -60,7 +60,7 @@ run the node directly from the command-line.
 ## Building
 
 Since the Pezkuwi node is based on Substrate, first set up your build environment according to the
-[Substrate installation instructions](https://github.com/pezkuwichain/docs.pezkuwichain.io/install/).
+[Substrate installation instructions](https://docs.pezkuwichain.io/install/).
 
 ### Install via Cargo
 

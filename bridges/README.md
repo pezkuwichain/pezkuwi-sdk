@@ -57,7 +57,7 @@ If you want to reproduce other steps of CI process you can use the following
 [guide](https://github.com/paritytech/scripts#reproduce-ci-locally).
 
 If you need more information about setting up your development environment [Substrate's Installation
-page](https://github.com/pezkuwichain/docs.pezkuwichain.io/main-docs/install/) is a good resource.
+page](https://docs.pezkuwichain.io/main-docs/install/) is a good resource.
 
 ## High-Level Architecture
 

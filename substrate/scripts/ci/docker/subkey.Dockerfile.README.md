@@ -8,4 +8,4 @@ perform the following tasks
 * Sign and verify signatures on messages.
 * Sign and verify signatures for encoded transactions.
 * Derive hierarchical deterministic child key pairs.
-* [Documentation](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/command-line-tools/subkey/)
+* [Documentation](https://docs.pezkuwichain.io/reference/command-line-tools/subkey/)

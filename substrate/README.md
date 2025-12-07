@@ -14,8 +14,8 @@ Substrate is a next-generation framework for blockchain innovation 🚀.
 
 ## Getting Started
 
-Head to [`docs.substrate.io`](https://github.com/pezkuwichain/docs.pezkuwichain.io) and follow the [installation](https://github.com/pezkuwichain/docs.pezkuwichain.io/install/)
-instructions.  Then try out one of the [tutorials](https://github.com/pezkuwichain/docs.pezkuwichain.io/tutorials/).  Refer to the [Docker
+Head to [`docs.substrate.io`](https://github.com/pezkuwichain/docs.pezkuwichain.io) and follow the [installation](https://docs.pezkuwichain.io/install/)
+instructions.  Then try out one of the [tutorials](https://docs.pezkuwichain.io/tutorials/).  Refer to the [Docker
 instructions](./docker/README.md) to quickly run Substrate, Substrate Node Template, Subkey, or to build a chain spec.
 
 ## Community & Support

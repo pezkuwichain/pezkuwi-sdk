@@ -808,7 +808,7 @@ pub mod pallet_macros {
 	pub use frame_support_procedural::pallet_section;
 
 	/// The `#[pallet::inherent]` attribute allows the pallet to provide
-	/// [inherents](https://github.com/pezkuwichain/docs.pezkuwichain.io/fundamentals/transaction-types/#inherent-transactions).
+	/// [inherents](https://docs.pezkuwichain.io/fundamentals/transaction-types/#inherent-transactions).
 	///
 	/// An inherent is some piece of data that is inserted by a block authoring node at block
 	/// creation time and can either be accepted or rejected by validators based on whether the
@@ -1038,7 +1038,7 @@ pub mod pallet_macros {
 	/// I.e. a regular trait definition named `Config`, with the supertrait
 	/// [`frame_system::pallet::Config`](../../frame_system/pallet/trait.Config.html), and
 	/// optionally other supertraits and a where clause. (Specifying other supertraits here is
-	/// known as [tight coupling](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/how-to-guides/pallet-design/use-tight-coupling/))
+	/// known as [tight coupling](https://docs.pezkuwichain.io/reference/how-to-guides/pallet-design/use-tight-coupling/))
 	///
 	/// ## Optional: `with_default`
 	///

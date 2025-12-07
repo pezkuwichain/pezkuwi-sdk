@@ -19,7 +19,7 @@ repository.
 
 Depending on your operating system and Rust version, there might be additional
 packages required to compile this template. Check the
-[Install](https://github.com/pezkuwichain/docs.pezkuwichain.io/install/) instructions for your platform for
+[Install](https://docs.pezkuwichain.io/install/) instructions for your platform for
 the most common dependencies. Alternatively, you can use one of the [alternative
 installation](#alternatives-installations) options.
 
@@ -118,7 +118,7 @@ also find the source code and instructions for hosting your own instance in the
 ### Multi-Node Local Testnet
 
 If you want to see the multi-node consensus algorithm in action, see [Simulate a
-network](https://github.com/pezkuwichain/docs.pezkuwichain.io/tutorials/build-a-blockchain/simulate-network/).
+network](https://docs.pezkuwichain.io/tutorials/build-a-blockchain/simulate-network/).
 
 ## Template Structure
 
@@ -134,7 +134,7 @@ capabilities:
 - Networking: Substrate nodes use the [`libp2p`](https://libp2p.io/) networking
   stack to allow the nodes in the network to communicate with one another.
 - Consensus: Blockchains must have a way to come to
-  [consensus](https://github.com/pezkuwichain/docs.pezkuwichain.io/fundamentals/consensus/) on the state of
+  [consensus](https://docs.pezkuwichain.io/fundamentals/consensus/) on the state of
   the network. Substrate makes it possible to supply custom consensus engines
   and also ships with several consensus mechanisms that have been built on top
   of [Web3 Foundation
@@ -146,22 +146,22 @@ There are several files in the `node` directory. Take special note of the
 following:
 
 - [`chain_spec.rs`](./node/src/chain_spec.rs): A [chain
-  specification](https://github.com/pezkuwichain/docs.pezkuwichain.io/build/chain-spec/) is a source code
+  specification](https://docs.pezkuwichain.io/build/chain-spec/) is a source code
   file that defines a Substrate chain's initial (genesis) state. Chain
   specifications are useful for development and testing, and critical when
   architecting the launch of a production chain. Take note of the
   `development_config` and `testnet_genesis` functions. These functions are
   used to define the genesis state for the local development chain
   configuration. These functions identify some [well-known
-  accounts](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/command-line-tools/subkey/) and
+  accounts](https://docs.pezkuwichain.io/reference/command-line-tools/subkey/) and
   use them to configure the blockchain's initial state.
 - [`service.rs`](./node/src/service.rs): This file defines the node
   implementation. Take note of the libraries that this file imports and the
   names of the functions it invokes. In particular, there are references to
   consensus-related topics, such as the [block finalization and
-  forks](https://github.com/pezkuwichain/docs.pezkuwichain.io/fundamentals/consensus/#finalization-and-forks)
+  forks](https://docs.pezkuwichain.io/fundamentals/consensus/#finalization-and-forks)
   and other [consensus
-  mechanisms](https://github.com/pezkuwichain/docs.pezkuwichain.io/fundamentals/consensus/#default-consensus-models)
+  mechanisms](https://docs.pezkuwichain.io/fundamentals/consensus/#default-consensus-models)
   such as Aura for block authoring and GRANDPA for finality.
 
 
@@ -171,10 +171,10 @@ In Substrate, the terms "runtime" and "state transition function" are analogous.
 Both terms refer to the core logic of the blockchain that is responsible for
 validating blocks and executing the state changes they define. The Substrate
 project in this repository uses
-[FRAME](https://github.com/pezkuwichain/docs.pezkuwichain.io/learn/runtime-development/#frame) to construct
+[FRAME](https://docs.pezkuwichain.io/learn/runtime-development/#frame) to construct
 a blockchain runtime. FRAME allows runtime developers to declare domain-specific
 logic in modules called "pallets". At the heart of FRAME is a helpful [macro
-language](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/frame-macros/) that makes it easy
+language](https://docs.pezkuwichain.io/reference/frame-macros/) that makes it easy
 to create pallets and flexibly compose them to create blockchains that can
 address [a variety of needs](https://substrate.pezkuwichain.app/ecosystem/projects/).
 
@@ -187,7 +187,7 @@ template and note the following:
 - The pallets are composed into a single runtime by way of the
   [#[runtime]](https://docs.pezkuwichain.io/sdk/master/frame_support/attr.runtime.html)
   macro, which is part of the [core FRAME pallet
-  library](https://github.com/pezkuwichain/docs.pezkuwichain.io/reference/frame-pallets/#system-pallets).
+  library](https://docs.pezkuwichain.io/reference/frame-pallets/#system-pallets).
 
 ### Pallets
 
@@ -200,13 +200,13 @@ template pallet that is [defined in the
 A FRAME pallet is comprised of a number of blockchain primitives, including:
 
 - Storage: FRAME defines a rich set of powerful [storage
-  abstractions](https://github.com/pezkuwichain/docs.pezkuwichain.io/build/runtime-storage/) that makes it
+  abstractions](https://docs.pezkuwichain.io/build/runtime-storage/) that makes it
   easy to use Substrate's efficient key-value database to manage the evolving
   state of a blockchain.
 - Dispatchables: FRAME pallets define special types of functions that can be
   invoked (dispatched) from outside of the runtime in order to update its state.
 - Events: Substrate uses
-  [events](https://github.com/pezkuwichain/docs.pezkuwichain.io/build/events-and-errors/) to notify users
+  [events](https://docs.pezkuwichain.io/build/events-and-errors/) to notify users
   of significant state changes.
 - Errors: When a dispatchable fails, it returns an error.
 
