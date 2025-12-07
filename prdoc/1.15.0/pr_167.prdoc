@@ -1,0 +1,19 @@
+# Schema: Pezkuwi SDK PRDoc Schema (prdoc) v1.0.0
+# See doc at https://raw.githubusercontent.com/pezkuwichain/pezkuwi-sdk/master/prdoc/schema_user.json
+
+title: Improve pallet-tiki EnsureOrigin documentation for CI exclusion
+
+doc:
+  - audience: Runtime Dev
+    description: |
+      Adds comprehensive documentation to pallet-tiki's EnsureOrigin implementation
+      explaining why the pallet must be excluded from `cargo check --benches` due to
+      Cargo feature unification behavior with the `try_successful_origin` method.
+
+      Documents the CI workflow exclusion in `.github/workflows/tests-misc.yml` and
+      clarifies that the `#[cfg(feature = "runtime-benchmarks")]` attribute must
+      remain on the method implementation.
+
+crates:
+  - name: pallet-tiki
+    bump: patch
