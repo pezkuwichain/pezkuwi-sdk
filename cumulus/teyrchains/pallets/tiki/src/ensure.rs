@@ -7,12 +7,16 @@
 //!
 //! Due to Cargo's feature unification behavior, this pallet must be excluded
 //! from `cargo check --benches` operations when its `runtime-benchmarks` feature
-//! is not explicitly enabled. The CI workflow handles this appropriately.
+//! is not explicitly enabled. The CI workflow (tests-misc.yml) handles this
+//! by excluding pallet-tiki and all its dependents.
 //!
 //! The issue: When building with `--benches`, other packages may enable
 //! `frame-support/runtime-benchmarks`, which makes `EnsureOrigin::try_successful_origin`
 //! a required trait method. However, if `pallet-tiki/runtime-benchmarks` is not enabled,
 //! our cfg-gated method won't be compiled, causing E0046 errors.
+//!
+//! CI exclusion: .github/workflows/tests-misc.yml excludes this pallet with:
+//! `--exclude pallet-tiki` in the `cargo check --benches` command.
 
 use crate::{Config, Pallet as TikiPallet};
 use frame_support::traits::EnsureOrigin;
