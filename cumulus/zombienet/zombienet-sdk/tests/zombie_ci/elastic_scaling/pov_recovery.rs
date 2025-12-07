@@ -53,7 +53,7 @@ async fn elastic_scaling_pov_recovery() -> Result<(), anyhow::Error> {
 
 	log::info!("Registering teyrchain para_id = {PARA_ID}");
 	let relay_client: OnlineClient<PolkadotConfig> = alice.wait_client().await?;
-	network.register_teyrchain(PARA_ID).await?;
+	network.register_parachain(PARA_ID).await?;
 
 	log::info!("Ensuring teyrchain is registered within 30 blocks");
 	assert_para_is_registered(&relay_client, ParaId::from(PARA_ID), 30).await?;
@@ -133,7 +133,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.polkadot.as_str())
 				.with_default_resources(|resources| {
 					// These settings are applicable only for `k8s` provider.
 					// Leaving them in case we switch to `k8s` some day.

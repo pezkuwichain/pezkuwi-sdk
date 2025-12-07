@@ -21,7 +21,7 @@ async fn statement_store() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("zagros-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.polkadot.as_str())
 				.with_default_args(vec!["-lteyrchain=debug".into()])
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.

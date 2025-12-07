@@ -89,7 +89,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.polkadot.as_str())
 				.with_genesis_overrides(json!({
 					"configuration": {
 						"config": {

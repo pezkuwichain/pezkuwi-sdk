@@ -26,7 +26,7 @@ async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), any
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.polkadot.as_str())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"configuration": {

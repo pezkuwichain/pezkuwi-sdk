@@ -45,7 +45,7 @@ async fn pov_recovery() -> Result<(), anyhow::Error> {
 		.is_ok());
 
 	log::info!("Registering teyrchain para_id = {PARA_ID}");
-	network.register_teyrchain(PARA_ID).await?;
+	network.register_parachain(PARA_ID).await?;
 
 	let validator = network.get_node("validator-0")?;
 	let validator_client: OnlineClient<PolkadotConfig> = validator.wait_client().await?;
@@ -145,7 +145,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.polkadot.as_str())
 				.with_genesis_overrides(json!({
 						"configuration": {
 							"config": {
