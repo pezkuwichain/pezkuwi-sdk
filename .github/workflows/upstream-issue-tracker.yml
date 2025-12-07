@@ -46,7 +46,7 @@ jobs:
             BODY=$(echo "$ISSUE" | jq -r '.body')
 
             # Extract upstream issue number from body
-            UPSTREAM_NUM=$(echo "$BODY" | sed -n 's|.*'"$UPSTREAM_REPO"'/issues/\([0-9]*\).*|\1|p' || echo "")
+            UPSTREAM_NUM=$(echo "$BODY" | sed -n 's|.*"$UPSTREAM_REPO"/issues/\([0-9]*\).*|\1|p' || echo "")
 
             if [ -z "$UPSTREAM_NUM" ]; then
               echo "⚠️  Issue #$ISSUE_NUM: No upstream reference found"
