@@ -36,9 +36,6 @@ exclude = [
 	# TODO meta issue: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/134>
 	"https://github.com/ipfs/js-ipfs-bitswap/blob/",
 	"https://github.com/paritytech/substrate/frame/fast-unstake",
-	# Exclude all github.com/pezkuwichain/docs.pezkuwichain.io/* - these are invalid GitHub paths
-	# (docs.pezkuwichain.io is a website, not a GitHub repo)
-	"https://github.com/pezkuwichain/docs.pezkuwichain.io/*",
 	# Exclude wiki.network.pezkuwichain.io - SSL certificate hostname mismatch
 	"https://wiki.network.pezkuwichain.io/*",
 	"https://github.com/pezkuwichain/pezkuwi-sdk/substrate/frame/timestamp",

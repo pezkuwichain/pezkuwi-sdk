@@ -1,6 +1,7 @@
 //! Storage migrations for pallet-pez-treasury
 
 use super::*;
+use codec::Encode;
 use frame_support::{
 	traits::{Get, GetStorageVersion, OnRuntimeUpgrade, StorageVersion},
 	weights::Weight,
