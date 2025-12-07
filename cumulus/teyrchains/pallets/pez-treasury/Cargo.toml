@@ -35,7 +35,7 @@ pallet-balances = { default-features = false, workspace = true }
 pallet-scheduler = { default-features = false, workspace = true }
 
 # Test ve Benchmark için Gerekli İsteğe Bağlı Bağımlılıklar
-frame-benchmarking = { default-features = false, optional = true, workspace = true }
+frame-benchmarking = { optional = true, workspace = true }
 sp-core = { workspace = true, default-features = false, optional = true }
 sp-io = { workspace = true, default-features = false, optional = true }
 

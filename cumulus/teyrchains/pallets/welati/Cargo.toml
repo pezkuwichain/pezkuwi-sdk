@@ -17,7 +17,7 @@ codec = { workspace = true, default-features = false, features = ["derive", "max
 scale-info = { default-features = false, features = ["derive"], workspace = true }
 serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
 
-frame-benchmarking = { default-features = false, optional = true, workspace = true }
+frame-benchmarking = { optional = true, workspace = true }
 frame-support = { default-features = false, workspace = true }
 frame-system = { default-features = false, workspace = true }
 log = { default-features = false, workspace = true }

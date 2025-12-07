@@ -40,7 +40,7 @@ pallet-pez-treasury = { workspace = true, default-features = false }
 pallet-trust = { workspace = true, default-features = false }
 
 # Test ve Benchmark için Gerekli İsteğe Bağlı Bağımlılıklar
-frame-benchmarking = { default-features = false, optional = true, workspace = true }
+frame-benchmarking = { optional = true, workspace = true }
 sp-core = { workspace = true, default-features = false, optional = true }
 sp-io = { workspace = true, default-features = false, optional = true }
 

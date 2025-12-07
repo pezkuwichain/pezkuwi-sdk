@@ -838,7 +838,7 @@ fork-tree = { path = "substrate/utils/fork-tree", default-features = false }
 forwarded-header-value = { version = "0.1.1" }
 fraction = { version = "0.13.1" }
 frame = { path = "substrate/frame", default-features = false, package = "pezkuwi-sdk-frame" }
-frame-benchmarking = { path = "substrate/frame/benchmarking", default-features = false }
+frame-benchmarking = { path = "substrate/frame/benchmarking" }
 frame-benchmarking-cli = { path = "substrate/utils/frame/benchmarking-cli", default-features = false }
 frame-benchmarking-pallet-pov = { default-features = false, path = "substrate/frame/benchmarking/pov" }
 frame-election-provider-solution-type = { path = "substrate/frame/election-provider-support/solution-type", default-features = false }

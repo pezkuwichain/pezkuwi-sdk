@@ -23,7 +23,7 @@ scale-info = { default-features = false, features = [
 ], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 
-frame-benchmarking = { default-features = false, optional = true, workspace = true }
+frame-benchmarking = { optional = true, workspace = true }
 frame-support = { default-features = false, workspace = true }
 frame-system = { default-features = false, workspace = true }
 sp-runtime = { default-features = false, workspace = true }
