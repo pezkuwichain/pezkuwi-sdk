@@ -694,6 +694,8 @@ construct_runtime!(
 		Utility: pallet_utility = 40,
 		Multisig: pallet_multisig = 41,
 		Proxy: pallet_proxy = 42,
+		Recovery: pallet_recovery = 43,
+		Vesting: pallet_vesting = 44,
 
 		// The main stage - Identity & People
 		Identity: pallet_identity = 50,
@@ -722,6 +724,7 @@ construct_runtime!(
 		// Trust & Staking
 		StakingScore: pallet_staking_score = 80,
 		Trust: pallet_trust = 81,
+		Society: pallet_society = 82,
 
 		// Assets & Rewards
 		Assets: pallet_assets = 90,
@@ -747,8 +750,11 @@ mod benches {
 		[pallet_multisig, Multisig]
 		[pallet_nfts, Nfts]
 		[pallet_proxy, Proxy]
+		[pallet_recovery, Recovery]
 		[pallet_session, SessionBench::<Runtime>]
+		[pallet_society, Society]
 		[pallet_utility, Utility]
+		[pallet_vesting, Vesting]
 		[pallet_timestamp, Timestamp]
 		[pallet_migrations, MultiBlockMigrations]
 		[pallet_transaction_payment, TransactionPayment]

@@ -18,14 +18,19 @@ use crate::xcm_config::LocationToAccountId;
 use codec::{Decode, Encode, MaxEncodedLen};
 use enumflags2::{bitflags, BitFlags};
 use frame_support::{
-	parameter_types, traits::ConstU32, weights::Weight, CloneNoBound, EqNoBound, PartialEqNoBound,
+	parameter_types,
+	traits::{ConstU32, WithdrawReasons},
+	weights::Weight,
+	CloneNoBound,
+	EqNoBound,
+	PartialEqNoBound,
 	RuntimeDebugNoBound,
 };
 use frame_system::EnsureRoot;
 use pallet_identity::{Data, IdentityInformationProvider};
 use scale_info::TypeInfo;
 use sp_runtime::{
-	traits::{AccountIdConversion, Verify},
+	traits::{AccountIdConversion, ConvertInto, Verify},
 	RuntimeDebug,
 };
 use testnet_teyrchains_constants::pezkuwichain::currency::UNITS;
@@ -884,4 +889,82 @@ impl pallet_pez_rewards::Config for Runtime {
 	type ForceOrigin = crate::RootOrTreasuryCommittee;
 	type CollectionId = u32;
 	type ItemId = u32;
+}
+
+// =============================================================================
+// Recovery Pallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const ConfigDepositBase: Balance = 5 * UNITS;
+	pub const FriendDepositFactor: Balance = 50 * CENTS;
+	pub const MaxFriends: u16 = 9;
+	pub const RecoveryDeposit: Balance = 5 * UNITS;
+}
+
+impl pallet_recovery::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = ();
+	type RuntimeCall = RuntimeCall;
+	type BlockNumberProvider = System;
+	type Currency = Balances;
+	type ConfigDepositBase = ConfigDepositBase;
+	type FriendDepositFactor = FriendDepositFactor;
+	type MaxFriends = MaxFriends;
+	type RecoveryDeposit = RecoveryDeposit;
+}
+
+// =============================================================================
+// Society Pallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const GraceStrikes: u32 = 10;
+	pub const SocietyVotingPeriod: BlockNumber = 80 * HOURS;
+	pub const ClaimPeriod: BlockNumber = 80 * HOURS;
+	pub const PeriodSpend: Balance = 500 * UNITS;
+	pub const MaxLockDuration: BlockNumber = 36 * 30 * DAYS;
+	pub const ChallengePeriod: BlockNumber = 7 * DAYS;
+	pub const MaxPayouts: u32 = 10;
+	pub const MaxBids: u32 = 10;
+	pub const SocietyPalletId: frame_support::PalletId = frame_support::PalletId(*b"py/socie");
+}
+
+impl pallet_society::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type PalletId = SocietyPalletId;
+	type Currency = Balances;
+	type Randomness = TimestampRandomness;
+	type GraceStrikes = GraceStrikes;
+	type PeriodSpend = PeriodSpend;
+	type VotingPeriod = SocietyVotingPeriod;
+	type ClaimPeriod = ClaimPeriod;
+	type MaxLockDuration = MaxLockDuration;
+	type FounderSetOrigin = EnsureRoot<AccountId>;
+	type ChallengePeriod = ChallengePeriod;
+	type MaxPayouts = MaxPayouts;
+	type MaxBids = MaxBids;
+	type BlockNumberProvider = System;
+	type WeightInfo = ();
+}
+
+// =============================================================================
+// Vesting Pallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const MinVestedTransfer: Balance = UNITS;
+	pub UnvestedFundsAllowedWithdrawReasons: WithdrawReasons =
+		WithdrawReasons::except(WithdrawReasons::TRANSFER | WithdrawReasons::RESERVE);
+}
+
+impl pallet_vesting::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type BlockNumberToBalance = ConvertInto;
+	type MinVestedTransfer = MinVestedTransfer;
+	type WeightInfo = ();
+	type UnvestedFundsAllowedWithdrawReasons = UnvestedFundsAllowedWithdrawReasons;
+	type BlockNumberProvider = System;
+	const MAX_VESTING_SCHEDULES: u32 = 28;
 }

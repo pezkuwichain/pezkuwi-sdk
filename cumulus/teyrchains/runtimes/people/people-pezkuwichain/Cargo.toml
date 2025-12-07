@@ -47,8 +47,10 @@ pallet-nfts = { workspace = true }
 pallet-perwerde = { workspace = true }
 pallet-pez-rewards = { workspace = true }
 pallet-proxy = { workspace = true }
+pallet-recovery = { workspace = true }
 pallet-referral = { workspace = true }
 pallet-scheduler = { workspace = true }
+pallet-society = { workspace = true }
 pallet-session = { workspace = true }
 pallet-skip-feeless-payment = { workspace = true }
 pallet-staking-score = { workspace = true }
@@ -58,6 +60,7 @@ pallet-transaction-payment = { workspace = true }
 pallet-transaction-payment-rpc-runtime-api = { workspace = true }
 pallet-trust = { workspace = true }
 pallet-utility = { workspace = true }
+pallet-vesting = { workspace = true }
 pallet-welati = { workspace = true }
 pezkuwi-primitives = { workspace = true }
 sp-api = { workspace = true }
@@ -145,8 +148,10 @@ std = [
 	"pallet-perwerde/std",
 	"pallet-pez-rewards/std",
 	"pallet-proxy/std",
+	"pallet-recovery/std",
 	"pallet-referral/std",
 	"pallet-scheduler/std",
+	"pallet-society/std",
 	"pallet-session/std",
 	"pallet-skip-feeless-payment/std",
 	"pallet-staking-score/std",
@@ -156,6 +161,7 @@ std = [
 	"pallet-transaction-payment/std",
 	"pallet-trust/std",
 	"pallet-utility/std",
+	"pallet-vesting/std",
 	"pallet-welati/std",
 	"pallet-xcm-benchmarks?/std",
 	"pallet-xcm/std",
@@ -224,8 +230,10 @@ runtime-benchmarks = [
 	"pallet-perwerde/runtime-benchmarks",
 	"pallet-pez-rewards/runtime-benchmarks",
 	"pallet-proxy/runtime-benchmarks",
+	"pallet-recovery/runtime-benchmarks",
 	"pallet-referral/runtime-benchmarks",
 	"pallet-scheduler/runtime-benchmarks",
+	"pallet-society/runtime-benchmarks",
 	"pallet-session/runtime-benchmarks",
 	"pallet-skip-feeless-payment/runtime-benchmarks",
 	"pallet-staking-score/runtime-benchmarks",
@@ -235,6 +243,7 @@ runtime-benchmarks = [
 	"pallet-transaction-payment/runtime-benchmarks",
 	"pallet-trust/runtime-benchmarks",
 	"pallet-utility/runtime-benchmarks",
+	"pallet-vesting/runtime-benchmarks",
 	"pallet-welati/runtime-benchmarks",
 	"pallet-xcm-benchmarks/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
@@ -291,8 +300,10 @@ try-runtime = [
 	"pallet-perwerde/try-runtime",
 	"pallet-pez-rewards/try-runtime",
 	"pallet-proxy/try-runtime",
+	"pallet-recovery/try-runtime",
 	"pallet-referral/try-runtime",
 	"pallet-scheduler/try-runtime",
+	"pallet-society/try-runtime",
 	"pallet-session/try-runtime",
 	"pallet-skip-feeless-payment/try-runtime",
 	"pallet-staking-score/try-runtime",
@@ -301,6 +312,7 @@ try-runtime = [
 	"pallet-transaction-payment/try-runtime",
 	"pallet-trust/try-runtime",
 	"pallet-utility/try-runtime",
+	"pallet-vesting/try-runtime",
 	"pallet-welati/try-runtime",
 	"pallet-xcm/try-runtime",
 	"pezkuwi-runtime-common/try-runtime",

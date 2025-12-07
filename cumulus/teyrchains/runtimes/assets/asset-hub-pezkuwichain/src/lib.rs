@@ -1118,6 +1118,100 @@ impl pallet_nis::Config for Runtime {
 	type BenchmarkSetup = ();
 }
 
+// -----------------------------------------------------------------------------
+// Treasury Pallet
+// -----------------------------------------------------------------------------
+parameter_types! {
+	pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
+	pub const SpendPeriod: BlockNumber = 6 * DAYS;
+	pub const Burn: Permill = Permill::from_perthousand(2);
+	pub const MaxApprovals: u32 = 100;
+	pub const PayoutSpendPeriod: BlockNumber = 30 * DAYS;
+	pub TreasuryAccount: AccountId = Treasury::account_id();
+}
+
+impl pallet_treasury::Config for Runtime {
+	type PalletId = TreasuryPalletId;
+	type Currency = Balances;
+	type RejectOrigin = EnsureRoot<AccountId>;
+	type RuntimeEvent = RuntimeEvent;
+	type SpendPeriod = SpendPeriod;
+	type Burn = Burn;
+	type BurnDestination = ();
+	type MaxApprovals = MaxApprovals;
+	type WeightInfo = ();
+	type SpendFunds = ();
+	type SpendOrigin = frame_system::EnsureRootWithSuccess<AccountId, ConstU128<{ Balance::max_value() }>>;
+	type AssetKind = ();
+	type Beneficiary = AccountId;
+	type BeneficiaryLookup = sp_runtime::traits::IdentityLookup<Self::Beneficiary>;
+	type Paymaster = frame_support::traits::tokens::pay::PayFromAccount<Balances, TreasuryAccount>;
+	type BalanceConverter = frame_support::traits::tokens::UnityAssetBalanceConversion;
+	type PayoutPeriod = PayoutSpendPeriod;
+	type BlockNumberProvider = frame_system::Pallet<Runtime>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
+}
+
+// -----------------------------------------------------------------------------
+// AssetRate Pallet
+// -----------------------------------------------------------------------------
+impl pallet_asset_rate::Config for Runtime {
+	type WeightInfo = ();
+	type RuntimeEvent = RuntimeEvent;
+	type CreateOrigin = EnsureRoot<AccountId>;
+	type RemoveOrigin = EnsureRoot<AccountId>;
+	type UpdateOrigin = EnsureRoot<AccountId>;
+	type Currency = Balances;
+	type AssetKind = ();
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
+}
+
+// -----------------------------------------------------------------------------
+// Bounties Pallet
+// -----------------------------------------------------------------------------
+parameter_types! {
+	pub const BountiesDepositBase: Balance = 100 * CENTS;
+	pub const BountyDepositPayoutDelay: BlockNumber = 1 * DAYS;
+	pub const BountyUpdatePeriod: BlockNumber = 14 * DAYS;
+	pub const MaximumReasonLength: u32 = 16384;
+	pub const BountyCuratorDeposit: Permill = Permill::from_percent(50);
+	pub const BountyValueMinimum: Balance = 5 * UNITS;
+	pub const DataDepositPerByte: Balance = 1 * CENTS;
+}
+
+impl pallet_bounties::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type BountyDepositBase = BountiesDepositBase;
+	type BountyDepositPayoutDelay = BountyDepositPayoutDelay;
+	type BountyUpdatePeriod = BountyUpdatePeriod;
+	type CuratorDepositMultiplier = BountyCuratorDeposit;
+	type CuratorDepositMin = ConstU128<{ 1 * UNITS }>;
+	type CuratorDepositMax = ConstU128<{ 100 * UNITS }>;
+	type BountyValueMinimum = BountyValueMinimum;
+	type DataDepositPerByte = DataDepositPerByte;
+	type MaximumReasonLength = MaximumReasonLength;
+	type WeightInfo = ();
+	type ChildBountyManager = ChildBounties;
+	type OnSlash = Treasury;
+}
+
+// -----------------------------------------------------------------------------
+// ChildBounties Pallet
+// -----------------------------------------------------------------------------
+parameter_types! {
+	pub const MaxActiveChildBountyCount: u32 = 100;
+	pub const ChildBountyValueMinimum: Balance = 1 * UNITS;
+}
+
+impl pallet_child_bounties::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type MaxActiveChildBountyCount = MaxActiveChildBountyCount;
+	type ChildBountyValueMinimum = ChildBountyValueMinimum;
+	type WeightInfo = ();
+}
+
 // =============================================================================
 // PezkuwiChain Custom Asset Hub Pallets Configuration
 // =============================================================================
@@ -1251,6 +1345,10 @@ construct_runtime!(
 		AssetRewards: pallet_asset_rewards = 60,
 
 		Nis: pallet_nis = 61,
+		AssetRate: pallet_asset_rate = 62,
+		Bounties: pallet_bounties = 63,
+		ChildBounties: pallet_child_bounties = 64,
+		Treasury: pallet_treasury = 65,
 
 		// PezkuwiChain Custom Pallets
 		PezTreasury: pallet_pez_treasury = 70,
