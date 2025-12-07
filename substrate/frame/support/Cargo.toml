@@ -90,7 +90,6 @@ std = [
 	"sp-weights/std",
 ]
 runtime-benchmarks = [
-	"binary-merkle-tree/runtime-benchmarks",
 	"frame-support-procedural/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
