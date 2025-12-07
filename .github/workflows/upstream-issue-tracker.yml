@@ -30,8 +30,8 @@ jobs:
 
           echo "🔍 Fetching tracking issues..."
 
-          # Get all our tracking issues (1-300)
-          TRACKING_ISSUES=$(gh api repos/$REPO/issues --paginate -q '.[] | select(.number >= 1 and .number <= 300) | {number, body, state}')
+          # Get all our tracking issues
+          TRACKING_ISSUES=$(gh api repos/$REPO/issues --paginate -q '.[] | select(.labels[]?.name == "upstream-tracking") | {number, body, state}')
 
           TOTAL=0
           CLOSED=0
@@ -46,7 +46,7 @@ jobs:
             BODY=$(echo "$ISSUE" | jq -r '.body')
 
             # Extract upstream issue number from body
-            UPSTREAM_NUM=$(echo "$BODY" | grep -oP 'polkadot-sdk/issues/\K\d+' || echo "")
+            UPSTREAM_NUM=$(echo "$BODY" | grep -oP "$UPSTREAM_REPO/issues/\K\d+" || echo "")
 
             if [ -z "$UPSTREAM_NUM" ]; then
               echo "⚠️  Issue #$ISSUE_NUM: No upstream reference found"
@@ -79,12 +79,7 @@ jobs:
               gh api repos/$REPO/issues/$ISSUE_NUM -X PATCH -f body="$NEW_BODY" || true
 
               # Add to action items
-              ACTION_ITEMS="$ACTION_ITEMS
-**#$ISSUE_NUM: $UPSTREAM_TITLE - CLOSED** ✅
-  → Upstream issue #$UPSTREAM_NUM closed
-  → **TODO**: Evaluate if fix needed for PezkuwiChain
-  → Link: https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM
-"
+              ACTION_ITEMS="$ACTION_ITEMS"$'\n'"**#$ISSUE_NUM: $UPSTREAM_TITLE - CLOSED** ✅"$'\n'"  → Upstream issue #$UPSTREAM_NUM closed"$'\n'"  → **TODO**: Evaluate if fix needed for PezkuwiChain"$'\n'"  → Link: https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM"$'\n' 
 
               # Add comment to our issue
               gh issue comment $ISSUE_NUM --repo $REPO --body "🔔 **Upstream Update**
@@ -105,12 +100,7 @@ Updated status checkboxes automatically." || true
               if [ $UPDATED_DAYS_AGO -lt 7 ]; then
                 UPDATED=$((UPDATED + 1))
 
-                ACTION_ITEMS="$ACTION_ITEMS
-**#$ISSUE_NUM: $UPSTREAM_TITLE - Updated** 🔄
-  → Recent activity detected (updated $UPDATED_DAYS_AGO days ago)
-  → **TODO**: Monitor for resolution
-  → Link: https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM
-"
+                ACTION_ITEMS="$ACTION_ITEMS"$'\n'"**#$ISSUE_NUM: $UPSTREAM_TITLE - Updated** 🔄"$'\n'"  → Recent activity detected (updated $UPDATED_DAYS_AGO days ago)"$'\n'"  → **TODO**: Monitor for resolution"$'\n'"  → Link: https://github.com/$UPSTREAM_REPO/issues/$UPSTREAM_NUM"$'\n' 
               else
                 NO_CHANGE=$((NO_CHANGE + 1))
               fi
