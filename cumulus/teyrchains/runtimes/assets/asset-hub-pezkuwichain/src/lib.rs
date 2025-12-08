@@ -1235,7 +1235,6 @@ parameter_types! {
 }
 
 impl pallet_pez_treasury::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type Assets = Assets;
 	type WeightInfo = pallet_pez_treasury::weights::SubstrateWeight<Runtime>;
 	type PezAssetId = PezAssetId;
@@ -1262,7 +1261,6 @@ parameter_types! {
 }
 
 impl pallet_presale::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type AssetId = AssetIdForTrustBackedAssets;
 	type Balance = Balance;
 	type Assets = Assets;
@@ -1288,7 +1286,6 @@ parameter_types! {
 }
 
 impl pallet_token_wrapper::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_token_wrapper::weights::SubstrateWeight<Runtime>;
 	type Currency = Balances;
 	type AssetId = AssetIdForTrustBackedAssets;

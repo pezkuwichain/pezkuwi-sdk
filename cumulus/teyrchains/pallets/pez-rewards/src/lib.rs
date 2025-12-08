@@ -140,7 +140,6 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config + pallet_trust::Config + TypeInfo {
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type Assets: Mutate<Self::AccountId>;
 		#[pallet::constant]
 		type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;

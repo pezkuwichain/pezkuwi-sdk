@@ -118,7 +118,6 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config: frame_system::Config + TypeInfo {
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type Assets: Mutate<Self::AccountId>;
 		type WeightInfo: crate::WeightInfo;
 
