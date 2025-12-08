@@ -69,6 +69,15 @@ pub const PEZ_PRESALE_ALLOCATION: Balance = 93_750_000 * TYR;
 /// Rewards pool: 76% = 3,800,000,000 PEZ (distributed via sentetik halving)
 pub const PEZ_REWARDS_POOL: Balance = 3_800_000_000 * TYR;
 
+// Compile-time verification that all allocations sum to PEZ_TOTAL_SUPPLY
+const _: () = {
+	assert!(
+		PEZ_TREASURY_ALLOCATION + PEZ_FOUNDER_ALLOCATION + PEZ_PRESALE_ALLOCATION +
+			PEZ_REWARDS_POOL == PEZ_TOTAL_SUPPLY,
+		"PEZ allocations must sum to exactly 5 billion tokens"
+	);
+};
+
 /// Genesis configuration for Asset Hub Pezkuwichain
 ///
 /// # Parameters

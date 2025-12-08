@@ -64,6 +64,14 @@ pub const HEZ_TREASURY_ALLOCATION: u128 = 40_000_000 * TYR;
 /// Airdrop allocation: 20% = 40,000,000 HEZ
 pub const HEZ_AIRDROP_ALLOCATION: u128 = 40_000_000 * TYR;
 
+// ===========================================================================
+// COMPILE-TIME VALIDATION: Ensure allocation integrity
+// ===========================================================================
+const _: () = assert!(
+	HEZ_FOUNDER_ALLOCATION + HEZ_PRESALE_ALLOCATION + HEZ_TREASURY_ALLOCATION + HEZ_AIRDROP_ALLOCATION == HEZ_GENESIS_SUPPLY,
+	"HEZ allocations MUST sum to genesis supply (200M)"
+);
+
 /// Helper function to generate stash, controller and session key from seed
 fn get_authority_keys_from_seed(
 	seed: &str,
@@ -525,24 +533,32 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 	use sp_core::crypto::UncheckedInto;
 
 	// ==========================================================================
-	// MAINNET ACCOUNTS - Replace with real addresses from JSON before launch
+	// MAINNET ACCOUNTS - Real addresses from founder_governance.json & presale_airdrop_wallets.json
 	// ==========================================================================
 
 	// Founder account - receives 10% (20M HEZ)
+	// From: founder_governance.json - Founder_Satoshi_Qazi_Muhammed
+	// SS58: 5GRTwhBCAPR2un27NxMw9uyHFmXdfJa1EJx8TNZxJWjAFmyc
 	let founder_account: AccountId =
-		hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+		hex!("c0c6403050931c67e13edfa4a558a9c3d4ae64f04b0fd8cb57b2f796c668a068").into();
 
 	// Presale account - receives 50% (100M HEZ)
+	// From: presale_airdrop_wallets.json
+	// SS58: 5F4fVGo9E33EpWoqPYyoWXiu34MvKhovMDeAboQzfbtFQ43Q
 	let presale_account: AccountId =
-		hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+		hex!("84acb9d8e22fe6ee32e2ea92919e6ee7355c9fc4112bc2ca4b29942ebd986e69").into();
 
 	// Kurdistan Treasury account - receives 20% (40M HEZ)
+	// From: founder_governance.json - treasury
+	// SS58: 5GdprKXDvoXAryJa6YH8WMdjRprFU4584TDX2FEG8AqYDnV9
 	let treasury_account: AccountId =
-		hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+		hex!("ca3393764525378c54d83478b88453091c27031ba8de693d64da16ac21277359").into();
 
 	// Airdrop account - receives 20% (40M HEZ)
+	// From: presale_airdrop_wallets.json
+	// SS58: 5DVitukYFhLsXJnzxXekMJKuimUu7Qc38HxTZTjF9NH4VsUM
 	let airdrop_account: AccountId =
-		hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+		hex!("3f50dd6e1cb2f47d355e6160f63f11cf42660e0fadd8126785314943294b3678").into();
 
 	// ==========================================================================
 	// INITIAL VALIDATORS - First 4 validators from mainnet_validators JSON

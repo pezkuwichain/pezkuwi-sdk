@@ -18,15 +18,20 @@
 //! Asset Hub Pezkuwichain, formerly known as "Rockmine", is the test network for its Kusama cousin.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![recursion_limit = "256"]
+#![recursion_limit = "512"]
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+mod bag_thresholds;
 mod genesis_config_presets;
+mod staking;
 mod weights;
 pub mod xcm_config;
+
+// Re-export staking configurations
+pub use staking::*;
 
 extern crate alloc;
 
@@ -38,7 +43,7 @@ use assets_common::{
 	AssetIdForPoolAssets, AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
 };
 use bp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
-use cumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use cumulus_pallet_teyrchain_system::{RelayNumberMonotonicallyIncreases, RelaychainDataProvider};
 use cumulus_primitives_core::AggregateMessageOrigin;
 use sp_api::impl_runtime_apis;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -65,7 +70,7 @@ use frame_support::{
 	traits::{
 		fungible, fungible::HoldConsideration, fungibles, tokens::imbalance::ResolveAssetTo,
 		AsEnsureOriginWithArg, ConstBool, ConstU128, ConstU32, ConstU64, ConstU8,
-		ConstantStoragePrice, EitherOfDiverse, Equals, InstanceFilter, TransformOrigin,
+		ConstantStoragePrice, EitherOfDiverse, Equals, InstanceFilter, Nothing, TransformOrigin,
 	},
 	weights::{ConstantMultiplier, Weight},
 	BoundedVec, PalletId,
@@ -1354,6 +1359,19 @@ construct_runtime!(
 		PezTreasury: pallet_pez_treasury = 70,
 		Presale: pallet_presale = 71,
 		TokenWrapper: pallet_token_wrapper = 73,
+
+		// Staking
+		Staking: pallet_staking_async = 80,
+		NominationPools: pallet_nomination_pools = 81,
+		VoterList: pallet_bags_list::<Instance1> = 83,
+		DelegatedStaking: pallet_delegated_staking = 84,
+		StakingRcClient: pallet_staking_async_rc_client = 89,
+
+		// Staking election apparatus.
+		MultiBlockElection: pallet_election_provider_multi_block = 85,
+		MultiBlockElectionVerifier: pallet_election_provider_multi_block::verifier = 86,
+		MultiBlockElectionUnsigned: pallet_election_provider_multi_block::unsigned = 87,
+		MultiBlockElectionSigned: pallet_election_provider_multi_block::signed = 88,
 
 		// TODO: the pallet instance should be removed once all pools have migrated
 		// to the new account IDs.

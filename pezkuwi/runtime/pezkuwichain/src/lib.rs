@@ -581,48 +581,6 @@ impl pallet_fast_unstake::Config for Runtime {
 }
 
 // =====================================================
-// NOMINATION POOLS CONFIGURATION
-// =====================================================
-
-parameter_types! {
-	pub const PoolsPalletId: PalletId = PalletId(*b"py/nopls");
-	pub const MaxPointsToBalance: u8 = 10;
-}
-
-pub struct BalanceToU256;
-impl sp_runtime::traits::Convert<Balance, sp_core::U256> for BalanceToU256 {
-	fn convert(balance: Balance) -> sp_core::U256 {
-		sp_core::U256::from(balance)
-	}
-}
-
-pub struct U256ToBalance;
-impl sp_runtime::traits::Convert<sp_core::U256, Balance> for U256ToBalance {
-	fn convert(n: sp_core::U256) -> Balance {
-		n.try_into().unwrap_or(Balance::MAX)
-	}
-}
-
-impl pallet_nomination_pools::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_nomination_pools::weights::SubstrateWeight<Runtime>;
-	type Currency = Balances;
-	type RuntimeFreezeReason = RuntimeFreezeReason;
-	type RewardCounter = FixedU128;
-	type BalanceToU256 = BalanceToU256;
-	type U256ToBalance = U256ToBalance;
-	type StakeAdapter = pallet_nomination_pools::adapter::TransferStake<Self, Staking>;
-	type PostUnbondingPoolsWindow = ConstU32<4>;
-	type MaxMetadataLen = ConstU32<256>;
-	type MaxUnbonding = ConstU32<8>;
-	type MaxPointsToBalance = MaxPointsToBalance;
-	type PalletId = PoolsPalletId;
-	type AdminOrigin = EnsureRoot<AccountId>;
-	type BlockNumberProvider = System;
-	type Filter = Nothing;
-}
-
-// =====================================================
 // VALIDATOR POOL CONFIGURATION (TNPoS Shadow Mode)
 // =====================================================
 
@@ -1531,7 +1489,6 @@ construct_runtime! {
 		AuthorityDiscovery: pallet_authority_discovery = 12,
 
 		// Staking extensions.
-		NominationPools: pallet_nomination_pools = 14,
 		FastUnstake: pallet_fast_unstake = 15,
 
 		// Governance stuff; uncallable initially.
