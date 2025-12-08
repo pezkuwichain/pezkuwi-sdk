@@ -112,14 +112,8 @@ pub mod pallet_custom_origins {
 					})
 				}
 				fn try_successful_origin() -> Result<O, ()> {
-					#[cfg(feature = "runtime-benchmarks")]
-					{
-						Ok(O::from(Origin::$name))
-					}
-					#[cfg(not(feature = "runtime-benchmarks"))]
-					{
-						Err(())
-					}
+				#[cfg(feature = "runtime-benchmarks")]
+				fn try_successful_origin() -> Result<O, ()> {
 				}
 			}
 		};
