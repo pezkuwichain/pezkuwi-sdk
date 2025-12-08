@@ -39,7 +39,7 @@ paste = { workspace = true, default-features = true }
 primitive-types = { features = ["codec", "scale-info"], workspace = true }
 rand = { features = [
 	"small_rng",
-], optional = true, workspace = true, default-features = true }
+], optional = true, workspace = true, default-features = false }
 scale-info = { features = ["derive"], workspace = true }
 secrecy = { features = ["alloc"], workspace = true }
 serde = { optional = true, features = ["alloc", "derive"], workspace = true }
