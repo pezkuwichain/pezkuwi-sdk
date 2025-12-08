@@ -1449,7 +1449,6 @@ impl<T: Config> SortedListProvider<T::AccountId> for UseValidatorsMap<T> {
 		Validators::<T>::remove_all();
 	}
 
-	#[cfg(feature = "runtime-benchmarks")]
 	fn score_update_worst_case(_who: &T::AccountId, _is_increase: bool) -> Self::Score {
 		unimplemented!()
 	}
@@ -1532,7 +1531,6 @@ impl<T: Config> SortedListProvider<T::AccountId> for UseNominatorsAndValidatorsM
 		Validators::<T>::remove_all();
 	}
 
-	#[cfg(feature = "runtime-benchmarks")]
 	fn score_update_worst_case(_who: &T::AccountId, _is_increase: bool) -> Self::Score {
 		unimplemented!()
 	}
@@ -1751,7 +1749,6 @@ impl<T: Config> sp_staking::StakingUnchecked for Pallet<T> {
 	}
 
 	/// Only meant to be used in tests.
-	#[cfg(feature = "runtime-benchmarks")]
 	fn migrate_to_direct_staker(who: &Self::AccountId) {
 		assert!(VirtualStakers::<T>::contains_key(who));
 		let ledger = StakingLedger::<T>::get(Stash(who.clone())).unwrap();
