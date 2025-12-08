@@ -62,6 +62,7 @@ impl pallet_identity::Config for Runtime {
 	type UsernameGracePeriod = ConstU32<{ 3 * DAYS }>;
 	type MaxSuffixLength = ConstU32<7>;
 	type MaxUsernameLength = ConstU32<32>;
+	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 	type WeightInfo = weights::pallet_identity::WeightInfo<Runtime>;
 }
@@ -153,6 +154,7 @@ impl IdentityInformationProvider for IdentityInfo {
 		self.fields().bits() & fields == fields
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn create_identity_info() -> Self {
 		let data = Data::Raw(alloc::vec![0; 32].try_into().unwrap());
 
@@ -170,6 +172,7 @@ impl IdentityInformationProvider for IdentityInfo {
 		}
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn all_fields() -> Self::FieldsIdentifier {
 		use enumflags2::BitFlag;
 		IdentityField::all().bits()

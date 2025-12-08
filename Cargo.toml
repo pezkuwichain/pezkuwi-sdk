@@ -838,7 +838,7 @@ fork-tree = { path = "substrate/utils/fork-tree", default-features = false }
 forwarded-header-value = { version = "0.1.1" }
 fraction = { version = "0.13.1" }
 frame = { path = "substrate/frame", default-features = false, package = "pezkuwi-sdk-frame" }
-frame-benchmarking = { path = "substrate/frame/benchmarking" }
+frame-benchmarking = { path = "substrate/frame/benchmarking", default-features = false }
 frame-benchmarking-cli = { path = "substrate/utils/frame/benchmarking-cli", default-features = false }
 frame-benchmarking-pallet-pov = { default-features = false, path = "substrate/frame/benchmarking/pov" }
 frame-election-provider-solution-type = { path = "substrate/frame/election-provider-support/solution-type", default-features = false }
@@ -1542,30 +1542,6 @@ panic = "unwind"
 debug = "line-tables-only"
 
 # make sure dev builds with backtrace do not slow us down
-[profile.dev.package.backtrace]
-inherits = "release"
-
-[profile.production]
-codegen-units = 1
-inherits = "release"
-lto = true
-
-[profile.testnet]
-debug = 1               # debug symbols are useful for profilers
-debug-assertions = true
-inherits = "release"
-overflow-checks = true
-
-# The list of dependencies below (which can be both direct and indirect dependencies) are crates
-# that are suspected to be CPU-intensive, and that are unlikely to require debugging (as some of
-# their debug info might be missing) or to require to be frequently recompiled. We compile these
-# dependencies with `opt-level=3` even in "dev" mode in order to make "dev" mode more usable.
-# The majority of these crates are cryptographic libraries.
-#
-# If you see an error mentioning "profile package spec ... did not match any packages", it
-# probably concerns this list.
-#
-# This list is ordered alphabetically.
 [profile.dev.package]
 ark-vrf = { opt-level = 3 }
 blake2 = { opt-level = 3 }
