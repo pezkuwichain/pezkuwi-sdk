@@ -177,10 +177,8 @@ where
 		Ok(())
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn ensure_successful_identity_reaping(_: &AccountId, _: u32, _: u32) {
-		#[cfg(feature = "runtime-benchmarks")]
-		{
-			crate::Dmp::make_teyrchain_reachable(1004);
-		}
+		crate::Dmp::make_teyrchain_reachable(1004);
 	}
 }

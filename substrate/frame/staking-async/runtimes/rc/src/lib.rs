@@ -369,16 +369,10 @@ impl EnsureOriginWithArg<RuntimeOrigin, RuntimeParametersKey> for DynamicParamet
 		.map_err(|_| origin)
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin(_key: &RuntimeParametersKey) -> Result<RuntimeOrigin, ()> {
-		#[cfg(feature = "runtime-benchmarks")]
-		{
-			// Provide the origin for the parameter returned by `Default`:
-			Ok(RuntimeOrigin::root())
-		}
-		#[cfg(not(feature = "runtime-benchmarks"))]
-		{
-			Err(())
-		}
+		// Provide the origin for the parameter returned by `Default`:
+		Ok(RuntimeOrigin::root())
 	}
 }
 
@@ -483,6 +477,7 @@ impl pallet_mmr::Config for Runtime {
 	type LeafData = pallet_beefy_mmr::Pallet<Runtime>;
 	type BlockHashProvider = pallet_mmr::DefaultBlockHashProvider<Runtime>;
 	type WeightInfo = weights::pallet_mmr::WeightInfo<Runtime>;
+	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = teyrchains_paras::benchmarking::mmr_setup::MmrSetup<Runtime>;
 }
 
@@ -781,15 +776,9 @@ impl frame_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 		}
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<RuntimeOrigin, ()> {
-		#[cfg(feature = "runtime-benchmarks")]
-		{
-			Ok(RuntimeOrigin::root())
-		}
-		#[cfg(not(feature = "runtime-benchmarks"))]
-		{
-			Err(())
-		}
+		Ok(RuntimeOrigin::root())
 	}
 }
 
@@ -1064,6 +1053,7 @@ impl pallet_treasury::Config for Runtime {
 	>;
 	type PayoutPeriod = PayoutSpendPeriod;
 	type BlockNumberProvider = System;
+	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
 }
 
@@ -1217,6 +1207,7 @@ impl pallet_identity::Config for Runtime {
 	type UsernameGracePeriod = ConstU32<{ 30 * DAYS }>;
 	type MaxSuffixLength = ConstU32<7>;
 	type MaxUsernameLength = ConstU32<32>;
+	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 	type WeightInfo = weights::pallet_identity::WeightInfo<Runtime>;
 }
@@ -1778,6 +1769,7 @@ impl pallet_asset_rate::Config for Runtime {
 	type UpdateOrigin = EnsureRoot<AccountId>;
 	type Currency = Balances;
 	type AssetKind = <Runtime as pallet_treasury::Config>::AssetKind;
+	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::AssetRateArguments;
 }
 
