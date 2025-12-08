@@ -877,7 +877,6 @@ impl pallet_trust::TrustScoreProvider<AccountId> for PezRewardsTrustScoreSource 
 }
 
 impl pallet_pez_rewards::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type Assets = Assets;
 	type PezAssetId = PezAssetId;
 	type WeightInfo = pallet_pez_rewards::weights::SubstrateWeight<Runtime>;
