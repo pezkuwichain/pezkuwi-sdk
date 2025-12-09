@@ -246,3 +246,40 @@ Periodically check upstream and update checkboxes above based on status changes.
 Commit atılıp push edilmeli - CI/CD artık geçmeli.
 
 ---
+
+## 🧪 ZOMBIENET TEST ENVIRONMENT VARIABLES
+
+**Zombienet SDK test'leri için gerekli environment variable'lar:**
+
+### Problem
+
+`zombienet_sdk::environment::get_images_from_env()` fonksiyonu, test'lerde kullanılacak Docker image'larını environment variable'lardan alır. Pezkuwi SDK için bu variable'lar tanımlanmalı.
+
+### Çözüm
+
+**Lokal test için:**
+```bash
+export ZOMBIENET_IMAGE_PEZKUWI="docker.io/pezkuwichain/pezkuwi:latest"
+export ZOMBIENET_IMAGE_CUMULUS="docker.io/pezkuwichain/cumulus:latest"
+cargo test --workspace --features runtime-benchmarks
+```
+
+**CI/CD workflow'larına eklenecek:**
+
+Test yapan tüm workflow'lara (`.github/workflows/tests*.yml`) şu environment variable'lar eklenmelidir:
+
+```yaml
+env:
+  ZOMBIENET_IMAGE_PEZKUWI: "docker.io/pezkuwichain/pezkuwi:latest"
+  ZOMBIENET_IMAGE_CUMULUS: "docker.io/pezkuwichain/cumulus:latest"
+```
+
+**Not:** Bu değişkenler compile-time'da image alanlarının doldurulması için gerekli. Gerçek image path'leri production'da güncellenebilir.
+
+**İlgili dosyalar:**
+- `substrate/client/transaction-pool/tests/zombienet/yap_test.rs:38`
+- Tüm zombienet SDK test dosyaları
+
+**Tarih:** 2025-12-09
+
+---
