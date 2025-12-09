@@ -103,12 +103,10 @@ impl SubstrateCli for Cli {
 	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
 		let id = if id.is_empty() { "pezkuwichain" } else { id };
 		Ok(match id {
-			"pezkuwichain-staging" => {
-				Box::new(pezkuwi_service::chain_spec::pezkuwichain_staging_testnet_config()?)
-			},
-			"pezkuwichain-local" => {
-				Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?)
-			},
+			"pezkuwichain-staging" =>
+				Box::new(pezkuwi_service::chain_spec::pezkuwichain_staging_testnet_config()?),
+			"pezkuwichain-local" =>
+				Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?),
 			"pezkuwichain" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_config()?),
 			path => {
 				let path = std::path::PathBuf::from(path);

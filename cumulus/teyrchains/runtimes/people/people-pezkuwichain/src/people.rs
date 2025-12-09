@@ -21,10 +21,7 @@ use frame_support::{
 	parameter_types,
 	traits::{ConstU32, WithdrawReasons},
 	weights::Weight,
-	CloneNoBound,
-	EqNoBound,
-	PartialEqNoBound,
-	RuntimeDebugNoBound,
+	CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
 use frame_system::EnsureRoot;
 use pallet_identity::{Data, IdentityInformationProvider};

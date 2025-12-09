@@ -887,9 +887,8 @@ pub mod pallet {
 
 			match Self::can_set_code(&code, res.check_version) {
 				CanSetCodeResult::Ok => {},
-				CanSetCodeResult::MultiBlockMigrationsOngoing => {
-					return Err(Error::<T>::MultiBlockMigrationsOngoing.into())
-				},
+				CanSetCodeResult::MultiBlockMigrationsOngoing =>
+					return Err(Error::<T>::MultiBlockMigrationsOngoing.into()),
 				CanSetCodeResult::InvalidVersion(error) => {
 					// The upgrade is invalid and there is no benefit in trying to apply this again.
 					Self::deposit_event(Event::RejectedInvalidAuthorizedUpgrade {
@@ -1550,9 +1549,8 @@ impl<T: Config> CanSetCodeResult<T> {
 	pub fn into_result(self) -> Result<(), DispatchError> {
 		match self {
 			Self::Ok => Ok(()),
-			Self::MultiBlockMigrationsOngoing => {
-				Err(Error::<T>::MultiBlockMigrationsOngoing.into())
-			},
+			Self::MultiBlockMigrationsOngoing =>
+				Err(Error::<T>::MultiBlockMigrationsOngoing.into()),
 			Self::InvalidVersion(err) => Err(err.into()),
 		}
 	}

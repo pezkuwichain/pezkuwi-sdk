@@ -421,9 +421,8 @@ where
 				format: ExtrinsicFormat::General(extension_version, tx_ext),
 				function: self.function,
 			},
-			Preamble::Bare(_) => {
-				CheckedExtrinsic { format: ExtrinsicFormat::Bare, function: self.function }
-			},
+			Preamble::Bare(_) =>
+				CheckedExtrinsic { format: ExtrinsicFormat::Bare, function: self.function },
 		})
 	}
 
@@ -444,9 +443,8 @@ where
 				format: ExtrinsicFormat::General(extension_version, tx_ext),
 				function: self.function,
 			},
-			Preamble::Bare(_) => {
-				CheckedExtrinsic { format: ExtrinsicFormat::Bare, function: self.function }
-			},
+			Preamble::Bare(_) =>
+				CheckedExtrinsic { format: ExtrinsicFormat::Bare, function: self.function },
 		})
 	}
 }

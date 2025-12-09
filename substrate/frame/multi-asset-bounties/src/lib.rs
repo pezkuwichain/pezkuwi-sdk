@@ -663,8 +663,8 @@ pub mod pallet {
 				Error::<T, I>::InvalidValue
 			);
 			ensure!(
-				ChildBountiesPerParent::<T, I>::get(parent_bounty_id)
-					< T::MaxActiveChildBountyCount::get() as u32,
+				ChildBountiesPerParent::<T, I>::get(parent_bounty_id) <
+					T::MaxActiveChildBountyCount::get() as u32,
 				Error::<T, I>::TooManyChildBounties,
 			);
 
@@ -898,8 +898,8 @@ pub mod pallet {
 					// curator can unassign the child-/bounty curator.
 					ensure!(
 						maybe_sender.map_or(true, |sender| {
-							sender == *curator
-								|| parent_curator
+							sender == *curator ||
+								parent_curator
 									.map_or(false, |parent_curator| sender == parent_curator)
 						}),
 						BadOrigin
@@ -1070,9 +1070,8 @@ pub mod pallet {
 				Self::get_bounty_details(parent_bounty_id, child_bounty_id)?;
 
 			let maybe_curator = match status {
-				BountyStatus::Funded { curator } | BountyStatus::Active { curator, .. } => {
-					Some(curator)
-				},
+				BountyStatus::Funded { curator } | BountyStatus::Active { curator, .. } =>
+					Some(curator),
 				BountyStatus::CuratorUnassigned => None,
 				_ => return Err(Error::<T, I>::UnexpectedStatus.into()),
 			};
@@ -1175,14 +1174,13 @@ pub mod pallet {
 
 					let new_status = match new_payment_status {
 						PaymentState::Succeeded => match (child_bounty_id, parent_curator) {
-							(Some(_), Some(parent_curator)) if curator == parent_curator => {
-								BountyStatus::Active { curator }
-							},
+							(Some(_), Some(parent_curator)) if curator == parent_curator =>
+								BountyStatus::Active { curator },
 							_ => BountyStatus::Funded { curator },
 						},
-						PaymentState::Pending
-						| PaymentState::Failed
-						| PaymentState::Attempted { .. } => BountyStatus::FundingAttempted {
+						PaymentState::Pending |
+						PaymentState::Failed |
+						PaymentState::Attempted { .. } => BountyStatus::FundingAttempted {
 							payment_status: new_payment_status,
 							curator,
 						},
@@ -1222,9 +1220,9 @@ pub mod pallet {
 							Self::remove_bounty(parent_bounty_id, child_bounty_id, metadata);
 							return Ok(Pays::No.into());
 						},
-						PaymentState::Pending
-						| PaymentState::Failed
-						| PaymentState::Attempted { .. } => BountyStatus::RefundAttempted {
+						PaymentState::Pending |
+						PaymentState::Failed |
+						PaymentState::Attempted { .. } => BountyStatus::RefundAttempted {
 							payment_status: new_payment_status,
 							curator: curator.clone(),
 						},
@@ -1258,9 +1256,9 @@ pub mod pallet {
 							Self::remove_bounty(parent_bounty_id, child_bounty_id, metadata);
 							return Ok(Pays::No.into());
 						},
-						PaymentState::Pending
-						| PaymentState::Failed
-						| PaymentState::Attempted { .. } => BountyStatus::PayoutAttempted {
+						PaymentState::Pending |
+						PaymentState::Failed |
+						PaymentState::Attempted { .. } => BountyStatus::PayoutAttempted {
 							curator: curator.clone(),
 							beneficiary: beneficiary.clone(),
 							payment_status: new_payment_status.clone(),
@@ -1631,9 +1629,8 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 				});
 				Ok(PaymentState::Succeeded)
 			},
-			PaymentStatus::InProgress | PaymentStatus::Unknown => {
-				return Err(Error::<T, I>::FundingInconclusive.into())
-			},
+			PaymentStatus::InProgress | PaymentStatus::Unknown =>
+				return Err(Error::<T, I>::FundingInconclusive.into()),
 			PaymentStatus::Failure => {
 				Self::deposit_event(Event::<T, I>::PaymentFailed {
 					index: parent_bounty_id,
@@ -1700,9 +1697,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 			},
 			PaymentStatus::InProgress | PaymentStatus::Unknown =>
 			// nothing new to report
-			{
-				Err(Error::<T, I>::RefundInconclusive.into())
-			},
+				Err(Error::<T, I>::RefundInconclusive.into()),
 			PaymentStatus::Failure => {
 				// assume payment has failed, allow user to retry
 				Self::deposit_event(Event::<T, I>::PaymentFailed {
@@ -1732,9 +1727,8 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 		let source = match child_bounty_id {
 			None => Self::bounty_account(parent_bounty_id, asset_kind.clone())?,
-			Some(child_bounty_id) => {
-				Self::child_bounty_account(parent_bounty_id, child_bounty_id, asset_kind.clone())?
-			},
+			Some(child_bounty_id) =>
+				Self::child_bounty_account(parent_bounty_id, child_bounty_id, asset_kind.clone())?,
 		};
 
 		let id = <T as Config<I>>::Paymaster::pay(&source, &beneficiary, asset_kind, payout)
@@ -1777,9 +1771,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 			},
 			PaymentStatus::InProgress | PaymentStatus::Unknown =>
 			// nothing new to report
-			{
-				Err(Error::<T, I>::PayoutInconclusive.into())
-			},
+				Err(Error::<T, I>::PayoutInconclusive.into()),
 			PaymentStatus::Failure => {
 				// assume payment has failed, allow user to retry
 				Self::deposit_event(Event::<T, I>::PaymentFailed {

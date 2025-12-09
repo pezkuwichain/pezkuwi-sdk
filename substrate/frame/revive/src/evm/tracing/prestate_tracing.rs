@@ -77,10 +77,10 @@ where
 		let include_code = !self.config.disable_code;
 
 		let is_empty = |info: &PrestateTraceInfo| {
-			!info.storage.values().any(|v| v.is_some())
-				&& info.balance.is_none()
-				&& info.nonce.is_none()
-				&& info.code.is_none()
+			!info.storage.values().any(|v| v.is_some()) &&
+				info.balance.is_none() &&
+				info.nonce.is_none() &&
+				info.code.is_none()
 		};
 
 		if self.config.diff_mode {

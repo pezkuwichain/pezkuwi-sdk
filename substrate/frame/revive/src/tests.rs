@@ -178,8 +178,8 @@ pub mod test_utils {
 		let code_info_len = CodeInfo::<Test>::max_encoded_len() as u64;
 		// Calculate deposit to be reserved.
 		// We add 2 storage items: one for code, other for code_info
-		DepositPerByte::get().saturating_mul(code_len as u64 + code_info_len)
-			+ DepositPerItem::get().saturating_mul(2)
+		DepositPerByte::get().saturating_mul(code_len as u64 + code_info_len) +
+			DepositPerItem::get().saturating_mul(2)
 	}
 	pub fn ensure_stored(code_hash: sp_core::H256) -> usize {
 		// Assert that code_info is stored
@@ -422,8 +422,8 @@ impl SetWeightLimit for RuntimeCall {
 	fn set_weight_limit(&mut self, weight_limit: Weight) -> Weight {
 		match self {
 			Self::Contracts(
-				Call::eth_call { gas_limit, .. }
-				| Call::eth_instantiate_with_code { gas_limit, .. },
+				Call::eth_call { gas_limit, .. } |
+				Call::eth_instantiate_with_code { gas_limit, .. },
 			) => {
 				let old = *gas_limit;
 				*gas_limit = weight_limit;

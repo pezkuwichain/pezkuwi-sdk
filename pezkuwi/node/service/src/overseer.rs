@@ -295,11 +295,10 @@ where
 		.collation_generation(DummySubsystem)
 		.collator_protocol({
 			let side = match is_teyrchain_node {
-				IsTeyrchainNode::Collator(_) | IsTeyrchainNode::FullNode => {
+				IsTeyrchainNode::Collator(_) | IsTeyrchainNode::FullNode =>
 					return Err(Error::Overseer(SubsystemError::Context(
 						"build validator overseer for teyrchain node".to_owned(),
-					)))
-				},
+					))),
 				IsTeyrchainNode::No => ProtocolSide::Validator {
 					keystore: keystore.clone(),
 					eviction_policy: Default::default(),
@@ -467,11 +466,10 @@ where
 		.collation_generation(CollationGenerationSubsystem::new(Metrics::register(registry)?))
 		.collator_protocol({
 			let side = match is_teyrchain_node {
-				IsTeyrchainNode::No => {
+				IsTeyrchainNode::No =>
 					return Err(Error::Overseer(SubsystemError::Context(
 						"build teyrchain node overseer for validator".to_owned(),
-					)))
-				},
+					))),
 				IsTeyrchainNode::Collator(collator_pair) => ProtocolSide::Collator {
 					peer_id: network_service.local_peer_id(),
 					collator_pair,

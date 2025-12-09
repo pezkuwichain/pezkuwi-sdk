@@ -338,12 +338,10 @@ pub(crate) mod pallet {
 				// store the valid pages
 				for (support, page) in supports.into_iter().zip(pages.iter()) {
 					match Self::valid() {
-						ValidSolution::X => {
-							QueuedSolutionX::<T>::insert(Self::round(), page, support)
-						},
-						ValidSolution::Y => {
-							QueuedSolutionY::<T>::insert(Self::round(), page, support)
-						},
+						ValidSolution::X =>
+							QueuedSolutionX::<T>::insert(Self::round(), page, support),
+						ValidSolution::Y =>
+							QueuedSolutionY::<T>::insert(Self::round(), page, support),
 					}
 				}
 				QueuedSolutionScore::<T>::insert(Self::round(), score);
@@ -489,8 +487,8 @@ pub(crate) mod pallet {
 			// The number of existing keys in `QueuedSolutionBackings` must always match that of
 			// the INVALID variant.
 			ensure!(
-				QueuedSolutionBackings::<T>::iter_prefix(Self::round()).count()
-					== Self::invalid_iter().count(),
+				QueuedSolutionBackings::<T>::iter_prefix(Self::round()).count() ==
+					Self::invalid_iter().count(),
 				"incorrect number of backings pages",
 			);
 

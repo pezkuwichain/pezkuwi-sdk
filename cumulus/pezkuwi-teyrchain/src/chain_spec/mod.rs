@@ -58,9 +58,8 @@ impl LoadSpec for ChainSpecLoader {
 	fn load_spec(&self, id: &str) -> Result<Box<dyn ChainSpec>, String> {
 		Ok(match id {
 			// - Default-like
-			"staging" => {
-				Box::new(pezkuwichain_teyrchain::staging_pezkuwichain_teyrchain_local_config())
-			},
+			"staging" =>
+				Box::new(pezkuwichain_teyrchain::staging_pezkuwichain_teyrchain_local_config()),
 			"tick" => Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/tick.json")[..],
 			)?),
@@ -82,31 +81,25 @@ impl LoadSpec for ChainSpecLoader {
 			)?),
 
 			// -- Asset Hub Pezkuwichain
-			"asset-hub-pezkuwichain-dev" => {
-				Box::new(asset_hubs::asset_hub_pezkuwichain_development_config())
-			},
-			"asset-hub-pezkuwichain-local" => {
-				Box::new(asset_hubs::asset_hub_pezkuwichain_local_config())
-			},
+			"asset-hub-pezkuwichain-dev" =>
+				Box::new(asset_hubs::asset_hub_pezkuwichain_development_config()),
+			"asset-hub-pezkuwichain-local" =>
+				Box::new(asset_hubs::asset_hub_pezkuwichain_local_config()),
 			// the chain spec as used for generating the upgrade genesis values
-			"asset-hub-pezkuwichain-genesis" => {
-				Box::new(asset_hubs::asset_hub_pezkuwichain_genesis_config())
-			},
+			"asset-hub-pezkuwichain-genesis" =>
+				Box::new(asset_hubs::asset_hub_pezkuwichain_genesis_config()),
 			"asset-hub-pezkuwichain" => Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/asset-hub-pezkuwichain.json")[..],
 			)?),
 
 			// -- Asset Hub Zagros
-			"asset-hub-zagros-dev" | "westmint-dev" => {
-				Box::new(asset_hubs::asset_hub_zagros_development_config())
-			},
-			"asset-hub-zagros-local" | "westmint-local" => {
-				Box::new(asset_hubs::asset_hub_zagros_local_config())
-			},
+			"asset-hub-zagros-dev" | "westmint-dev" =>
+				Box::new(asset_hubs::asset_hub_zagros_development_config()),
+			"asset-hub-zagros-local" | "westmint-local" =>
+				Box::new(asset_hubs::asset_hub_zagros_local_config()),
 			// the chain spec as used for generating the upgrade genesis values
-			"asset-hub-zagros-genesis" | "westmint-genesis" => {
-				Box::new(asset_hubs::asset_hub_zagros_config())
-			},
+			"asset-hub-zagros-genesis" | "westmint-genesis" =>
+				Box::new(asset_hubs::asset_hub_zagros_config()),
 			// the shell-based chain spec as used for syncing
 			"asset-hub-zagros" | "westmint" => Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/asset-hub-zagros.json")[..],
@@ -118,9 +111,8 @@ impl LoadSpec for ChainSpecLoader {
 			)?),
 
 			// -- Zagros Collectives
-			"collectives-zagros-dev" => {
-				Box::new(collectives::collectives_zagros_development_config())
-			},
+			"collectives-zagros-dev" =>
+				Box::new(collectives::collectives_zagros_development_config()),
 			"collectives-zagros-local" => Box::new(collectives::collectives_zagros_local_config()),
 			"collectives-zagros" => Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/collectives-zagros.json")[..],
@@ -129,22 +121,18 @@ impl LoadSpec for ChainSpecLoader {
 			// -- BridgeHub
 			bridge_like_id
 				if bridge_like_id.starts_with(bridge_hubs::BridgeHubRuntimeType::ID_PREFIX) =>
-			{
 				bridge_like_id
 					.parse::<bridge_hubs::BridgeHubRuntimeType>()
 					.expect("invalid value")
-					.load_config()?
-			},
+					.load_config()?,
 
 			// -- Coretime
 			coretime_like_id
 				if coretime_like_id.starts_with(coretime::CoretimeRuntimeType::ID_PREFIX) =>
-			{
 				coretime_like_id
 					.parse::<coretime::CoretimeRuntimeType>()
 					.expect("invalid value")
-					.load_config()?
-			},
+					.load_config()?,
 
 			// -- Penpal
 			id if id.starts_with("penpal-pezkuwichain") => {
@@ -209,12 +197,11 @@ impl LoadSpec for ChainSpecLoader {
 			},
 
 			// -- People
-			people_like_id if people_like_id.starts_with(people::PeopleRuntimeType::ID_PREFIX) => {
+			people_like_id if people_like_id.starts_with(people::PeopleRuntimeType::ID_PREFIX) =>
 				people_like_id
 					.parse::<people::PeopleRuntimeType>()
 					.expect("invalid value")
-					.load_config()?
-			},
+					.load_config()?,
 
 			// -- Fallback (generic chainspec)
 			"" => {
@@ -249,12 +236,12 @@ impl LegacyRuntime {
 
 		if id.starts_with("asset-hub-pezkuwi") | id.starts_with("statemint") {
 			LegacyRuntime::AssetHubPezkuwi
-		} else if id.starts_with("asset-hub-kusama")
-			| id.starts_with("statemine")
-			| id.starts_with("asset-hub-pezkuwichain")
-			| id.starts_with("rockmine")
-			| id.starts_with("asset-hub-zagros")
-			| id.starts_with("westmint")
+		} else if id.starts_with("asset-hub-kusama") |
+			id.starts_with("statemine") |
+			id.starts_with("asset-hub-pezkuwichain") |
+			id.starts_with("rockmine") |
+			id.starts_with("asset-hub-zagros") |
+			id.starts_with("westmint")
 		{
 			LegacyRuntime::AssetHub
 		} else if id.starts_with("penpal") {
@@ -291,19 +278,17 @@ impl RuntimeResolverT for RuntimeResolver {
 	fn runtime(&self, chain_spec: &dyn ChainSpec) -> sc_cli::Result<Runtime> {
 		let legacy_runtime = LegacyRuntime::from_id(chain_spec.id());
 		Ok(match legacy_runtime {
-			LegacyRuntime::AssetHubPezkuwi => {
-				Runtime::Omni(BlockNumber::U32, Consensus::Aura(AuraConsensusId::Ed25519))
-			},
-			LegacyRuntime::AssetHub
-			| LegacyRuntime::BridgeHub(_)
-			| LegacyRuntime::Collectives
-			| LegacyRuntime::Coretime(_)
-			| LegacyRuntime::People(_)
-			| LegacyRuntime::Glutton
-			| LegacyRuntime::Penpal
-			| LegacyRuntime::Omni => {
-				Runtime::Omni(BlockNumber::U32, Consensus::Aura(AuraConsensusId::Sr25519))
-			},
+			LegacyRuntime::AssetHubPezkuwi =>
+				Runtime::Omni(BlockNumber::U32, Consensus::Aura(AuraConsensusId::Ed25519)),
+			LegacyRuntime::AssetHub |
+			LegacyRuntime::BridgeHub(_) |
+			LegacyRuntime::Collectives |
+			LegacyRuntime::Coretime(_) |
+			LegacyRuntime::People(_) |
+			LegacyRuntime::Glutton |
+			LegacyRuntime::Penpal |
+			LegacyRuntime::Omni =>
+				Runtime::Omni(BlockNumber::U32, Consensus::Aura(AuraConsensusId::Sr25519)),
 		})
 	}
 }

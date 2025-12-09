@@ -340,16 +340,16 @@ pub mod pallet {
 					paras::Pallet::<T>::lifecycle(other).ok_or(Error::<T>::NotRegistered)?;
 				// identify which is a lease holding teyrchain and which is a parathread (on-demand
 				// teyrchain)
-				if id_lifecycle == ParaLifecycle::Teyrchain
-					&& other_lifecycle == ParaLifecycle::Parathread
+				if id_lifecycle == ParaLifecycle::Teyrchain &&
+					other_lifecycle == ParaLifecycle::Parathread
 				{
 					Self::do_thread_and_chain_swap(id, other);
-				} else if id_lifecycle == ParaLifecycle::Parathread
-					&& other_lifecycle == ParaLifecycle::Teyrchain
+				} else if id_lifecycle == ParaLifecycle::Parathread &&
+					other_lifecycle == ParaLifecycle::Teyrchain
 				{
 					Self::do_thread_and_chain_swap(other, id);
-				} else if id_lifecycle == ParaLifecycle::Teyrchain
-					&& other_lifecycle == ParaLifecycle::Teyrchain
+				} else if id_lifecycle == ParaLifecycle::Teyrchain &&
+					other_lifecycle == ParaLifecycle::Teyrchain
 				{
 					// If both chains are currently teyrchains, there is nothing funny we
 					// need to do for their lifecycle management, just swap the underlying

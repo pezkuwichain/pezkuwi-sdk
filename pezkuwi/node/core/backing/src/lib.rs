@@ -831,7 +831,7 @@ async fn validate_and_make_available(
 
 	let pov = match pov {
 		PoVData::Ready(pov) => pov,
-		PoVData::FetchFromValidator { from_validator, candidate_hash, pov_hash } => {
+		PoVData::FetchFromValidator { from_validator, candidate_hash, pov_hash } =>
 			match request_pov(
 				&mut sender,
 				relay_parent,
@@ -854,8 +854,7 @@ async fn validate_and_make_available(
 				},
 				Err(err) => return Err(err),
 				Ok(pov) => pov,
-			}
-		},
+			},
 	};
 
 	let v = {
@@ -946,12 +945,10 @@ async fn handle_communication<Context>(
 		CandidateBackingMessage::Statement(relay_parent, statement) => {
 			handle_statement_message(ctx, state, relay_parent, statement, metrics).await?;
 		},
-		CandidateBackingMessage::GetBackableCandidates(requested_candidates, tx) => {
-			handle_get_backable_candidates_message(state, requested_candidates, tx, metrics)?
-		},
-		CandidateBackingMessage::CanSecond(request, tx) => {
-			handle_can_second_request(ctx, state, request, tx).await
-		},
+		CandidateBackingMessage::GetBackableCandidates(requested_candidates, tx) =>
+			handle_get_backable_candidates_message(state, requested_candidates, tx, metrics)?,
+		CandidateBackingMessage::CanSecond(request, tx) =>
+			handle_can_second_request(ctx, state, request, tx).await,
 	}
 
 	Ok(())

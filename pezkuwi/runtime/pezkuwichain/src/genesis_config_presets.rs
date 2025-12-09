@@ -68,7 +68,11 @@ pub const HEZ_AIRDROP_ALLOCATION: u128 = 40_000_000 * TYR;
 // COMPILE-TIME VALIDATION: Ensure allocation integrity
 // ===========================================================================
 const _: () = assert!(
-	HEZ_FOUNDER_ALLOCATION + HEZ_PRESALE_ALLOCATION + HEZ_TREASURY_ALLOCATION + HEZ_AIRDROP_ALLOCATION == HEZ_GENESIS_SUPPLY,
+	HEZ_FOUNDER_ALLOCATION +
+		HEZ_PRESALE_ALLOCATION +
+		HEZ_TREASURY_ALLOCATION +
+		HEZ_AIRDROP_ALLOCATION ==
+		HEZ_GENESIS_SUPPLY,
 	"HEZ allocations MUST sum to genesis supply (200M)"
 );
 
@@ -166,9 +170,9 @@ fn default_teyrchains_host_configuration(
 			allowed_ancestry_len: 0,
 		},
 		node_features: bitvec::vec::BitVec::from_element(
-			(1u8 << (FeatureIndex::ElasticScalingMVP as usize))
-				| (1u8 << (FeatureIndex::EnableAssignmentsV2 as usize))
-				| (1u8 << (FeatureIndex::CandidateReceiptV2 as usize)),
+			(1u8 << (FeatureIndex::ElasticScalingMVP as usize)) |
+				(1u8 << (FeatureIndex::EnableAssignmentsV2 as usize)) |
+				(1u8 << (FeatureIndex::CandidateReceiptV2 as usize)),
 		),
 		scheduler_params: SchedulerParams {
 			lookahead: 3,

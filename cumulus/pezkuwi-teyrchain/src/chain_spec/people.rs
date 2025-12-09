@@ -44,9 +44,8 @@ impl FromStr for PeopleRuntimeType {
 			pezkuwi::PEOPLE_PEZKUWI_LOCAL => Ok(PeopleRuntimeType::PezkuwiLocal),
 			pezkuwichain::PEOPLE_PEZKUWICHAIN => Ok(PeopleRuntimeType::Pezkuwichain),
 			pezkuwichain::PEOPLE_PEZKUWICHAIN_LOCAL => Ok(PeopleRuntimeType::PezkuwichainLocal),
-			pezkuwichain::PEOPLE_PEZKUWICHAIN_DEVELOPMENT => {
-				Ok(PeopleRuntimeType::PezkuwichainDevelopment)
-			},
+			pezkuwichain::PEOPLE_PEZKUWICHAIN_DEVELOPMENT =>
+				Ok(PeopleRuntimeType::PezkuwichainDevelopment),
 			zagros::PEOPLE_ZAGROS => Ok(PeopleRuntimeType::Zagros),
 			zagros::PEOPLE_ZAGROS_LOCAL => Ok(PeopleRuntimeType::ZagrosLocal),
 			zagros::PEOPLE_ZAGROS_DEVELOPMENT => Ok(PeopleRuntimeType::ZagrosDevelopment),

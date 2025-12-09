@@ -1768,7 +1768,7 @@ impl<T: Config> Pallet<T> {
 
 		match SignedSubmissionNextIndex::<T>::get() {
 			0 => Ok(()),
-			next => {
+			next =>
 				if SignedSubmissionsMap::<T>::get(next).is_some() {
 					return Err(
 						"The next submissions index should not be in the submissions maps already"
@@ -1776,8 +1776,7 @@ impl<T: Config> Pallet<T> {
 					);
 				} else {
 					Ok(())
-				}
-			},
+				},
 		}
 	}
 
@@ -1786,13 +1785,12 @@ impl<T: Config> Pallet<T> {
 	fn try_state_phase_off() -> Result<(), TryRuntimeError> {
 		match CurrentPhase::<T>::get().is_off() {
 			false => Ok(()),
-			true => {
+			true =>
 				if Snapshot::<T>::get().is_some() {
 					Err("Snapshot must be none when in Phase::Off".into())
 				} else {
 					Ok(())
-				}
-			},
+				},
 		}
 	}
 }
@@ -2750,8 +2748,8 @@ mod tests {
 
 		let mut active = 1;
 		while weight_with(active)
-			.all_lte(<Runtime as frame_system::Config>::BlockWeights::get().max_block)
-			|| active == all_voters
+			.all_lte(<Runtime as frame_system::Config>::BlockWeights::get().max_block) ||
+			active == all_voters
 		{
 			active += 1;
 		}

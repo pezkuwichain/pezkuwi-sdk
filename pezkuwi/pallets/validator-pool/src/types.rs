@@ -102,9 +102,9 @@ where
 
 	/// Get total validator count
 	pub fn total_count(&self) -> u32 {
-		self.stake_validators.len() as u32
-			+ self.parliamentary_validators.len() as u32
-			+ self.merit_validators.len() as u32
+		self.stake_validators.len() as u32 +
+			self.parliamentary_validators.len() as u32 +
+			self.merit_validators.len() as u32
 	}
 }
 

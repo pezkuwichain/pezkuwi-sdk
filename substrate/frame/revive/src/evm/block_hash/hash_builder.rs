@@ -300,16 +300,15 @@ impl IncrementalHashBuilder {
 	#[cfg(test)]
 	fn calculate_current_size(&self) -> usize {
 		// Each mask in these vectors holds a u16.
-		let masks_len = (self.hash_builder.state_masks.len()
-			+ self.hash_builder.tree_masks.len()
-			+ self.hash_builder.hash_masks.len())
-			* 2;
+		let masks_len = (self.hash_builder.state_masks.len() +
+			self.hash_builder.tree_masks.len() +
+			self.hash_builder.hash_masks.len()) *
+			2;
 
-		self.hash_builder.key.len()
-			+ self.hash_builder.value.as_slice().len()
-			+ self.hash_builder.stack.len() * 33
-			+ masks_len
-			+ self.hash_builder.rlp_buf.len()
+		self.hash_builder.key.len() +
+			self.hash_builder.value.as_slice().len() +
+			self.hash_builder.stack.len() * 33 +
+			masks_len + self.hash_builder.rlp_buf.len()
 	}
 
 	/// Update accounting metrics after processing data.
@@ -416,15 +415,14 @@ impl IncrementalHashBuilderIR {
 		// Vector metadata overhead (capacity info, etc.)
 		let vec_overhead = 8 * core::mem::size_of::<usize>(); // 8 Vec structures
 
-		fixed_size
-			+ key_size
-			+ builder_value_size
-			+ stack_size
-			+ state_masks_size
-			+ tree_masks_size
-			+ hash_masks_size
-			+ rlp_buf_size
-			+ vec_overhead
+		fixed_size +
+			key_size + builder_value_size +
+			stack_size +
+			state_masks_size +
+			tree_masks_size +
+			hash_masks_size +
+			rlp_buf_size +
+			vec_overhead
 	}
 }
 

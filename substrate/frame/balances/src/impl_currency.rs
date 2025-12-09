@@ -835,9 +835,8 @@ where
 		if slashed == beneficiary {
 			return match status {
 				Status::Free => Ok(Self::unreserve_named(id, slashed, value)),
-				Status::Reserved => {
-					Ok(value.saturating_sub(Self::reserved_balance_named(id, slashed)))
-				},
+				Status::Reserved =>
+					Ok(value.saturating_sub(Self::reserved_balance_named(id, slashed))),
 			};
 		}
 

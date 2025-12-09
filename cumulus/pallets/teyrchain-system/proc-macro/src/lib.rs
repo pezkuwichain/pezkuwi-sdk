@@ -80,9 +80,8 @@ impl Parse for Input {
 
 fn crate_() -> Result<Ident, Error> {
 	match crate_name("cumulus-pallet-teyrchain-system") {
-		Ok(FoundCrate::Itself) => {
-			Ok(syn::Ident::new("cumulus_pallet_teyrchain_system", Span::call_site()))
-		},
+		Ok(FoundCrate::Itself) =>
+			Ok(syn::Ident::new("cumulus_pallet_teyrchain_system", Span::call_site())),
 		Ok(FoundCrate::Name(name)) => Ok(Ident::new(&name, Span::call_site())),
 		Err(e) => Err(Error::new(Span::call_site(), e)),
 	}

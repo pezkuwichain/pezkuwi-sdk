@@ -613,24 +613,22 @@ where
 		node_extra_args: NodeExtraArgs,
 	) -> Pin<Box<dyn Future<Output = sc_service::error::Result<TaskManager>>>> {
 		match teyrchain_config.network.network_backend {
-			sc_network::config::NetworkBackendType::Libp2p => {
+			sc_network::config::NetworkBackendType::Libp2p =>
 				<Self as NodeSpec>::start_node::<sc_network::NetworkWorker<_, _>>(
 					teyrchain_config,
 					pezkuwi_config,
 					collator_options,
 					hwbench,
 					node_extra_args,
-				)
-			},
-			sc_network::config::NetworkBackendType::Litep2p => {
+				),
+			sc_network::config::NetworkBackendType::Litep2p =>
 				<Self as NodeSpec>::start_node::<sc_network::Litep2pNetworkBackend>(
 					teyrchain_config,
 					pezkuwi_config,
 					collator_options,
 					hwbench,
 					node_extra_args,
-				)
-			},
+				),
 		}
 	}
 }

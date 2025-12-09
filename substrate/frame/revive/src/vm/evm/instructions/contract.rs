@@ -55,8 +55,8 @@ pub fn create<const IS_CREATE2: bool, E: Ext>(
 	let mut code = Vec::new();
 	if len != 0 {
 		// EIP-3860: Limit initcode
-		if len > revm::primitives::eip3860::MAX_INITCODE_SIZE
-			&& !DebugSettings::is_unlimited_contract_size_allowed::<E::T>()
+		if len > revm::primitives::eip3860::MAX_INITCODE_SIZE &&
+			!DebugSettings::is_unlimited_contract_size_allowed::<E::T>()
 		{
 			return ControlFlow::Break(Error::<E::T>::BlobTooLarge.into());
 		}
@@ -209,9 +209,8 @@ fn run_call<'a, E: Ext>(
 			true,
 			scheme.is_static_call(),
 		),
-		CallScheme::DelegateCall => {
-			interpreter.ext.delegate_call(gas_limit, U256::MAX, callee, input)
-		},
+		CallScheme::DelegateCall =>
+			interpreter.ext.delegate_call(gas_limit, U256::MAX, callee, input),
 		CallScheme::CallCode => {
 			unreachable!()
 		},

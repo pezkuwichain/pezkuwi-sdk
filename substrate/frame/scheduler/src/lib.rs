@@ -442,9 +442,9 @@ pub mod pallet {
 		fn integrity_test() {
 			/// Calculate the maximum weight that a lookup of a given size can take.
 			fn lookup_weight<T: Config>(s: usize) -> Weight {
-				T::WeightInfo::service_agendas_base()
-					+ T::WeightInfo::service_agenda_base(T::MaxScheduledPerBlock::get())
-					+ T::WeightInfo::service_task(Some(s), true, true)
+				T::WeightInfo::service_agendas_base() +
+					T::WeightInfo::service_agenda_base(T::MaxScheduledPerBlock::get()) +
+					T::WeightInfo::service_task(Some(s), true, true)
 			}
 
 			let limit = sp_runtime::Perbill::from_percent(90) * T::MaximumWeight::get();
@@ -1407,11 +1407,10 @@ impl<T: Config> Pallet<T> {
 					}
 					let wake = now.saturating_add(period);
 					match Self::place_task(wake, task) {
-						Ok(new_address) => {
+						Ok(new_address) =>
 							if let Some(retry_config) = maybe_retry_config {
 								Retries::<T>::insert(new_address, retry_config);
-							}
-						},
+							},
 						Err((_, task)) => {
 							// TODO: Leave task in storage somewhere for it to be rescheduled
 							// manually.
@@ -1458,9 +1457,8 @@ impl<T: Config> Pallet<T> {
 		let dispatch_origin = origin.into();
 		let (maybe_actual_call_weight, result) = match call.dispatch(dispatch_origin) {
 			Ok(post_info) => (post_info.actual_weight, Ok(())),
-			Err(error_and_info) => {
-				(error_and_info.post_info.actual_weight, Err(error_and_info.error))
-			},
+			Err(error_and_info) =>
+				(error_and_info.post_info.actual_weight, Err(error_and_info.error)),
 		};
 		let call_weight = maybe_actual_call_weight.unwrap_or(call_weight);
 		let _ = weight.try_consume(base_weight);

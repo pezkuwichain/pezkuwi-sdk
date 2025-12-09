@@ -630,8 +630,8 @@ pub mod pallet {
 					// Handle vesting
 					if let Some(ref vesting) = presale.vesting {
 						let immediate = total_reward
-							.saturating_mul(vesting.immediate_release_percent as u128)
-							/ 100;
+							.saturating_mul(vesting.immediate_release_percent as u128) /
+							100;
 
 						if immediate > 0 {
 							let immediate_balance: T::Balance =
@@ -812,9 +812,10 @@ pub mod pallet {
 				let vested_percent = elapsed_u128.saturating_mul(100) / duration_u128;
 				let immediate_percent = vesting.immediate_release_percent as u128;
 				let vesting_percent = 100u128.saturating_sub(immediate_percent);
-				let vested_amount =
-					total_with_bonus.saturating_mul(vesting_percent).saturating_mul(vested_percent)
-						/ 10000;
+				let vested_amount = total_with_bonus
+					.saturating_mul(vesting_percent)
+					.saturating_mul(vested_percent) /
+					10000;
 				let total_unlocked = vested_amount.saturating_add(already_claimed);
 				total_unlocked.saturating_sub(already_claimed)
 			};
@@ -904,14 +905,22 @@ pub mod pallet {
 			let current_block = <frame_system::Pallet<T>>::block_number();
 			let treasury = Self::presale_account_id(presale_id);
 
-			// Refund all contributors (no fees since presale was cancelled)
+			// Refund all contributors (treasury fee refunded, burn+stakers portion non-refundable)
 			let contributors = Contributors::<T>::get(presale_id);
 			for contributor in contributors.iter() {
 				if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
 					if !contribution_info.refunded && contribution_info.amount > 0 {
-						// Full refund (no fees on cancelled presale)
+						// Calculate non-refundable portion (burn + stakers = 50% of platform fee)
+						let platform_fee = contribution_info
+							.amount
+							.saturating_mul(T::PlatformFeePercent::get() as u128) /
+							100;
+						let non_refundable = platform_fee.saturating_mul(50) / 100; // 1% (burn 25% + stakers 25%)
+
+						// Refund = 99% (contribution - non_refundable portion)
 						let refund_amount: T::Balance = contribution_info
 							.amount
+							.saturating_sub(non_refundable)
 							.try_into()
 							.map_err(|_| Error::<T>::ArithmeticOverflow)?;
 
@@ -980,9 +989,17 @@ pub mod pallet {
 				if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
 					// Skip if already refunded or zero amount
 					if !contribution_info.refunded && contribution_info.amount > 0 {
-						// Full refund (NO FEE for failed presale)
+						// Calculate non-refundable portion (burn + stakers = 50% of platform fee)
+						let platform_fee = contribution_info
+							.amount
+							.saturating_mul(T::PlatformFeePercent::get() as u128) /
+							100;
+						let non_refundable = platform_fee.saturating_mul(50) / 100; // 1% (burn 25% + stakers 25%)
+
+						// Refund = 99% (contribution - non_refundable portion)
 						let refund_amount: T::Balance = contribution_info
 							.amount
+							.saturating_sub(non_refundable)
 							.try_into()
 							.map_err(|_| Error::<T>::ArithmeticOverflow)?;
 

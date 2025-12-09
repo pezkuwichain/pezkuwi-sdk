@@ -61,8 +61,8 @@ impl StorageCmd {
 		if self.params.is_validate_block_mode() && self.params.disable_pov_recorder {
 			return Err("PoV recorder must be activated to provide a storage proof for block validation at runtime. Remove `--disable-pov-recorder`.".into());
 		}
-		if self.params.is_validate_block_mode()
-			&& self.params.batch_size > MAX_BATCH_SIZE_FOR_BLOCK_VALIDATION
+		if self.params.is_validate_block_mode() &&
+			self.params.batch_size > MAX_BATCH_SIZE_FOR_BLOCK_VALIDATION
 		{
 			return Err(format!("Batch size is too large. This may cause problems with runtime memory allocation. Better set `--batch-size {}` or less.", MAX_BATCH_SIZE_FOR_BLOCK_VALIDATION).into());
 		}

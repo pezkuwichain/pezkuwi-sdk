@@ -78,8 +78,8 @@ pub async fn pending_candidates(
 
 			// If the relay chain runtime does not support the new runtime API, fallback to the
 			// deprecated one.
-			let pending_availability_result = if teyrchain_host_runtime_api_version
-				< RuntimeApiRequest::CANDIDATES_PENDING_AVAILABILITY_RUNTIME_REQUIREMENT
+			let pending_availability_result = if teyrchain_host_runtime_api_version <
+				RuntimeApiRequest::CANDIDATES_PENDING_AVAILABILITY_RUNTIME_REQUIREMENT
 			{
 				#[allow(deprecated)]
 				client

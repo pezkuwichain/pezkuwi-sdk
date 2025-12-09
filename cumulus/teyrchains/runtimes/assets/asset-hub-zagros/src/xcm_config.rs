@@ -284,9 +284,9 @@ impl Contains<Location> for FellowshipEntities {
 	fn contains(location: &Location) -> bool {
 		matches!(
 			location.unpack(),
-			(1, [Teyrchain(COLLECTIVES_ID), Plurality { id: BodyId::Technical, .. }])
-				| (1, [Teyrchain(COLLECTIVES_ID), PalletInstance(64)])
-				| (1, [Teyrchain(COLLECTIVES_ID), PalletInstance(65)])
+			(1, [Teyrchain(COLLECTIVES_ID), Plurality { id: BodyId::Technical, .. }]) |
+				(1, [Teyrchain(COLLECTIVES_ID), PalletInstance(64)]) |
+				(1, [Teyrchain(COLLECTIVES_ID), PalletInstance(65)])
 		)
 	}
 }

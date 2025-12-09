@@ -268,6 +268,10 @@ mod benchmarks {
 		// Setup assets
 		let (payment_asset, reward_asset) = setup_benchmark_assets::<T>(&caller, &presale_treasury);
 
+		// Mint EXTRA reward tokens to presale treasury to prevent account death
+		let extra_reward: T::Balance = 100_000_000_000u128.into();
+		let _ = T::Assets::mint_into(reward_asset.clone(), &presale_treasury, extra_reward);
+
 		// Create presale WITH vesting (will get the presale_id we calculated)
 		let _ = create_test_presale::<T>(&caller, payment_asset, reward_asset, false, true);
 
@@ -304,12 +308,17 @@ mod benchmarks {
 		let (payment_asset, reward_asset) = setup_benchmark_assets::<T>(&caller, &presale_treasury);
 
 		// Create presale (will get the presale_id we calculated)
-		let _ = create_test_presale::<T>(&caller, payment_asset, reward_asset, false, false);
+		let _ =
+			create_test_presale::<T>(&caller, payment_asset.clone(), reward_asset, false, false);
 
 		// Make a contribution
 		let amount: u128 = 10_000u128;
 		let _ =
 			Presale::<T>::contribute(RawOrigin::Signed(caller.clone()).into(), presale_id, amount);
+
+		// Mint payment tokens to presale treasury for refund
+		let refund_amount: T::Balance = 100_000u128.into();
+		let _ = T::Assets::mint_into(payment_asset, &presale_treasury, refund_amount);
 
 		// Cancel the presale
 		let _ = Presale::<T>::cancel_presale(RawOrigin::Root.into(), presale_id);
@@ -420,6 +429,10 @@ mod benchmarks {
 				1_000u128,
 			);
 		}
+
+		// Mint payment tokens to presale treasury for refunds
+		let refund_pool: T::Balance = (n as u128 * 10_000u128).into();
+		let _ = T::Assets::mint_into(payment_asset.clone(), &presale_treasury, refund_pool);
 
 		// Advance blocks past presale end
 		frame_system::Pallet::<T>::set_block_number(2000u32.into());

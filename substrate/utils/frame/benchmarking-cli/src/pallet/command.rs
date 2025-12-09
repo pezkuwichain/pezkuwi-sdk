@@ -166,9 +166,8 @@ impl PalletCmd {
 		chain_spec_from_api: Option<Box<dyn ChainSpec>>,
 	) -> Result<GenesisStateHandler> {
 		let genesis_builder_to_source = || match self.genesis_builder {
-			Some(GenesisBuilderPolicy::Runtime) | Some(GenesisBuilderPolicy::SpecRuntime) => {
-				SpecGenesisSource::Runtime(self.genesis_builder_preset.clone())
-			},
+			Some(GenesisBuilderPolicy::Runtime) | Some(GenesisBuilderPolicy::SpecRuntime) =>
+				SpecGenesisSource::Runtime(self.genesis_builder_preset.clone()),
 			Some(GenesisBuilderPolicy::SpecGenesis) | None => {
 				log::warn!(target: LOG_TARGET, "{WARN_SPEC_GENESIS_CTOR}");
 				SpecGenesisSource::SpecJson
@@ -245,15 +244,13 @@ impl PalletCmd {
 		if let Some(json_input) = &self.json_input {
 			let raw_data = match std::fs::read(json_input) {
 				Ok(raw_data) => raw_data,
-				Err(error) => {
-					return Err(format!("Failed to read {:?}: {}", json_input, error).into())
-				},
+				Err(error) =>
+					return Err(format!("Failed to read {:?}: {}", json_input, error).into()),
 			};
 			let batches: Vec<BenchmarkBatchSplitResults> = match serde_json::from_slice(&raw_data) {
 				Ok(batches) => batches,
-				Err(error) => {
-					return Err(format!("Failed to deserialize {:?}: {}", json_input, error).into())
-				},
+				Err(error) =>
+					return Err(format!("Failed to deserialize {:?}: {}", json_input, error).into()),
 			};
 			return self.output_from_results(&batches);
 		}
@@ -633,10 +630,10 @@ impl PalletCmd {
 	fn pallet_selected(&self, pallet: &Vec<u8>) -> bool {
 		let include = self.pallets.clone();
 
-		let included = include.is_empty()
-			|| include.iter().any(|p| p.as_bytes() == pallet)
-			|| include.iter().any(|p| p == "*")
-			|| include.iter().any(|p| p == "all");
+		let included = include.is_empty() ||
+			include.iter().any(|p| p.as_bytes() == pallet) ||
+			include.iter().any(|p| p == "*") ||
+			include.iter().any(|p| p == "all");
 		let excluded = self.exclude_pallets.iter().any(|p| p.as_bytes() == pallet);
 
 		included && !excluded
@@ -652,10 +649,10 @@ impl PalletCmd {
 		let extrinsic_split: Vec<&str> = extrinsic_filter.split(',').collect();
 		let extrinsics: Vec<_> = extrinsic_split.iter().map(|x| x.trim().as_bytes()).collect();
 
-		let included = extrinsic_filter.is_empty()
-			|| extrinsic_filter == "*"
-			|| extrinsic_filter == "all"
-			|| extrinsics.contains(&&extrinsic[..]);
+		let included = extrinsic_filter.is_empty() ||
+			extrinsic_filter == "*" ||
+			extrinsic_filter == "all" ||
+			extrinsics.contains(&&extrinsic[..]);
 
 		let excluded = self
 			.excluded_extrinsics()
@@ -964,13 +961,12 @@ impl PalletCmd {
 					.or_default()
 					.entry((pov_pallet.to_string(), pov_storage.to_string()))
 				{
-					Entry::Occupied(_) => {
+					Entry::Occupied(_) =>
 						return Err(format!(
 							"Cannot specify pov_mode tag twice for the same key: {}",
 							pallet_storage
 						)
-						.into())
-					},
+						.into()),
 					Entry::Vacant(e) => {
 						e.insert(mode);
 					},
@@ -1032,14 +1028,13 @@ impl PalletCmd {
 		}
 
 		match self.genesis_builder {
-			Some(GenesisBuilderPolicy::SpecGenesis | GenesisBuilderPolicy::SpecRuntime) => {
+			Some(GenesisBuilderPolicy::SpecGenesis | GenesisBuilderPolicy::SpecRuntime) =>
 				if chain_spec.is_none() && self.shared_params.chain.is_none() {
 					return Err((
 						ErrorKind::MissingRequiredArgument,
 						"Provide a chain spec via `--chain`.".to_string(),
 					));
-				}
-			},
+				},
 			_ => {},
 		}
 

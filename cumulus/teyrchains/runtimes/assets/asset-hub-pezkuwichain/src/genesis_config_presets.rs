@@ -72,8 +72,11 @@ pub const PEZ_REWARDS_POOL: Balance = 3_800_000_000 * TYR;
 // Compile-time verification that all allocations sum to PEZ_TOTAL_SUPPLY
 const _: () = {
 	assert!(
-		PEZ_TREASURY_ALLOCATION + PEZ_FOUNDER_ALLOCATION + PEZ_PRESALE_ALLOCATION +
-			PEZ_REWARDS_POOL == PEZ_TOTAL_SUPPLY,
+		PEZ_TREASURY_ALLOCATION +
+			PEZ_FOUNDER_ALLOCATION +
+			PEZ_PRESALE_ALLOCATION +
+			PEZ_REWARDS_POOL ==
+			PEZ_TOTAL_SUPPLY,
 		"PEZ allocations must sum to exactly 5 billion tokens"
 	);
 };

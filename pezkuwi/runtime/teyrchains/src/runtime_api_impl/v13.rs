@@ -147,13 +147,12 @@ where
 			build()
 		},
 		OccupiedCoreAssumption::TimedOut => build(),
-		OccupiedCoreAssumption::Free => {
+		OccupiedCoreAssumption::Free =>
 			if !<inclusion::Pallet<Config>>::candidates_pending_availability(para_id).is_empty() {
 				None
 			} else {
 				build()
-			}
-		},
+			},
 	}
 }
 
@@ -291,15 +290,12 @@ where
 		.filter_map(|record| extract_event(record.event))
 		.filter_map(|event| {
 			Some(match event {
-				RawEvent::<T>::CandidateBacked(c, h, core, group) => {
-					CandidateEvent::CandidateBacked(c, h, core, group)
-				},
-				RawEvent::<T>::CandidateIncluded(c, h, core, group) => {
-					CandidateEvent::CandidateIncluded(c, h, core, group)
-				},
-				RawEvent::<T>::CandidateTimedOut(c, h, core) => {
-					CandidateEvent::CandidateTimedOut(c, h, core)
-				},
+				RawEvent::<T>::CandidateBacked(c, h, core, group) =>
+					CandidateEvent::CandidateBacked(c, h, core, group),
+				RawEvent::<T>::CandidateIncluded(c, h, core, group) =>
+					CandidateEvent::CandidateIncluded(c, h, core, group),
+				RawEvent::<T>::CandidateTimedOut(c, h, core) =>
+					CandidateEvent::CandidateTimedOut(c, h, core),
 				// Not needed for candidate events.
 				RawEvent::<T>::UpwardMessagesReceived { .. } => return None,
 				RawEvent::<T>::__Ignore(_, _) => unreachable!("__Ignore cannot be used"),
@@ -430,8 +426,8 @@ pub fn backing_constraints<T: initializer::Config>(
 
 	// Use the right storage depending on version to ensure #64 doesn't cause issues with this
 	// migration.
-	let min_relay_parent_number = if shared::Pallet::<T>::on_chain_storage_version()
-		== StorageVersion::new(0)
+	let min_relay_parent_number = if shared::Pallet::<T>::on_chain_storage_version() ==
+		StorageVersion::new(0)
 	{
 		shared::migration::v0::AllowedRelayParents::<T>::get().hypothetical_earliest_block_number(
 			now,
@@ -575,8 +571,8 @@ pub fn candidates_pending_availability<T: initializer::Config>(
 
 /// Implementation for `validation_code_bomb_limit` function from the runtime API
 pub fn validation_code_bomb_limit<T: initializer::Config>() -> u32 {
-	configuration::ActiveConfig::<T>::get().max_code_size
-		* configuration::MAX_VALIDATION_CODE_COMPRESSION_RATIO
+	configuration::ActiveConfig::<T>::get().max_code_size *
+		configuration::MAX_VALIDATION_CODE_COMPRESSION_RATIO
 }
 
 /// Implementation for `scheduling_lookahead` function from the runtime API

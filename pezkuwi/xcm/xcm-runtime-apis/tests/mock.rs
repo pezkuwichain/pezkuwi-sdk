@@ -186,8 +186,8 @@ type Weigher = FixedWeightBounds<BaseXcmWeight, RuntimeCall, MaxInstructions>;
 pub struct NativeTokenToAssetHub;
 impl ContainsPair<Asset, Location> for NativeTokenToAssetHub {
 	fn contains(asset: &Asset, origin: &Location) -> bool {
-		matches!(asset.id.0.unpack(), (0, []))
-			&& matches!(origin.unpack(), (1, [Teyrchain(ASSET_HUB_PARA_ID)]))
+		matches!(asset.id.0.unpack(), (0, [])) &&
+			matches!(origin.unpack(), (1, [Teyrchain(ASSET_HUB_PARA_ID)]))
 	}
 }
 
@@ -428,9 +428,8 @@ where
 {
 	fn try_convert(origin: RuntimeOrigin) -> Result<Location, RuntimeOrigin> {
 		origin.try_with_caller(|caller| match caller.try_into() {
-			Ok(SystemRawOrigin::Signed(who)) => {
-				Ok(Junction::AccountIndex64 { network: None, index: who.into() }.into())
-			},
+			Ok(SystemRawOrigin::Signed(who)) =>
+				Ok(Junction::AccountIndex64 { network: None, index: who.into() }.into()),
 			Ok(other) => Err(other.into()),
 			Err(other) => Err(other),
 		})

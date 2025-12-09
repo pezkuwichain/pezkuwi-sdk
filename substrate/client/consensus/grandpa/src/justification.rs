@@ -214,14 +214,12 @@ impl<Block: BlockT> GrandpaJustification<Block> {
 				&mut buf,
 			);
 			match signature_result {
-				sp_consensus_grandpa::SignatureResult::Invalid => {
+				sp_consensus_grandpa::SignatureResult::Invalid =>
 					return Err(ClientError::BadJustification(
 						"invalid signature for precommit in grandpa justification".to_string(),
-					))
-				},
-				sp_consensus_grandpa::SignatureResult::OutdatedSet => {
-					return Err(ClientError::OutdatedJustification)
-				},
+					)),
+				sp_consensus_grandpa::SignatureResult::OutdatedSet =>
+					return Err(ClientError::OutdatedJustification),
 				sp_consensus_grandpa::SignatureResult::Valid => {},
 			}
 
@@ -238,11 +236,10 @@ impl<Block: BlockT> GrandpaJustification<Block> {
 						visited_hashes.insert(hash);
 					}
 				},
-				_ => {
+				_ =>
 					return Err(ClientError::BadJustification(
 						"invalid precommit ancestry proof in grandpa justification".to_string(),
-					))
-				},
+					)),
 			}
 		}
 

@@ -101,8 +101,8 @@ fn compute_next_wake_up_time(
 	// we should still produce two blocks if we are scheduled on every relay block.
 	let mut block_production_interval = min(para_slot_duration.as_duration(), relay_slot_duration);
 
-	if assigned_core_num > para_slots_per_relay_block
-		&& para_slot_duration.as_duration() >= relay_slot_duration
+	if assigned_core_num > para_slots_per_relay_block &&
+		para_slot_duration.as_duration() >= relay_slot_duration
 	{
 		block_production_interval =
 			max(relay_slot_duration / assigned_core_num, BLOCK_PRODUCTION_MINIMUM_INTERVAL_MS);
@@ -204,8 +204,8 @@ fn adjust_authoring_duration(
 		//     without issues.
 		// - Block 11: next slot change in 0.993s - skipped by the deadline
 		// - Block 12: next slot change in 0.493s - skipped by the deadline
-		if authoring_duration
-			< BLOCK_PRODUCTION_MINIMUM_INTERVAL_MS.saturating_sub(BLOCK_PRODUCTION_THRESHOLD_MS)
+		if authoring_duration <
+			BLOCK_PRODUCTION_MINIMUM_INTERVAL_MS.saturating_sub(BLOCK_PRODUCTION_THRESHOLD_MS)
 		{
 			tracing::debug!(
 				target: LOG_TARGET,
@@ -233,9 +233,9 @@ fn time_until_next_attempt(
 ) -> (Duration, Timestamp) {
 	let now = now.as_millis().saturating_sub(offset.as_millis());
 
-	let next_slot_time = ((now + block_production_interval.as_millis())
-		/ block_production_interval.as_millis())
-		* block_production_interval.as_millis();
+	let next_slot_time = ((now + block_production_interval.as_millis()) /
+		block_production_interval.as_millis()) *
+		block_production_interval.as_millis();
 	let remaining_millis = next_slot_time - now;
 	(Duration::from_millis(remaining_millis as u64), Timestamp::from(next_slot_time as u64))
 }

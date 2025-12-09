@@ -89,7 +89,6 @@ use frame_support::{
 		tokens::Preservation,
 		Get,
 	},
-	weights::Weight,
 	PalletId,
 };
 use frame_system::pallet_prelude::BlockNumberFor;
@@ -119,7 +118,7 @@ pub mod pallet {
 	#[pallet::config]
 	pub trait Config: frame_system::Config + TypeInfo {
 		type Assets: Mutate<Self::AccountId>;
-		type WeightInfo: crate::WeightInfo;
+		type WeightInfo: weights::WeightInfo;
 
 		#[pallet::constant]
 		type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;

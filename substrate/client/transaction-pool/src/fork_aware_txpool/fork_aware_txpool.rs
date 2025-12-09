@@ -748,10 +748,9 @@ where
 
 		let insertion = match self.mempool.push_watched(source, at_number, xt.clone()).await {
 			Ok(result) => result,
-			Err(TxPoolApiError::ImmediatelyDropped) => {
+			Err(TxPoolApiError::ImmediatelyDropped) =>
 				self.attempt_transaction_replacement(source, at_number, true, xt.clone())
-					.await?
-			},
+					.await?,
 			Err(e) => return Err(e.into()),
 		};
 
@@ -804,9 +803,8 @@ where
 			.zip(xts.clone())
 			.map(|(result, xt)| async move {
 				match result {
-					Err(TxPoolApiError::ImmediatelyDropped) => {
-						self.attempt_transaction_replacement(source, at_number, false, xt).await
-					},
+					Err(TxPoolApiError::ImmediatelyDropped) =>
+						self.attempt_transaction_replacement(source, at_number, false, xt).await,
 					_ => result,
 				}
 			})
@@ -993,9 +991,8 @@ where
 			"fatp::submit_one"
 		);
 		match self.submit_at(_at, source, vec![xt]).await {
-			Ok(mut v) => {
-				v.pop().expect("There is exactly one element in result of submit_at. qed.")
-			},
+			Ok(mut v) =>
+				v.pop().expect("There is exactly one element in result of submit_at. qed."),
 			Err(e) => Err(e),
 		}
 	}
@@ -1282,8 +1279,8 @@ where
 				return;
 			};
 
-			if at.number.saturating_sub(oldest_block_number).into()
-				<= self.finality_timeout_threshold.into()
+			if at.number.saturating_sub(oldest_block_number).into() <=
+				self.finality_timeout_threshold.into()
 			{
 				return;
 			}
@@ -1514,8 +1511,8 @@ where
 			// note: There is no point to fetch the transactions from blocks older than threshold.
 			// All transactions included in these blocks, were already removed from pool
 			// with FinalityTimeout event.
-			if at.number.saturating_sub(block.number).into()
-				<= self.finality_timeout_threshold.into()
+			if at.number.saturating_sub(block.number).into() <=
+				self.finality_timeout_threshold.into()
 			{
 				all_txs.extend(self.fetch_block_transactions(block).await);
 			}
@@ -1987,11 +1984,10 @@ where
 		let compute_tree_route = |from, to| -> Result<TreeRoute<Block>, String> {
 			match self.api.tree_route(from, to) {
 				Ok(tree_route) => Ok(tree_route),
-				Err(e) => {
+				Err(e) =>
 					return Err(format!(
 						"Error occurred while computing tree_route from {from:?} to {to:?}: {e}"
-					))
-				},
+					)),
 			}
 		};
 		let block_id_to_number =

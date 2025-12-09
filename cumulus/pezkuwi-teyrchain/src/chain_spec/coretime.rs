@@ -53,9 +53,8 @@ impl FromStr for CoretimeRuntimeType {
 			pezkuwi::CORETIME_PEZKUWI_LOCAL => Ok(CoretimeRuntimeType::PezkuwiLocal),
 			pezkuwichain::CORETIME_PEZKUWICHAIN => Ok(CoretimeRuntimeType::Pezkuwichain),
 			pezkuwichain::CORETIME_PEZKUWICHAIN_LOCAL => Ok(CoretimeRuntimeType::PezkuwichainLocal),
-			pezkuwichain::CORETIME_PEZKUWICHAIN_DEVELOPMENT => {
-				Ok(CoretimeRuntimeType::PezkuwichainDevelopment)
-			},
+			pezkuwichain::CORETIME_PEZKUWICHAIN_DEVELOPMENT =>
+				Ok(CoretimeRuntimeType::PezkuwichainDevelopment),
 			zagros::CORETIME_ZAGROS => Ok(CoretimeRuntimeType::Zagros),
 			zagros::CORETIME_ZAGROS_LOCAL => Ok(CoretimeRuntimeType::ZagrosLocal),
 			zagros::CORETIME_ZAGROS_DEVELOPMENT => Ok(CoretimeRuntimeType::ZagrosDevelopment),
@@ -73,9 +72,8 @@ impl From<CoretimeRuntimeType> for &str {
 			CoretimeRuntimeType::PezkuwiLocal => pezkuwi::CORETIME_PEZKUWI_LOCAL,
 			CoretimeRuntimeType::Pezkuwichain => pezkuwichain::CORETIME_PEZKUWICHAIN,
 			CoretimeRuntimeType::PezkuwichainLocal => pezkuwichain::CORETIME_PEZKUWICHAIN_LOCAL,
-			CoretimeRuntimeType::PezkuwichainDevelopment => {
-				pezkuwichain::CORETIME_PEZKUWICHAIN_DEVELOPMENT
-			},
+			CoretimeRuntimeType::PezkuwichainDevelopment =>
+				pezkuwichain::CORETIME_PEZKUWICHAIN_DEVELOPMENT,
 			CoretimeRuntimeType::Zagros => zagros::CORETIME_ZAGROS,
 			CoretimeRuntimeType::ZagrosLocal => zagros::CORETIME_ZAGROS_LOCAL,
 			CoretimeRuntimeType::ZagrosDevelopment => zagros::CORETIME_ZAGROS_DEVELOPMENT,
@@ -86,16 +84,16 @@ impl From<CoretimeRuntimeType> for &str {
 impl From<CoretimeRuntimeType> for ChainType {
 	fn from(runtime_type: CoretimeRuntimeType) -> Self {
 		match runtime_type {
-			CoretimeRuntimeType::Kusama
-			| CoretimeRuntimeType::Pezkuwi
-			| CoretimeRuntimeType::Pezkuwichain
-			| CoretimeRuntimeType::Zagros => ChainType::Live,
-			CoretimeRuntimeType::KusamaLocal
-			| CoretimeRuntimeType::PezkuwiLocal
-			| CoretimeRuntimeType::PezkuwichainLocal
-			| CoretimeRuntimeType::ZagrosLocal => ChainType::Local,
-			CoretimeRuntimeType::PezkuwichainDevelopment
-			| CoretimeRuntimeType::ZagrosDevelopment => ChainType::Development,
+			CoretimeRuntimeType::Kusama |
+			CoretimeRuntimeType::Pezkuwi |
+			CoretimeRuntimeType::Pezkuwichain |
+			CoretimeRuntimeType::Zagros => ChainType::Live,
+			CoretimeRuntimeType::KusamaLocal |
+			CoretimeRuntimeType::PezkuwiLocal |
+			CoretimeRuntimeType::PezkuwichainLocal |
+			CoretimeRuntimeType::ZagrosLocal => ChainType::Local,
+			CoretimeRuntimeType::PezkuwichainDevelopment |
+			CoretimeRuntimeType::ZagrosDevelopment => ChainType::Development,
 		}
 	}
 }
@@ -114,21 +112,17 @@ impl CoretimeRuntimeType {
 			CoretimeRuntimeType::Pezkuwichain => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/coretime-pezkuwichain.json")[..],
 			)?)),
-			CoretimeRuntimeType::PezkuwichainLocal => {
-				Ok(Box::new(pezkuwichain::local_config(*self, "pezkuwichain-local")))
-			},
-			CoretimeRuntimeType::PezkuwichainDevelopment => {
-				Ok(Box::new(pezkuwichain::local_config(*self, "pezkuwichain-dev")))
-			},
+			CoretimeRuntimeType::PezkuwichainLocal =>
+				Ok(Box::new(pezkuwichain::local_config(*self, "pezkuwichain-local"))),
+			CoretimeRuntimeType::PezkuwichainDevelopment =>
+				Ok(Box::new(pezkuwichain::local_config(*self, "pezkuwichain-dev"))),
 			CoretimeRuntimeType::Zagros => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../../teyrchains/chain-specs/coretime-zagros.json")[..],
 			)?)),
-			CoretimeRuntimeType::ZagrosLocal => {
-				Ok(Box::new(zagros::local_config(*self, "zagros-local")))
-			},
-			CoretimeRuntimeType::ZagrosDevelopment => {
-				Ok(Box::new(zagros::local_config(*self, "zagros-dev")))
-			},
+			CoretimeRuntimeType::ZagrosLocal =>
+				Ok(Box::new(zagros::local_config(*self, "zagros-local"))),
+			CoretimeRuntimeType::ZagrosDevelopment =>
+				Ok(Box::new(zagros::local_config(*self, "zagros-dev"))),
 			other => Err(std::format!(
 				"No default config present for {:?}, you should provide a chain-spec as json file!",
 				other
