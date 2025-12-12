@@ -5,9 +5,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  pull_request:
-    types: [labeled, opened, synchronize, unlabeled]
-  merge_group:
+  workflow_dispatch:
 
 env:
   # NOTE: prdoc tool from paritytech - using local prdoc check instead
