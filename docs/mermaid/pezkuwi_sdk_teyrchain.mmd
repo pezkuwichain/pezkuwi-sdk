@@ -1,11 +1,11 @@
 flowchart LR
-	subgraph Parachain[A Polkadot Parachain]
-		ParachainNode[Parachain Node]
-		ParachainRuntime[Parachain Runtime]
+	subgraph TeyrChain[A Pezkuwi TeyrChain]
+		TeyrChainNode[TeyrChain Node]
+		TeyrChainRuntime[TeyrChain Runtime]
 	end
 
-    FRAME -.-> ParachainRuntime
-    Substrate[Substrate Node Libraries] -.-> ParachainNode
+    FRAME -.-> TeyrChainRuntime
+    PezkuwiSDK[Pezkuwi SDK Node Libraries] -.-> TeyrChainNode
 
-    CumulusC[Cumulus Node Libraries] -.-> ParachainNode
-    CumulusR[Cumulus Runtime Libraries] -.-> ParachainRuntime
+    CumulusC[Cumulus Node Libraries] -.-> TeyrChainNode
+    CumulusR[Cumulus Runtime Libraries] -.-> TeyrChainRuntime

@@ -498,7 +498,7 @@
 ## Custom Pallets Distribution Table
 
 | Pallet Name | Asset Hub PZ | Asset Hub ZG | People PZ | People ZG | PZ Relay | Test Runtimes | Benchmarks |
-|-------------|:------------:|:------------:|:---------:|:---------:|:--------:|:-------------:|:----------:|
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **pallet-pez-treasury** | ✓ | | | | | | ✅ |
 | **pallet-presale** | ✓ | | | | | | ✅ |
 | **pallet-token-wrapper** | ✓ | | | | | | ✅ |

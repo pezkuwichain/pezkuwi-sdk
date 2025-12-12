@@ -31,7 +31,7 @@ There are a few basic ground-rules for contributors (including the maintainer(s)
 All branches must follow these naming patterns:
 
 | Pattern | Purpose | Example |
-|---------|---------|---------|
+| --- | --- | --- |
 | `feature/<name>` | New features | `feature/parliamentary-nft-voting` |
 | `fix/<name>` | Bug fixes | `fix/presale-overflow-check` |
 | `pallet/<name>` | Pallet-specific changes | `pallet/welati-liquid-democracy` |

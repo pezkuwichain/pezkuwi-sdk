@@ -13,7 +13,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ## Terminoloji Dönüşüm Tablosu
 
 | Eski Terim | Yeni Terim | Açıklama |
-|------------|------------|----------|
+| --- | --- | --- |
 | `polkadot` | `pezkuwi` | Ana zincir referansları |
 | `polkadot-sdk` | `pezkuwi-sdk` | SDK referansları |
 | `paritytech` | `pezkuwichain` | Organizasyon adı |
@@ -29,7 +29,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 1. CI/CD Kontrolleri (12 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `checks.yml` | Clippy, try-runtime kontrolleri | 1 referans | YÜKSEK |
 | `checks-quick.yml` | Format, zepter, toml kontrolleri | 3 referans | YÜKSEK |
 | `check-prdoc.yml` | PR dokümantasyon kontrolü | 1 referans | ORTA |
@@ -46,7 +46,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 2. Test Workflow'ları (7 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `tests.yml` | Ana test suite | 0 referans | TAMAM |
 | `tests-linux-stable.yml` | Linux stable testleri | 1 referans | ORTA |
 | `tests-linux-stable-coverage.yml` | Coverage testleri | 0 referans | TAMAM |
@@ -58,7 +58,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 3. Build & Publish (5 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `build-publish-images.yml` | Docker image build | 5 referans | KRİTİK |
 | `build-publish-eth-rpc.yml` | ETH RPC build | 0 referans | TAMAM |
 | `build-misc.yml` | Misc build işlemleri | 0 referans | TAMAM |
@@ -68,7 +68,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 4. Release Workflow'ları (17 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `release-10_branchoff-stable.yml` | Stable branch oluşturma | 1 referans | YÜKSEK |
 | `release-11_rc-automation.yml` | RC otomasyonu | 1 referans | YÜKSEK |
 | `release-20_build-rc.yml` | RC build | 1 referans | YÜKSEK |
@@ -90,7 +90,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 5. Reusable Workflow'lar (5 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `reusable-preflight.yml` | Preflight kontrolleri | 2 referans | YÜKSEK |
 | `reusable-isdraft.yml` | Draft kontrolü | 0 referans | TAMAM |
 | `release-reusable-rc-build.yml` | RC build reusable | 3 referans | YÜKSEK |
@@ -101,7 +101,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 6. Zombienet Workflow'ları (5 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `zombienet_pezkuwi.yml` | Pezkuwi zombienet testleri | 0 referans | TAMAM |
 | `zombienet_cumulus.yml` | Cumulus zombienet testleri | 0 referans | TAMAM |
 | `zombienet_substrate.yml` | Substrate zombienet testleri | 0 referans | TAMAM |
@@ -112,7 +112,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 7. Command & Bot Workflow'ları (7 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `cmd.yml` | Command işleyici | 1 referans | ORTA |
 | `cmd-run.yml` | Command çalıştırıcı | 0 referans | TAMAM |
 | `command-backport.yml` | Backport command | 0 referans | TAMAM |
@@ -124,7 +124,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 8. Misc Workflow'lar (9 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `docs.yml` | Dokümantasyon | 1 referans | ORTA |
 | `fork-sync-action.yml` | Fork senkronizasyonu | 1 referans | ORTA |
 | `gitspiegel-trigger.yml` | Git mirror trigger | 0 referans | TAMAM |
@@ -139,7 +139,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 ### 9. Benchmark Workflow'ları (3 dosya)
 
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
-|-------|------|-------------------|---------|
+| --- | --- | --- | --- |
 | `bench-all-runtimes.yml` | Tüm runtime benchmarks | 0 referans | TAMAM |
 | `benchmarks-networking.yml` | Network benchmarks | 0 referans | TAMAM |
 | `benchmarks-subsystem.yml` | Subsystem benchmarks | 0 referans | TAMAM |
@@ -375,7 +375,7 @@ on:
 Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değil:
 
 | Dependency | Kullanım Yeri | Öneri |
-|------------|---------------|-------|
+| --- | --- | --- |
 | `@polkadot-api/check-runtime` | Runtime uyumluluk | Uyumluluk testi yap, muhtemelen çalışır |
 | `paritytech/revive` | EVM testleri | Harici olarak bırak |
 | `paritytech/try-runtime-cli` | Migration testleri | Substrate fork'u olduğu için muhtemelen uyumlu |
@@ -384,7 +384,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 ### Fork Edilmesi Gerekenler
 
 | Tool | Öncelik | Sebep |
-|------|---------|-------|
+| --- | --- | --- |
 | `paritytech/tools` Docker image | YÜKSEK | CI container'ı |
 | `paritytech/node-bench-regression-guard` | ORTA | Benchmark regresyon kontrolü |
 | `@paritytech/license-scanner` | DÜŞÜK | Lisans taraması |
@@ -393,7 +393,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 ### Oluşturulması Gerekenler
 
 | Kaynak | Öncelik | Açıklama |
-|--------|---------|----------|
+| --- | --- | --- |
 | Pezkuwi Matrix/Discord odaları | YÜKSEK | Release bildirimleri için |
 | `pezkuwichain/tools` Docker image | YÜKSEK | CI için |
 | Pezkuwi DockerHub registry | YÜKSEK | Image depolama |
@@ -432,7 +432,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 ## Özet
 
 | Kategori | Dosya Sayısı | Değişiklik Gereken | Tamam |
-|----------|--------------|-------------------|-------|
+| --- | --- | --- | --- |
 | CI/CD Kontrolleri | 12 | 7 | 5 |
 | Test Workflow'ları | 7 | 3 | 4 |
 | Build & Publish | 5 | 1 | 4 |
