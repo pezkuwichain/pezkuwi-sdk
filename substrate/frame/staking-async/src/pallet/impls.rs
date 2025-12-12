@@ -370,7 +370,7 @@ impl<T: Config> Pallet<T> {
 
 		if Eras::<T>::is_rewards_claimed(era, &stash, page) {
 			return Err(Error::<T>::AlreadyClaimed
-				.with_weight(T::WeightInfo::payout_stakers_alive_staked(0)));
+				.with_weight(T::WeightInfo::payout_stakers_alive_staked(0)))
 		}
 
 		Eras::<T>::set_rewards_as_claimed(era, &stash, page);
@@ -396,7 +396,7 @@ impl<T: Config> Pallet<T> {
 
 		// Nothing to do if they have no reward points.
 		if validator_reward_points.is_zero() {
-			return Ok(Some(T::WeightInfo::payout_stakers_alive_staked(0)).into());
+			return Ok(Some(T::WeightInfo::payout_stakers_alive_staked(0)).into())
 		}
 
 		// This is the fraction of the total reward that the validator and the
@@ -485,7 +485,7 @@ impl<T: Config> Pallet<T> {
 	) -> Option<(PositiveImbalanceOf<T>, RewardDestination<T::AccountId>)> {
 		// noop if amount is zero
 		if amount.is_zero() {
-			return None;
+			return None
 		}
 		let dest = Self::payee(StakingAccount::Stash(stash.clone()))?;
 
@@ -618,7 +618,7 @@ impl<T: Config> Pallet<T> {
 			// if voter weight is zero, do not consider this voter for the snapshot.
 			if voter_weight.is_zero() {
 				log!(debug, "voter's active balance is 0. skip this voter.");
-				continue;
+				continue
 			}
 
 			if let Some(Nominations { targets, .. }) = <Nominators<T>>::get(&voter) {
@@ -633,7 +633,7 @@ impl<T: Config> Pallet<T> {
 						Self::deposit_event(Event::<T>::SnapshotVotersSizeExceeded {
 							size: voters_size_tracker.size as u32,
 						});
-						break;
+						break
 					}
 
 					all_voters.push(voter);
@@ -659,7 +659,7 @@ impl<T: Config> Pallet<T> {
 					Self::deposit_event(Event::<T>::SnapshotVotersSizeExceeded {
 						size: voters_size_tracker.size as u32,
 					});
-					break;
+					break
 				}
 				all_voters.push(self_vote);
 				validators_taken.saturating_inc();
@@ -721,7 +721,7 @@ impl<T: Config> Pallet<T> {
 				Self::deposit_event(Event::<T>::SnapshotTargetsSizeExceeded {
 					size: targets_size_tracker.size as u32,
 				});
-				break;
+				break
 			}
 
 			if Validators::<T>::contains_key(&target) {
@@ -900,7 +900,7 @@ impl<T: Config> Pallet<T> {
 		// dec provider
 		let _ = frame_system::Pallet::<T>::dec_providers(&stash)?;
 
-		return Ok(());
+		return Ok(())
 	}
 }
 
@@ -1007,7 +1007,7 @@ impl<T: Config> ElectionDataProvider for Pallet<T> {
 
 		let targets = Self::get_npos_targets(bounds);
 		if bounds.exhausted(None, CountBound(targets.len() as u32).into()) {
-			return Err("Target snapshot too big");
+			return Err("Target snapshot too big")
 		}
 
 		debug_assert!(!bounds.slice_exhausted(&targets));
@@ -1201,7 +1201,7 @@ impl<T: Config> rc_client::AHStakingInterface for Pallet<T> {
 			// Skip if the validator is invulnerable.
 			if invulnerables.contains(&validator) {
 				log!(debug, "🦹 on_offence: {:?} is invulnerable; ignoring offence", validator);
-				continue;
+				continue
 			}
 
 			// ignore offence if too old to report.
@@ -1448,6 +1448,7 @@ impl<T: Config> SortedListProvider<T::AccountId> for UseValidatorsMap<T> {
 		Validators::<T>::remove_all();
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn score_update_worst_case(_who: &T::AccountId, _is_increase: bool) -> Self::Score {
 		unimplemented!()
 	}
@@ -1530,6 +1531,7 @@ impl<T: Config> SortedListProvider<T::AccountId> for UseNominatorsAndValidatorsM
 		Validators::<T>::remove_all();
 	}
 
+	#[cfg(feature = "runtime-benchmarks")]
 	fn score_update_worst_case(_who: &T::AccountId, _is_increase: bool) -> Self::Score {
 		unimplemented!()
 	}
@@ -1653,7 +1655,7 @@ impl<T: Config> StakingInterface for Pallet<T> {
 		who: &Self::AccountId,
 	) -> Result<sp_staking::StakerStatus<Self::AccountId>, DispatchError> {
 		if !StakingLedger::<T>::is_bonded(StakingAccount::Stash(who.clone())) {
-			return Err(Error::<T>::NotStash.into());
+			return Err(Error::<T>::NotStash.into())
 		}
 
 		let is_validator = Validators::<T>::contains_key(&who);
@@ -1730,7 +1732,7 @@ impl<T: Config> sp_staking::StakingUnchecked for Pallet<T> {
 		payee: &Self::AccountId,
 	) -> DispatchResult {
 		if StakingLedger::<T>::is_bonded(StakingAccount::Stash(keyless_who.clone())) {
-			return Err(Error::<T>::AlreadyBonded.into());
+			return Err(Error::<T>::AlreadyBonded.into())
 		}
 
 		// check if payee not same as who.
@@ -1748,6 +1750,7 @@ impl<T: Config> sp_staking::StakingUnchecked for Pallet<T> {
 	}
 
 	/// Only meant to be used in tests.
+	#[cfg(feature = "runtime-benchmarks")]
 	fn migrate_to_direct_staker(who: &Self::AccountId) {
 		assert!(VirtualStakers::<T>::contains_key(who));
 		let ledger = StakingLedger::<T>::get(Stash(who.clone())).unwrap();
