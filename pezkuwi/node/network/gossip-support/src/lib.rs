@@ -86,7 +86,7 @@ const TRY_RERESOLVE_AUTHORITIES: Duration = Duration::from_secs(2);
 /// populated). Authority discovery on Kusama takes around 8 minutes, so warning after 10 minutes
 /// should be fine:
 ///
-/// https://github.com/paritytech/bizinikiwi/blob/fc49802f263529160635471c8a17888846035f5d/client/authority-discovery/src/lib.rs#L88
+/// https://github.com/pezkuwichain/kurdistan-sdk/blob/main/bizinikiwi/client/authority-discovery/src/lib.rs#L88
 const LOW_CONNECTIVITY_WARN_DELAY: Duration = Duration::from_secs(600);
 
 /// If connectivity is lower than this in percent, issue warning in logs.
@@ -452,7 +452,7 @@ where
 
 				// First `maxValidators` entries are the teyrchain validators. We'll check
 				// if our index is in this set to avoid searching for the keys.
-				// https://github.com/paritytech/polkadot/blob/a52dca2be7840b23c19c153cf7e110b1e3e475f8/runtime/parachains/src/configuration.rs#L148
+				// https://github.com/pezkuwichain/kurdistan-sdk/blob/main/pezkuwi/runtime/teyrchains/src/configuration.rs#L148
 				if *index < teyrchain_validators_this_session {
 					gum::trace!(target: LOG_TARGET, "We are now a teyrchain validator",);
 					self.metrics.on_is_teyrchain_validator();

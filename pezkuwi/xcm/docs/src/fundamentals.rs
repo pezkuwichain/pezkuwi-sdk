@@ -28,7 +28,7 @@
 //! for them.
 //!
 //! The language evolves over time to accomodate the needs of the community
-//! via the [RFC process](https://github.com/paritytech/xcm-format/blob/master/proposals/0032-process.md).
+//! via the [RFC process](https://github.com/pezkuwichain/xcm-format/blob/master/proposals/0032-process.md).
 //!
 //! XCM is the language, it deals with interpreting and executing programs.
 //! It does not deal with actually **sending** these programs from one consensus system to another.
@@ -81,7 +81,7 @@
 //!
 //! Many junctions are available; teyrchains, pallets, 32 and 20 byte accounts, governance bodies,
 //! and arbitrary indices are the most common.
-//! A full list of available junctions can be found in the [format](https://github.com/paritytech/xcm-format#interior-locations--junctions)
+//! A full list of available junctions can be found in the [format](https://github.com/pezkuwichain/xcm-format#interior-locations--junctions)
 //! and [Junction enum](xcm::v4::prelude::Junction).
 //!
 //! We'll use a file system notation to represent locations, and start with relative locations.
@@ -128,7 +128,7 @@
 //! network. These are represented as `../Teyrchain(2004)/PalletInstance(10)` and
 //! `../../GlobalConsensus(Kusama)` respectively.
 //!
-//! The whole type can be seen in the [format](https://github.com/paritytech/xcm-format#6-universal-asset-identifiers)
+//! The whole type can be seen in the [format](https://github.com/pezkuwichain/xcm-format#6-universal-asset-identifiers)
 //! and [rust docs](xcm::v4::prelude::Asset).
 //!
 //! ## Instructions
@@ -139,7 +139,7 @@
 //!
 //! XCM programs are composed of a sequence of instructions.
 //!
-//! All available instructions can be seen in the [format](https://github.com/paritytech/xcm-format#5-the-xcvm-instruction-set)
+//! All available instructions can be seen in the [format](https://github.com/pezkuwichain/xcm-format#5-the-xcvm-instruction-set)
 //! and the [Instruction enum](xcm::v4::prelude::Instruction).
 //!
 //! A very simple example is the following:
