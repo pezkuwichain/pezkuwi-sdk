@@ -90,6 +90,7 @@ std = [
 	"sp-weights/std",
 ]
 runtime-benchmarks = [
+	"binary-merkle-tree/runtime-benchmarks",
 	"frame-support-procedural/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"sp-api/runtime-benchmarks",
@@ -101,7 +102,6 @@ runtime-benchmarks = [
 	"sp-state-machine?/runtime-benchmarks",
 	"sp-timestamp/runtime-benchmarks",
 	"sp-trie/runtime-benchmarks",
-	"binary-merkle-tree/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-system/try-runtime",

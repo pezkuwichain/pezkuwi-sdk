@@ -43,6 +43,4 @@ std = [
 	"serde_json/std",
 	"sp-debug-derive/std",
 ]
-runtime-benchmarks = [
-	"pezkuwi-sdk/runtime-benchmarks",
-]
+runtime-benchmarks = ["pezkuwi-sdk/runtime-benchmarks"]

@@ -36,6 +36,4 @@ std = [
 	"sp-runtime/std",
 	"thiserror",
 ]
-runtime-benchmarks = [
-	"sp-runtime?/runtime-benchmarks",
-]
+runtime-benchmarks = ["sp-runtime?/runtime-benchmarks"]

@@ -26,6 +26,4 @@ scale-info = { features = ["derive"], workspace = true }
 [features]
 default = ["std"]
 std = ["codec/std", "pezkuwi-sdk/std", "scale-info/std"]
-runtime-benchmarks = [
-	"pezkuwi-sdk/runtime-benchmarks",
-]
+runtime-benchmarks = ["pezkuwi-sdk/runtime-benchmarks"]

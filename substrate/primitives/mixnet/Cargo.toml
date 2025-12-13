@@ -27,6 +27,4 @@ sp-application-crypto = { workspace = true }
 [features]
 default = ["std"]
 std = ["codec/std", "scale-info/std", "sp-api/std", "sp-application-crypto/std"]
-runtime-benchmarks = [
-	"sp-api/runtime-benchmarks",
-]
+runtime-benchmarks = ["sp-api/runtime-benchmarks"]

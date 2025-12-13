@@ -24,6 +24,4 @@ clap = { features = ["derive"], workspace = true }
 sc-cli = { workspace = true, default-features = true }
 
 [features]
-runtime-benchmarks = [
-	"sc-cli/runtime-benchmarks",
-]
+runtime-benchmarks = ["sc-cli/runtime-benchmarks"]

@@ -46,6 +46,4 @@ serde = [
 	"sp-core/serde",
 	"sp-runtime/serde",
 ]
-runtime-benchmarks = [
-	"sp-runtime/runtime-benchmarks",
-]
+runtime-benchmarks = ["sp-runtime/runtime-benchmarks"]

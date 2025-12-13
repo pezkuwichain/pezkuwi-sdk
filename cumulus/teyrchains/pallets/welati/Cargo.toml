@@ -13,9 +13,16 @@ repository.workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-codec = { workspace = true, default-features = false, features = ["derive", "max-encoded-len"] }
-scale-info = { default-features = false, features = ["derive"], workspace = true }
-serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
+codec = { workspace = true, default-features = false, features = [
+	"derive",
+	"max-encoded-len",
+] }
+scale-info = { default-features = false, features = [
+	"derive",
+], workspace = true }
+serde = { version = "1.0", default-features = false, features = [
+	"derive",
+], optional = true }
 
 frame-benchmarking = { optional = true, workspace = true }
 frame-support = { default-features = false, workspace = true }

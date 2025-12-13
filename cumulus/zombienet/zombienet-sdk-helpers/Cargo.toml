@@ -20,6 +20,6 @@ zombienet-configuration = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"cumulus-primitives-core/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks"
+  "cumulus-primitives-core/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
 ]

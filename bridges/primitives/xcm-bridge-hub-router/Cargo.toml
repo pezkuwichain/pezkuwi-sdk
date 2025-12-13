@@ -30,7 +30,4 @@ std = [
 	"sp-runtime/std",
 	"xcm/std",
 ]
-runtime-benchmarks = [
-	"sp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-]
+runtime-benchmarks = ["sp-runtime/runtime-benchmarks", "xcm/runtime-benchmarks"]
