@@ -16512,7 +16512,7 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "asset-test-utils",
  "assets-common",

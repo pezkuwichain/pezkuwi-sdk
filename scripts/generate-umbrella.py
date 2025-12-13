@@ -16,6 +16,7 @@ import os
 import re
 import toml
 import shutil
+import subprocess
 
 from cargo_workspace import Workspace
 
@@ -152,6 +153,14 @@ def main(path, version):
 		toml_manifest = toml.dumps(manifest)
 		f.write(toml_manifest)
 		print(f"Wrote {manifest_path}")
+	# Format with taplo to match CI expectations
+	taplo_config = os.path.join(workspace.path, ".config", "taplo.toml")
+	if os.path.exists(taplo_config):
+		try:
+			subprocess.run(["taplo", "format", "--config", taplo_config, manifest_path], check=True, capture_output=True)
+			print(f"Formatted {manifest_path} with taplo")
+		except (subprocess.CalledProcessError, FileNotFoundError) as e:
+			print(f"Warning: Could not format with taplo: {e}")
 	# and the lib.rs
 	with open(lib_path, "w") as f:
 		f.write('''// Copyright (C) Parity Technologies (UK) Ltd.
