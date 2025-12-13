@@ -131,13 +131,32 @@ where
 		}
 	}
 
-	/// Returns a successful origin for benchmarking purposes.
-	///
-	/// This method generates a deterministic account that can be used
-	/// when running runtime benchmarks. It does NOT grant actual Tiki
-	/// ownership - benchmarks must separately set up the Tiki holder state.
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<T::RuntimeOrigin, ()> {
+		use codec::Decode;
+		use sp_runtime::traits::TrailingZeroInput;
+
+		// Generate a deterministic zero-filled account for benchmarking
+		let zero_account = T::AccountId::decode(&mut TrailingZeroInput::zeroes())
+			.expect("infinite length input; no invalid inputs for type; qed");
+
+		Ok(T::RuntimeOrigin::from(frame_system::RawOrigin::Signed(zero_account)))
+	}
+}
+
+#[cfg(feature = "runtime-benchmarks")]
+impl<T, I> frame_support::traits::EnsureOriginWithArg<T::RuntimeOrigin, ()> for EnsureTiki<T, I>
+where
+	T: Config,
+	I: GetTiki,
+{
+	type Success = T::AccountId;
+
+	fn try_origin(o: T::RuntimeOrigin, _: &()) -> Result<Self::Success, T::RuntimeOrigin> {
+		<Self as EnsureOrigin<T::RuntimeOrigin>>::try_origin(o)
+	}
+
+	fn try_successful_origin(_: &()) -> Result<T::RuntimeOrigin, ()> {
 		use codec::Decode;
 		use sp_runtime::traits::TrailingZeroInput;
 
