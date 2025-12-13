@@ -1,0 +1,91 @@
+[package]
+name = "pezkuwi-test-service"
+publish = false
+version = "1.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+futures = { workspace = true }
+rand = { workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
+tokio = { workspace = true, default-features = true }
+
+# Pezkuwi dependencies
+pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-node-subsystem = { workspace = true, default-features = true }
+pezkuwi-overseer = { workspace = true, default-features = true }
+pezkuwi-primitives = { workspace = true, default-features = true }
+pezkuwi-runtime-common = { workspace = true, default-features = true }
+pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
+pezkuwi-service = { workspace = true, default-features = true }
+pezkuwi-test-runtime = { workspace = true }
+pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
+test-runtime-constants = { workspace = true, default-features = true }
+
+# Substrate dependencies
+frame-system = { workspace = true, default-features = true }
+pallet-balances = { workspace = true, default-features = true }
+pallet-staking = { workspace = true, default-features = true }
+pallet-transaction-payment = { workspace = true, default-features = true }
+sc-chain-spec = { workspace = true, default-features = true }
+sc-cli = { workspace = true, default-features = true }
+sc-client-api = { workspace = true, default-features = true }
+sc-consensus = { workspace = true, default-features = true }
+sc-consensus-grandpa = { workspace = true, default-features = true }
+sc-network = { workspace = true, default-features = true }
+sc-service = { workspace = true }
+sc-tracing = { workspace = true, default-features = true }
+sp-arithmetic = { workspace = true, default-features = true }
+sp-authority-discovery = { workspace = true, default-features = true }
+sp-blockchain = { workspace = true, default-features = true }
+sp-consensus = { workspace = true, default-features = true }
+sp-consensus-babe = { workspace = true, default-features = true }
+sp-core = { workspace = true, default-features = true }
+sp-keyring = { workspace = true, default-features = true }
+sp-runtime = { workspace = true, default-features = true }
+sp-state-machine = { workspace = true, default-features = true }
+substrate-test-client = { workspace = true }
+
+[dev-dependencies]
+pallet-balances = { workspace = true }
+tokio = { features = ["macros"], workspace = true, default-features = true }
+
+[features]
+runtime-metrics = ["pezkuwi-test-runtime/runtime-metrics"]
+runtime-benchmarks = [
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-staking/runtime-benchmarks",
+	"pallet-transaction-payment/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-common/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-service/runtime-benchmarks",
+	"pezkuwi-test-runtime/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sc-chain-spec/runtime-benchmarks",
+	"sc-cli/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-consensus-grandpa/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sc-service/runtime-benchmarks",
+	"sc-tracing/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"substrate-test-client/runtime-benchmarks",
+	"test-runtime-constants/runtime-benchmarks",
+]

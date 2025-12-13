@@ -1,0 +1,46 @@
+[package]
+name = "teyrchain-template-node"
+description = "A teyrchain node template built with Substrate and Cumulus, part of Pezkuwi Sdk."
+version = "0.0.0"
+license = "Unlicense"
+authors.workspace = true
+homepage.workspace = true
+repository.workspace = true
+edition.workspace = true
+publish = false
+build = "build.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+clap = { features = ["derive"], workspace = true }
+codec = { workspace = true, default-features = true }
+color-print = { workspace = true }
+docify = { workspace = true }
+futures = { workspace = true }
+jsonrpsee = { features = ["server"], workspace = true }
+log = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
+
+pezkuwi-sdk = { workspace = true, features = ["node", "pezkuwi-primitives"] }
+
+teyrchain-template-runtime = { workspace = true }
+
+# Substrate
+prometheus-endpoint = { workspace = true, default-features = true }
+
+[build-dependencies]
+pezkuwi-sdk = { workspace = true, features = ["substrate-build-script-utils"] }
+
+[features]
+default = ["std"]
+std = ["log/std", "pezkuwi-sdk/std", "teyrchain-template-runtime/std"]
+runtime-benchmarks = [
+	"pezkuwi-sdk/runtime-benchmarks",
+	"teyrchain-template-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"pezkuwi-sdk/try-runtime",
+	"teyrchain-template-runtime/try-runtime",
+]

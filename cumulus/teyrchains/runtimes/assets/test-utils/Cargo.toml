@@ -1,0 +1,118 @@
+[package]
+name = "asset-test-utils"
+version = "7.0.0"
+authors.workspace = true
+edition.workspace = true
+description = "Test utils for Asset Hub runtimes."
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive", "max-encoded-len"], workspace = true }
+
+# Substrate
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+pallet-asset-conversion = { workspace = true }
+pallet-assets = { workspace = true }
+pallet-balances = { workspace = true }
+pallet-session = { workspace = true }
+pallet-timestamp = { workspace = true }
+sp-io = { workspace = true }
+sp-runtime = { workspace = true }
+
+# Cumulus
+assets-common = { workspace = true }
+cumulus-pallet-teyrchain-system = { workspace = true }
+cumulus-pallet-xcmp-queue = { workspace = true }
+cumulus-primitives-core = { workspace = true }
+pallet-collator-selection = { workspace = true }
+teyrchain-info = { workspace = true }
+teyrchains-common = { workspace = true }
+teyrchains-runtimes-test-utils = { workspace = true }
+
+# Pezkuwi
+pallet-xcm = { workspace = true }
+xcm = { workspace = true }
+xcm-builder = { workspace = true }
+xcm-executor = { workspace = true }
+xcm-runtime-apis = { workspace = true }
+
+# Bridges
+pallet-xcm-bridge-hub-router = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"assets-common/std",
+	"codec/std",
+	"cumulus-pallet-teyrchain-system/std",
+	"cumulus-pallet-xcmp-queue/std",
+	"cumulus-primitives-core/std",
+	"frame-support/std",
+	"frame-system/std",
+	"pallet-asset-conversion/std",
+	"pallet-assets/std",
+	"pallet-balances/std",
+	"pallet-collator-selection/std",
+	"pallet-session/std",
+	"pallet-timestamp/std",
+	"pallet-xcm-bridge-hub-router/std",
+	"pallet-xcm/std",
+	"sp-io/std",
+	"sp-runtime/std",
+	"teyrchain-info/std",
+	"teyrchains-common/std",
+	"teyrchains-runtimes-test-utils/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm-runtime-apis/std",
+	"xcm/std",
+]
+try-runtime = [
+	"assets-common/try-runtime",
+	"cumulus-pallet-teyrchain-system/try-runtime",
+	"cumulus-pallet-xcmp-queue/try-runtime",
+	"frame-support/try-runtime",
+	"frame-system/try-runtime",
+	"pallet-asset-conversion/try-runtime",
+	"pallet-assets/try-runtime",
+	"pallet-balances/try-runtime",
+	"pallet-collator-selection/try-runtime",
+	"pallet-session/try-runtime",
+	"pallet-timestamp/try-runtime",
+	"pallet-xcm-bridge-hub-router/try-runtime",
+	"pallet-xcm/try-runtime",
+	"sp-runtime/try-runtime",
+	"teyrchain-info/try-runtime",
+	"teyrchains-common/try-runtime",
+]
+runtime-benchmarks = [
+	"assets-common/runtime-benchmarks",
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-asset-conversion/runtime-benchmarks",
+	"pallet-assets/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collator-selection/runtime-benchmarks",
+	"pallet-session/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-xcm-bridge-hub-router/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"teyrchains-runtimes-test-utils/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

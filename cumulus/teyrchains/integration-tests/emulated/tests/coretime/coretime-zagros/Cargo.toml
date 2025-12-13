@@ -1,0 +1,44 @@
+[package]
+name = "coretime-zagros-integration-tests"
+version = "0.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Coretime Zagros runtime integration tests with xcm-emulator"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Substrate
+frame-support = { workspace = true }
+pallet-broker = { workspace = true, default-features = true }
+pallet-message-queue = { workspace = true }
+sp-runtime = { workspace = true }
+
+# Pezkuwi
+pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
+xcm = { workspace = true }
+xcm-executor = { workspace = true }
+zagros-runtime-constants = { workspace = true, default-features = true }
+
+# Cumulus
+cumulus-pallet-teyrchain-system = { workspace = true, default-features = true }
+emulated-integration-tests-common = { workspace = true }
+zagros-system-emulated-network = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"pallet-broker/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks",
+	"zagros-system-emulated-network/runtime-benchmarks",
+]

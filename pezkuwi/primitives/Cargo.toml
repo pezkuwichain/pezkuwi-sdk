@@ -1,0 +1,77 @@
+[package]
+name = "pezkuwi-primitives"
+version = "7.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Shared primitives used by Pezkuwi runtime"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+bitvec = { features = ["alloc", "serde"], workspace = true }
+bounded-collections = { features = ["serde"], workspace = true }
+codec = { features = ["bit-vec", "derive"], workspace = true }
+hex-literal = { workspace = true, default-features = true }
+log = { workspace = true }
+scale-info = { features = ["bit-vec", "derive", "serde"], workspace = true }
+serde = { features = ["alloc", "derive"], workspace = true }
+thiserror = { workspace = true, optional = true }
+
+sp-api = { workspace = true }
+sp-application-crypto = { features = ["serde"], workspace = true }
+sp-arithmetic = { features = ["serde"], workspace = true }
+sp-authority-discovery = { features = ["serde"], workspace = true }
+sp-consensus-slots = { features = ["serde"], workspace = true }
+sp-core = { workspace = true }
+sp-inherents = { workspace = true }
+sp-io = { workspace = true }
+sp-keystore = { optional = true, workspace = true }
+sp-runtime = { workspace = true }
+sp-staking = { features = ["serde"], workspace = true }
+sp-std = { workspace = true, optional = true }
+
+pezkuwi-core-primitives = { workspace = true }
+pezkuwi-teyrchain-primitives = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"bitvec/std",
+	"bounded-collections/std",
+	"codec/std",
+	"log/std",
+	"pezkuwi-core-primitives/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"scale-info/std",
+	"serde/std",
+	"sp-api/std",
+	"sp-application-crypto/std",
+	"sp-arithmetic/std",
+	"sp-authority-discovery/std",
+	"sp-consensus-slots/std",
+	"sp-core/std",
+	"sp-inherents/std",
+	"sp-io/std",
+	"sp-keystore",
+	"sp-keystore?/std",
+	"sp-runtime/std",
+	"sp-staking/std",
+	"sp-std/std",
+	"thiserror",
+]
+runtime-benchmarks = [
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-consensus-slots/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-staking/runtime-benchmarks",
+]
+test = []

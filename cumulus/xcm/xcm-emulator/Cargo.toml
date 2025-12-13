@@ -1,0 +1,73 @@
+[package]
+name = "xcm-emulator"
+description = "Test kit to emulate XCM program execution."
+version = "0.5.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+array-bytes = { workspace = true }
+codec = { workspace = true, default-features = true }
+impl-trait-for-tuples = { workspace = true }
+paste = { workspace = true, default-features = true }
+tracing = { workspace = true, default-features = true }
+
+# Substrate
+frame-support = { workspace = true, default-features = true }
+frame-system = { workspace = true, default-features = true }
+pallet-aura = { workspace = true, default-features = true }
+pallet-balances = { workspace = true, default-features = true }
+pallet-message-queue = { workspace = true, default-features = true }
+pallet-timestamp = { workspace = true, default-features = true }
+sp-arithmetic = { workspace = true, default-features = true }
+sp-consensus-aura = { workspace = true, default-features = true }
+sp-core = { workspace = true, default-features = true }
+sp-crypto-hashing = { workspace = true, default-features = true }
+sp-io = { workspace = true, default-features = true }
+sp-runtime = { workspace = true, default-features = true }
+sp-tracing = { workspace = true, default-features = true }
+
+# Cumulus
+cumulus-pallet-teyrchain-system = { workspace = true, default-features = true }
+cumulus-primitives-core = { workspace = true, default-features = true }
+cumulus-primitives-teyrchain-inherent = { workspace = true, default-features = true }
+cumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+# Pezkuwi
+pezkuwi-primitives = { workspace = true, default-features = true }
+pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
+pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
+xcm = { workspace = true, default-features = true }
+xcm-executor = { workspace = true, default-features = true }
+xcm-simulator = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-aura/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-simulator/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

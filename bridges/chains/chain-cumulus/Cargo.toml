@@ -1,0 +1,54 @@
+[package]
+name = "bp-bridge-hub-cumulus"
+description = "Primitives for BridgeHub teyrchain runtimes."
+version = "0.7.0"
+authors.workspace = true
+edition.workspace = true
+license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
+repository.workspace = true
+
+[package.metadata.pezkuwi-sdk]
+exclude-from-umbrella = true
+
+[lints]
+workspace = true
+
+[dependencies]
+# Bridge Dependencies
+bp-messages = { workspace = true }
+bp-pezkuwi-core = { workspace = true }
+bp-runtime = { workspace = true }
+
+# Substrate Based Dependencies
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+sp-api = { workspace = true }
+sp-std = { workspace = true }
+teyrchains-common = { workspace = true }
+
+# Pezkuwi Dependencies
+pezkuwi-primitives = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"bp-messages/std",
+	"bp-pezkuwi-core/std",
+	"bp-runtime/std",
+	"frame-support/std",
+	"frame-system/std",
+	"pezkuwi-primitives/std",
+	"sp-api/std",
+	"sp-std/std",
+	"teyrchains-common/std",
+]
+runtime-benchmarks = [
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+]

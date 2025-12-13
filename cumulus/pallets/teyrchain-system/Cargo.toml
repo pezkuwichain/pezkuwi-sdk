@@ -1,0 +1,140 @@
+[package]
+name = "cumulus-pallet-teyrchain-system"
+version = "0.7.0"
+authors.workspace = true
+edition.workspace = true
+description = "Base pallet for cumulus-based teyrchains"
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+array-bytes = { workspace = true }
+bytes = { workspace = true }
+codec = { features = ["derive"], workspace = true }
+environmental = { workspace = true }
+hashbrown = { workspace = true }
+impl-trait-for-tuples = { workspace = true }
+log = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+trie-db = { workspace = true }
+
+# Substrate
+frame-benchmarking = { optional = true, workspace = true }
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+pallet-message-queue = { workspace = true }
+sp-consensus-babe = { workspace = true }
+sp-core = { workspace = true }
+sp-externalities = { workspace = true }
+sp-inherents = { workspace = true }
+sp-io = { workspace = true }
+sp-runtime = { workspace = true }
+sp-state-machine = { workspace = true }
+sp-std = { workspace = true }
+sp-trie = { workspace = true }
+sp-version = { workspace = true }
+
+# Pezkuwi
+pezkuwi-runtime-teyrchains = { workspace = true }
+pezkuwi-teyrchain-primitives = { features = ["wasm-api"], workspace = true }
+xcm = { workspace = true }
+xcm-builder = { workspace = true }
+
+# Cumulus
+cumulus-pallet-teyrchain-system-proc-macro = { workspace = true }
+cumulus-primitives-core = { workspace = true }
+cumulus-primitives-proof-size-hostfunction = { workspace = true }
+cumulus-primitives-teyrchain-inherent = { workspace = true }
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+futures = { workspace = true }
+hex-literal = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
+rstest = { workspace = true }
+trie-standardmap = { workspace = true }
+
+
+# Substrate
+sc-consensus = { workspace = true }
+sp-api = { workspace = true, default-features = true }
+sp-consensus-slots = { workspace = true, default-features = true }
+sp-crypto-hashing = { workspace = true, default-features = true }
+sp-keyring = { workspace = true, default-features = true }
+sp-tracing = { workspace = true, default-features = true }
+sp-version = { workspace = true, default-features = true }
+# Cumulus
+cumulus-test-client = { workspace = true }
+cumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
+
+[features]
+default = ["std"]
+std = [
+	"bytes/std",
+	"codec/std",
+	"cumulus-pallet-teyrchain-system-proc-macro/std",
+	"cumulus-primitives-core/std",
+	"cumulus-primitives-proof-size-hostfunction/std",
+	"cumulus-primitives-teyrchain-inherent/std",
+	"environmental/std",
+	"frame-benchmarking/std",
+	"frame-support/std",
+	"frame-system/std",
+	"log/std",
+	"pallet-message-queue/std",
+	"pezkuwi-runtime-teyrchains/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"scale-info/std",
+	"sp-consensus-babe/std",
+	"sp-core/std",
+	"sp-externalities/std",
+	"sp-inherents/std",
+	"sp-io/std",
+	"sp-runtime/std",
+	"sp-state-machine/std",
+	"sp-std/std",
+	"sp-tracing/std",
+	"sp-trie/std",
+	"trie-db/std",
+	"xcm-builder/std",
+	"xcm/std",
+]
+
+runtime-benchmarks = [
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
+	"cumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+	"cumulus-test-client/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"frame-benchmarking/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sc-consensus/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus-slots/runtime-benchmarks",
+	"sp-inherents/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"sp-state-machine/runtime-benchmarks",
+	"sp-trie/runtime-benchmarks",
+	"sp-version/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]
+
+try-runtime = [
+	"frame-support/try-runtime",
+	"frame-system/try-runtime",
+	"pallet-message-queue/try-runtime",
+	"pezkuwi-runtime-teyrchains/try-runtime",
+	"sp-runtime/try-runtime",
+]

@@ -1,0 +1,51 @@
+[package]
+name = "pezkuwi-node-subsystem-types"
+description = "Subsystem traits and message definitions"
+version = "7.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+derive_more = { workspace = true, default-features = true }
+fatality = { workspace = true }
+futures = { workspace = true }
+orchestra = { features = ["futures_channel"], workspace = true }
+pezkuwi-node-network-protocol = { workspace = true, default-features = true }
+pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-primitives = { workspace = true, default-features = true }
+pezkuwi-statement-table = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
+sc-client-api = { workspace = true, default-features = true }
+sc-network = { workspace = true, default-features = true }
+sc-network-types = { workspace = true, default-features = true }
+sc-transaction-pool-api = { workspace = true, default-features = true }
+smallvec = { workspace = true, default-features = true }
+sp-api = { workspace = true, default-features = true }
+sp-authority-discovery = { workspace = true, default-features = true }
+sp-blockchain = { workspace = true, default-features = true }
+sp-consensus-babe = { workspace = true, default-features = true }
+sp-runtime = { workspace = true, default-features = true }
+thiserror = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-node-network-protocol/runtime-benchmarks",
+	"pezkuwi-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-statement-table/runtime-benchmarks",
+	"sc-client-api/runtime-benchmarks",
+	"sc-network/runtime-benchmarks",
+	"sc-transaction-pool-api/runtime-benchmarks",
+	"sp-api/runtime-benchmarks",
+	"sp-authority-discovery/runtime-benchmarks",
+	"sp-blockchain/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+]

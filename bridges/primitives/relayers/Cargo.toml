@@ -1,0 +1,57 @@
+[package]
+name = "bp-relayers"
+description = "Primitives of relayers module."
+version = "0.7.0"
+authors.workspace = true
+edition.workspace = true
+license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["bit-vec", "derive"], workspace = true }
+scale-info = { features = ["bit-vec", "derive"], workspace = true }
+
+# Bridge Dependencies
+bp-header-chain = { workspace = true }
+bp-messages = { workspace = true }
+bp-runtime = { workspace = true }
+bp-teyrchains = { workspace = true }
+
+# Substrate Dependencies
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+pallet-utility = { workspace = true }
+sp-runtime = { workspace = true }
+sp-std = { workspace = true }
+
+[dev-dependencies]
+hex-literal = { workspace = true, default-features = true }
+
+[features]
+default = ["std"]
+std = [
+	"bp-header-chain/std",
+	"bp-messages/std",
+	"bp-runtime/std",
+	"bp-teyrchains/std",
+	"codec/std",
+	"frame-support/std",
+	"frame-system/std",
+	"pallet-utility/std",
+	"scale-info/std",
+	"sp-runtime/std",
+	"sp-std/std",
+]
+runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-utility/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+]

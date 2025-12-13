@@ -1,0 +1,46 @@
+[package]
+name = "revive-dev-runtime"
+description = "A solochain dev runtime for revive."
+version = "0.1.0"
+license = "Apache-2.0"
+authors.workspace = true
+homepage.workspace = true
+repository.workspace = true
+edition.workspace = true
+
+[dependencies]
+array-bytes = { workspace = true }
+codec = { workspace = true }
+pezkuwi-sdk = { workspace = true, features = [
+	"pallet-balances",
+	"pallet-revive",
+	"pallet-sudo",
+	"pallet-timestamp",
+	"pallet-transaction-payment",
+	"pallet-transaction-payment-rpc-runtime-api",
+	"pezkuwi-runtime-common",
+	"runtime",
+	"teyrchains-common",
+	"with-tracing",
+] }
+scale-info = { workspace = true }
+serde_json = { workspace = true, default-features = false, features = [
+	"alloc",
+] }
+sp-debug-derive = { workspace = true, features = ["force-debug"] }
+
+[build-dependencies]
+pezkuwi-sdk = { optional = true, workspace = true, features = [
+	"substrate-wasm-builder",
+] }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"pezkuwi-sdk/std",
+	"scale-info/std",
+	"serde_json/std",
+	"sp-debug-derive/std",
+]
+runtime-benchmarks = ["pezkuwi-sdk/runtime-benchmarks"]

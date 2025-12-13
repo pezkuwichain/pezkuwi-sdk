@@ -1,0 +1,49 @@
+[package]
+name = "asset-hub-pezkuwichain-emulated-chain"
+version = "0.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Asset Hub Pezkuwichain emulated chain"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Substrate
+frame-support = { workspace = true }
+sp-core = { workspace = true }
+sp-keyring = { workspace = true }
+
+# Cumulus
+asset-hub-pezkuwichain-runtime = { workspace = true, default-features = true }
+cumulus-primitives-core = { workspace = true }
+emulated-integration-tests-common = { workspace = true }
+pezkuwichain-emulated-chain = { workspace = true }
+testnet-teyrchains-constants = { features = [
+	"pezkuwichain",
+], workspace = true, default-features = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+# Pezkuwi
+xcm = { workspace = true }
+xcm-builder = { workspace = true, default-features = true }
+
+# Bridges
+bp-bridge-hub-pezkuwichain = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
+	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"pezkuwichain-emulated-chain/runtime-benchmarks",
+	"sp-keyring/runtime-benchmarks",
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

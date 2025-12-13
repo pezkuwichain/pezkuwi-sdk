@@ -1,0 +1,82 @@
+[package]
+name = "pallet-perwerde"
+version = "1.0.0"
+description = "PezkuwiChain Egitim (Education) Management Pallet"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { workspace = true, default-features = false, features = ["derive"] }
+scale-info = { default-features = false, features = [
+	"derive",
+], workspace = true }
+serde = { version = "1.0", default-features = false, features = [
+	"derive",
+], optional = true }
+
+frame-benchmarking = { optional = true, workspace = true }
+frame-support = { default-features = false, workspace = true }
+frame-system = { default-features = false, workspace = true }
+log = { default-features = false, workspace = true }
+sp-runtime = { default-features = false, workspace = true }
+sp-std = { default-features = false, workspace = true }
+
+# PezkuwiChain'in özel tiplerini ve trait'lerini içeren kütüphane
+pezkuwi-primitives = { workspace = true, default-features = false }
+
+# Mock ve benchmark için gerekli olanlar buraya optional olarak eklendi
+pallet-balances = { workspace = true, default-features = false, optional = true }
+pallet-collective = { workspace = true, default-features = false, optional = true }
+sp-core = { workspace = true, default-features = false, optional = true }
+sp-io = { workspace = true, default-features = false, optional = true }
+
+[dev-dependencies]
+# pallet-sudo = { workspace = true, default-features = false } 
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"frame-benchmarking?/std",
+	"frame-support/std",
+	"frame-system/std",
+	"log/std",
+	"pallet-balances/std",
+	"pallet-collective/std",
+	"pezkuwi-primitives/std",
+	"scale-info/std",
+	"serde",
+	"serde?/std",
+	"sp-core/std",
+	"sp-io/std",
+	"sp-runtime/std",
+	"sp-std/std",
+]
+runtime-benchmarks = [
+	"frame-benchmarking/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-balances",
+	"pallet-balances?/runtime-benchmarks",
+	"pallet-collective",
+	"pallet-collective?/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"sp-core",
+	"sp-io",
+	"sp-io?/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"frame-support/try-runtime",
+	"frame-system/try-runtime",
+	"pallet-balances?/try-runtime",
+	"pallet-collective?/try-runtime",
+	"sp-runtime/try-runtime",
+]

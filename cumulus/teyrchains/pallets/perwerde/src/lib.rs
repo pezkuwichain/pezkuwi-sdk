@@ -1,0 +1,325 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
+//! # Perwerde (Education) Pallet
+//!
+//! A pallet for managing educational courses, student enrollments, and achievement tracking.
+//!
+//! ## Overview
+//!
+//! The Perwerde pallet implements an on-chain educational platform where:
+//! - Educators create and manage courses with IPFS-linked content
+//! - Students enroll in courses and track their progress
+//! - Course completion earns points that contribute to trust scores
+//! - Educational achievements are permanently recorded on-chain
+//!
+//! ## Core Features
+//!
+//! ### Course Management
+//! - Admins create courses with name, description, and content links (IPFS)
+//! - Courses can be active or archived
+//! - Each course has a unique ID and owner
+//! - Course metadata is immutable after creation
+//!
+//! ### Student Enrollment
+//! - Students enroll in active courses
+//! - One enrollment per student per course
+//! - Enrollment history tracked with block numbers
+//! - Students can be enrolled in multiple courses simultaneously
+//!
+//! ### Completion & Points
+//! - Course owners mark student completions
+//! - Points awarded upon completion
+//! - Points contribute to Perwerde score for trust calculation
+//! - Completion timestamps recorded permanently
+//!
+//! ## Perwerde Score System
+//!
+//! The Perwerde score is derived from total education points:
+//! - Each completed course awards points
+//! - Points accumulate over time
+//! - Score used by `pallet-trust` for composite trust calculation
+//! - Higher education achievement improves ecosystem standing
+//!
+//! ## Interface
+//!
+//! ### Extrinsics
+//!
+//! - `create_course(name, description, content_link)` - Create new educational course (admin)
+//! - `enroll_student(course_id)` - Enroll in an active course (user)
+//! - `mark_course_completed(student, course_id, points)` - Award completion points (course owner)
+//! - `archive_course(course_id)` - Archive a course (course owner)
+//!
+//! ### Storage
+//!
+//! - `Courses` - Course metadata indexed by course ID
+//! - `NextCourseId` - Auto-incrementing course ID counter
+//! - `Enrollments` - Student enrollment records (student, course_id) → Enrollment
+//! - `StudentCourses` - Per-student list of enrolled course IDs
+//!
+//! ### Integration
+//!
+//! - Implements `PerwerdeScoreProvider` trait for `pallet-trust`
+//! - Education scores contribute to validator eligibility
+//! - Course completion history visible to governance
+//!
+//! ## Security Features
+//!
+//! - Only course owners can mark completions
+//! - Active courses required for enrollment
+//! - No duplicate enrollments
+//! - Maximum courses per student limit
+//! - Admin-only course creation
+//!
+//! ## Runtime Integration Example
+//!
+//! ```ignore
+//! impl pallet_perwerde::Config for Runtime {
+//!     type RuntimeEvent = RuntimeEvent;
+//!     type AdminOrigin = EnsureRoot<AccountId>;
+//!     type WeightInfo = pallet_perwerde::weights::SubstrateWeight<Runtime>;
+//!     type MaxCourseNameLength = ConstU32<128>;
+//!     type MaxCourseDescLength = ConstU32<512>;
+//!     type MaxCourseLinkLength = ConstU32<256>;
+//!     type MaxStudentsPerCourse = ConstU32<100>;
+//! }
+//! ```
+
+pub use pallet::*;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+pub mod weights;
+
+// These modules should only be compiled in `std` environment.
+#[cfg(all(feature = "std", any(test, feature = "runtime-benchmarks")))]
+pub mod mock;
+
+#[cfg(all(feature = "std", test))]
+mod tests;
+
+pub use weights::WeightInfo;
+
+#[frame_support::pallet]
+pub mod pallet {
+	use super::*;
+	use frame_support::{
+		dispatch::DispatchResult,
+		pallet_prelude::*,
+		traits::{EnsureOrigin, Get},
+	};
+	use frame_system::pallet_prelude::*;
+
+	#[pallet::pallet]
+	pub struct Pallet<T>(_);
+
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
+		type WeightInfo: WeightInfo;
+
+		#[pallet::constant]
+		type MaxCourseNameLength: Get<u32>;
+		#[pallet::constant]
+		type MaxCourseDescLength: Get<u32>;
+		#[pallet::constant]
+		type MaxCourseLinkLength: Get<u32>;
+		#[pallet::constant]
+		type MaxStudentsPerCourse: Get<u32>;
+
+		/// Maximum number of courses a single student can enroll in
+		/// Used for StudentCourses storage bound
+		#[pallet::constant]
+		type MaxCoursesPerStudent: Get<u32>;
+	}
+
+	#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+	pub enum CourseStatus {
+		Active,
+		Archived,
+	}
+
+	#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+	#[scale_info(skip_type_params(T))]
+	pub struct Course<T: Config> {
+		pub id: u32,
+		pub owner: T::AccountId,
+		pub name: BoundedVec<u8, T::MaxCourseNameLength>,
+		pub description: BoundedVec<u8, T::MaxCourseDescLength>,
+		pub content_link: BoundedVec<u8, T::MaxCourseLinkLength>,
+		pub status: CourseStatus,
+		pub created_at: BlockNumberFor<T>,
+	}
+
+	#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+	#[scale_info(skip_type_params(T))]
+	pub struct Enrollment<T: Config> {
+		pub student: T::AccountId,
+		pub course_id: u32,
+		pub enrolled_at: BlockNumberFor<T>,
+		pub completed_at: Option<BlockNumberFor<T>>,
+		pub points_earned: u32,
+	}
+
+	#[pallet::storage]
+	#[pallet::getter(fn courses)]
+	pub type Courses<T: Config> = StorageMap<_, Blake2_128Concat, u32, Course<T>, OptionQuery>;
+
+	#[pallet::storage]
+	#[pallet::getter(fn next_course_id)]
+	pub type NextCourseId<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pallet::storage]
+	#[pallet::getter(fn enrollments)]
+	pub type Enrollments<T: Config> =
+		StorageMap<_, Blake2_128Concat, (T::AccountId, u32), Enrollment<T>, OptionQuery>;
+
+	/// Per-student list of enrolled course IDs
+	/// UPDATED (Gemini suggestion): Uses MaxCoursesPerStudent instead of MaxStudentsPerCourse
+	/// This is the correct semantic - limits how many courses ONE student can take
+	#[pallet::storage]
+	#[pallet::getter(fn student_courses)]
+	pub type StudentCourses<T: Config> = StorageMap<
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		BoundedVec<u32, T::MaxCoursesPerStudent>,
+		ValueQuery,
+	>;
+
+	#[pallet::event]
+	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	pub enum Event<T: Config> {
+		CourseCreated { course_id: u32, owner: T::AccountId },
+		StudentEnrolled { student: T::AccountId, course_id: u32 },
+		CourseCompleted { student: T::AccountId, course_id: u32, points: u32 },
+		CourseArchived { course_id: u32 },
+	}
+
+	#[pallet::error]
+	pub enum Error<T> {
+		CourseNotFound,
+		AlreadyEnrolled,
+		NotEnrolled,
+		CourseNotActive,
+		CourseAlreadyCompleted,
+		NotCourseOwner,
+		TooManyCourses,
+	}
+
+	#[pallet::call]
+	impl<T: Config> Pallet<T> {
+		#[pallet::call_index(0)]
+		#[pallet::weight(T::WeightInfo::create_course())]
+		pub fn create_course(
+			origin: OriginFor<T>,
+			name: BoundedVec<u8, T::MaxCourseNameLength>,
+			description: BoundedVec<u8, T::MaxCourseDescLength>,
+			content_link: BoundedVec<u8, T::MaxCourseLinkLength>,
+		) -> DispatchResult {
+			let owner = T::AdminOrigin::ensure_origin(origin)?;
+			let course_id = NextCourseId::<T>::get();
+
+			// Parameters are already bounded, no conversion needed
+			let course = Course {
+				id: course_id,
+				owner: owner.clone(),
+				name,
+				description,
+				content_link,
+				status: CourseStatus::Active,
+				created_at: frame_system::Pallet::<T>::block_number(),
+			};
+
+			Courses::<T>::insert(course_id, course);
+			NextCourseId::<T>::mutate(|id| *id += 1);
+
+			Self::deposit_event(Event::CourseCreated { course_id, owner });
+			Ok(())
+		}
+
+		#[pallet::call_index(1)]
+		#[pallet::weight(T::WeightInfo::enroll())]
+		pub fn enroll(origin: OriginFor<T>, course_id: u32) -> DispatchResult {
+			let student = ensure_signed(origin)?;
+			let course = Courses::<T>::get(course_id).ok_or(Error::<T>::CourseNotFound)?;
+			ensure!(course.status == CourseStatus::Active, Error::<T>::CourseNotActive);
+			ensure!(
+				!Enrollments::<T>::contains_key((&student, course_id)),
+				Error::<T>::AlreadyEnrolled
+			);
+
+			let enrollment = Enrollment {
+				student: student.clone(),
+				course_id,
+				enrolled_at: frame_system::Pallet::<T>::block_number(),
+				completed_at: None,
+				points_earned: 0,
+			};
+
+			Enrollments::<T>::insert((&student, course_id), enrollment);
+			StudentCourses::<T>::try_mutate(&student, |courses| {
+				courses.try_push(course_id).map_err(|_| Error::<T>::TooManyCourses)
+			})?;
+
+			Self::deposit_event(Event::StudentEnrolled { student, course_id });
+			Ok(())
+		}
+
+		/// Mark a student's course as completed and award points
+		/// SECURITY: Only the course owner can mark completions, not students themselves
+		#[pallet::call_index(2)]
+		#[pallet::weight(T::WeightInfo::complete_course())]
+		pub fn complete_course(
+			origin: OriginFor<T>,
+			student: T::AccountId,
+			course_id: u32,
+			points: u32,
+		) -> DispatchResult {
+			let caller = ensure_signed(origin)?;
+
+			// Verify caller is the course owner
+			let course = Courses::<T>::get(course_id).ok_or(Error::<T>::CourseNotFound)?;
+			ensure!(course.owner == caller, Error::<T>::NotCourseOwner);
+
+			// Get and validate enrollment
+			let mut enrollment =
+				Enrollments::<T>::get((&student, course_id)).ok_or(Error::<T>::NotEnrolled)?;
+			ensure!(enrollment.completed_at.is_none(), Error::<T>::CourseAlreadyCompleted);
+
+			// Mark completion
+			enrollment.completed_at = Some(frame_system::Pallet::<T>::block_number());
+			enrollment.points_earned = points;
+
+			Enrollments::<T>::insert((&student, course_id), enrollment);
+
+			Self::deposit_event(Event::CourseCompleted { student, course_id, points });
+			Ok(())
+		}
+
+		#[pallet::call_index(3)]
+		#[pallet::weight(T::WeightInfo::archive_course())]
+		pub fn archive_course(origin: OriginFor<T>, course_id: u32) -> DispatchResult {
+			let caller = T::AdminOrigin::ensure_origin(origin)?;
+			let mut course = Courses::<T>::get(course_id).ok_or(Error::<T>::CourseNotFound)?;
+			ensure!(course.owner == caller, Error::<T>::NotCourseOwner);
+
+			course.status = CourseStatus::Archived;
+			Courses::<T>::insert(course_id, course);
+
+			Self::deposit_event(Event::CourseArchived { course_id });
+			Ok(())
+		}
+	}
+
+	impl<T: Config> Pallet<T> {
+		pub fn get_perwerde_score(who: &T::AccountId) -> u32 {
+			StudentCourses::<T>::get(who)
+				.iter()
+				.filter_map(|course_id| Enrollments::<T>::get((who, *course_id)))
+				.filter(|enrollment| enrollment.completed_at.is_some())
+				.map(|enrollment| enrollment.points_earned)
+				.sum()
+		}
+	}
+}

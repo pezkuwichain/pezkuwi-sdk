@@ -1,0 +1,95 @@
+[package]
+name = "teyrchains-runtimes-test-utils"
+version = "7.0.0"
+authors.workspace = true
+edition.workspace = true
+description = "Utils for Runtimes testing"
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive", "max-encoded-len"], workspace = true }
+
+# Substrate
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+pallet-balances = { workspace = true }
+pallet-session = { workspace = true }
+pallet-timestamp = { workspace = true }
+sp-consensus-aura = { workspace = true }
+sp-core = { workspace = true }
+sp-io = { workspace = true }
+sp-runtime = { workspace = true }
+sp-tracing = { workspace = true, default-features = true }
+
+# Cumulus
+cumulus-pallet-teyrchain-system = { workspace = true }
+cumulus-pallet-xcmp-queue = { workspace = true }
+cumulus-primitives-core = { workspace = true }
+cumulus-primitives-teyrchain-inherent = { workspace = true }
+cumulus-test-relay-sproof-builder = { workspace = true }
+pallet-collator-selection = { workspace = true }
+teyrchain-info = { workspace = true }
+teyrchains-common = { workspace = true }
+
+# Pezkuwi
+pallet-xcm = { workspace = true }
+pezkuwi-teyrchain-primitives = { workspace = true }
+xcm = { workspace = true }
+xcm-executor = { workspace = true }
+xcm-runtime-apis = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"cumulus-pallet-teyrchain-system/std",
+	"cumulus-pallet-xcmp-queue/std",
+	"cumulus-primitives-core/std",
+	"cumulus-primitives-teyrchain-inherent/std",
+	"cumulus-test-relay-sproof-builder/std",
+	"frame-support/std",
+	"frame-system/std",
+	"pallet-balances/std",
+	"pallet-collator-selection/std",
+	"pallet-session/std",
+	"pallet-timestamp/std",
+	"pallet-xcm/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"sp-consensus-aura/std",
+	"sp-core/std",
+	"sp-io/std",
+	"sp-runtime/std",
+	"teyrchain-info/std",
+	"teyrchains-common/std",
+	"xcm-executor/std",
+	"xcm-runtime-apis/std",
+	"xcm/std",
+]
+runtime-benchmarks = [
+	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"cumulus-primitives-core/runtime-benchmarks",
+	"cumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+	"cumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collator-selection/runtime-benchmarks",
+	"pallet-session/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-consensus-aura/runtime-benchmarks",
+	"sp-io/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

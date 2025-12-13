@@ -1,0 +1,41 @@
+[package]
+name = "pezkuwi-node-primitives"
+description = "Primitives types for the Node-side"
+version = "7.0.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+bitvec = { features = ["alloc"], workspace = true }
+bounded-vec = { workspace = true }
+codec = { features = ["derive"], workspace = true }
+futures = { workspace = true }
+futures-timer = { workspace = true }
+pezkuwi-primitives = { workspace = true, default-features = true }
+pezkuwi-teyrchain-primitives = { workspace = true }
+sc-keystore = { workspace = true }
+schnorrkel = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
+sp-application-crypto = { workspace = true, default-features = true }
+sp-consensus-babe = { workspace = true, default-features = true }
+sp-consensus-slots = { workspace = true }
+sp-keystore = { workspace = true, default-features = true }
+sp-maybe-compressed-blob = { workspace = true, default-features = true }
+thiserror = { workspace = true }
+
+[target.'cfg(not(target_os = "unknown"))'.dependencies]
+zstd = { workspace = true, default-features = false }
+
+[features]
+runtime-benchmarks = [
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"sp-consensus-babe/runtime-benchmarks",
+	"sp-consensus-slots/runtime-benchmarks",
+]
