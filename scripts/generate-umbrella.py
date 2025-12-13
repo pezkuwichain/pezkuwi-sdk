@@ -218,6 +218,7 @@ def add_to_workspace(path):
 	os.system("cargo metadata --format-version 1 > /dev/null") # update the lockfile
 	os.system(f"zepter") # enable the features
 	os.system(f"taplo format --config .config/taplo.toml Cargo.toml umbrella/Cargo.toml")
+	os.system(f"cargo fmt -- umbrella/src/lib.rs") # format lib.rs for rustfmt compliance
 
 def parse_args():
 	parser = argparse.ArgumentParser(description="Create a pezkuwi-sdk crate")
