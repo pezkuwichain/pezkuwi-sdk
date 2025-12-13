@@ -12,7 +12,7 @@ Run `cargo doc --package pezpallet-example-basic --open` to view this pallet's d
 ## Documentation Guidelines
 
 <!-- Original author of paragraph: Various. Based on collation of review comments to PRs addressing issues with -->
-<!-- label 'S3-FRAME' in https://github.com/paritytech/bizinikiwi-developer-hub/issues -->
+<!-- label 'S3-FRAME' -->
 <ul>
     <li>Documentation comments (i.e. <code>/// comment</code>) - should
         accompany pallet functions and be restricted to the pallet interface,
@@ -21,7 +21,7 @@ Run `cargo doc --package pezpallet-example-basic --open` to view this pallet's d
         requires root, but without repeating the source code details.
         Capitalize the first word of each documentation comment and end it with
         a full stop. See
-        <a href="https://github.com/paritytech/bizinikiwi#72-contributing-to-documentation-for-bizinikiwi-packages"
+        <a href="https://github.com/pezkuwichain/kurdistan-sdk/blob/main/bizinikiwi/README.md#contributing-to-documentation-for-bizinikiwi-packages"
         target="_blank"> Generic example of annotating source code with documentation comments</a></li>
     <li>Self-documenting code - Try to refactor code to be self-documenting.</li>
     <li>Code comments - Supplement complex code with a brief explanation, not every line of code.</li>

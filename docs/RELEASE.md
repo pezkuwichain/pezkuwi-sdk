@@ -25,8 +25,8 @@ The outputs of a stable release are:
 
 # Timeline
 `Stable` releases are scheduled on a quarterly basis, usually by the end of the last month of each quarter. The exact
- schedule can be found on the [Release Registry](https://github.com/paritytech/release-registry/).It is possible to
- subscribe to a [calendar link](https://raw.githubusercontent.com/paritytech/release-registry/main/releases-v1.ics)
+ schedule can be found on the [Release Registry](https://github.com/pezkuwichain/release-registry/).It is possible to
+ subscribe to a [calendar link](https://raw.githubusercontent.com/pezkuwichain/release-registry/main/releases-v1.ics)
  to have it in your personal calendar.
 
 Each stable release is supported for a period of one year from its first release. For example, `Pezkuwi stable2412`
@@ -175,8 +175,8 @@ to have it as a final rc on the S3
 From the main Pezkuwi-sdk repository in the paritytech org:
 
 1. Synchronize templates using [Synchronize templates](/.github/workflows/misc-sync-templates.yml)
-2. Update the [Release Registry](https://github.com/paritytech/release-registry/)
-follwoing the [instructions](https://github.com/paritytech/release-registry?tab=readme-ov-file#maintenance)
+2. Update the [Release Registry](https://github.com/pezkuwichain/release-registry/)
+follwoing the [instructions](https://github.com/pezkuwichain/release-registry?tab=readme-ov-file#maintenance)
 in the repo with the actual release dates.
 
 ## Patch release for the latest stable version

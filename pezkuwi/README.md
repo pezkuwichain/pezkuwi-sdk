@@ -230,7 +230,7 @@ that we currently maintain.
 
 ### Shell Completion
 
-[Shell Completion](https://github.com/paritytech/polkadot-sdk/blob/master/polkadot/doc/shell-completion.md)
+[Shell Completion](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/pezkuwi/doc/shell-completion.md)
 
 ## Contributing
 
@@ -244,4 +244,4 @@ that we currently maintain.
 
 ## License
 
-Pezkuwi is [GPL 3.0 licensed](https://github.com/paritytech/polkadot-sdk/blob/master/polkadot/LICENSE).
+Pezkuwi is [GPL 3.0 licensed](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/pezkuwi/LICENSE).

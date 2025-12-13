@@ -26,7 +26,7 @@ that are removed from the source. So you need to manually check and remove them 
 commit in Bizinikiwi remote repository, such as:
 
 ```toml
-toml pezsp-core = { version = "7.0.0", git = "https://github.com/paritytech/bizinikiwi.git", rev =
+toml pezsp-core = { version = "7.0.0", git = "https://github.com/pezkuwichain/kurdistan-sdk.git", rev =
 "de80d0107336a9c7a2efdc0199015e4d67fcbdb5", default-features = false }
 ```
 

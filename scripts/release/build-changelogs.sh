@@ -27,12 +27,12 @@ OUTPUT="${TMP}/changelogs/$PRODUCT/$VERSION"
 echo -e "OUTPUT: \t\t$OUTPUT"
 mkdir -p $OUTPUT
 
-$ENGINE run --rm -v ${PROJECT_ROOT}:/repo paritytech/prdoc load -d "prdoc/$VERSION" --json > $DATA_JSON
+$ENGINE run --rm -v ${PROJECT_ROOT}:/repo pezkuwichain/prdoc load -d "prdoc/$VERSION" --json > $DATA_JSON
 
 cat $DATA_JSON | jq ' { "prdoc" : .}' > $CONTEXT_JSON
 
 # Fetch the list of valid audiences and their descriptions
-SCHEMA_URL=https://raw.githubusercontent.com/paritytech/polkadot-sdk/master/prdoc/schema_user.json
+SCHEMA_URL=https://raw.githubusercontent.com/pezkuwichain/kurdistan-sdk/master/prdoc/schema_user.json
 SCHEMA=$(curl -s $SCHEMA_URL | sed 's|^//.*||')
 aud_desc_array=()
 while IFS= read -r line; do

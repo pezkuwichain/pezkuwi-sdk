@@ -16,7 +16,7 @@ Parity builds and publishes a container image that can be found as `docker.io/pa
 ## Parity CI image
 
 Parity maintains and uses internally a generic "CI" image that can be used as a base to build binaries: [Parity CI
-container image](https://github.com/paritytech/dockerfiles/tree/main/ci-unified):
+container image](https://github.com/pezkuwichain/dockerfiles/tree/main/ci-unified):
 
 The command below allows building a Linux binary without having to even install Rust or any dependency locally:
 

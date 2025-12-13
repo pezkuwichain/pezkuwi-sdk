@@ -87,8 +87,8 @@
 //! - Touching too many storage keys and resulting in an excessively large PoV.
 //! - Taking too long to execute.
 //!
-//! [`try-runtime-cli`](https://github.com/paritytech/try-runtime-cli) has a sub-command
-//! [`on-runtime-upgrade`](https://paritytech.github.io/try-runtime-cli/try_runtime_core/commands/enum.Action.html#variant.OnRuntimeUpgrade)
+//! [`try-runtime-cli`](https://github.com/pezkuwichain/try-runtime-cli) has a sub-command
+//! [`on-runtime-upgrade`](https://pezkuwichain.github.io/try-runtime-cli/try_runtime_core/commands/enum.Action.html#variant.OnRuntimeUpgrade)
 //! which is designed to help with exactly this.
 //!
 //! Developers MUST run this command before deploying migrations to ensure they will not
@@ -100,7 +100,7 @@
 //!
 //! ### Note on the Manipulability of PoV Size and Execution Time
 //!
-//! While [`try-runtime-cli`](https://github.com/paritytech/try-runtime-cli) can help ensure with
+//! While [`try-runtime-cli`](https://github.com/pezkuwichain/try-runtime-cli) can help ensure with
 //! very high certainty that a migration will succeed given **existing** on-chain state, it cannot
 //! prevent a malicious actor from manipulating state in a way that will cause the migration to take
 //! longer or produce a PoV much larger than previously measured.

@@ -64,7 +64,7 @@ pub(crate) fn check(target: RuntimeTarget) -> Result<CargoCommandVersioned, Stri
 			if !cargo_command.supports_bizinikiwi_runtime_env(target) {
 				return Err(colorize_error_message(
 					"Cannot compile a RISC-V runtime: no compatible Rust compiler found!\n\
-					 Install a toolchain from here and try again: https://github.com/paritytech/rustc-rv32e-toolchain/",
+					 Install a toolchain from here and try again: https://github.com/pezkuwichain/rustc-rv32e-toolchain/",
 				));
 			}
 

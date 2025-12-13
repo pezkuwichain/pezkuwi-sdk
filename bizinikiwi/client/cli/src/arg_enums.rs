@@ -242,12 +242,12 @@ pub enum Database {
 	/// Facebooks RocksDB
 	#[cfg(feature = "rocksdb")]
 	RocksDb,
-	/// ParityDb. <https://github.com/paritytech/parity-db/>
+	/// ParityDb. <https://github.com/pezkuwichain/parity-db/>
 	ParityDb,
 	/// Detect whether there is an existing database. Use it, if there is, if not, create new
 	/// instance of ParityDb
 	Auto,
-	/// ParityDb. <https://github.com/paritytech/parity-db/>
+	/// ParityDb. <https://github.com/pezkuwichain/parity-db/>
 	#[value(name = "paritydb-experimental")]
 	ParityDbDeprecated,
 }

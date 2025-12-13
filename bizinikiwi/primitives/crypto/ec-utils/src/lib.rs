@@ -21,7 +21,7 @@
 //! The implementation has been primarily designed to be used in slow hosted
 //! targets (e.g. wasm32) and offloads the most computationally expensive
 //! operations to the host by leveraging the
-//! [arkworks-extensions](https://github.com/paritytech/arkworks-extensions)
+//! [arkworks-extensions](https://github.com/pezkuwichain/arkworks-extensions)
 //! library and Bizinikiwi's host functions.
 //!
 //! The exported types are organized and named in a way that mirrors the structure

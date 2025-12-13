@@ -26,7 +26,7 @@ description = "Zombienet sdk config builder, allow to build a network configurat
 readme = false
 keywords = ["configuration", "sdk", "zombienet"]
 license = "Apache-2.0 OR GPL-3.0"
-repository = "https://github.com/paritytech/zombienet-sdk"
+repository = "https://github.com/pezkuwichain/zombienet-sdk"
 
 [lib]
 name = "zombienet_configuration"

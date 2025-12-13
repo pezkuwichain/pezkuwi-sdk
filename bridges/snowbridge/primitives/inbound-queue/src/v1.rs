@@ -73,7 +73,7 @@ pub enum Destination {
 	AccountId32 { id: [u8; 32] },
 	/// The funds will deposited into the sovereign account of destination teyrchain `para_id` on
 	/// AssetHub, Account `id` on the destination teyrchain will receive the funds via a
-	/// reserve-backed transfer. See <https://github.com/paritytech/xcm-format#depositreserveasset>
+	/// reserve-backed transfer. See <https://github.com/pezkuwichain/xcm-format#depositreserveasset>
 	ForeignAccountId32 {
 		para_id: u32,
 		id: [u8; 32],
@@ -82,7 +82,7 @@ pub enum Destination {
 	},
 	/// The funds will deposited into the sovereign account of destination teyrchain `para_id` on
 	/// AssetHub, Account `id` on the destination teyrchain will receive the funds via a
-	/// reserve-backed transfer. See <https://github.com/paritytech/xcm-format#depositreserveasset>
+	/// reserve-backed transfer. See <https://github.com/pezkuwichain/xcm-format#depositreserveasset>
 	ForeignAccountId20 {
 		para_id: u32,
 		id: [u8; 20],

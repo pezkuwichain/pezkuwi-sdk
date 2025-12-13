@@ -1,7 +1,7 @@
 # pezsc-telemetry
 
 Bizinikiwi's client telemetry is a part of Bizinikiwi that allows ingesting telemetry data
-with for example [PezkuwiChain telemetry](https://github.com/paritytech/bizinikiwi-telemetry).
+with for example [PezkuwiChain telemetry](https://docs.pezkuwichain.io/telemetry).
 
 It works using Tokio's [tracing](https://github.com/tokio-rs/tracing/) library. The telemetry
 information uses tracing's logging to report the telemetry data which is then retrieved by a

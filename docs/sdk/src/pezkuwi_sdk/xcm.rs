@@ -5,7 +5,7 @@
 //!
 //! ## Overview
 //!
-//! XCM is a standard, specification of which lives in the [xcm format repo](https://github.com/paritytech/xcm-format).
+//! XCM is a standard, specification of which lives in the [xcm format repo](https://github.com/pezkuwichain/xcm-format).
 //! It's agnostic both in programming language and blockchain platform, which means it could be used
 //! in Rust in Pezkuwi, or in Go or C++ in any other platform like Cosmos or Ethereum.
 //!
@@ -30,7 +30,7 @@
 //!
 //! ## Implementation
 //!
-//! A ready-to-use Rust implementation lives in the [pezkuwi-sdk repo](https://github.com/paritytech/polkadot-sdk/tree/master/polkadot/xcm),
+//! A ready-to-use Rust implementation lives in the [pezkuwi-sdk repo](https://github.com/pezkuwichain/kurdistan-sdk/tree/main/pezkuwi/xcm),
 //! but will be moved to its own repo in the future.
 //!
 //! Its main components are:

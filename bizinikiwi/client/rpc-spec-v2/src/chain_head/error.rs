@@ -47,7 +47,7 @@ pub enum Error {
 }
 
 /// Errors for `chainHead` RPC module, as defined in
-/// <https://github.com/paritytech/json-rpc-interface-spec>.
+/// <https://docs.pezkuwichain.io/json-rpc-interface-spec>.
 pub mod rpc_spec_v2 {
 	/// Maximum number of chainHead_follow has been reached.
 	pub const REACHED_LIMITS: i32 = -32800;

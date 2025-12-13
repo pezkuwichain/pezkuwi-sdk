@@ -88,7 +88,7 @@
 //! build their WASM files as a part of normal build command (e.g. `cargo build`). Once built, the
 //! wasm file is placed in `./target/{debug|release}/wbuild/{runtime_name}/{runtime_name}.wasm`.
 //!
-//! In order to ensure that the WASM build is **deterministic**, the [Bizinikiwi Runtime Toolbox (srtool)](https://github.com/paritytech/srtool) can be used.
+//! In order to ensure that the WASM build is **deterministic**, the [Bizinikiwi Runtime Toolbox (srtool)](https://github.com/pezkuwichain/srtool) can be used.
 //!
 //! ### Anatomy of a Binary Crate
 //!

@@ -63,7 +63,7 @@ with-tracing = ["pezkuwi-sdk/with-tracing"]
 cargo build --features "runtime-benchmarks,with-tracing"
 ```
 
-Bizinikiwi's [try-runtime](https://paritytech.github.io/try-runtime-cli/try_runtime/) is an essential
+Bizinikiwi's [try-runtime](https://pezkuwichain.github.io/try-runtime-cli/try_runtime/) is an essential
 tool for testing runtime protocol upgrades locally, which can be enabled with the `try-runtime`
 feature.
 

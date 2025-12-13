@@ -204,7 +204,7 @@ npx @paritytech/license-scanner scan ...
 
 ```yaml
 # Satır 31, 99: Yorum satırları - runner dokümantasyonu
-# https://github.com/paritytech/ci_cd/wiki/GitHub#paritytech-self-hosted-runners
+
 # DEĞİŞTİR: Yorum güncellenebilir veya kaldırılabilir (işlevsel değil)
 ```
 
@@ -266,7 +266,7 @@ https://github.com/paritytech/revive/releases/...
 # DEĞİŞTİR: - https://github.com/pezkuwichain/pezkuwi-sdk/issues/25
 
 # Satır 132: PSVM aracı
-cargo install --git https://github.com/paritytech/psvm psvm
+cargo install --git https://github.com/pezkuwichain/psvm psvm
 # NOT: PSVM Parity aracı - kullanılıyorsa fork edilmeli
 ```
 
@@ -290,7 +290,7 @@ npx @polkadot-api/check-runtime@latest ...
 
 ```yaml
 # Satır 89: Try-runtime CLI
-curl -sL https://github.com/paritytech/try-runtime-cli/releases/...
+curl -sL https://github.com/pezkuwichain/try-runtime-cli/releases/...
 # NOT: Try-runtime CLI Parity'ye ait. Fork veya uyumluluk kontrolü gerekli.
 ```
 
@@ -378,7 +378,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 | --- | --- | --- |
 | `@polkadot-api/check-runtime` | Runtime uyumluluk | Uyumluluk testi yap, muhtemelen çalışır |
 | `paritytech/revive` | EVM testleri | Harici olarak bırak |
-| `paritytech/try-runtime-cli` | Migration testleri | Bizinikiwi fork'u olduğu için muhtemelen uyumlu |
+| `pezkuwichain/try-runtime-cli` | Migration testleri | Bizinikiwi fork'u olduğu için muhtemelen uyumlu |
 | `paritytech/evm-test-suite` | EVM testleri | Harici olarak bırak |
 
 ### Fork Edilmesi Gerekenler
@@ -388,7 +388,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 | `paritytech/tools` Docker image | YÜKSEK | CI container'ı |
 | `paritytech/node-bench-regression-guard` | ORTA | Benchmark regresyon kontrolü |
 | `@paritytech/license-scanner` | DÜŞÜK | Lisans taraması |
-| `paritytech/psvm` | DÜŞÜK | Version yönetimi |
+| `pezkuwichain/psvm` | DÜŞÜK | Version yönetimi |
 
 ### Oluşturulması Gerekenler
 

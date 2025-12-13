@@ -1,11 +1,11 @@
 # Bridges Tests for Local pezkuwichain <> zagros Bridge
 
-This folder contains [zombienet](https://github.com/paritytech/zombienet/) based integration tests for both
+This folder contains [zombienet](https://github.com/pezkuwichain/zombienet-sdk/) based integration tests for both
 onchain and offchain bridges code.
 
 Prerequisites for running the tests locally:
 
-- download latest [zombienet release](https://github.com/paritytech/zombienet/releases) and place it at
+- download latest [zombienet release](https://github.com/pezkuwichain/zombienet-sdk/releases) and place it at
 `~/local_bridge_testing/bin/zombienet`;
 
 - build PezkuwiChain binary by running `cargo build -p pezkuwi --release  --features fast-runtime` command in the
@@ -18,7 +18,7 @@ Prerequisites for running the tests locally:
   `pezkuwi/api-cli` package. Use `yarn global add @pezkuwi/api-cli` to install it.
 
 - build Bizinikiwi relay by running `cargo build -p bizinikiwi-relay --release` command in the
-  [`parity-bridges-common`](https://github.com/paritytech/parity-bridges-common) repository clone;
+  [`pezkuwichain/kurdistan-sdk`](https://github.com/pezkuwichain/kurdistan-sdk/tree/main/bridges) repository clone;
 
 - copy the `bizinikiwi-relay` binary, built in the previous step, to `~/local_bridge_testing/bin/bizinikiwi-relay`;
 
