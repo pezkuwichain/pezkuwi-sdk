@@ -943,7 +943,7 @@ macro_rules! implement_per_thing {
 				let mut result = self;
 				let mut exp = exp - 1;
 				while exp > 0 && !result.is_zero() {
-					if exp % 2 != 0 {
+					if !exp.is_multiple_of(2) {
 						result = result * self;
 						exp -= 1;
 					}
