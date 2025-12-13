@@ -1536,6 +1536,12 @@ zstd = { version = "0.12.4", default-features = false }
 opt-level = 3
 panic = "unwind"
 
+# Production profile for optimized builds (used by Docker images)
+[profile.production]
+inherits = "release"
+lto = true
+codegen-units = 1
+
 [profile.dev]
 # Debug info significantly slows down the build.
 # This setting only keeps source line information for stack traces.
