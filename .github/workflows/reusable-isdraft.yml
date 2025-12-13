@@ -9,8 +9,12 @@ on:
 jobs:
   isdraft:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false || contains(github.event.pull_request.labels.*.name, 'A5-run-CI')
+    # Run for: non-draft PRs, PRs with A5-run-CI label, push events, or other non-PR events
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.draft == false ||
+      contains(github.event.pull_request.labels.*.name, 'A5-run-CI')
     steps:
       - name: echo test
         shell: bash
-        run: echo "PR is not draft, starting CI"
+        run: echo "PR is not draft or this is not a PR event, starting CI"
