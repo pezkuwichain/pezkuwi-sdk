@@ -25,5 +25,7 @@ sp-runtime = { workspace = true, default-features = true }
 [features]
 debug = ["array-bytes", "log"]
 default = ["debug", "std"]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"sp-runtime/runtime-benchmarks"
+]
 std = ["codec/std", "hash-db/std", "log/std", "sp-core/std", "sp-runtime/std"]

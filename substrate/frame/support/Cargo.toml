@@ -101,6 +101,7 @@ runtime-benchmarks = [
 	"sp-state-machine?/runtime-benchmarks",
 	"sp-timestamp/runtime-benchmarks",
 	"sp-trie/runtime-benchmarks",
+	"binary-merkle-tree/runtime-benchmarks"
 ]
 try-runtime = [
 	"frame-system/try-runtime",

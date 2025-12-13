@@ -50,9 +50,9 @@ pallet-proxy = { workspace = true }
 pallet-recovery = { workspace = true }
 pallet-referral = { workspace = true }
 pallet-scheduler = { workspace = true }
-pallet-society = { workspace = true }
 pallet-session = { workspace = true }
 pallet-skip-feeless-payment = { workspace = true }
+pallet-society = { workspace = true }
 pallet-staking-score = { workspace = true }
 pallet-tiki = { workspace = true }
 pallet-timestamp = { workspace = true }
@@ -151,9 +151,9 @@ std = [
 	"pallet-recovery/std",
 	"pallet-referral/std",
 	"pallet-scheduler/std",
-	"pallet-society/std",
 	"pallet-session/std",
 	"pallet-skip-feeless-payment/std",
+	"pallet-society/std",
 	"pallet-staking-score/std",
 	"pallet-tiki/std",
 	"pallet-timestamp/std",
@@ -233,9 +233,9 @@ runtime-benchmarks = [
 	"pallet-recovery/runtime-benchmarks",
 	"pallet-referral/runtime-benchmarks",
 	"pallet-scheduler/runtime-benchmarks",
-	"pallet-society/runtime-benchmarks",
 	"pallet-session/runtime-benchmarks",
 	"pallet-skip-feeless-payment/runtime-benchmarks",
+	"pallet-society/runtime-benchmarks",
 	"pallet-staking-score/runtime-benchmarks",
 	"pallet-tiki/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
@@ -303,9 +303,9 @@ try-runtime = [
 	"pallet-recovery/try-runtime",
 	"pallet-referral/try-runtime",
 	"pallet-scheduler/try-runtime",
-	"pallet-society/try-runtime",
 	"pallet-session/try-runtime",
 	"pallet-skip-feeless-payment/try-runtime",
+	"pallet-society/try-runtime",
 	"pallet-staking-score/try-runtime",
 	"pallet-tiki/try-runtime",
 	"pallet-timestamp/try-runtime",
