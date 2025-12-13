@@ -283,3 +283,101 @@ env:
 **Tarih:** 2025-12-09
 
 ---
+
+## 🛑 SİSTEMATİK ÇALIŞMA KURALLARI - KRİTİK
+
+**Son güncelleme:** 2025-12-13
+
+Bu kurallar, tekrarlanan hatalardan öğrenilerek oluşturulmuştur. **KESİNLİKLE** uyulmalı.
+
+### 1. ÇALIŞAN KODA DOKUNMA
+
+```
+"If it ain't broke, don't fix it"
+```
+
+- Çalışan workflow'lara, test geçen dosyalara **gereksiz değişiklik yapma**
+- Bir şeyi "iyileştirmek" için çalışan kodu değiştirme
+- Düzeltme yaparken **sadece hatalı olan yere** odaklan
+
+### 2. TEK DEĞİŞİKLİK → TEK TEST
+
+```
+Her seferinde SADECE BİR değişiklik yap
+→ Test et
+→ Sonucu gör
+→ Sonra diğerine geç
+```
+
+- Birden fazla değişikliği aynı anda yapmak = hangi değişikliğin hataya sebep olduğunu anlayamama
+- Bir commit'te birden fazla bağımsız fix varsa, sorun çıktığında rollback zor
+
+### 3. LOKAL TEST ÖNCE
+
+```
+Mümkünse önce lokal test et, sonra push et
+```
+
+- `cargo check --workspace`
+- `cargo test -p <crate>`
+- `cargo clippy --workspace`
+
+GitHub'a push edip sonucu beklemek = zaman kaybı + gereksiz workflow kuyruğu
+
+### 4. GERİ DÖNÜŞ NOKTASI BELİRLE
+
+```
+Her başarılı durumda commit at ve işaretle
+```
+
+- "Bu çalışıyor" diye bilinen commit SHA'sını not al
+- Sorun çıkarsa o commit'e dön, karmaşık düzeltmeler deneme
+- Git history'si temiz tutulmalı
+
+### 5. PANİK YAPMA
+
+```
+İlk hata geldiğinde:
+1. DURMA
+2. Hata mesajını OKU
+3. Root cause analizi YAP
+4. Sonra düzelt
+```
+
+- Hızlıca "düzeltme" yapmaya çalışmak = durumu daha da kötüleştirmek
+- Bir düzeltme işe yaramazsa → geri al → farklı yaklaşım dene
+- Aynı şeyi tekrar tekrar deneme
+
+### 6. ROLLBACK > DEBUG
+
+```
+Düzeltme 2-3 denemede işe yaramazsa → ROLLBACK
+```
+
+- Çalışan versiyona geri dön
+- Temiz bir başlangıç noktasından tekrar başla
+- Sonsuz debug döngüsüne girme
+
+### Örnek Senaryo (YANLIŞ):
+
+```
+1. Clippy hatası var → düzelt
+2. Düzeltme sırasında isdraft workflow'una dokundum (gereksiz)
+3. isdraft patladı
+4. isdraft'ı düzeltmeye çalıştım (5 farklı deneme)
+5. Hepsi başarısız
+6. Sonunda revert ettim
+7. Zaman kaybı: 2 saat
+```
+
+### Örnek Senaryo (DOĞRU):
+
+```
+1. Clippy hatası var → düzelt
+2. Sadece clippy ile ilgili dosyalara dokun
+3. Test et, push et
+4. Başka bir şey patlarsa → o dosyalara bak
+5. Çalışan koda dokunma
+```
+
+---
