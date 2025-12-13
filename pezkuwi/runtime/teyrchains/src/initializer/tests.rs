@@ -23,7 +23,7 @@ use crate::{
 use pezkuwi_primitives::{HeadData, Id as ParaId};
 use pezkuwi_primitives_test_helpers::dummy_validation_code;
 
-use frame_support::{
+use pezframe_support::{
 	assert_ok,
 	traits::{OnFinalize, OnInitialize},
 };

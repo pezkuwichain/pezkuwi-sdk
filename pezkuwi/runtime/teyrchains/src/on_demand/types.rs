@@ -19,16 +19,16 @@
 use super::{alloc, pallet::Config};
 use alloc::collections::BinaryHeap;
 use core::cmp::{Ord, Ordering, PartialOrd};
-use frame_support::{
-	pallet_prelude::{Decode, Encode, RuntimeDebug, TypeInfo},
+use pezframe_support::{
+	pezpallet_prelude::{Decode, Encode, RuntimeDebug, TypeInfo},
 	traits::Currency,
 };
 use pezkuwi_primitives::{CoreIndex, Id as ParaId, ON_DEMAND_MAX_QUEUE_MAX_SIZE};
-use sp_runtime::FixedU128;
+use pezsp_runtime::FixedU128;
 
 /// Shorthand for the Balance type the runtime is using.
 pub type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 /// Meta data for full queue.
 ///

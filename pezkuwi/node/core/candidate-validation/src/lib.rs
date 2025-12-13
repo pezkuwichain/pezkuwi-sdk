@@ -55,8 +55,8 @@ use pezkuwi_primitives::{
 	ValidationCode, ValidationCodeHash, ValidatorId,
 };
 use pezkuwi_teyrchain_primitives::primitives::ValidationResult as WasmValidationResult;
-use sp_application_crypto::{AppCrypto, ByteArray};
-use sp_keystore::KeystorePtr;
+use pezsp_application_crypto::{AppCrypto, ByteArray};
+use pezsp_keystore::KeystorePtr;
 
 use codec::Encode;
 

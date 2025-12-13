@@ -17,7 +17,7 @@
 //! Runtime metric interface similar to native Prometheus metrics.
 //!
 //! This is intended to be used only for testing and debugging and **must never
-//! be used in production**. It requires the Substrate wasm tracing support
+//! be used in production**. It requires the Bizinikiwi wasm tracing support
 //! and command line configuration: `--tracing-targets wasm_tracing=trace`.
 
 #![cfg_attr(not(feature = "std"), no_std)]

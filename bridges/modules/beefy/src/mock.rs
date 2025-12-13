@@ -24,17 +24,17 @@ use crate::{
 use bp_beefy::{BeefyValidatorSignatureOf, ChainWithBeefy, Commitment, MmrDataOrHash};
 use bp_runtime::{BasicOperatingMode, Chain, ChainId};
 use codec::Encode;
-use frame_support::{construct_runtime, derive_impl, weights::Weight};
-use sp_core::{sr25519::Signature, Pair};
-use sp_runtime::{
+use pezframe_support::{construct_runtime, derive_impl, weights::Weight};
+use pezsp_core::{sr25519::Signature, Pair};
+use pezsp_runtime::{
 	testing::{Header, H256},
 	traits::{BlakeTwo256, Hash},
 	StateVersion,
 };
 
-pub use sp_consensus_beefy::ecdsa_crypto::{AuthorityId as BeefyId, Pair as BeefyPair};
-use sp_core::crypto::Wraps;
-use sp_runtime::traits::Keccak256;
+pub use pezsp_consensus_beefy::ecdsa_crypto::{AuthorityId as BeefyId, Pair as BeefyPair};
+use pezsp_core::crypto::Wraps;
+use pezsp_runtime::traits::Keccak256;
 
 pub type TestAccountId = u64;
 pub type TestBridgedBlockNumber = u64;
@@ -49,7 +49,7 @@ pub type TestBridgedMmrHashing = BridgedMmrHashing<TestRuntime, ()>;
 pub type TestBridgedMmrHash = BridgedMmrHash<TestRuntime, ()>;
 pub type TestBridgedBeefyMmrLeafExtra = BridgedBeefyMmrLeafExtra<TestRuntime, ()>;
 pub type TestBridgedMmrProof = BridgedMmrProof<TestRuntime, ()>;
-pub type TestBridgedRawMmrLeaf = sp_consensus_beefy::mmr::MmrLeaf<
+pub type TestBridgedRawMmrLeaf = pezsp_consensus_beefy::mmr::MmrLeaf<
 	TestBridgedBlockNumber,
 	TestBridgedBlockHash,
 	TestBridgedMmrHash,
@@ -57,25 +57,25 @@ pub type TestBridgedRawMmrLeaf = sp_consensus_beefy::mmr::MmrLeaf<
 >;
 pub type TestBridgedMmrNode = MmrDataOrHash<Keccak256, TestBridgedRawMmrLeaf>;
 
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Block = pezframe_system::mocking::MockBlock<TestRuntime>;
 
 construct_runtime! {
 	pub enum TestRuntime
 	{
-		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
+		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
 		Beefy: beefy::{Pallet},
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = Block;
 }
 
 impl beefy::Config for TestRuntime {
-	type MaxRequests = frame_support::traits::ConstU32<16>;
+	type MaxRequests = pezframe_support::traits::ConstU32<16>;
 	type BridgedChain = TestBridgedChain;
-	type CommitmentsToKeep = frame_support::traits::ConstU32<16>;
+	type CommitmentsToKeep = pezframe_support::traits::ConstU32<16>;
 }
 
 #[derive(Debug)]
@@ -87,7 +87,7 @@ impl Chain for TestBridgedChain {
 	type BlockNumber = TestBridgedBlockNumber;
 	type Hash = H256;
 	type Hasher = BlakeTwo256;
-	type Header = sp_runtime::testing::Header;
+	type Header = pezsp_runtime::testing::Header;
 
 	type AccountId = TestAccountId;
 	type Balance = u64;
@@ -110,12 +110,12 @@ impl ChainWithBeefy for TestBridgedChain {
 	type MmrHash = <Keccak256 as Hash>::Output;
 	type BeefyMmrLeafExtra = ();
 	type AuthorityId = BeefyId;
-	type AuthorityIdToMerkleLeaf = pallet_beefy_mmr::BeefyEcdsaToEthereum;
+	type AuthorityIdToMerkleLeaf = pezpallet_beefy_mmr::BeefyEcdsaToEthereum;
 }
 
 /// Run test within test runtime.
 pub fn run_test<T>(test: impl FnOnce() -> T) -> T {
-	sp_io::TestExternalities::new(Default::default()).execute_with(test)
+	pezsp_io::TestExternalities::new(Default::default()).execute_with(test)
 }
 
 /// Initialize pallet and run test.
@@ -141,7 +141,7 @@ pub fn run_test_with_initialize<T>(initial_validators_count: u32, test: impl FnO
 /// Import given commitment.
 pub fn import_commitment(
 	header: crate::mock_chain::HeaderAndCommitment,
-) -> sp_runtime::DispatchResult {
+) -> pezsp_runtime::DispatchResult {
 	crate::Pallet::<TestRuntime>::submit_commitment(
 		RuntimeOrigin::signed(1),
 		header

@@ -27,12 +27,12 @@ bitvec = { features = ["alloc"], workspace = true }
 maplit = { workspace = true }
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
 rand_chacha = { workspace = true, default-features = true }
-sp-application-crypto = { workspace = true, default-features = true }
-sp-authority-discovery = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
-sp-tracing = { workspace = true }
+pezsp-application-crypto = { workspace = true, default-features = true }
+pezsp-authority-discovery = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true }
 
 [features]
 runtime-benchmarks = [
@@ -42,6 +42,6 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-authority-discovery/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

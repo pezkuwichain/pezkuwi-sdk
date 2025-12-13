@@ -26,7 +26,7 @@ use pezkuwi_node_subsystem_types::OverseerSignal;
 use pezkuwi_primitives::{
 	CandidateHash, Hash, PersistedValidationData, SigningContext, ValidatorIndex, ValidatorPair,
 };
-use sp_core::Pair;
+use pezsp_core::Pair;
 use std::collections::HashMap;
 
 const LOG_TARGET: &str = "subsystem-bench::candidate-backing-mock";

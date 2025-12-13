@@ -17,7 +17,7 @@
 use super::{Error, IsTeyrchainNode, Registry};
 use pezkuwi_node_subsystem_types::{ChainApiBackend, RuntimeApiSubsystemClient};
 use pezkuwi_overseer::{DummySubsystem, InitializedOverseerBuilder, SubsystemError};
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 use pezkuwi_availability_distribution::IncomingRequestReceivers;
 use pezkuwi_node_core_approval_voting::Config as ApprovalVotingConfig;
@@ -39,10 +39,10 @@ use pezkuwi_overseer::{
 };
 
 use parking_lot::Mutex;
-use sc_authority_discovery::Service as AuthorityDiscoveryService;
-use sc_client_api::AuxStore;
-use sc_keystore::LocalKeystore;
-use sc_network::{NetworkStateInfo, NotificationService};
+use pezsc_authority_discovery::Service as AuthorityDiscoveryService;
+use pezsc_client_api::AuxStore;
+use pezsc_keystore::LocalKeystore;
+use pezsc_network::{NetworkStateInfo, NotificationService};
 use std::{
 	collections::{HashMap, HashSet},
 	sync::Arc,
@@ -86,9 +86,9 @@ where
 	/// Runtime client generic, providing the `ProvideRuntimeApi` trait besides others.
 	pub runtime_client: Arc<RuntimeClient>,
 	/// Underlying network service implementation.
-	pub network_service: Arc<dyn sc_network::service::traits::NetworkService>,
+	pub network_service: Arc<dyn pezsc_network::service::traits::NetworkService>,
 	/// Underlying syncing service implementation.
-	pub sync_service: Arc<dyn sp_consensus::SyncOracle + Send + Sync>,
+	pub sync_service: Arc<dyn pezsp_consensus::SyncOracle + Send + Sync>,
 	/// Underlying authority discovery service.
 	pub authority_discovery_service: AuthorityDiscoveryService,
 	/// Collations request receiver for network protocol v1.
@@ -200,11 +200,11 @@ pub fn validator_overseer_builder<Spawner, RuntimeClient>(
 		RuntimeApiSubsystem<RuntimeClient>,
 		AvailabilityStoreSubsystem,
 		NetworkBridgeRxSubsystem<
-			Arc<dyn sc_network::service::traits::NetworkService>,
+			Arc<dyn pezsc_network::service::traits::NetworkService>,
 			AuthorityDiscoveryService,
 		>,
 		NetworkBridgeTxSubsystem<
-			Arc<dyn sc_network::service::traits::NetworkService>,
+			Arc<dyn pezsc_network::service::traits::NetworkService>,
 			AuthorityDiscoveryService,
 		>,
 		ChainApiSubsystem<RuntimeClient>,
@@ -398,11 +398,11 @@ pub fn collator_overseer_builder<Spawner, RuntimeClient>(
 		RuntimeApiSubsystem<RuntimeClient>,
 		DummySubsystem,
 		NetworkBridgeRxSubsystem<
-			Arc<dyn sc_network::service::traits::NetworkService>,
+			Arc<dyn pezsc_network::service::traits::NetworkService>,
 			AuthorityDiscoveryService,
 		>,
 		NetworkBridgeTxSubsystem<
-			Arc<dyn sc_network::service::traits::NetworkService>,
+			Arc<dyn pezsc_network::service::traits::NetworkService>,
 			AuthorityDiscoveryService,
 		>,
 		ChainApiSubsystem<RuntimeClient>,

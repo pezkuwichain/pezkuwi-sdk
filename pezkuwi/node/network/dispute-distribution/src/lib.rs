@@ -30,7 +30,7 @@ use futures::{channel::mpsc, FutureExt, StreamExt, TryFutureExt};
 
 use pezkuwi_node_network_protocol::authority_discovery::AuthorityDiscovery;
 use pezkuwi_node_subsystem_util::nesting_sender::NestingSender;
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use pezkuwi_node_network_protocol::request_response::{incoming::IncomingRequestReceiver, v1};
 use pezkuwi_node_primitives::DISPUTE_WINDOW;

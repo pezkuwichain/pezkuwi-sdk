@@ -15,9 +15,9 @@ workspace = true
 codec = { features = ["derive"], workspace = true }
 enumn = { workspace = true }
 paste = { workspace = true, default-features = true }
-sp-runtime = { workspace = true }
+pezsp-runtime = { workspace = true }
 
 [features]
 default = ["std"]
-std = ["codec/std", "sp-runtime/std"]
-runtime-benchmarks = ["sp-runtime/runtime-benchmarks"]
+std = ["codec/std", "pezsp-runtime/std"]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

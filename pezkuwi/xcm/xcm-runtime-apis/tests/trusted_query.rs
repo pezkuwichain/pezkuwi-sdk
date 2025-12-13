@@ -20,9 +20,9 @@
 
 mod mock;
 
-use frame_support::sp_runtime::testing::H256;
+use pezframe_support::pezsp_runtime::testing::H256;
 use mock::*;
-use sp_api::ProvideRuntimeApi;
+use pezsp_api::ProvideRuntimeApi;
 use xcm::{prelude::*, v3};
 use xcm_runtime_apis::trusted_query::{Error, TrustedQueryApi};
 
@@ -36,7 +36,7 @@ fn query_trusted_reserve() {
 		expected: Result<bool, Error>,
 	}
 
-	sp_io::TestExternalities::default().execute_with(|| {
+	pezsp_io::TestExternalities::default().execute_with(|| {
 		let client = TestClient {};
 		let runtime_api = client.runtime_api();
 
@@ -98,7 +98,7 @@ fn query_trusted_teleporter() {
 		expected: Result<bool, Error>,
 	}
 
-	sp_io::TestExternalities::default().execute_with(|| {
+	pezsp_io::TestExternalities::default().execute_with(|| {
 		let client = TestClient {};
 		let runtime_api = client.runtime_api();
 

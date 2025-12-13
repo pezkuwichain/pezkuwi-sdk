@@ -1,13 +1,13 @@
 // pezkuwi/primitives/src/traits.rs
 #![cfg_attr(not(feature = "std"), no_no_std)]
 
-use frame_support::pallet_prelude::*;
-use sp_runtime::traits::BlockNumber as BlockNumberT;
-use sp_std::prelude::*;
+use pezframe_support::pezpallet_prelude::*;
+use pezsp_runtime::traits::BlockNumber as BlockNumberT;
+use pezsp_std::prelude::*;
 use codec::{Encode, Decode};
 use scale_info::TypeInfo;
-// `pallet-staking-score`'dan StakingDetails'ı doğrudan kullanabilmek için
-// StakingDetails'ı burada yeniden tanımlıyoruz. Bu struct, pallet-staking-score'daki ile BİREBİR AYNI olmalı.
+// `pezpallet-staking-score`'dan StakingDetails'ı doğrudan kullanabilmek için
+// StakingDetails'ı burada yeniden tanımlıyoruz. Bu struct, pezpallet-staking-score'daki ile BİREBİR AYNI olmalı.
 #[derive(Encode, Decode, Clone, PartialEq, Eq, TypeInfo, Debug)]
 pub struct StakingDetails<Balance> {
     pub staked_amount: Balance,

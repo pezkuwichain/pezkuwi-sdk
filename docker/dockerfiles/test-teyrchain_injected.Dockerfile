@@ -12,7 +12,7 @@ LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/test-parachain_injected.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
-	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/tree/master/cumulus"
+	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/tree/master/pezcumulus"
 
 # show backtraces
 ENV RUST_BACKTRACE 1
@@ -36,7 +36,7 @@ RUN apt-get update && \
 
 # add test-parachain binary to the docker image
 COPY ./artifacts/test-parachain /usr/local/bin
-COPY ./cumulus/parachains/chain-specs/*.json /specs/
+COPY ./pezcumulus/parachains/chain-specs/*.json /specs/
 
 USER test-parachain
 

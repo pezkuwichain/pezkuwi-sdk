@@ -17,7 +17,7 @@
 use super::*;
 
 #[test]
-fn pallet_query_should_work() {
+fn pezpallet_query_should_work() {
 	AllowUnpaidFrom::set(vec![[Teyrchain(1)].into()]);
 	// They want to transfer 100 of our native asset from sovereign account of teyrchain #1 into #2
 	// and let them know to hand it to account #3.
@@ -52,12 +52,12 @@ fn pallet_query_should_work() {
 }
 
 #[test]
-fn pallet_query_with_results_should_work() {
+fn pezpallet_query_with_results_should_work() {
 	AllowUnpaidFrom::set(vec![[Teyrchain(1)].into()]);
 	// They want to transfer 100 of our native asset from sovereign account of teyrchain #1 into #2
 	// and let them know to hand it to account #3.
 	let message = Xcm(vec![QueryPallet {
-		module_name: "pallet_balances".into(),
+		module_name: "pezpallet_balances".into(),
 		response_info: QueryResponseInfo {
 			destination: Teyrchain(1).into(),
 			query_id: 1,
@@ -82,7 +82,7 @@ fn pallet_query_with_results_should_work() {
 				vec![PalletInfo::new(
 					1,
 					b"Balances".as_ref().into(),
-					b"pallet_balances".as_ref().into(),
+					b"pezpallet_balances".as_ref().into(),
 					1,
 					42,
 					69,

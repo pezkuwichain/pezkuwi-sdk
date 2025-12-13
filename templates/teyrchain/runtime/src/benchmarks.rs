@@ -23,14 +23,14 @@
 //
 // For more information, please refer to <http://unlicense.org>
 
-pezkuwi_sdk::frame_benchmarking::define_benchmarks!(
-	[frame_system, SystemBench::<Runtime>]
-	[pallet_balances, Balances]
-	[pallet_session, SessionBench::<Runtime>]
-	[pallet_timestamp, Timestamp]
-	[pallet_message_queue, MessageQueue]
-	[pallet_sudo, Sudo]
-	[pallet_collator_selection, CollatorSelection]
+pezkuwi_sdk::pezframe_benchmarking::define_benchmarks!(
+	[pezframe_system, SystemBench::<Runtime>]
+	[pezpallet_balances, Balances]
+	[pezpallet_session, SessionBench::<Runtime>]
+	[pezpallet_timestamp, Timestamp]
+	[pezpallet_message_queue, MessageQueue]
+	[pezpallet_sudo, Sudo]
+	[pezpallet_collator_selection, CollatorSelection]
 	[cumulus_pallet_teyrchain_system, TeyrchainSystem]
 	[cumulus_pallet_xcmp_queue, XcmpQueue]
 	[cumulus_pallet_weight_reclaim, WeightReclaim]

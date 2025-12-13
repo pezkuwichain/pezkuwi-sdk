@@ -20,8 +20,8 @@ use pezkuwi_cli::{Error, Result};
 use pezkuwi_node_primitives::CollationGenerationConfig;
 use pezkuwi_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
 use pezkuwi_primitives::Id as ParaId;
-use sc_cli::{Error as SubstrateCliError, SubstrateCli};
-use sp_core::hexdisplay::HexDisplay;
+use pezsc_cli::{Error as BizinikiwiCliError, BizinikiwiCli};
+use pezsp_core::hexdisplay::HexDisplay;
 use std::{
 	collections::HashSet,
 	fs,
@@ -75,7 +75,7 @@ fn main() -> Result<()> {
 		},
 		None => {
 			let runner = cli.create_runner(&cli.run.base).map_err(|e| {
-				SubstrateCliError::Application(
+				BizinikiwiCliError::Application(
 					Box::new(e) as Box<(dyn 'static + Send + Sync + std::error::Error)>
 				)
 			})?;

@@ -22,7 +22,7 @@ use pezkuwi_node_network_protocol::{
 	request_response::v2 as request_v2, v3::BackedCandidateManifest,
 };
 use pezkuwi_primitives_test_helpers::{make_candidate, make_candidate_v2};
-use sc_network::config::{
+use pezsc_network::config::{
 	IncomingRequest as RawIncomingRequest, OutgoingResponse as RawOutgoingResponse,
 };
 

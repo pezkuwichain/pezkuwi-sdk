@@ -24,11 +24,11 @@ use codec::{Decode, DecodeAll};
 use net_protocol::filter_by_peer_version;
 use parking_lot::Mutex;
 
-use sc_network::{
+use pezsc_network::{
 	service::traits::{NotificationEvent, ValidationResult},
 	MessageSink, NotificationService,
 };
-use sp_consensus::SyncOracle;
+use pezsp_consensus::SyncOracle;
 
 use pezkuwi_node_network_protocol::{
 	self as net_protocol,

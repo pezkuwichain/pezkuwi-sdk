@@ -17,8 +17,8 @@
 //! A mock runtime for XCM benchmarking.
 
 use crate::{fungible as xcm_balances_benchmark, generate_holding_assets, mock::*};
-use frame_benchmarking::BenchmarkError;
-use frame_support::{
+use pezframe_benchmarking::BenchmarkError;
+use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::{Everything, Nothing},
 };
@@ -27,30 +27,30 @@ use xcm_builder::{
 	AllowUnpaidExecutionFrom, EnsureDecodableXcm, FrameTransactionalProcessor, MintLocation,
 };
 
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 
 // For testing the pallet, we construct a mock runtime.
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		XcmBalancesBenchmark: xcm_balances_benchmark,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<u64>;
+	type AccountData = pezpallet_balances::AccountData<u64>;
 }
 
 parameter_types! {
 	pub const ExistentialDeposit: u64 = 7;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type ReserveIdentifier = [u8; 8];
 	type AccountStore = System;
 }
@@ -66,7 +66,7 @@ parameter_types! {
 pub struct MatchAnyFungible;
 impl xcm_executor::traits::MatchesFungible<u64> for MatchAnyFungible {
 	fn matches_fungible(m: &Asset) -> Option<u64> {
-		use sp_runtime::traits::SaturatedConversion;
+		use pezsp_runtime::traits::SaturatedConversion;
 		match m {
 			Asset { fun: Fungible(amount), .. } => Some((*amount).saturated_into::<u64>()),
 			_ => None,
@@ -173,9 +173,9 @@ impl xcm_balances_benchmark::Config for Test {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	use sp_runtime::BuildStorage;
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	use pezsp_runtime::BuildStorage;
 	let t = RuntimeGenesisConfig { ..Default::default() }.build_storage().unwrap();
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	t.into()
 }

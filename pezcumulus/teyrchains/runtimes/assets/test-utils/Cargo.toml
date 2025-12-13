@@ -1,0 +1,118 @@
+[package]
+name = "asset-test-utils"
+version = "7.0.0"
+authors.workspace = true
+edition.workspace = true
+description = "Test utils for Asset Hub runtimes."
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive", "max-encoded-len"], workspace = true }
+
+# Bizinikiwi
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezpallet-asset-conversion = { workspace = true }
+pezpallet-assets = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-session = { workspace = true }
+pezpallet-timestamp = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { workspace = true }
+
+# Pezcumulus
+assets-common = { workspace = true }
+pezcumulus-pezpallet-teyrchain-system = { workspace = true }
+pezcumulus-pezpallet-xcmp-queue = { workspace = true }
+pezcumulus-primitives-core = { workspace = true }
+pezpallet-collator-selection = { workspace = true }
+teyrchain-info = { workspace = true }
+teyrchains-common = { workspace = true }
+teyrchains-runtimes-test-utils = { workspace = true }
+
+# Pezkuwi
+pezpallet-xcm = { workspace = true }
+xcm = { workspace = true }
+xcm-builder = { workspace = true }
+xcm-executor = { workspace = true }
+xcm-runtime-apis = { workspace = true }
+
+# Bridges
+pezpallet-xcm-bridge-hub-router = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"assets-common/std",
+	"codec/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
+	"pezcumulus-pezpallet-xcmp-queue/std",
+	"pezcumulus-primitives-core/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-asset-conversion/std",
+	"pezpallet-assets/std",
+	"pezpallet-balances/std",
+	"pezpallet-collator-selection/std",
+	"pezpallet-session/std",
+	"pezpallet-timestamp/std",
+	"pezpallet-xcm-bridge-hub-router/std",
+	"pezpallet-xcm/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"teyrchain-info/std",
+	"teyrchains-common/std",
+	"teyrchains-runtimes-test-utils/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm-runtime-apis/std",
+	"xcm/std",
+]
+try-runtime = [
+	"assets-common/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezcumulus-pezpallet-xcmp-queue/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-asset-conversion/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-collator-selection/try-runtime",
+	"pezpallet-session/try-runtime",
+	"pezpallet-timestamp/try-runtime",
+	"pezpallet-xcm-bridge-hub-router/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchain-info/try-runtime",
+	"teyrchains-common/try-runtime",
+]
+runtime-benchmarks = [
+	"assets-common/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-asset-conversion/runtime-benchmarks",
+	"pezpallet-assets/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-collator-selection/runtime-benchmarks",
+	"pezpallet-session/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub-router/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"teyrchains-runtimes-test-utils/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

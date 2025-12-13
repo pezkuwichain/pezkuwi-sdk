@@ -36,9 +36,9 @@ use futures_timer::Delay;
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha20Rng;
 
-use sc_network::{config::parse_addr, Multiaddr};
-use sp_application_crypto::{AppCrypto, ByteArray};
-use sp_keystore::{Keystore, KeystorePtr};
+use pezsc_network::{config::parse_addr, Multiaddr};
+use pezsp_application_crypto::{AppCrypto, ByteArray};
+use pezsp_keystore::{Keystore, KeystorePtr};
 
 use pezkuwi_node_network_protocol::{
 	authority_discovery::AuthorityDiscovery, peer_set::PeerSet, GossipSupportNetworkMessage,
@@ -86,7 +86,7 @@ const TRY_RERESOLVE_AUTHORITIES: Duration = Duration::from_secs(2);
 /// populated). Authority discovery on Kusama takes around 8 minutes, so warning after 10 minutes
 /// should be fine:
 ///
-/// https://github.com/paritytech/substrate/blob/fc49802f263529160635471c8a17888846035f5d/client/authority-discovery/src/lib.rs#L88
+/// https://github.com/paritytech/bizinikiwi/blob/fc49802f263529160635471c8a17888846035f5d/client/authority-discovery/src/lib.rs#L88
 const LOW_CONNECTIVITY_WARN_DELAY: Duration = Duration::from_secs(600);
 
 /// If connectivity is lower than this in percent, issue warning in logs.
@@ -796,7 +796,7 @@ async fn update_gossip_topology(
 	let random_seed = {
 		let (tx, rx) = oneshot::channel();
 
-		// TODO https://github.com/paritytech/polkadot/issues/5316:
+		// TODO https://github.com/pezkuwichain/kurdistan-sdk/issues/156:
 		// get the random seed from the `SessionInfo` instead.
 		sender
 			.send_message(RuntimeApiMessage::Request(
@@ -809,7 +809,7 @@ async fn update_gossip_topology(
 		let mut subject = [0u8; 40];
 		subject[..8].copy_from_slice(b"gossipsu");
 		subject[8..].copy_from_slice(&randomness);
-		sp_crypto_hashing::blake2_256(&subject)
+		pezsp_crypto_hashing::blake2_256(&subject)
 	};
 
 	// shuffle the validators and create the index mapping

@@ -1055,7 +1055,7 @@ pub(crate) mod tests {
 	use assert_matches::assert_matches;
 	use futures::future::BoxFuture;
 	use pezkuwi_node_primitives::BlockData;
-	use sp_core::H256;
+	use pezsp_core::H256;
 
 	const TEST_EXECUTION_TIMEOUT: Duration = Duration::from_secs(3);
 	pub(crate) const TEST_PREPARATION_TIMEOUT: Duration = Duration::from_secs(30);

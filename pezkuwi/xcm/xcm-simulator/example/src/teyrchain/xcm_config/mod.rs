@@ -24,7 +24,7 @@ pub mod teleporter;
 pub mod weigher;
 
 use crate::teyrchain::{MsgQueue, PezkuwiXcm, RuntimeCall};
-use frame_support::traits::{Everything, Nothing};
+use pezframe_support::traits::{Everything, Nothing};
 use xcm_builder::{EnsureDecodableXcm, FixedRateOfFungible, FrameTransactionalProcessor};
 
 // Generated from `decl_test_network!`

@@ -125,8 +125,8 @@ mod tests {
 	use futures::{executor, future};
 
 	use codec::Encode;
-	use sc_network::ProtocolName;
-	use sp_core::testing::TaskExecutor;
+	use pezsc_network::ProtocolName;
+	use pezsp_core::testing::TaskExecutor;
 
 	use pezkuwi_node_primitives::BlockData;
 	use pezkuwi_node_subsystem::messages::{
@@ -141,14 +141,14 @@ mod tests {
 
 	#[test]
 	fn rejects_invalid_pov() {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		let pov = PoV { block_data: BlockData(vec![1, 2, 3, 4, 5, 6]) };
 		test_run(Hash::default(), pov);
 	}
 
 	#[test]
 	fn accepts_valid_pov() {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		let pov = PoV { block_data: BlockData(vec![1, 2, 3, 4, 5, 6]) };
 		test_run(pov.hash(), pov);
 	}

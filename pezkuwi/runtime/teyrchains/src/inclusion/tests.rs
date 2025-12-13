@@ -33,17 +33,17 @@ use pezkuwi_primitives::{
 
 use assert_matches::assert_matches;
 use codec::DecodeAll;
-use frame_support::assert_noop;
+use pezframe_support::assert_noop;
 use pezkuwi_primitives::{
 	BlockNumber, CandidateCommitments, CollatorId, CollatorSignature,
 	CompactStatement as Statement, Hash, MutateDescriptorV2, SignedAvailabilityBitfield,
 	SignedStatement, ValidationCode, ValidatorId, ValidityAttestation, TEYRCHAIN_KEY_TYPE_ID,
 };
 use pezkuwi_primitives_test_helpers::{dummy_validation_code, CandidateDescriptor};
-use sc_keystore::LocalKeystore;
-use sp_core::ByteArray;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{Keystore, KeystorePtr};
+use pezsc_keystore::LocalKeystore;
+use pezsp_core::ByteArray;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{Keystore, KeystorePtr};
 use std::sync::Arc;
 
 fn default_config() -> HostConfiguration<BlockNumber> {
@@ -349,7 +349,7 @@ impl TestCandidateBuilder {
 }
 
 pub(crate) fn make_vdata_hash(para_id: ParaId) -> Option<Hash> {
-	let relay_parent_number = frame_system::Pallet::<Test>::block_number() - 1;
+	let relay_parent_number = pezframe_system::Pallet::<Test>::block_number() - 1;
 	make_vdata_hash_with_block_number(para_id, relay_parent_number)
 }
 
@@ -371,7 +371,7 @@ fn simple_sanitize_bitfields(
 	disputed_bitfield: DisputedBitfield,
 	expected_bits: usize,
 ) -> SignedAvailabilityBitfields {
-	let parent_hash = frame_system::Pallet::<Test>::parent_hash();
+	let parent_hash = pezframe_system::Pallet::<Test>::parent_hash();
 	let session_index = shared::CurrentSessionIndex::<Test>::get();
 	let validators = shared::ActiveValidatorKeys::<Test>::get();
 

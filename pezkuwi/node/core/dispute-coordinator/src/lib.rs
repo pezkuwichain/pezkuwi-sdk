@@ -31,7 +31,7 @@ use error::FatalError;
 use futures::FutureExt;
 
 use gum::CandidateHash;
-use sc_keystore::LocalKeystore;
+use pezsc_keystore::LocalKeystore;
 
 use pezkuwi_node_primitives::{
 	CandidateVotes, DisputeMessage, DisputeMessageCheckError, SignedDisputeStatement,

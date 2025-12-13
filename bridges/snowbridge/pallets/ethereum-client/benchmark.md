@@ -1,7 +1,7 @@
 # Motivation
 Demonstrate that
 [FastAggregateVerify](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature-04#section-3.3.4) is the most
-expensive call in ethereum beacon light client, though in [#13031](https://github.com/paritytech/substrate/pull/13031)
+expensive call in ethereum beacon light client, though in [#13031](https://github.com/pezkuwichain/kurdistan-sdk/issues/42)
 Parity team has wrapped some low level host functions for `bls-12381` but adding a high level host function specific
 for it is super helpful.
 
@@ -66,7 +66,7 @@ benchmark pallet \
 --output ./teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/src/weights/snowbridge_pallet_ethereum_client.rs
 ```
 
-### [Weights](https://github.com/Snowfork/cumulus/blob/ron/benchmark-beacon-bridge/parachains/runtimes/bridge-hubs/bridge-hub-rococo/src/weights/snowbridge_pallet_ethereum_client.rs)
+### [Weights](https://github.com/Snowfork/pezcumulus/blob/ron/benchmark-beacon-bridge/parachains/runtimes/bridge-hubs/bridge-hub-rococo/src/weights/snowbridge_pallet_ethereum_client.rs)
 
 |extrinsic       | minimum execution time benchmarked(us) |
 | --------------------------------------- |----------------------------------------|

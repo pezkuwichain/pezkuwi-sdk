@@ -1,0 +1,191 @@
+[package]
+name = "pezkuwi-omni-node-lib"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description = "Helper library that can be used to build a teyrchain node"
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = { workspace = true }
+chain-spec-builder = { workspace = true }
+clap = { features = ["derive"], workspace = true }
+codec = { workspace = true, default-features = true }
+color-print = { workspace = true }
+docify = { workspace = true }
+futures = { workspace = true }
+log = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
+
+# Local
+jsonrpsee = { features = ["server"], workspace = true }
+scale-info = { workspace = true }
+subxt-metadata = { workspace = true, default-features = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+# Bizinikiwi
+pezframe-benchmarking = { optional = true, workspace = true, default-features = true }
+pezframe-benchmarking-cli = { workspace = true, default-features = true }
+pezframe-support = { optional = true, workspace = true, default-features = true }
+pezframe-system-rpc-runtime-api = { workspace = true, default-features = true }
+pezframe-try-runtime = { optional = true, workspace = true, default-features = true }
+pezpallet-transaction-payment = { workspace = true, default-features = true }
+pezpallet-transaction-payment-rpc = { workspace = true, default-features = true }
+pezpallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
+pezsc-basic-authorship = { workspace = true, default-features = true }
+pezsc-chain-spec = { workspace = true, default-features = true }
+pezsc-cli = { workspace = true, default-features = false }
+pezsc-client-api = { workspace = true, default-features = true }
+pezsc-client-db = { workspace = true, default-features = true }
+pezsc-consensus = { workspace = true, default-features = true }
+pezsc-consensus-manual-seal = { workspace = true, default-features = true }
+pezsc-executor = { workspace = true, default-features = true }
+pezsc-keystore = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsc-network-statement = { workspace = true, default-features = true }
+pezsc-network-sync = { workspace = true, default-features = true }
+pezsc-offchain = { workspace = true, default-features = true }
+pezsc-rpc = { workspace = true, default-features = true }
+pezsc-runtime-utilities = { workspace = true, default-features = true }
+pezsc-service = { workspace = true, default-features = false }
+pezsc-statement-store = { workspace = true, default-features = true }
+pezsc-storage-monitor = { workspace = true, default-features = true }
+pezsc-sysinfo = { workspace = true, default-features = true }
+pezsc-telemetry = { workspace = true, default-features = true }
+pezsc-tracing = { workspace = true, default-features = true }
+pezsc-transaction-pool = { workspace = true, default-features = true }
+pezsc-transaction-pool-api = { workspace = true, default-features = true }
+pezsp-api = { workspace = true, default-features = true }
+pezsp-block-builder = { workspace = true, default-features = true }
+pezsp-consensus = { workspace = true, default-features = true }
+pezsp-consensus-aura = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-genesis-builder = { workspace = true }
+pezsp-inherents = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
+pezsp-offchain = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true }
+pezsp-session = { workspace = true, default-features = true }
+pezsp-statement-store = { workspace = true, default-features = true }
+pezsp-storage = { workspace = true, default-features = true }
+pezsp-timestamp = { workspace = true, default-features = true }
+pezsp-transaction-pool = { workspace = true, default-features = true }
+pezsp-version = { workspace = true, default-features = true }
+pezsp-weights = { workspace = true, default-features = true }
+bizinikiwi-frame-rpc-system = { workspace = true, default-features = true }
+bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = true }
+
+# Pezkuwi
+pezkuwi-cli = { workspace = true, default-features = true, features = [
+	"service",
+] }
+pezkuwi-primitives = { workspace = true, default-features = true }
+
+# Pezcumulus
+pezcumulus-client-bootnodes = { workspace = true, default-features = true }
+pezcumulus-client-cli = { workspace = true, default-features = true }
+pezcumulus-client-collator = { workspace = true, default-features = true }
+pezcumulus-client-consensus-aura = { workspace = true, default-features = true }
+pezcumulus-client-consensus-common = { workspace = true, default-features = true }
+pezcumulus-client-consensus-proposer = { workspace = true, default-features = true }
+pezcumulus-client-consensus-relay-chain = { workspace = true, default-features = true }
+pezcumulus-client-service = { workspace = true, default-features = true }
+pezcumulus-client-teyrchain-inherent = { workspace = true, default-features = true }
+pezcumulus-primitives-aura = { workspace = true, default-features = true }
+pezcumulus-primitives-core = { workspace = true, default-features = true }
+pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
+futures-timer = { workspace = true }
+pezsc-consensus-aura = { workspace = true }
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+pezcumulus-test-runtime = { workspace = true }
+nix = { features = ["signal"], workspace = true }
+tokio = { version = "1.43.1", features = ["macros", "parking_lot", "time"] }
+wait-timeout = { workspace = true }
+
+[features]
+default = []
+pezkuwichain-native = ["pezkuwi-cli/pezkuwichain-native"]
+zagros-native = ["pezkuwi-cli/zagros-native"]
+runtime-benchmarks = [
+	"chain-spec-builder/runtime-benchmarks",
+	"pezcumulus-client-bootnodes/runtime-benchmarks",
+	"pezcumulus-client-cli/runtime-benchmarks",
+	"pezcumulus-client-collator/runtime-benchmarks",
+	"pezcumulus-client-consensus-aura/runtime-benchmarks",
+	"pezcumulus-client-consensus-common/runtime-benchmarks",
+	"pezcumulus-client-consensus-proposer/runtime-benchmarks",
+	"pezcumulus-client-consensus-relay-chain/runtime-benchmarks",
+	"pezcumulus-client-service/runtime-benchmarks",
+	"pezcumulus-client-teyrchain-inherent/runtime-benchmarks",
+	"pezcumulus-primitives-aura/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezcumulus-test-runtime/runtime-benchmarks",
+	"pezframe-benchmarking-cli/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
+	"pezframe-try-runtime?/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezkuwi-cli/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-basic-authorship/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-consensus-aura/runtime-benchmarks",
+	"pezsc-consensus-manual-seal/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-network-statement/runtime-benchmarks",
+	"pezsc-network-sync/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsc-offchain/runtime-benchmarks",
+	"pezsc-rpc/runtime-benchmarks",
+	"pezsc-runtime-utilities/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsc-statement-store/runtime-benchmarks",
+	"pezsc-sysinfo/runtime-benchmarks",
+	"pezsc-tracing/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsc-transaction-pool/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-consensus-aura/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-offchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-session/runtime-benchmarks",
+	"pezsp-statement-store/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
+	"pezsp-transaction-pool/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
+	"bizinikiwi-frame-rpc-system/runtime-benchmarks",
+	"bizinikiwi-state-trie-migration-rpc/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-try-runtime/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezkuwi-cli/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchains-common/try-runtime",
+]

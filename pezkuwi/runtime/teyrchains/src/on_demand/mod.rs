@@ -31,7 +31,7 @@
 //! occupying multiple cores in on-demand, we will likely add a separate order type, where the
 //! intent can be made explicit.
 
-use sp_runtime::traits::Zero;
+use pezsp_runtime::traits::Zero;
 mod benchmarking;
 pub mod migration;
 mod mock_helpers;
@@ -45,8 +45,8 @@ mod tests;
 use crate::{configuration, paras, scheduler::common::Assignment};
 use alloc::collections::BinaryHeap;
 use core::mem::take;
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{
 		defensive_prelude::*,
 		Currency,
@@ -55,9 +55,9 @@ use frame_support::{
 	},
 	PalletId,
 };
-use frame_system::{pallet_prelude::*, Pallet as System};
+use pezframe_system::{pezpallet_prelude::*, Pallet as System};
 use pezkuwi_primitives::{CoreIndex, Id as ParaId};
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{AccountIdConversion, One, SaturatedConversion},
 	FixedPointNumber, FixedPointOperand, FixedU128, Perbill, Saturating,
 };
@@ -102,7 +102,7 @@ enum PaymentType {
 	Balance,
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 
 	use super::*;
@@ -115,10 +115,10 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + configuration::Config + paras::Config {
+	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {
 		/// The runtime's definition of an event.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The runtime's definition of a Currency.
 		type Currency: Currency<Self::AccountId>;
@@ -454,7 +454,7 @@ where
 	/// Events:
 	/// - `OnDemandOrderPlaced`
 	fn do_place_order(
-		sender: <T as frame_system::Config>::AccountId,
+		sender: <T as pezframe_system::Config>::AccountId,
 		max_amount: BalanceOf<T>,
 		para_id: ParaId,
 		existence_requirement: ExistenceRequirement,
@@ -743,7 +743,7 @@ where
 
 	/// Collect the revenue from the `when` blockheight
 	pub fn claim_revenue_until(when: BlockNumberFor<T>) -> BalanceOf<T> {
-		let now = <frame_system::Pallet<T>>::block_number();
+		let now = <pezframe_system::Pallet<T>>::block_number();
 		let mut amount: BalanceOf<T> = BalanceOf::<T>::zero();
 		Revenue::<T>::mutate(|revenue| {
 			while !revenue.is_empty() {

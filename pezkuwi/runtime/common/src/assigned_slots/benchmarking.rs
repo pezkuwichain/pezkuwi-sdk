@@ -19,15 +19,15 @@
 #![cfg(feature = "runtime-benchmarks")]
 use super::*;
 
-use frame_benchmarking::v2::*;
-use frame_support::assert_ok;
-use frame_system::{pallet_prelude::BlockNumberFor, RawOrigin};
+use pezframe_benchmarking::v2::*;
+use pezframe_support::assert_ok;
+use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
 use pezkuwi_primitives::Id as ParaId;
-use sp_runtime::traits::Bounded;
+use pezsp_runtime::traits::Bounded;
 
 type CurrencyOf<T> = <<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Currency;
 type BalanceOf<T> = <<<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Currency as Currency<
-	<T as frame_system::Config>::AccountId,
+	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 #[benchmarks(where T: Config)]
 mod benchmarks {
@@ -49,7 +49,7 @@ mod benchmarks {
 			worst_validation_code.clone()
 		));
 		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-			frame_system::Origin::<T>::Root.into(),
+			pezframe_system::Origin::<T>::Root.into(),
 			worst_validation_code,
 		));
 		T::Registrar::execute_pending_transitions();
@@ -61,12 +61,12 @@ mod benchmarks {
 		let caller = RawOrigin::Root;
 
 		let _ =
-			AssignedSlots::<T>::set_max_permanent_slots(frame_system::Origin::<T>::Root.into(), 10);
+			AssignedSlots::<T>::set_max_permanent_slots(pezframe_system::Origin::<T>::Root.into(), 10);
 		register_teyrchain::<T>(para_id);
 
 		let counter = PermanentSlotCount::<T>::get();
 		let current_lease_period: BlockNumberFor<T> =
-			T::Leaser::lease_period_index(frame_system::Pallet::<T>::block_number())
+			T::Leaser::lease_period_index(pezframe_system::Pallet::<T>::block_number())
 				.and_then(|x| Some(x.0))
 				.unwrap();
 		#[extrinsic_call]
@@ -88,11 +88,11 @@ mod benchmarks {
 		let caller = RawOrigin::Root;
 
 		let _ =
-			AssignedSlots::<T>::set_max_temporary_slots(frame_system::Origin::<T>::Root.into(), 10);
+			AssignedSlots::<T>::set_max_temporary_slots(pezframe_system::Origin::<T>::Root.into(), 10);
 		register_teyrchain::<T>(para_id);
 
 		let current_lease_period: BlockNumberFor<T> =
-			T::Leaser::lease_period_index(frame_system::Pallet::<T>::block_number())
+			T::Leaser::lease_period_index(pezframe_system::Pallet::<T>::block_number())
 				.and_then(|x| Some(x.0))
 				.unwrap();
 
@@ -117,7 +117,7 @@ mod benchmarks {
 		let caller = RawOrigin::Root;
 
 		let _ =
-			AssignedSlots::<T>::set_max_temporary_slots(frame_system::Origin::<T>::Root.into(), 10);
+			AssignedSlots::<T>::set_max_temporary_slots(pezframe_system::Origin::<T>::Root.into(), 10);
 		register_teyrchain::<T>(para_id);
 
 		let _ = AssignedSlots::<T>::assign_temp_teyrchain_slot(

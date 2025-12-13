@@ -2,7 +2,7 @@
 
 PezkuwiChain nodes collect and produce Prometheus metrics and logs. These include health, performance and debug
 information such as last finalized block, height of the chain, and many other deeper implementation details
-of the PezkuwiChain/Substrate node subsystems. These are crucial pieces of information that one needs to successfully
+of the PezkuwiChain/Bizinikiwi node subsystems. These are crucial pieces of information that one needs to successfully
 monitor the liveliness and performance of a network and its validators.
 
 # How does it work ?

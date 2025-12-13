@@ -3,8 +3,8 @@
 use snowbridge_core::ChannelId;
 use snowbridge_inbound_queue_primitives::Log;
 
-use sp_core::{RuntimeDebug, H160, H256};
-use sp_std::prelude::*;
+use pezsp_core::{RuntimeDebug, H160, H256};
+use pezsp_std::prelude::*;
 
 use alloy_core::{primitives::B256, sol, sol_types::SolEvent};
 

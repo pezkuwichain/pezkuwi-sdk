@@ -25,7 +25,7 @@ use crate::{
 	util::take_active_subset,
 };
 use pezkuwi_primitives::{BlockNumber, SchedulerParams, ValidatorId, ValidatorIndex};
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
 fn run_to_block(
 	to: BlockNumber,

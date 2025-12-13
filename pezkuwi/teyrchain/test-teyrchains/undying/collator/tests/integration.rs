@@ -28,9 +28,9 @@ const TIMEOUT: Duration = Duration::from_secs(120);
 #[tokio::test(flavor = "multi_thread")]
 async fn collating_using_undying_collator() {
 	use pezkuwi_primitives::Id as ParaId;
-	use sp_keyring::Sr25519Keyring::*;
+	use pezsp_keyring::Sr25519Keyring::*;
 
-	let mut builder = sc_cli::LoggerBuilder::new("");
+	let mut builder = pezsc_cli::LoggerBuilder::new("");
 	builder.with_colors(false);
 	builder.init().expect("Set up logger");
 

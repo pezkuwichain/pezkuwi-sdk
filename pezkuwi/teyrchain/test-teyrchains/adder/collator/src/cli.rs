@@ -17,7 +17,7 @@
 //! Pezkuwi CLI library.
 
 use clap::Parser;
-use sc_cli::SubstrateCli;
+use pezsc_cli::BizinikiwiCli;
 use std::path::PathBuf;
 
 /// Sub-commands supported by the collator.
@@ -54,7 +54,7 @@ pub struct ExportGenesisWasmCommand {
 pub struct RunCmd {
 	#[allow(missing_docs)]
 	#[clap(flatten)]
-	pub base: sc_cli::RunCmd,
+	pub base: pezsc_cli::RunCmd,
 
 	/// Id of the teyrchain this collator collates for.
 	#[arg(long)]
@@ -71,7 +71,7 @@ pub struct Cli {
 	pub run: RunCmd,
 }
 
-impl SubstrateCli for Cli {
+impl BizinikiwiCli for Cli {
 	fn impl_name() -> String {
 		"Parity Pezkuwi".into()
 	}
@@ -100,7 +100,7 @@ impl SubstrateCli for Cli {
 		"adder-collator".into()
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		let id = if id.is_empty() { "pezkuwichain" } else { id };
 		Ok(match id {
 			"pezkuwichain-staging" =>

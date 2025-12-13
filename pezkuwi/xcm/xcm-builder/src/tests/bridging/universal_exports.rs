@@ -19,7 +19,7 @@ use crate::test_utils::TrappedAssets;
 
 #[test]
 fn sovereign_paid_remote_exporter_produces_xcm_which_does_not_trap_assets() {
-	frame_support::parameter_types! {
+	pezframe_support::parameter_types! {
 		pub BridgeFeeAsset: Location = Parent.into();
 		pub LocalNetwork: NetworkId = ExecutorUniversalLocation::get().global_consensus().expect("valid `NetworkId`");
 		pub LocalBridgeLocation: Location = match &ExecutorUniversalLocation::get().split_global() {
@@ -54,7 +54,7 @@ fn sovereign_paid_remote_exporter_produces_xcm_which_does_not_trap_assets() {
 	)
 	.expect("valid message");
 	let message = Xcm::<TestCall>::from(message.0 .1);
-	let mut message_id = message.using_encoded(sp_io::hashing::blake2_256);
+	let mut message_id = message.using_encoded(pezsp_io::hashing::blake2_256);
 
 	// allow origin to pass barrier
 	let origin = Location::new(1, Teyrchain(50));

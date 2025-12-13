@@ -25,7 +25,7 @@ use pezkuwi_primitives::{
 	GroupIndex, Hash, SessionIndex, ValidatorIndex, ValidatorSignature,
 };
 
-use sp_consensus_slots::Slot;
+use pezsp_consensus_slots::Slot;
 
 use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
 use std::collections::BTreeMap;

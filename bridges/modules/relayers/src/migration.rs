@@ -17,7 +17,7 @@
 //! A module that is responsible for migration of storage.
 
 use alloc::vec::Vec;
-use frame_support::{
+use pezframe_support::{
 	traits::{Get, StorageVersion},
 	weights::Weight,
 };
@@ -33,9 +33,9 @@ pub mod v0 {
 	use bp_runtime::{ChainId, StorageDoubleMapKeyProvider};
 	use codec::{Codec, Decode, Encode, EncodeLike, MaxEncodedLen};
 	use core::marker::PhantomData;
-	use frame_support::{pallet_prelude::OptionQuery, Blake2_128Concat, Identity};
+	use pezframe_support::{pezpallet_prelude::OptionQuery, Blake2_128Concat, Identity};
 	use scale_info::TypeInfo;
-	use sp_runtime::traits::AccountIdConversion;
+	use pezsp_runtime::traits::AccountIdConversion;
 
 	/// Structure used to identify the account that pays a reward to the relayer.
 	#[derive(Copy, Clone, Debug, Decode, Encode, Eq, PartialEq, TypeInfo, MaxEncodedLen)]
@@ -59,7 +59,7 @@ pub mod v0 {
 		}
 	}
 
-	impl<LaneId> sp_runtime::TypeId for RewardsAccountParams<LaneId> {
+	impl<LaneId> pezsp_runtime::TypeId for RewardsAccountParams<LaneId> {
 		const TYPE_ID: [u8; 4] = *b"brap";
 	}
 
@@ -84,12 +84,12 @@ pub mod v0 {
 	}
 
 	pub(crate) type RelayerRewardsKeyProviderOf<T, I, LaneId> = RelayerRewardsKeyProvider<
-		<T as frame_system::Config>::AccountId,
+		<T as pezframe_system::Config>::AccountId,
 		<T as Config<I>>::RewardBalance,
 		LaneId,
 	>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type RelayerRewards<T: Config<I>, I: 'static, LaneId> = StorageDoubleMap<
 		Pallet<T, I>,
 		<RelayerRewardsKeyProviderOf<T, I, LaneId> as StorageDoubleMapKeyProvider>::Hasher1,
@@ -125,10 +125,10 @@ pub mod v1 {
 	use bp_runtime::StorageDoubleMapKeyProvider;
 	use codec::{Codec, EncodeLike};
 	use core::marker::PhantomData;
-	use frame_support::{
-		pallet_prelude::OptionQuery, traits::UncheckedOnRuntimeUpgrade, Blake2_128Concat, Identity,
+	use pezframe_support::{
+		pezpallet_prelude::OptionQuery, traits::UncheckedOnRuntimeUpgrade, Blake2_128Concat, Identity,
 	};
-	use sp_arithmetic::traits::Zero;
+	use pezsp_arithmetic::traits::Zero;
 
 	pub(crate) struct RelayerRewardsKeyProvider<AccountId, RewardBalance, LaneId>(
 		PhantomData<(AccountId, RewardBalance, LaneId)>,
@@ -151,12 +151,12 @@ pub mod v1 {
 	}
 
 	pub(crate) type RelayerRewardsKeyProviderOf<T, I, LaneId> = RelayerRewardsKeyProvider<
-		<T as frame_system::Config>::AccountId,
+		<T as pezframe_system::Config>::AccountId,
 		<T as Config<I>>::RewardBalance,
 		LaneId,
 	>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type RelayerRewards<T: Config<I>, I: 'static, LaneId> = StorageDoubleMap<
 		Pallet<T, I>,
 		<RelayerRewardsKeyProviderOf<T, I, LaneId> as StorageDoubleMapKeyProvider>::Hasher1,
@@ -177,7 +177,7 @@ pub mod v1 {
 		relayer: &T::AccountId,
 		reward_balance: T::RewardBalance,
 	) {
-		use sp_runtime::Saturating;
+		use pezsp_runtime::Saturating;
 
 		if reward_balance.is_zero() {
 			return;
@@ -240,10 +240,10 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
 			use codec::Encode;
-			use frame_support::BoundedBTreeMap;
-			use sp_runtime::traits::ConstU32;
+			use pezframe_support::BoundedBTreeMap;
+			use pezsp_runtime::traits::ConstU32;
 
 			// collect actual rewards
 			let mut rewards: BoundedBTreeMap<
@@ -268,10 +268,10 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			use codec::Decode;
-			use frame_support::BoundedBTreeMap;
-			use sp_runtime::traits::ConstU32;
+			use pezframe_support::BoundedBTreeMap;
+			use pezsp_runtime::traits::ConstU32;
 
 			let rewards_before: BoundedBTreeMap<
 				(T::AccountId, LaneId),
@@ -298,7 +298,7 @@ pub mod v1 {
 			}
 			tracing::info!(target: LOG_TARGET, ?rewards_after, "Found total migrated rewards");
 
-			frame_support::ensure!(
+			pezframe_support::ensure!(
 				rewards_before == rewards_after,
 				"The rewards were not migrated correctly!."
 			);
@@ -309,14 +309,14 @@ pub mod v1 {
 	}
 
 	/// [`UncheckedMigrationV0ToV1`] wrapped in a
-	/// [`VersionedMigration`](frame_support::migrations::VersionedMigration), ensuring the
+	/// [`VersionedMigration`](pezframe_support::migrations::VersionedMigration), ensuring the
 	/// migration is only performed when on-chain version is 0.
-	pub type MigrationToV1<T, I, LaneId> = frame_support::migrations::VersionedMigration<
+	pub type MigrationToV1<T, I, LaneId> = pezframe_support::migrations::VersionedMigration<
 		0,
 		1,
 		UncheckedMigrationV0ToV1<T, I, LaneId>,
 		Pallet<T, I>,
-		<T as frame_system::Config>::DbWeight,
+		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
 
@@ -331,7 +331,7 @@ pub mod v2 {
 	use bp_messages::LaneIdType;
 	use bp_relayers::RewardsAccountParams;
 	use core::marker::PhantomData;
-	use frame_support::traits::UncheckedOnRuntimeUpgrade;
+	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
 
 	/// Migrates the pallet storage to v2.
 	pub struct UncheckedMigrationV1ToV2<T, I, LaneId>(PhantomData<(T, I, LaneId)>);
@@ -369,10 +369,10 @@ pub mod v2 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
 			use codec::Encode;
-			use frame_support::BoundedBTreeMap;
-			use sp_runtime::traits::ConstU32;
+			use pezframe_support::BoundedBTreeMap;
+			use pezsp_runtime::traits::ConstU32;
 
 			// collect actual rewards
 			let mut rewards: BoundedBTreeMap<
@@ -398,10 +398,10 @@ pub mod v2 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			use codec::{Decode, Encode};
-			use frame_support::BoundedBTreeMap;
-			use sp_runtime::traits::ConstU32;
+			use pezframe_support::BoundedBTreeMap;
+			use pezsp_runtime::traits::ConstU32;
 
 			let rewards_before: BoundedBTreeMap<
 				(T::AccountId, Vec<u8>),
@@ -428,7 +428,7 @@ pub mod v2 {
 			}
 			tracing::info!(target: LOG_TARGET, ?rewards_after, "Found total migrated rewards");
 
-			frame_support::ensure!(
+			pezframe_support::ensure!(
 				rewards_before == rewards_after,
 				"The rewards were not migrated correctly!."
 			);
@@ -439,13 +439,13 @@ pub mod v2 {
 	}
 
 	/// [`UncheckedMigrationV1ToV2`] wrapped in a
-	/// [`VersionedMigration`](frame_support::migrations::VersionedMigration), ensuring the
+	/// [`VersionedMigration`](pezframe_support::migrations::VersionedMigration), ensuring the
 	/// migration is only performed when on-chain version is 1.
-	pub type MigrationToV2<T, I, LaneId> = frame_support::migrations::VersionedMigration<
+	pub type MigrationToV2<T, I, LaneId> = pezframe_support::migrations::VersionedMigration<
 		1,
 		2,
 		UncheckedMigrationV1ToV2<T, I, LaneId>,
 		Pallet<T, I>,
-		<T as frame_system::Config>::DbWeight,
+		<T as pezframe_system::Config>::DbWeight,
 	>;
 }

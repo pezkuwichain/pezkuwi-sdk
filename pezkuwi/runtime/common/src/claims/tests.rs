@@ -22,17 +22,17 @@ use crate::{claims, claims::mock::*};
 use claims::Call as ClaimsCall;
 use hex_literal::hex;
 use secp_utils::*;
-use sp_runtime::transaction_validity::TransactionSource::External;
+use pezsp_runtime::transaction_validity::TransactionSource::External;
 
 use codec::Encode;
 // The testing primitives are very useful for avoiding having to work with signatures
 // or public keys. `u64` is used as the `AccountId` and no `Signature`s are required.
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::{GetDispatchInfo, Pays},
 	traits::ExistenceRequirement,
 };
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::DispatchTransaction, transaction_validity::TransactionLongevity,
 	DispatchError::BadOrigin, TokenError,
 };
@@ -327,7 +327,7 @@ fn add_claim_works() {
 				None,
 				None
 			),
-			sp_runtime::traits::BadOrigin,
+			pezsp_runtime::traits::BadOrigin,
 		);
 		assert_eq!(Balances::free_balance(42), 0);
 		assert_noop!(
@@ -368,7 +368,7 @@ fn add_claim_with_vesting_works() {
 				Some((50, 10, 1)),
 				None
 			),
-			sp_runtime::traits::BadOrigin,
+			pezsp_runtime::traits::BadOrigin,
 		);
 		assert_eq!(Balances::free_balance(42), 0);
 		assert_noop!(
@@ -413,7 +413,7 @@ fn add_claim_with_statement_works() {
 				None,
 				Some(StatementKind::Regular)
 			),
-			sp_runtime::traits::BadOrigin,
+			pezsp_runtime::traits::BadOrigin,
 		);
 		assert_eq!(Balances::free_balance(42), 0);
 		let signature = sig::<Test>(&bob(), &69u64.encode(), StatementKind::Regular.to_text());
@@ -462,7 +462,7 @@ fn origin_signed_claiming_fail() {
 				42,
 				sig::<Test>(&alice(), &42u64.encode(), &[][..])
 			),
-			sp_runtime::traits::BadOrigin,
+			pezsp_runtime::traits::BadOrigin,
 		);
 	});
 }
@@ -565,8 +565,8 @@ fn real_eth_sig_works() {
 
 #[test]
 fn validate_unsigned_works() {
-	use sp_runtime::traits::ValidateUnsigned;
-	let source = sp_runtime::transaction_validity::TransactionSource::External;
+	use pezsp_runtime::traits::ValidateUnsigned;
+	let source = pezsp_runtime::transaction_validity::TransactionSource::External;
 
 	new_test_ext().execute_with(|| {
 		assert_eq!(

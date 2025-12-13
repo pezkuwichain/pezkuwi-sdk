@@ -31,7 +31,7 @@ automatically do so.
 
 Related issues:
 
-* <https://github.com/paritytech/polkadot/issues/5045>
+* <https://github.com/pezkuwichain/kurdistan-sdk/issues/153>
 
 ### Decision
 

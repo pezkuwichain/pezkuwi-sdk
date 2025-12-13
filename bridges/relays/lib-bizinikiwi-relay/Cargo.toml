@@ -1,0 +1,85 @@
+[package]
+name = "bizinikiwi-relay-helper"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = { workspace = true }
+async-std = { workspace = true }
+async-trait = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+codec = { workspace = true, default-features = true }
+futures = { workspace = true }
+hex = { workspace = true, default-features = true }
+num-traits = { workspace = true, default-features = true }
+rbtag = { workspace = true }
+strum = { features = ["derive"], workspace = true, default-features = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+# Bridge dependencies
+bp-header-chain = { workspace = true, default-features = true }
+bp-pezkuwi-core = { workspace = true, default-features = true }
+bp-relayers = { workspace = true, default-features = true }
+bp-teyrchains = { workspace = true, default-features = true }
+
+equivocation-detector = { workspace = true }
+finality-relay = { workspace = true }
+messages-relay = { workspace = true }
+relay-bizinikiwi-client = { workspace = true }
+relay-utils = { workspace = true }
+teyrchains-relay = { workspace = true }
+
+pezpallet-bridge-grandpa = { workspace = true, default-features = true }
+pezpallet-bridge-messages = { workspace = true, default-features = true }
+pezpallet-bridge-teyrchains = { workspace = true, default-features = true }
+
+bp-messages = { workspace = true, default-features = true }
+bp-runtime = { workspace = true, default-features = true }
+
+# Bizinikiwi Dependencies
+pezframe-support = { workspace = true, default-features = true }
+pezframe-system = { workspace = true, default-features = true }
+pezpallet-balances = { workspace = true, default-features = true }
+pezpallet-grandpa = { workspace = true, default-features = true }
+pezsp-consensus-grandpa = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
+pezsp-trie = { workspace = true }
+
+[dev-dependencies]
+relay-bizinikiwi-client = { features = ["test-helpers"], workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-relayers/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
+	"equivocation-detector/runtime-benchmarks",
+	"finality-relay/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"messages-relay/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-bridge-grandpa/runtime-benchmarks",
+	"pezpallet-bridge-messages/runtime-benchmarks",
+	"pezpallet-bridge-teyrchains/runtime-benchmarks",
+	"pezpallet-grandpa/runtime-benchmarks",
+	"relay-bizinikiwi-client/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
+	"teyrchains-relay/runtime-benchmarks",
+]

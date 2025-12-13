@@ -1,6 +1,6 @@
 [package]
 name = "minimal-template-runtime"
-description = "A solochain runtime template built with Substrate, part of Pezkuwi Sdk."
+description = "A solochain runtime template built with Bizinikiwi, part of Pezkuwi Sdk."
 version = "0.0.0"
 license = "Unlicense"
 authors.workspace = true
@@ -15,11 +15,11 @@ workspace = true
 [dependencies]
 codec = { workspace = true }
 pezkuwi-sdk = { workspace = true, features = [
-	"pallet-balances",
-	"pallet-sudo",
-	"pallet-timestamp",
-	"pallet-transaction-payment",
-	"pallet-transaction-payment-rpc-runtime-api",
+	"pezpallet-balances",
+	"pezpallet-sudo",
+	"pezpallet-timestamp",
+	"pezpallet-transaction-payment",
+	"pezpallet-transaction-payment-rpc-runtime-api",
 	"runtime",
 ] }
 scale-info = { workspace = true }
@@ -28,23 +28,23 @@ serde_json = { workspace = true, default-features = false, features = [
 ] }
 
 # local pallet templates
-pallet-minimal-template = { workspace = true }
+pezpallet-minimal-template = { workspace = true }
 
 [build-dependencies]
 pezkuwi-sdk = { optional = true, workspace = true, features = [
-	"substrate-wasm-builder",
+	"bizinikiwi-wasm-builder",
 ] }
 
 [features]
 default = ["std"]
 std = [
 	"codec/std",
-	"pallet-minimal-template/std",
+	"pezpallet-minimal-template/std",
 	"pezkuwi-sdk/std",
 	"scale-info/std",
 	"serde_json/std",
 ]
 runtime-benchmarks = [
-	"pallet-minimal-template/runtime-benchmarks",
+	"pezpallet-minimal-template/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
 ]

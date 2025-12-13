@@ -23,15 +23,15 @@ use bp_messages::LaneIdType;
 use bp_runtime::{AccountIdOf, BalanceOf, Chain};
 pub use call_info::XcmBridgeHubCall;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::{
-	ensure, sp_runtime::RuntimeDebug, CloneNoBound, PalletError, PartialEqNoBound,
+use pezframe_support::{
+	ensure, pezsp_runtime::RuntimeDebug, CloneNoBound, PalletError, PartialEqNoBound,
 	RuntimeDebugNoBound,
 };
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
-use sp_core::H256;
-use sp_io::hashing::blake2_256;
-use sp_std::boxed::Box;
+use pezsp_core::H256;
+use pezsp_io::hashing::blake2_256;
+use pezsp_std::boxed::Box;
 use xcm::{
 	latest::prelude::*, prelude::XcmVersion, IntoVersion, VersionedInteriorLocation,
 	VersionedLocation,
@@ -41,7 +41,7 @@ mod call_info;
 
 /// Encoded XCM blob. We expect the bridge messages pallet to use this blob type for both inbound
 /// and outbound payloads.
-pub type XcmAsPlainPayload = sp_std::vec::Vec<u8>;
+pub type XcmAsPlainPayload = pezsp_std::vec::Vec<u8>;
 
 /// Bridge identifier - used **only** for communicating with sibling/parent chains in the same
 /// consensus.
@@ -104,7 +104,7 @@ impl core::fmt::Debug for BridgeId {
 /// Local XCM channel manager.
 pub trait LocalXcmChannelManager {
 	/// Error that may be returned when suspending/resuming the bridge.
-	type Error: sp_std::fmt::Debug;
+	type Error: pezsp_std::fmt::Debug;
 
 	/// Returns true if the channel with given location is currently congested.
 	///
@@ -340,9 +340,9 @@ impl BridgeLocations {
 		// a tricky helper struct that adds required `Ord` support for
 		// `VersionedInteriorLocation`
 		#[derive(Eq, PartialEq, Ord, PartialOrd)]
-		struct EncodedVersionedInteriorLocation(sp_std::vec::Vec<u8>);
+		struct EncodedVersionedInteriorLocation(pezsp_std::vec::Vec<u8>);
 		impl Encode for EncodedVersionedInteriorLocation {
-			fn encode(&self) -> sp_std::vec::Vec<u8> {
+			fn encode(&self) -> pezsp_std::vec::Vec<u8> {
 				self.0.clone()
 			}
 		}

@@ -25,7 +25,7 @@ use std::{
 };
 use tokio_util::sync::CancellationToken;
 
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use pezkuwi_node_network_protocol::{
 	self as net_protocol,
@@ -876,7 +876,7 @@ async fn process_incoming_peer_message<Context>(
 ) {
 	use protocol_v1::CollatorProtocolMessage as V1;
 	use protocol_v2::CollatorProtocolMessage as V2;
-	use sp_runtime::traits::AppVerify;
+	use pezsp_runtime::traits::AppVerify;
 
 	match msg {
 		CollationProtocols::V1(V1::Declare(collator_id, para_id, signature)) |
@@ -2366,7 +2366,7 @@ async fn handle_collation_fetch_response(
 				"Request timed out"
 			);
 			// For now we don't want to change reputation on timeout, to mitigate issues like
-			// this: https://github.com/paritytech/polkadot/issues/4617
+			// this: https://github.com/pezkuwichain/kurdistan-sdk/issues/152
 			Err(None)
 		},
 		Err(RequestError::NetworkError(err)) => {

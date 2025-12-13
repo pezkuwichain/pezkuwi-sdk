@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use crate::{mock::*, DispatchError::BadOrigin, *};
-use frame_support::{assert_noop, assert_ok};
+use pezframe_support::{assert_noop, assert_ok};
 use snowbridge_test_utils::FAILING_NONCE;
-use sp_keyring::sr25519::Keyring;
+use pezsp_keyring::sr25519::Keyring;
 use xcm::{latest::ZAGROS_GENESIS_HASH, prelude::*};
 
 #[test]
@@ -65,7 +65,7 @@ fn upgrade_as_root() {
 #[test]
 fn upgrade_as_signed_fails() {
 	new_test_ext(true).execute_with(|| {
-		let origin = RuntimeOrigin::signed(sp_runtime::AccountId32::new([0; 32]));
+		let origin = RuntimeOrigin::signed(pezsp_runtime::AccountId32::new([0; 32]));
 		let address: H160 = Default::default();
 		let code_hash: H256 = Default::default();
 		let initializer = Initializer { params: [0; 256].into(), maximum_required_gas: 10000 };

@@ -22,8 +22,8 @@ use async_trait::async_trait;
 use parking_lot::Mutex;
 use std::collections::HashSet;
 
-use sc_network::{
-	IfDisconnected, ObservedRole as SubstrateObservedRole, ProtocolName, ReputationChange, Roles,
+use pezsc_network::{
+	IfDisconnected, ObservedRole as BizinikiwiObservedRole, ProtocolName, ReputationChange, Roles,
 };
 
 use codec::DecodeAll;
@@ -37,8 +37,8 @@ use pezkuwi_node_subsystem_test_helpers::TestSubsystemContextHandle;
 use pezkuwi_node_subsystem_util::metered;
 use pezkuwi_primitives::{AuthorityDiscoveryId, Hash};
 use pezkuwi_primitives_test_helpers::dummy_collator_signature;
-use sc_network::Multiaddr;
-use sp_keyring::Sr25519Keyring;
+use pezsc_network::Multiaddr;
+use pezsp_keyring::Sr25519Keyring;
 
 const TIMEOUT: std::time::Duration = pezkuwi_node_subsystem_test_helpers::TestSubsystemContextHandle::<NetworkBridgeTxMessage>::TIMEOUT;
 
@@ -105,7 +105,7 @@ impl MessageSink for TestMessageSink {
 	async fn send_async_notification(
 		&self,
 		_notification: Vec<u8>,
-	) -> Result<(), sc_network::error::Error> {
+	) -> Result<(), pezsc_network::error::Error> {
 		unimplemented!();
 	}
 }
@@ -190,10 +190,10 @@ impl Network for TestNetwork {
 			.unwrap();
 	}
 
-	fn peer_role(&self, _peer_id: PeerId, handshake: Vec<u8>) -> Option<SubstrateObservedRole> {
+	fn peer_role(&self, _peer_id: PeerId, handshake: Vec<u8>) -> Option<BizinikiwiObservedRole> {
 		Roles::decode_all(&mut &handshake[..])
 			.ok()
-			.and_then(|role| Some(SubstrateObservedRole::from(role)))
+			.and_then(|role| Some(BizinikiwiObservedRole::from(role)))
 	}
 }
 
@@ -241,7 +241,7 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(test: impl FnOnce(TestHarne
 	let req_protocol_names = ReqProtocolNames::new(genesis_hash, fork_id);
 	let peerset_protocol_names = PeerSetProtocolNames::new(genesis_hash, fork_id);
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (network, network_handle, discovery, network_notification_sinks) =
 		new_test_network(peerset_protocol_names.clone());
 

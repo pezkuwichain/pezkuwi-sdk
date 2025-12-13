@@ -20,7 +20,7 @@
 //!
 //!
 //! In this example, we use arbitrary choices for `AccountId`, `Balance` and the `MinTransfer` type.
-//! This works great for **one team's purposes** but we have to remember that Substrate and FRAME
+//! This works great for **one team's purposes** but we have to remember that Bizinikiwi and FRAME
 //! are written as generic frameworks, intended to be highly configurable.
 //!
 //! In a broad sense, there are two avenues in exposing configurability:
@@ -44,7 +44,7 @@
 //! }
 //! ```
 //!
-//! Substrate and FRAME, for various reasons (performance, correctness, type safety) has opted to
+//! Bizinikiwi and FRAME, for various reasons (performance, correctness, type safety) has opted to
 //! use *types* to declare both *values* and *types* as generic. This is the essence of why the
 //! `Get` trait exists.
 //!
@@ -72,7 +72,7 @@
 //!
 //! > Interestingly, one downside of associated types is that declaring defaults on them is not
 //! > stable yet. In the meantime, we have built our own custom mechanics around declaring defaults
-//! for associated types, see [`pallet_default_config_example`].
+//! for associated types, see [`pezpallet_default_config_example`].
 //!
 //! The last iteration of our code would look like this:
 #![doc = docify::embed!("./src/reference_docs/trait_based_programming.rs", trait_based)]
@@ -84,7 +84,7 @@
 //! having individual `trait Configs` declare a shared `trait SystemConfig` as their
 //! [supertrait](https://doc.rust-lang.org/rust-by-example/trait/supertraits.html).
 #![doc = docify::embed!("./src/reference_docs/trait_based_programming.rs", with_system)]
-//! In FRAME, this shared supertrait is [`frame::prelude::frame_system`].
+//! In FRAME, this shared supertrait is [`frame::prelude::pezframe_system`].
 //!
 //! Notice how this made no difference in the syntax of the rest of the code. `T::AccountId` is
 //! still a valid type, since `T` implements `Config` and `Config` implies `SystemConfig`, which
@@ -104,12 +104,12 @@
 //!
 //! The above example is almost identical to the well-known (and somewhat notorious) `type
 //! BalanceOf` that is often used in the context of [`frame::traits::fungible`].
-#![doc = docify::embed!("../../substrate/frame/fast-unstake/src/types.rs", BalanceOf)]
+#![doc = docify::embed!("../../bizinikiwi/pezframe/fast-unstake/src/types.rs", BalanceOf)]
 //!
 //! ## Additional Resources
 //!
-//! - <https://github.com/paritytech/substrate/issues/13836>
-//! - [Substrate Seminar - Traits and Generic Types](https://www.youtube.com/watch?v=6cp10jVWNl4)
+//! - <https://github.com/pezkuwichain/kurdistan-sdk/issues/13>
+//! - [Bizinikiwi Seminar - Traits and Generic Types](https://www.youtube.com/watch?v=6cp10jVWNl4)
 //! - <https://exchange.pezkuwichain.app/questions/2228/type-casting-to-trait-t-as-config>
 #![allow(unused)]
 
@@ -119,7 +119,7 @@ use frame::traits::Get;
 mod basic {
 	struct Pallet;
 
-	type AccountId = frame::deps::sp_runtime::AccountId32;
+	type AccountId = frame::deps::pezsp_runtime::AccountId32;
 	type Balance = u128;
 	type MinTransfer = frame::traits::ConstU128<10>;
 

@@ -17,7 +17,7 @@
 //! The Zagros runtime. This can be compiled with `#[no_std]`, ready for Wasm.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-// `#[frame_support::runtime]!` does a lot of recursion and requires us to increase the limit.
+// `#[pezframe_support::runtime]!` does a lot of recursion and requires us to increase the limit.
 #![recursion_limit = "512"]
 
 extern crate alloc;
@@ -28,8 +28,8 @@ use alloc::{
 	vec::Vec,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_election_provider_support::{bounds::ElectionBoundsBuilder, onchain, SequentialPhragmen};
-use frame_support::{
+use pezframe_election_provider_support::{bounds::ElectionBoundsBuilder, onchain, SequentialPhragmen};
+use pezframe_support::{
 	derive_impl,
 	dynamic_params::{dynamic_pallet_params, dynamic_params},
 	genesis_builder_helper::{build_state, get_preset},
@@ -43,16 +43,16 @@ use frame_support::{
 	weights::{ConstantMultiplier, WeightMeter},
 	PalletId,
 };
-use frame_system::{EnsureRoot, EnsureSigned};
-use pallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
-use pallet_identity::legacy::IdentityInfo;
-use pallet_nomination_pools::PoolId;
-use pallet_session::historical as session_historical;
-use pallet_staking::UseValidatorsMap;
-use pallet_staking_async_ah_client as ah_client;
-use pallet_staking_async_rc_client as rc_client;
-use pallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
-use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
+use pezframe_system::{EnsureRoot, EnsureSigned};
+use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
+use pezpallet_identity::legacy::IdentityInfo;
+use pezpallet_nomination_pools::PoolId;
+use pezpallet_session::historical as session_historical;
+use pezpallet_staking::UseValidatorsMap;
+use pezpallet_staking_async_ah_client as ah_client;
+use pezpallet_staking_async_rc_client as rc_client;
+use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_primitives::{
 	async_backing::Constraints, slashing, AccountId, AccountIndex, ApprovalVotingParams, Balance,
 	BlockNumber, CandidateEvent, CandidateHash,
@@ -92,15 +92,15 @@ use pezkuwi_runtime_teyrchains::{
 	shared as teyrchains_shared,
 };
 use scale_info::TypeInfo;
-use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
-use sp_consensus_beefy::{
+use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+use pezsp_consensus_beefy::{
 	ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature},
 	mmr::{BeefyDataProvider, MmrLeafVersion},
 };
-use sp_core::{ConstBool, ConstU8, ConstUint, OpaqueMetadata, RuntimeDebug, H256};
+use pezsp_core::{ConstBool, ConstU8, ConstUint, OpaqueMetadata, RuntimeDebug, H256};
 #[cfg(any(feature = "std", test))]
-pub use sp_runtime::BuildStorage;
-use sp_runtime::{
+pub use pezsp_runtime::BuildStorage;
+use pezsp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{
 		AccountIdConversion, BlakeTwo256, Block as BlockT, ConvertInto, Get, IdentityLookup,
@@ -109,10 +109,10 @@ use sp_runtime::{
 	transaction_validity::{TransactionPriority, TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult, FixedU128, KeyTypeId, MultiSignature, MultiSigner, Percent, Permill,
 };
-use sp_staking::{EraIndex, SessionIndex};
+use pezsp_staking::{EraIndex, SessionIndex};
 #[cfg(any(feature = "std", test))]
-use sp_version::NativeVersion;
-use sp_version::RuntimeVersion;
+use pezsp_version::NativeVersion;
+use pezsp_version::RuntimeVersion;
 use xcm::{
 	latest::prelude::*, Version as XcmVersion, VersionedAsset, VersionedAssetId, VersionedAssets,
 	VersionedLocation, VersionedXcm,
@@ -123,10 +123,10 @@ use xcm_runtime_apis::{
 	fees::Error as XcmPaymentApiError,
 };
 
-pub use frame_system::Call as SystemCall;
-pub use pallet_balances::Call as BalancesCall;
-pub use pallet_election_provider_multi_phase::{Call as EPMCall, GeometricDepositBase};
-pub use pallet_timestamp::Call as TimestampCall;
+pub use pezframe_system::Call as SystemCall;
+pub use pezpallet_balances::Call as BalancesCall;
+pub use pezpallet_election_provider_multi_phase::{Call as EPMCall, GeometricDepositBase};
+pub use pezpallet_timestamp::Call as TimestampCall;
 
 /// Constant values used within the runtime.
 use zagros_runtime_constants::{
@@ -148,7 +148,7 @@ use impls::ToTeyrchainIdentityReaper;
 // Governance and configurations.
 pub mod governance;
 use governance::{
-	pallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin, StakingAdmin,
+	pezpallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin, StakingAdmin,
 	Treasurer, TreasurySpender,
 };
 use xcm_config::XcmConfig;
@@ -168,7 +168,7 @@ pub mod fast_runtime_binary {
 }
 
 /// Runtime version (Zagros).
-#[sp_version::runtime_version]
+#[pezsp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("zagros"),
 	impl_name: alloc::borrow::Cow::Borrowed("parity-zagros"),
@@ -181,10 +181,10 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 };
 
 /// The BABE epoch configuration at genesis.
-pub const BABE_GENESIS_EPOCH_CONFIG: sp_consensus_babe::BabeEpochConfiguration =
-	sp_consensus_babe::BabeEpochConfiguration {
+pub const BABE_GENESIS_EPOCH_CONFIG: pezsp_consensus_babe::BabeEpochConfiguration =
+	pezsp_consensus_babe::BabeEpochConfiguration {
 		c: PRIMARY_PROBABILITY,
-		allowed_slots: sp_consensus_babe::AllowedSlots::PrimaryAndSecondaryVRFSlots,
+		allowed_slots: pezsp_consensus_babe::AllowedSlots::PrimaryAndSecondaryVRFSlots,
 	};
 
 /// Native version.
@@ -209,8 +209,8 @@ parameter_types! {
 	pub const SS58Prefix: u8 = 42;
 }
 
-#[derive_impl(frame_system::config_preludes::RelayChainDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::RelayChainDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type BlockWeights = BlockWeights;
 	type BlockLength = BlockLength;
 	type Nonce = Nonce;
@@ -220,23 +220,23 @@ impl frame_system::Config for Runtime {
 	type BlockHashCount = BlockHashCount;
 	type DbWeight = RocksDbWeight;
 	type Version = Version;
-	type AccountData = pallet_balances::AccountData<Balance>;
-	type SystemWeightInfo = weights::frame_system::WeightInfo<Runtime>;
-	type ExtensionsWeightInfo = weights::frame_system_extensions::WeightInfo<Runtime>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
+	type SystemWeightInfo = weights::pezframe_system::WeightInfo<Runtime>;
+	type ExtensionsWeightInfo = weights::pezframe_system_extensions::WeightInfo<Runtime>;
 	type SS58Prefix = SS58Prefix;
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type MultiBlockMigrator = MultiBlockMigrations;
 	type SingleBlockMigrations = Migrations;
 }
 
 parameter_types! {
-	pub MaximumSchedulerWeight: frame_support::weights::Weight = Perbill::from_percent(80) *
+	pub MaximumSchedulerWeight: pezframe_support::weights::Weight = Perbill::from_percent(80) *
 		BlockWeights::get().max_block;
 	pub const MaxScheduledPerBlock: u32 = 50;
 	pub const NoPreimagePostponement: Option<u32> = Some(10);
 }
 
-impl pallet_scheduler::Config for Runtime {
+impl pezpallet_scheduler::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeEvent = RuntimeEvent;
 	type PalletsOrigin = OriginCaller;
@@ -246,8 +246,8 @@ impl pallet_scheduler::Config for Runtime {
 	// OpenGov to schedule periodic auctions.
 	type ScheduleOrigin = EitherOf<EnsureRoot<AccountId>, AuctionAdmin>;
 	type MaxScheduledPerBlock = MaxScheduledPerBlock;
-	type WeightInfo = weights::pallet_scheduler::WeightInfo<Runtime>;
-	type OriginPrivilegeCmp = frame_support::traits::EqualPrivilegeOnly;
+	type WeightInfo = weights::pezpallet_scheduler::WeightInfo<Runtime>;
+	type OriginPrivilegeCmp = pezframe_support::traits::EqualPrivilegeOnly;
 	type Preimages = Preimage;
 	type BlockNumberProvider = System;
 }
@@ -255,11 +255,11 @@ impl pallet_scheduler::Config for Runtime {
 parameter_types! {
 	pub const PreimageBaseDeposit: Balance = deposit(2, 64);
 	pub const PreimageByteDeposit: Balance = deposit(0, 1);
-	pub const PreimageHoldReason: RuntimeHoldReason = RuntimeHoldReason::Preimage(pallet_preimage::HoldReason::Preimage);
+	pub const PreimageHoldReason: RuntimeHoldReason = RuntimeHoldReason::Preimage(pezpallet_preimage::HoldReason::Preimage);
 }
 
 /// Dynamic params that can be adjusted at runtime.
-#[dynamic_params(RuntimeParameters, pallet_parameters::Parameters::<Runtime>)]
+#[dynamic_params(RuntimeParameters, pezpallet_parameters::Parameters::<Runtime>)]
 pub mod dynamic_params {
 	use super::*;
 
@@ -301,11 +301,11 @@ impl Default for RuntimeParameters {
 	}
 }
 
-impl pallet_parameters::Config for Runtime {
+impl pezpallet_parameters::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeParameters = RuntimeParameters;
 	type AdminOrigin = DynamicParameterOrigin;
-	type WeightInfo = weights::pallet_parameters::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_parameters::WeightInfo<Runtime>;
 }
 
 /// Defines what origin can modify which dynamic parameters.
@@ -320,7 +320,7 @@ impl EnsureOriginWithArg<RuntimeOrigin, RuntimeParametersKey> for DynamicParamet
 		use crate::RuntimeParametersKey::*;
 
 		match key {
-			Inflation(_) => frame_system::ensure_root(origin.clone()),
+			Inflation(_) => pezframe_system::ensure_root(origin.clone()),
 		}
 		.map_err(|_| origin)
 	}
@@ -332,8 +332,8 @@ impl EnsureOriginWithArg<RuntimeOrigin, RuntimeParametersKey> for DynamicParamet
 	}
 }
 
-impl pallet_preimage::Config for Runtime {
-	type WeightInfo = weights::pallet_preimage::WeightInfo<Runtime>;
+impl pezpallet_preimage::Config for Runtime {
+	type WeightInfo = weights::pezpallet_preimage::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type ManagerOrigin = EnsureRoot<AccountId>;
@@ -355,12 +355,12 @@ parameter_types! {
 		BondingDuration::get() as u64 * SessionsPerEra::get() as u64 * EpochDuration::get();
 }
 
-impl pallet_babe::Config for Runtime {
+impl pezpallet_babe::Config for Runtime {
 	type EpochDuration = EpochDuration;
 	type ExpectedBlockTime = ExpectedBlockTime;
 
 	// session module is the trigger
-	type EpochChangeTrigger = pallet_babe::ExternalTrigger;
+	type EpochChangeTrigger = pezpallet_babe::ExternalTrigger;
 
 	type DisabledValidators = Session;
 
@@ -369,22 +369,22 @@ impl pallet_babe::Config for Runtime {
 	type MaxAuthorities = MaxAuthorities;
 	type MaxNominators = MaxNominators;
 
-	type KeyOwnerProof = sp_session::MembershipProof;
+	type KeyOwnerProof = pezsp_session::MembershipProof;
 
 	type EquivocationReportSystem =
-		pallet_babe::EquivocationReportSystem<Self, Offences, Historical, ReportLongevity>;
+		pezpallet_babe::EquivocationReportSystem<Self, Offences, Historical, ReportLongevity>;
 }
 
 parameter_types! {
 	pub const IndexDeposit: Balance = 100 * CENTS;
 }
 
-impl pallet_indices::Config for Runtime {
+impl pezpallet_indices::Config for Runtime {
 	type AccountIndex = AccountIndex;
 	type Currency = Balances;
 	type Deposit = IndexDeposit;
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pallet_indices::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_indices::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -393,7 +393,7 @@ parameter_types! {
 	pub const MaxReserves: u32 = 50;
 }
 
-impl pallet_balances::Config for Runtime {
+impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	type DustRemoval = ();
 	type RuntimeEvent = RuntimeEvent;
@@ -402,7 +402,7 @@ impl pallet_balances::Config for Runtime {
 	type MaxLocks = MaxLocks;
 	type MaxReserves = MaxReserves;
 	type ReserveIdentifier = [u8; 8];
-	type WeightInfo = weights::pallet_balances::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_balances::WeightInfo<Runtime>;
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type RuntimeFreezeReason = RuntimeFreezeReason;
 	type FreezeIdentifier = RuntimeFreezeReason;
@@ -414,7 +414,7 @@ parameter_types! {
 	pub const BeefySetIdSessionEntries: u32 = BondingDuration::get() * SessionsPerEra::get();
 }
 
-impl pallet_beefy::Config for Runtime {
+impl pezpallet_beefy::Config for Runtime {
 	type BeefyId = BeefyId;
 	type MaxAuthorities = MaxAuthorities;
 	type MaxNominators = MaxNominators;
@@ -422,18 +422,18 @@ impl pallet_beefy::Config for Runtime {
 	type OnNewValidatorSet = BeefyMmrLeaf;
 	type AncestryHelper = BeefyMmrLeaf;
 	type WeightInfo = ();
-	type KeyOwnerProof = sp_session::MembershipProof;
+	type KeyOwnerProof = pezsp_session::MembershipProof;
 	type EquivocationReportSystem =
-		pallet_beefy::EquivocationReportSystem<Self, Offences, Historical, ReportLongevity>;
+		pezpallet_beefy::EquivocationReportSystem<Self, Offences, Historical, ReportLongevity>;
 }
 
-impl pallet_mmr::Config for Runtime {
+impl pezpallet_mmr::Config for Runtime {
 	const INDEXING_PREFIX: &'static [u8] = mmr::INDEXING_PREFIX;
 	type Hashing = Keccak256;
-	type OnNewRoot = pallet_beefy_mmr::DepositBeefyDigest<Runtime>;
-	type LeafData = pallet_beefy_mmr::Pallet<Runtime>;
-	type BlockHashProvider = pallet_mmr::DefaultBlockHashProvider<Runtime>;
-	type WeightInfo = weights::pallet_mmr::WeightInfo<Runtime>;
+	type OnNewRoot = pezpallet_beefy_mmr::DepositBeefyDigest<Runtime>;
+	type LeafData = pezpallet_beefy_mmr::Pallet<Runtime>;
+	type BlockHashProvider = pezpallet_mmr::DefaultBlockHashProvider<Runtime>;
+	type WeightInfo = weights::pezpallet_mmr::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = teyrchains_paras::benchmarking::mmr_setup::MmrSetup<Runtime>;
 }
@@ -441,11 +441,11 @@ impl pallet_mmr::Config for Runtime {
 /// MMR helper types.
 mod mmr {
 	use super::Runtime;
-	pub use pallet_mmr::primitives::*;
+	pub use pezpallet_mmr::primitives::*;
 
-	pub type Leaf = <<Runtime as pallet_mmr::Config>::LeafData as LeafDataProvider>::LeafData;
-	pub type Hashing = <Runtime as pallet_mmr::Config>::Hashing;
-	pub type Hash = <Hashing as sp_runtime::traits::Hash>::Output;
+	pub type Leaf = <<Runtime as pezpallet_mmr::Config>::LeafData as LeafDataProvider>::LeafData;
+	pub type Hashing = <Runtime as pezpallet_mmr::Config>::Hashing;
+	pub type Hash = <Hashing as pezsp_runtime::traits::Hash>::Output;
 }
 
 parameter_types! {
@@ -466,12 +466,12 @@ impl BeefyDataProvider<H256> for ParaHeadsRootProvider {
 	}
 }
 
-impl pallet_beefy_mmr::Config for Runtime {
+impl pezpallet_beefy_mmr::Config for Runtime {
 	type LeafVersion = LeafVersion;
-	type BeefyAuthorityToMerkleLeaf = pallet_beefy_mmr::BeefyEcdsaToEthereum;
+	type BeefyAuthorityToMerkleLeaf = pezpallet_beefy_mmr::BeefyEcdsaToEthereum;
 	type LeafExtra = H256;
 	type BeefyDataProvider = ParaHeadsRootProvider;
-	type WeightInfo = weights::pallet_beefy_mmr::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_beefy_mmr::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -481,28 +481,28 @@ parameter_types! {
 	pub const OperationalFeeMultiplier: u8 = 5;
 }
 
-impl pallet_transaction_payment::Config for Runtime {
+impl pezpallet_transaction_payment::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OnChargeTransaction = FungibleAdapter<Balances, ToAuthor<Runtime>>;
 	type OperationalFeeMultiplier = OperationalFeeMultiplier;
 	type WeightToFee = WeightToFee;
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type FeeMultiplierUpdate = SlowAdjustingFeeUpdate<Self>;
-	type WeightInfo = weights::pallet_transaction_payment::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_transaction_payment::WeightInfo<Runtime>;
 }
 
 parameter_types! {
 	pub const MinimumPeriod: u64 = SLOT_DURATION / 2;
 }
-impl pallet_timestamp::Config for Runtime {
+impl pezpallet_timestamp::Config for Runtime {
 	type Moment = u64;
 	type OnTimestampSet = Babe;
 	type MinimumPeriod = MinimumPeriod;
-	type WeightInfo = weights::pallet_timestamp::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_timestamp::WeightInfo<Runtime>;
 }
 
-impl pallet_authorship::Config for Runtime {
-	type FindAuthor = pallet_session::FindAccountFromAuthorIndex<Self, Babe>;
+impl pezpallet_authorship::Config for Runtime {
+	type FindAuthor = pezpallet_session::FindAccountFromAuthorIndex<Self, Babe>;
 	type EventHandler = StakingAhClient;
 }
 
@@ -523,7 +523,7 @@ impl_opaque_keys! {
 	}
 }
 
-impl pallet_session::Config for Runtime {
+impl pezpallet_session::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ValidatorId = AccountId;
 	type ValidatorIdOf = ConvertInto;
@@ -532,16 +532,16 @@ impl pallet_session::Config for Runtime {
 	type SessionManager = session_historical::NoteHistoricalRoot<Self, StakingAhClient>;
 	type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
 	type Keys = SessionKeys;
-	type DisablingStrategy = pallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy;
-	type WeightInfo = weights::pallet_session::WeightInfo<Runtime>;
+	type DisablingStrategy = pezpallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy;
+	type WeightInfo = weights::pezpallet_session::WeightInfo<Runtime>;
 	type Currency = Balances;
 	type KeyDeposit = KeyDeposit;
 }
 
-impl pallet_session::historical::Config for Runtime {
+impl pezpallet_session::historical::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type FullIdentification = sp_staking::Exposure<AccountId, Balance>;
-	type FullIdentificationOf = pallet_staking::DefaultExposureOf<Self>;
+	type FullIdentification = pezsp_staking::Exposure<AccountId, Balance>;
+	type FullIdentificationOf = pezpallet_staking::DefaultExposureOf<Self>;
 }
 
 pub struct MaybeSignedPhase;
@@ -550,7 +550,7 @@ impl Get<u32> for MaybeSignedPhase {
 	fn get() -> u32 {
 		// 1 day = 4 eras -> 1 week = 28 eras. We want to disable signed phase once a week to test
 		// the fallback unsigned phase is able to compute elections on Zagros.
-		if pallet_staking::CurrentEra::<Runtime>::get().unwrap_or(1) % 28 == 0 {
+		if pezpallet_staking::CurrentEra::<Runtime>::get().unwrap_or(1) % 28 == 0 {
 			0
 		} else {
 			SignedPhase::get()
@@ -585,7 +585,7 @@ parameter_types! {
 	/// We take the top 22500 nominators as electing voters and all of the validators as electable
 	/// targets. Whilst this is the case, we cannot and shall not increase the size of the
 	/// validator intentions.
-	pub ElectionBounds: frame_election_provider_support::bounds::ElectionBounds =
+	pub ElectionBounds: pezframe_election_provider_support::bounds::ElectionBounds =
 		ElectionBoundsBuilder::default().voters_count(MaxElectingVoters::get().into()).build();
 	// Maximum winners that can be chosen as active validators
 	pub const MaxActiveValidators: u32 = 1000;
@@ -595,12 +595,12 @@ parameter_types! {
 	pub const MaxBackersPerWinner: u32 = MaxElectingVoters::get();
 }
 
-frame_election_provider_support::generate_solution_type!(
+pezframe_election_provider_support::generate_solution_type!(
 	#[compact]
 	pub struct NposCompactSolution16::<
 		VoterIndex = u32,
 		TargetIndex = u16,
-		Accuracy = sp_runtime::PerU16,
+		Accuracy = pezsp_runtime::PerU16,
 		MaxVoters = MaxElectingVoters,
 	>(16)
 );
@@ -611,21 +611,21 @@ impl onchain::Config for OnChainSeqPhragmen {
 	type System = Runtime;
 	type Solver = SequentialPhragmen<AccountId, OnChainAccuracy>;
 	type DataProvider = Staking;
-	type WeightInfo = weights::frame_election_provider_support::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezframe_election_provider_support::WeightInfo<Runtime>;
 	type Bounds = ElectionBounds;
 	type MaxBackersPerWinner = MaxBackersPerWinner;
 	type MaxWinnersPerPage = MaxWinnersPerPage;
 }
 
-impl pallet_election_provider_multi_phase::MinerConfig for Runtime {
+impl pezpallet_election_provider_multi_phase::MinerConfig for Runtime {
 	type AccountId = AccountId;
 	type MaxLength = OffchainSolutionLengthLimit;
 	type MaxWeight = OffchainSolutionWeightLimit;
 	type Solution = NposCompactSolution16;
 	type MaxVotesPerVoter = <
-    <Self as pallet_election_provider_multi_phase::Config>::DataProvider
+    <Self as pezpallet_election_provider_multi_phase::Config>::DataProvider
     as
-    frame_election_provider_support::ElectionDataProvider
+    pezframe_election_provider_support::ElectionDataProvider
     >::MaxVotesPerVoter;
 	type MaxBackersPerWinner = MaxBackersPerWinner;
 	type MaxWinners = MaxWinnersPerPage;
@@ -634,14 +634,14 @@ impl pallet_election_provider_multi_phase::MinerConfig for Runtime {
 	// weight estimate function is wired to this call's weight.
 	fn solution_weight(v: u32, t: u32, a: u32, d: u32) -> Weight {
 		<
-        <Self as pallet_election_provider_multi_phase::Config>::WeightInfo
+        <Self as pezpallet_election_provider_multi_phase::Config>::WeightInfo
         as
-        pallet_election_provider_multi_phase::WeightInfo
+        pezpallet_election_provider_multi_phase::WeightInfo
         >::submit_unsigned(v, t, a, d)
 	}
 }
 
-impl pallet_election_provider_multi_phase::Config for Runtime {
+impl pezpallet_election_provider_multi_phase::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type EstimateCallFee = TransactionPayment;
@@ -655,7 +655,7 @@ impl pallet_election_provider_multi_phase::Config for Runtime {
 	type SignedDepositByte = SignedDepositByte;
 	type SignedDepositWeight = ();
 	type SignedMaxWeight =
-		<Self::MinerConfig as pallet_election_provider_multi_phase::MinerConfig>::MaxWeight;
+		<Self::MinerConfig as pezpallet_election_provider_multi_phase::MinerConfig>::MaxWeight;
 	type MinerConfig = Self;
 	type SlashHandler = (); // burn slashes
 	type RewardHandler = (); // rewards are minted from the void
@@ -668,7 +668,7 @@ impl pallet_election_provider_multi_phase::Config for Runtime {
 	#[cfg(any(feature = "fast-runtime", feature = "runtime-benchmarks"))]
 	type Fallback = onchain::OnChainExecution<OnChainSeqPhragmen>;
 	#[cfg(not(any(feature = "fast-runtime", feature = "runtime-benchmarks")))]
-	type Fallback = frame_election_provider_support::NoElection<(
+	type Fallback = pezframe_election_provider_support::NoElection<(
 		AccountId,
 		BlockNumber,
 		Staking,
@@ -678,12 +678,12 @@ impl pallet_election_provider_multi_phase::Config for Runtime {
 	type GovernanceFallback = onchain::OnChainExecution<OnChainSeqPhragmen>;
 	type Solver = SequentialPhragmen<
 		AccountId,
-		pallet_election_provider_multi_phase::SolutionAccuracyOf<Self>,
+		pezpallet_election_provider_multi_phase::SolutionAccuracyOf<Self>,
 		(),
 	>;
 	type BenchmarkingConfig = pezkuwi_runtime_common::elections::BenchmarkConfig;
 	type ForceOrigin = EnsureRoot<AccountId>;
-	type WeightInfo = weights::pallet_election_provider_multi_phase::WeightInfo<Self>;
+	type WeightInfo = weights::pezpallet_election_provider_multi_phase::WeightInfo<Self>;
 	type ElectionBounds = ElectionBounds;
 }
 
@@ -692,18 +692,18 @@ parameter_types! {
 	pub const AutoRebagNumber: u32 = 10;
 }
 
-type VoterBagsListInstance = pallet_bags_list::Instance1;
-impl pallet_bags_list::Config<VoterBagsListInstance> for Runtime {
+type VoterBagsListInstance = pezpallet_bags_list::Instance1;
+impl pezpallet_bags_list::Config<VoterBagsListInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pallet_bags_list::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_bags_list::WeightInfo<Runtime>;
 	type ScoreProvider = Staking;
 	type BagThresholds = BagThresholds;
 	type MaxAutoRebagPerBlock = AutoRebagNumber;
-	type Score = sp_npos_elections::VoteWeight;
+	type Score = pezsp_npos_elections::VoteWeight;
 }
 
 pub struct EraPayout;
-impl pallet_staking::EraPayout<Balance> for EraPayout {
+impl pezpallet_staking::EraPayout<Balance> for EraPayout {
 	fn era_payout(
 		_total_staked: Balance,
 		_total_issuance: Balance,
@@ -740,18 +740,18 @@ parameter_types! {
 	// this is an unbounded number. We just set it to a reasonably high value, 1 full page
 	// of nominators.
 	pub const MaxNominators: u32 = 64;
-	pub const MaxNominations: u32 = <NposCompactSolution16 as frame_election_provider_support::NposSolution>::LIMIT as u32;
+	pub const MaxNominations: u32 = <NposCompactSolution16 as pezframe_election_provider_support::NposSolution>::LIMIT as u32;
 	pub const MaxControllersInDeprecationBatch: u32 = 751;
 }
 
-impl pallet_staking::Config for Runtime {
+impl pezpallet_staking::Config for Runtime {
 	type OldCurrency = Balances;
 	type Currency = Balances;
 	type CurrencyBalance = Balance;
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type UnixTime = Timestamp;
 	// Zagros's total issuance is already more than `u64::MAX`, this will work better.
-	type CurrencyToVote = sp_staking::currency_to_vote::SaturatingCurrencyToVote;
+	type CurrencyToVote = pezsp_staking::currency_to_vote::SaturatingCurrencyToVote;
 	type RewardRemainder = ();
 	type RuntimeEvent = RuntimeEvent;
 	type Slash = ();
@@ -769,18 +769,18 @@ impl pallet_staking::Config for Runtime {
 	type VoterList = VoterList;
 	type TargetList = UseValidatorsMap<Self>;
 	type MaxValidatorSet = MaxActiveValidators;
-	type NominationsQuota = pallet_staking::FixedNominationsQuota<{ MaxNominations::get() }>;
-	type MaxUnlockingChunks = frame_support::traits::ConstU32<32>;
-	type HistoryDepth = frame_support::traits::ConstU32<84>;
+	type NominationsQuota = pezpallet_staking::FixedNominationsQuota<{ MaxNominations::get() }>;
+	type MaxUnlockingChunks = pezframe_support::traits::ConstU32<32>;
+	type HistoryDepth = pezframe_support::traits::ConstU32<84>;
 	type MaxControllersInDeprecationBatch = MaxControllersInDeprecationBatch;
 	type BenchmarkingConfig = pezkuwi_runtime_common::StakingBenchmarkingConfig;
 	type EventListeners = (NominationPools, DelegatedStaking);
-	type WeightInfo = weights::pallet_staking::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_staking::WeightInfo<Runtime>;
 	// Genesis benchmarking setup needs this until we remove the pallet completely.
 	#[cfg(not(feature = "on-chain-release-build"))]
 	type Filter = Nothing;
 	#[cfg(feature = "on-chain-release-build")]
-	type Filter = frame_support::traits::Everything;
+	type Filter = pezframe_support::traits::Everything;
 }
 
 #[derive(Encode, Decode)]
@@ -806,7 +806,7 @@ impl Get<Location> for AssetHubLocation {
 }
 
 pub struct EnsureAssetHub;
-impl frame_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
+impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 	type Success = ();
 	fn try_origin(o: RuntimeOrigin) -> Result<Self::Success, RuntimeOrigin> {
 		match <RuntimeOrigin as Into<Result<teyrchains_origin::Origin, RuntimeOrigin>>>::into(
@@ -824,7 +824,7 @@ impl frame_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 }
 
 pub struct SessionReportToXcm;
-impl sp_runtime::traits::Convert<rc_client::SessionReport<AccountId>, Xcm<()>>
+impl pezsp_runtime::traits::Convert<rc_client::SessionReport<AccountId>, Xcm<()>>
 	for SessionReportToXcm
 {
 	fn convert(a: rc_client::SessionReport<AccountId>) -> Xcm<()> {
@@ -845,7 +845,7 @@ impl sp_runtime::traits::Convert<rc_client::SessionReport<AccountId>, Xcm<()>>
 }
 
 pub struct QueuedOffenceToXcm;
-impl sp_runtime::traits::Convert<Vec<ah_client::QueuedOffenceOf<Runtime>>, Xcm<()>>
+impl pezsp_runtime::traits::Convert<Vec<ah_client::QueuedOffenceOf<Runtime>>, Xcm<()>>
 	for QueuedOffenceToXcm
 {
 	fn convert(offences: Vec<ah_client::QueuedOffenceOf<Runtime>>) -> Xcm<()> {
@@ -897,7 +897,7 @@ impl ah_client::SendToAssetHub for StakingXcmToAssetHub {
 impl ah_client::Config for Runtime {
 	type CurrencyBalance = Balance;
 	type AssetHubOrigin =
-		frame_support::traits::EitherOfDiverse<EnsureRoot<AccountId>, EnsureAssetHub>;
+		pezframe_support::traits::EitherOfDiverse<EnsureRoot<AccountId>, EnsureAssetHub>;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type SessionInterface = Self;
 	type SendToAssetHub = StakingXcmToAssetHub;
@@ -910,15 +910,15 @@ impl ah_client::Config for Runtime {
 	type MaxSessionReportRetries = ConstU32<5>;
 }
 
-impl pallet_fast_unstake::Config for Runtime {
+impl pezpallet_fast_unstake::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
-	type BatchSize = frame_support::traits::ConstU32<64>;
-	type Deposit = frame_support::traits::ConstU128<{ UNITS }>;
+	type BatchSize = pezframe_support::traits::ConstU32<64>;
+	type Deposit = pezframe_support::traits::ConstU128<{ UNITS }>;
 	type ControlOrigin = EnsureRoot<AccountId>;
 	type Staking = Staking;
 	type MaxErasToCheckPerBlock = ConstU32<1>;
-	type WeightInfo = weights::pallet_fast_unstake::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_fast_unstake::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -941,7 +941,7 @@ parameter_types! {
 	pub const MaxBalance: Balance = Balance::max_value();
 }
 
-impl pallet_treasury::Config for Runtime {
+impl pezpallet_treasury::Config for Runtime {
 	type PalletId = TreasuryPalletId;
 	type Currency = Balances;
 	type RejectOrigin = EitherOfDiverse<EnsureRoot<AccountId>, Treasurer>;
@@ -950,7 +950,7 @@ impl pallet_treasury::Config for Runtime {
 	type Burn = Burn;
 	type BurnDestination = ();
 	type MaxApprovals = MaxApprovals;
-	type WeightInfo = weights::pallet_treasury::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_treasury::WeightInfo<Runtime>;
 	type SpendFunds = ();
 	type SpendOrigin = TreasurySpender;
 	type AssetKind = VersionedLocatableAsset;
@@ -981,13 +981,13 @@ impl pallet_treasury::Config for Runtime {
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
 }
 
-impl pallet_offences::Config for Runtime {
+impl pezpallet_offences::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type IdentificationTuple = session_historical::IdentificationTuple<Self>;
 	type OnOffenceHandler = StakingAhClient;
 }
 
-impl pallet_authority_discovery::Config for Runtime {
+impl pezpallet_authority_discovery::Config for Runtime {
 	type MaxAuthorities = MaxAuthorities;
 }
 
@@ -999,7 +999,7 @@ parameter_types! {
 	pub const MaxSetIdSessionEntries: u32 = BondingDuration::get() * SessionsPerEra::get();
 }
 
-impl pallet_grandpa::Config for Runtime {
+impl pezpallet_grandpa::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 
 	type WeightInfo = ();
@@ -1007,18 +1007,18 @@ impl pallet_grandpa::Config for Runtime {
 	type MaxNominators = MaxNominators;
 	type MaxSetIdSessionEntries = MaxSetIdSessionEntries;
 
-	type KeyOwnerProof = sp_session::MembershipProof;
+	type KeyOwnerProof = pezsp_session::MembershipProof;
 
 	type EquivocationReportSystem =
-		pallet_grandpa::EquivocationReportSystem<Self, Offences, Historical, ReportLongevity>;
+		pezpallet_grandpa::EquivocationReportSystem<Self, Offences, Historical, ReportLongevity>;
 }
 
-impl frame_system::offchain::SigningTypes for Runtime {
+impl pezframe_system::offchain::SigningTypes for Runtime {
 	type Public = <Signature as Verify>::Signer;
 	type Signature = Signature;
 }
 
-impl<C> frame_system::offchain::CreateTransactionBase<C> for Runtime
+impl<C> pezframe_system::offchain::CreateTransactionBase<C> for Runtime
 where
 	RuntimeCall: From<C>,
 {
@@ -1026,7 +1026,7 @@ where
 	type Extrinsic = UncheckedExtrinsic;
 }
 
-impl<LocalCall> frame_system::offchain::CreateTransaction<LocalCall> for Runtime
+impl<LocalCall> pezframe_system::offchain::CreateTransaction<LocalCall> for Runtime
 where
 	RuntimeCall: From<LocalCall>,
 {
@@ -1039,19 +1039,19 @@ where
 
 /// Submits a transaction with the node's public and signature type. Adheres to the signed extension
 /// format of the chain.
-impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
+impl<LocalCall> pezframe_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
 where
 	RuntimeCall: From<LocalCall>,
 {
 	fn create_signed_transaction<
-		C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>,
+		C: pezframe_system::offchain::AppCrypto<Self::Public, Self::Signature>,
 	>(
 		call: RuntimeCall,
 		public: <Signature as Verify>::Signer,
 		account: AccountId,
-		nonce: <Runtime as frame_system::Config>::Nonce,
+		nonce: <Runtime as pezframe_system::Config>::Nonce,
 	) -> Option<UncheckedExtrinsic> {
-		use sp_runtime::traits::StaticLookup;
+		use pezsp_runtime::traits::StaticLookup;
 		// take the biggest period possible.
 		let period =
 			BlockHashCount::get().checked_next_power_of_two().map(|c| c / 2).unwrap_or(2) as u64;
@@ -1063,20 +1063,20 @@ where
 			.saturating_sub(1);
 		let tip = 0;
 		let tx_ext: TxExtension = (
-			frame_system::AuthorizeCall::<Runtime>::new(),
-			frame_system::CheckNonZeroSender::<Runtime>::new(),
-			frame_system::CheckSpecVersion::<Runtime>::new(),
-			frame_system::CheckTxVersion::<Runtime>::new(),
-			frame_system::CheckGenesis::<Runtime>::new(),
-			frame_system::CheckMortality::<Runtime>::from(generic::Era::mortal(
+			pezframe_system::AuthorizeCall::<Runtime>::new(),
+			pezframe_system::CheckNonZeroSender::<Runtime>::new(),
+			pezframe_system::CheckSpecVersion::<Runtime>::new(),
+			pezframe_system::CheckTxVersion::<Runtime>::new(),
+			pezframe_system::CheckGenesis::<Runtime>::new(),
+			pezframe_system::CheckMortality::<Runtime>::from(generic::Era::mortal(
 				period,
 				current_block,
 			)),
-			frame_system::CheckNonce::<Runtime>::from(nonce),
-			frame_system::CheckWeight::<Runtime>::new(),
-			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
-			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(true),
-			frame_system::WeightReclaim::<Runtime>::new(),
+			pezframe_system::CheckNonce::<Runtime>::from(nonce),
+			pezframe_system::CheckWeight::<Runtime>::new(),
+			pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+			pezframe_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(true),
+			pezframe_system::WeightReclaim::<Runtime>::new(),
 		)
 			.into();
 		let raw_payload = SignedPayload::new(call, tx_ext)
@@ -1086,13 +1086,13 @@ where
 			.ok()?;
 		let signature = raw_payload.using_encoded(|payload| C::sign(payload, public))?;
 		let (call, tx_ext, _) = raw_payload.deconstruct();
-		let address = <Runtime as frame_system::Config>::Lookup::unlookup(account);
+		let address = <Runtime as pezframe_system::Config>::Lookup::unlookup(account);
 		let transaction = UncheckedExtrinsic::new_signed(call, address, signature, tx_ext);
 		Some(transaction)
 	}
 }
 
-impl<LocalCall> frame_system::offchain::CreateBare<LocalCall> for Runtime
+impl<LocalCall> pezframe_system::offchain::CreateBare<LocalCall> for Runtime
 where
 	RuntimeCall: From<LocalCall>,
 {
@@ -1101,23 +1101,23 @@ where
 	}
 }
 
-impl<LocalCall> frame_system::offchain::CreateAuthorizedTransaction<LocalCall> for Runtime
+impl<LocalCall> pezframe_system::offchain::CreateAuthorizedTransaction<LocalCall> for Runtime
 where
 	RuntimeCall: From<LocalCall>,
 {
 	fn create_extension() -> Self::Extension {
 		(
-			frame_system::AuthorizeCall::<Runtime>::new(),
-			frame_system::CheckNonZeroSender::<Runtime>::new(),
-			frame_system::CheckSpecVersion::<Runtime>::new(),
-			frame_system::CheckTxVersion::<Runtime>::new(),
-			frame_system::CheckGenesis::<Runtime>::new(),
-			frame_system::CheckMortality::<Runtime>::from(generic::Era::Immortal),
-			frame_system::CheckNonce::<Runtime>::from(0),
-			frame_system::CheckWeight::<Runtime>::new(),
-			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
-			frame_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
-			frame_system::WeightReclaim::<Runtime>::new(),
+			pezframe_system::AuthorizeCall::<Runtime>::new(),
+			pezframe_system::CheckNonZeroSender::<Runtime>::new(),
+			pezframe_system::CheckSpecVersion::<Runtime>::new(),
+			pezframe_system::CheckTxVersion::<Runtime>::new(),
+			pezframe_system::CheckGenesis::<Runtime>::new(),
+			pezframe_system::CheckMortality::<Runtime>::from(generic::Era::Immortal),
+			pezframe_system::CheckNonce::<Runtime>::from(0),
+			pezframe_system::CheckWeight::<Runtime>::new(),
+			pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
+			pezframe_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
+			pezframe_system::WeightReclaim::<Runtime>::new(),
 		)
 	}
 }
@@ -1133,7 +1133,7 @@ parameter_types! {
 	pub const MaxRegistrars: u32 = 20;
 }
 
-impl pallet_identity::Config for Runtime {
+impl pezpallet_identity::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type Slashed = ();
@@ -1155,14 +1155,14 @@ impl pallet_identity::Config for Runtime {
 	type MaxUsernameLength = ConstU32<32>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
-	type WeightInfo = weights::pallet_identity::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_identity::WeightInfo<Runtime>;
 }
 
-impl pallet_utility::Config for Runtime {
+impl pezpallet_utility::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
 	type PalletsOrigin = OriginCaller;
-	type WeightInfo = weights::pallet_utility::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_utility::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -1173,15 +1173,15 @@ parameter_types! {
 	pub const MaxSignatories: u32 = 100;
 }
 
-impl pallet_multisig::Config for Runtime {
+impl pezpallet_multisig::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
 	type Currency = Balances;
 	type DepositBase = DepositBase;
 	type DepositFactor = DepositFactor;
 	type MaxSignatories = MaxSignatories;
-	type WeightInfo = weights::pallet_multisig::WeightInfo<Runtime>;
-	type BlockNumberProvider = frame_system::Pallet<Runtime>;
+	type WeightInfo = weights::pezpallet_multisig::WeightInfo<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
 }
 
 parameter_types! {
@@ -1191,7 +1191,7 @@ parameter_types! {
 	pub const RecoveryDeposit: Balance = 500 * CENTS;
 }
 
-impl pallet_recovery::Config for Runtime {
+impl pezpallet_recovery::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type RuntimeCall = RuntimeCall;
@@ -1209,21 +1209,21 @@ parameter_types! {
 		WithdrawReasons::except(WithdrawReasons::TRANSFER | WithdrawReasons::RESERVE);
 }
 
-impl pallet_vesting::Config for Runtime {
+impl pezpallet_vesting::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type BlockNumberToBalance = ConvertInto;
 	type MinVestedTransfer = MinVestedTransfer;
-	type WeightInfo = weights::pallet_vesting::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_vesting::WeightInfo<Runtime>;
 	type UnvestedFundsAllowedWithdrawReasons = UnvestedFundsAllowedWithdrawReasons;
 	type BlockNumberProvider = System;
 	const MAX_VESTING_SCHEDULES: u32 = 28;
 }
 
-impl pallet_sudo::Config for Runtime {
+impl pezpallet_sudo::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
-	type WeightInfo = weights::pallet_sudo::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_sudo::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -1278,9 +1278,9 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::System(..) |
 				RuntimeCall::Babe(..) |
 				RuntimeCall::Timestamp(..) |
-				RuntimeCall::Indices(pallet_indices::Call::claim{..}) |
-				RuntimeCall::Indices(pallet_indices::Call::free{..}) |
-				RuntimeCall::Indices(pallet_indices::Call::freeze{..}) |
+				RuntimeCall::Indices(pezpallet_indices::Call::claim{..}) |
+				RuntimeCall::Indices(pezpallet_indices::Call::free{..}) |
+				RuntimeCall::Indices(pezpallet_indices::Call::freeze{..}) |
 				// Specifically omitting Indices `transfer`, `force_transfer`
 				// Specifically omitting the entire Balances pallet
 				RuntimeCall::Staking(..) |
@@ -1291,15 +1291,15 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::ConvictionVoting(..) |
 				RuntimeCall::Referenda(..) |
 				RuntimeCall::Whitelist(..) |
-				RuntimeCall::Recovery(pallet_recovery::Call::as_recovered{..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::vouch_recovery{..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::claim_recovery{..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::close_recovery{..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::remove_recovery{..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::cancel_recovered{..}) |
+				RuntimeCall::Recovery(pezpallet_recovery::Call::as_recovered{..}) |
+				RuntimeCall::Recovery(pezpallet_recovery::Call::vouch_recovery{..}) |
+				RuntimeCall::Recovery(pezpallet_recovery::Call::claim_recovery{..}) |
+				RuntimeCall::Recovery(pezpallet_recovery::Call::close_recovery{..}) |
+				RuntimeCall::Recovery(pezpallet_recovery::Call::remove_recovery{..}) |
+				RuntimeCall::Recovery(pezpallet_recovery::Call::cancel_recovered{..}) |
 				// Specifically omitting Recovery `create_recovery`, `initiate_recovery`
-				RuntimeCall::Vesting(pallet_vesting::Call::vest{..}) |
-				RuntimeCall::Vesting(pallet_vesting::Call::vest_other{..}) |
+				RuntimeCall::Vesting(pezpallet_vesting::Call::vest{..}) |
+				RuntimeCall::Vesting(pezpallet_vesting::Call::vest_other{..}) |
 				// Specifically omitting Vesting `vested_transfer`, and `force_vested_transfer`
 				RuntimeCall::Scheduler(..) |
 				// Specifically omitting Sudo pallet
@@ -1331,7 +1331,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				matches!(c, RuntimeCall::NominationPools(..) | RuntimeCall::Utility(..))
 			},
 			ProxyType::SudoBalances => match c {
-				RuntimeCall::Sudo(pallet_sudo::Call::sudo { call: ref x }) => {
+				RuntimeCall::Sudo(pezpallet_sudo::Call::sudo { call: ref x }) => {
 					matches!(x.as_ref(), &RuntimeCall::Balances(..))
 				},
 				RuntimeCall::Utility(..) => true,
@@ -1346,11 +1346,11 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			),
 			ProxyType::IdentityJudgement => matches!(
 				c,
-				RuntimeCall::Identity(pallet_identity::Call::provide_judgement { .. }) |
+				RuntimeCall::Identity(pezpallet_identity::Call::provide_judgement { .. }) |
 					RuntimeCall::Utility(..)
 			),
 			ProxyType::CancelProxy => {
-				matches!(c, RuntimeCall::Proxy(pallet_proxy::Call::reject_announcement { .. }))
+				matches!(c, RuntimeCall::Proxy(pezpallet_proxy::Call::reject_announcement { .. }))
 			},
 			ProxyType::Auction => matches!(
 				c,
@@ -1363,10 +1363,10 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				c,
 				RuntimeCall::Registrar(paras_registrar::Call::reserve { .. }) |
 					RuntimeCall::Registrar(paras_registrar::Call::register { .. }) |
-					RuntimeCall::Utility(pallet_utility::Call::batch { .. }) |
-					RuntimeCall::Utility(pallet_utility::Call::batch_all { .. }) |
-					RuntimeCall::Utility(pallet_utility::Call::force_batch { .. }) |
-					RuntimeCall::Proxy(pallet_proxy::Call::remove_proxy { .. })
+					RuntimeCall::Utility(pezpallet_utility::Call::batch { .. }) |
+					RuntimeCall::Utility(pezpallet_utility::Call::batch_all { .. }) |
+					RuntimeCall::Utility(pezpallet_utility::Call::force_batch { .. }) |
+					RuntimeCall::Proxy(pezpallet_proxy::Call::remove_proxy { .. })
 			),
 		}
 	}
@@ -1381,7 +1381,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 	}
 }
 
-impl pallet_proxy::Config for Runtime {
+impl pezpallet_proxy::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
 	type Currency = Balances;
@@ -1389,12 +1389,12 @@ impl pallet_proxy::Config for Runtime {
 	type ProxyDepositBase = ProxyDepositBase;
 	type ProxyDepositFactor = ProxyDepositFactor;
 	type MaxProxies = MaxProxies;
-	type WeightInfo = weights::pallet_proxy::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_proxy::WeightInfo<Runtime>;
 	type MaxPending = MaxPending;
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = AnnouncementDepositBase;
 	type AnnouncementDepositFactor = AnnouncementDepositFactor;
-	type BlockNumberProvider = frame_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
 }
 
 impl teyrchains_origin::Config for Runtime {}
@@ -1477,7 +1477,7 @@ impl ProcessMessage for MessageProcessor {
 	}
 }
 
-impl pallet_message_queue::Config for Runtime {
+impl pezpallet_message_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Size = u32;
 	type HeapSize = MessageQueueHeapSize;
@@ -1488,10 +1488,10 @@ impl pallet_message_queue::Config for Runtime {
 	type MessageProcessor = MessageProcessor;
 	#[cfg(feature = "runtime-benchmarks")]
 	type MessageProcessor =
-		pallet_message_queue::mock_helpers::NoopMessageProcessor<AggregateMessageOrigin>;
+		pezpallet_message_queue::mock_helpers::NoopMessageProcessor<AggregateMessageOrigin>;
 	type QueueChangeHandler = ParaInclusion;
 	type QueuePausedQuery = ();
-	type WeightInfo = weights::pallet_message_queue::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_message_queue::WeightInfo<Runtime>;
 }
 
 impl teyrchains_dmp::Config for Runtime {}
@@ -1547,7 +1547,7 @@ impl coretime::Config for Runtime {
 	type AssetTransactor = crate::xcm_config::LocalAssetTransactor;
 	type AccountToLocation = xcm_builder::AliasesIntoAccountId32<
 		xcm_config::ThisNetwork,
-		<Runtime as frame_system::Config>::AccountId,
+		<Runtime as pezframe_system::Config>::AccountId,
 	>;
 	type MaxXcmTransactWeight = MaxXcmTransactWeight;
 }
@@ -1571,7 +1571,7 @@ impl teyrchains_on_demand::Config for Runtime {
 impl teyrchains_assigner_coretime::Config for Runtime {}
 
 impl teyrchains_initializer::Config for Runtime {
-	type Randomness = pallet_babe::RandomnessFromOneEpochAgo<Runtime>;
+	type Randomness = pezpallet_babe::RandomnessFromOneEpochAgo<Runtime>;
 	type ForceOrigin = EnsureRoot<AccountId>;
 	type WeightInfo = weights::pezkuwi_runtime_teyrchains_initializer::WeightInfo<Runtime>;
 	type CoretimeOnNewSession = Coretime;
@@ -1684,7 +1684,7 @@ impl auctions::Config for Runtime {
 	type Registrar = Registrar;
 	type EndingPeriod = EndingPeriod;
 	type SampleLength = SampleLength;
-	type Randomness = pallet_babe::RandomnessFromOneEpochAgo<Runtime>;
+	type Randomness = pezpallet_babe::RandomnessFromOneEpochAgo<Runtime>;
 	type InitiateOrigin = EitherOf<EnsureRoot<Self::AccountId>, AuctionAdmin>;
 	type WeightInfo = weights::pezkuwi_runtime_common_auctions::WeightInfo<Runtime>;
 }
@@ -1701,20 +1701,20 @@ parameter_types! {
 	pub const MaxPointsToBalance: u8 = 10;
 }
 
-impl pallet_nomination_pools::Config for Runtime {
+impl pezpallet_nomination_pools::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pallet_nomination_pools::WeightInfo<Self>;
+	type WeightInfo = weights::pezpallet_nomination_pools::WeightInfo<Self>;
 	type Currency = Balances;
 	type RuntimeFreezeReason = RuntimeFreezeReason;
 	type RewardCounter = FixedU128;
 	type BalanceToU256 = BalanceToU256;
 	type U256ToBalance = U256ToBalance;
 	type StakeAdapter =
-		pallet_nomination_pools::adapter::DelegateStake<Self, Staking, DelegatedStaking>;
+		pezpallet_nomination_pools::adapter::DelegateStake<Self, Staking, DelegatedStaking>;
 	type PostUnbondingPoolsWindow = ConstU32<4>;
 	type MaxMetadataLen = ConstU32<256>;
 	// we use the same number of allowed unlocking chunks as with staking.
-	type MaxUnbonding = <Self as pallet_staking::Config>::MaxUnlockingChunks;
+	type MaxUnbonding = <Self as pezpallet_staking::Config>::MaxUnlockingChunks;
 	type PalletId = PoolsPalletId;
 	type MaxPointsToBalance = MaxPointsToBalance;
 	type AdminOrigin = EitherOf<EnsureRoot<AccountId>, StakingAdmin>;
@@ -1727,7 +1727,7 @@ parameter_types! {
 	pub const SlashRewardFraction: Perbill = Perbill::from_percent(1);
 }
 
-impl pallet_delegated_staking::Config for Runtime {
+impl pezpallet_delegated_staking::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type PalletId = DelegatedStakingPalletId;
 	type Currency = Balances;
@@ -1737,11 +1737,11 @@ impl pallet_delegated_staking::Config for Runtime {
 	type CoreStaking = Staking;
 }
 
-impl pallet_root_testing::Config for Runtime {
+impl pezpallet_root_testing::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
 
-impl pallet_root_offences::Config for Runtime {
+impl pezpallet_root_offences::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OffenceHandler = StakingAhClient;
 	type ReportOffence = Offences;
@@ -1751,19 +1751,19 @@ parameter_types! {
 	pub MbmServiceWeight: Weight = Perbill::from_percent(80) * BlockWeights::get().max_block;
 }
 
-impl pallet_migrations::Config for Runtime {
+impl pezpallet_migrations::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	#[cfg(not(feature = "runtime-benchmarks"))]
-	type Migrations = pallet_identity::migration::v2::LazyMigrationV1ToV2<Runtime>;
+	type Migrations = pezpallet_identity::migration::v2::LazyMigrationV1ToV2<Runtime>;
 	// Benchmarks need mocked migrations to guarantee that they succeed.
 	#[cfg(feature = "runtime-benchmarks")]
-	type Migrations = pallet_migrations::mock_helpers::MockedMigrations;
+	type Migrations = pezpallet_migrations::mock_helpers::MockedMigrations;
 	type CursorMaxLen = ConstU32<65_536>;
 	type IdentifierMaxLen = ConstU32<256>;
 	type MigrationStatusHandler = ();
-	type FailedMigrationHandler = frame_support::migrations::FreezeChainOnFailedMigration;
+	type FailedMigrationHandler = pezframe_support::migrations::FreezeChainOnFailedMigration;
 	type MaxServiceWeight = MbmServiceWeight;
-	type WeightInfo = weights::pallet_migrations::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_migrations::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -1773,14 +1773,14 @@ parameter_types! {
 	pub const MigrationMaxKeyLen: u32 = 512;
 }
 
-impl pallet_asset_rate::Config for Runtime {
-	type WeightInfo = weights::pallet_asset_rate::WeightInfo<Runtime>;
+impl pezpallet_asset_rate::Config for Runtime {
+	type WeightInfo = weights::pezpallet_asset_rate::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type CreateOrigin = EnsureRoot<AccountId>;
 	type RemoveOrigin = EnsureRoot<AccountId>;
 	type UpdateOrigin = EnsureRoot<AccountId>;
 	type Currency = Balances;
-	type AssetKind = <Runtime as pallet_treasury::Config>::AssetKind;
+	type AssetKind = <Runtime as pezpallet_treasury::Config>::AssetKind;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::AssetRateArguments;
 }
@@ -1794,35 +1794,35 @@ impl OnSwap for SwapLeases {
 }
 
 pub type MetaTxExtension = (
-	pallet_verify_signature::VerifySignature<Runtime>,
-	pallet_meta_tx::MetaTxMarker<Runtime>,
-	frame_system::CheckNonZeroSender<Runtime>,
-	frame_system::CheckSpecVersion<Runtime>,
-	frame_system::CheckTxVersion<Runtime>,
-	frame_system::CheckGenesis<Runtime>,
-	frame_system::CheckMortality<Runtime>,
-	frame_system::CheckNonce<Runtime>,
-	frame_metadata_hash_extension::CheckMetadataHash<Runtime>,
+	pezpallet_verify_signature::VerifySignature<Runtime>,
+	pezpallet_meta_tx::MetaTxMarker<Runtime>,
+	pezframe_system::CheckNonZeroSender<Runtime>,
+	pezframe_system::CheckSpecVersion<Runtime>,
+	pezframe_system::CheckTxVersion<Runtime>,
+	pezframe_system::CheckGenesis<Runtime>,
+	pezframe_system::CheckMortality<Runtime>,
+	pezframe_system::CheckNonce<Runtime>,
+	pezframe_metadata_hash_extension::CheckMetadataHash<Runtime>,
 );
 
-impl pallet_meta_tx::Config for Runtime {
-	type WeightInfo = weights::pallet_meta_tx::WeightInfo<Runtime>;
+impl pezpallet_meta_tx::Config for Runtime {
+	type WeightInfo = weights::pezpallet_meta_tx::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type Extension = MetaTxExtension;
 	#[cfg(feature = "runtime-benchmarks")]
-	type Extension = pallet_meta_tx::WeightlessExtension<Runtime>;
+	type Extension = pezpallet_meta_tx::WeightlessExtension<Runtime>;
 }
 
-impl pallet_verify_signature::Config for Runtime {
+impl pezpallet_verify_signature::Config for Runtime {
 	type Signature = MultiSignature;
 	type AccountIdentifier = MultiSigner;
-	type WeightInfo = weights::pallet_verify_signature::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpallet_verify_signature::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 }
 
-#[frame_support::runtime(legacy_ordering)]
+#[pezframe_support::runtime(legacy_ordering)]
 mod runtime {
 	#[runtime::runtime]
 	#[runtime::derive(
@@ -1840,210 +1840,210 @@ mod runtime {
 	pub struct Runtime;
 
 	// Basic stuff; balances is uncallable initially.
-	#[runtime::pallet_index(0)]
-	pub type System = frame_system;
+	#[runtime::pezpallet_index(0)]
+	pub type System = pezframe_system;
 
 	// Babe must be before session.
-	#[runtime::pallet_index(1)]
-	pub type Babe = pallet_babe;
+	#[runtime::pezpallet_index(1)]
+	pub type Babe = pezpallet_babe;
 
-	#[runtime::pallet_index(2)]
-	pub type Timestamp = pallet_timestamp;
-	#[runtime::pallet_index(3)]
-	pub type Indices = pallet_indices;
-	#[runtime::pallet_index(4)]
-	pub type Balances = pallet_balances;
-	#[runtime::pallet_index(26)]
-	pub type TransactionPayment = pallet_transaction_payment;
+	#[runtime::pezpallet_index(2)]
+	pub type Timestamp = pezpallet_timestamp;
+	#[runtime::pezpallet_index(3)]
+	pub type Indices = pezpallet_indices;
+	#[runtime::pezpallet_index(4)]
+	pub type Balances = pezpallet_balances;
+	#[runtime::pezpallet_index(26)]
+	pub type TransactionPayment = pezpallet_transaction_payment;
 
 	// Consensus support.
 	// Authorship must be before session in order to note author in the correct session and era.
-	#[runtime::pallet_index(5)]
-	pub type Authorship = pallet_authorship;
-	#[runtime::pallet_index(6)]
-	pub type Staking = pallet_staking;
-	#[runtime::pallet_index(7)]
-	pub type Offences = pallet_offences;
-	#[runtime::pallet_index(27)]
+	#[runtime::pezpallet_index(5)]
+	pub type Authorship = pezpallet_authorship;
+	#[runtime::pezpallet_index(6)]
+	pub type Staking = pezpallet_staking;
+	#[runtime::pezpallet_index(7)]
+	pub type Offences = pezpallet_offences;
+	#[runtime::pezpallet_index(27)]
 	pub type Historical = session_historical;
-	#[runtime::pallet_index(70)]
-	pub type Parameters = pallet_parameters;
+	#[runtime::pezpallet_index(70)]
+	pub type Parameters = pezpallet_parameters;
 
-	#[runtime::pallet_index(8)]
-	pub type Session = pallet_session;
-	#[runtime::pallet_index(10)]
-	pub type Grandpa = pallet_grandpa;
-	#[runtime::pallet_index(12)]
-	pub type AuthorityDiscovery = pallet_authority_discovery;
+	#[runtime::pezpallet_index(8)]
+	pub type Session = pezpallet_session;
+	#[runtime::pezpallet_index(10)]
+	pub type Grandpa = pezpallet_grandpa;
+	#[runtime::pezpallet_index(12)]
+	pub type AuthorityDiscovery = pezpallet_authority_discovery;
 
 	// Utility module.
-	#[runtime::pallet_index(16)]
-	pub type Utility = pallet_utility;
+	#[runtime::pezpallet_index(16)]
+	pub type Utility = pezpallet_utility;
 
 	// Less simple identity module.
-	#[runtime::pallet_index(17)]
-	pub type Identity = pallet_identity;
+	#[runtime::pezpallet_index(17)]
+	pub type Identity = pezpallet_identity;
 
 	// Social recovery module.
-	#[runtime::pallet_index(18)]
-	pub type Recovery = pallet_recovery;
+	#[runtime::pezpallet_index(18)]
+	pub type Recovery = pezpallet_recovery;
 
 	// Vesting. Usable initially, but removed once all vesting is finished.
-	#[runtime::pallet_index(19)]
-	pub type Vesting = pallet_vesting;
+	#[runtime::pezpallet_index(19)]
+	pub type Vesting = pezpallet_vesting;
 
 	// System scheduler.
-	#[runtime::pallet_index(20)]
-	pub type Scheduler = pallet_scheduler;
+	#[runtime::pezpallet_index(20)]
+	pub type Scheduler = pezpallet_scheduler;
 
 	// Preimage registrar.
-	#[runtime::pallet_index(28)]
-	pub type Preimage = pallet_preimage;
+	#[runtime::pezpallet_index(28)]
+	pub type Preimage = pezpallet_preimage;
 
 	// Sudo.
-	#[runtime::pallet_index(21)]
-	pub type Sudo = pallet_sudo;
+	#[runtime::pezpallet_index(21)]
+	pub type Sudo = pezpallet_sudo;
 
 	// Proxy module. Late addition.
-	#[runtime::pallet_index(22)]
-	pub type Proxy = pallet_proxy;
+	#[runtime::pezpallet_index(22)]
+	pub type Proxy = pezpallet_proxy;
 
 	// Multisig module. Late addition.
-	#[runtime::pallet_index(23)]
-	pub type Multisig = pallet_multisig;
+	#[runtime::pezpallet_index(23)]
+	pub type Multisig = pezpallet_multisig;
 
 	// Election pallet. Only works with staking, but placed here to maintain indices.
-	#[runtime::pallet_index(24)]
-	pub type ElectionProviderMultiPhase = pallet_election_provider_multi_phase;
+	#[runtime::pezpallet_index(24)]
+	pub type ElectionProviderMultiPhase = pezpallet_election_provider_multi_phase;
 
 	// Provides a semi-sorted list of nominators for staking.
-	#[runtime::pallet_index(25)]
-	pub type VoterList = pallet_bags_list<Instance1>;
+	#[runtime::pezpallet_index(25)]
+	pub type VoterList = pezpallet_bags_list<Instance1>;
 
 	// Nomination pools for staking.
-	#[runtime::pallet_index(29)]
-	pub type NominationPools = pallet_nomination_pools;
+	#[runtime::pezpallet_index(29)]
+	pub type NominationPools = pezpallet_nomination_pools;
 
 	// Fast unstake pallet = extension to staking.
-	#[runtime::pallet_index(30)]
-	pub type FastUnstake = pallet_fast_unstake;
+	#[runtime::pezpallet_index(30)]
+	pub type FastUnstake = pezpallet_fast_unstake;
 
 	// OpenGov
-	#[runtime::pallet_index(31)]
-	pub type ConvictionVoting = pallet_conviction_voting;
-	#[runtime::pallet_index(32)]
-	pub type Referenda = pallet_referenda;
-	#[runtime::pallet_index(35)]
-	pub type Origins = pallet_custom_origins;
-	#[runtime::pallet_index(36)]
-	pub type Whitelist = pallet_whitelist;
+	#[runtime::pezpallet_index(31)]
+	pub type ConvictionVoting = pezpallet_conviction_voting;
+	#[runtime::pezpallet_index(32)]
+	pub type Referenda = pezpallet_referenda;
+	#[runtime::pezpallet_index(35)]
+	pub type Origins = pezpallet_custom_origins;
+	#[runtime::pezpallet_index(36)]
+	pub type Whitelist = pezpallet_whitelist;
 
 	// Treasury
-	#[runtime::pallet_index(37)]
-	pub type Treasury = pallet_treasury;
+	#[runtime::pezpallet_index(37)]
+	pub type Treasury = pezpallet_treasury;
 
 	// Staking extension for delegation
-	#[runtime::pallet_index(38)]
-	pub type DelegatedStaking = pallet_delegated_staking;
+	#[runtime::pezpallet_index(38)]
+	pub type DelegatedStaking = pezpallet_delegated_staking;
 
 	// Teyrchains pallets. Start indices at 40 to leave room.
-	#[runtime::pallet_index(41)]
+	#[runtime::pezpallet_index(41)]
 	pub type TeyrchainsOrigin = teyrchains_origin;
-	#[runtime::pallet_index(42)]
+	#[runtime::pezpallet_index(42)]
 	pub type Configuration = teyrchains_configuration;
-	#[runtime::pallet_index(43)]
+	#[runtime::pezpallet_index(43)]
 	pub type ParasShared = teyrchains_shared;
-	#[runtime::pallet_index(44)]
+	#[runtime::pezpallet_index(44)]
 	pub type ParaInclusion = teyrchains_inclusion;
-	#[runtime::pallet_index(45)]
+	#[runtime::pezpallet_index(45)]
 	pub type ParaInherent = teyrchains_paras_inherent;
-	#[runtime::pallet_index(46)]
+	#[runtime::pezpallet_index(46)]
 	pub type ParaScheduler = teyrchains_scheduler;
-	#[runtime::pallet_index(47)]
+	#[runtime::pezpallet_index(47)]
 	pub type Paras = teyrchains_paras;
-	#[runtime::pallet_index(48)]
+	#[runtime::pezpallet_index(48)]
 	pub type Initializer = teyrchains_initializer;
-	#[runtime::pallet_index(49)]
+	#[runtime::pezpallet_index(49)]
 	pub type Dmp = teyrchains_dmp;
 	// RIP Ump 50
-	#[runtime::pallet_index(51)]
+	#[runtime::pezpallet_index(51)]
 	pub type Hrmp = teyrchains_hrmp;
-	#[runtime::pallet_index(52)]
+	#[runtime::pezpallet_index(52)]
 	pub type ParaSessionInfo = teyrchains_session_info;
-	#[runtime::pallet_index(53)]
+	#[runtime::pezpallet_index(53)]
 	pub type ParasDisputes = teyrchains_disputes;
-	#[runtime::pallet_index(54)]
+	#[runtime::pezpallet_index(54)]
 	pub type ParasSlashing = teyrchains_slashing;
-	#[runtime::pallet_index(56)]
+	#[runtime::pezpallet_index(56)]
 	pub type OnDemandAssignmentProvider = teyrchains_on_demand;
-	#[runtime::pallet_index(57)]
+	#[runtime::pezpallet_index(57)]
 	pub type CoretimeAssignmentProvider = teyrchains_assigner_coretime;
 
 	// Teyrchain Onboarding Pallets. Start indices at 60 to leave room.
-	#[runtime::pallet_index(60)]
+	#[runtime::pezpallet_index(60)]
 	pub type Registrar = paras_registrar;
-	#[runtime::pallet_index(61)]
+	#[runtime::pezpallet_index(61)]
 	pub type Slots = slots;
-	#[runtime::pallet_index(62)]
+	#[runtime::pezpallet_index(62)]
 	pub type ParasSudoWrapper = paras_sudo_wrapper;
-	#[runtime::pallet_index(63)]
+	#[runtime::pezpallet_index(63)]
 	pub type Auctions = auctions;
-	#[runtime::pallet_index(64)]
+	#[runtime::pezpallet_index(64)]
 	pub type Crowdloan = crowdloan;
-	#[runtime::pallet_index(65)]
+	#[runtime::pezpallet_index(65)]
 	pub type AssignedSlots = assigned_slots;
-	#[runtime::pallet_index(66)]
+	#[runtime::pezpallet_index(66)]
 	pub type Coretime = coretime;
-	#[runtime::pallet_index(67)]
-	pub type StakingAhClient = pallet_staking_async_ah_client;
+	#[runtime::pezpallet_index(67)]
+	pub type StakingAhClient = pezpallet_staking_async_ah_client;
 
 	// Migrations pallet
-	#[runtime::pallet_index(98)]
-	pub type MultiBlockMigrations = pallet_migrations;
+	#[runtime::pezpallet_index(98)]
+	pub type MultiBlockMigrations = pezpallet_migrations;
 
 	// Pallet for sending XCM.
-	#[runtime::pallet_index(99)]
-	pub type XcmPallet = pallet_xcm;
+	#[runtime::pezpallet_index(99)]
+	pub type XcmPallet = pezpallet_xcm;
 
 	// Generalized message queue
-	#[runtime::pallet_index(100)]
-	pub type MessageQueue = pallet_message_queue;
+	#[runtime::pezpallet_index(100)]
+	pub type MessageQueue = pezpallet_message_queue;
 
 	// Asset rate.
-	#[runtime::pallet_index(101)]
-	pub type AssetRate = pallet_asset_rate;
+	#[runtime::pezpallet_index(101)]
+	pub type AssetRate = pezpallet_asset_rate;
 
 	// Root testing pallet.
-	#[runtime::pallet_index(102)]
-	pub type RootTesting = pallet_root_testing;
+	#[runtime::pezpallet_index(102)]
+	pub type RootTesting = pezpallet_root_testing;
 
-	#[runtime::pallet_index(103)]
-	pub type MetaTx = pallet_meta_tx::Pallet<Runtime>;
+	#[runtime::pezpallet_index(103)]
+	pub type MetaTx = pezpallet_meta_tx::Pallet<Runtime>;
 
-	#[runtime::pallet_index(104)]
-	pub type VerifySignature = pallet_verify_signature::Pallet<Runtime>;
+	#[runtime::pezpallet_index(104)]
+	pub type VerifySignature = pezpallet_verify_signature::Pallet<Runtime>;
 
 	// Root offences pallet
-	#[runtime::pallet_index(105)]
-	pub type RootOffences = pallet_root_offences;
+	#[runtime::pezpallet_index(105)]
+	pub type RootOffences = pezpallet_root_offences;
 
 	// BEEFY Bridges support.
-	#[runtime::pallet_index(200)]
-	pub type Beefy = pallet_beefy;
+	#[runtime::pezpallet_index(200)]
+	pub type Beefy = pezpallet_beefy;
 	// MMR leaf construction must be after session in order to have a leaf's next_auth_set
 	// refer to block<N>. See issue pezkuwi-fellows/runtimes#160 for details.
-	#[runtime::pallet_index(201)]
-	pub type Mmr = pallet_mmr;
-	#[runtime::pallet_index(202)]
-	pub type BeefyMmrLeaf = pallet_beefy_mmr;
+	#[runtime::pezpallet_index(201)]
+	pub type Mmr = pezpallet_mmr;
+	#[runtime::pezpallet_index(202)]
+	pub type BeefyMmrLeaf = pezpallet_beefy_mmr;
 
 	// Pallet for migrating Identity to a teyrchain. To be removed post-migration.
-	#[runtime::pallet_index(248)]
+	#[runtime::pezpallet_index(248)]
 	pub type IdentityMigrator = identity_migrator;
 }
 
 /// The address format for describing accounts.
-pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
+pub type Address = pezsp_runtime::MultiAddress<AccountId, ()>;
 /// Block header type as expected by this runtime.
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type as expected by this runtime.
@@ -2054,17 +2054,17 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 /// The extension to the basic transaction logic.
 pub type TxExtension = (
-	frame_system::AuthorizeCall<Runtime>,
-	frame_system::CheckNonZeroSender<Runtime>,
-	frame_system::CheckSpecVersion<Runtime>,
-	frame_system::CheckTxVersion<Runtime>,
-	frame_system::CheckGenesis<Runtime>,
-	frame_system::CheckMortality<Runtime>,
-	frame_system::CheckNonce<Runtime>,
-	frame_system::CheckWeight<Runtime>,
-	pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
-	frame_metadata_hash_extension::CheckMetadataHash<Runtime>,
-	frame_system::WeightReclaim<Runtime>,
+	pezframe_system::AuthorizeCall<Runtime>,
+	pezframe_system::CheckNonZeroSender<Runtime>,
+	pezframe_system::CheckSpecVersion<Runtime>,
+	pezframe_system::CheckTxVersion<Runtime>,
+	pezframe_system::CheckGenesis<Runtime>,
+	pezframe_system::CheckMortality<Runtime>,
+	pezframe_system::CheckNonce<Runtime>,
+	pezframe_system::CheckWeight<Runtime>,
+	pezpallet_transaction_payment::ChargeTransactionPayment<Runtime>,
+	pezframe_metadata_hash_extension::CheckMetadataHash<Runtime>,
+	pezframe_system::WeightReclaim<Runtime>,
 );
 
 parameter_types! {
@@ -2086,19 +2086,19 @@ pub mod migrations {
 	/// Unreleased migrations. Add new ones here:
 	pub type Unreleased = (
 		// This is only needed for Zagros.
-		pallet_delegated_staking::migration::unversioned::ProxyDelegatorMigration<
+		pezpallet_delegated_staking::migration::unversioned::ProxyDelegatorMigration<
 			Runtime,
 			MaxAgentsToMigrate,
 		>,
 		teyrchains_shared::migration::MigrateToV1<Runtime>,
 		teyrchains_scheduler::migration::MigrateV2ToV3<Runtime>,
-		pallet_staking::migrations::v16::MigrateV15ToV16<Runtime>,
-		pallet_session::migrations::v1::MigrateV0ToV1<
+		pezpallet_staking::migrations::v16::MigrateV15ToV16<Runtime>,
+		pezpallet_session::migrations::v1::MigrateV0ToV1<
 			Runtime,
-			pallet_staking::migrations::v17::MigrateDisabledToSession<Runtime>,
+			pezpallet_staking::migrations::v17::MigrateDisabledToSession<Runtime>,
 		>,
 		// permanent
-		pallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
+		pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
 	);
 }
 
@@ -2110,10 +2110,10 @@ pub type UncheckedSignaturePayload =
 	generic::UncheckedSignaturePayload<Address, Signature, TxExtension>;
 
 /// Executive: handles dispatch to the various modules.
-pub type Executive = frame_executive::Executive<
+pub type Executive = pezframe_executive::Executive<
 	Runtime,
 	Block,
-	frame_system::ChainContext<Runtime>,
+	pezframe_system::ChainContext<Runtime>,
 	Runtime,
 	AllPalletsWithSystem,
 >;
@@ -2122,7 +2122,7 @@ pub type SignedPayload = generic::SignedPayload<RuntimeCall, TxExtension>;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benches {
-	frame_benchmarking::define_benchmarks!(
+	pezframe_benchmarking::define_benchmarks!(
 		// Pezkuwi
 		// NOTE: Make sure to prefix these with `runtime_common::` so
 		// the that path resolves correctly in the generated file.
@@ -2142,52 +2142,52 @@ mod benches {
 		[pezkuwi_runtime_teyrchains::paras_inherent, ParaInherent]
 		[pezkuwi_runtime_teyrchains::on_demand, OnDemandAssignmentProvider]
 		[pezkuwi_runtime_teyrchains::coretime, Coretime]
-		// Substrate
-		[pallet_bags_list, VoterList]
-		[pallet_balances, Balances]
-		[pallet_beefy_mmr, BeefyMmrLeaf]
-		[pallet_conviction_voting, ConvictionVoting]
-		[pallet_election_provider_multi_phase, ElectionProviderMultiPhase]
-		[frame_election_provider_support, ElectionProviderBench::<Runtime>]
-		[pallet_fast_unstake, FastUnstake]
-		[pallet_identity, Identity]
-		[pallet_indices, Indices]
-		[pallet_message_queue, MessageQueue]
-		[pallet_migrations, MultiBlockMigrations]
-		[pallet_mmr, Mmr]
-		[pallet_multisig, Multisig]
-		[pallet_nomination_pools, NominationPoolsBench::<Runtime>]
-		[pallet_offences, OffencesBench::<Runtime>]
-		[pallet_parameters, Parameters]
-		[pallet_preimage, Preimage]
-		[pallet_proxy, Proxy]
-		[pallet_recovery, Recovery]
-		[pallet_referenda, Referenda]
-		[pallet_scheduler, Scheduler]
-		[pallet_session, SessionBench::<Runtime>]
-		[pallet_staking, Staking]
-		[pallet_sudo, Sudo]
-		[frame_system, SystemBench::<Runtime>]
-		[frame_system_extensions, SystemExtensionsBench::<Runtime>]
-		[pallet_timestamp, Timestamp]
-		[pallet_transaction_payment, TransactionPayment]
-		[pallet_treasury, Treasury]
-		[pallet_utility, Utility]
-		[pallet_vesting, Vesting]
-		[pallet_whitelist, Whitelist]
-		[pallet_asset_rate, AssetRate]
-		[pallet_meta_tx, MetaTx]
-		[pallet_verify_signature, VerifySignature]
+		// Bizinikiwi
+		[pezpallet_bags_list, VoterList]
+		[pezpallet_balances, Balances]
+		[pezpallet_beefy_mmr, BeefyMmrLeaf]
+		[pezpallet_conviction_voting, ConvictionVoting]
+		[pezpallet_election_provider_multi_phase, ElectionProviderMultiPhase]
+		[pezframe_election_provider_support, ElectionProviderBench::<Runtime>]
+		[pezpallet_fast_unstake, FastUnstake]
+		[pezpallet_identity, Identity]
+		[pezpallet_indices, Indices]
+		[pezpallet_message_queue, MessageQueue]
+		[pezpallet_migrations, MultiBlockMigrations]
+		[pezpallet_mmr, Mmr]
+		[pezpallet_multisig, Multisig]
+		[pezpallet_nomination_pools, NominationPoolsBench::<Runtime>]
+		[pezpallet_offences, OffencesBench::<Runtime>]
+		[pezpallet_parameters, Parameters]
+		[pezpallet_preimage, Preimage]
+		[pezpallet_proxy, Proxy]
+		[pezpallet_recovery, Recovery]
+		[pezpallet_referenda, Referenda]
+		[pezpallet_scheduler, Scheduler]
+		[pezpallet_session, SessionBench::<Runtime>]
+		[pezpallet_staking, Staking]
+		[pezpallet_sudo, Sudo]
+		[pezframe_system, SystemBench::<Runtime>]
+		[pezframe_system_extensions, SystemExtensionsBench::<Runtime>]
+		[pezpallet_timestamp, Timestamp]
+		[pezpallet_transaction_payment, TransactionPayment]
+		[pezpallet_treasury, Treasury]
+		[pezpallet_utility, Utility]
+		[pezpallet_vesting, Vesting]
+		[pezpallet_whitelist, Whitelist]
+		[pezpallet_asset_rate, AssetRate]
+		[pezpallet_meta_tx, MetaTx]
+		[pezpallet_verify_signature, VerifySignature]
 		// XCM
-		[pallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
+		[pezpallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		// NOTE: Make sure you point to the individual modules below.
-		[pallet_xcm_benchmarks::fungible, XcmBalances]
-		[pallet_xcm_benchmarks::generic, XcmGeneric]
+		[pezpallet_xcm_benchmarks::fungible, XcmBalances]
+		[pezpallet_xcm_benchmarks::generic, XcmGeneric]
 	);
 }
 
-sp_api::impl_runtime_apis! {
-	impl sp_api::Core<Block> for Runtime {
+pezsp_api::impl_runtime_apis! {
+	impl pezsp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
 		}
@@ -2196,12 +2196,12 @@ sp_api::impl_runtime_apis! {
 			Executive::execute_block(block);
 		}
 
-		fn initialize_block(header: &<Block as BlockT>::Header) -> sp_runtime::ExtrinsicInclusionMode {
+		fn initialize_block(header: &<Block as BlockT>::Header) -> pezsp_runtime::ExtrinsicInclusionMode {
 			Executive::initialize_block(header)
 		}
 	}
 
-	impl sp_api::Metadata<Block> for Runtime {
+	impl pezsp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			OpaqueMetadata::new(Runtime::metadata().into())
 		}
@@ -2215,13 +2215,13 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl frame_support::view_functions::runtime_api::RuntimeViewFunction<Block> for Runtime {
-		fn execute_view_function(id: frame_support::view_functions::ViewFunctionId, input: Vec<u8>) -> Result<Vec<u8>, frame_support::view_functions::ViewFunctionDispatchError> {
+	impl pezframe_support::view_functions::runtime_api::RuntimeViewFunction<Block> for Runtime {
+		fn execute_view_function(id: pezframe_support::view_functions::ViewFunctionId, input: Vec<u8>) -> Result<Vec<u8>, pezframe_support::view_functions::ViewFunctionDispatchError> {
 			Runtime::execute_view_function(id, input)
 		}
 	}
 
-	impl sp_block_builder::BlockBuilder<Block> for Runtime {
+	impl pezsp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
 		}
@@ -2230,19 +2230,19 @@ sp_api::impl_runtime_apis! {
 			Executive::finalize_block()
 		}
 
-		fn inherent_extrinsics(data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+		fn inherent_extrinsics(data: pezsp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
 			data.create_extrinsics()
 		}
 
 		fn check_inherents(
 			block: <Block as BlockT>::LazyBlock,
-			data: sp_inherents::InherentData,
-		) -> sp_inherents::CheckInherentsResult {
+			data: pezsp_inherents::InherentData,
+		) -> pezsp_inherents::CheckInherentsResult {
 			data.check_extrinsics(&block)
 		}
 	}
 
-	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
+	impl pezsp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(
 			source: TransactionSource,
 			tx: <Block as BlockT>::Extrinsic,
@@ -2252,7 +2252,7 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
+	impl pezsp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(header: &<Block as BlockT>::Header) {
 			Executive::offchain_worker(header)
 		}
@@ -2448,22 +2448,22 @@ sp_api::impl_runtime_apis! {
 	}
 
 	#[api_version(6)]
-	impl sp_consensus_beefy::BeefyApi<Block, BeefyId> for Runtime {
+	impl pezsp_consensus_beefy::BeefyApi<Block, BeefyId> for Runtime {
 		fn beefy_genesis() -> Option<BlockNumber> {
-			pallet_beefy::GenesisBlock::<Runtime>::get()
+			pezpallet_beefy::GenesisBlock::<Runtime>::get()
 		}
 
-		fn validator_set() -> Option<sp_consensus_beefy::ValidatorSet<BeefyId>> {
+		fn validator_set() -> Option<pezsp_consensus_beefy::ValidatorSet<BeefyId>> {
 			Beefy::validator_set()
 		}
 
 		fn submit_report_double_voting_unsigned_extrinsic(
-			equivocation_proof: sp_consensus_beefy::DoubleVotingProof<
+			equivocation_proof: pezsp_consensus_beefy::DoubleVotingProof<
 				BlockNumber,
 				BeefyId,
 				BeefySignature,
 			>,
-			key_owner_proof: sp_consensus_beefy::OpaqueKeyOwnershipProof,
+			key_owner_proof: pezsp_consensus_beefy::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			let key_owner_proof = key_owner_proof.decode()?;
 
@@ -2475,12 +2475,12 @@ sp_api::impl_runtime_apis! {
 
 		fn submit_report_fork_voting_unsigned_extrinsic(
 			equivocation_proof:
-				sp_consensus_beefy::ForkVotingProof<
+				pezsp_consensus_beefy::ForkVotingProof<
 					<Block as BlockT>::Header,
 					BeefyId,
-					sp_runtime::OpaqueValue
+					pezsp_runtime::OpaqueValue
 				>,
-			key_owner_proof: sp_consensus_beefy::OpaqueKeyOwnershipProof,
+			key_owner_proof: pezsp_consensus_beefy::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			Beefy::submit_unsigned_fork_voting_report(
 				equivocation_proof.try_into()?,
@@ -2489,8 +2489,8 @@ sp_api::impl_runtime_apis! {
 		}
 
 		fn submit_report_future_block_voting_unsigned_extrinsic(
-			equivocation_proof: sp_consensus_beefy::FutureBlockVotingProof<BlockNumber, BeefyId>,
-			key_owner_proof: sp_consensus_beefy::OpaqueKeyOwnershipProof,
+			equivocation_proof: pezsp_consensus_beefy::FutureBlockVotingProof<BlockNumber, BeefyId>,
+			key_owner_proof: pezsp_consensus_beefy::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			Beefy::submit_unsigned_future_block_voting_report(
 				equivocation_proof,
@@ -2499,25 +2499,25 @@ sp_api::impl_runtime_apis! {
 		}
 
 		fn generate_key_ownership_proof(
-			_set_id: sp_consensus_beefy::ValidatorSetId,
+			_set_id: pezsp_consensus_beefy::ValidatorSetId,
 			authority_id: BeefyId,
-		) -> Option<sp_consensus_beefy::OpaqueKeyOwnershipProof> {
+		) -> Option<pezsp_consensus_beefy::OpaqueKeyOwnershipProof> {
 			use codec::Encode;
 
-			Historical::prove((sp_consensus_beefy::KEY_TYPE, authority_id))
+			Historical::prove((pezsp_consensus_beefy::KEY_TYPE, authority_id))
 				.map(|p| p.encode())
-				.map(sp_consensus_beefy::OpaqueKeyOwnershipProof::new)
+				.map(pezsp_consensus_beefy::OpaqueKeyOwnershipProof::new)
 		}
 	}
 
 	#[api_version(3)]
 	impl mmr::MmrApi<Block, Hash, BlockNumber> for Runtime {
 		fn mmr_root() -> Result<mmr::Hash, mmr::Error> {
-			Ok(pallet_mmr::RootHash::<Runtime>::get())
+			Ok(pezpallet_mmr::RootHash::<Runtime>::get())
 		}
 
 		fn mmr_leaf_count() -> Result<mmr::LeafIndex, mmr::Error> {
-			Ok(pallet_mmr::NumberOfLeaves::<Runtime>::get())
+			Ok(pezpallet_mmr::NumberOfLeaves::<Runtime>::get())
 		}
 
 		fn generate_proof(
@@ -2560,16 +2560,16 @@ sp_api::impl_runtime_apis! {
 			proof: mmr::LeafProof<mmr::Hash>
 		) -> Result<(), mmr::Error> {
 			let nodes = leaves.into_iter().map(|leaf|mmr::DataOrHash::Data(leaf.into_opaque_leaf())).collect();
-			pallet_mmr::verify_leaves_proof::<mmr::Hashing, _>(root, nodes, proof)
+			pezpallet_mmr::verify_leaves_proof::<mmr::Hashing, _>(root, nodes, proof)
 		}
 	}
 
-	impl pallet_beefy_mmr::BeefyMmrApi<Block, Hash> for RuntimeApi {
-		fn authority_set_proof() -> sp_consensus_beefy::mmr::BeefyAuthoritySet<Hash> {
+	impl pezpallet_beefy_mmr::BeefyMmrApi<Block, Hash> for RuntimeApi {
+		fn authority_set_proof() -> pezsp_consensus_beefy::mmr::BeefyAuthoritySet<Hash> {
 			BeefyMmrLeaf::authority_set_proof()
 		}
 
-		fn next_authority_set_proof() -> sp_consensus_beefy::mmr::BeefyNextAuthoritySet<Hash> {
+		fn next_authority_set_proof() -> pezsp_consensus_beefy::mmr::BeefyNextAuthoritySet<Hash> {
 			BeefyMmrLeaf::next_authority_set_proof()
 		}
 	}
@@ -2580,13 +2580,13 @@ sp_api::impl_runtime_apis! {
 		}
 
 		fn current_set_id() -> fg_primitives::SetId {
-			pallet_grandpa::CurrentSetId::<Runtime>::get()
+			pezpallet_grandpa::CurrentSetId::<Runtime>::get()
 		}
 
 		fn submit_report_equivocation_unsigned_extrinsic(
 			equivocation_proof: fg_primitives::EquivocationProof<
 				<Block as BlockT>::Hash,
-				sp_runtime::traits::NumberFor<Block>,
+				pezsp_runtime::traits::NumberFor<Block>,
 			>,
 			key_owner_proof: fg_primitives::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
@@ -2610,10 +2610,10 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_consensus_babe::BabeApi<Block> for Runtime {
-		fn configuration() -> sp_consensus_babe::BabeConfiguration {
+	impl pezsp_consensus_babe::BabeApi<Block> for Runtime {
+		fn configuration() -> pezsp_consensus_babe::BabeConfiguration {
 			let epoch_config = Babe::epoch_config().unwrap_or(BABE_GENESIS_EPOCH_CONFIG);
-			sp_consensus_babe::BabeConfiguration {
+			pezsp_consensus_babe::BabeConfiguration {
 				slot_duration: Babe::slot_duration(),
 				epoch_length: EpochDuration::get(),
 				c: epoch_config.c,
@@ -2623,32 +2623,32 @@ sp_api::impl_runtime_apis! {
 			}
 		}
 
-		fn current_epoch_start() -> sp_consensus_babe::Slot {
+		fn current_epoch_start() -> pezsp_consensus_babe::Slot {
 			Babe::current_epoch_start()
 		}
 
-		fn current_epoch() -> sp_consensus_babe::Epoch {
+		fn current_epoch() -> pezsp_consensus_babe::Epoch {
 			Babe::current_epoch()
 		}
 
-		fn next_epoch() -> sp_consensus_babe::Epoch {
+		fn next_epoch() -> pezsp_consensus_babe::Epoch {
 			Babe::next_epoch()
 		}
 
 		fn generate_key_ownership_proof(
-			_slot: sp_consensus_babe::Slot,
-			authority_id: sp_consensus_babe::AuthorityId,
-		) -> Option<sp_consensus_babe::OpaqueKeyOwnershipProof> {
+			_slot: pezsp_consensus_babe::Slot,
+			authority_id: pezsp_consensus_babe::AuthorityId,
+		) -> Option<pezsp_consensus_babe::OpaqueKeyOwnershipProof> {
 			use codec::Encode;
 
-			Historical::prove((sp_consensus_babe::KEY_TYPE, authority_id))
+			Historical::prove((pezsp_consensus_babe::KEY_TYPE, authority_id))
 				.map(|p| p.encode())
-				.map(sp_consensus_babe::OpaqueKeyOwnershipProof::new)
+				.map(pezsp_consensus_babe::OpaqueKeyOwnershipProof::new)
 		}
 
 		fn submit_report_equivocation_unsigned_extrinsic(
-			equivocation_proof: sp_consensus_babe::EquivocationProof<<Block as BlockT>::Header>,
-			key_owner_proof: sp_consensus_babe::OpaqueKeyOwnershipProof,
+			equivocation_proof: pezsp_consensus_babe::EquivocationProof<<Block as BlockT>::Header>,
+			key_owner_proof: pezsp_consensus_babe::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			let key_owner_proof = key_owner_proof.decode()?;
 
@@ -2659,31 +2659,31 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_authority_discovery::AuthorityDiscoveryApi<Block> for Runtime {
+	impl pezsp_authority_discovery::AuthorityDiscoveryApi<Block> for Runtime {
 		fn authorities() -> Vec<AuthorityDiscoveryId> {
 			teyrchains_runtime_api_impl::relevant_authority_ids::<Runtime>()
 		}
 	}
 
-	impl sp_session::SessionKeys<Block> for Runtime {
+	impl pezsp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			SessionKeys::generate(seed)
 		}
 
 		fn decode_session_keys(
 			encoded: Vec<u8>,
-		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
+		) -> Option<Vec<(Vec<u8>, pezsp_core::crypto::KeyTypeId)>> {
 			SessionKeys::decode_into_raw_public_keys(&encoded)
 		}
 	}
 
-	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
+	impl pezframe_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
 		fn account_nonce(account: AccountId) -> Nonce {
 			System::account_nonce(account)
 		}
 	}
 
-	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<
+	impl pezpallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<
 		Block,
 		Balance,
 	> for Runtime {
@@ -2701,7 +2701,7 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentCallApi<Block, Balance, RuntimeCall>
+	impl pezpallet_transaction_payment_rpc_runtime_api::TransactionPaymentCallApi<Block, Balance, RuntimeCall>
 		for Runtime
 	{
 		fn query_call_info(call: RuntimeCall, len: u32) -> RuntimeDispatchInfo<Balance> {
@@ -2761,7 +2761,7 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl pallet_nomination_pools_runtime_api::NominationPoolsApi<
+	impl pezpallet_nomination_pools_runtime_api::NominationPoolsApi<
 		Block,
 		AccountId,
 		Balance,
@@ -2807,23 +2807,23 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl pallet_staking_runtime_api::StakingApi<Block, Balance, AccountId> for Runtime {
+	impl pezpallet_staking_runtime_api::StakingApi<Block, Balance, AccountId> for Runtime {
 		fn nominations_quota(balance: Balance) -> u32 {
 			Staking::api_nominations_quota(balance)
 		}
 
-		fn eras_stakers_page_count(era: sp_staking::EraIndex, account: AccountId) -> sp_staking::Page {
+		fn eras_stakers_page_count(era: pezsp_staking::EraIndex, account: AccountId) -> pezsp_staking::Page {
 			Staking::api_eras_stakers_page_count(era, account)
 		}
 
-		fn pending_rewards(era: sp_staking::EraIndex, account: AccountId) -> bool {
+		fn pending_rewards(era: pezsp_staking::EraIndex, account: AccountId) -> bool {
 			Staking::api_pending_rewards(era, account)
 		}
 	}
 
 	#[cfg(feature = "try-runtime")]
-	impl frame_try_runtime::TryRuntime<Block> for Runtime {
-		fn on_runtime_upgrade(checks: frame_try_runtime::UpgradeCheckSelect) -> (Weight, Weight) {
+	impl pezframe_try_runtime::TryRuntime<Block> for Runtime {
+		fn on_runtime_upgrade(checks: pezframe_try_runtime::UpgradeCheckSelect) -> (Weight, Weight) {
 			log::info!("try-runtime::on_runtime_upgrade zagros.");
 		  // TODO:: remove once https://github.com/pezkuwichain/pezkuwi-sdk/issues/159 is resolved.
 			let excluded_pallets = vec![
@@ -2832,8 +2832,8 @@ sp_api::impl_runtime_apis! {
 				b"FastUnstake".to_vec(),      // deprecated
 				b"DelegatedStaking".to_vec(), // moved to AH
 			];
-			let config = frame_executive::TryRuntimeUpgradeConfig::new(checks)
-				.with_try_state_select(frame_try_runtime::TryStateSelect::AllExcept(
+			let config = pezframe_executive::TryRuntimeUpgradeConfig::new(checks)
+				.with_try_state_select(pezframe_try_runtime::TryStateSelect::AllExcept(
 					excluded_pallets,
 				));
 			let weight = Executive::try_runtime_upgrade_with_config(config).unwrap();
@@ -2844,7 +2844,7 @@ sp_api::impl_runtime_apis! {
 			block: <Block as BlockT>::LazyBlock,
 			state_root_check: bool,
 			signature_check: bool,
-			select: frame_try_runtime::TryStateSelect,
+			select: pezframe_try_runtime::TryStateSelect,
 		) -> Weight {
 			// NOTE: intentional unwrap: we don't want to propagate the error backwards, and want to
 			// have a backtrace here.
@@ -2853,24 +2853,24 @@ sp_api::impl_runtime_apis! {
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]
-	impl frame_benchmarking::Benchmark<Block> for Runtime {
+	impl pezframe_benchmarking::Benchmark<Block> for Runtime {
 		fn benchmark_metadata(extra: bool) -> (
-			Vec<frame_benchmarking::BenchmarkList>,
-			Vec<frame_support::traits::StorageInfo>,
+			Vec<pezframe_benchmarking::BenchmarkList>,
+			Vec<pezframe_support::traits::StorageInfo>,
 		) {
-			use frame_benchmarking::BenchmarkList;
-			use frame_support::traits::StorageInfoTrait;
+			use pezframe_benchmarking::BenchmarkList;
+			use pezframe_support::traits::StorageInfoTrait;
 
-			use pallet_session_benchmarking::Pallet as SessionBench;
-			use pallet_offences_benchmarking::Pallet as OffencesBench;
-			use pallet_election_provider_support_benchmarking::Pallet as ElectionProviderBench;
-			use pallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
-			use frame_system_benchmarking::Pallet as SystemBench;
-			use frame_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
+			use pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezpallet_offences_benchmarking::Pallet as OffencesBench;
+			use pezpallet_election_provider_support_benchmarking::Pallet as ElectionProviderBench;
+			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezframe_system_benchmarking::Pallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezpallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
 
-			type XcmBalances = pallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -2881,27 +2881,27 @@ sp_api::impl_runtime_apis! {
 
 		#[allow(non_local_definitions)]
 		fn dispatch_benchmark(
-			config: frame_benchmarking::BenchmarkConfig,
+			config: pezframe_benchmarking::BenchmarkConfig,
 		) -> Result<
-			Vec<frame_benchmarking::BenchmarkBatch>,
+			Vec<pezframe_benchmarking::BenchmarkBatch>,
 			alloc::string::String,
 		> {
-			use frame_support::traits::WhitelistedStorageKeys;
-			use frame_benchmarking::{BenchmarkBatch, BenchmarkError};
-			use sp_storage::TrackedStorageKey;
+			use pezframe_support::traits::WhitelistedStorageKeys;
+			use pezframe_benchmarking::{BenchmarkBatch, BenchmarkError};
+			use pezsp_storage::TrackedStorageKey;
 			// Trying to add benchmarks directly to some pallets caused cyclic dependency issues.
 			// To get around that, we separated the benchmarks into its own crate.
-			use pallet_session_benchmarking::Pallet as SessionBench;
-			use pallet_offences_benchmarking::Pallet as OffencesBench;
-			use pallet_election_provider_support_benchmarking::Pallet as ElectionProviderBench;
-			use pallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
-			use frame_system_benchmarking::Pallet as SystemBench;
-			use frame_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
+			use pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezpallet_offences_benchmarking::Pallet as OffencesBench;
+			use pezpallet_election_provider_support_benchmarking::Pallet as ElectionProviderBench;
+			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezframe_system_benchmarking::Pallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezpallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
 
-			impl pallet_session_benchmarking::Config for Runtime {}
-			impl pallet_offences_benchmarking::Config for Runtime {}
-			impl pallet_election_provider_support_benchmarking::Config for Runtime {}
+			impl pezpallet_session_benchmarking::Config for Runtime {}
+			impl pezpallet_offences_benchmarking::Config for Runtime {}
+			impl pezpallet_election_provider_support_benchmarking::Config for Runtime {}
 
 			use xcm_config::{AssetHub, TokenLocation};
 
@@ -2916,7 +2916,7 @@ sp_api::impl_runtime_apis! {
 				pub const RandomParaId: ParaId = ParaId::new(43211234);
 			}
 
-			impl pallet_xcm::benchmarking::Config for Runtime {
+			impl pezpallet_xcm::benchmarking::Config for Runtime {
 				type DeliveryHelper = (
 					pezkuwi_runtime_common::xcm_sender::ToTeyrchainDeliveryHelper<
 						xcm_config::XcmConfig,
@@ -2959,7 +2959,7 @@ sp_api::impl_runtime_apis! {
 					// Relay/native token can be teleported to/from AH.
 					let native_location = Here.into();
 					let dest = crate::xcm_config::AssetHub::get();
-					pallet_xcm::benchmarking::helpers::native_teleport_as_asset_transfer::<Runtime>(
+					pezpallet_xcm::benchmarking::helpers::native_teleport_as_asset_transfer::<Runtime>(
 						native_location,
 						dest
 					)
@@ -2972,8 +2972,8 @@ sp_api::impl_runtime_apis! {
 					}
 				}
 			}
-			impl frame_system_benchmarking::Config for Runtime {}
-			impl pallet_nomination_pools_benchmarking::Config for Runtime {}
+			impl pezframe_system_benchmarking::Config for Runtime {}
+			impl pezpallet_nomination_pools_benchmarking::Config for Runtime {}
 			impl pezkuwi_runtime_teyrchains::disputes::slashing::benchmarking::Config for Runtime {}
 
 			use xcm::latest::{
@@ -2981,7 +2981,7 @@ sp_api::impl_runtime_apis! {
 				Asset, Assets, Location, NetworkId, Response,
 			};
 
-			impl pallet_xcm_benchmarks::Config for Runtime {
+			impl pezpallet_xcm_benchmarks::Config for Runtime {
 				type XcmConfig = xcm_config::XcmConfig;
 				type AccountIdConverter = xcm_config::LocationConverter;
 				type DeliveryHelper = pezkuwi_runtime_common::xcm_sender::ToTeyrchainDeliveryHelper<
@@ -3012,7 +3012,7 @@ sp_api::impl_runtime_apis! {
 				pub const CheckedAccount: Option<(AccountId, xcm_builder::MintLocation)> = None;
 			}
 
-			impl pallet_xcm_benchmarks::fungible::Config for Runtime {
+			impl pezpallet_xcm_benchmarks::fungible::Config for Runtime {
 				type TransactAsset = Balances;
 
 				type CheckedAccount = CheckedAccount;
@@ -3027,7 +3027,7 @@ sp_api::impl_runtime_apis! {
 				}
 			}
 
-			impl pallet_xcm_benchmarks::generic::Config for Runtime {
+			impl pezpallet_xcm_benchmarks::generic::Config for Runtime {
 				type TransactAsset = Balances;
 				type RuntimeCall = RuntimeCall;
 
@@ -3046,7 +3046,7 @@ sp_api::impl_runtime_apis! {
 				}
 
 				fn transact_origin_and_runtime_call() -> Result<(Location, RuntimeCall), BenchmarkError> {
-					Ok((AssetHub::get(), frame_system::Call::remark_with_event { remark: vec![] }.into()))
+					Ok((AssetHub::get(), pezframe_system::Call::remark_with_event { remark: vec![] }.into()))
 				}
 
 				fn subscribe_origin() -> Result<Location, BenchmarkError> {
@@ -3085,8 +3085,8 @@ sp_api::impl_runtime_apis! {
 				}
 			}
 
-			type XcmBalances = pallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
 
 			let whitelist: Vec<TrackedStorageKey> = AllPalletsWithSystem::whitelisted_storage_keys();
 
@@ -3099,16 +3099,16 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_genesis_builder::GenesisBuilder<Block> for Runtime {
-		fn build_state(config: Vec<u8>) -> sp_genesis_builder::Result {
+	impl pezsp_genesis_builder::GenesisBuilder<Block> for Runtime {
+		fn build_state(config: Vec<u8>) -> pezsp_genesis_builder::Result {
 			build_state::<RuntimeGenesisConfig>(config)
 		}
 
-		fn get_preset(id: &Option<sp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
+		fn get_preset(id: &Option<pezsp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
 			get_preset::<RuntimeGenesisConfig>(id, &genesis_config_presets::get_preset)
 		}
 
-		fn preset_names() -> Vec<sp_genesis_builder::PresetId> {
+		fn preset_names() -> Vec<pezsp_genesis_builder::PresetId> {
 			genesis_config_presets::preset_names()
 		}
 	}

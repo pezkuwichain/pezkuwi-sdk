@@ -19,7 +19,7 @@ use alloc::{
 	vec::Vec,
 };
 use core::mem;
-use sp_runtime::{traits::Saturating, RuntimeDebug};
+use pezsp_runtime::{traits::Saturating, RuntimeDebug};
 use xcm::latest::{
 	Asset, AssetFilter, AssetId, AssetInstance, Assets,
 	Fungibility::{Fungible, NonFungible},
@@ -434,7 +434,7 @@ impl AssetsInHolding {
 	/// Example:
 	///
 	/// ```
-	/// use staging_xcm_executor::AssetsInHolding;
+	/// use pezstaging_xcm_executor::AssetsInHolding;
 	/// use xcm::latest::prelude::*;
 	/// let assets_i_have: AssetsInHolding = vec![ (Here, 100).into(), (Junctions::from([GeneralIndex(0)]), 100).into() ].into();
 	/// let assets_they_want: AssetFilter = vec![ (Here, 200).into(), (Junctions::from([GeneralIndex(0)]), 50).into() ].into();

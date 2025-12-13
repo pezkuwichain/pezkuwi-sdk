@@ -24,8 +24,8 @@ pub mod time;
 
 /// A list of primitives introduced in v1.
 pub mod v1 {
-	use sp_consensus_babe as babe_primitives;
-	pub use sp_consensus_babe::{
+	use pezsp_consensus_babe as babe_primitives;
+	pub use pezsp_consensus_babe::{
 		Randomness, Slot, VrfPreOutput, VrfProof, VrfSignature, VrfTranscript,
 	};
 
@@ -34,7 +34,7 @@ pub mod v1 {
 		BlockNumber, CandidateHash, CandidateIndex, CoreIndex, GroupIndex, Hash, Header,
 		SessionIndex, ValidatorIndex, ValidatorSignature,
 	};
-	use sp_application_crypto::ByteArray;
+	use pezsp_application_crypto::ByteArray;
 
 	/// Validators assigning to check a particular candidate are split up into tranches.
 	/// Earlier tranches of validators check first, with later tranches serving as backup.
@@ -182,7 +182,7 @@ pub mod v1 {
 				.map_err(ApprovalError::SchnorrkelSignature)?;
 
 			let transcript =
-				sp_consensus_babe::make_vrf_transcript(randomness, self.slot, epoch_index);
+				pezsp_consensus_babe::make_vrf_transcript(randomness, self.slot, epoch_index);
 
 			let inout = self
 				.vrf_pre_output
@@ -196,7 +196,7 @@ pub mod v1 {
 	/// Extract the slot number and relay VRF from a header.
 	///
 	/// This fails if either there is no BABE `PreRuntime` digest or
-	/// the digest has type `SecondaryPlain`, which Substrate nodes do
+	/// the digest has type `SecondaryPlain`, which Bizinikiwi nodes do
 	/// not produce or accept anymore.
 	pub fn babe_unsafe_vrf_info(header: &Header) -> Option<UnsafeVRFPreOutput> {
 		use babe_primitives::digests::CompatibleDigestItem;
@@ -221,7 +221,7 @@ pub mod v1 {
 /// A list of primitives introduced by v2.
 pub mod v2 {
 	use codec::{Decode, Encode};
-	pub use sp_consensus_babe::{
+	pub use pezsp_consensus_babe::{
 		Randomness, Slot, VrfPreOutput, VrfProof, VrfSignature, VrfTranscript,
 	};
 	use std::ops::BitOr;

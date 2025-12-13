@@ -12,15 +12,15 @@ workspace = true
 [dependencies]
 smallvec = { workspace = true, default-features = true }
 
-frame-support = { workspace = true }
+pezframe-support = { workspace = true }
 pezkuwi-primitives = { workspace = true }
-sp-runtime = { workspace = true }
+pezsp-runtime = { workspace = true }
 
 [features]
 default = ["std"]
-std = ["frame-support/std", "pezkuwi-primitives/std", "sp-runtime/std"]
+std = ["pezframe-support/std", "pezkuwi-primitives/std", "pezsp-runtime/std"]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

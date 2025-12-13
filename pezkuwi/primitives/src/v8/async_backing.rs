@@ -21,7 +21,7 @@ use super::*;
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use scale_info::TypeInfo;
-use sp_core::RuntimeDebug;
+use pezsp_core::RuntimeDebug;
 
 /// Candidate's acceptance limitations for asynchronous backing per relay parent.
 #[derive(

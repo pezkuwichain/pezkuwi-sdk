@@ -33,7 +33,7 @@ use assert_matches::assert_matches;
 use codec::Encode;
 use futures::channel::oneshot;
 use parking_lot::Mutex;
-use sp_core::testing::TaskExecutor;
+use pezsp_core::testing::TaskExecutor;
 
 use pezkuwi_node_subsystem::{messages::AllMessages, ActiveLeavesUpdate};
 use pezkuwi_node_subsystem_test_helpers as test_helpers;

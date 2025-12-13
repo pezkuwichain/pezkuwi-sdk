@@ -16,8 +16,8 @@
 
 //! A module that is responsible for migration of storage.
 use super::*;
-use frame_support::{
-	migrations::VersionedMigration, pallet_prelude::ValueQuery, storage_alias,
+use pezframe_support::{
+	migrations::VersionedMigration, pezpallet_prelude::ValueQuery, storage_alias,
 	traits::UncheckedOnRuntimeUpgrade, weights::Weight,
 };
 
@@ -88,7 +88,7 @@ mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<alloc::vec::Vec<u8>, sp_runtime::TryRuntimeError> {
+		fn pre_upgrade() -> Result<alloc::vec::Vec<u8>, pezsp_runtime::TryRuntimeError> {
 			let n: u32 = v0::OnDemandQueue::<T>::get().len() as u32;
 
 			log::info!(
@@ -100,7 +100,7 @@ mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: alloc::vec::Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+		fn post_upgrade(state: alloc::vec::Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::info!(target: LOG_TARGET, "Running post_upgrade()");
 
 			ensure!(
@@ -136,7 +136,7 @@ pub type MigrateV0ToV1<T> = VersionedMigration<
 	1,
 	v1::UncheckedMigrateToV1<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;
 
 #[cfg(test)]

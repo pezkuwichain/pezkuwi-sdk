@@ -20,9 +20,9 @@ use futures::{channel::oneshot, StreamExt};
 
 use codec::{Decode, Encode};
 
-use sc_network::{config as netconfig, NetworkBackend};
-use sc_network_types::PeerId;
-use sp_runtime::traits::Block;
+use pezsc_network::{config as netconfig, NetworkBackend};
+use pezsc_network_types::PeerId;
+use pezsp_runtime::traits::Block;
 
 use super::{IsRequest, ReqProtocolNames};
 use crate::UnifiedReputationChange;
@@ -32,7 +32,7 @@ pub use error::{Error, FatalError, JfyiError, Result};
 
 /// A request coming in, including a sender for sending responses.
 ///
-/// Typed `IncomingRequest`s, see `IncomingRequest::get_config_receiver` and substrate
+/// Typed `IncomingRequest`s, see `IncomingRequest::get_config_receiver` and bizinikiwi
 /// `NetworkConfiguration` for more information.
 #[derive(Debug)]
 pub struct IncomingRequest<Req> {
@@ -52,7 +52,7 @@ where
 	/// Create configuration for `NetworkConfiguration::request_response_protocols` and a
 	/// corresponding typed receiver.
 	///
-	/// This Register that config with substrate networking and receive incoming requests via the
+	/// This Register that config with bizinikiwi networking and receive incoming requests via the
 	/// returned `IncomingRequestReceiver`.
 	pub fn get_config_receiver<B: Block, N: NetworkBackend<B, <B as Block>::Hash>>(
 		req_protocol_names: &ReqProtocolNames,
@@ -74,7 +74,7 @@ where
 		}
 	}
 
-	/// Try building from raw substrate request.
+	/// Try building from raw bizinikiwi request.
 	///
 	/// This function will fail if the request cannot be decoded and will apply passed in
 	/// reputation changes in that case.
@@ -83,15 +83,15 @@ where
 	/// 		- The raw request to decode
 	/// 		- Reputation changes to apply for the peer in case decoding fails.
 	fn try_from_raw(
-		raw: sc_network::config::IncomingRequest,
+		raw: pezsc_network::config::IncomingRequest,
 		reputation_changes: Vec<UnifiedReputationChange>,
 	) -> std::result::Result<Self, JfyiError> {
-		let sc_network::config::IncomingRequest { payload, peer, pending_response } = raw;
+		let pezsc_network::config::IncomingRequest { payload, peer, pending_response } = raw;
 		let payload = match Req::decode(&mut payload.as_ref()) {
 			Ok(payload) => payload,
 			Err(err) => {
 				let reputation_changes = reputation_changes.into_iter().map(|r| r.into()).collect();
-				let response = sc_network::config::OutgoingResponse {
+				let response = pezsc_network::config::OutgoingResponse {
 					result: Err(()),
 					reputation_changes,
 					sent_feedback: None,
@@ -106,11 +106,11 @@ where
 		Ok(Self::new(peer, payload, pending_response))
 	}
 
-	/// Convert into raw untyped substrate `IncomingRequest`.
+	/// Convert into raw untyped bizinikiwi `IncomingRequest`.
 	///
 	/// This is mostly useful for testing.
-	pub fn into_raw(self) -> sc_network::config::IncomingRequest {
-		sc_network::config::IncomingRequest {
+	pub fn into_raw(self) -> pezsc_network::config::IncomingRequest {
+		pezsc_network::config::IncomingRequest {
 			peer: self.peer,
 			payload: self.payload.encode(),
 			pending_response: self.pending_response.pending_response,

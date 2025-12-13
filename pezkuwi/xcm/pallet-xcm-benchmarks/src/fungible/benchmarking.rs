@@ -17,14 +17,14 @@
 use super::*;
 use crate::{account_and_location, new_executor, AssetTransactorOf, EnsureDelivery, XcmCallOf};
 use alloc::{vec, vec::Vec};
-use frame_benchmarking::{benchmarks_instance_pallet, BenchmarkError, BenchmarkResult};
-use frame_support::{
-	pallet_prelude::Get,
+use pezframe_benchmarking::{benchmarks_instance_pallet, BenchmarkError, BenchmarkResult};
+use pezframe_support::{
+	pezpallet_prelude::Get,
 	traits::fungible::{Inspect, Mutate},
 	weights::Weight,
 	BoundedVec,
 };
-use sp_runtime::traits::Bounded;
+use pezsp_runtime::traits::Bounded;
 use xcm::latest::{prelude::*, AssetTransferFilter, MAX_ITEMS_IN_ASSETS};
 use xcm_executor::traits::{ConvertLocation, FeeReason, TransactAsset};
 

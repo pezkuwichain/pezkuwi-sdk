@@ -16,10 +16,10 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::configuration::*;
-use frame_benchmarking::v2::*;
-use frame_system::RawOrigin;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::RawOrigin;
 use pezkuwi_primitives::{ExecutorParam, ExecutorParams, PvfExecKind, PvfPrepKind};
-use sp_runtime::traits::One;
+use pezsp_runtime::traits::One;
 
 #[benchmarks]
 mod benchmarks {

@@ -25,9 +25,9 @@ use crate::{
 		MockGenesisConfig, ParaInclusion, Processed, System, Test, *,
 	},
 };
-use frame_support::{
+use pezframe_support::{
 	assert_noop, assert_ok,
-	pallet_prelude::*,
+	pezpallet_prelude::*,
 	traits::{ExecuteOverweightError, QueueFootprintQuery, ServiceQueues},
 	weights::Weight,
 };
@@ -35,8 +35,8 @@ use pezkuwi_primitives::{
 	well_known_keys, ClaimQueueOffset, CoreSelector, Id as ParaId, UMPSignal, UpwardMessage,
 	UMP_SEPARATOR,
 };
-use sp_crypto_hashing::{blake2_256, twox_64};
-use sp_runtime::traits::Bounded;
+use pezsp_crypto_hashing::{blake2_256, twox_64};
+use pezsp_runtime::traits::Bounded;
 
 pub(super) struct GenesisConfigBuilder {
 	max_upward_message_size: u32,
@@ -128,7 +128,7 @@ mod check_upward_messages {
 	#[test]
 	fn basic_works() {
 		new_test_ext(GenesisConfigBuilder::default().build()).execute_with(|| {
-			let _g = frame_support::StorageNoopGuard::default();
+			let _g = pezframe_support::StorageNoopGuard::default();
 			check(P_0, vec![msg("p0m0")], None);
 			check(P_1, vec![msg("p1m0")], None);
 			check(P_0, vec![msg("p0m1")], None);
@@ -139,7 +139,7 @@ mod check_upward_messages {
 	#[test]
 	fn num_per_candidate_exceeded_error() {
 		new_test_ext(GenesisConfigBuilder::default().build()).execute_with(|| {
-			let _g = frame_support::StorageNoopGuard::default();
+			let _g = pezframe_support::StorageNoopGuard::default();
 			let permitted =
 				configuration::ActiveConfig::<Test>::get().max_upward_message_num_per_candidate;
 
@@ -159,7 +159,7 @@ mod check_upward_messages {
 	#[test]
 	fn size_per_message_exceeded_error() {
 		new_test_ext(GenesisConfigBuilder::default().build()).execute_with(|| {
-			let _g = frame_support::StorageNoopGuard::default();
+			let _g = pezframe_support::StorageNoopGuard::default();
 			let max_size = configuration::ActiveConfig::<Test>::get().max_upward_message_size;
 			let max_per_candidate =
 				configuration::ActiveConfig::<Test>::get().max_upward_message_num_per_candidate;
@@ -209,7 +209,7 @@ mod check_upward_messages {
 	fn queue_size_exceeded_error() {
 		new_test_ext(GenesisConfigBuilder::large_queue_count().build()).execute_with(|| {
 			let limit = configuration::ActiveConfig::<Test>::get().max_upward_queue_size as u64;
-			assert_eq!(pallet_message_queue::ItemHeader::<MessageQueueSize>::max_encoded_len(), 5);
+			assert_eq!(pezpallet_message_queue::ItemHeader::<MessageQueueSize>::max_encoded_len(), 5);
 			assert!(
 				configuration::ActiveConfig::<Test>::get().max_upward_queue_size <
 					crate::inclusion::MaxUmpMessageLenOf::<Test>::get(),
@@ -421,7 +421,7 @@ fn relay_dispatch_queue_size_is_updated() {
 fn relay_dispatch_queue_size_key_is_correct() {
 	#![allow(deprecated)]
 	// Storage alias to the old way of accessing the queue size.
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	type RelayDispatchQueueSize = StorageMap<Ump, Twox64Concat, ParaId, (u32, u32), ValueQuery>;
 
 	for i in 0..1024 {
@@ -465,7 +465,7 @@ fn verify_relay_dispatch_queue_size_is_externally_accessible() {
 
 fn assert_queue_size(para: ParaId, count: u32, size: u32) {
 	#[allow(deprecated)]
-	let raw_queue_size = sp_io::storage::get(&well_known_keys::relay_dispatch_queue_size(para))
+	let raw_queue_size = pezsp_io::storage::get(&well_known_keys::relay_dispatch_queue_size(para))
 		.expect(
 			"enqueuing a message should create the dispatch queue\
 				and it should be accessible via the well known keys",
@@ -533,21 +533,21 @@ fn overweight_queue_works() {
 		MessageQueue::service_queues(Weight::from_parts(500, 500));
 		assert_last_events(
 			[
-				pallet_message_queue::Event::<Test>::Processed {
+				pezpallet_message_queue::Event::<Test>::Processed {
 					id: hash_1.into(),
 					origin: Ump(UmpQueueId::Para(para_a)),
 					weight_used: Weight::from_parts(301, 301),
 					success: true,
 				}
 				.into(),
-				pallet_message_queue::Event::<Test>::OverweightEnqueued {
+				pezpallet_message_queue::Event::<Test>::OverweightEnqueued {
 					id: hash_2.into(),
 					origin: Ump(UmpQueueId::Para(para_a)),
 					page_index: 0,
 					message_index: 1,
 				}
 				.into(),
-				pallet_message_queue::Event::<Test>::OverweightEnqueued {
+				pezpallet_message_queue::Event::<Test>::OverweightEnqueued {
 					id: hash_3.into(),
 					origin: Ump(UmpQueueId::Para(para_a)),
 					page_index: 0,
@@ -575,7 +575,7 @@ fn overweight_queue_works() {
 			(Ump(UmpQueueId::Para(para_a)), 0, 2)
 		));
 		assert_last_event(
-			pallet_message_queue::Event::<Test>::Processed {
+			pezpallet_message_queue::Event::<Test>::Processed {
 				id: hash_3.into(),
 				origin: Ump(UmpQueueId::Para(para_a)),
 				weight_used: Weight::from_parts(501, 501),

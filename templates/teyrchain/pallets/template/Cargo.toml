@@ -1,5 +1,5 @@
 [package]
-name = "pallet-teyrchain-template"
+name = "pezpallet-teyrchain-template"
 description = "FRAME pallet template for defining custom runtime logic."
 version = "0.0.0"
 license = "Unlicense"

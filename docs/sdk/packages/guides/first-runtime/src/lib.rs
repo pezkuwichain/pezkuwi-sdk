@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -21,12 +21,12 @@
 
 extern crate alloc;
 use alloc::{vec, vec::Vec};
-use first_pallet::pallet_v2 as our_first_pallet;
+use first_pallet::pezpallet_v2 as our_first_pallet;
 use frame::{
 	prelude::*,
 	runtime::{apis, prelude::*},
 };
-use pallet_transaction_payment_rpc_runtime_api::{FeeDetails, RuntimeDispatchInfo};
+use pezpallet_transaction_payment_rpc_runtime_api::{FeeDetails, RuntimeDispatchInfo};
 
 #[docify::export]
 #[runtime_version]
@@ -45,13 +45,13 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 construct_runtime!(
 	pub struct Runtime {
 		// Mandatory for all runtimes
-		System: frame_system,
+		System: pezframe_system,
 
 		// A number of other pallets from FRAME.
-		Timestamp: pallet_timestamp,
-		Balances: pallet_balances,
-		Sudo: pallet_sudo,
-		TransactionPayment: pallet_transaction_payment,
+		Timestamp: pezpallet_timestamp,
+		Balances: pezpallet_balances,
+		Sudo: pezpallet_sudo,
+		TransactionPayment: pezpallet_transaction_payment,
 
 		// Our local pallet
 		FirstPallet: our_first_pallet,
@@ -62,10 +62,10 @@ construct_runtime!(
 mod runtime_types {
 	use super::*;
 	pub(super) type SignedExtra = (
-		// `frame` already provides all the signed extensions from `frame-system`. We just add the
+		// `frame` already provides all the signed extensions from `pezframe-system`. We just add the
 		// one related to tx-payment here.
 		frame::runtime::types_common::SystemTransactionExtensionsOf<Runtime>,
-		pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
+		pezpallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 	);
 
 	pub(super) type Block = frame::runtime::types_common::BlockOf<Runtime, SignedExtra>;
@@ -74,7 +74,7 @@ mod runtime_types {
 	pub(super) type RuntimeExecutive = Executive<
 		Runtime,
 		Block,
-		frame_system::ChainContext<Runtime>,
+		pezframe_system::ChainContext<Runtime>,
 		Runtime,
 		AllPalletsWithSystem,
 	>;
@@ -89,32 +89,32 @@ mod config_impls {
 		pub const Version: RuntimeVersion = VERSION;
 	}
 
-	#[derive_impl(frame_system::config_preludes::SolochainDefaultConfig)]
-	impl frame_system::Config for Runtime {
+	#[derive_impl(pezframe_system::config_preludes::SolochainDefaultConfig)]
+	impl pezframe_system::Config for Runtime {
 		type Block = Block;
 		type Version = Version;
 		type AccountData =
-			pallet_balances::AccountData<<Runtime as pallet_balances::Config>::Balance>;
+			pezpallet_balances::AccountData<<Runtime as pezpallet_balances::Config>::Balance>;
 	}
 
-	#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-	impl pallet_balances::Config for Runtime {
+	#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+	impl pezpallet_balances::Config for Runtime {
 		type AccountStore = System;
 	}
 
-	#[derive_impl(pallet_sudo::config_preludes::TestDefaultConfig)]
-	impl pallet_sudo::Config for Runtime {}
+	#[derive_impl(pezpallet_sudo::config_preludes::TestDefaultConfig)]
+	impl pezpallet_sudo::Config for Runtime {}
 
-	#[derive_impl(pallet_timestamp::config_preludes::TestDefaultConfig)]
-	impl pallet_timestamp::Config for Runtime {}
+	#[derive_impl(pezpallet_timestamp::config_preludes::TestDefaultConfig)]
+	impl pezpallet_timestamp::Config for Runtime {}
 
-	#[derive_impl(pallet_transaction_payment::config_preludes::TestDefaultConfig)]
-	impl pallet_transaction_payment::Config for Runtime {
-		type OnChargeTransaction = pallet_transaction_payment::FungibleAdapter<Balances, ()>;
+	#[derive_impl(pezpallet_transaction_payment::config_preludes::TestDefaultConfig)]
+	impl pezpallet_transaction_payment::Config for Runtime {
+		type OnChargeTransaction = pezpallet_transaction_payment::FungibleAdapter<Balances, ()>;
 		// We specify a fixed length to fee here, which essentially means all transactions charge
 		// exactly 1 unit of fee.
-		type LengthToFee = FixedFee<1, <Self as pallet_balances::Config>::Balance>;
-		type WeightToFee = NoFee<<Self as pallet_balances::Config>::Balance>;
+		type LengthToFee = FixedFee<1, <Self as pezpallet_balances::Config>::Balance>;
+		type WeightToFee = NoFee<<Self as pezpallet_balances::Config>::Balance>;
 	}
 }
 
@@ -130,7 +130,7 @@ pub mod genesis_config_presets {
 		interface::{Balance, MinimumBalance},
 		BalancesConfig, RuntimeGenesisConfig, SudoConfig,
 	};
-	use frame::deps::frame_support::build_struct_json_patch;
+	use frame::deps::pezframe_support::build_struct_json_patch;
 	use serde_json::Value;
 
 	/// Returns a development genesis config preset.
@@ -222,7 +222,7 @@ impl_runtime_apis! {
 		fn validate_transaction(
 			source: TransactionSource,
 			tx: ExtrinsicFor<Runtime>,
-			block_hash: <Runtime as frame_system::Config>::Hash,
+			block_hash: <Runtime as pezframe_system::Config>::Hash,
 		) -> TransactionValidity {
 			RuntimeExecutive::validate_transaction(source, tx, block_hash)
 		}
@@ -266,7 +266,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<
+	impl pezpallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<
 		Block,
 		interface::Balance,
 	> for Runtime {
@@ -289,11 +289,11 @@ impl_runtime_apis! {
 /// configs.
 pub mod interface {
 	use super::Runtime;
-	use frame::prelude::frame_system;
+	use frame::prelude::pezframe_system;
 
-	pub type AccountId = <Runtime as frame_system::Config>::AccountId;
-	pub type Nonce = <Runtime as frame_system::Config>::Nonce;
-	pub type Hash = <Runtime as frame_system::Config>::Hash;
-	pub type Balance = <Runtime as pallet_balances::Config>::Balance;
-	pub type MinimumBalance = <Runtime as pallet_balances::Config>::ExistentialDeposit;
+	pub type AccountId = <Runtime as pezframe_system::Config>::AccountId;
+	pub type Nonce = <Runtime as pezframe_system::Config>::Nonce;
+	pub type Hash = <Runtime as pezframe_system::Config>::Hash;
+	pub type Balance = <Runtime as pezpallet_balances::Config>::Balance;
+	pub type MinimumBalance = <Runtime as pezpallet_balances::Config>::ExistentialDeposit;
 }

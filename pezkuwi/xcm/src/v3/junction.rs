@@ -47,7 +47,7 @@ use serde::{Deserialize, Serialize};
 	Deserialize,
 )]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum NetworkId {
 	/// Network specified by the first 32 bytes of its genesis block.
 	ByGenesis([u8; 32]),
@@ -120,7 +120,7 @@ impl From<NewNetworkId> for NetworkId {
 	Deserialize,
 )]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum BodyId {
 	/// The only body in its context.
 	Unit,
@@ -167,7 +167,7 @@ pub enum BodyId {
 	Deserialize,
 )]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum BodyPart {
 	/// The body's declaration, under whatever means it decides.
 	Voice,
@@ -231,7 +231,7 @@ impl BodyPart {
 	Deserialize,
 )]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum Junction {
 	/// An indexed teyrchain belonging to and operated by the context.
 	///
@@ -240,7 +240,7 @@ pub enum Junction {
 	/// A 32-byte identifier for an account of a specific network that is respected as a sovereign
 	/// endpoint within the context.
 	///
-	/// Generally used when the context is a Substrate-based chain.
+	/// Generally used when the context is a Bizinikiwi-based chain.
 	AccountId32 { network: Option<NetworkId>, id: [u8; 32] },
 	/// An 8-byte index for an account of a specific network that is respected as a sovereign
 	/// endpoint within the context.

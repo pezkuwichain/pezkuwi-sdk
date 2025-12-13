@@ -21,18 +21,18 @@ use super::{
 	GeneralAdmin, ParaId, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, StakingAdmin,
 	TransactionByteFee, Treasury, WeightToFee, XcmPallet,
 };
-use crate::governance::pallet_custom_origins::Treasurer;
-use frame_support::{
+use crate::governance::pezpallet_custom_origins::Treasurer;
+use pezframe_support::{
 	parameter_types,
 	traits::{Contains, Disabled, Equals, Everything, Nothing},
 };
-use frame_system::EnsureRoot;
-use pallet_xcm::XcmPassthrough;
+use pezframe_system::EnsureRoot;
+use pezpallet_xcm::XcmPassthrough;
 use pezkuwi_runtime_common::{
 	xcm_sender::{ChildTeyrchainRouter, ExponentialPrice},
 	ToAuthor,
 };
-use sp_core::ConstU32;
+use pezsp_core::ConstU32;
 use xcm::latest::{prelude::*, ZAGROS_GENESIS_HASH};
 use xcm_builder::{
 	AccountId32Aliases, AliasChildLocation, AllowExplicitUnpaidExecutionFrom,
@@ -287,7 +287,7 @@ pub type LocalPalletOriginToLocation = (
 	TreasurerToPlurality,
 );
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	// Note that this configuration of `SendXcmOrigin` is different from the one present in
 	// production.
@@ -311,7 +311,7 @@ impl pallet_xcm::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<TokenLocation>;
 	type TrustedLockers = ();
@@ -319,7 +319,7 @@ impl pallet_xcm::Config for Runtime {
 	type MaxLockers = ConstU32<8>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = crate::weights::pallet_xcm::WeightInfo<Runtime>;
+	type WeightInfo = crate::weights::pezpallet_xcm::WeightInfo<Runtime>;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	// Aliasing is disabled: xcm_executor::Config::Aliasers only allows `AliasChildLocation`.
 	type AuthorizedAliasConsideration = Disabled;

@@ -19,9 +19,9 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use frame_benchmarking::v2::*;
-use frame_support::traits::OriginTrait;
-use pallet_broker::CoreIndex as BrokerCoreIndex;
+use pezframe_benchmarking::v2::*;
+use pezframe_support::traits::OriginTrait;
+use pezpallet_broker::CoreIndex as BrokerCoreIndex;
 
 #[benchmarks]
 mod benchmarks {
@@ -30,12 +30,12 @@ mod benchmarks {
 
 	#[benchmark]
 	fn request_revenue_at() {
-		let root_origin = <T as frame_system::Config>::RuntimeOrigin::root();
+		let root_origin = <T as pezframe_system::Config>::RuntimeOrigin::root();
 		let mhr = <T as on_demand::Config>::MaxHistoricalRevenue::get();
-		frame_system::Pallet::<T>::set_block_number((mhr + 2).into());
+		pezframe_system::Pallet::<T>::set_block_number((mhr + 2).into());
 		let minimum_balance = <T as on_demand::Config>::Currency::minimum_balance();
 		let rev: BoundedVec<
-			<<T as on_demand::Config>::Currency as frame_support::traits::Currency<
+			<<T as on_demand::Config>::Currency as pezframe_support::traits::Currency<
 				T::AccountId,
 			>>::Balance,
 			T::MaxHistoricalRevenue,
@@ -51,17 +51,17 @@ mod benchmarks {
 		);
 
 		#[extrinsic_call]
-		_(root_origin as <T as frame_system::Config>::RuntimeOrigin, mhr + 1)
+		_(root_origin as <T as pezframe_system::Config>::RuntimeOrigin, mhr + 1)
 	}
 
 	#[benchmark]
 	fn request_core_count() {
 		// Setup
-		let root_origin = <T as frame_system::Config>::RuntimeOrigin::root();
+		let root_origin = <T as pezframe_system::Config>::RuntimeOrigin::root();
 
 		#[extrinsic_call]
 		_(
-			root_origin as <T as frame_system::Config>::RuntimeOrigin,
+			root_origin as <T as pezframe_system::Config>::RuntimeOrigin,
 			// random core count
 			100,
 		)
@@ -70,7 +70,7 @@ mod benchmarks {
 	#[benchmark]
 	fn assign_core(s: Linear<1, 100>) {
 		// Setup
-		let root_origin = <T as frame_system::Config>::RuntimeOrigin::root();
+		let root_origin = <T as pezframe_system::Config>::RuntimeOrigin::root();
 
 		// Use parameterized assignment count
 		let mut assignments: Vec<(CoreAssignment, PartsOf57600)> = vec![0u16; s as usize - 1]
@@ -89,7 +89,7 @@ mod benchmarks {
 
 		#[extrinsic_call]
 		_(
-			root_origin as <T as frame_system::Config>::RuntimeOrigin,
+			root_origin as <T as pezframe_system::Config>::RuntimeOrigin,
 			core_index,
 			BlockNumberFor::<T>::from(5u32),
 			assignments,
@@ -100,10 +100,10 @@ mod benchmarks {
 	#[benchmark]
 	fn credit_account() {
 		// Setup
-		let root_origin = <T as frame_system::Config>::RuntimeOrigin::root();
+		let root_origin = <T as pezframe_system::Config>::RuntimeOrigin::root();
 		let who: T::AccountId = whitelisted_caller();
 
 		#[extrinsic_call]
-		_(root_origin as <T as frame_system::Config>::RuntimeOrigin, who, 1_000_000u32.into())
+		_(root_origin as <T as pezframe_system::Config>::RuntimeOrigin, who, 1_000_000u32.into())
 	}
 }

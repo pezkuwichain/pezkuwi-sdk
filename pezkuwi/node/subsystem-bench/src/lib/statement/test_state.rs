@@ -52,8 +52,8 @@ use pezkuwi_primitives::{
 use pezkuwi_primitives_test_helpers::{
 	dummy_committed_candidate_receipt_v2, dummy_hash, dummy_head_data, dummy_pvd,
 };
-use sc_network::{config::IncomingRequest, ProtocolName};
-use sp_core::{Pair, H256};
+use pezsc_network::{config::IncomingRequest, ProtocolName};
+use pezsp_core::{Pair, H256};
 use std::{
 	collections::HashMap,
 	sync::{

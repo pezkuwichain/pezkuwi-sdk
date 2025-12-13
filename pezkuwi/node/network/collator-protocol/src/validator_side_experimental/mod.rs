@@ -39,7 +39,7 @@ use pezkuwi_node_subsystem_util::{
 	runtime::recv_runtime, signing_key_and_index,
 };
 use pezkuwi_primitives::{Hash, Id as ParaId};
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 use state::State;
 
 pub use metrics::Metrics;

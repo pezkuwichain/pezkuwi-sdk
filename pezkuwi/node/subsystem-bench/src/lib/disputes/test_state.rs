@@ -35,7 +35,7 @@ use pezkuwi_primitives::{
 	SessionIndex, ValidDisputeStatementKind, ValidatorId, ValidatorIndex,
 };
 use pezkuwi_primitives_test_helpers::{dummy_candidate_receipt_v2_bad_sig, dummy_hash};
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 use std::{
 	collections::{HashMap, HashSet},
 	sync::{Arc, Mutex},

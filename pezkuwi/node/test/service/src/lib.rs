@@ -34,33 +34,33 @@ use pezkuwi_test_runtime::{
 	UncheckedExtrinsic, VERSION,
 };
 
-use sc_chain_spec::ChainSpec;
-use sc_client_api::BlockchainEvents;
-use sc_network::{
+use pezsc_chain_spec::ChainSpec;
+use pezsc_client_api::BlockchainEvents;
+use pezsc_network::{
 	config::{NetworkConfiguration, TransportConfig},
 	multiaddr,
 	service::traits::NetworkService,
 	NetworkStateInfo,
 };
-use sc_service::{
+use pezsc_service::{
 	config::{
 		DatabaseSource, KeystoreConfig, MultiaddrWithPeerId, RpcBatchRequestConfig,
 		WasmExecutionMethod, WasmtimeInstantiationStrategy,
 	},
 	BasePath, BlocksPruning, Configuration, Role, RpcHandlers, TaskManager,
 };
-use sp_arithmetic::traits::SaturatedConversion;
-use sp_blockchain::HeaderBackend;
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::{codec::Encode, generic, traits::IdentifyAccount, MultiSigner};
-use sp_state_machine::BasicExternalities;
+use pezsp_arithmetic::traits::SaturatedConversion;
+use pezsp_blockchain::HeaderBackend;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::{codec::Encode, generic, traits::IdentifyAccount, MultiSigner};
+use pezsp_state_machine::BasicExternalities;
 use std::{
 	collections::HashSet,
 	net::{Ipv4Addr, SocketAddr},
 	path::PathBuf,
 	sync::Arc,
 };
-use substrate_test_client::{
+use bizinikiwi_test_client::{
 	BlockchainEventsExt, RpcHandlersExt, RpcTransactionError, RpcTransactionOutput,
 };
 
@@ -68,10 +68,10 @@ use substrate_test_client::{
 pub type Client = FullClient;
 
 pub use pezkuwi_service::{FullBackend, GetLastTimestamp};
-use sc_service::config::{ExecutorConfiguration, RpcConfiguration};
+use pezsc_service::config::{ExecutorConfiguration, RpcConfiguration};
 
 /// Create a new full node.
-#[sc_tracing::logging::prefix_logs_with(custom_log_prefix.unwrap_or(config.network.node_name.as_str()))]
+#[pezsc_tracing::logging::prefix_logs_with(custom_log_prefix.unwrap_or(config.network.node_name.as_str()))]
 pub fn new_full<OverseerGenerator: OverseerGen>(
 	config: Configuration,
 	is_teyrchain_node: IsTeyrchainNode,
@@ -103,10 +103,10 @@ pub fn new_full<OverseerGenerator: OverseerGen>(
 	};
 
 	match config.network.network_backend {
-		sc_network::config::NetworkBackendType::Libp2p =>
-			pezkuwi_service::new_full::<_, sc_network::NetworkWorker<_, _>>(config, params),
-		sc_network::config::NetworkBackendType::Litep2p =>
-			pezkuwi_service::new_full::<_, sc_network::Litep2pNetworkBackend>(config, params),
+		pezsc_network::config::NetworkBackendType::Libp2p =>
+			pezkuwi_service::new_full::<_, pezsc_network::NetworkWorker<_, _>>(config, params),
+		pezsc_network::config::NetworkBackendType::Litep2p =>
+			pezkuwi_service::new_full::<_, pezsc_network::Litep2pNetworkBackend>(config, params),
 	}
 }
 
@@ -226,7 +226,7 @@ pub fn node_config(
 /// Get the listen multiaddr from the network service.
 ///
 /// The address is used to connect to the node.
-pub async fn get_listen_address(network: Arc<dyn NetworkService>) -> sc_network::Multiaddr {
+pub async fn get_listen_address(network: Arc<dyn NetworkService>) -> pezsc_network::Multiaddr {
 	loop {
 		// Litep2p provides instantly the listen address of the TCP protocol and
 		// ditched the `/0` port used by the `node_config` function.
@@ -433,16 +433,16 @@ pub fn construct_extrinsic(
 		BlockHashCount::get().checked_next_power_of_two().map(|c| c / 2).unwrap_or(2) as u64;
 	let tip = 0;
 	let tx_ext: TxExtension = (
-		frame_system::AuthorizeCall::<Runtime>::new(),
-		frame_system::CheckNonZeroSender::<Runtime>::new(),
-		frame_system::CheckSpecVersion::<Runtime>::new(),
-		frame_system::CheckTxVersion::<Runtime>::new(),
-		frame_system::CheckGenesis::<Runtime>::new(),
-		frame_system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
-		frame_system::CheckNonce::<Runtime>::from(nonce),
-		frame_system::CheckWeight::<Runtime>::new(),
-		pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
-		frame_system::WeightReclaim::<Runtime>::new(),
+		pezframe_system::AuthorizeCall::<Runtime>::new(),
+		pezframe_system::CheckNonZeroSender::<Runtime>::new(),
+		pezframe_system::CheckSpecVersion::<Runtime>::new(),
+		pezframe_system::CheckTxVersion::<Runtime>::new(),
+		pezframe_system::CheckGenesis::<Runtime>::new(),
+		pezframe_system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
+		pezframe_system::CheckNonce::<Runtime>::from(nonce),
+		pezframe_system::CheckWeight::<Runtime>::new(),
+		pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+		pezframe_system::WeightReclaim::<Runtime>::new(),
 	)
 		.into();
 	let raw_payload = SignedPayload::from_raw(
@@ -473,12 +473,12 @@ pub fn construct_extrinsic(
 /// Construct a transfer extrinsic.
 pub fn construct_transfer_extrinsic(
 	client: &Client,
-	origin: sp_keyring::Sr25519Keyring,
-	dest: sp_keyring::Sr25519Keyring,
+	origin: pezsp_keyring::Sr25519Keyring,
+	dest: pezsp_keyring::Sr25519Keyring,
 	value: Balance,
 ) -> UncheckedExtrinsic {
 	let function =
-		pezkuwi_test_runtime::RuntimeCall::Balances(pallet_balances::Call::transfer_allow_death {
+		pezkuwi_test_runtime::RuntimeCall::Balances(pezpallet_balances::Call::transfer_allow_death {
 			dest: MultiSigner::from(dest.public()).into_account().into(),
 			value,
 		});

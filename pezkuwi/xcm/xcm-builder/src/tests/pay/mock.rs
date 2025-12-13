@@ -16,28 +16,28 @@
 
 use super::*;
 
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{AsEnsureOriginWithArg, ConstU32, Disabled, Everything, Nothing},
 };
-use frame_system::{EnsureRoot, EnsureSigned};
+use pezframe_system::{EnsureRoot, EnsureSigned};
 use pezkuwi_primitives::{AccountIndex, BlakeTwo256, Signature};
-use sp_runtime::{generic, traits::MaybeEquivalence, AccountId32, BuildStorage};
+use pezsp_runtime::{generic, traits::MaybeEquivalence, AccountId32, BuildStorage};
 use xcm_executor::{traits::ConvertLocation, XcmExecutor};
 use xcm_simulator::ParaId;
 
 pub type TxExtension = (
-	frame_system::AuthorizeCall<Test>,
-	frame_system::CheckNonZeroSender<Test>,
-	frame_system::CheckSpecVersion<Test>,
-	frame_system::CheckTxVersion<Test>,
-	frame_system::CheckGenesis<Test>,
-	frame_system::CheckMortality<Test>,
-	frame_system::CheckNonce<Test>,
-	frame_system::CheckWeight<Test>,
-	frame_system::WeightReclaim<Test>,
+	pezframe_system::AuthorizeCall<Test>,
+	pezframe_system::CheckNonZeroSender<Test>,
+	pezframe_system::CheckSpecVersion<Test>,
+	pezframe_system::CheckTxVersion<Test>,
+	pezframe_system::CheckGenesis<Test>,
+	pezframe_system::CheckMortality<Test>,
+	pezframe_system::CheckNonce<Test>,
+	pezframe_system::CheckWeight<Test>,
+	pezframe_system::WeightReclaim<Test>,
 );
-pub type Address = sp_runtime::MultiAddress<AccountId, AccountIndex>;
+pub type Address = pezsp_runtime::MultiAddress<AccountId, AccountIndex>;
 pub type UncheckedExtrinsic =
 	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
@@ -48,20 +48,20 @@ pub type AccountId = AccountId32;
 
 construct_runtime!(
 	pub enum Test {
-		System: frame_system,
-		Balances: pallet_balances,
-		Assets: pallet_assets,
-		Salary: pallet_salary,
-		XcmPallet: pallet_xcm,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		Assets: pezpallet_assets,
+		Salary: pezpallet_salary,
+		XcmPallet: pezpallet_xcm,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type AccountId = AccountId;
-	type Lookup = sp_runtime::traits::IdentityLookup<AccountId>;
+	type Lookup = pezsp_runtime::traits::IdentityLookup<AccountId>;
 }
 
 pub type Balance = u128;
@@ -70,7 +70,7 @@ parameter_types! {
 	pub const ExistentialDeposit: Balance = 1;
 }
 
-impl pallet_balances::Config for Test {
+impl pezpallet_balances::Config for Test {
 	type MaxLocks = ConstU32<0>;
 	type Balance = Balance;
 	type RuntimeEvent = RuntimeEvent;
@@ -97,7 +97,7 @@ parameter_types! {
 	pub const RemoveItemsLimit: u32 = 50;
 }
 
-impl pallet_assets::Config for Test {
+impl pezpallet_assets::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
 	type AssetId = AssetIdForAssets;
@@ -145,7 +145,7 @@ pub struct AssetKind {
 }
 
 pub struct LocatableAssetKindConverter;
-impl sp_runtime::traits::TryConvert<AssetKind, LocatableAssetId> for LocatableAssetKindConverter {
+impl pezsp_runtime::traits::TryConvert<AssetKind, LocatableAssetId> for LocatableAssetKindConverter {
 	fn try_convert(value: AssetKind) -> Result<LocatableAssetId, AssetKind> {
 		Ok(LocatableAssetId { asset_id: value.asset_id, location: value.destination })
 	}
@@ -196,7 +196,7 @@ pub type LocalAssetsTransactor = FungiblesAdapter<
 >;
 
 type OriginConverter = (
-	pallet_xcm::XcmPassthrough<RuntimeOrigin>,
+	pezpallet_xcm::XcmPassthrough<RuntimeOrigin>,
 	SignedAccountId32AsNative<AnyNetwork, RuntimeOrigin>,
 );
 type Barrier = AllowUnpaidExecutionFrom<Everything>;
@@ -273,7 +273,7 @@ pub(crate) type SovereignAccountOf = (
 	HashedDescription<AccountId, DescribeFamily<DescribeAllTerminal>>,
 );
 
-impl pallet_xcm::Config for Test {
+impl pezpallet_xcm::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = TestMessageSender;
@@ -287,15 +287,15 @@ impl pallet_xcm::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type TrustedLockers = ();
 	type SovereignAccountOf = SovereignAccountOf;
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<RelayLocation>;
-	type MaxLockers = frame_support::traits::ConstU32<8>;
-	type MaxRemoteLockConsumers = frame_support::traits::ConstU32<0>;
+	type MaxLockers = pezframe_support::traits::ConstU32<8>;
+	type MaxRemoteLockConsumers = pezframe_support::traits::ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type AuthorizedAliasConsideration = Disabled;
 }
@@ -310,10 +310,10 @@ pub fn sibling_chain_account_id(para_id: u32, account: [u8; 32]) -> AccountId {
 	SovereignAccountOf::convert_location(&location).unwrap()
 }
 
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 	let admin_account: AccountId = AccountId::new([0u8; 32]);
-	pallet_assets::GenesisConfig::<Test> {
+	pezpallet_assets::GenesisConfig::<Test> {
 		assets: vec![
 			(0, admin_account.clone(), true, MINIMUM_BALANCE),
 			(1, admin_account.clone(), true, MINIMUM_BALANCE),
@@ -334,7 +334,7 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }

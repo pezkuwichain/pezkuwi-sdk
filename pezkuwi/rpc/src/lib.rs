@@ -22,21 +22,21 @@ use std::sync::Arc;
 
 use jsonrpsee::RpcModule;
 use pezkuwi_primitives::{AccountId, Balance, Block, BlockNumber, Hash, Nonce};
-use sc_client_api::AuxStore;
-use sc_consensus_beefy::communication::notification::{
+use pezsc_client_api::AuxStore;
+use pezsc_consensus_beefy::communication::notification::{
 	BeefyBestBlockStream, BeefyVersionedFinalityProofStream,
 };
-use sc_consensus_grandpa::FinalityProofProvider;
-pub use sc_rpc::SubscriptionTaskExecutor;
-use sc_transaction_pool_api::TransactionPool;
-use sp_api::ProvideRuntimeApi;
-use sp_application_crypto::RuntimeAppPublic;
-use sp_block_builder::BlockBuilder;
-use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
-use sp_consensus::SelectChain;
-use sp_consensus_babe::BabeApi;
-use sp_consensus_beefy::AuthorityIdBound;
-use sp_keystore::KeystorePtr;
+use pezsc_consensus_grandpa::FinalityProofProvider;
+pub use pezsc_rpc::SubscriptionTaskExecutor;
+use pezsc_transaction_pool_api::TransactionPool;
+use pezsp_api::ProvideRuntimeApi;
+use pezsp_application_crypto::RuntimeAppPublic;
+use pezsp_block_builder::BlockBuilder;
+use pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
+use pezsp_consensus::SelectChain;
+use pezsp_consensus_babe::BabeApi;
+use pezsp_consensus_beefy::AuthorityIdBound;
+use pezsp_keystore::KeystorePtr;
 
 /// A type representing all RPC extensions.
 pub type RpcExtension = RpcModule<()>;
@@ -44,7 +44,7 @@ pub type RpcExtension = RpcModule<()>;
 /// Extra dependencies for BABE.
 pub struct BabeDeps {
 	/// A handle to the BABE worker for issuing requests.
-	pub babe_worker_handle: sc_consensus_babe::BabeWorkerHandle<Block>,
+	pub babe_worker_handle: pezsc_consensus_babe::BabeWorkerHandle<Block>,
 	/// The keystore that manages the keys of the node.
 	pub keystore: KeystorePtr,
 }
@@ -52,13 +52,13 @@ pub struct BabeDeps {
 /// Dependencies for GRANDPA
 pub struct GrandpaDeps<B> {
 	/// Voting round info.
-	pub shared_voter_state: sc_consensus_grandpa::SharedVoterState,
+	pub shared_voter_state: pezsc_consensus_grandpa::SharedVoterState,
 	/// Authority set info.
-	pub shared_authority_set: sc_consensus_grandpa::SharedAuthoritySet<Hash, BlockNumber>,
+	pub shared_authority_set: pezsc_consensus_grandpa::SharedAuthoritySet<Hash, BlockNumber>,
 	/// Receives notifications about justification events from Grandpa.
-	pub justification_stream: sc_consensus_grandpa::GrandpaJustificationStream<Block>,
+	pub justification_stream: pezsc_consensus_grandpa::GrandpaJustificationStream<Block>,
 	/// Executor to drive the subscription manager in the Grandpa RPC handler.
-	pub subscription_executor: sc_rpc::SubscriptionTaskExecutor,
+	pub subscription_executor: pezsc_rpc::SubscriptionTaskExecutor,
 	/// Finality proof provider.
 	pub finality_provider: Arc<FinalityProofProvider<B, Block>>,
 }
@@ -70,7 +70,7 @@ pub struct BeefyDeps<AuthorityId: AuthorityIdBound> {
 	/// Receives notifications about best block events from BEEFY.
 	pub beefy_best_block_stream: BeefyBestBlockStream<Block>,
 	/// Executor to drive the subscription manager in the BEEFY RPC handler.
-	pub subscription_executor: sc_rpc::SubscriptionTaskExecutor,
+	pub subscription_executor: pezsc_rpc::SubscriptionTaskExecutor,
 }
 
 /// Full client dependencies
@@ -82,7 +82,7 @@ pub struct FullDeps<C, P, SC, B, AuthorityId: AuthorityIdBound> {
 	/// The [`SelectChain`] Strategy
 	pub select_chain: SC,
 	/// A copy of the chain spec.
-	pub chain_spec: Box<dyn sc_chain_spec::ChainSpec>,
+	pub chain_spec: Box<dyn pezsc_chain_spec::ChainSpec>,
 	/// BABE specific dependencies.
 	pub babe: BabeDeps,
 	/// GRANDPA specific dependencies.
@@ -111,26 +111,26 @@ where
 		+ Send
 		+ Sync
 		+ 'static,
-	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
-	C::Api: mmr_rpc::MmrRuntimeApi<Block, <Block as sp_runtime::traits::Block>::Hash, BlockNumber>,
-	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
+	C::Api: bizinikiwi_frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
+	C::Api: mmr_rpc::MmrRuntimeApi<Block, <Block as pezsp_runtime::traits::Block>::Hash, BlockNumber>,
+	C::Api: pezpallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
 	C::Api: BabeApi<Block>,
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + Sync + Send + 'static,
 	SC: SelectChain<Block> + 'static,
-	B: sc_client_api::Backend<Block> + Send + Sync + 'static,
-	B::State: sc_client_api::StateBackend<sp_runtime::traits::HashingFor<Block>>,
+	B: pezsc_client_api::Backend<Block> + Send + Sync + 'static,
+	B::State: pezsc_client_api::StateBackend<pezsp_runtime::traits::HashingFor<Block>>,
 	AuthorityId: AuthorityIdBound,
 	<AuthorityId as RuntimeAppPublic>::Signature: Send + Sync,
 {
 	use mmr_rpc::{Mmr, MmrApiServer};
-	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
-	use sc_consensus_babe_rpc::{Babe, BabeApiServer};
-	use sc_consensus_beefy_rpc::{Beefy, BeefyApiServer};
-	use sc_consensus_grandpa_rpc::{Grandpa, GrandpaApiServer};
-	use sc_sync_state_rpc::{SyncState, SyncStateApiServer};
-	use substrate_frame_rpc_system::{System, SystemApiServer};
-	use substrate_state_trie_migration_rpc::{StateMigration, StateMigrationApiServer};
+	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
+	use pezsc_consensus_babe_rpc::{Babe, BabeApiServer};
+	use pezsc_consensus_beefy_rpc::{Beefy, BeefyApiServer};
+	use pezsc_consensus_grandpa_rpc::{Grandpa, GrandpaApiServer};
+	use pezsc_sync_state_rpc::{SyncState, SyncStateApiServer};
+	use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
+	use bizinikiwi_state_trie_migration_rpc::{StateMigration, StateMigrationApiServer};
 
 	let mut io = RpcModule::new(());
 	let BabeDeps { babe_worker_handle, keystore } = babe;

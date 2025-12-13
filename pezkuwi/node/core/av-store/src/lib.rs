@@ -36,7 +36,7 @@ use futures::{
 };
 use futures_timer::Delay;
 use pezkuwi_node_subsystem_util::database::{DBTransaction, Database};
-use sp_consensus::SyncOracle;
+use pezsp_consensus::SyncOracle;
 
 use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
 use pezkuwi_node_primitives::{AvailableData, ErasureChunk};
@@ -647,7 +647,7 @@ async fn run_iteration<Context>(
 
 // Start prune-all on a separate thread, so that in the case when the operation takes
 // longer than expected we don't keep the whole subsystem blocked.
-// See: https://github.com/paritytech/polkadot/issues/7237 for more details.
+// See: https://github.com/pezkuwichain/kurdistan-sdk/issues/170 for more details.
 #[overseer::contextbounds(AvailabilityStore, prefix = self::overseer)]
 async fn start_prune_all<Context>(
 	ctx: &mut Context,

@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   node_alice:
-    image: "pezkuwi:${BRANCH:-cumulus-branch}"
+    image: "pezkuwi:${BRANCH:-pezcumulus-branch}"
     ports:
       - "30333:30333"
       - "9933:9933"
@@ -30,7 +30,7 @@ services:
           - alice
 
   node_bob:
-    image: "pezkuwi:${BRANCH:-cumulus-branch}"
+    image: "pezkuwi:${BRANCH:-pezcumulus-branch}"
     ports:
       - "30344:30333"
       - "9935:9933"

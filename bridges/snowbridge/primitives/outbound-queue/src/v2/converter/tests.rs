@@ -3,11 +3,11 @@ use crate::{
 	v2::{convert::XcmConverterError, Command, Message},
 	SendError, SendMessageFeeProvider,
 };
-use frame_support::{parameter_types, BoundedVec};
+use pezframe_support::{parameter_types, BoundedVec};
 use hex_literal::hex;
 use snowbridge_core::{AgentIdOf, TokenIdOf};
-use sp_core::H256;
-use sp_std::default::Default;
+use pezsp_core::H256;
+use pezsp_std::default::Default;
 use xcm::{latest::ZAGROS_GENESIS_HASH, prelude::SendError as XcmSendError};
 use xcm_executor::traits::ConvertLocation;
 

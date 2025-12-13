@@ -20,8 +20,8 @@ exclude-from-umbrella = true
 [dependencies]
 codec = { features = ["derive"], workspace = true }
 snowbridge-core = { workspace = true }
-sp-api = { workspace = true }
-sp-std = { workspace = true }
+pezsp-api = { workspace = true }
+pezsp-std = { workspace = true }
 xcm = { workspace = true }
 
 [features]
@@ -29,12 +29,12 @@ default = ["std"]
 std = [
 	"codec/std",
 	"snowbridge-core/std",
-	"sp-api/std",
-	"sp-std/std",
+	"pezsp-api/std",
+	"pezsp-std/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
 	"snowbridge-core/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]

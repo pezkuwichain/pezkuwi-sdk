@@ -23,8 +23,8 @@
 //
 // For more information, please refer to <http://unlicense.org>
 
-// Substrate and Pezkuwi dependencies
-use frame_support::{
+// Bizinikiwi and Pezkuwi dependencies
+use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::{ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, VariantCountOf},
 	weights::{
@@ -32,11 +32,11 @@ use frame_support::{
 		IdentityFee, Weight,
 	},
 };
-use frame_system::limits::{BlockLength, BlockWeights};
-use pallet_transaction_payment::{ConstFeeMultiplier, FungibleAdapter, Multiplier};
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use sp_runtime::{traits::One, Perbill};
-use sp_version::RuntimeVersion;
+use pezframe_system::limits::{BlockLength, BlockWeights};
+use pezpallet_transaction_payment::{ConstFeeMultiplier, FungibleAdapter, Multiplier};
+use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
+use pezsp_runtime::{traits::One, Perbill};
+use pezsp_version::RuntimeVersion;
 
 // Local module imports
 use super::{
@@ -66,11 +66,11 @@ parameter_types! {
 #[allow(unused_parens)]
 type SingleBlockMigrations = ();
 
-/// The default types are being injected by [`derive_impl`](`frame_support::derive_impl`) from
-/// [`SoloChainDefaultConfig`](`struct@frame_system::config_preludes::SolochainDefaultConfig`),
+/// The default types are being injected by [`derive_impl`](`pezframe_support::derive_impl`) from
+/// [`SoloChainDefaultConfig`](`struct@pezframe_system::config_preludes::SolochainDefaultConfig`),
 /// but overridden as needed.
-#[derive_impl(frame_system::config_preludes::SolochainDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::SolochainDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	/// The block type for the runtime.
 	type Block = Block;
 	/// Block & extrinsics weights: base values and limits.
@@ -90,22 +90,22 @@ impl frame_system::Config for Runtime {
 	/// Version of the runtime.
 	type Version = Version;
 	/// The data to be stored in an account.
-	type AccountData = pallet_balances::AccountData<Balance>;
-	/// This is used as an identifier of the chain. 42 is the generic substrate prefix.
+	type AccountData = pezpallet_balances::AccountData<Balance>;
+	/// This is used as an identifier of the chain. 42 is the generic bizinikiwi prefix.
 	type SS58Prefix = SS58Prefix;
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = SingleBlockMigrations;
 }
 
-impl pallet_aura::Config for Runtime {
+impl pezpallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
 	type DisabledValidators = ();
 	type MaxAuthorities = ConstU32<32>;
 	type AllowMultipleBlocksPerSlot = ConstBool<false>;
-	type SlotDuration = pallet_aura::MinimumPeriodTimesTwo<Runtime>;
+	type SlotDuration = pezpallet_aura::MinimumPeriodTimesTwo<Runtime>;
 }
 
-impl pallet_grandpa::Config for Runtime {
+impl pezpallet_grandpa::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 
 	type WeightInfo = ();
@@ -113,11 +113,11 @@ impl pallet_grandpa::Config for Runtime {
 	type MaxNominators = ConstU32<0>;
 	type MaxSetIdSessionEntries = ConstU64<0>;
 
-	type KeyOwnerProof = sp_core::Void;
+	type KeyOwnerProof = pezsp_core::Void;
 	type EquivocationReportSystem = ();
 }
 
-impl pallet_timestamp::Config for Runtime {
+impl pezpallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
 	type OnTimestampSet = Aura;
@@ -125,7 +125,7 @@ impl pallet_timestamp::Config for Runtime {
 	type WeightInfo = ();
 }
 
-impl pallet_balances::Config for Runtime {
+impl pezpallet_balances::Config for Runtime {
 	type MaxLocks = ConstU32<50>;
 	type MaxReserves = ();
 	type ReserveIdentifier = [u8; 8];
@@ -136,7 +136,7 @@ impl pallet_balances::Config for Runtime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ConstU128<EXISTENTIAL_DEPOSIT>;
 	type AccountStore = System;
-	type WeightInfo = pallet_balances::weights::SubstrateWeight<Runtime>;
+	type WeightInfo = pezpallet_balances::weights::BizinikiwiWeight<Runtime>;
 	type FreezeIdentifier = RuntimeFreezeReason;
 	type MaxFreezes = VariantCountOf<RuntimeFreezeReason>;
 	type RuntimeHoldReason = RuntimeHoldReason;
@@ -148,24 +148,24 @@ parameter_types! {
 	pub FeeMultiplier: Multiplier = Multiplier::one();
 }
 
-impl pallet_transaction_payment::Config for Runtime {
+impl pezpallet_transaction_payment::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OnChargeTransaction = FungibleAdapter<Balances, ()>;
 	type OperationalFeeMultiplier = ConstU8<5>;
 	type WeightToFee = IdentityFee<Balance>;
 	type LengthToFee = IdentityFee<Balance>;
 	type FeeMultiplierUpdate = ConstFeeMultiplier<FeeMultiplier>;
-	type WeightInfo = pallet_transaction_payment::weights::SubstrateWeight<Runtime>;
+	type WeightInfo = pezpallet_transaction_payment::weights::BizinikiwiWeight<Runtime>;
 }
 
-impl pallet_sudo::Config for Runtime {
+impl pezpallet_sudo::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
-	type WeightInfo = pallet_sudo::weights::SubstrateWeight<Runtime>;
+	type WeightInfo = pezpallet_sudo::weights::BizinikiwiWeight<Runtime>;
 }
 
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
+/// Configure the pezpallet-template in pallets/template.
+impl pezpallet_template::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_template::weights::SubstrateWeight<Runtime>;
+	type WeightInfo = pezpallet_template::weights::BizinikiwiWeight<Runtime>;
 }

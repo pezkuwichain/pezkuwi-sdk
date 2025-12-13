@@ -16,7 +16,7 @@
 
 //! A module that is responsible for migration of storage.
 
-use frame_support::traits::StorageVersion;
+use pezframe_support::traits::StorageVersion;
 
 /// The in-code storage version.
 pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);

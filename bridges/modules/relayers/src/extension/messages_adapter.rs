@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Adapter that allows using `pallet-bridge-relayers` as a signed extension in the
+//! Adapter that allows using `pezpallet-bridge-relayers` as a signed extension in the
 //! bridge with any remote chain. This adapter does not refund any finality transactions.
 
 use crate::{extension::verify_messages_call_succeeded, Config as BridgeRelayersConfig};
@@ -22,11 +22,11 @@ use crate::{extension::verify_messages_call_succeeded, Config as BridgeRelayersC
 use bp_relayers::{ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
 use bp_runtime::StaticStrProvider;
 use core::marker::PhantomData;
-use frame_support::dispatch::{DispatchInfo, PostDispatchInfo};
-use pallet_bridge_messages::{
+use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
+use pezpallet_bridge_messages::{
 	CallSubType as BridgeMessagesCallSubType, Config as BridgeMessagesConfig, LaneIdOf,
 };
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{Dispatchable, Get},
 	transaction_validity::{TransactionPriority, TransactionValidityError},
 };
@@ -43,11 +43,11 @@ pub struct WithMessagesExtensionConfig<
 	PhantomData<(
 		// signed extension identifier
 		IdProvider,
-		// runtime with `pallet-bridge-messages` pallet deployed
+		// runtime with `pezpallet-bridge-messages` pallet deployed
 		Runtime,
-		// instance of BridgedChain `pallet-bridge-messages`, tracked by this extension
+		// instance of BridgedChain `pezpallet-bridge-messages`, tracked by this extension
 		BridgeMessagesPalletInstance,
-		// instance of `pallet-bridge-relayers`, tracked by this extension
+		// instance of `pezpallet-bridge-relayers`, tracked by this extension
 		BridgeRelayersPalletInstance,
 		// message delivery transaction priority boost for every additional message
 		PriorityBoostPerMessage,

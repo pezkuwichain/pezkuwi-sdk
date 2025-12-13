@@ -18,11 +18,11 @@
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use frame_support::pallet_prelude::TypeInfo;
-use sp_weights::Weight;
+use pezframe_support::pezpallet_prelude::TypeInfo;
+use pezsp_weights::Weight;
 use xcm::{Version, VersionedAssetId, VersionedAssets, VersionedLocation, VersionedXcm};
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// A trait of XCM payment API.
 	///
 	/// API provides functionality for obtaining:

@@ -58,7 +58,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 			// commitment for selecting the core index.
 			p.with_id(2100)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_chain("elastic-scaling-mvp")
 				.with_default_args(vec![
 					"--authoring=slot-based".into(),
@@ -71,7 +71,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 			// for selecting the core index
 			p.with_id(2200)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_chain("elastic-scaling")
 				.with_default_args(vec![
 					"--authoring=slot-based".into(),

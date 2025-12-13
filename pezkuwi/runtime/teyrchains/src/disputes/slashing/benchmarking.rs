@@ -18,13 +18,13 @@ use super::*;
 
 use crate::{disputes::SlashingHandler, initializer, shared};
 use codec::Decode;
-use frame_benchmarking::v2::*;
-use frame_support::traits::{OnFinalize, OnInitialize};
-use frame_system::{pallet_prelude::BlockNumberFor, RawOrigin};
-use pallet_staking::testing_utils::create_validators;
+use pezframe_benchmarking::v2::*;
+use pezframe_support::traits::{OnFinalize, OnInitialize};
+use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
+use pezpallet_staking::testing_utils::create_validators;
 use pezkuwi_primitives::{Hash, TEYRCHAIN_KEY_TYPE_ID};
-use sp_runtime::traits::{One, OpaqueKeys, StaticLookup};
-use sp_session::MembershipProof;
+use pezsp_runtime::traits::{One, OpaqueKeys, StaticLookup};
+use pezsp_session::MembershipProof;
 
 // Candidate hash of the disputed candidate.
 const CANDIDATE_HASH: CandidateHash = CandidateHash(Hash::zero());
@@ -35,9 +35,9 @@ pub const fn max_validators_for<T: super::Config>() -> u32 {
 }
 
 pub trait Config:
-	pallet_session::Config
-	+ pallet_session::historical::Config
-	+ pallet_staking::Config
+	pezpallet_session::Config
+	+ pezpallet_session::historical::Config
+	+ pezpallet_staking::Config
 	+ super::Config
 	+ shared::Config
 	+ initializer::Config
@@ -48,7 +48,7 @@ fn setup_validator_set<T>(n: u32) -> (SessionIndex, MembershipProof, ValidatorId
 where
 	T: Config,
 {
-	pallet_staking::ValidatorCount::<T>::put(n);
+	pezpallet_staking::ValidatorCount::<T>::put(n);
 
 	let balance_factor = 1000;
 	// create validators and set random session keys
@@ -56,13 +56,13 @@ where
 		use rand::{RngCore, SeedableRng};
 
 		let validator = T::Lookup::lookup(who).unwrap();
-		let controller = pallet_staking::Pallet::<T>::bonded(&validator).unwrap();
+		let controller = pezpallet_staking::Pallet::<T>::bonded(&validator).unwrap();
 
 		let keys = {
 			const SESSION_KEY_LEN: usize = 32;
 			let key_ids = T::Keys::key_ids();
 			let mut keys_len = key_ids.len() * SESSION_KEY_LEN;
-			if key_ids.contains(&sp_core::crypto::key_types::BEEFY) {
+			if key_ids.contains(&pezsp_core::crypto::key_types::BEEFY) {
 				// BEEFY key is 33 bytes long, not 32.
 				keys_len += 1;
 			}
@@ -76,21 +76,21 @@ where
 		let proof: Vec<u8> = vec![];
 
 		whitelist_account!(controller);
-		pallet_session::Pallet::<T>::ensure_can_pay_key_deposit(&controller).unwrap();
-		pallet_session::Pallet::<T>::set_keys(RawOrigin::Signed(controller).into(), keys, proof)
+		pezpallet_session::Pallet::<T>::ensure_can_pay_key_deposit(&controller).unwrap();
+		pezpallet_session::Pallet::<T>::set_keys(RawOrigin::Signed(controller).into(), keys, proof)
 			.expect("session::set_keys should work");
 	}
 
-	pallet_session::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
+	pezpallet_session::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
 	initializer::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
 
-	// signal to `pallet-staking`'s `ElectionProvider` to be ready asap.
-	use frame_election_provider_support::ElectionProvider;
-	<<T as pallet_staking::Config>::ElectionProvider as ElectionProvider>::asap();
+	// signal to `pezpallet-staking`'s `ElectionProvider` to be ready asap.
+	use pezframe_election_provider_support::ElectionProvider;
+	<<T as pezpallet_staking::Config>::ElectionProvider as ElectionProvider>::asap();
 
 	// skip sessions until the new validator set is enacted
-	while pallet_session::Pallet::<T>::validators().len() < n as usize {
-		pallet_session::Pallet::<T>::rotate_session();
+	while pezpallet_session::Pallet::<T>::validators().len() < n as usize {
+		pezpallet_session::Pallet::<T>::rotate_session();
 	}
 	initializer::Pallet::<T>::on_finalize(BlockNumberFor::<T>::one());
 
@@ -99,11 +99,11 @@ where
 	let session_info = session_info.unwrap();
 	let validator_id = session_info.validators.get(ValidatorIndex::from(0)).unwrap().clone();
 	let key = (TEYRCHAIN_KEY_TYPE_ID, validator_id.clone());
-	let key_owner_proof = pallet_session::historical::Pallet::<T>::prove(key).unwrap();
+	let key_owner_proof = pezpallet_session::historical::Pallet::<T>::prove(key).unwrap();
 
 	// rotate a session to make sure `key_owner_proof` is historical
 	initializer::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
-	pallet_session::Pallet::<T>::rotate_session();
+	pezpallet_session::Pallet::<T>::rotate_session();
 	initializer::Pallet::<T>::on_finalize(BlockNumberFor::<T>::one());
 
 	let idx = crate::shared::CurrentSessionIndex::<T>::get();

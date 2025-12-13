@@ -34,7 +34,7 @@
 use std::sync::Arc;
 
 use futures::prelude::*;
-use sc_client_api::AuxStore;
+use pezsc_client_api::AuxStore;
 
 use futures::stream::StreamExt;
 use pezkuwi_node_subsystem::{
@@ -107,7 +107,7 @@ where
 				},
 				ChainApiMessage::BlockWeight(hash, response_channel) => {
 					let _timer = subsystem.metrics.time_block_weight();
-					let result = sc_consensus_babe::block_weight(&*subsystem.client, hash)
+					let result = pezsc_consensus_babe::block_weight(&*subsystem.client, hash)
 						.map_err(|e| e.to_string().into());
 					subsystem.metrics.on_request(result.is_ok());
 					let _ = response_channel.send(result);

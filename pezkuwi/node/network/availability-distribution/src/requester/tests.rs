@@ -24,7 +24,7 @@ use pezkuwi_primitives::{
 	BlockNumber, ChunkIndex, CoreState, ExecutorParams, GroupIndex, Hash, Id as ParaId,
 	ScheduledCore, SessionIndex, SessionInfo,
 };
-use sp_core::{testing::TaskExecutor, traits::SpawnNamed};
+use pezsp_core::{testing::TaskExecutor, traits::SpawnNamed};
 
 use pezkuwi_node_subsystem::{
 	messages::{

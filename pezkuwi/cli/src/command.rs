@@ -15,8 +15,8 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::cli::{Cli, Subcommand, NODE_VERSION};
-use frame_benchmarking_cli::{
-	BenchmarkCmd, ExtrinsicFactory, SubstrateRemarkBuilder, SUBSTRATE_REFERENCE_HARDWARE,
+use pezframe_benchmarking_cli::{
+	BenchmarkCmd, ExtrinsicFactory, BizinikiwiRemarkBuilder, BIZINIKIWI_REFERENCE_HARDWARE,
 };
 use futures::future::TryFutureExt;
 use log::{info, warn};
@@ -27,10 +27,10 @@ use pezkuwi_service::{
 };
 #[cfg(feature = "pyroscope")]
 use pyroscope_pprofrs::{pprof_backend, PprofConfig};
-use sc_cli::SubstrateCli;
-use sc_network_types::PeerId;
-use sp_core::crypto::Ss58AddressFormatRegistry;
-use sp_keyring::Sr25519Keyring;
+use pezsc_cli::BizinikiwiCli;
+use pezsc_network_types::PeerId;
+use pezsp_core::crypto::Ss58AddressFormatRegistry;
+use pezsp_keyring::Sr25519Keyring;
 
 pub use crate::error::Error;
 #[cfg(feature = "pyroscope")]
@@ -95,13 +95,13 @@ fn get_invulnerable_ah_collators(
 			.collect()
 }
 
-impl SubstrateCli for Cli {
+impl BizinikiwiCli for Cli {
 	fn impl_name() -> String {
 		"Parity Pezkuwi".into()
 	}
 
 	fn impl_version() -> String {
-		let commit_hash = env!("SUBSTRATE_CLI_COMMIT_HASH");
+		let commit_hash = env!("BIZINIKIWI_CLI_COMMIT_HASH");
 		format!("{}-{commit_hash}", NODE_VERSION)
 	}
 
@@ -125,7 +125,7 @@ impl SubstrateCli for Cli {
 		"pezkuwi".into()
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		let id = if id == "" {
 			let n = get_exec_name().unwrap_or_default();
 			["pezkuwi", "kusama", "zagros", "pezkuwichain", "versi"]
@@ -199,13 +199,13 @@ fn set_default_ss58_version(spec: &Box<dyn pezkuwi_service::ChainSpec>) {
 	let ss58_version = if spec.is_kusama() {
 		Ss58AddressFormatRegistry::KusamaAccount
 	} else if spec.is_zagros() {
-		Ss58AddressFormatRegistry::SubstrateAccount
+		Ss58AddressFormatRegistry::BizinikiwiAccount
 	} else {
 		Ss58AddressFormatRegistry::PezkuwiAccount
 	}
 	.into();
 
-	sp_core::crypto::set_default_ss58_version(ss58_version);
+	pezsp_core::crypto::set_default_ss58_version(ss58_version);
 }
 
 /// Launch a node, accepting arguments just like a regular node,
@@ -229,7 +229,7 @@ fn run_node_inner<F>(
 	logger_hook: F,
 ) -> Result<()>
 where
-	F: FnOnce(&mut sc_cli::LoggerBuilder, &sc_service::Configuration),
+	F: FnOnce(&mut pezsc_cli::LoggerBuilder, &pezsc_service::Configuration),
 {
 	let runner = cli
 		.create_runner_with_logger_hook::<_, _, F>(&cli.run.base, logger_hook)
@@ -263,7 +263,7 @@ where
 			.then(|| {
 				config.database.path().map(|database_path| {
 					let _ = std::fs::create_dir_all(&database_path);
-					sc_sysinfo::gather_hwbench(Some(database_path), &SUBSTRATE_REFERENCE_HARDWARE)
+					pezsc_sysinfo::gather_hwbench(Some(database_path), &BIZINIKIWI_REFERENCE_HARDWARE)
 				})
 			})
 			.flatten();
@@ -297,7 +297,7 @@ where
 		.map(|full| full.task_manager)?;
 
 		if let Some(path) = database_source.path() {
-			sc_storage_monitor::StorageMonitorService::try_spawn(
+			pezsc_storage_monitor::StorageMonitorService::try_spawn(
 				cli.storage_monitor,
 				path.to_path_buf(),
 				&task_manager.spawn_essential_handle(),
@@ -354,7 +354,7 @@ pub fn run() -> Result<()> {
 			cmd.run(spec).map_err(Into::into)
 		},
 		Some(Subcommand::CheckBlock(cmd)) => {
-			let runner = cli.create_runner(cmd).map_err(Error::SubstrateCli)?;
+			let runner = cli.create_runner(cmd).map_err(Error::BizinikiwiCli)?;
 			let chain_spec = &runner.config().chain_spec;
 
 			set_default_ss58_version(chain_spec);
@@ -362,7 +362,7 @@ pub fn run() -> Result<()> {
 			runner.async_run(|mut config| {
 				let (client, _, import_queue, task_manager) =
 					pezkuwi_service::new_chain_ops(&mut config)?;
-				Ok((cmd.run(client, import_queue).map_err(Error::SubstrateCli), task_manager))
+				Ok((cmd.run(client, import_queue).map_err(Error::BizinikiwiCli), task_manager))
 			})
 		},
 		Some(Subcommand::ExportBlocks(cmd)) => {
@@ -374,7 +374,7 @@ pub fn run() -> Result<()> {
 			Ok(runner.async_run(|mut config| {
 				let (client, _, _, task_manager) =
 					pezkuwi_service::new_chain_ops(&mut config).map_err(Error::PezkuwiService)?;
-				Ok((cmd.run(client, config.database).map_err(Error::SubstrateCli), task_manager))
+				Ok((cmd.run(client, config.database).map_err(Error::BizinikiwiCli), task_manager))
 			})?)
 		},
 		Some(Subcommand::ExportState(cmd)) => {
@@ -385,7 +385,7 @@ pub fn run() -> Result<()> {
 
 			Ok(runner.async_run(|mut config| {
 				let (client, _, _, task_manager) = pezkuwi_service::new_chain_ops(&mut config)?;
-				Ok((cmd.run(client, config.chain_spec).map_err(Error::SubstrateCli), task_manager))
+				Ok((cmd.run(client, config.chain_spec).map_err(Error::BizinikiwiCli), task_manager))
 			})?)
 		},
 		Some(Subcommand::ImportBlocks(cmd)) => {
@@ -397,7 +397,7 @@ pub fn run() -> Result<()> {
 			Ok(runner.async_run(|mut config| {
 				let (client, _, import_queue, task_manager) =
 					pezkuwi_service::new_chain_ops(&mut config)?;
-				Ok((cmd.run(client, import_queue).map_err(Error::SubstrateCli), task_manager))
+				Ok((cmd.run(client, import_queue).map_err(Error::BizinikiwiCli), task_manager))
 			})?)
 		},
 		Some(Subcommand::PurgeChain(cmd)) => {
@@ -420,12 +420,12 @@ pub fn run() -> Result<()> {
 							match err {
 								pezkuwi_service::Error::Blockchain(err) => err.into(),
 								// Generic application-specific error.
-								err => sc_cli::Error::Application(err.into()),
+								err => pezsc_cli::Error::Application(err.into()),
 							}
 						})
 				});
 				Ok((
-					cmd.run(client, backend, Some(aux_revert)).map_err(Error::SubstrateCli),
+					cmd.run(client, backend, Some(aux_revert)).map_err(Error::BizinikiwiCli),
 					task_manager,
 				))
 			})?)
@@ -437,7 +437,7 @@ pub fn run() -> Result<()> {
 			match cmd {
 				#[cfg(not(feature = "runtime-benchmarks"))]
 				BenchmarkCmd::Storage(_) =>
-					return Err(sc_cli::Error::Input(
+					return Err(pezsc_cli::Error::Input(
 						"Compile with --features=runtime-benchmarks \
 						to enable storage benchmarks."
 							.into(),
@@ -450,16 +450,16 @@ pub fn run() -> Result<()> {
 					let storage = backend.expose_storage();
 					let shared_trie_cache = backend.expose_shared_trie_cache();
 
-					cmd.run(config, client.clone(), db, storage, shared_trie_cache).map_err(Error::SubstrateCli)
+					cmd.run(config, client.clone(), db, storage, shared_trie_cache).map_err(Error::BizinikiwiCli)
 				}),
 				BenchmarkCmd::Block(cmd) => runner.sync_run(|mut config| {
 					let (client, _, _, _) = pezkuwi_service::new_chain_ops(&mut config)?;
 
-					cmd.run(client.clone()).map_err(Error::SubstrateCli)
+					cmd.run(client.clone()).map_err(Error::BizinikiwiCli)
 				}),
 				BenchmarkCmd::Overhead(cmd) => runner.sync_run(|config| {
 					if cmd.params.runtime.is_some() {
-						return Err(sc_cli::Error::Input(
+						return Err(pezsc_cli::Error::Input(
 							"Pezkuwi binary does not support `--runtime` flag for `benchmark overhead`. Please provide a chain spec or use the `frame-omni-bencher`."
 								.into(),
 						)
@@ -469,7 +469,7 @@ pub fn run() -> Result<()> {
 					cmd.run_with_default_builder_and_spec::<pezkuwi_service::Block, ()>(
 						Some(config.chain_spec),
 					)
-					.map_err(Error::SubstrateCli)
+					.map_err(Error::BizinikiwiCli)
 				}),
 				BenchmarkCmd::Extrinsic(cmd) => runner.sync_run(|mut config| {
 					let (client, _, _, _) = pezkuwi_service::new_chain_ops(&mut config)?;
@@ -477,7 +477,7 @@ pub fn run() -> Result<()> {
 					let inherent_data = benchmark_inherent_data(header)
 						.map_err(|e| format!("generating inherent data: {:?}", e))?;
 
-					let remark_builder = SubstrateRemarkBuilder::new_from_client(client.clone())?;
+					let remark_builder = BizinikiwiRemarkBuilder::new_from_client(client.clone())?;
 
 					let tka_builder = TransferKeepAliveBuilder::new(
 						client.clone(),
@@ -489,20 +489,20 @@ pub fn run() -> Result<()> {
 						ExtrinsicFactory(vec![Box::new(remark_builder), Box::new(tka_builder)]);
 
 					cmd.run(client.clone(), inherent_data, Vec::new(), &ext_factory)
-						.map_err(Error::SubstrateCli)
+						.map_err(Error::BizinikiwiCli)
 				}),
 				BenchmarkCmd::Pallet(cmd) => {
 					set_default_ss58_version(chain_spec);
 
 					if cfg!(feature = "runtime-benchmarks") {
 						runner.sync_run(|config| {
-							cmd.run_with_spec::<sp_runtime::traits::HashingFor<pezkuwi_service::Block>, ()>(
+							cmd.run_with_spec::<pezsp_runtime::traits::HashingFor<pezkuwi_service::Block>, ()>(
 								Some(config.chain_spec),
 							)
-							.map_err(|e| Error::SubstrateCli(e))
+							.map_err(|e| Error::BizinikiwiCli(e))
 						})
 					} else {
-						Err(sc_cli::Error::Input(
+						Err(pezsc_cli::Error::Input(
 							"Benchmarking wasn't enabled when building the node. \
 				You can enable it with `--features runtime-benchmarks`."
 								.into(),
@@ -511,8 +511,8 @@ pub fn run() -> Result<()> {
 					}
 				},
 				BenchmarkCmd::Machine(cmd) => runner.sync_run(|config| {
-					cmd.run(&config, SUBSTRATE_REFERENCE_HARDWARE.clone())
-						.map_err(Error::SubstrateCli)
+					cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone())
+						.map_err(Error::BizinikiwiCli)
 				}),
 				// NOTE: this allows the Pezkuwi client to leniently implement
 				// new benchmark commands.

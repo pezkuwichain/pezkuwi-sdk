@@ -25,11 +25,11 @@ use crate::{
 	util::{take_active_subset, take_active_subset_and_inactive},
 };
 use alloc::vec::Vec;
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{OneSessionHandler, ValidatorSet, ValidatorSetWithIdentification},
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{
 	AssignmentId, AuthorityDiscoveryId, ExecutorParams, SessionIndex, SessionInfo,
 };
@@ -43,7 +43,7 @@ mod tests;
 
 /// A type for representing the validator account id in a session.
 pub type AccountId<T> = <<T as Config>::ValidatorSet as ValidatorSet<
-	<T as frame_system::Config>::AccountId,
+	<T as pezframe_system::Config>::AccountId,
 >>::ValidatorId;
 
 /// A tuple of `(AccountId, Identification)` where `Identification`
@@ -51,11 +51,11 @@ pub type AccountId<T> = <<T as Config>::ValidatorSet as ValidatorSet<
 pub type IdentificationTuple<T> = (
 	AccountId<T>,
 	<<T as Config>::ValidatorSet as ValidatorSetWithIdentification<
-		<T as frame_system::Config>::AccountId,
+		<T as pezframe_system::Config>::AccountId,
 	>>::Identification,
 );
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -66,7 +66,7 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config:
-		frame_system::Config
+		pezframe_system::Config
 		+ configuration::Config
 		+ shared::Config
 		+ paras::Config
@@ -115,9 +115,9 @@ pub trait AuthorityDiscoveryConfig {
 	fn authorities() -> Vec<AuthorityDiscoveryId>;
 }
 
-impl<T: pallet_authority_discovery::Config> AuthorityDiscoveryConfig for T {
+impl<T: pezpallet_authority_discovery::Config> AuthorityDiscoveryConfig for T {
 	fn authorities() -> Vec<AuthorityDiscoveryId> {
-		pallet_authority_discovery::Pallet::<T>::current_authorities().to_vec()
+		pezpallet_authority_discovery::Pallet::<T>::current_authorities().to_vec()
 	}
 }
 
@@ -202,11 +202,11 @@ impl<T: Config> Pallet<T> {
 	pub(crate) fn initializer_finalize() {}
 }
 
-impl<T: Config> sp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
 	type Public = AssignmentId;
 }
 
-impl<T: pallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: pezpallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pallet<T> {
 	type Key = AssignmentId;
 
 	fn on_genesis_session<'a, I: 'a>(_validators: I)

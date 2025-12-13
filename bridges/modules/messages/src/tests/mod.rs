@@ -21,6 +21,6 @@
 #[cfg(test)]
 pub(crate) mod mock;
 #[cfg(test)]
-mod pallet_tests;
+mod pezpallet_tests;
 
 pub mod messages_generation;

@@ -46,7 +46,7 @@
 //! - [`Executor`](xcm_executor): Implements the XCVM, capable of executing XCMs. Highly
 //!   configurable.
 //! - [`Builder`](xcm_builder): A collection of types used to configure the executor.
-//! - [`XCM Pallet`](pallet_xcm): A FRAME pallet for interacting with the executor.
+//! - [`XCM Pallet`](pezpallet_xcm): A FRAME pallet for interacting with the executor.
 //! - [`Simulator`](xcm_simulator): A playground to tinker with different XCM programs and executor
 //!   configurations.
 //!

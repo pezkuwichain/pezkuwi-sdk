@@ -17,12 +17,12 @@
 use std::sync::Arc;
 
 use pezkuwi_node_subsystem::{ActivatedLeaf, BlockInfo};
-use sc_client_api::UnpinHandle;
-use sc_keystore::LocalKeystore;
-use sc_utils::mpsc::tracing_unbounded;
-use sp_application_crypto::AppCrypto;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{Keystore, KeystorePtr};
+use pezsc_client_api::UnpinHandle;
+use pezsc_keystore::LocalKeystore;
+use pezsc_utils::mpsc::tracing_unbounded;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{Keystore, KeystorePtr};
 
 use pezkuwi_primitives::{AuthorityDiscoveryId, Block, BlockNumber, Hash, ValidatorId};
 

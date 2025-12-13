@@ -24,18 +24,18 @@ pezkuwi-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sp-consensus = { workspace = true }
+pezsp-consensus = { workspace = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
 kvdb-memorydb = { workspace = true }
-sp-tracing = { workspace = true }
+pezsp-tracing = { workspace = true }
 
 parking_lot = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives-test-helpers = { workspace = true }
-sp-core = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
@@ -47,6 +47,6 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

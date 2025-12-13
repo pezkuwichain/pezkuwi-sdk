@@ -18,17 +18,17 @@
 
 use crate::configuration::{Config, Pallet};
 use alloc::vec::Vec;
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{Defensive, UncheckedOnRuntimeUpgrade},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{
 	AsyncBackingParams, Balance, ExecutorParams, NodeFeatures, SessionIndex,
 	LEGACY_MIN_BACKING_VOTES, ON_DEMAND_DEFAULT_QUEUE_MAX_SIZE,
 };
-use sp_runtime::Perbill;
+use pezsp_runtime::Perbill;
 
 use super::v9::V9HostConfiguration;
 // All configuration of the runtime with respect to paras.
@@ -137,11 +137,11 @@ impl<BlockNumber: Default + From<u32>> Default for V10HostConfiguration<BlockNum
 mod v9 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V9HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V9HostConfiguration<BlockNumberFor<T>>)>,
@@ -152,11 +152,11 @@ mod v9 {
 mod v10 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V10HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V10HostConfiguration<BlockNumberFor<T>>)>,
@@ -167,7 +167,7 @@ mod v10 {
 pub struct VersionUncheckedMigrateToV10<T>(core::marker::PhantomData<T>);
 impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateToV10<T> {
 	#[cfg(feature = "try-runtime")]
-	fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running pre_upgrade() for HostConfiguration MigrateToV10");
 		Ok(Vec::new())
 	}
@@ -177,7 +177,7 @@ impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateToV10<T> {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(_state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+	fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running post_upgrade() for HostConfiguration MigrateToV10");
 		ensure!(
 			Pallet::<T>::on_chain_storage_version() >= StorageVersion::new(10),
@@ -188,12 +188,12 @@ impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateToV10<T> {
 	}
 }
 
-pub type MigrateToV10<T> = frame_support::migrations::VersionedMigration<
+pub type MigrateToV10<T> = pezframe_support::migrations::VersionedMigration<
 	9,
 	10,
 	VersionUncheckedMigrateToV10<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;
 
 // Unusual formatting is justified:

@@ -26,10 +26,10 @@ use std::{
 use async_trait::async_trait;
 
 use pezkuwi_node_network_protocol::{authority_discovery::AuthorityDiscovery, PeerId};
-use sc_keystore::LocalKeystore;
-use sp_application_crypto::AppCrypto;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{Keystore, KeystorePtr};
+use pezsc_keystore::LocalKeystore;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{Keystore, KeystorePtr};
 
 use pezkuwi_node_primitives::{DisputeMessage, SignedDisputeStatement};
 use pezkuwi_primitives::{
@@ -203,7 +203,7 @@ impl AuthorityDiscovery for MockAuthorityDiscovery {
 	async fn get_addresses_by_authority_id(
 		&mut self,
 		_authority: pezkuwi_primitives::AuthorityDiscoveryId,
-	) -> Option<HashSet<sc_network::Multiaddr>> {
+	) -> Option<HashSet<pezsc_network::Multiaddr>> {
 		panic!("Not implemented");
 	}
 

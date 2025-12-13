@@ -16,8 +16,8 @@
 
 use std::collections::HashSet;
 
-pub use sc_network::ReputationChange;
-pub use sc_network_types::PeerId;
+pub use pezsc_network::ReputationChange;
+pub use pezsc_network_types::PeerId;
 
 use pezkuwi_node_network_protocol::{
 	grid_topology::SessionGridTopology, peer_set::ProtocolVersion, ObservedRole, OurView, View,

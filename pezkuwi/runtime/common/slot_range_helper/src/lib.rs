@@ -22,7 +22,7 @@ pub use codec::{Decode, Encode};
 pub use core::{ops::Add, result};
 pub use enumn::N;
 pub use paste;
-pub use sp_runtime::traits::CheckedSub;
+pub use pezsp_runtime::traits::CheckedSub;
 
 /// This macro generates a `SlotRange` enum of arbitrary length for use in the Slot Auction
 /// mechanism on Pezkuwi.

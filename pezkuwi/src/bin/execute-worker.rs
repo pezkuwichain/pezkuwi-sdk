@@ -20,5 +20,5 @@ pezkuwi_node_core_pvf_common::decl_worker_main!(
 	"execute-worker",
 	pezkuwi_node_core_pvf_execute_worker::worker_entrypoint,
 	pezkuwi_cli::NODE_VERSION,
-	env!("SUBSTRATE_CLI_COMMIT_HASH"),
+	env!("BIZINIKIWI_CLI_COMMIT_HASH"),
 );

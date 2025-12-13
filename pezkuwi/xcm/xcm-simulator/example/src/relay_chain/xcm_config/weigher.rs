@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::relay_chain::RuntimeCall;
-use frame_support::parameter_types;
+use pezframe_support::parameter_types;
 use xcm::latest::prelude::*;
 use xcm_builder::FixedWeightBounds;
 

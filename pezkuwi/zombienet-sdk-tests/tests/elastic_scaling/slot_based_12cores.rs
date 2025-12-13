@@ -59,7 +59,7 @@ async fn slot_based_12cores_test() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(2300)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_chain("elastic-scaling-500ms")
 				.with_default_args(vec![
 					"--authoring=slot-based".into(),

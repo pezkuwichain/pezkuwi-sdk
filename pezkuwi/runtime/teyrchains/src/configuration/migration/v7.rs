@@ -18,15 +18,15 @@
 
 use crate::configuration::{self, Config, Pallet};
 use alloc::vec::Vec;
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{Defensive, StorageVersion},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{AsyncBackingParams, Balance, ExecutorParams, SessionIndex};
 
-use frame_support::traits::OnRuntimeUpgrade;
+use pezframe_support::traits::OnRuntimeUpgrade;
 
 use super::v6::V6HostConfiguration;
 
@@ -127,11 +127,11 @@ impl<BlockNumber: Default + From<u32>> Default for V7HostConfiguration<BlockNumb
 mod v6 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V6HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V6HostConfiguration<BlockNumberFor<T>>)>,
@@ -142,11 +142,11 @@ mod v6 {
 mod v7 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V7HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V7HostConfiguration<BlockNumberFor<T>>)>,
@@ -157,7 +157,7 @@ mod v7 {
 pub struct MigrateToV7<T>(core::marker::PhantomData<T>);
 impl<T: Config> OnRuntimeUpgrade for MigrateToV7<T> {
 	#[cfg(feature = "try-runtime")]
-	fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running pre_upgrade()");
 		Ok(Vec::new())
 	}
@@ -178,7 +178,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToV7<T> {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(_state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+	fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running post_upgrade()");
 		ensure!(
 			StorageVersion::get::<Pallet<T>>() >= 7,

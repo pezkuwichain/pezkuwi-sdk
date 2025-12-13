@@ -40,7 +40,7 @@ pub fn validate_candidate(
 	use pezkuwi_node_core_pvf_common::executor_interface::{prepare, prevalidate};
 	use pezkuwi_node_core_pvf_execute_worker::execute_artifact;
 
-	let code = sp_maybe_compressed_blob::decompress(code, 10 * 1024 * 1024)
+	let code = pezsp_maybe_compressed_blob::decompress(code, 10 * 1024 * 1024)
 		.expect("Decompressing code failed");
 
 	let blob = prevalidate(&code)?;

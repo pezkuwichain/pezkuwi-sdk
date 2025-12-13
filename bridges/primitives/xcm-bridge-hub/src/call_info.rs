@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Defines structures related to calls of the `pallet-xcm-bridge-hub` pallet.
+//! Defines structures related to calls of the `pezpallet-xcm-bridge-hub` pallet.
 
 use bp_messages::MessageNonce;
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-use sp_std::boxed::Box;
+use pezsp_std::boxed::Box;
 use xcm::prelude::VersionedInteriorLocation;
 
-/// A minimized version of `pallet_xcm_bridge_hub::Call` that can be used without a runtime.
+/// A minimized version of `pezpallet_xcm_bridge_hub::Call` that can be used without a runtime.
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 #[allow(non_camel_case_types)]
 pub enum XcmBridgeHubCall {
-	/// `pallet_xcm_bridge_hub::Call::open_bridge`
+	/// `pezpallet_xcm_bridge_hub::Call::open_bridge`
 	#[codec(index = 0)]
 	open_bridge {
 		/// Universal `InteriorLocation` from the bridged consensus.
 		bridge_destination_universal_location: Box<VersionedInteriorLocation>,
 	},
-	/// `pallet_xcm_bridge_hub::Call::close_bridge`
+	/// `pezpallet_xcm_bridge_hub::Call::close_bridge`
 	#[codec(index = 1)]
 	close_bridge {
 		/// Universal `InteriorLocation` from the bridged consensus.

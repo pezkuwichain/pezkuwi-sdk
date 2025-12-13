@@ -8,7 +8,7 @@ use snowbridge_outbound_queue_primitives::{
 	v2::{Message, SendMessage},
 	SendMessageFeeProvider,
 };
-use sp_core::H256;
+use pezsp_core::H256;
 
 pub struct MockOkOutboundQueue;
 impl SendMessage for MockOkOutboundQueue {

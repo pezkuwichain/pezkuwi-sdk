@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use crate::{mock::*, *};
-use frame_support::{assert_noop, assert_ok};
+use pezframe_support::{assert_noop, assert_ok};
 use hex_literal::hex;
 use snowbridge_core::eth;
-use sp_core::H256;
-use sp_runtime::{AccountId32, DispatchError::BadOrigin};
+use pezsp_core::H256;
+use pezsp_runtime::{AccountId32, DispatchError::BadOrigin};
 
 #[test]
 fn test_agent_for_here() {
@@ -125,7 +125,7 @@ fn set_pricing_parameters_invalid() {
 			Error::<Test>::InvalidPricingParameters
 		);
 		params = Parameters::get();
-		params.fee_per_gas = sp_core::U256::zero();
+		params.fee_per_gas = pezsp_core::U256::zero();
 		assert_noop!(
 			EthereumSystem::set_pricing_parameters(origin.clone(), params),
 			Error::<Test>::InvalidPricingParameters
@@ -137,7 +137,7 @@ fn set_pricing_parameters_invalid() {
 			Error::<Test>::InvalidPricingParameters
 		);
 		params = Parameters::get();
-		params.rewards.remote = sp_core::U256::zero();
+		params.rewards.remote = pezsp_core::U256::zero();
 		assert_noop!(
 			EthereumSystem::set_pricing_parameters(origin, params),
 			Error::<Test>::InvalidPricingParameters

@@ -19,12 +19,12 @@
 use crate::LocatableAssetId;
 use alloc::vec;
 use core::{fmt::Debug, marker::PhantomData};
-use frame_support::traits::Get;
-use sp_runtime::traits::TryConvert;
+use pezframe_support::traits::Get;
+use pezsp_runtime::traits::TryConvert;
 use xcm::{latest::Error, opaque::lts::Weight, prelude::*};
 use xcm_executor::traits::{FeeManager, FeeReason, QueryHandler, QueryResponseStatus};
 
-pub use frame_support::traits::tokens::transfer::{Transfer, TransferStatus};
+pub use pezframe_support::traits::tokens::transfer::{Transfer, TransferStatus};
 
 const LOG_TARGET: &str = "xcm::transfer_over_xcm";
 

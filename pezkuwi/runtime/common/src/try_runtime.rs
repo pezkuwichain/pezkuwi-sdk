@@ -17,18 +17,18 @@
 //! Common try-runtime only tests for runtimes.
 
 use alloc::{collections::btree_set::BTreeSet, vec::Vec};
-use frame_support::{
+use pezframe_support::{
 	dispatch::RawOrigin,
 	traits::{Get, Hooks},
 };
-use pallet_fast_unstake::{Pallet as FastUnstake, *};
-use pallet_staking::*;
+use pezpallet_fast_unstake::{Pallet as FastUnstake, *};
+use pezpallet_staking::*;
 
 /// register all inactive nominators for fast-unstake, and progress until they have all been
 /// processed.
-pub fn migrate_all_inactive_nominators<T: pallet_fast_unstake::Config + pallet_staking::Config>()
+pub fn migrate_all_inactive_nominators<T: pezpallet_fast_unstake::Config + pezpallet_staking::Config>()
 where
-	<T as frame_system::Config>::RuntimeEvent: TryInto<pallet_fast_unstake::Event<T>>,
+	<T as pezframe_system::Config>::RuntimeEvent: TryInto<pezpallet_fast_unstake::Event<T>>,
 {
 	let mut unstaked_ok = 0;
 	let mut unstaked_err = 0;
@@ -64,35 +64,35 @@ where
 		target: "runtime::test",
 		"registered {} successfully, starting at {:?}.",
 		Queue::<T>::count(),
-		frame_system::Pallet::<T>::block_number(),
+		pezframe_system::Pallet::<T>::block_number(),
 	);
 	while Queue::<T>::count() != 0 || Head::<T>::get().is_some() {
-		let now = frame_system::Pallet::<T>::block_number();
-		let weight = <T as frame_system::Config>::BlockWeights::get().max_block;
+		let now = pezframe_system::Pallet::<T>::block_number();
+		let weight = <T as pezframe_system::Config>::BlockWeights::get().max_block;
 		let consumed = FastUnstake::<T>::on_idle(now, weight);
 		log::debug!(target: "runtime::test", "consumed {:?} ({})", consumed, consumed.ref_time() as f32 / weight.ref_time() as f32);
 
-		frame_system::Pallet::<T>::read_events_no_consensus()
+		pezframe_system::Pallet::<T>::read_events_no_consensus()
 			.into_iter()
 			.map(|r| r.event)
 			.filter_map(|e| {
-				let maybe_fast_unstake_event: Option<pallet_fast_unstake::Event<T>> =
+				let maybe_fast_unstake_event: Option<pezpallet_fast_unstake::Event<T>> =
 					e.try_into().ok();
 				maybe_fast_unstake_event
 			})
-			.for_each(|e: pallet_fast_unstake::Event<T>| match e {
-				pallet_fast_unstake::Event::<T>::Unstaked { result, .. } =>
+			.for_each(|e: pezpallet_fast_unstake::Event<T>| match e {
+				pezpallet_fast_unstake::Event::<T>::Unstaked { result, .. } =>
 					if result.is_ok() {
 						unstaked_ok += 1;
 					} else {
 						unstaked_err += 1
 					},
-				pallet_fast_unstake::Event::<T>::Slashed { .. } => unstaked_slashed += 1,
-				pallet_fast_unstake::Event::<T>::InternalError => unreachable!(),
+				pezpallet_fast_unstake::Event::<T>::Slashed { .. } => unstaked_slashed += 1,
+				pezpallet_fast_unstake::Event::<T>::InternalError => unreachable!(),
 				_ => {},
 			});
 
-		if now % 100u32.into() == sp_runtime::traits::Zero::zero() {
+		if now % 100u32.into() == pezsp_runtime::traits::Zero::zero() {
 			log::info!(
 				target: "runtime::test",
 				"status: ok {}, err {}, slash {}",
@@ -102,6 +102,6 @@ where
 			);
 		}
 
-		frame_system::Pallet::<T>::reset_events();
+		pezframe_system::Pallet::<T>::reset_events();
 	}
 }

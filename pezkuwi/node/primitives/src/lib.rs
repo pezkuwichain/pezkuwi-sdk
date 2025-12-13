@@ -36,7 +36,7 @@ use pezkuwi_primitives::{
 	PersistedValidationData, SessionIndex, Signed, UncheckedSigned, ValidationCode,
 	ValidationCodeHash, MAX_CODE_SIZE, MAX_POV_SIZE,
 };
-pub use sp_consensus_babe::{
+pub use pezsp_consensus_babe::{
 	AllowedSlots as BabeAllowedSlots, BabeEpochConfiguration, Epoch as BabeEpoch,
 	Randomness as BabeRandomness,
 };
@@ -421,7 +421,7 @@ impl MaybeCompressedPoV {
 ///
 /// This differs from `CandidateCommitments` in two ways:
 ///
-/// - does not contain the erasure root; that's computed at the Pezkuwi level, not at Cumulus
+/// - does not contain the erasure root; that's computed at the Pezkuwi level, not at Pezcumulus
 /// - contains a proof of validity.
 #[derive(Debug, Clone, Encode, Decode)]
 #[cfg(not(target_os = "unknown"))]
@@ -664,7 +664,7 @@ impl ErasureChunk {
 #[cfg(not(target_os = "unknown"))]
 pub fn maybe_compress_pov(pov: PoV) -> PoV {
 	let PoV { block_data: BlockData(raw) } = pov;
-	let raw = sp_maybe_compressed_blob::compress_weakly(&raw, POV_BOMB_LIMIT).unwrap_or(raw);
+	let raw = pezsp_maybe_compressed_blob::compress_weakly(&raw, POV_BOMB_LIMIT).unwrap_or(raw);
 
 	let pov = PoV { block_data: BlockData(raw) };
 	pov

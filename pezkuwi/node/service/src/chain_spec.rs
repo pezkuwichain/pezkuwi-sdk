@@ -18,11 +18,11 @@
 
 #[cfg(feature = "pezkuwichain-native")]
 use pezkuwichain_runtime as pezkuwichain;
-use sc_chain_spec::ChainSpecExtension;
+use pezsc_chain_spec::ChainSpecExtension;
 #[cfg(any(feature = "zagros-native", feature = "pezkuwichain-native"))]
-use sc_chain_spec::ChainType;
+use pezsc_chain_spec::ChainType;
 #[cfg(any(feature = "zagros-native", feature = "pezkuwichain-native"))]
-use sc_telemetry::TelemetryEndpoints;
+use pezsc_telemetry::TelemetryEndpoints;
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "zagros-native")]
 use zagros_runtime as zagros;
@@ -38,27 +38,27 @@ const DEFAULT_PROTOCOL_ID: &str = "hez";
 
 /// Node `ChainSpec` extensions.
 ///
-/// Additional parameters for some Substrate core modules,
+/// Additional parameters for some Bizinikiwi core modules,
 /// customizable from the chain spec.
 #[derive(Default, Clone, Serialize, Deserialize, ChainSpecExtension)]
 #[serde(rename_all = "camelCase")]
 pub struct Extensions {
 	/// Block numbers with known hashes.
-	pub fork_blocks: sc_client_api::ForkBlocks<pezkuwi_primitives::Block>,
+	pub fork_blocks: pezsc_client_api::ForkBlocks<pezkuwi_primitives::Block>,
 	/// Known bad block hashes.
-	pub bad_blocks: sc_client_api::BadBlocks<pezkuwi_primitives::Block>,
+	pub bad_blocks: pezsc_client_api::BadBlocks<pezkuwi_primitives::Block>,
 	/// The light sync state.
 	///
 	/// This value will be set by the `sync-state rpc` implementation.
-	pub light_sync_state: sc_sync_state_rpc::LightSyncStateExtension,
+	pub light_sync_state: pezsc_sync_state_rpc::LightSyncStateExtension,
 }
 
 // Generic chain spec, in case when we don't have the native runtime.
-pub type GenericChainSpec = sc_service::GenericChainSpec<Extensions>;
+pub type GenericChainSpec = pezsc_service::GenericChainSpec<Extensions>;
 
 /// The `ChainSpec` parameterized for the zagros runtime.
 #[cfg(feature = "zagros-native")]
-pub type ZagrosChainSpec = sc_service::GenericChainSpec<Extensions>;
+pub type ZagrosChainSpec = pezsc_service::GenericChainSpec<Extensions>;
 
 /// The `ChainSpec` parameterized for the zagros runtime.
 // Dummy chain spec, but that is fine when we don't have the native runtime.
@@ -67,7 +67,7 @@ pub type ZagrosChainSpec = GenericChainSpec;
 
 /// The `ChainSpec` parameterized for the pezkuwichain runtime.
 #[cfg(feature = "pezkuwichain-native")]
-pub type PezkuwichainChainSpec = sc_service::GenericChainSpec<Extensions>;
+pub type PezkuwichainChainSpec = pezsc_service::GenericChainSpec<Extensions>;
 
 /// The `ChainSpec` parameterized for the pezkuwichain runtime.
 // Dummy chain spec, but that is fine when we don't have the native runtime.
@@ -104,7 +104,7 @@ pub fn zagros_staging_testnet_config() -> Result<ZagrosChainSpec, String> {
 	.with_name("Zagros Staging Testnet")
 	.with_id("zagros_staging_testnet")
 	.with_chain_type(ChainType::Live)
-	.with_genesis_config_preset_name("staging_testnet")
+	.with_genesis_config_preset_name("pezstaging_testnet")
 	.with_telemetry_endpoints(
 		TelemetryEndpoints::new(vec![(ZAGROS_STAGING_TELEMETRY_URL.to_string(), 0)])
 			.expect("Zagros Staging telemetry url is valid; qed"),
@@ -123,7 +123,7 @@ pub fn pezkuwichain_staging_testnet_config() -> Result<PezkuwichainChainSpec, St
 	.with_name("Pezkuwichain Staging Testnet")
 	.with_id("pezkuwichain_staging_testnet")
 	.with_chain_type(ChainType::Live)
-	.with_genesis_config_preset_name("staging_testnet")
+	.with_genesis_config_preset_name("pezstaging_testnet")
 	.with_telemetry_endpoints(
 		TelemetryEndpoints::new(vec![(PEZKUWICHAIN_STAGING_TELEMETRY_URL.to_string(), 0)])
 			.expect("Pezkuwichain Staging telemetry url is valid; qed"),
@@ -153,7 +153,7 @@ pub fn versi_staging_testnet_config() -> Result<PezkuwichainChainSpec, String> {
 	.with_name("Versi Staging Testnet")
 	.with_id("versi_staging_testnet")
 	.with_chain_type(ChainType::Live)
-	.with_genesis_config_preset_name("staging_testnet")
+	.with_genesis_config_preset_name("pezstaging_testnet")
 	.with_telemetry_endpoints(
 		TelemetryEndpoints::new(vec![(VERSI_STAGING_TELEMETRY_URL.to_string(), 0)])
 			.expect("Versi Staging telemetry url is valid; qed"),
@@ -173,7 +173,7 @@ pub fn zagros_development_config() -> Result<ZagrosChainSpec, String> {
 	.with_name("Development")
 	.with_id("zagros_dev")
 	.with_chain_type(ChainType::Development)
-	.with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsp_genesis_builder::DEV_RUNTIME_PRESET)
 	.with_protocol_id(DEFAULT_PROTOCOL_ID)
 	.build())
 }
@@ -188,7 +188,7 @@ pub fn pezkuwichain_development_config() -> Result<PezkuwichainChainSpec, String
 	.with_name("Development")
 	.with_id("pezkuwichain_dev")
 	.with_chain_type(ChainType::Development)
-	.with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsp_genesis_builder::DEV_RUNTIME_PRESET)
 	.with_protocol_id(DEFAULT_PROTOCOL_ID)
 	.build())
 }
@@ -203,7 +203,7 @@ pub fn versi_development_config() -> Result<PezkuwichainChainSpec, String> {
 	.with_name("Development")
 	.with_id("versi_dev")
 	.with_chain_type(ChainType::Development)
-	.with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsp_genesis_builder::DEV_RUNTIME_PRESET)
 	.with_protocol_id("versi")
 	.build())
 }
@@ -218,7 +218,7 @@ pub fn zagros_local_testnet_config() -> Result<ZagrosChainSpec, String> {
 	.with_name("Zagros Local Testnet")
 	.with_id("zagros_local_testnet")
 	.with_chain_type(ChainType::Local)
-	.with_genesis_config_preset_name(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
 	.with_protocol_id(DEFAULT_PROTOCOL_ID)
 	.build())
 }
@@ -234,7 +234,7 @@ pub fn pezkuwichain_local_testnet_config() -> Result<PezkuwichainChainSpec, Stri
 	.with_name("Pezkuwichain Local Testnet")
 	.with_id("pezkuwichain_local_testnet")
 	.with_chain_type(ChainType::Local)
-	.with_genesis_config_preset_name(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET)
 	.with_protocol_id(DEFAULT_PROTOCOL_ID)
 	.build())
 }

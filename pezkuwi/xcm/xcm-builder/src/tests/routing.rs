@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use frame_support::{assert_ok, traits::Everything};
+use pezframe_support::{assert_ok, traits::Everything};
 use xcm_executor::traits::Properties;
 
 fn props() -> Properties {
@@ -42,7 +42,7 @@ fn trailing_set_topic_as_id_with_unique_topic_should_work() {
 	);
 
 	// simulate sending `valid_xcm` with the `WithUniqueTopic` router
-	let mut sent_xcm = sp_io::TestExternalities::default().execute_with(|| {
+	let mut sent_xcm = pezsp_io::TestExternalities::default().execute_with(|| {
 		assert_ok!(send_xcm::<WithUniqueTopic<TestMessageSender>>(Location::parent(), valid_xcm,));
 		sent_xcm()
 	});

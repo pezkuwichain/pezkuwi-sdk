@@ -7,7 +7,7 @@
 //! third-parties, and are therefore subject to more variability. Any further resources may be added
 //! by opening a pull request to the `pezkuwi-sdk` repository.
 //!
-//! - [Pezkuwi NFT Marketplace Tutorial by Pezkuwi Fellow Shawn Tabrizi](https://www.shawntabrizi.com/substrate-collectables-workshop/)
+//! - [Pezkuwi NFT Marketplace Tutorial by Pezkuwi Fellow Shawn Tabrizi](https://www.shawntabrizi.com/bizinikiwi-collectables-workshop/)
 //! - [HEZ Code School](https://pezkuwichain.io/docs/introduction)
 //! - [Pezkuwi Developers Github Organization](https://github.com/polkadot-developers/)
 //! - [Pezkuwi Blockchain Academy](https://github.com/pezkuwichain/kurdistan_blockchain-akademy)

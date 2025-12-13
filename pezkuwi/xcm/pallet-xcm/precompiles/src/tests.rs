@@ -20,8 +20,8 @@ use crate::{
 	IXcm::{self, weighMessageCall},
 	VersionedLocation, VersionedXcm,
 };
-use frame_support::traits::Currency;
-use pallet_revive::{
+use pezframe_support::traits::Currency;
+use pezpallet_revive::{
 	precompiles::{
 		alloy::{
 			hex,
@@ -32,7 +32,7 @@ use pallet_revive::{
 	ExecConfig, U256,
 };
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_runtime::traits::AccountIdConversion;
+use pezsp_runtime::traits::AccountIdConversion;
 use xcm::{prelude::*, v3, v4};
 
 const BOB: AccountId = AccountId::new([1u8; 32]);
@@ -71,14 +71,14 @@ fn test_xcm_send_precompile_works() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		assert!(result.result.is_ok());
 		let sent_message = Xcm(Some(DescendOrigin(sender.clone().try_into().unwrap()))
@@ -120,14 +120,14 @@ fn test_xcm_send_precompile_to_teyrchain() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		assert!(result.result.is_ok());
@@ -169,14 +169,14 @@ fn test_xcm_send_precompile_fails() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		let return_value = match result.result {
 			Ok(value) => value,
@@ -219,14 +219,14 @@ fn send_fails_on_old_location_version() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		let return_value = match result.result {
 			Ok(value) => value,
@@ -246,14 +246,14 @@ fn send_fails_on_old_location_version() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		let return_value = match result.result {
 			Ok(value) => value,
@@ -296,14 +296,14 @@ fn send_fails_on_old_xcm_version() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		let return_value = match result.result {
 			Ok(value) => value,
@@ -324,14 +324,14 @@ fn send_fails_on_old_xcm_version() {
 		let call = IXcm::IXcmCalls::send(xcm_send_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		let return_value = match result.result {
 			Ok(value) => value,
@@ -367,14 +367,14 @@ fn test_xcm_execute_precompile_works() {
 		let weight_call = IXcm::IXcmCalls::weighMessage(weight_params);
 		let encoded_weight_call = weight_call.abi_encode();
 
-		let xcm_weight_results = pallet_revive::Pallet::<Test>::bare_call(
+		let xcm_weight_results = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_weight_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let weight_result = match xcm_weight_results.result {
@@ -389,14 +389,14 @@ fn test_xcm_execute_precompile_works() {
 		let call = IXcm::IXcmCalls::execute(xcm_execute_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		assert!(result.result.is_ok());
@@ -428,14 +428,14 @@ fn test_xcm_execute_precompile_different_beneficiary() {
 		let weight_call = IXcm::IXcmCalls::weighMessage(weight_params);
 		let encoded_weight_call = weight_call.abi_encode();
 
-		let xcm_weight_results = pallet_revive::Pallet::<Test>::bare_call(
+		let xcm_weight_results = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_weight_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let weight_result = match xcm_weight_results.result {
@@ -450,14 +450,14 @@ fn test_xcm_execute_precompile_different_beneficiary() {
 		let call = IXcm::IXcmCalls::execute(xcm_execute_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let return_value = match result.result {
@@ -497,14 +497,14 @@ fn test_xcm_execute_precompile_fails() {
 		let weight_call = IXcm::IXcmCalls::weighMessage(weight_params);
 		let encoded_weight_call = weight_call.abi_encode();
 
-		let xcm_weight_results = pallet_revive::Pallet::<Test>::bare_call(
+		let xcm_weight_results = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_weight_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let weight_result = match xcm_weight_results.result {
@@ -519,14 +519,14 @@ fn test_xcm_execute_precompile_fails() {
 		let call = IXcm::IXcmCalls::execute(xcm_execute_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 		let return_value = match result.result {
 			Ok(value) => value,
@@ -565,14 +565,14 @@ fn execute_fails_on_old_version() {
 		let weight_call = IXcm::IXcmCalls::weighMessage(weight_params);
 		let encoded_weight_call = weight_call.abi_encode();
 
-		let xcm_weight_results = pallet_revive::Pallet::<Test>::bare_call(
+		let xcm_weight_results = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_weight_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let weight_result = match xcm_weight_results.result {
@@ -594,14 +594,14 @@ fn execute_fails_on_old_version() {
 		let call = IXcm::IXcmCalls::execute(xcm_execute_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let return_value = match result.result {
@@ -621,14 +621,14 @@ fn execute_fails_on_old_version() {
 		let call = IXcm::IXcmCalls::execute(xcm_execute_params);
 		let encoded_call = call.abi_encode();
 
-		let result = pallet_revive::Pallet::<Test>::bare_call(
+		let result = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let return_value = match result.result {
@@ -670,14 +670,14 @@ fn weight_fails_on_old_version() {
 		let weight_call = IXcm::IXcmCalls::weighMessage(weight_params);
 		let encoded_weight_call = weight_call.abi_encode();
 
-		let xcm_weight_results = pallet_revive::Pallet::<Test>::bare_call(
+		let xcm_weight_results = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_weight_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let result = match xcm_weight_results.result {
@@ -694,14 +694,14 @@ fn weight_fails_on_old_version() {
 		let weight_call = IXcm::IXcmCalls::weighMessage(weight_params);
 		let encoded_weight_call = weight_call.abi_encode();
 
-		let xcm_weight_results = pallet_revive::Pallet::<Test>::bare_call(
+		let xcm_weight_results = pezpallet_revive::Pallet::<Test>::bare_call(
 			RuntimeOrigin::signed(ALICE),
 			xcm_precompile_addr,
 			U256::zero(),
 			Weight::MAX,
 			u128::MAX,
 			encoded_weight_call,
-			ExecConfig::new_substrate_tx(),
+			ExecConfig::new_bizinikiwi_tx(),
 		);
 
 		let result = match xcm_weight_results.result {

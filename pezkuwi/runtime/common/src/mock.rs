@@ -18,12 +18,12 @@
 
 use crate::traits::Registrar;
 use codec::{Decode, Encode};
-use frame_support::{dispatch::DispatchResult, weights::Weight};
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_support::{dispatch::DispatchResult, weights::Weight};
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{HeadData, Id as ParaId, PvfCheckStatement, SessionIndex, ValidationCode};
 use pezkuwi_runtime_teyrchains::paras;
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::{traits::SaturatedConversion, DispatchError, Permill};
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::{traits::SaturatedConversion, DispatchError, Permill};
 use std::{cell::RefCell, collections::HashMap};
 
 thread_local! {
@@ -37,7 +37,7 @@ thread_local! {
 
 pub struct TestRegistrar<T>(core::marker::PhantomData<T>);
 
-impl<T: frame_system::Config> Registrar for TestRegistrar<T> {
+impl<T: pezframe_system::Config> Registrar for TestRegistrar<T> {
 	type AccountId = T::AccountId;
 
 	fn manager_of(id: ParaId) -> Option<Self::AccountId> {
@@ -140,7 +140,7 @@ impl<T: frame_system::Config> Registrar for TestRegistrar<T> {
 		OPERATIONS.with(|x| {
 			x.borrow_mut().push((
 				id,
-				frame_system::Pallet::<T>::block_number().saturated_into(),
+				pezframe_system::Pallet::<T>::block_number().saturated_into(),
 				true,
 			))
 		});
@@ -174,7 +174,7 @@ impl<T: frame_system::Config> Registrar for TestRegistrar<T> {
 		OPERATIONS.with(|x| {
 			x.borrow_mut().push((
 				id,
-				frame_system::Pallet::<T>::block_number().saturated_into(),
+				pezframe_system::Pallet::<T>::block_number().saturated_into(),
 				false,
 			))
 		});
@@ -196,7 +196,7 @@ impl<T: frame_system::Config> Registrar for TestRegistrar<T> {
 	fn execute_pending_transitions() {}
 }
 
-impl<T: frame_system::Config> TestRegistrar<T> {
+impl<T: pezframe_system::Config> TestRegistrar<T> {
 	pub fn operations() -> Vec<(ParaId, BlockNumberFor<T>, bool)> {
 		OPERATIONS
 			.with(|x| x.borrow().iter().map(|(p, b, c)| (*p, (*b).into(), *c)).collect::<Vec<_>>())
@@ -225,7 +225,7 @@ impl<T: frame_system::Config> TestRegistrar<T> {
 /// is more to satisfy type requirements rather than to test anything.
 pub struct TestNextSessionRotation;
 
-impl frame_support::traits::EstimateNextSessionRotation<u32> for TestNextSessionRotation {
+impl pezframe_support::traits::EstimateNextSessionRotation<u32> for TestNextSessionRotation {
 	fn average_session_length() -> u32 {
 		10
 	}
@@ -261,7 +261,7 @@ pub fn conclude_pvf_checking<T: paras::Config>(
 		};
 		let signature = key.sign(&statement.signing_payload());
 		let _ = paras::Pallet::<T>::include_pvf_check_statement(
-			frame_system::Origin::<T>::None.into(),
+			pezframe_system::Origin::<T>::None.into(),
 			statement,
 			signature.into(),
 		);

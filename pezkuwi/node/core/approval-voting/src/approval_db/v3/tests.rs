@@ -31,7 +31,7 @@ use pezkuwi_primitives::{
 
 use pezkuwi_node_subsystem_util::database::Database;
 use pezkuwi_primitives::Id as ParaId;
-use sp_consensus_slots::Slot;
+use pezsp_consensus_slots::Slot;
 use std::{collections::HashMap, sync::Arc};
 
 use pezkuwi_primitives_test_helpers::{

@@ -1,0 +1,45 @@
+[package]
+name = "bridge-hub-pezkuwichain-emulated-chain"
+version = "0.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Bridge Hub Pezkuwichain emulated chain"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Bizinikiwi
+pezframe-support = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-keyring = { workspace = true }
+
+# Pezkuwi Dependencies
+xcm = { workspace = true }
+
+# Bridge dependencies
+bp-messages = { workspace = true }
+
+# Pezcumulus
+bridge-hub-common = { workspace = true }
+bridge-hub-pezkuwichain-runtime = { workspace = true, default-features = true }
+emulated-integration-tests-common = { workspace = true }
+testnet-teyrchains-constants = { features = [
+	"pezkuwichain",
+], workspace = true, default-features = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"bp-messages/runtime-benchmarks",
+	"bridge-hub-common/runtime-benchmarks",
+	"bridge-hub-pezkuwichain-runtime/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

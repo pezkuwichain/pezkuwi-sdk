@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use super::*;
 
-use frame_support::{derive_impl, parameter_types, traits::ConstU32, weights::IdentityFee};
+use pezframe_support::{derive_impl, parameter_types, traits::ConstU32, weights::IdentityFee};
 use hex_literal::hex;
 use snowbridge_beacon_primitives::{
 	types::deneb, BeaconHeader, ExecutionProof, Fork, ForkVersions, VersionedExecutionPayloadHeader,
@@ -11,12 +11,12 @@ use snowbridge_core::{
 	gwei, meth, Channel, ChannelId, PricingParameters, Rewards, StaticLookup, TokenId,
 };
 use snowbridge_inbound_queue_primitives::{v1::MessageToXcm, Log, Proof, VerificationError};
-use sp_core::{H160, H256};
-use sp_runtime::{
+use pezsp_core::{H160, H256};
+use pezsp_runtime::{
 	traits::{IdentifyAccount, IdentityLookup, MaybeConvert, Verify},
 	BuildStorage, FixedU128, MultiSignature,
 };
-use sp_std::{convert::From, default::Default};
+use pezsp_std::{convert::From, default::Default};
 use xcm::{
 	latest::{SendXcm, ZAGROS_GENESIS_HASH},
 	prelude::*,
@@ -30,13 +30,13 @@ use snowbridge_pallet_inbound_queue_fixtures::register_token::make_register_toke
 
 use crate::{self as inbound_queue};
 
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system::{Pallet, Call, Storage, Event<T>},
-		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
+		System: pezframe_system::{Pallet, Call, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
 		EthereumBeaconClient: snowbridge_pallet_ethereum_client::{Pallet, Call, Storage, Event<T>},
 		InboundQueue: inbound_queue::{Pallet, Call, Storage, Event<T>},
 	}
@@ -47,11 +47,11 @@ pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::Account
 
 type Balance = u128;
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
-	type AccountData = pallet_balances::AccountData<u128>;
+	type AccountData = pezpallet_balances::AccountData<u128>;
 	type Block = Block;
 }
 
@@ -59,8 +59,8 @@ parameter_types! {
 	pub const ExistentialDeposit: u128 = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -159,7 +159,7 @@ impl SendXcm for MockXcmSender {
 	}
 
 	fn deliver(xcm: Self::Ticket) -> core::result::Result<XcmHash, XcmpSendError> {
-		let hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+		let hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 		Ok(hash)
 	}
 }
@@ -271,9 +271,9 @@ pub fn setup() {
 	.unwrap();
 }
 
-pub fn new_tester() -> sp_io::TestExternalities {
-	let storage = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	let mut ext: sp_io::TestExternalities = storage.into();
+pub fn new_tester() -> pezsp_io::TestExternalities {
+	let storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let mut ext: pezsp_io::TestExternalities = storage.into();
 	ext.execute_with(setup);
 	ext
 }

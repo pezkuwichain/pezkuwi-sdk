@@ -18,8 +18,8 @@ use crate::xcm_config;
 use alloc::{boxed::Box, vec};
 use codec::{Decode, Encode};
 use core::marker::PhantomData;
-use frame_support::pallet_prelude::DispatchResult;
-use frame_system::RawOrigin;
+use pezframe_support::pezpallet_prelude::DispatchResult;
+use pezframe_system::RawOrigin;
 use pezkuwi_primitives::Balance;
 use pezkuwi_runtime_common::identity_migrator::{OnReapIdentity, WeightInfo};
 use xcm::{latest::prelude::*, VersionedLocation, VersionedXcm};
@@ -56,7 +56,7 @@ impl<Runtime, AccountId> ToTeyrchainIdentityReaper<Runtime, AccountId> {
 	fn calculate_remote_deposit(bytes: u32, subs: u32) -> Balance {
 		// Remote deposit constants. Teyrchain uses `deposit / 100`
 		// Source:
-		// https://github.com/pezkuwichain/pezkuwi-sdk/blob/a146918/cumulus/parachains/common/src/westend.rs#L28
+		// https://github.com/pezkuwichain/pezkuwi-sdk/blob/a146918/pezcumulus/parachains/common/src/westend.rs#L28
 		//
 		// Teyrchain Deposit Configuration:
 		//
@@ -84,7 +84,7 @@ impl<Runtime, AccountId> ToTeyrchainIdentityReaper<Runtime, AccountId> {
 // an error could result in assets being burned.
 impl<Runtime, AccountId> OnReapIdentity<AccountId> for ToTeyrchainIdentityReaper<Runtime, AccountId>
 where
-	Runtime: frame_system::Config + pallet_xcm::Config,
+	Runtime: pezframe_system::Config + pezpallet_xcm::Config,
 	AccountId: Into<[u8; 32]> + Clone + Encode,
 {
 	fn on_reap_identity(who: &AccountId, fields: u32, subs: u32) -> DispatchResult {
@@ -113,7 +113,7 @@ where
 					"withdraw_asset(what: {:?}, who_origin: {:?}) error: {:?}",
 					wnd, who_origin, err
 				);
-				pallet_xcm::Error::<Runtime>::LowBalance
+				pezpallet_xcm::Error::<Runtime>::LowBalance
 			})?;
 
 		// check out
@@ -129,7 +129,7 @@ where
 				"can_check_out(destination: {:?}, asset: {:?}, _) error: {:?}",
 				destination, wnd, err
 			);
-			pallet_xcm::Error::<Runtime>::CannotCheckOutTeleport
+			pezpallet_xcm::Error::<Runtime>::CannotCheckOutTeleport
 		})?;
 		xcm_config::LocalAssetTransactor::check_out(
 			&destination,
@@ -169,7 +169,7 @@ where
 		]);
 
 		// send
-		<pallet_xcm::Pallet<Runtime>>::send(
+		<pezpallet_xcm::Pallet<Runtime>>::send(
 			RawOrigin::Root.into(),
 			Box::new(VersionedLocation::from(destination)),
 			Box::new(VersionedXcm::from(program)),

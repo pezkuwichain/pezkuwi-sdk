@@ -30,7 +30,7 @@ use pezkuwi_node_subsystem_util::metrics::prometheus::{
 	self, Gauge, Histogram, PrometheusError, Registry, U64,
 };
 use pezkuwi_overseer::{BlockInfo, Handle as OverseerHandle};
-use sc_service::{SpawnTaskHandle, TaskManager};
+use pezsc_service::{SpawnTaskHandle, TaskManager};
 use std::net::{Ipv4Addr, SocketAddr};
 use tokio::runtime::Handle;
 
@@ -394,7 +394,7 @@ impl TestEnvironment {
 		for subsystem in subsystems_under_test.iter() {
 			let subsystem_cpu_metrics =
 				test_metrics.subset_with_label_value("task_group", subsystem);
-			let total_cpu = subsystem_cpu_metrics.sum_by("substrate_tasks_polling_duration_sum");
+			let total_cpu = subsystem_cpu_metrics.sum_by("bizinikiwi_tasks_polling_duration_sum");
 			usage.push(ResourceUsage {
 				resource_name: subsystem.to_string(),
 				total: total_cpu,
@@ -403,7 +403,7 @@ impl TestEnvironment {
 
 			if break_down_per_task {
 				for metric in subsystem_cpu_metrics.all() {
-					if metric.name() != "substrate_tasks_polling_duration_sum" {
+					if metric.name() != "bizinikiwi_tasks_polling_duration_sum" {
 						continue;
 					}
 
@@ -420,7 +420,7 @@ impl TestEnvironment {
 
 		let test_env_cpu_metrics =
 			test_metrics.subset_with_label_value("task_group", "test-environment");
-		let total_cpu = test_env_cpu_metrics.sum_by("substrate_tasks_polling_duration_sum");
+		let total_cpu = test_env_cpu_metrics.sum_by("bizinikiwi_tasks_polling_duration_sum");
 
 		usage.push(ResourceUsage {
 			resource_name: "test-environment".to_string(),

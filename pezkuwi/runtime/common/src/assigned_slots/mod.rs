@@ -32,8 +32,8 @@ use crate::{
 };
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::{pallet_prelude::*, traits::Currency};
-use frame_system::pallet_prelude::*;
+use pezframe_support::{pezpallet_prelude::*, traits::Currency};
+use pezframe_system::pezpallet_prelude::*;
 pub use pallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_runtime_teyrchains::{
@@ -41,7 +41,7 @@ use pezkuwi_runtime_teyrchains::{
 	paras::{self},
 };
 use scale_info::TypeInfo;
-use sp_runtime::traits::{One, Saturating, Zero};
+use pezsp_runtime::traits::{One, Saturating, Zero};
 
 const LOG_TARGET: &str = "runtime::assigned_slots";
 
@@ -101,11 +101,11 @@ impl WeightInfo for TestWeightInfo {
 }
 
 type BalanceOf<T> = <<<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Currency as Currency<
-	<T as frame_system::Config>::AccountId,
+	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 type LeasePeriodOf<T> = <<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::LeasePeriod;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -117,14 +117,14 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	#[pallet::disable_frame_system_supertrait_check]
+	#[pallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: configuration::Config + paras::Config + slots::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Origin for assigning slots.
-		type AssignSlotOrigin: EnsureOrigin<<Self as frame_system::Config>::RuntimeOrigin>;
+		type AssignSlotOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 
 		/// The type representing the leasing system.
 		type Leaser: Leaser<
@@ -185,7 +185,7 @@ pub mod pallet {
 	pub type MaxPermanentSlots<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	#[pallet::genesis_config]
-	#[derive(frame_support::DefaultNoBound)]
+	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub max_temporary_slots: u32,
 		pub max_permanent_slots: u32,
@@ -602,7 +602,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Returns current lease period index.
 	fn current_lease_period_index() -> LeasePeriodOf<T> {
-		T::Leaser::lease_period_index(frame_system::Pallet::<T>::block_number())
+		T::Leaser::lease_period_index(pezframe_system::Pallet::<T>::block_number())
 			.and_then(|x| Some(x.0))
 			.unwrap()
 	}
@@ -635,31 +635,31 @@ mod tests {
 	use super::*;
 
 	use crate::{assigned_slots, mock::TestRegistrar, slots};
-	use frame_support::{assert_noop, assert_ok, derive_impl, parameter_types};
-	use frame_system::EnsureRoot;
-	use pallet_balances;
+	use pezframe_support::{assert_noop, assert_ok, derive_impl, parameter_types};
+	use pezframe_system::EnsureRoot;
+	use pezpallet_balances;
 	use pezkuwi_primitives::BlockNumber;
 	use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
 	use pezkuwi_runtime_teyrchains::{
 		configuration as teyrchains_configuration, paras as teyrchains_paras,
 		shared as teyrchains_shared,
 	};
-	use sp_core::H256;
-	use sp_runtime::{
+	use pezsp_core::H256;
+	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},
 		transaction_validity::TransactionPriority,
 		BuildStorage,
 		DispatchError::BadOrigin,
 	};
 
-	type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
-	type Block = frame_system::mocking::MockBlockU32<Test>;
+	type UncheckedExtrinsic = pezframe_system::mocking::MockUncheckedExtrinsic<Test>;
+	type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
-	frame_support::construct_runtime!(
+	pezframe_support::construct_runtime!(
 		pub enum Test
 		{
-			System: frame_system,
-			Balances: pallet_balances,
+			System: pezframe_system,
+			Balances: pezpallet_balances,
 			Configuration: teyrchains_configuration,
 			ParasShared: teyrchains_shared,
 			Teyrchains: teyrchains_paras,
@@ -668,7 +668,7 @@ mod tests {
 		}
 	);
 
-	impl<C> frame_system::offchain::CreateTransactionBase<C> for Test
+	impl<C> pezframe_system::offchain::CreateTransactionBase<C> for Test
 	where
 		RuntimeCall: From<C>,
 	{
@@ -676,7 +676,7 @@ mod tests {
 		type RuntimeCall = RuntimeCall;
 	}
 
-	impl<C> frame_system::offchain::CreateBare<C> for Test
+	impl<C> pezframe_system::offchain::CreateBare<C> for Test
 	where
 		RuntimeCall: From<C>,
 	{
@@ -685,9 +685,9 @@ mod tests {
 		}
 	}
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Test {
-		type BaseCallFilter = frame_support::traits::Everything;
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Test {
+		type BaseCallFilter = pezframe_support::traits::Everything;
 		type BlockWeights = ();
 		type BlockLength = ();
 		type RuntimeOrigin = RuntimeOrigin;
@@ -702,17 +702,17 @@ mod tests {
 		type DbWeight = ();
 		type Version = ();
 		type PalletInfo = PalletInfo;
-		type AccountData = pallet_balances::AccountData<u64>;
+		type AccountData = pezpallet_balances::AccountData<u64>;
 		type OnNewAccount = ();
 		type OnKilledAccount = ();
 		type SystemWeightInfo = ();
 		type SS58Prefix = ();
 		type OnSetCode = ();
-		type MaxConsumers = frame_support::traits::ConstU32<16>;
+		type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	}
 
-	#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-	impl pallet_balances::Config for Test {
+	#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+	impl pezpallet_balances::Config for Test {
 		type AccountStore = System;
 	}
 
@@ -775,9 +775,9 @@ mod tests {
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mock up.
-	pub fn new_test_ext() -> sp_io::TestExternalities {
-		let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-		pallet_balances::GenesisConfig::<Test> {
+	pub fn new_test_ext() -> pezsp_io::TestExternalities {
+		let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		pezpallet_balances::GenesisConfig::<Test> {
 			balances: vec![(1, 10), (2, 20), (3, 30), (4, 40), (5, 50), (6, 60)],
 			..Default::default()
 		}

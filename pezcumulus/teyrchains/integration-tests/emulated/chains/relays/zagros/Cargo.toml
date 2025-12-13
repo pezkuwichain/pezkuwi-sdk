@@ -1,0 +1,45 @@
+[package]
+name = "zagros-emulated-chain"
+version = "0.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Zagros emulated chain"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Bizinikiwi
+pezpallet-staking = { workspace = true }
+pezsc-consensus-grandpa = { workspace = true }
+pezsp-authority-discovery = { workspace = true }
+pezsp-consensus-babe = { workspace = true }
+pezsp-consensus-beefy = { workspace = true, default-features = true }
+pezsp-core = { workspace = true }
+pezsp-runtime = { workspace = true }
+
+# Pezkuwi
+pezkuwi-primitives = { workspace = true }
+zagros-runtime = { workspace = true, default-features = true }
+zagros-runtime-constants = { workspace = true }
+
+# Pezcumulus
+emulated-integration-tests-common = { workspace = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezpallet-staking/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-consensus-grandpa/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
+]

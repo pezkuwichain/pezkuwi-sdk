@@ -204,7 +204,7 @@ pub static malloc_conf: &[u8] =
 
 fn main() -> eyre::Result<()> {
 	color_eyre::install()?;
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 
 	let cli: BenchCli = BenchCli::parse();
 	cli.launch()?;

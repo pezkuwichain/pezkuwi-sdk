@@ -155,15 +155,15 @@ Upstream Polkadot SDK'de TODO/issue referansları varsa, bunları **tracking iss
 
 **1. Upstream'de Kontrol Et:**
 ```bash
-# Örnek: paritytech/polkadot/issues/2403 için
-grep -r "paritytech/polkadot/issues/2403" /home/mamostehp/polkadot-sdk-check/
+# Örnek: pezkuwichain/kurdistan-sdk/issues/133 için
+grep -r "pezkuwichain/kurdistan-sdk/issues/133" /home/mamostehp/polkadot-sdk-check/
 ```
 
 **2. Tracking Issue Oluştur:**
 ```bash
 gh issue create --repo pezkuwichain/pezkuwi-sdk --label "upstream-tracking" \
   --title "[Upstream Tracking] paritytech/polkadot#2403" \
-  --body "**Upstream:** https://github.com/paritytech/polkadot/issues/2403
+  --body "**Upstream:** https://github.com/pezkuwichain/kurdistan-sdk/issues/133
 
 **Status Tracking:**
 - [x] Pending - Upstream not yet resolved
@@ -184,7 +184,7 @@ Periodically check upstream and update checkboxes above based on status changes.
 **3. Koddaki Linki Güncelle:**
 ```rust
 // ÖNCEKİ:
-// https://github.com/paritytech/polkadot/issues/2403
+// https://github.com/pezkuwichain/kurdistan-sdk/issues/133
 
 // SONRA (bizim tracking issue'ya işaret et):
 // https://github.com/pezkuwichain/pezkuwi-sdk/issues/163
@@ -229,7 +229,7 @@ Periodically check upstream and update checkboxes above based on status changes.
 5. **Zepter check** ✅
    - `.config/zepter.yaml`: `-p=polkadot-sdk` → `-p=pezkuwi-sdk` düzeltildi
    - Feature propagation: 36+ issue fix edildi
-   - Duplicate deps: `pallet-identity-kyc` ve `pallet-tiki` düzeltildi
+   - Duplicate deps: `pezpallet-identity-kyc` ve `pezpallet-tiki` düzeltildi
 
 6. **Umbrella crate** ✅
    - `generate-umbrella.py` çalıştırıldı
@@ -238,7 +238,7 @@ Periodically check upstream and update checkboxes above based on status changes.
 ### Değiştirilen Dosyalar (438 dosya)
 - Config dosyaları: `.config/taplo.toml`, `.config/zepter.yaml`, `.github/.markdownlint.yaml`
 - Script: `.github/scripts/check-workspace.py`
-- Pallet Cargo.toml: `pallet-identity-kyc`, `pallet-tiki` + 12 özel pallet feature propagation
+- Pallet Cargo.toml: `pezpallet-identity-kyc`, `pezpallet-tiki` + 12 özel pallet feature propagation
 - Tüm Cargo.toml dosyaları (taplo format)
 - Umbrella crate dosyaları
 
@@ -260,7 +260,7 @@ Commit atılıp push edilmeli - CI/CD artık geçmeli.
 **Lokal test için:**
 ```bash
 export ZOMBIENET_IMAGE_PEZKUWI="docker.io/pezkuwichain/pezkuwi:latest"
-export ZOMBIENET_IMAGE_CUMULUS="docker.io/pezkuwichain/cumulus:latest"
+export ZOMBIENET_IMAGE_CUMULUS="docker.io/pezkuwichain/pezcumulus:latest"
 cargo test --workspace --features runtime-benchmarks
 ```
 
@@ -271,13 +271,13 @@ Test yapan tüm workflow'lara (`.github/workflows/tests*.yml`) şu environment v
 ```yaml
 env:
   ZOMBIENET_IMAGE_PEZKUWI: "docker.io/pezkuwichain/pezkuwi:latest"
-  ZOMBIENET_IMAGE_CUMULUS: "docker.io/pezkuwichain/cumulus:latest"
+  ZOMBIENET_IMAGE_CUMULUS: "docker.io/pezkuwichain/pezcumulus:latest"
 ```
 
 **Not:** Bu değişkenler compile-time'da image alanlarının doldurulması için gerekli. Gerçek image path'leri production'da güncellenebilir.
 
 **İlgili dosyalar:**
-- `substrate/client/transaction-pool/tests/zombienet/yap_test.rs:38`
+- `bizinikiwi/client/transaction-pool/tests/zombienet/yap_test.rs:38`
 - Tüm zombienet SDK test dosyaları
 
 **Tarih:** 2025-12-09

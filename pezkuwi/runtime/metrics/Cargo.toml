@@ -13,9 +13,9 @@ workspace = true
 
 [dependencies]
 codec = { workspace = true }
-frame-benchmarking = { optional = true, workspace = true }
+pezframe-benchmarking = { optional = true, workspace = true }
 pezkuwi-primitives = { workspace = true }
-sp-tracing = { workspace = true }
+pezsp-tracing = { workspace = true }
 
 bs58 = { features = ["alloc"], workspace = true }
 
@@ -24,12 +24,12 @@ default = ["std"]
 std = [
 	"bs58/std",
 	"codec/std",
-	"frame-benchmarking?/std",
+	"pezframe-benchmarking?/std",
 	"pezkuwi-primitives/std",
-	"sp-tracing/std",
+	"pezsp-tracing/std",
 ]
-runtime-metrics = ["frame-benchmarking", "sp-tracing/with-tracing"]
+runtime-metrics = ["pezframe-benchmarking", "pezsp-tracing/with-tracing"]
 runtime-benchmarks = [
-	"frame-benchmarking?/runtime-benchmarks",
+	"pezframe-benchmarking?/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]

@@ -40,9 +40,9 @@ use pezkuwi_primitives_test_helpers::{
 	make_valid_candidate_descriptor_v2, CandidateDescriptor,
 };
 use rstest::rstest;
-use sp_core::{sr25519::Public, testing::TaskExecutor};
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{testing::MemoryKeystore, Keystore};
+use pezsp_core::{sr25519::Public, testing::TaskExecutor};
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{testing::MemoryKeystore, Keystore};
 
 const VALIDATION_CODE_BOMB_LIMIT: u32 = 30 * 1024 * 1024;
 
@@ -750,7 +750,7 @@ fn invalid_session_or_ump_signals() {
 		validation_code.hash(),
 		validation_result.head_data.hash(),
 		dummy_hash(),
-		sp_keyring::Sr25519Keyring::Ferdie,
+		pezsp_keyring::Sr25519Keyring::Ferdie,
 	);
 	let descriptor: CandidateDescriptorV2 = descriptor_v1.into();
 
@@ -1342,7 +1342,7 @@ fn compressed_code_works() {
 
 	let raw_code = vec![2u8; 16];
 	let validation_code =
-		sp_maybe_compressed_blob::compress_strongly(&raw_code, VALIDATION_CODE_BOMB_LIMIT as usize)
+		pezsp_maybe_compressed_blob::compress_strongly(&raw_code, VALIDATION_CODE_BOMB_LIMIT as usize)
 			.map(ValidationCode)
 			.unwrap();
 

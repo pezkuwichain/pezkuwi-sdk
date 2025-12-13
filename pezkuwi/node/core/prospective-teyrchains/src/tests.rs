@@ -116,9 +116,9 @@ fn get_parent_hash(hash: Hash) -> Hash {
 fn test_harness<T: Future<Output = VirtualOverseer>>(
 	test: impl FnOnce(VirtualOverseer) -> T,
 ) -> View {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 
 	let (mut context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());

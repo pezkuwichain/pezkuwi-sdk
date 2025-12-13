@@ -22,7 +22,7 @@ use crate::InspectMessageQueues;
 use alloc::{vec, vec::Vec};
 use codec::{Decode, Encode};
 use core::{convert::TryInto, marker::PhantomData};
-use frame_support::{ensure, traits::Get};
+use pezframe_support::{ensure, traits::Get};
 use xcm::prelude::*;
 use xcm_executor::traits::{validate_export, ExportXcm};
 use SendError::*;
@@ -132,7 +132,7 @@ impl<Exporter: ExportXcm, UniversalLocation: Get<InteriorLocation>> SendXcm
 		let xcm = msg.take().ok_or(MissingArgument)?;
 
 		let hash =
-			(Some(Location::here()), &remote_location).using_encoded(sp_io::hashing::blake2_128);
+			(Some(Location::here()), &remote_location).using_encoded(pezsp_io::hashing::blake2_128);
 		let channel = u32::decode(&mut hash.as_ref()).unwrap_or(0);
 
 		validate_export::<Exporter>(
@@ -662,7 +662,7 @@ impl<
 				tracing::debug!(target: "xcm::universal_exports", "Failed to convert destination to versioned location");
 				SendError::DestinationUnsupported })?;
 
-		let id = maybe_id.unwrap_or_else(|| message.using_encoded(sp_io::hashing::blake2_256));
+		let id = maybe_id.unwrap_or_else(|| message.using_encoded(pezsp_io::hashing::blake2_256));
 		let blob = BridgeMessage { universal_dest, message }.encode();
 		Ok(((blob, id), Price::get()))
 	}
@@ -676,7 +676,7 @@ impl<
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::{
+	use pezframe_support::{
 		assert_err, assert_ok,
 		traits::{Contains, Equals},
 	};
@@ -769,7 +769,7 @@ mod tests {
 
 	#[test]
 	fn local_exporters_works() {
-		frame_support::parameter_types! {
+		pezframe_support::parameter_types! {
 			pub Local: NetworkId = ByGenesis([0; 32]);
 			pub UniversalLocation: InteriorLocation = [GlobalConsensus(Local::get()), Teyrchain(1234)].into();
 			pub DifferentRemote: NetworkId = ByGenesis([22; 32]);
@@ -825,7 +825,7 @@ mod tests {
 
 	#[test]
 	fn remote_exporters_works() {
-		frame_support::parameter_types! {
+		pezframe_support::parameter_types! {
 			pub Local: NetworkId = ByGenesis([0; 32]);
 			pub UniversalLocation: InteriorLocation = [GlobalConsensus(Local::get()), Teyrchain(1234)].into();
 			pub DifferentRemote: NetworkId = ByGenesis([22; 32]);
@@ -934,7 +934,7 @@ mod tests {
 
 	#[test]
 	fn network_export_table_works() {
-		frame_support::parameter_types! {
+		pezframe_support::parameter_types! {
 			pub NetworkA: NetworkId = ByGenesis([0; 32]);
 			pub Teyrchain1000InNetworkA: InteriorLocation = [Teyrchain(1000)].into();
 			pub Teyrchain2000InNetworkA: InteriorLocation = [Teyrchain(2000)].into();

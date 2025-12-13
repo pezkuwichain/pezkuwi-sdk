@@ -6,7 +6,7 @@
 //!
 //! FRAME's origin abstractions allow you to convey meanings far beyond just an account-id being the
 //! caller of an extrinsic. Nonetheless, an account-id having signed an extrinsic is one of the
-//! meanings that an origin can convey. This is the commonly used [`frame_system::ensure_signed`],
+//! meanings that an origin can convey. This is the commonly used [`pezframe_system::ensure_signed`],
 //! where the return value happens to be an account-id.
 //!
 //! Instead, let's establish the following as the correct definition of an origin:
@@ -21,8 +21,8 @@
 //! example:
 //!
 //! * If the majority of token holders agreed upon this. This is more or less what the
-//!   [`pallet_democracy`] does under the hood ([reference](https://github.com/pezkuwichain/pezkuwi-sdk/blob/edd95b3749754d2ed0c5738588e872c87be91624/substrate/frame/democracy/src/lib.rs#L1603-L1633)).
-//! * If a specific ratio of an instance of [`pallet_collective`]/DAO agrees upon this.
+//!   [`pezpallet_democracy`] does under the hood ([reference](https://github.com/pezkuwichain/pezkuwi-sdk/blob/edd95b3749754d2ed0c5738588e872c87be91624/bizinikiwi/pezframe/democracy/src/lib.rs#L1603-L1633)).
+//! * If a specific ratio of an instance of [`pezpallet_collective`]/DAO agrees upon this.
 //! * If another consensus system, for example a bridged network or a teyrchain, agrees upon this.
 //! * If the majority of validator/authority set agrees upon this[^1].
 //! * If caller holds a particular NFT.
@@ -36,10 +36,10 @@
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", call_simple)]
 //!
 //! Typically, the code of an extrinsic starts with an origin check, such as
-//! [`frame_system::ensure_signed`].
+//! [`pezframe_system::ensure_signed`].
 //!
-//! Note that [`OriginFor`](frame_system::pallet_prelude::OriginFor) is merely a shorthand for
-//! [`frame_system::Config::RuntimeOrigin`]. Given the name prefix `Runtime`, we can learn that
+//! Note that [`OriginFor`](pezframe_system::pezpallet_prelude::OriginFor) is merely a shorthand for
+//! [`pezframe_system::Config::RuntimeOrigin`]. Given the name prefix `Runtime`, we can learn that
 //! `RuntimeOrigin` is similar to `RuntimeCall` and others, a runtime composite enum that is
 //! amalgamated at the runtime level. Read [`crate::reference_docs::frame_runtime_types`] to
 //! familiarize yourself with these types.
@@ -56,19 +56,19 @@
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", runtime_exp)]
 //!
 //! The type [`crate::reference_docs::frame_origin::runtime_for_origin::RuntimeOrigin`] is expanded.
-//! This `RuntimeOrigin` contains a variant for the [`frame_system::RawOrigin`] and the custom
+//! This `RuntimeOrigin` contains a variant for the [`pezframe_system::RawOrigin`] and the custom
 //! origin of the pallet.
 //!
-//! > Notice how the [`frame_system::ensure_signed`] is nothing more than a `match` statement. If
+//! > Notice how the [`pezframe_system::ensure_signed`] is nothing more than a `match` statement. If
 //! > you want to know where the actual origin of an extrinsic is set (and the signature
 //! > verification happens, if any), see
-//! > [`sp_runtime::generic::CheckedExtrinsic#trait-implementations`], specifically
-//! > [`sp_runtime::traits::Applyable`]'s implementation.
+//! > [`pezsp_runtime::generic::CheckedExtrinsic#trait-implementations`], specifically
+//! > [`pezsp_runtime::traits::Applyable`]'s implementation.
 //!
 //! ## Asserting on a Custom Internal Origin
 //!
 //! In order to assert on a custom origin that is defined within your pallet, we need a way to first
-//! convert the `<T as frame_system::Config>::RuntimeOrigin` into the local `enum Origin` of the
+//! convert the `<T as pezframe_system::Config>::RuntimeOrigin` into the local `enum Origin` of the
 //! current pallet. This is a common process that is explained in
 //! [`crate::reference_docs::frame_runtime_types#
 //! adding-further-constraints-to-runtime-composite-enums`].
@@ -102,8 +102,8 @@
 //! [`frame::runtime::prelude::EnsureNone`], etc. But, there are also many more that are not known
 //! to us, and are defined in other pallets.
 //!
-//! For example, [`pallet_collective`] defines [`pallet_collective::EnsureMember`] and
-//! [`pallet_collective::EnsureProportionMoreThan`] and many more, which is exactly what we alluded
+//! For example, [`pezpallet_collective`] defines [`pezpallet_collective::EnsureMember`] and
+//! [`pezpallet_collective::EnsureProportionMoreThan`] and many more, which is exactly what we alluded
 //! to earlier in this document.
 //!
 //! Make sure to check the full list of [implementors of
@@ -125,17 +125,17 @@
 //! - [Gavin Wood's speech about FRAME features at Protocol Berg 2023.](https://youtu.be/j7b8Upipmeg?si=83_XUgYuJxMwWX4g&t=195)
 //! - [A related StackExchange question.](https://exchange.pezkuwichain.app/questions/10992/how-do-you-find-the-public-key-for-the-medium-spender-track-origin)
 //!
-//! [^1]: Inherents are essentially unsigned extrinsics that need an [`frame_system::ensure_none`]
+//! [^1]: Inherents are essentially unsigned extrinsics that need an [`pezframe_system::ensure_none`]
 //! origin check, and through the virtue of being an inherent, are agreed upon by all validators.
 
 use frame::prelude::*;
 
 #[frame::pallet(dev_mode)]
-pub mod pallet_for_origin {
+pub mod pezpallet_for_origin {
 	use super::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -151,13 +151,13 @@ pub mod pallet_for_origin {
 }
 
 #[frame::pallet(dev_mode)]
-pub mod pallet_with_custom_origin {
+pub mod pezpallet_with_custom_origin {
 	use super::*;
 
 	#[docify::export(custom_origin_bound)]
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
-		type RuntimeOrigin: From<<Self as frame_system::Config>::RuntimeOrigin>
+	pub trait Config: pezframe_system::Config {
+		type RuntimeOrigin: From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<Result<Origin, <Self as Config>::RuntimeOrigin>>;
 	}
 
@@ -189,10 +189,10 @@ pub mod pallet_with_custom_origin {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		pub fn only_validators(origin: OriginFor<T>) -> DispatchResult {
-			// first, we convert from `<T as frame_system::Config>::RuntimeOrigin` to `<T as
+			// first, we convert from `<T as pezframe_system::Config>::RuntimeOrigin` to `<T as
 			// Config>::RuntimeOrigin`
 			let local_runtime_origin = <<T as Config>::RuntimeOrigin as From<
-				<T as frame_system::Config>::RuntimeOrigin,
+				<T as pezframe_system::Config>::RuntimeOrigin,
 			>>::from(origin);
 			// then we convert to `origin`, if possible
 			let local_origin =
@@ -204,33 +204,33 @@ pub mod pallet_with_custom_origin {
 }
 
 pub mod runtime_for_origin {
-	use super::pallet_with_custom_origin;
+	use super::pezpallet_with_custom_origin;
 	use frame::{runtime::prelude::*, testing_prelude::*};
 
 	#[docify::export(runtime_exp)]
 	construct_runtime!(
 		pub struct Runtime {
-			System: frame_system,
-			PalletWithCustomOrigin: pallet_with_custom_origin,
+			System: pezframe_system,
+			PalletWithCustomOrigin: pezpallet_with_custom_origin,
 		}
 	);
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Runtime {
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Runtime {
 		type Block = MockBlock<Self>;
 	}
 
-	impl pallet_with_custom_origin::Config for Runtime {
+	impl pezpallet_with_custom_origin::Config for Runtime {
 		type RuntimeOrigin = RuntimeOrigin;
 	}
 }
 
 #[frame::pallet(dev_mode)]
-pub mod pallet_with_external_origin {
+pub mod pezpallet_with_external_origin {
 	use super::*;
 	#[docify::export(external_origin_def)]
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		type ExternalOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 	}
 
@@ -253,18 +253,18 @@ pub mod runtime_for_external_origin {
 
 	construct_runtime!(
 		pub struct Runtime {
-			System: frame_system,
-			PalletWithExternalOrigin: pallet_with_external_origin,
+			System: pezframe_system,
+			PalletWithExternalOrigin: pezpallet_with_external_origin,
 		}
 	);
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Runtime {
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Runtime {
 		type Block = MockBlock<Self>;
 	}
 
 	#[docify::export(external_origin_provide)]
-	impl pallet_with_external_origin::Config for Runtime {
-		type ExternalOrigin = EnsureSigned<<Self as frame_system::Config>::AccountId>;
+	impl pezpallet_with_external_origin::Config for Runtime {
+		type ExternalOrigin = EnsureSigned<<Self as pezframe_system::Config>::AccountId>;
 	}
 }

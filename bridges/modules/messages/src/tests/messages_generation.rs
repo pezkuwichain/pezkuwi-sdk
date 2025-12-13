@@ -25,8 +25,8 @@ use bp_runtime::{
 	RawStorageProof, UnverifiedStorageProofParams,
 };
 use codec::Encode;
-use sp_std::{ops::RangeInclusive, prelude::*};
-use sp_trie::{trie_types::TrieDBMutBuilderV1, LayoutV1, MemoryDB, TrieMut};
+use pezsp_std::{ops::RangeInclusive, prelude::*};
+use pezsp_trie::{trie_types::TrieDBMutBuilderV1, LayoutV1, MemoryDB, TrieMut};
 
 /// Dummy message generation function.
 pub fn generate_dummy_message(_: MessageNonce) -> MessagePayload {

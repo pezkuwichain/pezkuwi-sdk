@@ -16,7 +16,7 @@
 
 //! Pezkuwi-specific GRANDPA integration utilities.
 
-use sp_runtime::traits::{Block as BlockT, Header as _, NumberFor};
+use pezsp_runtime::traits::{Block as BlockT, Header as _, NumberFor};
 
 use crate::HeaderProvider;
 
@@ -29,7 +29,7 @@ pub(super) fn walk_backwards_to_target_block<Block, HP>(
 	backend: &HP,
 	target_number: NumberFor<Block>,
 	current_header: &Block::Header,
-) -> Result<(Block::Hash, NumberFor<Block>), sp_blockchain::Error>
+) -> Result<(Block::Hash, NumberFor<Block>), pezsp_blockchain::Error>
 where
 	Block: BlockT,
 	HP: HeaderProvider<Block>,
@@ -64,8 +64,8 @@ where
 /// w3f validators and randomly selected validators from the latest session (at
 /// #1500988).
 #[cfg(feature = "full-node")]
-pub(crate) fn kusama_hard_forks() -> Vec<sc_consensus_grandpa::AuthoritySetHardFork<Block>> {
-	use sp_core::crypto::Ss58Codec;
+pub(crate) fn kusama_hard_forks() -> Vec<pezsc_consensus_grandpa::AuthoritySetHardFork<Block>> {
+	use pezsp_core::crypto::Ss58Codec;
 	use std::str::FromStr;
 
 	let forks = vec![
@@ -141,7 +141,7 @@ pub(crate) fn kusama_hard_forks() -> Vec<sc_consensus_grandpa::AuthoritySetHardF
 		.into_iter()
 		.map(|address| {
 			(
-				sp_consensus_grandpa::AuthorityId::from_ss58check(address)
+				pezsp_consensus_grandpa::AuthorityId::from_ss58check(address)
 					.expect("hard fork authority addresses are static and they should be carefully defined; qed."),
 				1,
 			)
@@ -154,7 +154,7 @@ pub(crate) fn kusama_hard_forks() -> Vec<sc_consensus_grandpa::AuthoritySetHardF
 			let hash = Hash::from_str(hash)
 				.expect("hard fork hashes are static and they should be carefully defined; qed.");
 
-			sc_consensus_grandpa::AuthoritySetHardFork {
+			pezsc_consensus_grandpa::AuthoritySetHardFork {
 				set_id,
 				block: (hash, number),
 				authorities: authorities.clone(),

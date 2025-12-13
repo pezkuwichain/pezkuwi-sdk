@@ -129,9 +129,9 @@
 //! ### Teyrchain Slot Duration
 //!
 //! A common source of confusion is the correct configuration of the `SlotDuration` that is passed
-//! to `pallet-aura`.
+//! to `pezpallet-aura`.
 //! ```ignore
-//! impl pallet_aura::Config for Runtime {
+//! impl pezpallet_aura::Config for Runtime {
 //!     // ...
 //!     type SlotDuration = ConstU64<SLOT_DURATION>;
 //! }

@@ -23,9 +23,9 @@ use bp_header_chain::ChainWithGrandpa;
 use bp_messages::{ChainWithMessages, InboundLaneData, MessageNonce};
 use bp_runtime::{AccountIdOf, Chain};
 use codec::Encode;
-use frame_support::{storage::generator::StorageValue, traits::Get, weights::Weight};
-use frame_system::limits;
-use pallet_bridge_messages::{ThisChainOf, WeightInfoExt as _};
+use pezframe_support::{storage::generator::StorageValue, traits::Get, weights::Weight};
+use pezframe_system::limits;
+use pezpallet_bridge_messages::{ThisChainOf, WeightInfoExt as _};
 
 // Re-export to avoid include all dependencies everywhere.
 #[doc(hidden)]
@@ -39,7 +39,7 @@ pub mod __private {
 macro_rules! assert_chain_types(
 	( runtime: $r:path, this_chain: $this:path ) => {
 		{
-			use frame_system::{Config as SystemConfig, pallet_prelude::{BlockNumberFor, HeaderFor}};
+			use pezframe_system::{Config as SystemConfig, pezpallet_prelude::{BlockNumberFor, HeaderFor}};
 			use $crate::integrity::__private::static_assertions::assert_type_eq_all;
 
 			// if one of asserts fail, then either bridge isn't configured properly (or alternatively - non-standard
@@ -71,7 +71,7 @@ macro_rules! assert_bridge_messages_pallet_types(
 			use $crate::integrity::__private::static_assertions::assert_type_eq_all;
 			use bp_messages::ChainWithMessages;
 			use bp_runtime::Chain;
-			use pallet_bridge_messages::Config as BridgeMessagesConfig;
+			use pezpallet_bridge_messages::Config as BridgeMessagesConfig;
 
 			// if one of asserts fail, then either bridge isn't configured properly (or alternatively - non-standard
 			// configuration is used), or something has broke existing configuration (meaning that all bridged chains
@@ -126,7 +126,7 @@ pub struct AssertChainConstants {
 /// 2) block size limits are matching.
 pub fn assert_chain_constants<R>(params: AssertChainConstants)
 where
-	R: frame_system::Config,
+	R: pezframe_system::Config,
 {
 	// we don't check runtime version here, because in our case we'll be building relay from one
 	// repo and runtime will live in another repo, along with outdated relay version. To avoid
@@ -157,7 +157,7 @@ where
 /// Test that the constants, used in GRANDPA pallet configuration are valid.
 pub fn assert_bridge_grandpa_pallet_constants<R, GI>()
 where
-	R: pallet_bridge_grandpa::Config<GI>,
+	R: pezpallet_bridge_grandpa::Config<GI>,
 	GI: 'static,
 {
 	assert!(
@@ -170,18 +170,18 @@ where
 /// Test that the constants, used in messages pallet configuration are valid.
 pub fn assert_bridge_messages_pallet_constants<R, MI>()
 where
-	R: pallet_bridge_messages::Config<MI>,
+	R: pezpallet_bridge_messages::Config<MI>,
 	MI: 'static,
 {
 	assert!(
-		pallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX
-			<= pallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
+		pezpallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX
+			<= pezpallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 		"MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX ({}) of {:?} is larger than \
 			its MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX ({}). This makes \
 			no sense",
-		pallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
-		pallet_bridge_messages::BridgedChainOf::<R, MI>::ID,
-		pallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
+		pezpallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
+		pezpallet_bridge_messages::BridgedChainOf::<R, MI>::ID,
+		pezpallet_bridge_messages::BridgedChainOf::<R, MI>::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 	);
 }
 
@@ -197,12 +197,12 @@ struct AssertBridgeGrandpaPalletNames<'a> {
 /// from chain primitives crates.
 fn assert_bridge_grandpa_pallet_names<R, GI>(params: AssertBridgeGrandpaPalletNames)
 where
-	R: pallet_bridge_grandpa::Config<GI>,
+	R: pezpallet_bridge_grandpa::Config<GI>,
 	GI: 'static,
 {
 	// check that the bridge GRANDPA pallet has required name
 	assert_eq!(
-			pallet_bridge_grandpa::PalletOwner::<R, GI>::storage_value_final_key().to_vec(),
+			pezpallet_bridge_grandpa::PalletOwner::<R, GI>::storage_value_final_key().to_vec(),
 			bp_runtime::storage_value_key(
 				params.with_bridged_chain_grandpa_pallet_name,
 				"PalletOwner",
@@ -210,7 +210,7 @@ where
 			.0,
 		);
 	assert_eq!(
-		pallet_bridge_grandpa::PalletOperatingMode::<R, GI>::storage_value_final_key().to_vec(),
+		pezpallet_bridge_grandpa::PalletOperatingMode::<R, GI>::storage_value_final_key().to_vec(),
 		bp_runtime::storage_value_key(
 			params.with_bridged_chain_grandpa_pallet_name,
 			"PalletOperatingMode",
@@ -231,12 +231,12 @@ struct AssertBridgeMessagesPalletNames<'a> {
 /// from chain primitives crates.
 fn assert_bridge_messages_pallet_names<R, MI>(params: AssertBridgeMessagesPalletNames)
 where
-	R: pallet_bridge_messages::Config<MI>,
+	R: pezpallet_bridge_messages::Config<MI>,
 	MI: 'static,
 {
 	// check that the bridge messages pallet has required name
 	assert_eq!(
-		pallet_bridge_messages::PalletOwner::<R, MI>::storage_value_final_key().to_vec(),
+		pezpallet_bridge_messages::PalletOwner::<R, MI>::storage_value_final_key().to_vec(),
 		bp_runtime::storage_value_key(
 			params.with_bridged_chain_messages_pallet_name,
 			"PalletOwner",
@@ -244,7 +244,7 @@ where
 		.0,
 	);
 	assert_eq!(
-		pallet_bridge_messages::PalletOperatingMode::<R, MI>::storage_value_final_key().to_vec(),
+		pezpallet_bridge_messages::PalletOperatingMode::<R, MI>::storage_value_final_key().to_vec(),
 		bp_runtime::storage_value_key(
 			params.with_bridged_chain_messages_pallet_name,
 			"PalletOperatingMode",
@@ -265,9 +265,9 @@ pub struct AssertCompleteBridgeConstants {
 pub fn assert_complete_with_relay_chain_bridge_constants<R, GI, MI>(
 	params: AssertCompleteBridgeConstants,
 ) where
-	R: frame_system::Config
-		+ pallet_bridge_grandpa::Config<GI>
-		+ pallet_bridge_messages::Config<MI>,
+	R: pezframe_system::Config
+		+ pezpallet_bridge_grandpa::Config<GI>
+		+ pezpallet_bridge_messages::Config<MI>,
 	GI: 'static,
 	MI: 'static,
 {
@@ -276,11 +276,11 @@ pub fn assert_complete_with_relay_chain_bridge_constants<R, GI, MI>(
 	assert_bridge_messages_pallet_constants::<R, MI>();
 	assert_bridge_grandpa_pallet_names::<R, GI>(AssertBridgeGrandpaPalletNames {
 		with_bridged_chain_grandpa_pallet_name:
-			<R as pallet_bridge_grandpa::Config<GI>>::BridgedChain::WITH_CHAIN_GRANDPA_PALLET_NAME,
+			<R as pezpallet_bridge_grandpa::Config<GI>>::BridgedChain::WITH_CHAIN_GRANDPA_PALLET_NAME,
 	});
 	assert_bridge_messages_pallet_names::<R, MI>(AssertBridgeMessagesPalletNames {
 		with_bridged_chain_messages_pallet_name:
-			<R as pallet_bridge_messages::Config<MI>>::BridgedChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
+			<R as pezpallet_bridge_messages::Config<MI>>::BridgedChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 	});
 }
 
@@ -289,10 +289,10 @@ pub fn assert_complete_with_relay_chain_bridge_constants<R, GI, MI>(
 pub fn assert_complete_with_teyrchain_bridge_constants<R, PI, MI>(
 	params: AssertCompleteBridgeConstants,
 ) where
-	R: frame_system::Config
-		+ pallet_bridge_teyrchains::Config<PI>
-		+ pallet_bridge_messages::Config<MI>,
-	<R as pallet_bridge_teyrchains::BoundedBridgeGrandpaConfig<R::BridgesGrandpaPalletInstance>>::BridgedRelayChain: ChainWithGrandpa,
+	R: pezframe_system::Config
+		+ pezpallet_bridge_teyrchains::Config<PI>
+		+ pezpallet_bridge_messages::Config<MI>,
+	<R as pezpallet_bridge_teyrchains::BoundedBridgeGrandpaConfig<R::BridgesGrandpaPalletInstance>>::BridgedRelayChain: ChainWithGrandpa,
 	PI: 'static,
 	MI: 'static,
 {
@@ -302,14 +302,14 @@ pub fn assert_complete_with_teyrchain_bridge_constants<R, PI, MI>(
 	assert_bridge_grandpa_pallet_names::<R, R::BridgesGrandpaPalletInstance>(
 		AssertBridgeGrandpaPalletNames {
 			with_bridged_chain_grandpa_pallet_name:
-				<<R as pallet_bridge_teyrchains::BoundedBridgeGrandpaConfig<
+				<<R as pezpallet_bridge_teyrchains::BoundedBridgeGrandpaConfig<
 					R::BridgesGrandpaPalletInstance,
 				>>::BridgedRelayChain>::WITH_CHAIN_GRANDPA_PALLET_NAME,
 		},
 	);
 	assert_bridge_messages_pallet_names::<R, MI>(AssertBridgeMessagesPalletNames {
 		with_bridged_chain_messages_pallet_name:
-			<R as pallet_bridge_messages::Config<MI>>::BridgedChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
+			<R as pezpallet_bridge_messages::Config<MI>>::BridgedChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 	});
 }
 
@@ -317,21 +317,21 @@ pub fn assert_complete_with_teyrchain_bridge_constants<R, PI, MI>(
 /// messages pallets deployed).
 pub fn assert_standalone_messages_bridge_constants<R, MI>(params: AssertCompleteBridgeConstants)
 where
-	R: frame_system::Config + pallet_bridge_messages::Config<MI>,
+	R: pezframe_system::Config + pezpallet_bridge_messages::Config<MI>,
 	MI: 'static,
 {
 	assert_chain_constants::<R>(params.this_chain_constants);
 	assert_bridge_messages_pallet_constants::<R, MI>();
 	assert_bridge_messages_pallet_names::<R, MI>(AssertBridgeMessagesPalletNames {
 		with_bridged_chain_messages_pallet_name:
-			<R as pallet_bridge_messages::Config<MI>>::BridgedChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
+			<R as pezpallet_bridge_messages::Config<MI>>::BridgedChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 	});
 }
 
 /// Check that the message lane weights are correct.
 pub fn check_message_lane_weights<
 	C: ChainWithMessages,
-	T: frame_system::Config + pallet_bridge_messages::Config<MessagesPalletInstance>,
+	T: pezframe_system::Config + pezpallet_bridge_messages::Config<MessagesPalletInstance>,
 	MessagesPalletInstance: 'static,
 >(
 	bridged_chain_extra_storage_proof_size: u32,
@@ -343,13 +343,13 @@ pub fn check_message_lane_weights<
 	// in other words: pass true for all known production chains
 	runtime_includes_refund_extension: bool,
 ) {
-	type Weights<T, MI> = <T as pallet_bridge_messages::Config<MI>>::WeightInfo;
+	type Weights<T, MI> = <T as pezpallet_bridge_messages::Config<MI>>::WeightInfo;
 
 	// check basic weight assumptions
-	pallet_bridge_messages::ensure_weights_are_correct::<Weights<T, MessagesPalletInstance>>();
+	pezpallet_bridge_messages::ensure_weights_are_correct::<Weights<T, MessagesPalletInstance>>();
 
 	// check that the maximal message dispatch weight is below hardcoded limit
-	pallet_bridge_messages::ensure_maximal_message_dispatch::<Weights<T, MessagesPalletInstance>>(
+	pezpallet_bridge_messages::ensure_maximal_message_dispatch::<Weights<T, MessagesPalletInstance>>(
 		C::maximal_incoming_message_size(),
 		C::maximal_incoming_message_dispatch_weight(),
 	);
@@ -357,7 +357,7 @@ pub fn check_message_lane_weights<
 	// check that weights allow us to receive messages
 	let max_incoming_message_proof_size =
 		bridged_chain_extra_storage_proof_size.saturating_add(C::maximal_incoming_message_size());
-	pallet_bridge_messages::ensure_able_to_receive_message::<Weights<T, MessagesPalletInstance>>(
+	pezpallet_bridge_messages::ensure_able_to_receive_message::<Weights<T, MessagesPalletInstance>>(
 		C::max_extrinsic_size(),
 		C::max_extrinsic_weight(),
 		max_incoming_message_proof_size,
@@ -370,7 +370,7 @@ pub fn check_message_lane_weights<
 	>::encoded_size_hint_u32(
 		this_chain_max_unrewarded_relayers as _
 	);
-	pallet_bridge_messages::ensure_able_to_receive_confirmation::<Weights<T, MessagesPalletInstance>>(
+	pezpallet_bridge_messages::ensure_able_to_receive_confirmation::<Weights<T, MessagesPalletInstance>>(
 		C::max_extrinsic_size(),
 		C::max_extrinsic_weight(),
 		max_incoming_inbound_lane_data_proof_size,

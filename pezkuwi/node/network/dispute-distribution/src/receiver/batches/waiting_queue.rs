@@ -132,7 +132,7 @@ mod tests {
 
 	#[test]
 	fn wait_ready_waits_for_earliest_event_always() {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		let mut queue = WaitingQueue::new();
 		let now = Instant::now();
 		let start = now;

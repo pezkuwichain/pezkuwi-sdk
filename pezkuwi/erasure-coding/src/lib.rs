@@ -27,8 +27,8 @@
 use codec::{Decode, Encode};
 use pezkuwi_node_primitives::{AvailableData, Proof};
 use pezkuwi_primitives::{BlakeTwo256, Hash as H256, HashT};
-use sp_core::Blake2Hasher;
-use sp_trie::{
+use pezsp_core::Blake2Hasher;
+use pezsp_trie::{
 	trie_types::{TrieDBBuilder, TrieDBMutBuilderV0 as TrieDBMutBuilder},
 	LayoutV0, MemoryDB, Trie, TrieMut, EMPTY_PREFIX,
 };
@@ -259,7 +259,7 @@ impl<'a, I: AsRef<[u8]>> Iterator for Branches<'a, I> {
 	type Item = (Proof, &'a [u8]);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		use sp_trie::Recorder;
+		use pezsp_trie::Recorder;
 
 		let mut recorder = Recorder::<LayoutV0<Blake2Hasher>>::new();
 		let res = {
@@ -313,7 +313,7 @@ where
 pub fn branch_hash(root: &H256, branch_nodes: &Proof, index: usize) -> Result<H256, Error> {
 	let mut trie_storage: MemoryDB<Blake2Hasher> = MemoryDB::default();
 	for node in branch_nodes.iter() {
-		(&mut trie_storage as &mut sp_trie::HashDB<_>).insert(EMPTY_PREFIX, node);
+		(&mut trie_storage as &mut pezsp_trie::HashDB<_>).insert(EMPTY_PREFIX, node);
 	}
 
 	let trie = TrieDBBuilder::new(&trie_storage, &root).build();

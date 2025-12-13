@@ -19,7 +19,7 @@
 use crate::weights::{BridgeWeight, WeightInfo};
 
 use bp_runtime::Size;
-use frame_support::weights::{RuntimeDbWeight, Weight};
+use pezframe_support::weights::{RuntimeDbWeight, Weight};
 
 /// Size of the regular teyrchain head.
 ///
@@ -42,7 +42,7 @@ pub trait WeightInfoExt: WeightInfo {
 	//
 	// 2) slash relayer if he submits an invalid transaction.
 	//
-	// We read and update storage values of other pallets (`pallet-bridge-relayers` and
+	// We read and update storage values of other pallets (`pezpallet-bridge-relayers` and
 	// balances/assets pallet). So we need to add this weight to the weight of our call.
 	// Hence two following methods.
 
@@ -121,7 +121,7 @@ impl WeightInfoExt for () {
 	}
 }
 
-impl<T: frame_system::Config> WeightInfoExt for BridgeWeight<T> {
+impl<T: pezframe_system::Config> WeightInfoExt for BridgeWeight<T> {
 	fn submit_teyrchain_heads_overhead_from_runtime() -> Weight {
 		Weight::zero()
 	}

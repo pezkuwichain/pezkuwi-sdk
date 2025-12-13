@@ -20,7 +20,7 @@
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use frame_support::pallet_prelude::{DispatchResultWithPostInfo, TypeInfo};
+use pezframe_support::pezpallet_prelude::{DispatchResultWithPostInfo, TypeInfo};
 use xcm::prelude::*;
 
 /// Effects of dry-running an extrinsic.
@@ -47,7 +47,7 @@ pub struct XcmDryRunEffects<Event> {
 	pub forwarded_xcms: Vec<(VersionedLocation, Vec<VersionedXcm<()>>)>,
 }
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// API for dry-running extrinsics and XCM programs to get the programs that need to be passed to the fees API.
 	///
 	/// All calls return a vector of tuples (location, xcm) where each "xcm" is executed in "location".

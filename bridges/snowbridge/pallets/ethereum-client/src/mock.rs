@@ -2,17 +2,17 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use crate as ethereum_beacon_client;
 use crate::config;
-use frame_support::{derive_impl, dispatch::DispatchResult, parameter_types};
-use pallet_timestamp;
+use pezframe_support::{derive_impl, dispatch::DispatchResult, parameter_types};
+use pezpallet_timestamp;
 use snowbridge_beacon_primitives::{Fork, ForkVersions};
 use snowbridge_verification_primitives::{Log, Proof};
-use sp_std::default::Default;
+use pezsp_std::default::Default;
 use std::{fs::File, path::PathBuf};
 
-type Block = frame_system::mocking::MockBlock<Test>;
-use frame_support::traits::ConstU32;
+type Block = pezframe_system::mocking::MockBlock<Test>;
+use pezframe_support::traits::ConstU32;
 use hex_literal::hex;
-use sp_runtime::BuildStorage;
+use pezsp_runtime::BuildStorage;
 
 fn load_fixture<T>(basename: String) -> Result<T, serde_json::Error>
 where
@@ -92,20 +92,20 @@ pub fn get_message_verification_payload() -> (Log, Proof) {
 	(inbound_fixture.event.event_log, inbound_fixture.event.proof)
 }
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test {
-		System: frame_system::{Pallet, Call, Storage, Event<T>},
-		Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent},
+		System: pezframe_system::{Pallet, Call, Storage, Event<T>},
+		Timestamp: pezpallet_timestamp::{Pallet, Call, Storage, Inherent},
 		EthereumBeaconClient: ethereum_beacon_client::{Pallet, Call, Storage, Event<T>},
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type Block = Block;
 }
 
-impl pallet_timestamp::Config for Test {
+impl pezpallet_timestamp::Config for Test {
 	type Moment = u64;
 	type OnTimestampSet = ();
 	type MinimumPeriod = ();
@@ -155,9 +155,9 @@ impl ethereum_beacon_client::Config for Test {
 }
 
 // Build genesis storage according to the mock runtime.
-pub fn new_tester() -> sp_io::TestExternalities {
-	let t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	let ext = sp_io::TestExternalities::new(t);
+pub fn new_tester() -> pezsp_io::TestExternalities {
+	let t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let ext = pezsp_io::TestExternalities::new(t);
 	ext
 }
 

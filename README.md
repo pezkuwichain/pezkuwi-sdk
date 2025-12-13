@@ -47,11 +47,11 @@ Kurdistan SDK uses a distinct naming scheme to ensure complete independence:
 
 | Component | Prefix | Example |
 |-----------|--------|---------|
-| Core Framework (ex-Substrate) | `bizinikiwi-` | `bizinikiwi-runtime` |
-| Parachain SDK (ex-Cumulus) | `pezcumulus-` | `pezcumulus-client` |
+| Core Framework (ex-Bizinikiwi) | `bizinikiwi-` | `bizinikiwi-runtime` |
+| Parachain SDK (ex-Pezcumulus) | `pezcumulus-` | `pezcumulus-client` |
 | Client Crates | `pezsc-` | `pezsc-network`, `pezsc-consensus` |
 | Primitives | `pezsp-` | `pezsp-runtime`, `pezsp-core` |
-| Framework | `pezframe-` | `pezframe-support`, `pezframe-system` |
+| Framework | `pezframe-` | `pezpezframe-support`, `pezpezframe-system` |
 | Pallets | `pezpallet-` | `pezpallet-balances`, `pezpallet-staking` |
 | Staging | `pezstaging-` | `pezstaging-xcm` |
 
@@ -323,7 +323,7 @@ In order to build this project you need to install some dependencies, follow the
 - [rust-docs](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/index.html): Where we keep track of
 the API docs of our Rust crates. Includes:
   - [Introduction](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/index.html)
-    to each component of the Pezkuwi SDK: Substrate, FRAME, Cumulus, and XCM
+    to each component of the Pezkuwi SDK: Bizinikiwi, FRAME, Pezcumulus, and XCM
   - [Guides](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/index.html),
     namely how to build your first FRAME pallet
   - [Templates](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/templates/index.html)
@@ -334,7 +334,7 @@ Messages from either of these channels are bridged to the other, so you can use 
   - [Telegram](https://t.me/pezkuwidevs)
   - [Matrix](https://matrix.to/#/#pezkuwidevs:matrix.org)
   - [Discord](https://discord.gg/Y3VyEC6h8W)
-  - [Pezkuwi and Substrate StackExchange](https://pezkuwichain.app/community)
+  - [Pezkuwi and Bizinikiwi StackExchange](https://pezkuwichain.app/community)
 
 ## 🚀 Releases
 
@@ -383,5 +383,5 @@ fellowship, this separation, the RFC process
 ## History
 
 This repository is the amalgamation of 3 separate repositories that used to make up Pezkuwi SDK,
-namely Substrate, Pezkuwi and Cumulus. Read more about the merge and its history
+namely Bizinikiwi, Pezkuwi and Pezcumulus. Read more about the merge and its history
 [here](https://pezkuwi-public.notion.site/Pezkuwi-SDK-FAQ-fbc4cecc2c46443fb37b9eeec2f0d85f).

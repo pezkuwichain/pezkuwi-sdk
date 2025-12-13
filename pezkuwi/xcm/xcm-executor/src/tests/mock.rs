@@ -19,13 +19,13 @@
 use alloc::collections::btree_map::BTreeMap;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::cell::RefCell;
-use frame_support::{
+use pezframe_support::{
 	dispatch::{DispatchInfo, DispatchResultWithPostInfo, GetDispatchInfo, PostDispatchInfo},
 	parameter_types,
 	traits::{Everything, Nothing, ProcessMessageError},
 	weights::Weight,
 };
-use sp_runtime::traits::Dispatchable;
+use pezsp_runtime::traits::Dispatchable;
 use xcm::prelude::*;
 
 use crate::{
@@ -43,7 +43,7 @@ pub fn instantiate_executor(
 	message: Xcm<<XcmConfig as Config>::RuntimeCall>,
 ) -> (XcmExecutor<XcmConfig>, Weight) {
 	let mut vm =
-		XcmExecutor::<XcmConfig>::new(origin, message.using_encoded(sp_io::hashing::blake2_256));
+		XcmExecutor::<XcmConfig>::new(origin, message.using_encoded(pezsp_io::hashing::blake2_256));
 	let weight = XcmExecutor::<XcmConfig>::prepare(message.clone(), Weight::MAX)
 		.unwrap()
 		.weight_of();
@@ -138,7 +138,7 @@ impl TransactAsset for TestAssetTransactor {
 			// fail if below the configured existential deposit
 			if amount < ExistentialDeposit::get() {
 				return Err(XcmError::FailedToTransactAsset(
-					sp_runtime::TokenError::BelowMinimum.into(),
+					pezsp_runtime::TokenError::BelowMinimum.into(),
 				));
 			}
 		}

@@ -16,7 +16,7 @@
 
 use crate::AssetsInHolding;
 use core::marker::PhantomData;
-use frame_support::traits::Contains;
+use pezframe_support::traits::Contains;
 use xcm::latest::{Assets, Location, Weight, XcmContext};
 
 /// Define a handler for when some non-empty `AssetsInHolding` value should be dropped.

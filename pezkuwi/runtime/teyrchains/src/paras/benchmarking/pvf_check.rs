@@ -18,10 +18,10 @@
 
 use crate::{configuration, paras::*, shared::Pallet as ParasShared};
 use alloc::{vec, vec::Vec};
-use frame_support::assert_ok;
-use frame_system::RawOrigin;
+use pezframe_support::assert_ok;
+use pezframe_system::RawOrigin;
 use pezkuwi_primitives::{HeadData, Id as ParaId, ValidationCode, ValidatorId, ValidatorIndex};
-use sp_application_crypto::RuntimeAppPublic;
+use pezsp_application_crypto::RuntimeAppPublic;
 
 // Constants for the benchmarking
 const SESSION_INDEX: SessionIndex = 1;

@@ -154,7 +154,7 @@
               "uid": "$data_source"
             },
             "editorMode": "code",
-            "expr": "sum(rate(substrate_tasks_polling_duration_sum{}[$__rate_interval])) by (task_name)",
+            "expr": "sum(rate(bizinikiwi_tasks_polling_duration_sum{}[$__rate_interval])) by (task_name)",
             "interval": "",
             "legendFormat": "{{task_name}}",
             "range": true,
@@ -254,7 +254,7 @@
               "uid": "$data_source"
             },
             "editorMode": "code",
-            "expr": "rate(substrate_tasks_polling_duration_count{}[$__rate_interval])",
+            "expr": "rate(bizinikiwi_tasks_polling_duration_count{}[$__rate_interval])",
             "interval": "",
             "legendFormat": "{{task_name}}",
             "range": true,
@@ -354,7 +354,7 @@
               "uid": "$data_source"
             },
             "editorMode": "code",
-            "expr": "increase(substrate_tasks_polling_duration_sum{}[$__rate_interval]) / increase(substrate_tasks_polling_duration_count{}[$__rate_interval])",
+            "expr": "increase(bizinikiwi_tasks_polling_duration_sum{}[$__rate_interval]) / increase(bizinikiwi_tasks_polling_duration_count{}[$__rate_interval])",
             "interval": "",
             "legendFormat": "{{task_name}}",
             "range": true,
@@ -453,7 +453,7 @@
               "uid": "$data_source"
             },
             "editorMode": "code",
-            "expr": "increase(substrate_tasks_spawned_total{}[$__rate_interval])",
+            "expr": "increase(bizinikiwi_tasks_spawned_total{}[$__rate_interval])",
             "interval": "",
             "intervalFactor": 1,
             "legendFormat": "{{task_name}}",
@@ -553,7 +553,7 @@
               "uid": "$data_source"
             },
             "editorMode": "code",
-            "expr": "substrate_tasks_spawned_total{} - sum(substrate_tasks_ended_total{}) without(reason)\n\n# Fallback if tasks_ended_total is null for that task\nor on(task_name) substrate_tasks_spawned_total{}",
+            "expr": "bizinikiwi_tasks_spawned_total{} - sum(bizinikiwi_tasks_ended_total{}) without(reason)\n\n# Fallback if tasks_ended_total is null for that task\nor on(task_name) bizinikiwi_tasks_spawned_total{}",
             "interval": "",
             "legendFormat": "{{task_name}}",
             "range": true,
@@ -654,7 +654,7 @@
               "uid": "$data_source"
             },
             "editorMode": "code",
-            "expr": "irate(substrate_tasks_polling_duration_bucket{le=\"+Inf\"}[$__rate_interval])\n    - ignoring(le)\n  irate(substrate_tasks_polling_duration_bucket{le=\"1.024\"}[$__rate_interval]) > 0",
+            "expr": "irate(bizinikiwi_tasks_polling_duration_bucket{le=\"+Inf\"}[$__rate_interval])\n    - ignoring(le)\n  irate(bizinikiwi_tasks_polling_duration_bucket{le=\"1.024\"}[$__rate_interval]) > 0",
             "interval": "",
             "legendFormat": "{{task_name}}",
             "range": true,
@@ -748,7 +748,7 @@
       ]
     },
     "timezone": "utc",
-    "title": "Substrate Service Tasks with substrate prefix",
+    "title": "Bizinikiwi Service Tasks with bizinikiwi prefix",
     "uid": "S7sc-M_Gk",
     "version": 17,
     "weekStart": ""

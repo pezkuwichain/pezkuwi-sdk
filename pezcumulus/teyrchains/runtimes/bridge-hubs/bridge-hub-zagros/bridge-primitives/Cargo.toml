@@ -1,0 +1,52 @@
+[package]
+name = "bp-bridge-hub-zagros"
+description = "Primitives of BridgeHubZagros teyrchain runtime."
+version = "0.3.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+repository.workspace = true
+
+[package.metadata.pezkuwi-sdk]
+exclude-from-umbrella = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+
+# Bridge Dependencies
+bp-bridge-hub-pezcumulus = { workspace = true }
+bp-messages = { workspace = true }
+bp-runtime = { workspace = true }
+bp-xcm-bridge-hub = { workspace = true }
+
+# Bizinikiwi Based Dependencies
+pezframe-support = { workspace = true }
+pezsp-api = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"bp-bridge-hub-pezcumulus/std",
+	"bp-messages/std",
+	"bp-runtime/std",
+	"bp-xcm-bridge-hub/std",
+	"codec/std",
+	"pezframe-support/std",
+	"pezsp-api/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+]
+runtime-benchmarks = [
+	"bp-bridge-hub-pezcumulus/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-xcm-bridge-hub/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+]

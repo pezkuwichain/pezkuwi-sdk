@@ -57,8 +57,8 @@ extern crate alloc;
 pub use origin::{ensure_teyrchain, Origin};
 pub use paras::{ParaLifecycle, UpgradeStrategy};
 use pezkuwi_primitives::{HeadData, Id as ParaId, ValidationCode};
-use sp_arithmetic::traits::Saturating;
-use sp_runtime::{traits::Get, DispatchResult, FixedU128};
+use pezsp_arithmetic::traits::Saturating;
+use pezsp_runtime::{traits::Get, DispatchResult, FixedU128};
 
 /// Trait for tracking message delivery fees on a transport protocol.
 pub trait FeeTracker {

@@ -17,7 +17,7 @@ gum = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 wasm-timer = { workspace = true }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# A script to update bridges repo as subtree to Cumulus
+# A script to update bridges repo as subtree to Pezcumulus
 # Usage:
 #       ./scripts/update_subtree_snowbridge.sh fetch
 #       ./scripts/update_subtree_snowbridge.sh patch

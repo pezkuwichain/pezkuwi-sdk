@@ -12,11 +12,11 @@ repository.workspace = true
 workspace = true
 
 [dependencies]
-sc-network = { workspace = true, default-features = true }
-sp-application-crypto = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-crypto-hashing = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsp-application-crypto = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-crypto-hashing = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
 
 pezkuwi-node-network-protocol = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
@@ -30,10 +30,10 @@ rand = { workspace = true }
 rand_chacha = { workspace = true }
 
 [dev-dependencies]
-sp-authority-discovery = { workspace = true, default-features = true }
-sp-consensus-babe = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-tracing = { workspace = true, default-features = true }
+pezsp-authority-discovery = { workspace = true, default-features = true }
+pezsp-consensus-babe = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
 
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
 
@@ -50,8 +50,8 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
-	"sp-authority-discovery/runtime-benchmarks",
-	"sp-consensus-babe/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

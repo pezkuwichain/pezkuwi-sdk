@@ -18,7 +18,7 @@
 
 use core::result;
 use pezkuwi_primitives::Id as ParaId;
-use sp_runtime::traits::BadOrigin;
+use pezsp_runtime::traits::BadOrigin;
 
 pub use pallet::*;
 
@@ -39,16 +39,16 @@ where
 ///
 /// This module fulfills only the single purpose of housing the `Origin` in `construct_runtime`.
 // ideally, though, the `construct_runtime` should support a free-standing origin.
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	/// Origin for the teyrchains.
 	#[pallet::origin]

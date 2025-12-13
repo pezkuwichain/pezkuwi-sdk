@@ -162,9 +162,9 @@ fn errors_should_return_unused_weight() {
 
 #[test]
 fn weight_bounds_should_respect_instructions_limit() {
-	use sp_tracing::capture_test_logs;
+	use pezsp_tracing::capture_test_logs;
 
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	MaxInstructions::set(3);
 	// 4 instructions are too many.
 	let log_capture = capture_test_logs!({

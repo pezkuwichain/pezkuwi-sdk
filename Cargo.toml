@@ -13,7 +13,7 @@ resolver = "2"
 
 members = [
 	"bridges/bin/runtime-common",
-	"bridges/chains/chain-cumulus",
+	"bridges/chains/chain-pezcumulus",
 	"bridges/chains/chain-pezkuwi-bulletin",
 	"bridges/modules/beefy",
 	"bridges/modules/grandpa",
@@ -32,10 +32,10 @@ members = [
 	"bridges/primitives/teyrchains",
 	"bridges/primitives/xcm-bridge-hub",
 	"bridges/primitives/xcm-bridge-hub-router",
-	"bridges/relays/client-substrate",
+	"bridges/relays/client-bizinikiwi",
 	"bridges/relays/equivocation",
 	"bridges/relays/finality",
-	"bridges/relays/lib-substrate-relay",
+	"bridges/relays/lib-bizinikiwi-relay",
 	"bridges/relays/messages",
 	"bridges/relays/teyrchains",
 	"bridges/relays/utils",
@@ -64,115 +64,115 @@ members = [
 	"bridges/snowbridge/runtime/runtime-common",
 	"bridges/snowbridge/runtime/test-common",
 	"bridges/snowbridge/test-utils",
-	"cumulus/bin/pov-validator",
-	"cumulus/client/bootnodes",
-	"cumulus/client/cli",
-	"cumulus/client/collator",
-	"cumulus/client/consensus/aura",
-	"cumulus/client/consensus/common",
-	"cumulus/client/consensus/proposer",
-	"cumulus/client/consensus/relay-chain",
-	"cumulus/client/network",
-	"cumulus/client/pov-recovery",
-	"cumulus/client/relay-chain-inprocess-interface",
-	"cumulus/client/relay-chain-interface",
-	"cumulus/client/relay-chain-minimal-node",
-	"cumulus/client/relay-chain-rpc-interface",
-	"cumulus/client/relay-chain-streams",
-	"cumulus/client/service",
-	"cumulus/client/teyrchain-inherent",
-	"cumulus/pallets/ah-ops",
-	"cumulus/pallets/aura-ext",
-	"cumulus/pallets/collator-selection",
-	"cumulus/pallets/dmp-queue",
-	"cumulus/pallets/session-benchmarking",
-	"cumulus/pallets/solo-to-para",
-	"cumulus/pallets/teyrchain-system",
-	"cumulus/pallets/teyrchain-system/proc-macro",
-	"cumulus/pallets/weight-reclaim",
-	"cumulus/pallets/xcm",
-	"cumulus/pallets/xcmp-queue",
-	"cumulus/pezkuwi-omni-node",
-	"cumulus/pezkuwi-omni-node/lib",
-	"cumulus/pezkuwi-teyrchain",
-	"cumulus/primitives/aura",
-	"cumulus/primitives/core",
-	"cumulus/primitives/proof-size-hostfunction",
-	"cumulus/primitives/storage-weight-reclaim",
-	"cumulus/primitives/teyrchain-inherent",
-	"cumulus/primitives/timestamp",
-	"cumulus/primitives/utility",
-	"cumulus/test/client",
-	"cumulus/test/relay-sproof-builder",
-	"cumulus/test/runtime",
-	"cumulus/test/service",
-	"cumulus/teyrchains/common",
-	"cumulus/teyrchains/integration-tests/emulated/chains/relays/pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/chains/relays/zagros",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/collectives/collectives-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/testing/penpal",
-	"cumulus/teyrchains/integration-tests/emulated/common",
-	"cumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-system",
-	"cumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-zagros-system",
-	"cumulus/teyrchains/integration-tests/emulated/networks/zagros-system",
-	"cumulus/teyrchains/integration-tests/emulated/tests/assets/asset-hub-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/tests/assets/asset-hub-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/tests/bridges/bridge-hub-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/tests/bridges/bridge-hub-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/tests/collectives/collectives-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/tests/coretime/coretime-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/tests/coretime/coretime-zagros",
-	"cumulus/teyrchains/integration-tests/emulated/tests/governance/zagros",
-	"cumulus/teyrchains/integration-tests/emulated/tests/people/people-pezkuwichain",
-	"cumulus/teyrchains/integration-tests/emulated/tests/people/people-zagros",
-	"cumulus/teyrchains/pallets/collective-content",
-	"cumulus/teyrchains/pallets/identity-kyc",
-	"cumulus/teyrchains/pallets/perwerde",
-	"cumulus/teyrchains/pallets/pez-rewards",
-	"cumulus/teyrchains/pallets/pez-treasury",
-	"cumulus/teyrchains/pallets/ping",
-	"cumulus/teyrchains/pallets/presale",
-	"cumulus/teyrchains/pallets/referral",
-	"cumulus/teyrchains/pallets/staking-score",
-	"cumulus/teyrchains/pallets/teyrchain-info",
-	"cumulus/teyrchains/pallets/tiki",
-	"cumulus/teyrchains/pallets/token-wrapper",
-	"cumulus/teyrchains/pallets/trust",
-	"cumulus/teyrchains/pallets/welati",
-	"cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain",
-	"cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/bridge-primitives",
-	"cumulus/teyrchains/runtimes/assets/asset-hub-zagros",
-	"cumulus/teyrchains/runtimes/assets/asset-hub-zagros/bridge-primitives",
-	"cumulus/teyrchains/runtimes/assets/common",
-	"cumulus/teyrchains/runtimes/assets/test-utils",
-	"cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain",
-	"cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/bridge-primitives",
-	"cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros",
-	"cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros/bridge-primitives",
-	"cumulus/teyrchains/runtimes/bridge-hubs/common",
-	"cumulus/teyrchains/runtimes/bridge-hubs/test-utils",
-	"cumulus/teyrchains/runtimes/collectives/collectives-zagros",
-	"cumulus/teyrchains/runtimes/constants",
-	"cumulus/teyrchains/runtimes/coretime/coretime-pezkuwichain",
-	"cumulus/teyrchains/runtimes/coretime/coretime-zagros",
-	"cumulus/teyrchains/runtimes/glutton/glutton-zagros",
-	"cumulus/teyrchains/runtimes/people/people-pezkuwichain",
-	"cumulus/teyrchains/runtimes/people/people-zagros",
-	"cumulus/teyrchains/runtimes/test-utils",
-	"cumulus/teyrchains/runtimes/testing/penpal",
-	"cumulus/teyrchains/runtimes/testing/pezkuwichain-teyrchain",
-	"cumulus/teyrchains/runtimes/testing/yet-another-teyrchain",
-	"cumulus/xcm/xcm-emulator",
-	"cumulus/zombienet/zombienet-sdk",
-	"cumulus/zombienet/zombienet-sdk-helpers",
+	"pezcumulus/bin/pov-validator",
+	"pezcumulus/client/bootnodes",
+	"pezcumulus/client/cli",
+	"pezcumulus/client/collator",
+	"pezcumulus/client/consensus/aura",
+	"pezcumulus/client/consensus/common",
+	"pezcumulus/client/consensus/proposer",
+	"pezcumulus/client/consensus/relay-chain",
+	"pezcumulus/client/network",
+	"pezcumulus/client/pov-recovery",
+	"pezcumulus/client/relay-chain-inprocess-interface",
+	"pezcumulus/client/relay-chain-interface",
+	"pezcumulus/client/relay-chain-minimal-node",
+	"pezcumulus/client/relay-chain-rpc-interface",
+	"pezcumulus/client/relay-chain-streams",
+	"pezcumulus/client/service",
+	"pezcumulus/client/teyrchain-inherent",
+	"pezcumulus/pallets/ah-ops",
+	"pezcumulus/pallets/aura-ext",
+	"pezcumulus/pallets/collator-selection",
+	"pezcumulus/pallets/dmp-queue",
+	"pezcumulus/pallets/session-benchmarking",
+	"pezcumulus/pallets/solo-to-para",
+	"pezcumulus/pallets/teyrchain-system",
+	"pezcumulus/pallets/teyrchain-system/proc-macro",
+	"pezcumulus/pallets/weight-reclaim",
+	"pezcumulus/pallets/xcm",
+	"pezcumulus/pallets/xcmp-queue",
+	"pezcumulus/pezkuwi-omni-node",
+	"pezcumulus/pezkuwi-omni-node/lib",
+	"pezcumulus/pezkuwi-teyrchain",
+	"pezcumulus/primitives/aura",
+	"pezcumulus/primitives/core",
+	"pezcumulus/primitives/proof-size-hostfunction",
+	"pezcumulus/primitives/storage-weight-reclaim",
+	"pezcumulus/primitives/teyrchain-inherent",
+	"pezcumulus/primitives/timestamp",
+	"pezcumulus/primitives/utility",
+	"pezcumulus/test/client",
+	"pezcumulus/test/relay-sproof-builder",
+	"pezcumulus/test/runtime",
+	"pezcumulus/test/service",
+	"pezcumulus/teyrchains/common",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/relays/pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/relays/zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/collectives/collectives-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/testing/penpal",
+	"pezcumulus/teyrchains/integration-tests/emulated/common",
+	"pezcumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-system",
+	"pezcumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-zagros-system",
+	"pezcumulus/teyrchains/integration-tests/emulated/networks/zagros-system",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/assets/asset-hub-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/assets/asset-hub-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/bridges/bridge-hub-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/bridges/bridge-hub-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/collectives/collectives-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/coretime/coretime-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/coretime/coretime-zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/governance/zagros",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/people/people-pezkuwichain",
+	"pezcumulus/teyrchains/integration-tests/emulated/tests/people/people-zagros",
+	"pezcumulus/teyrchains/pallets/collective-content",
+	"pezcumulus/teyrchains/pallets/identity-kyc",
+	"pezcumulus/teyrchains/pallets/perwerde",
+	"pezcumulus/teyrchains/pallets/pez-rewards",
+	"pezcumulus/teyrchains/pallets/pez-treasury",
+	"pezcumulus/teyrchains/pallets/ping",
+	"pezcumulus/teyrchains/pallets/presale",
+	"pezcumulus/teyrchains/pallets/referral",
+	"pezcumulus/teyrchains/pallets/staking-score",
+	"pezcumulus/teyrchains/pallets/teyrchain-info",
+	"pezcumulus/teyrchains/pallets/tiki",
+	"pezcumulus/teyrchains/pallets/token-wrapper",
+	"pezcumulus/teyrchains/pallets/trust",
+	"pezcumulus/teyrchains/pallets/welati",
+	"pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain",
+	"pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/bridge-primitives",
+	"pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros",
+	"pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros/bridge-primitives",
+	"pezcumulus/teyrchains/runtimes/assets/common",
+	"pezcumulus/teyrchains/runtimes/assets/test-utils",
+	"pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain",
+	"pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/bridge-primitives",
+	"pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros",
+	"pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros/bridge-primitives",
+	"pezcumulus/teyrchains/runtimes/bridge-hubs/common",
+	"pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils",
+	"pezcumulus/teyrchains/runtimes/collectives/collectives-zagros",
+	"pezcumulus/teyrchains/runtimes/constants",
+	"pezcumulus/teyrchains/runtimes/coretime/coretime-pezkuwichain",
+	"pezcumulus/teyrchains/runtimes/coretime/coretime-zagros",
+	"pezcumulus/teyrchains/runtimes/glutton/glutton-zagros",
+	"pezcumulus/teyrchains/runtimes/people/people-pezkuwichain",
+	"pezcumulus/teyrchains/runtimes/people/people-zagros",
+	"pezcumulus/teyrchains/runtimes/test-utils",
+	"pezcumulus/teyrchains/runtimes/testing/penpal",
+	"pezcumulus/teyrchains/runtimes/testing/pezkuwichain-teyrchain",
+	"pezcumulus/teyrchains/runtimes/testing/yet-another-teyrchain",
+	"pezcumulus/xcm/xcm-emulator",
+	"pezcumulus/zombienet/zombienet-sdk",
+	"pezcumulus/zombienet/zombienet-sdk-helpers",
 	"docs/sdk",
 	"docs/sdk/packages/guides/first-pallet",
 	"docs/sdk/packages/guides/first-runtime",
@@ -254,9 +254,9 @@ members = [
 	"pezkuwi/utils/remote-ext-tests/bags-list",
 	"pezkuwi/xcm",
 	"pezkuwi/xcm/docs",
-	"pezkuwi/xcm/pallet-xcm",
-	"pezkuwi/xcm/pallet-xcm-benchmarks",
-	"pezkuwi/xcm/pallet-xcm/precompiles",
+	"pezkuwi/xcm/pezpallet-xcm",
+	"pezkuwi/xcm/pezpallet-xcm-benchmarks",
+	"pezkuwi/xcm/pezpallet-xcm/precompiles",
 	"pezkuwi/xcm/procedural",
 	"pezkuwi/xcm/xcm-builder",
 	"pezkuwi/xcm/xcm-executor",
@@ -266,327 +266,327 @@ members = [
 	"pezkuwi/xcm/xcm-simulator/example",
 	"pezkuwi/xcm/xcm-simulator/fuzzer",
 	"pezkuwi/zombienet-sdk-tests",
-	"substrate/bin/node/bench",
-	"substrate/bin/node/cli",
-	"substrate/bin/node/inspect",
-	"substrate/bin/node/primitives",
-	"substrate/bin/node/rpc",
-	"substrate/bin/node/runtime",
-	"substrate/bin/node/testing",
-	"substrate/bin/utils/chain-spec-builder",
-	"substrate/bin/utils/subkey",
-	"substrate/client/allocator",
-	"substrate/client/api",
-	"substrate/client/authority-discovery",
-	"substrate/client/basic-authorship",
-	"substrate/client/block-builder",
-	"substrate/client/chain-spec",
-	"substrate/client/chain-spec/derive",
-	"substrate/client/cli",
-	"substrate/client/consensus/aura",
-	"substrate/client/consensus/babe",
-	"substrate/client/consensus/babe/rpc",
-	"substrate/client/consensus/beefy",
-	"substrate/client/consensus/beefy/rpc",
-	"substrate/client/consensus/common",
-	"substrate/client/consensus/epochs",
-	"substrate/client/consensus/grandpa",
-	"substrate/client/consensus/grandpa/rpc",
-	"substrate/client/consensus/manual-seal",
-	"substrate/client/consensus/pow",
-	"substrate/client/consensus/slots",
-	"substrate/client/db",
-	"substrate/client/executor",
-	"substrate/client/executor/common",
-	"substrate/client/executor/polkavm",
-	"substrate/client/executor/runtime-test",
-	"substrate/client/executor/wasmtime",
-	"substrate/client/informant",
-	"substrate/client/keystore",
-	"substrate/client/merkle-mountain-range",
-	"substrate/client/merkle-mountain-range/rpc",
-	"substrate/client/mixnet",
-	"substrate/client/network",
-	"substrate/client/network-gossip",
-	"substrate/client/network/common",
-	"substrate/client/network/light",
-	"substrate/client/network/statement",
-	"substrate/client/network/sync",
-	"substrate/client/network/test",
-	"substrate/client/network/transactions",
-	"substrate/client/network/types",
-	"substrate/client/offchain",
-	"substrate/client/proposer-metrics",
-	"substrate/client/rpc",
-	"substrate/client/rpc-api",
-	"substrate/client/rpc-servers",
-	"substrate/client/rpc-spec-v2",
-	"substrate/client/runtime-utilities",
-	"substrate/client/service",
-	"substrate/client/service/test",
-	"substrate/client/state-db",
-	"substrate/client/statement-store",
-	"substrate/client/storage-monitor",
-	"substrate/client/sync-state-rpc",
-	"substrate/client/sysinfo",
-	"substrate/client/telemetry",
-	"substrate/client/tracing",
-	"substrate/client/tracing/proc-macro",
-	"substrate/client/transaction-pool",
-	"substrate/client/transaction-pool/api",
-	"substrate/client/utils",
-	"substrate/deprecated/hashing",
-	"substrate/deprecated/hashing/proc-macro",
-	"substrate/frame",
-	"substrate/frame/alliance",
-	"substrate/frame/asset-conversion",
-	"substrate/frame/asset-conversion/ops",
-	"substrate/frame/asset-rate",
-	"substrate/frame/asset-rewards",
-	"substrate/frame/assets",
-	"substrate/frame/assets-freezer",
-	"substrate/frame/assets-holder",
-	"substrate/frame/assets/precompiles",
-	"substrate/frame/atomic-swap",
-	"substrate/frame/aura",
-	"substrate/frame/authority-discovery",
-	"substrate/frame/authorship",
-	"substrate/frame/babe",
-	"substrate/frame/bags-list",
-	"substrate/frame/bags-list/fuzzer",
-	"substrate/frame/bags-list/remote-tests",
-	"substrate/frame/balances",
-	"substrate/frame/beefy",
-	"substrate/frame/beefy-mmr",
-	"substrate/frame/benchmarking",
-	"substrate/frame/benchmarking/pov",
-	"substrate/frame/bounties",
-	"substrate/frame/broker",
-	"substrate/frame/child-bounties",
-	"substrate/frame/collective",
-	"substrate/frame/contracts",
-	"substrate/frame/contracts/fixtures",
-	"substrate/frame/contracts/mock-network",
-	"substrate/frame/contracts/proc-macro",
-	"substrate/frame/contracts/uapi",
-	"substrate/frame/conviction-voting",
-	"substrate/frame/core-fellowship",
-	"substrate/frame/delegated-staking",
-	"substrate/frame/democracy",
-	"substrate/frame/derivatives",
-	"substrate/frame/dummy-dim",
-	"substrate/frame/election-provider-multi-block",
-	"substrate/frame/election-provider-multi-phase",
-	"substrate/frame/election-provider-multi-phase/test-staking-e2e",
-	"substrate/frame/election-provider-support",
-	"substrate/frame/election-provider-support/benchmarking",
-	"substrate/frame/election-provider-support/solution-type",
-	"substrate/frame/election-provider-support/solution-type/fuzzer",
-	"substrate/frame/elections-phragmen",
-	"substrate/frame/examples",
-	"substrate/frame/examples/authorization-tx-extension",
-	"substrate/frame/examples/basic",
-	"substrate/frame/examples/default-config",
-	"substrate/frame/examples/dev-mode",
-	"substrate/frame/examples/frame-crate",
-	"substrate/frame/examples/kitchensink",
-	"substrate/frame/examples/multi-block-migrations",
-	"substrate/frame/examples/offchain-worker",
-	"substrate/frame/examples/single-block-migrations",
-	"substrate/frame/examples/split",
-	"substrate/frame/examples/tasks",
-	"substrate/frame/examples/view-functions",
-	"substrate/frame/executive",
-	"substrate/frame/fast-unstake",
-	"substrate/frame/glutton",
-	"substrate/frame/grandpa",
-	"substrate/frame/honzon/oracle",
-	"substrate/frame/honzon/oracle/runtime-api",
-	"substrate/frame/identity",
-	"substrate/frame/im-online",
-	"substrate/frame/indices",
-	"substrate/frame/insecure-randomness-collective-flip",
-	"substrate/frame/lottery",
-	"substrate/frame/membership",
-	"substrate/frame/merkle-mountain-range",
-	"substrate/frame/message-queue",
-	"substrate/frame/meta-tx",
-	"substrate/frame/metadata-hash-extension",
-	"substrate/frame/migrations",
-	"substrate/frame/mixnet",
-	"substrate/frame/multi-asset-bounties",
-	"substrate/frame/multisig",
-	"substrate/frame/nft-fractionalization",
-	"substrate/frame/nfts",
-	"substrate/frame/nfts/runtime-api",
-	"substrate/frame/nis",
-	"substrate/frame/node-authorization",
-	"substrate/frame/nomination-pools",
-	"substrate/frame/nomination-pools/benchmarking",
-	"substrate/frame/nomination-pools/fuzzer",
-	"substrate/frame/nomination-pools/runtime-api",
-	"substrate/frame/nomination-pools/test-delegate-stake",
-	"substrate/frame/offences",
-	"substrate/frame/offences/benchmarking",
-	"substrate/frame/origin-restriction",
-	"substrate/frame/paged-list",
-	"substrate/frame/paged-list/fuzzer",
-	"substrate/frame/parameters",
-	"substrate/frame/people",
-	"substrate/frame/preimage",
-	"substrate/frame/proxy",
-	"substrate/frame/ranked-collective",
-	"substrate/frame/recovery",
-	"substrate/frame/referenda",
-	"substrate/frame/remark",
-	"substrate/frame/revive",
-	"substrate/frame/revive/dev-node/node",
-	"substrate/frame/revive/dev-node/runtime",
-	"substrate/frame/revive/fixtures",
-	"substrate/frame/revive/proc-macro",
-	"substrate/frame/revive/rpc",
-	"substrate/frame/revive/uapi",
-	"substrate/frame/root-offences",
-	"substrate/frame/root-testing",
-	"substrate/frame/safe-mode",
-	"substrate/frame/salary",
-	"substrate/frame/sassafras",
-	"substrate/frame/scheduler",
-	"substrate/frame/scored-pool",
-	"substrate/frame/session",
-	"substrate/frame/session/benchmarking",
-	"substrate/frame/society",
-	"substrate/frame/staking",
-	"substrate/frame/staking-async",
-	"substrate/frame/staking-async/ah-client",
-	"substrate/frame/staking-async/ahm-test",
-	"substrate/frame/staking-async/rc-client",
-	"substrate/frame/staking-async/reward-fn",
-	"substrate/frame/staking-async/runtime-api",
-	"substrate/frame/staking-async/runtimes/preset-store",
-	"substrate/frame/staking-async/runtimes/rc",
-	"substrate/frame/staking-async/runtimes/rc/constants",
-	"substrate/frame/staking-async/runtimes/teyrchain",
-	"substrate/frame/staking/reward-curve",
-	"substrate/frame/staking/reward-fn",
-	"substrate/frame/staking/runtime-api",
-	"substrate/frame/state-trie-migration",
-	"substrate/frame/statement",
-	"substrate/frame/sudo",
-	"substrate/frame/support",
-	"substrate/frame/support/procedural",
-	"substrate/frame/support/procedural/tools",
-	"substrate/frame/support/procedural/tools/derive",
-	"substrate/frame/support/test",
-	"substrate/frame/support/test/compile_pass",
-	"substrate/frame/support/test/pallet",
-	"substrate/frame/support/test/stg_frame_crate",
-	"substrate/frame/system",
-	"substrate/frame/system/benchmarking",
-	"substrate/frame/system/rpc/runtime-api",
-	"substrate/frame/timestamp",
-	"substrate/frame/tips",
-	"substrate/frame/transaction-payment",
-	"substrate/frame/transaction-payment/asset-conversion-tx-payment",
-	"substrate/frame/transaction-payment/asset-tx-payment",
-	"substrate/frame/transaction-payment/rpc",
-	"substrate/frame/transaction-payment/rpc/runtime-api",
-	"substrate/frame/transaction-payment/skip-feeless-payment",
-	"substrate/frame/transaction-storage",
-	"substrate/frame/treasury",
-	"substrate/frame/try-runtime",
-	"substrate/frame/tx-pause",
-	"substrate/frame/uniques",
-	"substrate/frame/utility",
-	"substrate/frame/verify-signature",
-	"substrate/frame/vesting",
-	"substrate/frame/whitelist",
-	"substrate/primitives/api",
-	"substrate/primitives/api/proc-macro",
-	"substrate/primitives/api/test",
-	"substrate/primitives/application-crypto",
-	"substrate/primitives/application-crypto/test",
-	"substrate/primitives/arithmetic",
-	"substrate/primitives/arithmetic/fuzzer",
-	"substrate/primitives/authority-discovery",
-	"substrate/primitives/block-builder",
-	"substrate/primitives/blockchain",
-	"substrate/primitives/consensus/aura",
-	"substrate/primitives/consensus/babe",
-	"substrate/primitives/consensus/beefy",
-	"substrate/primitives/consensus/common",
-	"substrate/primitives/consensus/grandpa",
-	"substrate/primitives/consensus/pow",
-	"substrate/primitives/consensus/sassafras",
-	"substrate/primitives/consensus/slots",
-	"substrate/primitives/core",
-	"substrate/primitives/core/fuzz",
-	"substrate/primitives/crypto/ec-utils",
-	"substrate/primitives/crypto/hashing",
-	"substrate/primitives/crypto/hashing/proc-macro",
-	"substrate/primitives/database",
-	"substrate/primitives/debug-derive",
-	"substrate/primitives/ethereum-standards",
-	"substrate/primitives/externalities",
-	"substrate/primitives/genesis-builder",
-	"substrate/primitives/inherents",
-	"substrate/primitives/io",
-	"substrate/primitives/keyring",
-	"substrate/primitives/keystore",
-	"substrate/primitives/maybe-compressed-blob",
-	"substrate/primitives/merkle-mountain-range",
-	"substrate/primitives/metadata-ir",
-	"substrate/primitives/mixnet",
-	"substrate/primitives/npos-elections",
-	"substrate/primitives/npos-elections/fuzzer",
-	"substrate/primitives/offchain",
-	"substrate/primitives/panic-handler",
-	"substrate/primitives/rpc",
-	"substrate/primitives/runtime",
-	"substrate/primitives/runtime-interface",
-	"substrate/primitives/runtime-interface/proc-macro",
-	"substrate/primitives/runtime-interface/test",
-	"substrate/primitives/runtime-interface/test-wasm",
-	"substrate/primitives/runtime-interface/test-wasm-deprecated",
-	"substrate/primitives/session",
-	"substrate/primitives/staking",
-	"substrate/primitives/state-machine",
-	"substrate/primitives/statement-store",
-	"substrate/primitives/std",
-	"substrate/primitives/storage",
-	"substrate/primitives/test-primitives",
-	"substrate/primitives/timestamp",
-	"substrate/primitives/tracing",
-	"substrate/primitives/transaction-pool",
-	"substrate/primitives/transaction-storage-proof",
-	"substrate/primitives/trie",
-	"substrate/primitives/version",
-	"substrate/primitives/version/proc-macro",
-	"substrate/primitives/wasm-interface",
-	"substrate/primitives/weights",
-	"substrate/scripts/ci/node-template-release",
-	"substrate/test-utils",
-	"substrate/test-utils/cli",
-	"substrate/test-utils/client",
-	"substrate/test-utils/runtime",
-	"substrate/test-utils/runtime/client",
-	"substrate/test-utils/runtime/transaction-pool",
-	"substrate/utils/binary-merkle-tree",
-	"substrate/utils/build-script-utils",
-	"substrate/utils/fork-tree",
-	"substrate/utils/frame/benchmarking-cli",
-	"substrate/utils/frame/generate-bags",
-	"substrate/utils/frame/generate-bags/node-runtime",
-	"substrate/utils/frame/omni-bencher",
-	"substrate/utils/frame/remote-externalities",
-	"substrate/utils/frame/rpc/client",
-	"substrate/utils/frame/rpc/state-trie-migration-rpc",
-	"substrate/utils/frame/rpc/support",
-	"substrate/utils/frame/rpc/system",
-	"substrate/utils/frame/storage-access-test-runtime",
-	"substrate/utils/prometheus",
-	"substrate/utils/substrate-bip39",
-	"substrate/utils/wasm-builder",
+	"bizinikiwi/bin/node/bench",
+	"bizinikiwi/bin/node/cli",
+	"bizinikiwi/bin/node/inspect",
+	"bizinikiwi/bin/node/primitives",
+	"bizinikiwi/bin/node/rpc",
+	"bizinikiwi/bin/node/runtime",
+	"bizinikiwi/bin/node/testing",
+	"bizinikiwi/bin/utils/chain-spec-builder",
+	"bizinikiwi/bin/utils/subkey",
+	"bizinikiwi/client/allocator",
+	"bizinikiwi/client/api",
+	"bizinikiwi/client/authority-discovery",
+	"bizinikiwi/client/basic-authorship",
+	"bizinikiwi/client/block-builder",
+	"bizinikiwi/client/chain-spec",
+	"bizinikiwi/client/chain-spec/derive",
+	"bizinikiwi/client/cli",
+	"bizinikiwi/client/consensus/aura",
+	"bizinikiwi/client/consensus/babe",
+	"bizinikiwi/client/consensus/babe/rpc",
+	"bizinikiwi/client/consensus/beefy",
+	"bizinikiwi/client/consensus/beefy/rpc",
+	"bizinikiwi/client/consensus/common",
+	"bizinikiwi/client/consensus/epochs",
+	"bizinikiwi/client/consensus/grandpa",
+	"bizinikiwi/client/consensus/grandpa/rpc",
+	"bizinikiwi/client/consensus/manual-seal",
+	"bizinikiwi/client/consensus/pow",
+	"bizinikiwi/client/consensus/slots",
+	"bizinikiwi/client/db",
+	"bizinikiwi/client/executor",
+	"bizinikiwi/client/executor/common",
+	"bizinikiwi/client/executor/polkavm",
+	"bizinikiwi/client/executor/runtime-test",
+	"bizinikiwi/client/executor/wasmtime",
+	"bizinikiwi/client/informant",
+	"bizinikiwi/client/keystore",
+	"bizinikiwi/client/merkle-mountain-range",
+	"bizinikiwi/client/merkle-mountain-range/rpc",
+	"bizinikiwi/client/mixnet",
+	"bizinikiwi/client/network",
+	"bizinikiwi/client/network-gossip",
+	"bizinikiwi/client/network/common",
+	"bizinikiwi/client/network/light",
+	"bizinikiwi/client/network/statement",
+	"bizinikiwi/client/network/sync",
+	"bizinikiwi/client/network/test",
+	"bizinikiwi/client/network/transactions",
+	"bizinikiwi/client/network/types",
+	"bizinikiwi/client/offchain",
+	"bizinikiwi/client/proposer-metrics",
+	"bizinikiwi/client/rpc",
+	"bizinikiwi/client/rpc-api",
+	"bizinikiwi/client/rpc-servers",
+	"bizinikiwi/client/rpc-spec-v2",
+	"bizinikiwi/client/runtime-utilities",
+	"bizinikiwi/client/service",
+	"bizinikiwi/client/service/test",
+	"bizinikiwi/client/state-db",
+	"bizinikiwi/client/statement-store",
+	"bizinikiwi/client/storage-monitor",
+	"bizinikiwi/client/sync-state-rpc",
+	"bizinikiwi/client/sysinfo",
+	"bizinikiwi/client/telemetry",
+	"bizinikiwi/client/tracing",
+	"bizinikiwi/client/tracing/proc-macro",
+	"bizinikiwi/client/transaction-pool",
+	"bizinikiwi/client/transaction-pool/api",
+	"bizinikiwi/client/utils",
+	"bizinikiwi/deprecated/hashing",
+	"bizinikiwi/deprecated/hashing/proc-macro",
+	"bizinikiwi/frame",
+	"bizinikiwi/pezframe/alliance",
+	"bizinikiwi/pezframe/asset-conversion",
+	"bizinikiwi/pezframe/asset-conversion/ops",
+	"bizinikiwi/pezframe/asset-rate",
+	"bizinikiwi/pezframe/asset-rewards",
+	"bizinikiwi/pezframe/assets",
+	"bizinikiwi/pezframe/assets-freezer",
+	"bizinikiwi/pezframe/assets-holder",
+	"bizinikiwi/pezframe/assets/precompiles",
+	"bizinikiwi/pezframe/atomic-swap",
+	"bizinikiwi/pezframe/aura",
+	"bizinikiwi/pezframe/authority-discovery",
+	"bizinikiwi/pezframe/authorship",
+	"bizinikiwi/pezframe/babe",
+	"bizinikiwi/pezframe/bags-list",
+	"bizinikiwi/pezframe/bags-list/fuzzer",
+	"bizinikiwi/pezframe/bags-list/remote-tests",
+	"bizinikiwi/pezframe/balances",
+	"bizinikiwi/pezframe/beefy",
+	"bizinikiwi/pezframe/beefy-mmr",
+	"bizinikiwi/pezframe/benchmarking",
+	"bizinikiwi/pezframe/benchmarking/pov",
+	"bizinikiwi/pezframe/bounties",
+	"bizinikiwi/pezframe/broker",
+	"bizinikiwi/pezframe/child-bounties",
+	"bizinikiwi/pezframe/collective",
+	"bizinikiwi/pezframe/contracts",
+	"bizinikiwi/pezframe/contracts/fixtures",
+	"bizinikiwi/pezframe/contracts/mock-network",
+	"bizinikiwi/pezframe/contracts/proc-macro",
+	"bizinikiwi/pezframe/contracts/uapi",
+	"bizinikiwi/pezframe/conviction-voting",
+	"bizinikiwi/pezframe/core-fellowship",
+	"bizinikiwi/pezframe/delegated-staking",
+	"bizinikiwi/pezframe/democracy",
+	"bizinikiwi/pezframe/derivatives",
+	"bizinikiwi/pezframe/dummy-dim",
+	"bizinikiwi/pezframe/election-provider-multi-block",
+	"bizinikiwi/pezframe/election-provider-multi-phase",
+	"bizinikiwi/pezframe/election-provider-multi-phase/test-staking-e2e",
+	"bizinikiwi/pezframe/election-provider-support",
+	"bizinikiwi/pezframe/election-provider-support/benchmarking",
+	"bizinikiwi/pezframe/election-provider-support/solution-type",
+	"bizinikiwi/pezframe/election-provider-support/solution-type/fuzzer",
+	"bizinikiwi/pezframe/elections-phragmen",
+	"bizinikiwi/pezframe/examples",
+	"bizinikiwi/pezframe/examples/authorization-tx-extension",
+	"bizinikiwi/pezframe/examples/basic",
+	"bizinikiwi/pezframe/examples/default-config",
+	"bizinikiwi/pezframe/examples/dev-mode",
+	"bizinikiwi/pezframe/examples/frame-crate",
+	"bizinikiwi/pezframe/examples/kitchensink",
+	"bizinikiwi/pezframe/examples/multi-block-migrations",
+	"bizinikiwi/pezframe/examples/offchain-worker",
+	"bizinikiwi/pezframe/examples/single-block-migrations",
+	"bizinikiwi/pezframe/examples/split",
+	"bizinikiwi/pezframe/examples/tasks",
+	"bizinikiwi/pezframe/examples/view-functions",
+	"bizinikiwi/pezframe/executive",
+	"bizinikiwi/pezframe/fast-unstake",
+	"bizinikiwi/pezframe/glutton",
+	"bizinikiwi/pezframe/grandpa",
+	"bizinikiwi/pezframe/honzon/oracle",
+	"bizinikiwi/pezframe/honzon/oracle/runtime-api",
+	"bizinikiwi/pezframe/identity",
+	"bizinikiwi/pezframe/im-online",
+	"bizinikiwi/pezframe/indices",
+	"bizinikiwi/pezframe/insecure-randomness-collective-flip",
+	"bizinikiwi/pezframe/lottery",
+	"bizinikiwi/pezframe/membership",
+	"bizinikiwi/pezframe/merkle-mountain-range",
+	"bizinikiwi/pezframe/message-queue",
+	"bizinikiwi/pezframe/meta-tx",
+	"bizinikiwi/pezframe/metadata-hash-extension",
+	"bizinikiwi/pezframe/migrations",
+	"bizinikiwi/pezframe/mixnet",
+	"bizinikiwi/pezframe/multi-asset-bounties",
+	"bizinikiwi/pezframe/multisig",
+	"bizinikiwi/pezframe/nft-fractionalization",
+	"bizinikiwi/pezframe/nfts",
+	"bizinikiwi/pezframe/nfts/runtime-api",
+	"bizinikiwi/pezframe/nis",
+	"bizinikiwi/pezframe/node-authorization",
+	"bizinikiwi/pezframe/nomination-pools",
+	"bizinikiwi/pezframe/nomination-pools/benchmarking",
+	"bizinikiwi/pezframe/nomination-pools/fuzzer",
+	"bizinikiwi/pezframe/nomination-pools/runtime-api",
+	"bizinikiwi/pezframe/nomination-pools/test-delegate-stake",
+	"bizinikiwi/pezframe/offences",
+	"bizinikiwi/pezframe/offences/benchmarking",
+	"bizinikiwi/pezframe/origin-restriction",
+	"bizinikiwi/pezframe/paged-list",
+	"bizinikiwi/pezframe/paged-list/fuzzer",
+	"bizinikiwi/pezframe/parameters",
+	"bizinikiwi/pezframe/people",
+	"bizinikiwi/pezframe/preimage",
+	"bizinikiwi/pezframe/proxy",
+	"bizinikiwi/pezframe/ranked-collective",
+	"bizinikiwi/pezframe/recovery",
+	"bizinikiwi/pezframe/referenda",
+	"bizinikiwi/pezframe/remark",
+	"bizinikiwi/pezframe/revive",
+	"bizinikiwi/pezframe/revive/dev-node/node",
+	"bizinikiwi/pezframe/revive/dev-node/runtime",
+	"bizinikiwi/pezframe/revive/fixtures",
+	"bizinikiwi/pezframe/revive/proc-macro",
+	"bizinikiwi/pezframe/revive/rpc",
+	"bizinikiwi/pezframe/revive/uapi",
+	"bizinikiwi/pezframe/root-offences",
+	"bizinikiwi/pezframe/root-testing",
+	"bizinikiwi/pezframe/safe-mode",
+	"bizinikiwi/pezframe/salary",
+	"bizinikiwi/pezframe/sassafras",
+	"bizinikiwi/pezframe/scheduler",
+	"bizinikiwi/pezframe/scored-pool",
+	"bizinikiwi/pezframe/session",
+	"bizinikiwi/pezframe/session/benchmarking",
+	"bizinikiwi/pezframe/society",
+	"bizinikiwi/pezframe/staking",
+	"bizinikiwi/pezframe/staking-async",
+	"bizinikiwi/pezframe/staking-async/ah-client",
+	"bizinikiwi/pezframe/staking-async/ahm-test",
+	"bizinikiwi/pezframe/staking-async/rc-client",
+	"bizinikiwi/pezframe/staking-async/reward-fn",
+	"bizinikiwi/pezframe/staking-async/runtime-api",
+	"bizinikiwi/pezframe/staking-async/runtimes/preset-store",
+	"bizinikiwi/pezframe/staking-async/runtimes/rc",
+	"bizinikiwi/pezframe/staking-async/runtimes/rc/constants",
+	"bizinikiwi/pezframe/staking-async/runtimes/teyrchain",
+	"bizinikiwi/pezframe/staking/reward-curve",
+	"bizinikiwi/pezframe/staking/reward-fn",
+	"bizinikiwi/pezframe/staking/runtime-api",
+	"bizinikiwi/pezframe/state-trie-migration",
+	"bizinikiwi/pezframe/statement",
+	"bizinikiwi/pezframe/sudo",
+	"bizinikiwi/pezframe/support",
+	"bizinikiwi/pezframe/support/procedural",
+	"bizinikiwi/pezframe/support/procedural/tools",
+	"bizinikiwi/pezframe/support/procedural/tools/derive",
+	"bizinikiwi/pezframe/support/test",
+	"bizinikiwi/pezframe/support/test/compile_pass",
+	"bizinikiwi/pezframe/support/test/pallet",
+	"bizinikiwi/pezframe/support/test/stg_pezframe_crate",
+	"bizinikiwi/pezframe/system",
+	"bizinikiwi/pezframe/system/benchmarking",
+	"bizinikiwi/pezframe/system/rpc/runtime-api",
+	"bizinikiwi/pezframe/timestamp",
+	"bizinikiwi/pezframe/tips",
+	"bizinikiwi/pezframe/transaction-payment",
+	"bizinikiwi/pezframe/transaction-payment/asset-conversion-tx-payment",
+	"bizinikiwi/pezframe/transaction-payment/asset-tx-payment",
+	"bizinikiwi/pezframe/transaction-payment/rpc",
+	"bizinikiwi/pezframe/transaction-payment/rpc/runtime-api",
+	"bizinikiwi/pezframe/transaction-payment/skip-feeless-payment",
+	"bizinikiwi/pezframe/transaction-storage",
+	"bizinikiwi/pezframe/treasury",
+	"bizinikiwi/pezframe/try-runtime",
+	"bizinikiwi/pezframe/tx-pause",
+	"bizinikiwi/pezframe/uniques",
+	"bizinikiwi/pezframe/utility",
+	"bizinikiwi/pezframe/verify-signature",
+	"bizinikiwi/pezframe/vesting",
+	"bizinikiwi/pezframe/whitelist",
+	"bizinikiwi/primitives/api",
+	"bizinikiwi/primitives/api/proc-macro",
+	"bizinikiwi/primitives/api/test",
+	"bizinikiwi/primitives/application-crypto",
+	"bizinikiwi/primitives/application-crypto/test",
+	"bizinikiwi/primitives/arithmetic",
+	"bizinikiwi/primitives/arithmetic/fuzzer",
+	"bizinikiwi/primitives/authority-discovery",
+	"bizinikiwi/primitives/block-builder",
+	"bizinikiwi/primitives/blockchain",
+	"bizinikiwi/primitives/consensus/aura",
+	"bizinikiwi/primitives/consensus/babe",
+	"bizinikiwi/primitives/consensus/beefy",
+	"bizinikiwi/primitives/consensus/common",
+	"bizinikiwi/primitives/consensus/grandpa",
+	"bizinikiwi/primitives/consensus/pow",
+	"bizinikiwi/primitives/consensus/sassafras",
+	"bizinikiwi/primitives/consensus/slots",
+	"bizinikiwi/primitives/core",
+	"bizinikiwi/primitives/core/fuzz",
+	"bizinikiwi/primitives/crypto/ec-utils",
+	"bizinikiwi/primitives/crypto/hashing",
+	"bizinikiwi/primitives/crypto/hashing/proc-macro",
+	"bizinikiwi/primitives/database",
+	"bizinikiwi/primitives/debug-derive",
+	"bizinikiwi/primitives/ethereum-standards",
+	"bizinikiwi/primitives/externalities",
+	"bizinikiwi/primitives/genesis-builder",
+	"bizinikiwi/primitives/inherents",
+	"bizinikiwi/primitives/io",
+	"bizinikiwi/primitives/keyring",
+	"bizinikiwi/primitives/keystore",
+	"bizinikiwi/primitives/maybe-compressed-blob",
+	"bizinikiwi/primitives/merkle-mountain-range",
+	"bizinikiwi/primitives/metadata-ir",
+	"bizinikiwi/primitives/mixnet",
+	"bizinikiwi/primitives/npos-elections",
+	"bizinikiwi/primitives/npos-elections/fuzzer",
+	"bizinikiwi/primitives/offchain",
+	"bizinikiwi/primitives/panic-handler",
+	"bizinikiwi/primitives/rpc",
+	"bizinikiwi/primitives/runtime",
+	"bizinikiwi/primitives/runtime-interface",
+	"bizinikiwi/primitives/runtime-interface/proc-macro",
+	"bizinikiwi/primitives/runtime-interface/test",
+	"bizinikiwi/primitives/runtime-interface/test-wasm",
+	"bizinikiwi/primitives/runtime-interface/test-wasm-deprecated",
+	"bizinikiwi/primitives/session",
+	"bizinikiwi/primitives/staking",
+	"bizinikiwi/primitives/state-machine",
+	"bizinikiwi/primitives/statement-store",
+	"bizinikiwi/primitives/std",
+	"bizinikiwi/primitives/storage",
+	"bizinikiwi/primitives/test-primitives",
+	"bizinikiwi/primitives/timestamp",
+	"bizinikiwi/primitives/tracing",
+	"bizinikiwi/primitives/transaction-pool",
+	"bizinikiwi/primitives/transaction-storage-proof",
+	"bizinikiwi/primitives/trie",
+	"bizinikiwi/primitives/version",
+	"bizinikiwi/primitives/version/proc-macro",
+	"bizinikiwi/primitives/wasm-interface",
+	"bizinikiwi/primitives/weights",
+	"bizinikiwi/scripts/ci/node-template-release",
+	"bizinikiwi/test-utils",
+	"bizinikiwi/test-utils/cli",
+	"bizinikiwi/test-utils/client",
+	"bizinikiwi/test-utils/runtime",
+	"bizinikiwi/test-utils/runtime/client",
+	"bizinikiwi/test-utils/runtime/transaction-pool",
+	"bizinikiwi/utils/binary-merkle-tree",
+	"bizinikiwi/utils/build-script-utils",
+	"bizinikiwi/utils/fork-tree",
+	"bizinikiwi/utils/pezframe/benchmarking-cli",
+	"bizinikiwi/utils/pezframe/generate-bags",
+	"bizinikiwi/utils/pezframe/generate-bags/node-runtime",
+	"bizinikiwi/utils/pezframe/omni-bencher",
+	"bizinikiwi/utils/pezframe/remote-externalities",
+	"bizinikiwi/utils/pezframe/rpc/client",
+	"bizinikiwi/utils/pezframe/rpc/state-trie-migration-rpc",
+	"bizinikiwi/utils/pezframe/rpc/support",
+	"bizinikiwi/utils/pezframe/rpc/system",
+	"bizinikiwi/utils/pezframe/storage-access-test-runtime",
+	"bizinikiwi/utils/prometheus",
+	"bizinikiwi/utils/bizinikiwi-bip39",
+	"bizinikiwi/utils/wasm-builder",
 	"templates/minimal/node",
 	"templates/minimal/pallets/template",
 	"templates/minimal/runtime",
@@ -602,22 +602,22 @@ members = [
 ]
 
 default-members = [
-	"cumulus/pezkuwi-omni-node",
-	"cumulus/pezkuwi-teyrchain",
+	"pezcumulus/pezkuwi-omni-node",
+	"pezcumulus/pezkuwi-teyrchain",
 	"pezkuwi",
-	"substrate/bin/node/cli",
+	"bizinikiwi/bin/node/cli",
 ]
 
 [workspace.lints.rust]
 suspicious_double_ref_op = { level = "allow", priority = 2 }
-# `substrate_runtime` is a common `cfg` condition name used in the repo.
+# `bizinikiwi_runtime` is a common `cfg` condition name used in the repo.
 unexpected_cfgs = { level = "warn", check-cfg = [
 	'cfg(build_opt_level, values("3"))',
 	'cfg(build_profile, values("debug", "release"))',
 	'cfg(enable_alloc_error_handler)',
 	'cfg(fuzzing)',
 	'cfg(ignore_flaky_test)',
-	'cfg(substrate_runtime)',
+	'cfg(bizinikiwi_runtime)',
 ] }
 
 [workspace.lints.clippy]
@@ -647,8 +647,8 @@ while_immutable_condition = { level = "allow", priority = 2 }        # false pos
 zero-prefixed-literal = { level = "allow", priority = 2 }            # 00_1000_000
 
 [workspace.dependencies]
-pallet-oracle = { path = "substrate/frame/honzon/oracle", default-features = false }
-pallet-oracle-runtime-api = { path = "substrate/frame/honzon/oracle/runtime-api", default-features = false }
+pezpallet-oracle = { path = "bizinikiwi/pezframe/honzon/oracle", default-features = false }
+pezpallet-oracle-runtime-api = { path = "bizinikiwi/pezframe/honzon/oracle/runtime-api", default-features = false }
 
 Inflector = { version = "0.11.4" }
 aes-gcm = { version = "0.10" }
@@ -680,19 +680,19 @@ array-bytes = { version = "6.2.2", default-features = false }
 arrayvec = { version = "0.7.4" }
 assert_cmd = { version = "2.0.14" }
 assert_matches = { version = "1.5.0" }
-asset-hub-pezkuwichain-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-pezkuwichain" }
-asset-hub-pezkuwichain-runtime = { path = "cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain", default-features = false }
-asset-hub-zagros-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-zagros" }
-asset-hub-zagros-runtime = { path = "cumulus/teyrchains/runtimes/assets/asset-hub-zagros" }
-asset-test-utils = { path = "cumulus/teyrchains/runtimes/assets/test-utils", default-features = false }
-assets-common = { path = "cumulus/teyrchains/runtimes/assets/common", default-features = false }
+asset-hub-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-pezkuwichain" }
+asset-hub-pezkuwichain-runtime = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain", default-features = false }
+asset-hub-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-zagros" }
+asset-hub-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros" }
+asset-test-utils = { path = "pezcumulus/teyrchains/runtimes/assets/test-utils", default-features = false }
+assets-common = { path = "pezcumulus/teyrchains/runtimes/assets/common", default-features = false }
 async-channel = { version = "1.8.0" }
 async-std = { version = "1.9.0" }
 async-trait = { version = "0.1.88" }
 asynchronous-codec = { version = "0.6" }
 backoff = { version = "0.4" }
 backtrace = { version = "0.3.71" }
-binary-merkle-tree = { path = "substrate/utils/binary-merkle-tree", default-features = false }
+binary-merkle-tree = { path = "bizinikiwi/utils/binary-merkle-tree", default-features = false }
 bincode = { version = "1.3.3" }
 bip39 = { version = "2.2.0", default-features = false }
 bitflags = { version = "1.3.2" }
@@ -700,15 +700,15 @@ bitvec = { version = "1.0.1", default-features = false }
 blake2 = { version = "0.10.4", default-features = false }
 blake2b_simd = { version = "1.0.2", default-features = false }
 blake3 = { version = "1.5" }
-bn = { package = "substrate-bn", version = "0.6", default-features = false }
+bn = { package = "bizinikiwi-bn", version = "0.6", default-features = false }
 bounded-collections = { version = "0.3.2", default-features = false }
 bounded-vec = { version = "0.7" }
-bp-asset-hub-pezkuwichain = { path = "cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/bridge-primitives", default-features = false }
-bp-asset-hub-zagros = { path = "cumulus/teyrchains/runtimes/assets/asset-hub-zagros/bridge-primitives", default-features = false }
+bp-asset-hub-pezkuwichain = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/bridge-primitives", default-features = false }
+bp-asset-hub-zagros = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros/bridge-primitives", default-features = false }
 bp-beefy = { path = "bridges/primitives/beefy", default-features = false }
-bp-bridge-hub-cumulus = { path = "bridges/chains/chain-cumulus", default-features = false }
-bp-bridge-hub-pezkuwichain = { path = "cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/bridge-primitives", default-features = false }
-bp-bridge-hub-zagros = { path = "cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros/bridge-primitives", default-features = false }
+bp-bridge-hub-pezcumulus = { path = "bridges/chains/chain-pezcumulus", default-features = false }
+bp-bridge-hub-pezkuwichain = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/bridge-primitives", default-features = false }
+bp-bridge-hub-zagros = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros/bridge-primitives", default-features = false }
 bp-header-chain = { path = "bridges/primitives/header-chain", default-features = false }
 bp-messages = { path = "bridges/primitives/messages", default-features = false }
 bp-pezkuwi-bulletin = { path = "bridges/chains/chain-pezkuwi-bulletin", default-features = false }
@@ -721,12 +721,12 @@ bp-teyrchains = { path = "bridges/primitives/teyrchains", default-features = fal
 bp-xcm-bridge-hub = { path = "bridges/primitives/xcm-bridge-hub", default-features = false }
 bp-xcm-bridge-hub-router = { path = "bridges/primitives/xcm-bridge-hub-router", default-features = false }
 bp-zagros = { path = "pezkuwi/runtime/zagros/bridge-primitives", default-features = false }
-bridge-hub-common = { path = "cumulus/teyrchains/runtimes/bridge-hubs/common", default-features = false }
-bridge-hub-pezkuwichain-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-pezkuwichain" }
-bridge-hub-pezkuwichain-runtime = { path = "cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain", default-features = false }
-bridge-hub-test-utils = { path = "cumulus/teyrchains/runtimes/bridge-hubs/test-utils", default-features = false }
-bridge-hub-zagros-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-zagros" }
-bridge-hub-zagros-runtime = { path = "cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros" }
+bridge-hub-common = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/common", default-features = false }
+bridge-hub-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-pezkuwichain" }
+bridge-hub-pezkuwichain-runtime = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain", default-features = false }
+bridge-hub-test-utils = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils", default-features = false }
+bridge-hub-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-zagros" }
+bridge-hub-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros" }
 bridge-runtime-common = { path = "bridges/bin/runtime-common", default-features = false }
 bs58 = { version = "0.5.1", default-features = false }
 build-helper = { version = "0.1.1" }
@@ -736,7 +736,7 @@ bytes = { version = "1.4.0", default-features = false }
 cargo_metadata = { version = "0.15.4" }
 cfg-expr = { version = "0.15.5" }
 cfg-if = { version = "1.0" }
-chain-spec-builder = { path = "substrate/bin/utils/chain-spec-builder", default-features = false, package = "staging-chain-spec-builder" }
+chain-spec-builder = { path = "bizinikiwi/bin/utils/chain-spec-builder", default-features = false, package = "pezstaging-chain-spec-builder" }
 chain-spec-guide-runtime = { path = "docs/sdk/src/reference_docs/chain_spec_runtime" }
 chrono = { version = "0.4.31" }
 cid = { version = "0.9.0" }
@@ -745,58 +745,58 @@ clap_complete = { version = "4.5.13" }
 cmd_lib = { version = "1.9.5" }
 coarsetime = { version = "0.1.22" }
 codec = { version = "3.7.5", default-features = false, package = "parity-scale-codec" }
-collectives-zagros-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/collectives/collectives-zagros" }
-collectives-zagros-runtime = { path = "cumulus/teyrchains/runtimes/collectives/collectives-zagros" }
+collectives-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/collectives/collectives-zagros" }
+collectives-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/collectives/collectives-zagros" }
 color-eyre = { version = "0.6.3", default-features = false }
 color-print = { version = "0.3.4" }
 colored = { version = "2.0.4" }
 comfy-table = { version = "7.1.4", default-features = false }
 console = { version = "0.15.8" }
 const-hex = { version = "1.10.0", default-features = false }
-coretime-pezkuwichain-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-pezkuwichain" }
-coretime-pezkuwichain-runtime = { path = "cumulus/teyrchains/runtimes/coretime/coretime-pezkuwichain" }
-coretime-zagros-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-zagros" }
-coretime-zagros-runtime = { path = "cumulus/teyrchains/runtimes/coretime/coretime-zagros" }
+coretime-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-pezkuwichain" }
+coretime-pezkuwichain-runtime = { path = "pezcumulus/teyrchains/runtimes/coretime/coretime-pezkuwichain" }
+coretime-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-zagros" }
+coretime-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/coretime/coretime-zagros" }
 cpu-time = { version = "1.0.0" }
 criterion = { version = "0.5.1", default-features = false }
-cumulus-client-bootnodes = { path = "cumulus/client/bootnodes", default-features = false }
-cumulus-client-cli = { path = "cumulus/client/cli", default-features = false }
-cumulus-client-collator = { path = "cumulus/client/collator", default-features = false }
-cumulus-client-consensus-aura = { path = "cumulus/client/consensus/aura", default-features = false }
-cumulus-client-consensus-common = { path = "cumulus/client/consensus/common", default-features = false }
-cumulus-client-consensus-proposer = { path = "cumulus/client/consensus/proposer", default-features = false }
-cumulus-client-consensus-relay-chain = { path = "cumulus/client/consensus/relay-chain", default-features = false }
-cumulus-client-network = { path = "cumulus/client/network", default-features = false }
-cumulus-client-pov-recovery = { path = "cumulus/client/pov-recovery", default-features = false }
-cumulus-client-service = { path = "cumulus/client/service", default-features = false }
-cumulus-client-teyrchain-inherent = { path = "cumulus/client/teyrchain-inherent", default-features = false }
-cumulus-pallet-aura-ext = { path = "cumulus/pallets/aura-ext", default-features = false }
-cumulus-pallet-dmp-queue = { default-features = false, path = "cumulus/pallets/dmp-queue" }
-cumulus-pallet-session-benchmarking = { path = "cumulus/pallets/session-benchmarking", default-features = false }
-cumulus-pallet-solo-to-para = { path = "cumulus/pallets/solo-to-para", default-features = false }
-cumulus-pallet-teyrchain-system = { path = "cumulus/pallets/teyrchain-system", default-features = false }
-cumulus-pallet-teyrchain-system-proc-macro = { path = "cumulus/pallets/teyrchain-system/proc-macro", default-features = false }
-cumulus-pallet-weight-reclaim = { path = "cumulus/pallets/weight-reclaim", default-features = false }
-cumulus-pallet-xcm = { path = "cumulus/pallets/xcm", default-features = false }
-cumulus-pallet-xcmp-queue = { path = "cumulus/pallets/xcmp-queue", default-features = false }
-cumulus-ping = { path = "cumulus/teyrchains/pallets/ping", default-features = false }
-cumulus-primitives-aura = { path = "cumulus/primitives/aura", default-features = false }
-cumulus-primitives-core = { path = "cumulus/primitives/core", default-features = false }
-cumulus-primitives-proof-size-hostfunction = { path = "cumulus/primitives/proof-size-hostfunction", default-features = false }
-cumulus-primitives-storage-weight-reclaim = { path = "cumulus/primitives/storage-weight-reclaim", default-features = false }
-cumulus-primitives-teyrchain-inherent = { path = "cumulus/primitives/teyrchain-inherent", default-features = false }
-cumulus-primitives-timestamp = { path = "cumulus/primitives/timestamp", default-features = false }
-cumulus-primitives-utility = { path = "cumulus/primitives/utility", default-features = false }
-cumulus-relay-chain-inprocess-interface = { path = "cumulus/client/relay-chain-inprocess-interface", default-features = false }
-cumulus-relay-chain-interface = { path = "cumulus/client/relay-chain-interface", default-features = false }
-cumulus-relay-chain-minimal-node = { path = "cumulus/client/relay-chain-minimal-node", default-features = false }
-cumulus-relay-chain-rpc-interface = { path = "cumulus/client/relay-chain-rpc-interface", default-features = false }
-cumulus-relay-chain-streams = { path = "cumulus/client/relay-chain-streams", default-features = false }
-cumulus-test-client = { path = "cumulus/test/client" }
-cumulus-test-relay-sproof-builder = { path = "cumulus/test/relay-sproof-builder", default-features = false }
-cumulus-test-runtime = { path = "cumulus/test/runtime" }
-cumulus-test-service = { path = "cumulus/test/service" }
-cumulus-zombienet-sdk-helpers = { path = "cumulus/zombienet/zombienet-sdk-helpers", default-features = false }
+pezcumulus-client-bootnodes = { path = "pezcumulus/client/bootnodes", default-features = false }
+pezcumulus-client-cli = { path = "pezcumulus/client/cli", default-features = false }
+pezcumulus-client-collator = { path = "pezcumulus/client/collator", default-features = false }
+pezcumulus-client-consensus-aura = { path = "pezcumulus/client/consensus/aura", default-features = false }
+pezcumulus-client-consensus-common = { path = "pezcumulus/client/consensus/common", default-features = false }
+pezcumulus-client-consensus-proposer = { path = "pezcumulus/client/consensus/proposer", default-features = false }
+pezcumulus-client-consensus-relay-chain = { path = "pezcumulus/client/consensus/relay-chain", default-features = false }
+pezcumulus-client-network = { path = "pezcumulus/client/network", default-features = false }
+pezcumulus-client-pov-recovery = { path = "pezcumulus/client/pov-recovery", default-features = false }
+pezcumulus-client-service = { path = "pezcumulus/client/service", default-features = false }
+pezcumulus-client-teyrchain-inherent = { path = "pezcumulus/client/teyrchain-inherent", default-features = false }
+pezcumulus-pezpallet-aura-ext = { path = "pezcumulus/pallets/aura-ext", default-features = false }
+pezcumulus-pezpallet-dmp-queue = { default-features = false, path = "pezcumulus/pallets/dmp-queue" }
+pezcumulus-pezpallet-session-benchmarking = { path = "pezcumulus/pallets/session-benchmarking", default-features = false }
+pezcumulus-pezpallet-solo-to-para = { path = "pezcumulus/pallets/solo-to-para", default-features = false }
+pezcumulus-pezpallet-teyrchain-system = { path = "pezcumulus/pallets/teyrchain-system", default-features = false }
+pezcumulus-pezpallet-teyrchain-system-proc-macro = { path = "pezcumulus/pallets/teyrchain-system/proc-macro", default-features = false }
+pezcumulus-pezpallet-weight-reclaim = { path = "pezcumulus/pallets/weight-reclaim", default-features = false }
+pezcumulus-pezpallet-xcm = { path = "pezcumulus/pallets/xcm", default-features = false }
+pezcumulus-pezpallet-xcmp-queue = { path = "pezcumulus/pallets/xcmp-queue", default-features = false }
+pezcumulus-ping = { path = "pezcumulus/teyrchains/pallets/ping", default-features = false }
+pezcumulus-primitives-aura = { path = "pezcumulus/primitives/aura", default-features = false }
+pezcumulus-primitives-core = { path = "pezcumulus/primitives/core", default-features = false }
+pezcumulus-primitives-proof-size-hostfunction = { path = "pezcumulus/primitives/proof-size-hostfunction", default-features = false }
+pezcumulus-primitives-storage-weight-reclaim = { path = "pezcumulus/primitives/storage-weight-reclaim", default-features = false }
+pezcumulus-primitives-teyrchain-inherent = { path = "pezcumulus/primitives/teyrchain-inherent", default-features = false }
+pezcumulus-primitives-timestamp = { path = "pezcumulus/primitives/timestamp", default-features = false }
+pezcumulus-primitives-utility = { path = "pezcumulus/primitives/utility", default-features = false }
+pezcumulus-relay-chain-inprocess-interface = { path = "pezcumulus/client/relay-chain-inprocess-interface", default-features = false }
+pezcumulus-relay-chain-interface = { path = "pezcumulus/client/relay-chain-interface", default-features = false }
+pezcumulus-relay-chain-minimal-node = { path = "pezcumulus/client/relay-chain-minimal-node", default-features = false }
+pezcumulus-relay-chain-rpc-interface = { path = "pezcumulus/client/relay-chain-rpc-interface", default-features = false }
+pezcumulus-relay-chain-streams = { path = "pezcumulus/client/relay-chain-streams", default-features = false }
+pezcumulus-test-client = { path = "pezcumulus/test/client" }
+pezcumulus-test-relay-sproof-builder = { path = "pezcumulus/test/relay-sproof-builder", default-features = false }
+pezcumulus-test-runtime = { path = "pezcumulus/test/runtime" }
+pezcumulus-test-service = { path = "pezcumulus/test/service" }
+pezcumulus-zombienet-sdk-helpers = { path = "pezcumulus/zombienet/zombienet-sdk-helpers", default-features = false }
 curve25519-dalek = { version = "4.1.3" }
 derive-syn-parse = { version = "0.2.0" }
 derive-where = { version = "1.2.7" }
@@ -810,7 +810,7 @@ dyn-clone = { version = "1.0.16" }
 ed25519-dalek = { version = "2.1", default-features = false }
 ed25519-zebra = { version = "4.0.3", default-features = false }
 either = { version = "1.8.1", default-features = false }
-emulated-integration-tests-common = { path = "cumulus/teyrchains/integration-tests/emulated/common", default-features = false }
+emulated-integration-tests-common = { path = "pezcumulus/teyrchains/integration-tests/emulated/common", default-features = false }
 enumflags2 = { version = "0.7.11" }
 enumn = { version = "0.1.13" }
 env_filter = { version = "0.1.3" }
@@ -819,7 +819,7 @@ environmental = { version = "1.1.4", default-features = false }
 equivocation-detector = { path = "bridges/relays/equivocation" }
 ethabi = { version = "2.0.0", default-features = false, package = "ethabi-decode" }
 ethbloom = { version = "0.14.1", default-features = false }
-ethereum-standards = { path = "substrate/primitives/ethereum-standards" }
+ethereum-standards = { path = "bizinikiwi/primitives/ethereum-standards" }
 ethereum-types = { version = "0.15.1", default-features = false }
 exit-future = { version = "0.2.0" }
 expander = { version = "2.0.0" }
@@ -834,38 +834,38 @@ first-runtime = { package = "pezkuwi-sdk-docs-first-runtime", path = "docs/sdk/p
 flate2 = { version = "1.0" }
 fnv = { version = "1.0.6" }
 foldhash = { version = "0.1.5", default-features = false }
-fork-tree = { path = "substrate/utils/fork-tree", default-features = false }
+fork-tree = { path = "bizinikiwi/utils/fork-tree", default-features = false }
 forwarded-header-value = { version = "0.1.1" }
 fraction = { version = "0.13.1" }
-frame = { path = "substrate/frame", default-features = false, package = "pezkuwi-sdk-frame" }
-frame-benchmarking = { path = "substrate/frame/benchmarking", default-features = false }
-frame-benchmarking-cli = { path = "substrate/utils/frame/benchmarking-cli", default-features = false }
-frame-benchmarking-pallet-pov = { default-features = false, path = "substrate/frame/benchmarking/pov" }
-frame-election-provider-solution-type = { path = "substrate/frame/election-provider-support/solution-type", default-features = false }
-frame-election-provider-support = { path = "substrate/frame/election-provider-support", default-features = false }
-frame-executive = { path = "substrate/frame/executive", default-features = false }
+frame = { path = "bizinikiwi/frame", default-features = false, package = "pezkuwi-sdk-frame" }
+pezframe-benchmarking = { path = "bizinikiwi/pezframe/benchmarking", default-features = false }
+pezframe-benchmarking-cli = { path = "bizinikiwi/utils/pezframe/benchmarking-cli", default-features = false }
+pezframe-benchmarking-pezpallet-pov = { default-features = false, path = "bizinikiwi/pezframe/benchmarking/pov" }
+pezframe-election-provider-solution-type = { path = "bizinikiwi/pezframe/election-provider-support/solution-type", default-features = false }
+pezframe-election-provider-support = { path = "bizinikiwi/pezframe/election-provider-support", default-features = false }
+pezframe-executive = { path = "bizinikiwi/pezframe/executive", default-features = false }
 frame-metadata = { version = "23.0.0", default-features = false }
-frame-metadata-hash-extension = { path = "substrate/frame/metadata-hash-extension", default-features = false }
-frame-storage-access-test-runtime = { path = "substrate/utils/frame/storage-access-test-runtime", default-features = false }
-frame-support = { path = "substrate/frame/support", default-features = false }
-frame-support-procedural = { path = "substrate/frame/support/procedural", default-features = false }
-frame-support-procedural-tools = { path = "substrate/frame/support/procedural/tools", default-features = false }
-frame-support-procedural-tools-derive = { path = "substrate/frame/support/procedural/tools/derive", default-features = false }
-frame-support-test = { path = "substrate/frame/support/test" }
-frame-system = { path = "substrate/frame/system", default-features = false }
-frame-system-benchmarking = { path = "substrate/frame/system/benchmarking", default-features = false }
-frame-system-rpc-runtime-api = { path = "substrate/frame/system/rpc/runtime-api", default-features = false }
-frame-try-runtime = { path = "substrate/frame/try-runtime", default-features = false }
+pezframe-metadata-hash-extension = { path = "bizinikiwi/pezframe/metadata-hash-extension", default-features = false }
+frame-storage-access-test-runtime = { path = "bizinikiwi/utils/pezframe/storage-access-test-runtime", default-features = false }
+pezframe-support = { path = "bizinikiwi/pezframe/support", default-features = false }
+pezframe-support-procedural = { path = "bizinikiwi/pezframe/support/procedural", default-features = false }
+pezframe-support-procedural-tools = { path = "bizinikiwi/pezframe/support/procedural/tools", default-features = false }
+pezframe-support-procedural-tools-derive = { path = "bizinikiwi/pezframe/support/procedural/tools/derive", default-features = false }
+pezframe-support-test = { path = "bizinikiwi/pezframe/support/test" }
+pezframe-system = { path = "bizinikiwi/pezframe/system", default-features = false }
+pezframe-system-benchmarking = { path = "bizinikiwi/pezframe/system/benchmarking", default-features = false }
+pezframe-system-rpc-runtime-api = { path = "bizinikiwi/pezframe/system/rpc/runtime-api", default-features = false }
+pezframe-try-runtime = { path = "bizinikiwi/pezframe/try-runtime", default-features = false }
 fs4 = { version = "0.7.0" }
 fs_extra = { version = "1.3.0" }
 futures = { version = "0.3.31" }
 futures-timer = { version = "3.0.2" }
 futures-util = { version = "0.3.30", default-features = false }
-generate-bags = { path = "substrate/utils/frame/generate-bags", default-features = false }
+generate-bags = { path = "bizinikiwi/utils/pezframe/generate-bags", default-features = false }
 gethostname = { version = "0.2.3" }
 git2 = { version = "0.20.0", default-features = false }
 glob = { version = "0.3" }
-glutton-zagros-runtime = { path = "cumulus/teyrchains/runtimes/glutton/glutton-zagros" }
+glutton-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/glutton/glutton-zagros" }
 governor = { version = "0.6.0" }
 gum = { path = "pezkuwi/node/gum", default-features = false, package = "tracing-gum" }
 gum-proc-macro = { path = "pezkuwi/node/gum/proc-macro", default-features = false, package = "tracing-gum-proc-macro" }
@@ -907,7 +907,7 @@ jsonpath_lib = { version = "0.3" }
 jsonrpsee = { version = "0.24.10" }
 jsonrpsee-core = { version = "0.24.10" }
 k256 = { version = "0.13.4", default-features = false }
-kitchensink-runtime = { path = "substrate/bin/node/runtime" }
+kitchensink-runtime = { path = "bizinikiwi/bin/node/runtime" }
 kvdb = { version = "0.13.0" }
 kvdb-memorydb = { version = "0.13.0" }
 kvdb-rocksdb = { version = "0.20.1" }
@@ -937,20 +937,20 @@ milagro-bls = { version = "1.5.4", default-features = false, package = "snowbrid
 minimal-template-node = { path = "templates/minimal/node" }
 minimal-template-runtime = { path = "templates/minimal/runtime" }
 mixnet = { version = "0.7.0" }
-mmr-gadget = { path = "substrate/client/merkle-mountain-range", default-features = false }
+mmr-gadget = { path = "bizinikiwi/client/merkle-mountain-range", default-features = false }
 mmr-lib = { version = "0.8.2", package = "pezkuwi-ckb-merkle-mountain-range", default-features = false }
-mmr-rpc = { path = "substrate/client/merkle-mountain-range/rpc", default-features = false }
+mmr-rpc = { path = "bizinikiwi/client/merkle-mountain-range/rpc", default-features = false }
 mockall = { version = "0.13.1" }
 multiaddr = { version = "0.18.1" }
 multihash = { version = "0.19.1", default-features = false }
 multistream-select = { version = "0.13.0" }
 names = { version = "0.14.0", default-features = false }
 nix = { version = "0.29.0" }
-node-cli = { path = "substrate/bin/node/cli", package = "staging-node-cli" }
-node-inspect = { path = "substrate/bin/node/inspect", default-features = false, package = "staging-node-inspect" }
-node-primitives = { path = "substrate/bin/node/primitives", default-features = false }
-node-rpc = { path = "substrate/bin/node/rpc" }
-node-testing = { path = "substrate/bin/node/testing" }
+node-cli = { path = "bizinikiwi/bin/node/cli", package = "pezstaging-node-cli" }
+node-inspect = { path = "bizinikiwi/bin/node/inspect", default-features = false, package = "pezstaging-node-inspect" }
+node-primitives = { path = "bizinikiwi/bin/node/primitives", default-features = false }
+node-rpc = { path = "bizinikiwi/bin/node/rpc" }
+node-testing = { path = "bizinikiwi/bin/node/testing" }
 nohash-hasher = { version = "0.2.0" }
 novelpoly = { version = "2.0.0", package = "reed-solomon-novelpoly" }
 num-bigint = { version = "0.4.6", default-features = false }
@@ -961,172 +961,172 @@ num-traits = { version = "0.2.17", default-features = false }
 num_cpus = { version = "1.13.1" }
 once_cell = { version = "1.21.3" }
 orchestra = { version = "0.4.0", default-features = false }
-pallet-ah-ops = { path = "cumulus/pallets/ah-ops", default-features = false }
-pallet-alliance = { path = "substrate/frame/alliance", default-features = false }
-pallet-asset-conversion = { path = "substrate/frame/asset-conversion", default-features = false }
-pallet-asset-conversion-ops = { path = "substrate/frame/asset-conversion/ops", default-features = false }
-pallet-asset-conversion-tx-payment = { path = "substrate/frame/transaction-payment/asset-conversion-tx-payment", default-features = false }
-pallet-asset-rate = { path = "substrate/frame/asset-rate", default-features = false }
-pallet-asset-rewards = { path = "substrate/frame/asset-rewards", default-features = false }
-pallet-asset-tx-payment = { path = "substrate/frame/transaction-payment/asset-tx-payment", default-features = false }
-pallet-assets = { path = "substrate/frame/assets", default-features = false }
-pallet-assets-freezer = { path = "substrate/frame/assets-freezer", default-features = false }
-pallet-assets-holder = { path = "substrate/frame/assets-holder", default-features = false }
-pallet-assets-precompiles = { path = "substrate/frame/assets/precompiles", default-features = false }
-pallet-atomic-swap = { default-features = false, path = "substrate/frame/atomic-swap" }
-pallet-aura = { path = "substrate/frame/aura", default-features = false }
-pallet-authority-discovery = { path = "substrate/frame/authority-discovery", default-features = false }
-pallet-authorship = { path = "substrate/frame/authorship", default-features = false }
-pallet-babe = { path = "substrate/frame/babe", default-features = false }
-pallet-bags-list = { path = "substrate/frame/bags-list", default-features = false }
-pallet-bags-list-remote-tests = { path = "substrate/frame/bags-list/remote-tests" }
-pallet-balances = { path = "substrate/frame/balances", default-features = false }
-pallet-beefy = { path = "substrate/frame/beefy", default-features = false }
-pallet-beefy-mmr = { path = "substrate/frame/beefy-mmr", default-features = false }
-pallet-bounties = { path = "substrate/frame/bounties", default-features = false }
-pallet-bridge-grandpa = { path = "bridges/modules/grandpa", default-features = false }
-pallet-bridge-messages = { path = "bridges/modules/messages", default-features = false }
-pallet-bridge-relayers = { path = "bridges/modules/relayers", default-features = false }
-pallet-bridge-teyrchains = { path = "bridges/modules/teyrchains", default-features = false }
-pallet-broker = { path = "substrate/frame/broker", default-features = false }
-pallet-child-bounties = { path = "substrate/frame/child-bounties", default-features = false }
-pallet-collator-selection = { path = "cumulus/pallets/collator-selection", default-features = false }
-pallet-collective = { path = "substrate/frame/collective", default-features = false }
-pallet-collective-content = { path = "cumulus/teyrchains/pallets/collective-content", default-features = false }
-pallet-contracts = { path = "substrate/frame/contracts", default-features = false }
-pallet-contracts-fixtures = { path = "substrate/frame/contracts/fixtures", default-features = false }
-pallet-contracts-mock-network = { default-features = false, path = "substrate/frame/contracts/mock-network" }
-pallet-contracts-proc-macro = { path = "substrate/frame/contracts/proc-macro", default-features = false }
-pallet-contracts-uapi = { path = "substrate/frame/contracts/uapi", default-features = false }
-pallet-conviction-voting = { path = "substrate/frame/conviction-voting", default-features = false }
-pallet-core-fellowship = { path = "substrate/frame/core-fellowship", default-features = false }
-pallet-default-config-example = { path = "substrate/frame/examples/default-config", default-features = false }
-pallet-delegated-staking = { path = "substrate/frame/delegated-staking", default-features = false }
-pallet-democracy = { path = "substrate/frame/democracy", default-features = false }
-pallet-dev-mode = { path = "substrate/frame/examples/dev-mode", default-features = false }
-pallet-dummy-dim = { path = "substrate/frame/dummy-dim", default-features = false }
-pallet-election-provider-multi-block = { path = "substrate/frame/election-provider-multi-block", default-features = false }
-pallet-election-provider-multi-phase = { path = "substrate/frame/election-provider-multi-phase", default-features = false }
-pallet-election-provider-support-benchmarking = { path = "substrate/frame/election-provider-support/benchmarking", default-features = false }
-pallet-elections-phragmen = { path = "substrate/frame/elections-phragmen", default-features = false }
-pallet-example-authorization-tx-extension = { path = "substrate/frame/examples/authorization-tx-extension", default-features = false }
-pallet-example-basic = { path = "substrate/frame/examples/basic", default-features = false }
-pallet-example-frame-crate = { path = "substrate/frame/examples/frame-crate", default-features = false }
-pallet-example-kitchensink = { path = "substrate/frame/examples/kitchensink", default-features = false }
-pallet-example-mbm = { path = "substrate/frame/examples/multi-block-migrations", default-features = false }
-pallet-example-offchain-worker = { path = "substrate/frame/examples/offchain-worker", default-features = false }
-pallet-example-single-block-migrations = { path = "substrate/frame/examples/single-block-migrations", default-features = false }
-pallet-example-split = { path = "substrate/frame/examples/split", default-features = false }
-pallet-example-tasks = { path = "substrate/frame/examples/tasks", default-features = false }
-pallet-example-view-functions = { path = "substrate/frame/examples/view-functions", default-features = false }
-pallet-examples = { path = "substrate/frame/examples" }
-pallet-fast-unstake = { path = "substrate/frame/fast-unstake", default-features = false }
-pallet-glutton = { path = "substrate/frame/glutton", default-features = false }
-pallet-grandpa = { path = "substrate/frame/grandpa", default-features = false }
-pallet-identity = { path = "substrate/frame/identity", default-features = false }
-pallet-im-online = { path = "substrate/frame/im-online", default-features = false }
-pallet-indices = { path = "substrate/frame/indices", default-features = false }
-pallet-insecure-randomness-collective-flip = { path = "substrate/frame/insecure-randomness-collective-flip", default-features = false }
-pallet-lottery = { default-features = false, path = "substrate/frame/lottery" }
-pallet-membership = { path = "substrate/frame/membership", default-features = false }
-pallet-message-queue = { path = "substrate/frame/message-queue", default-features = false }
-pallet-meta-tx = { path = "substrate/frame/meta-tx", default-features = false }
-pallet-migrations = { path = "substrate/frame/migrations", default-features = false }
-pallet-minimal-template = { path = "templates/minimal/pallets/template", default-features = false }
-pallet-mixnet = { default-features = false, path = "substrate/frame/mixnet" }
-pallet-mmr = { path = "substrate/frame/merkle-mountain-range", default-features = false }
-pallet-multi-asset-bounties = { path = "substrate/frame/multi-asset-bounties", default-features = false }
-pallet-multisig = { path = "substrate/frame/multisig", default-features = false }
-pallet-nft-fractionalization = { path = "substrate/frame/nft-fractionalization", default-features = false }
-pallet-nfts = { path = "substrate/frame/nfts", default-features = false }
-pallet-nfts-runtime-api = { path = "substrate/frame/nfts/runtime-api", default-features = false }
-pallet-nis = { path = "substrate/frame/nis", default-features = false }
-pallet-node-authorization = { default-features = false, path = "substrate/frame/node-authorization" }
-pallet-nomination-pools = { path = "substrate/frame/nomination-pools", default-features = false }
-pallet-nomination-pools-benchmarking = { path = "substrate/frame/nomination-pools/benchmarking", default-features = false }
-pallet-nomination-pools-runtime-api = { path = "substrate/frame/nomination-pools/runtime-api", default-features = false }
-pallet-offences = { path = "substrate/frame/offences", default-features = false }
-pallet-offences-benchmarking = { path = "substrate/frame/offences/benchmarking", default-features = false }
-pallet-origin-restriction = { path = "substrate/frame/origin-restriction", default-features = false }
-pallet-paged-list = { path = "substrate/frame/paged-list", default-features = false }
-pallet-parameters = { path = "substrate/frame/parameters", default-features = false }
-pallet-people = { path = "substrate/frame/people", default-features = false }
-pallet-preimage = { path = "substrate/frame/preimage", default-features = false }
-pallet-proxy = { path = "substrate/frame/proxy", default-features = false }
-pallet-ranked-collective = { path = "substrate/frame/ranked-collective", default-features = false }
-pallet-recovery = { path = "substrate/frame/recovery", default-features = false }
-pallet-referenda = { path = "substrate/frame/referenda", default-features = false }
-pallet-remark = { default-features = false, path = "substrate/frame/remark" }
-pallet-revive = { path = "substrate/frame/revive", default-features = false }
-pallet-revive-eth-rpc = { path = "substrate/frame/revive/rpc", default-features = false }
-pallet-revive-fixtures = { path = "substrate/frame/revive/fixtures", default-features = false }
-pallet-revive-proc-macro = { path = "substrate/frame/revive/proc-macro", default-features = false }
-pallet-revive-uapi = { path = "substrate/frame/revive/uapi", default-features = false }
-pallet-root-offences = { default-features = false, path = "substrate/frame/root-offences" }
-pallet-root-testing = { path = "substrate/frame/root-testing", default-features = false }
-pallet-safe-mode = { default-features = false, path = "substrate/frame/safe-mode" }
-pallet-salary = { path = "substrate/frame/salary", default-features = false }
-pallet-scheduler = { path = "substrate/frame/scheduler", default-features = false }
-pallet-scored-pool = { default-features = false, path = "substrate/frame/scored-pool" }
-pallet-session = { path = "substrate/frame/session", default-features = false }
-pallet-session-benchmarking = { path = "substrate/frame/session/benchmarking", default-features = false }
-pallet-skip-feeless-payment = { path = "substrate/frame/transaction-payment/skip-feeless-payment", default-features = false }
-pallet-society = { path = "substrate/frame/society", default-features = false }
-pallet-staking = { path = "substrate/frame/staking", default-features = false }
-pallet-staking-reward-curve = { path = "substrate/frame/staking/reward-curve", default-features = false }
-pallet-teyrchain-template = { path = "templates/teyrchain/pallets/template", default-features = false }
+pezpallet-ah-ops = { path = "pezcumulus/pallets/ah-ops", default-features = false }
+pezpallet-alliance = { path = "bizinikiwi/pezframe/alliance", default-features = false }
+pezpallet-asset-conversion = { path = "bizinikiwi/pezframe/asset-conversion", default-features = false }
+pezpallet-asset-conversion-ops = { path = "bizinikiwi/pezframe/asset-conversion/ops", default-features = false }
+pezpallet-asset-conversion-tx-payment = { path = "bizinikiwi/pezframe/transaction-payment/asset-conversion-tx-payment", default-features = false }
+pezpallet-asset-rate = { path = "bizinikiwi/pezframe/asset-rate", default-features = false }
+pezpallet-asset-rewards = { path = "bizinikiwi/pezframe/asset-rewards", default-features = false }
+pezpallet-asset-tx-payment = { path = "bizinikiwi/pezframe/transaction-payment/asset-tx-payment", default-features = false }
+pezpallet-assets = { path = "bizinikiwi/pezframe/assets", default-features = false }
+pezpallet-assets-freezer = { path = "bizinikiwi/pezframe/assets-freezer", default-features = false }
+pezpallet-assets-holder = { path = "bizinikiwi/pezframe/assets-holder", default-features = false }
+pezpallet-assets-precompiles = { path = "bizinikiwi/pezframe/assets/precompiles", default-features = false }
+pezpallet-atomic-swap = { default-features = false, path = "bizinikiwi/pezframe/atomic-swap" }
+pezpallet-aura = { path = "bizinikiwi/pezframe/aura", default-features = false }
+pezpallet-authority-discovery = { path = "bizinikiwi/pezframe/authority-discovery", default-features = false }
+pezpallet-authorship = { path = "bizinikiwi/pezframe/authorship", default-features = false }
+pezpallet-babe = { path = "bizinikiwi/pezframe/babe", default-features = false }
+pezpallet-bags-list = { path = "bizinikiwi/pezframe/bags-list", default-features = false }
+pezpallet-bags-list-remote-tests = { path = "bizinikiwi/pezframe/bags-list/remote-tests" }
+pezpallet-balances = { path = "bizinikiwi/pezframe/balances", default-features = false }
+pezpallet-beefy = { path = "bizinikiwi/pezframe/beefy", default-features = false }
+pezpallet-beefy-mmr = { path = "bizinikiwi/pezframe/beefy-mmr", default-features = false }
+pezpallet-bounties = { path = "bizinikiwi/pezframe/bounties", default-features = false }
+pezpallet-bridge-grandpa = { path = "bridges/modules/grandpa", default-features = false }
+pezpallet-bridge-messages = { path = "bridges/modules/messages", default-features = false }
+pezpallet-bridge-relayers = { path = "bridges/modules/relayers", default-features = false }
+pezpallet-bridge-teyrchains = { path = "bridges/modules/teyrchains", default-features = false }
+pezpallet-broker = { path = "bizinikiwi/pezframe/broker", default-features = false }
+pezpallet-child-bounties = { path = "bizinikiwi/pezframe/child-bounties", default-features = false }
+pezpallet-collator-selection = { path = "pezcumulus/pallets/collator-selection", default-features = false }
+pezpallet-collective = { path = "bizinikiwi/pezframe/collective", default-features = false }
+pezpallet-collective-content = { path = "pezcumulus/teyrchains/pallets/collective-content", default-features = false }
+pezpallet-contracts = { path = "bizinikiwi/pezframe/contracts", default-features = false }
+pezpallet-contracts-fixtures = { path = "bizinikiwi/pezframe/contracts/fixtures", default-features = false }
+pezpallet-contracts-mock-network = { default-features = false, path = "bizinikiwi/pezframe/contracts/mock-network" }
+pezpallet-contracts-proc-macro = { path = "bizinikiwi/pezframe/contracts/proc-macro", default-features = false }
+pezpallet-contracts-uapi = { path = "bizinikiwi/pezframe/contracts/uapi", default-features = false }
+pezpallet-conviction-voting = { path = "bizinikiwi/pezframe/conviction-voting", default-features = false }
+pezpallet-core-fellowship = { path = "bizinikiwi/pezframe/core-fellowship", default-features = false }
+pezpallet-default-config-example = { path = "bizinikiwi/pezframe/examples/default-config", default-features = false }
+pezpallet-delegated-staking = { path = "bizinikiwi/pezframe/delegated-staking", default-features = false }
+pezpallet-democracy = { path = "bizinikiwi/pezframe/democracy", default-features = false }
+pezpallet-dev-mode = { path = "bizinikiwi/pezframe/examples/dev-mode", default-features = false }
+pezpallet-dummy-dim = { path = "bizinikiwi/pezframe/dummy-dim", default-features = false }
+pezpallet-election-provider-multi-block = { path = "bizinikiwi/pezframe/election-provider-multi-block", default-features = false }
+pezpallet-election-provider-multi-phase = { path = "bizinikiwi/pezframe/election-provider-multi-phase", default-features = false }
+pezpallet-election-provider-support-benchmarking = { path = "bizinikiwi/pezframe/election-provider-support/benchmarking", default-features = false }
+pezpallet-elections-phragmen = { path = "bizinikiwi/pezframe/elections-phragmen", default-features = false }
+pezpallet-example-authorization-tx-extension = { path = "bizinikiwi/pezframe/examples/authorization-tx-extension", default-features = false }
+pezpallet-example-basic = { path = "bizinikiwi/pezframe/examples/basic", default-features = false }
+pezpallet-example-frame-crate = { path = "bizinikiwi/pezframe/examples/frame-crate", default-features = false }
+pezpallet-example-kitchensink = { path = "bizinikiwi/pezframe/examples/kitchensink", default-features = false }
+pezpallet-example-mbm = { path = "bizinikiwi/pezframe/examples/multi-block-migrations", default-features = false }
+pezpallet-example-offchain-worker = { path = "bizinikiwi/pezframe/examples/offchain-worker", default-features = false }
+pezpallet-example-single-block-migrations = { path = "bizinikiwi/pezframe/examples/single-block-migrations", default-features = false }
+pezpallet-example-split = { path = "bizinikiwi/pezframe/examples/split", default-features = false }
+pezpallet-example-tasks = { path = "bizinikiwi/pezframe/examples/tasks", default-features = false }
+pezpallet-example-view-functions = { path = "bizinikiwi/pezframe/examples/view-functions", default-features = false }
+pezpallet-examples = { path = "bizinikiwi/pezframe/examples" }
+pezpallet-fast-unstake = { path = "bizinikiwi/pezframe/fast-unstake", default-features = false }
+pezpallet-glutton = { path = "bizinikiwi/pezframe/glutton", default-features = false }
+pezpallet-grandpa = { path = "bizinikiwi/pezframe/grandpa", default-features = false }
+pezpallet-identity = { path = "bizinikiwi/pezframe/identity", default-features = false }
+pezpallet-im-online = { path = "bizinikiwi/pezframe/im-online", default-features = false }
+pezpallet-indices = { path = "bizinikiwi/pezframe/indices", default-features = false }
+pezpallet-insecure-randomness-collective-flip = { path = "bizinikiwi/pezframe/insecure-randomness-collective-flip", default-features = false }
+pezpallet-lottery = { default-features = false, path = "bizinikiwi/pezframe/lottery" }
+pezpallet-membership = { path = "bizinikiwi/pezframe/membership", default-features = false }
+pezpallet-message-queue = { path = "bizinikiwi/pezframe/message-queue", default-features = false }
+pezpallet-meta-tx = { path = "bizinikiwi/pezframe/meta-tx", default-features = false }
+pezpallet-migrations = { path = "bizinikiwi/pezframe/migrations", default-features = false }
+pezpallet-minimal-template = { path = "templates/minimal/pallets/template", default-features = false }
+pezpallet-mixnet = { default-features = false, path = "bizinikiwi/pezframe/mixnet" }
+pezpallet-mmr = { path = "bizinikiwi/pezframe/merkle-mountain-range", default-features = false }
+pezpallet-multi-asset-bounties = { path = "bizinikiwi/pezframe/multi-asset-bounties", default-features = false }
+pezpallet-multisig = { path = "bizinikiwi/pezframe/multisig", default-features = false }
+pezpallet-nft-fractionalization = { path = "bizinikiwi/pezframe/nft-fractionalization", default-features = false }
+pezpallet-nfts = { path = "bizinikiwi/pezframe/nfts", default-features = false }
+pezpallet-nfts-runtime-api = { path = "bizinikiwi/pezframe/nfts/runtime-api", default-features = false }
+pezpallet-nis = { path = "bizinikiwi/pezframe/nis", default-features = false }
+pezpallet-node-authorization = { default-features = false, path = "bizinikiwi/pezframe/node-authorization" }
+pezpallet-nomination-pools = { path = "bizinikiwi/pezframe/nomination-pools", default-features = false }
+pezpallet-nomination-pools-benchmarking = { path = "bizinikiwi/pezframe/nomination-pools/benchmarking", default-features = false }
+pezpallet-nomination-pools-runtime-api = { path = "bizinikiwi/pezframe/nomination-pools/runtime-api", default-features = false }
+pezpallet-offences = { path = "bizinikiwi/pezframe/offences", default-features = false }
+pezpallet-offences-benchmarking = { path = "bizinikiwi/pezframe/offences/benchmarking", default-features = false }
+pezpallet-origin-restriction = { path = "bizinikiwi/pezframe/origin-restriction", default-features = false }
+pezpallet-paged-list = { path = "bizinikiwi/pezframe/paged-list", default-features = false }
+pezpallet-parameters = { path = "bizinikiwi/pezframe/parameters", default-features = false }
+pezpallet-people = { path = "bizinikiwi/pezframe/people", default-features = false }
+pezpallet-preimage = { path = "bizinikiwi/pezframe/preimage", default-features = false }
+pezpallet-proxy = { path = "bizinikiwi/pezframe/proxy", default-features = false }
+pezpallet-ranked-collective = { path = "bizinikiwi/pezframe/ranked-collective", default-features = false }
+pezpallet-recovery = { path = "bizinikiwi/pezframe/recovery", default-features = false }
+pezpallet-referenda = { path = "bizinikiwi/pezframe/referenda", default-features = false }
+pezpallet-remark = { default-features = false, path = "bizinikiwi/pezframe/remark" }
+pezpallet-revive = { path = "bizinikiwi/pezframe/revive", default-features = false }
+pezpallet-revive-eth-rpc = { path = "bizinikiwi/pezframe/revive/rpc", default-features = false }
+pezpallet-revive-fixtures = { path = "bizinikiwi/pezframe/revive/fixtures", default-features = false }
+pezpallet-revive-proc-macro = { path = "bizinikiwi/pezframe/revive/proc-macro", default-features = false }
+pezpallet-revive-uapi = { path = "bizinikiwi/pezframe/revive/uapi", default-features = false }
+pezpallet-root-offences = { default-features = false, path = "bizinikiwi/pezframe/root-offences" }
+pezpallet-root-testing = { path = "bizinikiwi/pezframe/root-testing", default-features = false }
+pezpallet-safe-mode = { default-features = false, path = "bizinikiwi/pezframe/safe-mode" }
+pezpallet-salary = { path = "bizinikiwi/pezframe/salary", default-features = false }
+pezpallet-scheduler = { path = "bizinikiwi/pezframe/scheduler", default-features = false }
+pezpallet-scored-pool = { default-features = false, path = "bizinikiwi/pezframe/scored-pool" }
+pezpallet-session = { path = "bizinikiwi/pezframe/session", default-features = false }
+pezpallet-session-benchmarking = { path = "bizinikiwi/pezframe/session/benchmarking", default-features = false }
+pezpallet-skip-feeless-payment = { path = "bizinikiwi/pezframe/transaction-payment/skip-feeless-payment", default-features = false }
+pezpallet-society = { path = "bizinikiwi/pezframe/society", default-features = false }
+pezpallet-staking = { path = "bizinikiwi/pezframe/staking", default-features = false }
+pezpallet-staking-reward-curve = { path = "bizinikiwi/pezframe/staking/reward-curve", default-features = false }
+pezpallet-teyrchain-template = { path = "templates/teyrchain/pallets/template", default-features = false }
 
 # Pezkuwi Custom Pallets (Relay Chain)
-pallet-staking-reward-fn = { path = "substrate/frame/staking/reward-fn", default-features = false }
-pallet-validator-pool = { path = "pezkuwi/pallets/validator-pool", default-features = false }
+pezpallet-staking-reward-fn = { path = "bizinikiwi/pezframe/staking/reward-fn", default-features = false }
+pezpallet-validator-pool = { path = "pezkuwi/pallets/validator-pool", default-features = false }
 
 # People Parachain Pallets (Phase 2)
-pallet-identity-kyc = { path = "cumulus/teyrchains/pallets/identity-kyc", default-features = false }
-pallet-perwerde = { path = "cumulus/teyrchains/pallets/perwerde", default-features = false }
-pallet-referral = { path = "cumulus/teyrchains/pallets/referral", default-features = false }
-pallet-tiki = { path = "cumulus/teyrchains/pallets/tiki", default-features = false }
-pallet-trust = { path = "cumulus/teyrchains/pallets/trust", default-features = false }
-pallet-welati = { path = "cumulus/teyrchains/pallets/welati", default-features = false }
+pezpallet-identity-kyc = { path = "pezcumulus/teyrchains/pallets/identity-kyc", default-features = false }
+pezpallet-perwerde = { path = "pezcumulus/teyrchains/pallets/perwerde", default-features = false }
+pezpallet-referral = { path = "pezcumulus/teyrchains/pallets/referral", default-features = false }
+pezpallet-tiki = { path = "pezcumulus/teyrchains/pallets/tiki", default-features = false }
+pezpallet-trust = { path = "pezcumulus/teyrchains/pallets/trust", default-features = false }
+pezpallet-welati = { path = "pezcumulus/teyrchains/pallets/welati", default-features = false }
 
 # Asset Hub Pallets (Phase 3)
-pallet-pez-rewards = { path = "cumulus/teyrchains/pallets/pez-rewards", default-features = false }
-pallet-pez-treasury = { path = "cumulus/teyrchains/pallets/pez-treasury", default-features = false }
-pallet-presale = { path = "cumulus/teyrchains/pallets/presale", default-features = false }
-pallet-staking-score = { path = "cumulus/teyrchains/pallets/staking-score", default-features = false }
-pallet-token-wrapper = { path = "cumulus/teyrchains/pallets/token-wrapper", default-features = false }
+pezpallet-pez-rewards = { path = "pezcumulus/teyrchains/pallets/pez-rewards", default-features = false }
+pezpallet-pez-treasury = { path = "pezcumulus/teyrchains/pallets/pez-treasury", default-features = false }
+pezpallet-presale = { path = "pezcumulus/teyrchains/pallets/presale", default-features = false }
+pezpallet-staking-score = { path = "pezcumulus/teyrchains/pallets/staking-score", default-features = false }
+pezpallet-token-wrapper = { path = "pezcumulus/teyrchains/pallets/token-wrapper", default-features = false }
 
-pallet-staking-async = { path = "substrate/frame/staking-async", default-features = false }
-pallet-staking-async-ah-client = { path = "substrate/frame/staking-async/ah-client", default-features = false }
-pallet-staking-async-preset-store = { path = "substrate/frame/staking-async/runtimes/preset-store", default-features = false }
-pallet-staking-async-rc-client = { path = "substrate/frame/staking-async/rc-client", default-features = false }
-pallet-staking-async-rc-runtime = { path = "substrate/frame/staking-async/runtimes/rc" }
-pallet-staking-async-rc-runtime-constants = { path = "substrate/frame/staking-async/runtimes/rc/constants", default-features = false }
-pallet-staking-async-reward-fn = { path = "substrate/frame/staking-async/reward-fn", default-features = false }
-pallet-staking-async-runtime-api = { path = "substrate/frame/staking-async/runtime-api", default-features = false }
-pallet-staking-async-teyrchain-runtime = { path = "substrate/frame/staking-async/runtimes/teyrchain" }
-pallet-staking-runtime-api = { path = "substrate/frame/staking/runtime-api", default-features = false }
-pallet-state-trie-migration = { path = "substrate/frame/state-trie-migration", default-features = false }
-pallet-statement = { default-features = false, path = "substrate/frame/statement" }
-pallet-sudo = { path = "substrate/frame/sudo", default-features = false }
-pallet-template = { path = "templates/solochain/pallets/template", default-features = false }
-pallet-timestamp = { path = "substrate/frame/timestamp", default-features = false }
-pallet-tips = { path = "substrate/frame/tips", default-features = false }
-pallet-transaction-payment = { path = "substrate/frame/transaction-payment", default-features = false }
-pallet-transaction-payment-rpc = { path = "substrate/frame/transaction-payment/rpc", default-features = false }
-pallet-transaction-payment-rpc-runtime-api = { path = "substrate/frame/transaction-payment/rpc/runtime-api", default-features = false }
-pallet-transaction-storage = { default-features = false, path = "substrate/frame/transaction-storage" }
-pallet-treasury = { path = "substrate/frame/treasury", default-features = false }
-pallet-tx-pause = { default-features = false, path = "substrate/frame/tx-pause" }
-pallet-uniques = { path = "substrate/frame/uniques", default-features = false }
-pallet-utility = { path = "substrate/frame/utility", default-features = false }
-pallet-verify-signature = { path = "substrate/frame/verify-signature", default-features = false }
-pallet-vesting = { path = "substrate/frame/vesting", default-features = false }
-pallet-whitelist = { path = "substrate/frame/whitelist", default-features = false }
-pallet-xcm = { path = "pezkuwi/xcm/pallet-xcm", default-features = false }
-pallet-xcm-benchmarks = { path = "pezkuwi/xcm/pallet-xcm-benchmarks", default-features = false }
-pallet-xcm-bridge-hub = { path = "bridges/modules/xcm-bridge-hub", default-features = false }
-pallet-xcm-bridge-hub-router = { path = "bridges/modules/xcm-bridge-hub-router", default-features = false }
-pallet-xcm-precompiles = { path = "pezkuwi/xcm/pallet-xcm/precompiles", default-features = false }
+pezpallet-staking-async = { path = "bizinikiwi/pezframe/staking-async", default-features = false }
+pezpallet-staking-async-ah-client = { path = "bizinikiwi/pezframe/staking-async/ah-client", default-features = false }
+pezpallet-staking-async-preset-store = { path = "bizinikiwi/pezframe/staking-async/runtimes/preset-store", default-features = false }
+pezpallet-staking-async-rc-client = { path = "bizinikiwi/pezframe/staking-async/rc-client", default-features = false }
+pezpallet-staking-async-rc-runtime = { path = "bizinikiwi/pezframe/staking-async/runtimes/rc" }
+pezpallet-staking-async-rc-runtime-constants = { path = "bizinikiwi/pezframe/staking-async/runtimes/rc/constants", default-features = false }
+pezpallet-staking-async-reward-fn = { path = "bizinikiwi/pezframe/staking-async/reward-fn", default-features = false }
+pezpallet-staking-async-runtime-api = { path = "bizinikiwi/pezframe/staking-async/runtime-api", default-features = false }
+pezpallet-staking-async-teyrchain-runtime = { path = "bizinikiwi/pezframe/staking-async/runtimes/teyrchain" }
+pezpallet-staking-runtime-api = { path = "bizinikiwi/pezframe/staking/runtime-api", default-features = false }
+pezpallet-state-trie-migration = { path = "bizinikiwi/pezframe/state-trie-migration", default-features = false }
+pezpallet-statement = { default-features = false, path = "bizinikiwi/pezframe/statement" }
+pezpallet-sudo = { path = "bizinikiwi/pezframe/sudo", default-features = false }
+pezpallet-template = { path = "templates/solochain/pallets/template", default-features = false }
+pezpallet-timestamp = { path = "bizinikiwi/pezframe/timestamp", default-features = false }
+pezpallet-tips = { path = "bizinikiwi/pezframe/tips", default-features = false }
+pezpallet-transaction-payment = { path = "bizinikiwi/pezframe/transaction-payment", default-features = false }
+pezpallet-transaction-payment-rpc = { path = "bizinikiwi/pezframe/transaction-payment/rpc", default-features = false }
+pezpallet-transaction-payment-rpc-runtime-api = { path = "bizinikiwi/pezframe/transaction-payment/rpc/runtime-api", default-features = false }
+pezpallet-transaction-storage = { default-features = false, path = "bizinikiwi/pezframe/transaction-storage" }
+pezpallet-treasury = { path = "bizinikiwi/pezframe/treasury", default-features = false }
+pezpallet-tx-pause = { default-features = false, path = "bizinikiwi/pezframe/tx-pause" }
+pezpallet-uniques = { path = "bizinikiwi/pezframe/uniques", default-features = false }
+pezpallet-utility = { path = "bizinikiwi/pezframe/utility", default-features = false }
+pezpallet-verify-signature = { path = "bizinikiwi/pezframe/verify-signature", default-features = false }
+pezpallet-vesting = { path = "bizinikiwi/pezframe/vesting", default-features = false }
+pezpallet-whitelist = { path = "bizinikiwi/pezframe/whitelist", default-features = false }
+pezpallet-xcm = { path = "pezkuwi/xcm/pezpallet-xcm", default-features = false }
+pezpallet-xcm-benchmarks = { path = "pezkuwi/xcm/pezpallet-xcm-benchmarks", default-features = false }
+pezpallet-xcm-bridge-hub = { path = "bridges/modules/xcm-bridge-hub", default-features = false }
+pezpallet-xcm-bridge-hub-router = { path = "bridges/modules/xcm-bridge-hub-router", default-features = false }
+pezpallet-xcm-precompiles = { path = "pezkuwi/xcm/pezpallet-xcm/precompiles", default-features = false }
 parity-bytes = { version = "0.1.2", default-features = false }
 parity-db = { version = "0.4.12" }
 parity-wasm = { version = "0.45.0" }
@@ -1134,12 +1134,12 @@ parking_lot = { version = "0.12.1", default-features = false }
 partial_sort = { version = "0.2.0" }
 paste = { version = "1.0.15", default-features = false }
 pbkdf2 = { version = "0.12.2", default-features = false }
-penpal-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/testing/penpal" }
-penpal-runtime = { path = "cumulus/teyrchains/runtimes/testing/penpal" }
-people-pezkuwichain-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-pezkuwichain" }
-people-pezkuwichain-runtime = { path = "cumulus/teyrchains/runtimes/people/people-pezkuwichain" }
-people-zagros-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-zagros" }
-people-zagros-runtime = { path = "cumulus/teyrchains/runtimes/people/people-zagros" }
+penpal-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/testing/penpal" }
+penpal-runtime = { path = "pezcumulus/teyrchains/runtimes/testing/penpal" }
+people-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-pezkuwichain" }
+people-pezkuwichain-runtime = { path = "pezcumulus/teyrchains/runtimes/people/people-pezkuwichain" }
+people-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/people/people-zagros" }
+people-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/people/people-zagros" }
 pezkuwi-approval-distribution = { path = "pezkuwi/node/network/approval-distribution", default-features = false }
 pezkuwi-availability-bitfield-distribution = { path = "pezkuwi/node/network/bitfield-distribution", default-features = false }
 pezkuwi-availability-distribution = { path = "pezkuwi/node/network/availability-distribution", default-features = false }
@@ -1177,8 +1177,8 @@ pezkuwi-node-subsystem = { path = "pezkuwi/node/subsystem", default-features = f
 pezkuwi-node-subsystem-test-helpers = { path = "pezkuwi/node/subsystem-test-helpers" }
 pezkuwi-node-subsystem-types = { path = "pezkuwi/node/subsystem-types", default-features = false }
 pezkuwi-node-subsystem-util = { path = "pezkuwi/node/subsystem-util", default-features = false }
-pezkuwi-omni-node = { path = "cumulus/pezkuwi-omni-node", default-features = false }
-pezkuwi-omni-node-lib = { path = "cumulus/pezkuwi-omni-node/lib", default-features = false }
+pezkuwi-omni-node = { path = "pezcumulus/pezkuwi-omni-node", default-features = false }
+pezkuwi-omni-node-lib = { path = "pezcumulus/pezkuwi-omni-node/lib", default-features = false }
 pezkuwi-overseer = { path = "pezkuwi/node/overseer", default-features = false }
 pezkuwi-primitives = { path = "pezkuwi/primitives", default-features = false }
 pezkuwi-primitives-test-helpers = { path = "pezkuwi/primitives/test-helpers" }
@@ -1196,12 +1196,12 @@ pezkuwi-test-client = { path = "pezkuwi/node/test/client" }
 pezkuwi-test-runtime = { path = "pezkuwi/runtime/test-runtime" }
 pezkuwi-test-service = { path = "pezkuwi/node/test/service" }
 pezkuwi-teyrchain-primitives = { path = "pezkuwi/teyrchain", default-features = false }
-pezkuwichain-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/relays/pezkuwichain" }
+pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/relays/pezkuwichain" }
 pezkuwichain-runtime = { path = "pezkuwi/runtime/pezkuwichain" }
 pezkuwichain-runtime-constants = { path = "pezkuwi/runtime/pezkuwichain/constants", default-features = false }
-pezkuwichain-system-emulated-network = { path = "cumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-system" }
-pezkuwichain-teyrchain-runtime = { path = "cumulus/teyrchains/runtimes/testing/pezkuwichain-teyrchain" }
-pezkuwichain-zagros-system-emulated-network = { path = "cumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-zagros-system" }
+pezkuwichain-system-emulated-network = { path = "pezcumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-system" }
+pezkuwichain-teyrchain-runtime = { path = "pezcumulus/teyrchains/runtimes/testing/pezkuwichain-teyrchain" }
+pezkuwichain-zagros-system-emulated-network = { path = "pezcumulus/teyrchains/integration-tests/emulated/networks/pezkuwichain-zagros-system" }
 pin-project = { version = "1.1.3" }
 polkavm = { version = "0.26.0", default-features = false }
 polkavm-derive = "0.26.0"
@@ -1216,7 +1216,7 @@ proc-macro-warning = { version = "1.0.0", default-features = false }
 proc-macro2 = { version = "1.0.86" }
 procfs = { version = "0.16.0" }
 prometheus = { version = "0.13.0", default-features = false }
-prometheus-endpoint = { path = "substrate/utils/prometheus", default-features = false, package = "substrate-prometheus-endpoint" }
+prometheus-endpoint = { path = "bizinikiwi/utils/prometheus", default-features = false, package = "bizinikiwi-prometheus-endpoint" }
 prometheus-parse = { version = "0.2.2" }
 proptest = { version = "1" }
 prost = { version = "0.12.4" }
@@ -1234,11 +1234,11 @@ rand_pcg = { version = "0.3.1" }
 rbtag = { version = "0.3" }
 ref-cast = { version = "1.0.23" }
 regex = { version = "1.10.2" }
-relay-substrate-client = { path = "bridges/relays/client-substrate" }
+relay-bizinikiwi-client = { path = "bridges/relays/client-bizinikiwi" }
 relay-utils = { path = "bridges/relays/utils" }
-remote-externalities = { path = "substrate/utils/frame/remote-externalities", default-features = false, package = "frame-remote-externalities" }
-revive-dev-node = { path = "substrate/frame/revive/dev-node/node" }
-revive-dev-runtime = { path = "substrate/frame/revive/dev-node/runtime" }
+remote-externalities = { path = "bizinikiwi/utils/pezframe/remote-externalities", default-features = false, package = "frame-remote-externalities" }
+revive-dev-node = { path = "bizinikiwi/pezframe/revive/dev-node/node" }
+revive-dev-runtime = { path = "bizinikiwi/pezframe/revive/dev-node/runtime" }
 revm = { version = "27.0.2", default-features = false }
 ripemd = { version = "0.1.3", default-features = false }
 rlp = { version = "0.6.1", default-features = false }
@@ -1256,64 +1256,64 @@ rustls = { version = "0.23.18", default-features = false, features = [
 rustversion = { version = "1.0.17" }
 rusty-fork = { version = "0.3.0", default-features = false }
 safe-mix = { version = "1.0", default-features = false }
-sc-allocator = { path = "substrate/client/allocator", default-features = false }
-sc-authority-discovery = { path = "substrate/client/authority-discovery", default-features = false }
-sc-basic-authorship = { path = "substrate/client/basic-authorship", default-features = false }
-sc-block-builder = { path = "substrate/client/block-builder", default-features = false }
-sc-chain-spec = { path = "substrate/client/chain-spec", default-features = false }
-sc-chain-spec-derive = { path = "substrate/client/chain-spec/derive", default-features = false }
-sc-cli = { path = "substrate/client/cli", default-features = false }
-sc-client-api = { path = "substrate/client/api", default-features = false }
-sc-client-db = { path = "substrate/client/db", default-features = false }
-sc-consensus = { path = "substrate/client/consensus/common", default-features = false }
-sc-consensus-aura = { path = "substrate/client/consensus/aura", default-features = false }
-sc-consensus-babe = { path = "substrate/client/consensus/babe", default-features = false }
-sc-consensus-babe-rpc = { path = "substrate/client/consensus/babe/rpc", default-features = false }
-sc-consensus-beefy = { path = "substrate/client/consensus/beefy", default-features = false }
-sc-consensus-beefy-rpc = { path = "substrate/client/consensus/beefy/rpc", default-features = false }
-sc-consensus-epochs = { path = "substrate/client/consensus/epochs", default-features = false }
-sc-consensus-grandpa = { path = "substrate/client/consensus/grandpa", default-features = false }
-sc-consensus-grandpa-rpc = { path = "substrate/client/consensus/grandpa/rpc", default-features = false }
-sc-consensus-manual-seal = { path = "substrate/client/consensus/manual-seal", default-features = false }
-sc-consensus-pow = { path = "substrate/client/consensus/pow", default-features = false }
-sc-consensus-slots = { path = "substrate/client/consensus/slots", default-features = false }
-sc-executor = { path = "substrate/client/executor", default-features = false }
-sc-executor-common = { path = "substrate/client/executor/common", default-features = false }
-sc-executor-polkavm = { path = "substrate/client/executor/polkavm", default-features = false }
-sc-executor-wasmtime = { path = "substrate/client/executor/wasmtime", default-features = false }
-sc-informant = { path = "substrate/client/informant", default-features = false }
-sc-keystore = { path = "substrate/client/keystore", default-features = false }
-sc-mixnet = { path = "substrate/client/mixnet", default-features = false }
-sc-network = { path = "substrate/client/network", default-features = false }
-sc-network-common = { path = "substrate/client/network/common", default-features = false }
-sc-network-gossip = { path = "substrate/client/network-gossip", default-features = false }
-sc-network-light = { path = "substrate/client/network/light", default-features = false }
-sc-network-statement = { default-features = false, path = "substrate/client/network/statement" }
-sc-network-sync = { path = "substrate/client/network/sync", default-features = false }
-sc-network-test = { path = "substrate/client/network/test" }
-sc-network-transactions = { path = "substrate/client/network/transactions", default-features = false }
-sc-network-types = { path = "substrate/client/network/types", default-features = false }
-sc-offchain = { path = "substrate/client/offchain", default-features = false }
-sc-proposer-metrics = { path = "substrate/client/proposer-metrics", default-features = false }
-sc-rpc = { path = "substrate/client/rpc", default-features = false }
-sc-rpc-api = { path = "substrate/client/rpc-api", default-features = false }
-sc-rpc-server = { path = "substrate/client/rpc-servers", default-features = false }
-sc-rpc-spec-v2 = { path = "substrate/client/rpc-spec-v2", default-features = false }
-sc-runtime-test = { path = "substrate/client/executor/runtime-test" }
-sc-runtime-utilities = { path = "substrate/client/runtime-utilities", default-features = true }
-sc-service = { path = "substrate/client/service", default-features = false }
-sc-service-test = { path = "substrate/client/service/test" }
-sc-state-db = { path = "substrate/client/state-db", default-features = false }
-sc-statement-store = { default-features = false, path = "substrate/client/statement-store" }
-sc-storage-monitor = { path = "substrate/client/storage-monitor", default-features = false }
-sc-sync-state-rpc = { path = "substrate/client/sync-state-rpc", default-features = false }
-sc-sysinfo = { path = "substrate/client/sysinfo", default-features = false }
-sc-telemetry = { path = "substrate/client/telemetry", default-features = false }
-sc-tracing = { path = "substrate/client/tracing", default-features = false }
-sc-tracing-proc-macro = { path = "substrate/client/tracing/proc-macro", default-features = false }
-sc-transaction-pool = { path = "substrate/client/transaction-pool", default-features = false }
-sc-transaction-pool-api = { path = "substrate/client/transaction-pool/api", default-features = false }
-sc-utils = { path = "substrate/client/utils", default-features = false }
+pezsc-allocator = { path = "bizinikiwi/client/allocator", default-features = false }
+pezsc-authority-discovery = { path = "bizinikiwi/client/authority-discovery", default-features = false }
+pezsc-basic-authorship = { path = "bizinikiwi/client/basic-authorship", default-features = false }
+pezsc-block-builder = { path = "bizinikiwi/client/block-builder", default-features = false }
+pezsc-chain-spec = { path = "bizinikiwi/client/chain-spec", default-features = false }
+pezsc-chain-spec-derive = { path = "bizinikiwi/client/chain-spec/derive", default-features = false }
+pezsc-cli = { path = "bizinikiwi/client/cli", default-features = false }
+pezsc-client-api = { path = "bizinikiwi/client/api", default-features = false }
+pezsc-client-db = { path = "bizinikiwi/client/db", default-features = false }
+pezsc-consensus = { path = "bizinikiwi/client/consensus/common", default-features = false }
+pezsc-consensus-aura = { path = "bizinikiwi/client/consensus/aura", default-features = false }
+pezsc-consensus-babe = { path = "bizinikiwi/client/consensus/babe", default-features = false }
+pezsc-consensus-babe-rpc = { path = "bizinikiwi/client/consensus/babe/rpc", default-features = false }
+pezsc-consensus-beefy = { path = "bizinikiwi/client/consensus/beefy", default-features = false }
+pezsc-consensus-beefy-rpc = { path = "bizinikiwi/client/consensus/beefy/rpc", default-features = false }
+pezsc-consensus-epochs = { path = "bizinikiwi/client/consensus/epochs", default-features = false }
+pezsc-consensus-grandpa = { path = "bizinikiwi/client/consensus/grandpa", default-features = false }
+pezsc-consensus-grandpa-rpc = { path = "bizinikiwi/client/consensus/grandpa/rpc", default-features = false }
+pezsc-consensus-manual-seal = { path = "bizinikiwi/client/consensus/manual-seal", default-features = false }
+pezsc-consensus-pow = { path = "bizinikiwi/client/consensus/pow", default-features = false }
+pezsc-consensus-slots = { path = "bizinikiwi/client/consensus/slots", default-features = false }
+pezsc-executor = { path = "bizinikiwi/client/executor", default-features = false }
+pezsc-executor-common = { path = "bizinikiwi/client/executor/common", default-features = false }
+pezsc-executor-polkavm = { path = "bizinikiwi/client/executor/polkavm", default-features = false }
+pezsc-executor-wasmtime = { path = "bizinikiwi/client/executor/wasmtime", default-features = false }
+pezsc-informant = { path = "bizinikiwi/client/informant", default-features = false }
+pezsc-keystore = { path = "bizinikiwi/client/keystore", default-features = false }
+pezsc-mixnet = { path = "bizinikiwi/client/mixnet", default-features = false }
+pezsc-network = { path = "bizinikiwi/client/network", default-features = false }
+pezsc-network-common = { path = "bizinikiwi/client/network/common", default-features = false }
+pezsc-network-gossip = { path = "bizinikiwi/client/network-gossip", default-features = false }
+pezsc-network-light = { path = "bizinikiwi/client/network/light", default-features = false }
+pezsc-network-statement = { default-features = false, path = "bizinikiwi/client/network/statement" }
+pezsc-network-sync = { path = "bizinikiwi/client/network/sync", default-features = false }
+pezsc-network-test = { path = "bizinikiwi/client/network/test" }
+pezsc-network-transactions = { path = "bizinikiwi/client/network/transactions", default-features = false }
+pezsc-network-types = { path = "bizinikiwi/client/network/types", default-features = false }
+pezsc-offchain = { path = "bizinikiwi/client/offchain", default-features = false }
+pezsc-proposer-metrics = { path = "bizinikiwi/client/proposer-metrics", default-features = false }
+pezsc-rpc = { path = "bizinikiwi/client/rpc", default-features = false }
+pezsc-rpc-api = { path = "bizinikiwi/client/rpc-api", default-features = false }
+pezsc-rpc-server = { path = "bizinikiwi/client/rpc-servers", default-features = false }
+pezsc-rpc-spec-v2 = { path = "bizinikiwi/client/rpc-spec-v2", default-features = false }
+pezsc-runtime-test = { path = "bizinikiwi/client/executor/runtime-test" }
+pezsc-runtime-utilities = { path = "bizinikiwi/client/runtime-utilities", default-features = true }
+pezsc-service = { path = "bizinikiwi/client/service", default-features = false }
+pezsc-service-test = { path = "bizinikiwi/client/service/test" }
+pezsc-state-db = { path = "bizinikiwi/client/state-db", default-features = false }
+pezsc-statement-store = { default-features = false, path = "bizinikiwi/client/statement-store" }
+pezsc-storage-monitor = { path = "bizinikiwi/client/storage-monitor", default-features = false }
+pezsc-sync-state-rpc = { path = "bizinikiwi/client/sync-state-rpc", default-features = false }
+pezsc-sysinfo = { path = "bizinikiwi/client/sysinfo", default-features = false }
+pezsc-telemetry = { path = "bizinikiwi/client/telemetry", default-features = false }
+pezsc-tracing = { path = "bizinikiwi/client/tracing", default-features = false }
+pezsc-tracing-proc-macro = { path = "bizinikiwi/client/tracing/proc-macro", default-features = false }
+pezsc-transaction-pool = { path = "bizinikiwi/client/transaction-pool", default-features = false }
+pezsc-transaction-pool-api = { path = "bizinikiwi/client/transaction-pool/api", default-features = false }
+pezsc-utils = { path = "bizinikiwi/client/utils", default-features = false }
 scale-info = { version = "2.11.6", default-features = false }
 schemars = { version = "0.8.13", default-features = false }
 schnellru = { version = "0.2.3" }
@@ -1346,17 +1346,17 @@ snowbridge-merkle-tree = { path = "bridges/snowbridge/primitives/merkle-tree", d
 snowbridge-outbound-queue-primitives = { path = "bridges/snowbridge/primitives/outbound-queue", default-features = false }
 snowbridge-outbound-queue-runtime-api = { path = "bridges/snowbridge/pallets/outbound-queue/runtime-api", default-features = false }
 snowbridge-outbound-queue-v2-runtime-api = { path = "bridges/snowbridge/pallets/outbound-queue-v2/runtime-api", default-features = false }
-snowbridge-pallet-ethereum-client = { path = "bridges/snowbridge/pallets/ethereum-client", default-features = false }
-snowbridge-pallet-ethereum-client-fixtures = { path = "bridges/snowbridge/pallets/ethereum-client/fixtures", default-features = false }
-snowbridge-pallet-inbound-queue = { path = "bridges/snowbridge/pallets/inbound-queue", default-features = false }
-snowbridge-pallet-inbound-queue-fixtures = { path = "bridges/snowbridge/pallets/inbound-queue/fixtures", default-features = false }
-snowbridge-pallet-inbound-queue-v2 = { path = "bridges/snowbridge/pallets/inbound-queue-v2", default-features = false }
-snowbridge-pallet-inbound-queue-v2-fixtures = { path = "bridges/snowbridge/pallets/inbound-queue-v2/fixtures", default-features = false }
-snowbridge-pallet-outbound-queue = { path = "bridges/snowbridge/pallets/outbound-queue", default-features = false }
-snowbridge-pallet-outbound-queue-v2 = { path = "bridges/snowbridge/pallets/outbound-queue-v2", default-features = false }
-snowbridge-pallet-system = { path = "bridges/snowbridge/pallets/system", default-features = false }
-snowbridge-pallet-system-frontend = { path = "bridges/snowbridge/pallets/system-frontend", default-features = false }
-snowbridge-pallet-system-v2 = { path = "bridges/snowbridge/pallets/system-v2", default-features = false }
+snowbridge-pezpallet-ethereum-client = { path = "bridges/snowbridge/pallets/ethereum-client", default-features = false }
+snowbridge-pezpallet-ethereum-client-fixtures = { path = "bridges/snowbridge/pallets/ethereum-client/fixtures", default-features = false }
+snowbridge-pezpallet-inbound-queue = { path = "bridges/snowbridge/pallets/inbound-queue", default-features = false }
+snowbridge-pezpallet-inbound-queue-fixtures = { path = "bridges/snowbridge/pallets/inbound-queue/fixtures", default-features = false }
+snowbridge-pezpallet-inbound-queue-v2 = { path = "bridges/snowbridge/pallets/inbound-queue-v2", default-features = false }
+snowbridge-pezpallet-inbound-queue-v2-fixtures = { path = "bridges/snowbridge/pallets/inbound-queue-v2/fixtures", default-features = false }
+snowbridge-pezpallet-outbound-queue = { path = "bridges/snowbridge/pallets/outbound-queue", default-features = false }
+snowbridge-pezpallet-outbound-queue-v2 = { path = "bridges/snowbridge/pallets/outbound-queue-v2", default-features = false }
+snowbridge-pezpallet-system = { path = "bridges/snowbridge/pallets/system", default-features = false }
+snowbridge-pezpallet-system-frontend = { path = "bridges/snowbridge/pallets/system-frontend", default-features = false }
+snowbridge-pezpallet-system-v2 = { path = "bridges/snowbridge/pallets/system-v2", default-features = false }
 snowbridge-runtime-common = { path = "bridges/snowbridge/runtime/runtime-common", default-features = false }
 snowbridge-runtime-test-common = { path = "bridges/snowbridge/runtime/test-common", default-features = false }
 snowbridge-system-runtime-api = { path = "bridges/snowbridge/pallets/system/runtime-api", default-features = false }
@@ -1365,64 +1365,64 @@ snowbridge-test-utils = { path = "bridges/snowbridge/test-utils" }
 snowbridge-verification-primitives = { path = "bridges/snowbridge/primitives/verification", default-features = false }
 soketto = { version = "0.8.0" }
 solochain-template-runtime = { path = "templates/solochain/runtime" }
-sp-api = { path = "substrate/primitives/api", default-features = false }
-sp-api-proc-macro = { path = "substrate/primitives/api/proc-macro", default-features = false }
-sp-application-crypto = { path = "substrate/primitives/application-crypto", default-features = false }
-sp-arithmetic = { path = "substrate/primitives/arithmetic", default-features = false }
-sp-authority-discovery = { path = "substrate/primitives/authority-discovery", default-features = false }
-sp-block-builder = { path = "substrate/primitives/block-builder", default-features = false }
-sp-blockchain = { path = "substrate/primitives/blockchain", default-features = false }
-sp-consensus = { path = "substrate/primitives/consensus/common", default-features = false }
-sp-consensus-aura = { path = "substrate/primitives/consensus/aura", default-features = false }
-sp-consensus-babe = { path = "substrate/primitives/consensus/babe", default-features = false }
-sp-consensus-beefy = { path = "substrate/primitives/consensus/beefy", default-features = false }
-sp-consensus-grandpa = { path = "substrate/primitives/consensus/grandpa", default-features = false }
-sp-consensus-pow = { path = "substrate/primitives/consensus/pow", default-features = false }
-sp-consensus-sassafras = { path = "substrate/primitives/consensus/sassafras", default-features = false }
-sp-consensus-slots = { path = "substrate/primitives/consensus/slots", default-features = false }
-sp-core = { path = "substrate/primitives/core", default-features = false }
-sp-core-hashing = { default-features = false, path = "substrate/deprecated/hashing" }
-sp-core-hashing-proc-macro = { default-features = false, path = "substrate/deprecated/hashing/proc-macro" }
-sp-crypto-ec-utils = { default-features = false, path = "substrate/primitives/crypto/ec-utils" }
-sp-crypto-hashing = { path = "substrate/primitives/crypto/hashing", default-features = false }
-sp-crypto-hashing-proc-macro = { path = "substrate/primitives/crypto/hashing/proc-macro", default-features = false }
-sp-database = { path = "substrate/primitives/database", default-features = false }
-sp-debug-derive = { path = "substrate/primitives/debug-derive", default-features = false }
-sp-externalities = { path = "substrate/primitives/externalities", default-features = false }
-sp-genesis-builder = { path = "substrate/primitives/genesis-builder", default-features = false }
-sp-inherents = { path = "substrate/primitives/inherents", default-features = false }
-sp-io = { path = "substrate/primitives/io", default-features = false }
-sp-keyring = { path = "substrate/primitives/keyring", default-features = false }
-sp-keystore = { path = "substrate/primitives/keystore", default-features = false }
-sp-maybe-compressed-blob = { path = "substrate/primitives/maybe-compressed-blob", default-features = false }
-sp-metadata-ir = { path = "substrate/primitives/metadata-ir", default-features = false }
-sp-mixnet = { path = "substrate/primitives/mixnet", default-features = false }
-sp-mmr-primitives = { path = "substrate/primitives/merkle-mountain-range", default-features = false }
-sp-npos-elections = { path = "substrate/primitives/npos-elections", default-features = false }
-sp-offchain = { path = "substrate/primitives/offchain", default-features = false }
-sp-panic-handler = { path = "substrate/primitives/panic-handler", default-features = false }
-sp-rpc = { path = "substrate/primitives/rpc", default-features = false }
-sp-runtime = { path = "substrate/primitives/runtime", default-features = false }
-sp-runtime-interface = { path = "substrate/primitives/runtime-interface", default-features = false }
-sp-runtime-interface-proc-macro = { path = "substrate/primitives/runtime-interface/proc-macro", default-features = false }
-sp-runtime-interface-test-wasm = { path = "substrate/primitives/runtime-interface/test-wasm" }
-sp-runtime-interface-test-wasm-deprecated = { path = "substrate/primitives/runtime-interface/test-wasm-deprecated" }
-sp-session = { path = "substrate/primitives/session", default-features = false }
-sp-staking = { path = "substrate/primitives/staking", default-features = false }
-sp-state-machine = { path = "substrate/primitives/state-machine", default-features = false }
-sp-statement-store = { path = "substrate/primitives/statement-store", default-features = false }
-sp-std = { path = "substrate/primitives/std", default-features = false }
-sp-storage = { path = "substrate/primitives/storage", default-features = false }
-sp-test-primitives = { path = "substrate/primitives/test-primitives" }
-sp-timestamp = { path = "substrate/primitives/timestamp", default-features = false }
-sp-tracing = { path = "substrate/primitives/tracing", default-features = false }
-sp-transaction-pool = { path = "substrate/primitives/transaction-pool", default-features = false }
-sp-transaction-storage-proof = { path = "substrate/primitives/transaction-storage-proof", default-features = false }
-sp-trie = { path = "substrate/primitives/trie", default-features = false }
-sp-version = { path = "substrate/primitives/version", default-features = false }
-sp-version-proc-macro = { path = "substrate/primitives/version/proc-macro", default-features = false }
-sp-wasm-interface = { path = "substrate/primitives/wasm-interface", default-features = false }
-sp-weights = { path = "substrate/primitives/weights", default-features = false }
+pezsp-api = { path = "bizinikiwi/primitives/api", default-features = false }
+pezsp-api-proc-macro = { path = "bizinikiwi/primitives/api/proc-macro", default-features = false }
+pezsp-application-crypto = { path = "bizinikiwi/primitives/application-crypto", default-features = false }
+pezsp-arithmetic = { path = "bizinikiwi/primitives/arithmetic", default-features = false }
+pezsp-authority-discovery = { path = "bizinikiwi/primitives/authority-discovery", default-features = false }
+pezsp-block-builder = { path = "bizinikiwi/primitives/block-builder", default-features = false }
+pezsp-blockchain = { path = "bizinikiwi/primitives/blockchain", default-features = false }
+pezsp-consensus = { path = "bizinikiwi/primitives/consensus/common", default-features = false }
+pezsp-consensus-aura = { path = "bizinikiwi/primitives/consensus/aura", default-features = false }
+pezsp-consensus-babe = { path = "bizinikiwi/primitives/consensus/babe", default-features = false }
+pezsp-consensus-beefy = { path = "bizinikiwi/primitives/consensus/beefy", default-features = false }
+pezsp-consensus-grandpa = { path = "bizinikiwi/primitives/consensus/grandpa", default-features = false }
+pezsp-consensus-pow = { path = "bizinikiwi/primitives/consensus/pow", default-features = false }
+pezsp-consensus-sassafras = { path = "bizinikiwi/primitives/consensus/sassafras", default-features = false }
+pezsp-consensus-slots = { path = "bizinikiwi/primitives/consensus/slots", default-features = false }
+pezsp-core = { path = "bizinikiwi/primitives/core", default-features = false }
+pezsp-core-hashing = { default-features = false, path = "bizinikiwi/deprecated/hashing" }
+pezsp-core-hashing-proc-macro = { default-features = false, path = "bizinikiwi/deprecated/hashing/proc-macro" }
+pezsp-crypto-ec-utils = { default-features = false, path = "bizinikiwi/primitives/crypto/ec-utils" }
+pezsp-crypto-hashing = { path = "bizinikiwi/primitives/crypto/hashing", default-features = false }
+pezsp-crypto-hashing-proc-macro = { path = "bizinikiwi/primitives/crypto/hashing/proc-macro", default-features = false }
+pezsp-database = { path = "bizinikiwi/primitives/database", default-features = false }
+pezsp-debug-derive = { path = "bizinikiwi/primitives/debug-derive", default-features = false }
+pezsp-externalities = { path = "bizinikiwi/primitives/externalities", default-features = false }
+pezsp-genesis-builder = { path = "bizinikiwi/primitives/genesis-builder", default-features = false }
+pezsp-inherents = { path = "bizinikiwi/primitives/inherents", default-features = false }
+pezsp-io = { path = "bizinikiwi/primitives/io", default-features = false }
+pezsp-keyring = { path = "bizinikiwi/primitives/keyring", default-features = false }
+pezsp-keystore = { path = "bizinikiwi/primitives/keystore", default-features = false }
+pezsp-maybe-compressed-blob = { path = "bizinikiwi/primitives/maybe-compressed-blob", default-features = false }
+pezsp-metadata-ir = { path = "bizinikiwi/primitives/metadata-ir", default-features = false }
+pezsp-mixnet = { path = "bizinikiwi/primitives/mixnet", default-features = false }
+pezsp-mmr-primitives = { path = "bizinikiwi/primitives/merkle-mountain-range", default-features = false }
+pezsp-npos-elections = { path = "bizinikiwi/primitives/npos-elections", default-features = false }
+pezsp-offchain = { path = "bizinikiwi/primitives/offchain", default-features = false }
+pezsp-panic-handler = { path = "bizinikiwi/primitives/panic-handler", default-features = false }
+pezsp-rpc = { path = "bizinikiwi/primitives/rpc", default-features = false }
+pezsp-runtime = { path = "bizinikiwi/primitives/runtime", default-features = false }
+pezsp-runtime-interface = { path = "bizinikiwi/primitives/runtime-interface", default-features = false }
+pezsp-runtime-interface-proc-macro = { path = "bizinikiwi/primitives/runtime-interface/proc-macro", default-features = false }
+pezsp-runtime-interface-test-wasm = { path = "bizinikiwi/primitives/runtime-interface/test-wasm" }
+pezsp-runtime-interface-test-wasm-deprecated = { path = "bizinikiwi/primitives/runtime-interface/test-wasm-deprecated" }
+pezsp-session = { path = "bizinikiwi/primitives/session", default-features = false }
+pezsp-staking = { path = "bizinikiwi/primitives/staking", default-features = false }
+pezsp-state-machine = { path = "bizinikiwi/primitives/state-machine", default-features = false }
+pezsp-statement-store = { path = "bizinikiwi/primitives/statement-store", default-features = false }
+pezsp-std = { path = "bizinikiwi/primitives/std", default-features = false }
+pezsp-storage = { path = "bizinikiwi/primitives/storage", default-features = false }
+pezsp-test-primitives = { path = "bizinikiwi/primitives/test-primitives" }
+pezsp-timestamp = { path = "bizinikiwi/primitives/timestamp", default-features = false }
+pezsp-tracing = { path = "bizinikiwi/primitives/tracing", default-features = false }
+pezsp-transaction-pool = { path = "bizinikiwi/primitives/transaction-pool", default-features = false }
+pezsp-transaction-storage-proof = { path = "bizinikiwi/primitives/transaction-storage-proof", default-features = false }
+pezsp-trie = { path = "bizinikiwi/primitives/trie", default-features = false }
+pezsp-version = { path = "bizinikiwi/primitives/version", default-features = false }
+pezsp-version-proc-macro = { path = "bizinikiwi/primitives/version/proc-macro", default-features = false }
+pezsp-wasm-interface = { path = "bizinikiwi/primitives/wasm-interface", default-features = false }
+pezsp-weights = { path = "bizinikiwi/primitives/weights", default-features = false }
 spinners = { version = "4.1.1" }
 sqlx = { version = "0.8.2" }
 ss58-registry = { version = "1.51.0", package = "pezkuwi-ss58-registry", default-features = false }
@@ -1431,20 +1431,20 @@ ssz_rs_derive = { version = "0.9.0", default-features = false }
 static_assertions = { version = "1.1.0", default-features = false }
 static_init = { version = "1.0.3" }
 strum = { version = "0.26.3", default-features = false }
-subkey = { path = "substrate/bin/utils/subkey", default-features = false }
-substrate-bip39 = { path = "substrate/utils/substrate-bip39", default-features = false }
-substrate-build-script-utils = { path = "substrate/utils/build-script-utils", default-features = false }
-substrate-cli-test-utils = { path = "substrate/test-utils/cli" }
-substrate-frame-rpc-support = { default-features = false, path = "substrate/utils/frame/rpc/support" }
-substrate-frame-rpc-system = { path = "substrate/utils/frame/rpc/system", default-features = false }
-substrate-rpc-client = { path = "substrate/utils/frame/rpc/client", default-features = false }
-substrate-state-trie-migration-rpc = { path = "substrate/utils/frame/rpc/state-trie-migration-rpc", default-features = false }
-substrate-test-client = { path = "substrate/test-utils/client" }
-substrate-test-runtime = { path = "substrate/test-utils/runtime" }
-substrate-test-runtime-client = { path = "substrate/test-utils/runtime/client" }
-substrate-test-runtime-transaction-pool = { path = "substrate/test-utils/runtime/transaction-pool" }
-substrate-test-utils = { path = "substrate/test-utils" }
-substrate-wasm-builder = { path = "substrate/utils/wasm-builder", default-features = false }
+subkey = { path = "bizinikiwi/bin/utils/subkey", default-features = false }
+bizinikiwi-bip39 = { path = "bizinikiwi/utils/bizinikiwi-bip39", default-features = false }
+bizinikiwi-build-script-utils = { path = "bizinikiwi/utils/build-script-utils", default-features = false }
+bizinikiwi-cli-test-utils = { path = "bizinikiwi/test-utils/cli" }
+bizinikiwi-frame-rpc-support = { default-features = false, path = "bizinikiwi/utils/pezframe/rpc/support" }
+bizinikiwi-frame-rpc-system = { path = "bizinikiwi/utils/pezframe/rpc/system", default-features = false }
+bizinikiwi-rpc-client = { path = "bizinikiwi/utils/pezframe/rpc/client", default-features = false }
+bizinikiwi-state-trie-migration-rpc = { path = "bizinikiwi/utils/pezframe/rpc/state-trie-migration-rpc", default-features = false }
+bizinikiwi-test-client = { path = "bizinikiwi/test-utils/client" }
+bizinikiwi-test-runtime = { path = "bizinikiwi/test-utils/runtime" }
+bizinikiwi-test-runtime-client = { path = "bizinikiwi/test-utils/runtime/client" }
+bizinikiwi-test-runtime-transaction-pool = { path = "bizinikiwi/test-utils/runtime/transaction-pool" }
+bizinikiwi-test-utils = { path = "bizinikiwi/test-utils" }
+bizinikiwi-wasm-builder = { path = "bizinikiwi/utils/wasm-builder", default-features = false }
 subxt = { version = "0.43", default-features = false }
 subxt-metadata = { version = "0.43", default-features = false }
 subxt-signer = { version = "0.43" }
@@ -1452,20 +1452,20 @@ syn = { version = "2.0.87" }
 sysinfo = { version = "0.30" }
 tar = { version = "0.4" }
 tempfile = { version = "3.8.1" }
-teyrchain-info = { path = "cumulus/teyrchains/pallets/teyrchain-info", default-features = false, package = "staging-teyrchain-info" }
+teyrchain-info = { path = "pezcumulus/teyrchains/pallets/teyrchain-info", default-features = false, package = "pezstaging-teyrchain-info" }
 teyrchain-template-runtime = { path = "templates/teyrchain/runtime" }
-teyrchains-common = { path = "cumulus/teyrchains/common", default-features = false }
+teyrchains-common = { path = "pezcumulus/teyrchains/common", default-features = false }
 teyrchains-relay = { path = "bridges/relays/teyrchains" }
-teyrchains-runtimes-test-utils = { path = "cumulus/teyrchains/runtimes/test-utils", default-features = false }
+teyrchains-runtimes-test-utils = { path = "pezcumulus/teyrchains/runtimes/test-utils", default-features = false }
 # pinned test-case to 3.3.1 because they support only the latest stable version of rust
 test-case = { version = "=3.3.1" }
 test-log = { version = "0.2.14" }
-test-pallet = { path = "substrate/frame/support/test/pallet", default-features = false, package = "frame-support-test-pallet" }
+test-pallet = { path = "bizinikiwi/pezframe/support/test/pallet", default-features = false, package = "pezframe-support-test-pallet" }
 test-runtime-constants = { path = "pezkuwi/runtime/test-runtime/constants", default-features = false }
 test-teyrchain-adder = { path = "pezkuwi/teyrchain/test-teyrchains/adder" }
 test-teyrchain-halt = { path = "pezkuwi/teyrchain/test-teyrchains/halt" }
 test-teyrchain-undying = { path = "pezkuwi/teyrchain/test-teyrchains/undying" }
-testnet-teyrchains-constants = { path = "cumulus/teyrchains/runtimes/constants", default-features = false }
+testnet-teyrchains-constants = { path = "pezcumulus/teyrchains/runtimes/constants", default-features = false }
 thiserror = { version = "1.0.64" }
 thousands = { version = "0.2.0" }
 threadpool = { version = "1.7" }
@@ -1488,7 +1488,7 @@ tracing-core = { version = "0.1.32", default-features = false }
 tracing-futures = { version = "0.2.4" }
 tracing-log = { version = "0.2.0" }
 tracing-subscriber = { version = "0.3.18" }
-tracking-allocator = { path = "pezkuwi/node/tracking-allocator", default-features = false, package = "staging-tracking-allocator" }
+tracking-allocator = { path = "pezkuwi/node/tracking-allocator", default-features = false, package = "pezstaging-tracking-allocator" }
 trie-bench = { version = "0.42.0" }
 trie-db = { version = "0.30.0", default-features = false }
 trie-root = { version = "0.18.0", default-features = false }
@@ -1497,7 +1497,7 @@ trybuild = { version = "1.0.103" }
 tt-call = { version = "1.0.8" }
 tuplex = { version = "0.1", default-features = false }
 twox-hash = { version = "1.6.3", default-features = false }
-txtesttool = { version = "0.7.0", package = "substrate-txtesttool" }
+txtesttool = { version = "0.7.0", package = "bizinikiwi-txtesttool" }
 unsigned-varint = { version = "0.7.2" }
 url = { version = "2.5.4" }
 verifiable = { version = "0.1", default-features = false }
@@ -1512,19 +1512,19 @@ wasmi = { version = "0.32.3", default-features = false }
 wasmtime = { version = "35.0.0", default-features = false }
 wat = { version = "1.0.0" }
 x25519-dalek = { version = "2.0" }
-xcm = { path = "pezkuwi/xcm", default-features = false, package = "staging-xcm" }
-xcm-builder = { path = "pezkuwi/xcm/xcm-builder", default-features = false, package = "staging-xcm-builder" }
+xcm = { path = "pezkuwi/xcm", default-features = false, package = "pezstaging-xcm" }
+xcm-builder = { path = "pezkuwi/xcm/xcm-builder", default-features = false, package = "pezstaging-xcm-builder" }
 xcm-docs = { path = "pezkuwi/xcm/docs" }
-xcm-emulator = { path = "cumulus/xcm/xcm-emulator", default-features = false }
-xcm-executor = { path = "pezkuwi/xcm/xcm-executor", default-features = false, package = "staging-xcm-executor" }
+xcm-emulator = { path = "pezcumulus/xcm/xcm-emulator", default-features = false }
+xcm-executor = { path = "pezkuwi/xcm/xcm-executor", default-features = false, package = "pezstaging-xcm-executor" }
 xcm-procedural = { path = "pezkuwi/xcm/procedural", default-features = false }
 xcm-runtime-apis = { path = "pezkuwi/xcm/xcm-runtime-apis", default-features = false }
 xcm-simulator = { path = "pezkuwi/xcm/xcm-simulator", default-features = false }
-yet-another-teyrchain-runtime = { path = "cumulus/teyrchains/runtimes/testing/yet-another-teyrchain" }
-zagros-emulated-chain = { path = "cumulus/teyrchains/integration-tests/emulated/chains/relays/zagros", default-features = false }
+yet-another-teyrchain-runtime = { path = "pezcumulus/teyrchains/runtimes/testing/yet-another-teyrchain" }
+zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/relays/zagros", default-features = false }
 zagros-runtime = { path = "pezkuwi/runtime/zagros", default-features = false }
 zagros-runtime-constants = { path = "pezkuwi/runtime/zagros/constants", default-features = false }
-zagros-system-emulated-network = { path = "cumulus/teyrchains/integration-tests/emulated/networks/zagros-system" }
+zagros-system-emulated-network = { path = "pezcumulus/teyrchains/integration-tests/emulated/networks/zagros-system" }
 zeroize = { version = "1.7.0", default-features = false }
 zombienet-configuration = { version = "0.3.13" }
 zombienet-orchestrator = { version = "0.3.13" }
@@ -1586,7 +1586,7 @@ sha2 = { opt-level = 3 }
 sha3 = { opt-level = 3 }
 smallvec = { opt-level = 3 }
 snow = { opt-level = 3 }
-substrate-bip39 = { opt-level = 3 }
+bizinikiwi-bip39 = { opt-level = 3 }
 twox-hash = { opt-level = 3 }
 uint = { opt-level = 3 }
 wasmi = { opt-level = 3 }

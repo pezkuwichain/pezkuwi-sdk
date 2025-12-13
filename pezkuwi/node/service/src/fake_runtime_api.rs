@@ -19,7 +19,7 @@
 //! These are used to provide a type that implements these runtime APIs without requiring to import
 //! the native runtimes.
 
-use pallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
+use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 use pezkuwi_primitives::{
 	runtime_api, slashing, AccountId, AuthorityDiscoveryId, Balance, Block, BlockNumber,
 	CandidateCommitments, CandidateEvent, CandidateHash,
@@ -29,22 +29,22 @@ use pezkuwi_primitives::{
 	ScrapedOnChainVotes, SessionIndex, SessionInfo, ValidationCode, ValidationCodeHash,
 	ValidatorId, ValidatorIndex, ValidatorSignature,
 };
-use sp_consensus_beefy::ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature};
-use sp_consensus_grandpa::AuthorityId as GrandpaId;
+use pezsp_consensus_beefy::ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature};
+use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
 
-use sp_core::OpaqueMetadata;
-use sp_runtime::{
+use pezsp_core::OpaqueMetadata;
+use pezsp_runtime::{
 	traits::Block as BlockT,
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult,
 };
-use sp_version::RuntimeVersion;
-use sp_weights::Weight;
+use pezsp_version::RuntimeVersion;
+use pezsp_weights::Weight;
 use std::collections::BTreeMap;
 use xcm::{
 	Version as XcmVersion, VersionedAssetId, VersionedAssets, VersionedLocation, VersionedXcm,
 };
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// This runtime API is only implemented for the test runtime!
 	pub trait GetLastTimestamp {
 		/// Returns the last timestamp of a runtime.
@@ -55,8 +55,8 @@ sp_api::decl_runtime_apis! {
 #[allow(dead_code)]
 struct Runtime;
 
-sp_api::impl_runtime_apis! {
-	impl sp_api::Core<Block> for Runtime {
+pezsp_api::impl_runtime_apis! {
+	impl pezsp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			unimplemented!()
 		}
@@ -65,12 +65,12 @@ sp_api::impl_runtime_apis! {
 			unimplemented!()
 		}
 
-		fn initialize_block(_: &<Block as BlockT>::Header) -> sp_runtime::ExtrinsicInclusionMode {
+		fn initialize_block(_: &<Block as BlockT>::Header) -> pezsp_runtime::ExtrinsicInclusionMode {
 			unimplemented!()
 		}
 	}
 
-	impl sp_api::Metadata<Block> for Runtime {
+	impl pezsp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			unimplemented!()
 		}
@@ -84,7 +84,7 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_block_builder::BlockBuilder<Block> for Runtime {
+	impl pezsp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(_: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			unimplemented!()
 		}
@@ -93,19 +93,19 @@ sp_api::impl_runtime_apis! {
 			unimplemented!()
 		}
 
-		fn inherent_extrinsics(_: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+		fn inherent_extrinsics(_: pezsp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
 			unimplemented!()
 		}
 
 		fn check_inherents(
 			_: <Block as BlockT>::LazyBlock,
-			_: sp_inherents::InherentData,
-		) -> sp_inherents::CheckInherentsResult {
+			_: pezsp_inherents::InherentData,
+		) -> pezsp_inherents::CheckInherentsResult {
 			unimplemented!()
 		}
 	}
 
-	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
+	impl pezsp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(
 			_: TransactionSource,
 			_: <Block as BlockT>::Extrinsic,
@@ -115,7 +115,7 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
+	impl pezsp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(_: &<Block as BlockT>::Header) {
 			unimplemented!()
 		}
@@ -236,174 +236,174 @@ sp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl sp_consensus_beefy::BeefyApi<Block, BeefyId> for Runtime {
+	impl pezsp_consensus_beefy::BeefyApi<Block, BeefyId> for Runtime {
 		fn beefy_genesis() -> Option<BlockNumber> {
 			unimplemented!()
 		}
 
-		fn validator_set() -> Option<sp_consensus_beefy::ValidatorSet<BeefyId>> {
+		fn validator_set() -> Option<pezsp_consensus_beefy::ValidatorSet<BeefyId>> {
 			unimplemented!()
 		}
 
 		fn submit_report_double_voting_unsigned_extrinsic(
-			_: sp_consensus_beefy::DoubleVotingProof<
+			_: pezsp_consensus_beefy::DoubleVotingProof<
 				BlockNumber,
 				BeefyId,
 				BeefySignature,
 			>,
-			_: sp_consensus_beefy::OpaqueKeyOwnershipProof,
+			_: pezsp_consensus_beefy::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			unimplemented!()
 		}
 
 		fn submit_report_fork_voting_unsigned_extrinsic(
-			_: sp_consensus_beefy::ForkVotingProof<
+			_: pezsp_consensus_beefy::ForkVotingProof<
 				<Block as BlockT>::Header,
 				BeefyId,
-				sp_runtime::OpaqueValue
+				pezsp_runtime::OpaqueValue
 			>,
-			_: sp_consensus_beefy::OpaqueKeyOwnershipProof,
+			_: pezsp_consensus_beefy::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			unimplemented!()
 		}
 
 		fn submit_report_future_block_voting_unsigned_extrinsic(
-			_: sp_consensus_beefy::FutureBlockVotingProof<BlockNumber, BeefyId>,
-			_: sp_consensus_beefy::OpaqueKeyOwnershipProof,
+			_: pezsp_consensus_beefy::FutureBlockVotingProof<BlockNumber, BeefyId>,
+			_: pezsp_consensus_beefy::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			unimplemented!()
 		}
 
 		fn generate_key_ownership_proof(
-			_: sp_consensus_beefy::ValidatorSetId,
+			_: pezsp_consensus_beefy::ValidatorSetId,
 			_: BeefyId,
-		) -> Option<sp_consensus_beefy::OpaqueKeyOwnershipProof> {
+		) -> Option<pezsp_consensus_beefy::OpaqueKeyOwnershipProof> {
 			unimplemented!()
 		}
 	}
 
-	impl sp_mmr_primitives::MmrApi<Block, Hash, BlockNumber> for Runtime {
-		fn mmr_root() -> Result<Hash, sp_mmr_primitives::Error> {
+	impl pezsp_mmr_primitives::MmrApi<Block, Hash, BlockNumber> for Runtime {
+		fn mmr_root() -> Result<Hash, pezsp_mmr_primitives::Error> {
 			unimplemented!()
 		}
 
-		fn mmr_leaf_count() -> Result<sp_mmr_primitives::LeafIndex, sp_mmr_primitives::Error> {
+		fn mmr_leaf_count() -> Result<pezsp_mmr_primitives::LeafIndex, pezsp_mmr_primitives::Error> {
 			unimplemented!()
 		}
 
 		fn generate_proof(
 			_: Vec<BlockNumber>,
 			_: Option<BlockNumber>,
-		) -> Result<(Vec<sp_mmr_primitives::EncodableOpaqueLeaf>, sp_mmr_primitives::LeafProof<Hash>), sp_mmr_primitives::Error> {
+		) -> Result<(Vec<pezsp_mmr_primitives::EncodableOpaqueLeaf>, pezsp_mmr_primitives::LeafProof<Hash>), pezsp_mmr_primitives::Error> {
 			unimplemented!()
 		}
 
 		fn generate_ancestry_proof(
 			_: BlockNumber,
 			_: Option<BlockNumber>,
-		) -> Result<sp_mmr_primitives::AncestryProof<Hash>, sp_mmr_primitives::Error> {
+		) -> Result<pezsp_mmr_primitives::AncestryProof<Hash>, pezsp_mmr_primitives::Error> {
 			unimplemented!()
 		}
 
-		fn verify_proof(_: Vec<sp_mmr_primitives::EncodableOpaqueLeaf>, _: sp_mmr_primitives::LeafProof<Hash>)
-			-> Result<(), sp_mmr_primitives::Error>
+		fn verify_proof(_: Vec<pezsp_mmr_primitives::EncodableOpaqueLeaf>, _: pezsp_mmr_primitives::LeafProof<Hash>)
+			-> Result<(), pezsp_mmr_primitives::Error>
 		{
 			unimplemented!()
 		}
 
 		fn verify_proof_stateless(
 			_: Hash,
-			_: Vec<sp_mmr_primitives::EncodableOpaqueLeaf>,
-			_: sp_mmr_primitives::LeafProof<Hash>
-		) -> Result<(), sp_mmr_primitives::Error> {
+			_: Vec<pezsp_mmr_primitives::EncodableOpaqueLeaf>,
+			_: pezsp_mmr_primitives::LeafProof<Hash>
+		) -> Result<(), pezsp_mmr_primitives::Error> {
 			unimplemented!()
 		}
 	}
 
-	impl sp_consensus_grandpa::GrandpaApi<Block> for Runtime {
+	impl pezsp_consensus_grandpa::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> Vec<(GrandpaId, u64)> {
 			unimplemented!()
 		}
 
-		fn current_set_id() -> sp_consensus_grandpa::SetId {
+		fn current_set_id() -> pezsp_consensus_grandpa::SetId {
 			unimplemented!()
 		}
 
 		fn submit_report_equivocation_unsigned_extrinsic(
-			_: sp_consensus_grandpa::EquivocationProof<
+			_: pezsp_consensus_grandpa::EquivocationProof<
 				<Block as BlockT>::Hash,
-				sp_runtime::traits::NumberFor<Block>,
+				pezsp_runtime::traits::NumberFor<Block>,
 			>,
-			_: sp_consensus_grandpa::OpaqueKeyOwnershipProof,
+			_: pezsp_consensus_grandpa::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			unimplemented!()
 		}
 
 		fn generate_key_ownership_proof(
-			_: sp_consensus_grandpa::SetId,
-			_: sp_consensus_grandpa::AuthorityId,
-		) -> Option<sp_consensus_grandpa::OpaqueKeyOwnershipProof> {
+			_: pezsp_consensus_grandpa::SetId,
+			_: pezsp_consensus_grandpa::AuthorityId,
+		) -> Option<pezsp_consensus_grandpa::OpaqueKeyOwnershipProof> {
 			unimplemented!()
 		}
 	}
 
-	impl sp_consensus_babe::BabeApi<Block> for Runtime {
-		fn configuration() -> sp_consensus_babe::BabeConfiguration {
+	impl pezsp_consensus_babe::BabeApi<Block> for Runtime {
+		fn configuration() -> pezsp_consensus_babe::BabeConfiguration {
 			unimplemented!()
 		}
 
-		fn current_epoch_start() -> sp_consensus_babe::Slot {
+		fn current_epoch_start() -> pezsp_consensus_babe::Slot {
 			unimplemented!()
 		}
 
-		fn current_epoch() -> sp_consensus_babe::Epoch {
+		fn current_epoch() -> pezsp_consensus_babe::Epoch {
 			unimplemented!()
 		}
 
-		fn next_epoch() -> sp_consensus_babe::Epoch {
+		fn next_epoch() -> pezsp_consensus_babe::Epoch {
 			unimplemented!()
 		}
 
 		fn generate_key_ownership_proof(
-			_: sp_consensus_babe::Slot,
-			_: sp_consensus_babe::AuthorityId,
-		) -> Option<sp_consensus_babe::OpaqueKeyOwnershipProof> {
+			_: pezsp_consensus_babe::Slot,
+			_: pezsp_consensus_babe::AuthorityId,
+		) -> Option<pezsp_consensus_babe::OpaqueKeyOwnershipProof> {
 			unimplemented!()
 		}
 
 		fn submit_report_equivocation_unsigned_extrinsic(
-			_: sp_consensus_babe::EquivocationProof<<Block as BlockT>::Header>,
-			_: sp_consensus_babe::OpaqueKeyOwnershipProof,
+			_: pezsp_consensus_babe::EquivocationProof<<Block as BlockT>::Header>,
+			_: pezsp_consensus_babe::OpaqueKeyOwnershipProof,
 		) -> Option<()> {
 			unimplemented!()
 		}
 	}
 
-	impl sp_authority_discovery::AuthorityDiscoveryApi<Block> for Runtime {
+	impl pezsp_authority_discovery::AuthorityDiscoveryApi<Block> for Runtime {
 		fn authorities() -> Vec<AuthorityDiscoveryId> {
 			unimplemented!()
 		}
 	}
 
-	impl sp_session::SessionKeys<Block> for Runtime {
+	impl pezsp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(_: Option<Vec<u8>>) -> Vec<u8> {
 			unimplemented!()
 		}
 
 		fn decode_session_keys(
 			_: Vec<u8>,
-		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
+		) -> Option<Vec<(Vec<u8>, pezsp_core::crypto::KeyTypeId)>> {
 			unimplemented!()
 		}
 	}
 
-	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
+	impl pezframe_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
 		fn account_nonce(_: AccountId) -> Nonce {
 			unimplemented!()
 		}
 	}
 
-	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<
+	impl pezpallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<
 		Block,
 		Balance,
 	> for Runtime {

@@ -1,5 +1,5 @@
 [package]
-name = "pallet-minimal-template"
+name = "pezpallet-minimal-template"
 description = "A minimal pallet built with FRAME, part of Pezkuwi Sdk."
 version = "0.0.0"
 license = "Unlicense"

@@ -31,7 +31,7 @@ use pezkuwi_primitives::{
 	ExecutorParam, ExecutorParams, Hash, PersistedValidationData, PvfExecKind as RuntimePvfExecKind,
 };
 use pezkuwi_teyrchain_primitives::primitives::{BlockData, ValidationResult};
-use sp_core::H256;
+use pezsp_core::H256;
 
 const VALIDATION_CODE_BOMB_LIMIT: u32 = 30 * 1024 * 1024;
 
@@ -789,7 +789,7 @@ async fn artifact_does_reprepare_on_meaningful_exec_parameter_change() {
 async fn invalid_compressed_code_fails_prechecking() {
 	let host = TestHost::new().await;
 	let raw_code = vec![2u8; VALIDATION_CODE_BOMB_LIMIT as usize + 1];
-	let validation_code = sp_maybe_compressed_blob::compress_strongly(
+	let validation_code = pezsp_maybe_compressed_blob::compress_strongly(
 		&raw_code,
 		VALIDATION_CODE_BOMB_LIMIT as usize + 1,
 	)
@@ -813,7 +813,7 @@ async fn invalid_compressed_code_fails_validation() {
 	let pov = PoV { block_data: BlockData(Vec::new()) };
 
 	let raw_code = vec![2u8; VALIDATION_CODE_BOMB_LIMIT as usize + 1];
-	let validation_code = sp_maybe_compressed_blob::compress_strongly(
+	let validation_code = pezsp_maybe_compressed_blob::compress_strongly(
 		&raw_code,
 		VALIDATION_CODE_BOMB_LIMIT as usize + 1,
 	)
@@ -841,7 +841,7 @@ async fn invalid_compressed_pov_fails_validation() {
 	};
 	let raw_block_data = vec![1u8; POV_BOMB_LIMIT + 1];
 	let block_data =
-		sp_maybe_compressed_blob::compress_weakly(&raw_block_data, POV_BOMB_LIMIT + 1).unwrap();
+		pezsp_maybe_compressed_blob::compress_weakly(&raw_block_data, POV_BOMB_LIMIT + 1).unwrap();
 	let pov = PoV { block_data: BlockData(block_data) };
 
 	let result = host

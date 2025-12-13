@@ -1,0 +1,386 @@
+[package]
+name = "bridge-hub-zagros-runtime"
+version = "0.3.0"
+authors.workspace = true
+edition.workspace = true
+description = "Zagros's BridgeHub teyrchain runtime"
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+hex-literal = { workspace = true, default-features = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { optional = true, features = [
+	"derive",
+], workspace = true, default-features = true }
+serde_json = { features = ["alloc"], workspace = true }
+tracing = { workspace = true }
+
+# Bizinikiwi
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-executive = { workspace = true }
+pezframe-metadata-hash-extension = { workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezframe-system-benchmarking = { optional = true, workspace = true }
+pezframe-system-rpc-runtime-api = { workspace = true }
+pezframe-try-runtime = { optional = true, workspace = true }
+pezpallet-aura = { workspace = true }
+pezpallet-authorship = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-message-queue = { workspace = true }
+pezpallet-multisig = { workspace = true }
+pezpallet-session = { workspace = true }
+pezpallet-timestamp = { workspace = true }
+pezpallet-transaction-payment = { workspace = true }
+pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
+pezpallet-utility = { workspace = true }
+pezsp-api = { workspace = true }
+pezsp-block-builder = { workspace = true }
+pezsp-consensus-aura = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-genesis-builder = { workspace = true }
+pezsp-inherents = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-keyring = { workspace = true }
+pezsp-offchain = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-session = { workspace = true }
+pezsp-std = { workspace = true }
+pezsp-storage = { workspace = true }
+pezsp-transaction-pool = { workspace = true }
+pezsp-version = { workspace = true }
+
+# Pezkuwi
+pezpallet-xcm = { workspace = true }
+pezpallet-xcm-benchmarks = { optional = true, workspace = true }
+pezkuwi-runtime-common = { workspace = true }
+pezkuwi-teyrchain-primitives = { workspace = true }
+xcm = { workspace = true }
+xcm-builder = { workspace = true }
+xcm-executor = { workspace = true }
+xcm-runtime-apis = { workspace = true }
+zagros-runtime-constants = { workspace = true }
+
+# Pezcumulus
+pezcumulus-pezpallet-aura-ext = { workspace = true }
+pezcumulus-pezpallet-session-benchmarking = { workspace = true }
+pezcumulus-pezpallet-teyrchain-system = { workspace = true }
+pezcumulus-pezpallet-weight-reclaim = { workspace = true }
+pezcumulus-pezpallet-xcm = { workspace = true }
+pezcumulus-pezpallet-xcmp-queue = { features = ["bridging"], workspace = true }
+pezcumulus-primitives-aura = { workspace = true }
+pezcumulus-primitives-core = { workspace = true }
+pezcumulus-primitives-utility = { workspace = true }
+
+pezpallet-collator-selection = { workspace = true }
+testnet-teyrchains-constants = { features = ["zagros"], workspace = true }
+teyrchain-info = { workspace = true }
+teyrchains-common = { workspace = true }
+
+# Bridges
+bp-asset-hub-pezkuwichain = { workspace = true }
+bp-asset-hub-zagros = { workspace = true }
+bp-bridge-hub-pezkuwichain = { workspace = true }
+bp-bridge-hub-zagros = { workspace = true }
+bp-header-chain = { workspace = true }
+bp-messages = { workspace = true }
+bp-pezkuwi-core = { workspace = true }
+bp-pezkuwichain = { workspace = true }
+bp-relayers = { workspace = true }
+bp-runtime = { workspace = true }
+bp-teyrchains = { workspace = true }
+bp-xcm-bridge-hub-router = { workspace = true }
+bridge-hub-common = { workspace = true }
+bridge-runtime-common = { workspace = true }
+pezpallet-bridge-grandpa = { workspace = true }
+pezpallet-bridge-messages = { workspace = true }
+pezpallet-bridge-relayers = { workspace = true }
+pezpallet-bridge-teyrchains = { workspace = true }
+pezpallet-xcm-bridge-hub = { workspace = true }
+
+# Ethereum Bridge (Snowbridge)
+snowbridge-beacon-primitives = { workspace = true }
+snowbridge-core = { workspace = true }
+snowbridge-inbound-queue-primitives = { workspace = true }
+snowbridge-merkle-tree = { workspace = true }
+snowbridge-outbound-queue-primitives = { workspace = true }
+snowbridge-outbound-queue-runtime-api = { workspace = true }
+snowbridge-outbound-queue-v2-runtime-api = { workspace = true }
+snowbridge-pezpallet-ethereum-client = { workspace = true }
+snowbridge-pezpallet-inbound-queue = { workspace = true }
+snowbridge-pezpallet-inbound-queue-fixtures = { workspace = true }
+snowbridge-pezpallet-inbound-queue-v2 = { workspace = true }
+snowbridge-pezpallet-inbound-queue-v2-fixtures = { workspace = true }
+snowbridge-pezpallet-outbound-queue = { workspace = true }
+snowbridge-pezpallet-outbound-queue-v2 = { workspace = true }
+snowbridge-pezpallet-system = { workspace = true }
+snowbridge-pezpallet-system-v2 = { workspace = true }
+snowbridge-system-runtime-api = { workspace = true }
+snowbridge-system-v2-runtime-api = { workspace = true }
+
+[dev-dependencies]
+bridge-hub-test-utils = { workspace = true, default-features = true }
+bridge-runtime-common = { features = [
+	"integrity-test",
+], workspace = true, default-features = true }
+pezpallet-bridge-relayers = { features = ["integrity-test"], workspace = true }
+snowbridge-runtime-test-common = { workspace = true, default-features = true }
+teyrchains-runtimes-test-utils = { workspace = true, default-features = true }
+
+[build-dependencies]
+bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
+
+[features]
+std = [
+	"bp-asset-hub-pezkuwichain/std",
+	"bp-asset-hub-zagros/std",
+	"bp-bridge-hub-pezkuwichain/std",
+	"bp-bridge-hub-zagros/std",
+	"bp-header-chain/std",
+	"bp-messages/std",
+	"bp-pezkuwi-core/std",
+	"bp-pezkuwichain/std",
+	"bp-relayers/std",
+	"bp-runtime/std",
+	"bp-teyrchains/std",
+	"bp-xcm-bridge-hub-router/std",
+	"bridge-hub-common/std",
+	"bridge-runtime-common/std",
+	"codec/std",
+	"pezcumulus-pezpallet-aura-ext/std",
+	"pezcumulus-pezpallet-session-benchmarking/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
+	"pezcumulus-pezpallet-weight-reclaim/std",
+	"pezcumulus-pezpallet-xcm/std",
+	"pezcumulus-pezpallet-xcmp-queue/std",
+	"pezcumulus-primitives-aura/std",
+	"pezcumulus-primitives-core/std",
+	"pezcumulus-primitives-utility/std",
+	"pezframe-benchmarking/std",
+	"pezframe-executive/std",
+	"pezframe-metadata-hash-extension/std",
+	"pezframe-support/std",
+	"pezframe-system-benchmarking?/std",
+	"pezframe-system-rpc-runtime-api/std",
+	"pezframe-system/std",
+	"pezframe-try-runtime?/std",
+	"pezpallet-aura/std",
+	"pezpallet-authorship/std",
+	"pezpallet-balances/std",
+	"pezpallet-bridge-grandpa/std",
+	"pezpallet-bridge-messages/std",
+	"pezpallet-bridge-relayers/std",
+	"pezpallet-bridge-teyrchains/std",
+	"pezpallet-collator-selection/std",
+	"pezpallet-message-queue/std",
+	"pezpallet-multisig/std",
+	"pezpallet-session/std",
+	"pezpallet-timestamp/std",
+	"pezpallet-transaction-payment-rpc-runtime-api/std",
+	"pezpallet-transaction-payment/std",
+	"pezpallet-utility/std",
+	"pezpallet-xcm-benchmarks?/std",
+	"pezpallet-xcm-bridge-hub/std",
+	"pezpallet-xcm/std",
+	"pezkuwi-runtime-common/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"scale-info/std",
+	"serde",
+	"serde_json/std",
+	"snowbridge-beacon-primitives/std",
+	"snowbridge-core/std",
+	"snowbridge-inbound-queue-primitives/std",
+	"snowbridge-merkle-tree/std",
+	"snowbridge-outbound-queue-primitives/std",
+	"snowbridge-outbound-queue-runtime-api/std",
+	"snowbridge-outbound-queue-v2-runtime-api/std",
+	"snowbridge-pezpallet-ethereum-client/std",
+	"snowbridge-pezpallet-inbound-queue-fixtures/std",
+	"snowbridge-pezpallet-inbound-queue-v2-fixtures/std",
+	"snowbridge-pezpallet-inbound-queue-v2/std",
+	"snowbridge-pezpallet-inbound-queue/std",
+	"snowbridge-pezpallet-outbound-queue-v2/std",
+	"snowbridge-pezpallet-outbound-queue/std",
+	"snowbridge-pezpallet-system-v2/std",
+	"snowbridge-pezpallet-system/std",
+	"snowbridge-system-runtime-api/std",
+	"snowbridge-system-v2-runtime-api/std",
+	"pezsp-api/std",
+	"pezsp-block-builder/std",
+	"pezsp-consensus-aura/std",
+	"pezsp-core/std",
+	"pezsp-genesis-builder/std",
+	"pezsp-inherents/std",
+	"pezsp-io/std",
+	"pezsp-keyring/std",
+	"pezsp-offchain/std",
+	"pezsp-runtime/std",
+	"pezsp-session/std",
+	"pezsp-std/std",
+	"pezsp-storage/std",
+	"pezsp-transaction-pool/std",
+	"pezsp-version/std",
+	"bizinikiwi-wasm-builder",
+	"testnet-teyrchains-constants/std",
+	"teyrchain-info/std",
+	"teyrchains-common/std",
+	"tracing/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm-runtime-apis/std",
+	"xcm/std",
+	"zagros-runtime-constants/std",
+]
+default = ["std"]
+
+runtime-benchmarks = [
+	"bp-asset-hub-pezkuwichain/runtime-benchmarks",
+	"bp-asset-hub-zagros/runtime-benchmarks",
+	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
+	"bp-bridge-hub-zagros/runtime-benchmarks",
+	"bp-header-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-pezkuwichain/runtime-benchmarks",
+	"bp-relayers/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
+	"bp-xcm-bridge-hub-router/runtime-benchmarks",
+	"bridge-hub-common/runtime-benchmarks",
+	"bridge-hub-test-utils/runtime-benchmarks",
+	"bridge-runtime-common/runtime-benchmarks",
+	"pezcumulus-pezpallet-aura-ext/runtime-benchmarks",
+	"pezcumulus-pezpallet-session-benchmarking/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezcumulus-pezpallet-weight-reclaim/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcm/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
+	"pezcumulus-primitives-aura/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-primitives-utility/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-executive/runtime-benchmarks",
+	"pezframe-metadata-hash-extension/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system-benchmarking/runtime-benchmarks",
+	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezframe-try-runtime?/runtime-benchmarks",
+	"pezpallet-aura/runtime-benchmarks",
+	"pezpallet-authorship/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-bridge-grandpa/runtime-benchmarks",
+	"pezpallet-bridge-messages/runtime-benchmarks",
+	"pezpallet-bridge-relayers/runtime-benchmarks",
+	"pezpallet-bridge-teyrchains/runtime-benchmarks",
+	"pezpallet-collator-selection/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezpallet-multisig/runtime-benchmarks",
+	"pezpallet-session/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"pezpallet-xcm-benchmarks/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezkuwi-runtime-common/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"snowbridge-beacon-primitives/runtime-benchmarks",
+	"snowbridge-core/runtime-benchmarks",
+	"snowbridge-inbound-queue-primitives/runtime-benchmarks",
+	"snowbridge-merkle-tree/runtime-benchmarks",
+	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
+	"snowbridge-outbound-queue-runtime-api/runtime-benchmarks",
+	"snowbridge-outbound-queue-v2-runtime-api/runtime-benchmarks",
+	"snowbridge-pezpallet-ethereum-client/runtime-benchmarks",
+	"snowbridge-pezpallet-inbound-queue-fixtures/runtime-benchmarks",
+	"snowbridge-pezpallet-inbound-queue-v2-fixtures/runtime-benchmarks",
+	"snowbridge-pezpallet-inbound-queue-v2/runtime-benchmarks",
+	"snowbridge-pezpallet-inbound-queue/runtime-benchmarks",
+	"snowbridge-pezpallet-outbound-queue-v2/runtime-benchmarks",
+	"snowbridge-pezpallet-outbound-queue/runtime-benchmarks",
+	"snowbridge-pezpallet-system-v2/runtime-benchmarks",
+	"snowbridge-pezpallet-system/runtime-benchmarks",
+	"snowbridge-runtime-test-common/runtime-benchmarks",
+	"snowbridge-system-runtime-api/runtime-benchmarks",
+	"snowbridge-system-v2-runtime-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-consensus-aura/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-offchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-session/runtime-benchmarks",
+	"pezsp-transaction-pool/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"teyrchain-info/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"teyrchains-runtimes-test-utils/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks",
+]
+
+try-runtime = [
+	"pezcumulus-pezpallet-aura-ext/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezcumulus-pezpallet-weight-reclaim/try-runtime",
+	"pezcumulus-pezpallet-xcm/try-runtime",
+	"pezcumulus-pezpallet-xcmp-queue/try-runtime",
+	"pezframe-executive/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezframe-try-runtime/try-runtime",
+	"pezpallet-aura/try-runtime",
+	"pezpallet-authorship/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-bridge-grandpa/try-runtime",
+	"pezpallet-bridge-messages/try-runtime",
+	"pezpallet-bridge-relayers/try-runtime",
+	"pezpallet-bridge-teyrchains/try-runtime",
+	"pezpallet-collator-selection/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezpallet-multisig/try-runtime",
+	"pezpallet-session/try-runtime",
+	"pezpallet-timestamp/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezpallet-utility/try-runtime",
+	"pezpallet-xcm-bridge-hub/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
+	"snowbridge-inbound-queue-primitives/try-runtime",
+	"snowbridge-pezpallet-ethereum-client/try-runtime",
+	"snowbridge-pezpallet-inbound-queue-v2/try-runtime",
+	"snowbridge-pezpallet-inbound-queue/try-runtime",
+	"snowbridge-pezpallet-outbound-queue-v2/try-runtime",
+	"snowbridge-pezpallet-outbound-queue/try-runtime",
+	"snowbridge-pezpallet-system-v2/try-runtime",
+	"snowbridge-pezpallet-system/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchain-info/try-runtime",
+	"teyrchains-common/try-runtime",
+]
+
+# Enable the metadata hash generation in the wasm builder.
+metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
+
+# A feature that should be enabled when the runtime should be built for on-chain
+# deployment. This will disable stuff that shouldn't be part of the on-chain wasm
+# to make it smaller, like logging for example.
+on-chain-release-build = ["metadata-hash"]
+
+fast-runtime = []

@@ -139,7 +139,7 @@ exclude-from-umbrella = true
 ### Is the Crate a Test, Example or Fuzzer?
 
 Test or example crates, like
-[`pallet-example-task`](https://github.com/pezkuwichain/pezkuwi-sdk/blob/9b4acf27b869d7cbb07b03f0857763b8c8cc7566/substrate/frame/examples/tasks/Cargo.toml#L9)
+[`pezpallet-example-task`](https://github.com/pezkuwichain/pezkuwi-sdk/blob/9b4acf27b869d7cbb07b03f0857763b8c8cc7566/bizinikiwi/pezframe/examples/tasks/Cargo.toml#L9)
 , should not be released to crates.io. To ensure this, you must add `publish = false` to your
 crate's `package` section:
 

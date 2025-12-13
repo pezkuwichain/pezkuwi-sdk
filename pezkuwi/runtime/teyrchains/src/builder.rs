@@ -30,8 +30,8 @@ use alloc::{
 	vec::Vec,
 };
 use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
-use frame_support::pallet_prelude::*;
-use frame_system::pallet_prelude::*;
+use pezframe_support::pezpallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 use pezkuwi_primitives::{
 	ApprovedPeerId, AvailabilityBitfield, BackedCandidate, CandidateCommitments,
 	CandidateDescriptorV2, CandidateHash, ClaimQueueOffset,
@@ -42,8 +42,8 @@ use pezkuwi_primitives::{
 	ValidDisputeStatementKind, ValidationCode, ValidatorId, ValidatorIndex, ValidityAttestation,
 	UMP_SEPARATOR,
 };
-use sp_core::H256;
-use sp_runtime::{
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{Header as HeaderT, One, TrailingZeroInput, Zero},
 	RuntimeAppPublic,
 };
@@ -54,15 +54,15 @@ fn mock_validation_code() -> ValidationCode {
 
 /// Grab an account, seeded by a name and index.
 ///
-/// This is directly from frame-benchmarking. Copy/pasted so we can use it when not compiling with
+/// This is directly from pezframe-benchmarking. Copy/pasted so we can use it when not compiling with
 /// "features = runtime-benchmarks".
 fn account<AccountId: Decode>(name: &'static str, index: u32, seed: u32) -> AccountId {
-	let entropy = (name, index, seed).using_encoded(sp_io::hashing::blake2_256);
+	let entropy = (name, index, seed).using_encoded(pezsp_io::hashing::blake2_256);
 	AccountId::decode(&mut TrailingZeroInput::new(&entropy[..]))
 		.expect("infinite input; no invalid input; qed")
 }
 
-pub fn generate_validator_pairs<T: frame_system::Config>(
+pub fn generate_validator_pairs<T: pezframe_system::Config>(
 	validator_count: u32,
 ) -> Vec<(T::AccountId, ValidatorId)> {
 	(0..validator_count)
@@ -422,12 +422,12 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 	/// way.
 	fn run_to_block(to: u32) {
 		let to = to.into();
-		while frame_system::Pallet::<T>::block_number() < to {
-			let b = frame_system::Pallet::<T>::block_number();
+		while pezframe_system::Pallet::<T>::block_number() < to {
+			let b = pezframe_system::Pallet::<T>::block_number();
 			initializer::Pallet::<T>::on_finalize(b);
 
 			let b = b + One::one();
-			frame_system::Pallet::<T>::set_block_number(b);
+			pezframe_system::Pallet::<T>::set_block_number(b);
 			initializer::Pallet::<T>::on_initialize(b);
 		}
 	}
@@ -452,7 +452,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 			)
 			.unwrap();
 			paras::Pallet::<T>::add_trusted_validation_code(
-				frame_system::Origin::<T>::Root.into(),
+				pezframe_system::Origin::<T>::Root.into(),
 				validation_code,
 			)
 			.unwrap();
@@ -504,8 +504,8 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 		let block_number = BlockNumberFor::<T>::from(block + 1);
 		let header = Self::header(block_number);
 
-		frame_system::Pallet::<T>::reset_events();
-		frame_system::Pallet::<T>::initialize(&header.number(), &header.hash(), header.digest());
+		pezframe_system::Pallet::<T>::reset_events();
+		pezframe_system::Pallet::<T>::initialize(&header.number(), &header.hash(), header.digest());
 		initializer::Pallet::<T>::on_initialize(*header.number());
 
 		assert_eq!(shared::CurrentSessionIndex::<T>::get(), target_session);

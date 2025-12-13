@@ -1,6 +1,6 @@
 //! A collection of node-specific RPC methods.
-//! Substrate provides the `sc-rpc` crate, which defines the core RPC layer
-//! used by Substrate nodes. This file extends those RPC definitions with
+//! Bizinikiwi provides the `sc-rpc` crate, which defines the core RPC layer
+//! used by Bizinikiwi nodes. This file extends those RPC definitions with
 //! capabilities that are specific to this project's runtime configuration.
 
 #![warn(missing_docs)]
@@ -8,11 +8,11 @@
 use std::sync::Arc;
 
 use jsonrpsee::RpcModule;
-use sc_transaction_pool_api::TransactionPool;
+use pezsc_transaction_pool_api::TransactionPool;
 use solochain_template_runtime::{opaque::Block, AccountId, Balance, Nonce};
-use sp_api::ProvideRuntimeApi;
-use sp_block_builder::BlockBuilder;
-use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
+use pezsp_api::ProvideRuntimeApi;
+use pezsp_block_builder::BlockBuilder;
+use pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
 
 /// Full client dependencies.
 pub struct FullDeps<C, P> {
@@ -30,13 +30,13 @@ where
 	C: ProvideRuntimeApi<Block>,
 	C: HeaderBackend<Block> + HeaderMetadata<Block, Error = BlockChainError> + 'static,
 	C: Send + Sync + 'static,
-	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
-	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
+	C::Api: bizinikiwi_frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
+	C::Api: pezpallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + 'static,
 {
-	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
-	use substrate_frame_rpc_system::{System, SystemApiServer};
+	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
+	use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
 
 	let mut module = RpcModule::new(());
 	let FullDeps { client, pool } = deps;

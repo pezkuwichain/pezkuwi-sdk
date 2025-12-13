@@ -48,12 +48,12 @@
 //! and include the ones that are known to fit based on the worst case.
 //!
 //! The benchmarking code can be written as a part of FRAME pallet, using the macros provided in
-//! [`frame_benchmarking`]. See any of the existing pallets in `pezkuwi-sdk`, or the pallets in our
+//! [`pezframe_benchmarking`]. See any of the existing pallets in `pezkuwi-sdk`, or the pallets in our
 //! [`crate::pezkuwi_sdk::templates`] for examples.
 //!
 //! ## Weight
 //!
-//! Finally, [`sp_weights::Weight`] is the output of the benchmarking process. It is a
+//! Finally, [`pezsp_weights::Weight`] is the output of the benchmarking process. It is a
 //! two-dimensional data structure that demonstrates the resources consumed by a given block of
 //! code (for example, a transaction). The two dimensions are:
 //!
@@ -67,7 +67,7 @@
 //! it captures the worst case execution of any block of code.
 //!
 //! Consider:
-#![doc = docify::embed!("./src/reference_docs/frame_benchmarking_weight.rs", simple_transfer)]
+#![doc = docify::embed!("./src/reference_docs/pezframe_benchmarking_weight.rs", simple_transfer)]
 //!
 //! If this block of code is to be benchmarked, then the benchmarking code must be written such that
 //! it captures the worst case.
@@ -78,18 +78,18 @@
 //! boilerplate needed to run these benchmarking (see [Running Benchmarks
 //! below](#running-benchmarks)). The outcome of running these benchmarks are meant to be fed back
 //! into the pallet via a conventional `trait WeightInfo` on `Config`:
-#![doc = docify::embed!("src/reference_docs/frame_benchmarking_weight.rs", WeightInfo)]
+#![doc = docify::embed!("src/reference_docs/pezframe_benchmarking_weight.rs", WeightInfo)]
 //!
 //! Then, individual functions of this trait are the final values that we assigned to the
-//! [`frame::pallet_macros::weight`] attribute:
-#![doc = docify::embed!("./src/reference_docs/frame_benchmarking_weight.rs", simple_transfer_2)]
+//! [`frame::pezpallet_macros::weight`] attribute:
+#![doc = docify::embed!("./src/reference_docs/pezframe_benchmarking_weight.rs", simple_transfer_2)]
 //!
 //! ## Manual Refund
 //!
 //! Back to the assumption of writing benchmarks for worst case: Sometimes, the pre-dispatch weight
 //! significantly differ from the post-dispatch actual weight consumed. This can be expressed with
 //! the following FRAME syntax:
-#![doc = docify::embed!("./src/reference_docs/frame_benchmarking_weight.rs", simple_transfer_3)]
+#![doc = docify::embed!("./src/reference_docs/pezframe_benchmarking_weight.rs", simple_transfer_3)]
 //!
 //! ## Running Benchmarks
 //!
@@ -114,7 +114,7 @@
 //!
 //! Pezkuwi-SDK runtimes use a more performant VM, namely WASM, which does not have metering. In
 //! return they have to be benchmarked to provide an upper bound on the resources they consume. This
-//! upper bound is represented as [`sp_weights::Weight`].
+//! upper bound is represented as [`pezsp_weights::Weight`].
 //!
 //! ## Future: PolkaVM
 //!
@@ -141,7 +141,7 @@ pub mod pallet {
 	}
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		type WeightInfo: WeightInfo;
 	}
 
@@ -195,14 +195,14 @@ pub mod pallet {
 			if destination_exists {
 				// simpler code path
 				// Note that need for .into(), to convert `()` to `PostDispatchInfo`
-				// See: https://docs.pezkuwichain.io/sdk/master/frame_support/dispatch/struct.PostDispatchInfo.html#impl-From%3C()%3E-for-PostDispatchInfo
+				// See: https://docs.pezkuwichain.io/sdk/master/pezframe_support/dispatch/struct.PostDispatchInfo.html#impl-From%3C()%3E-for-PostDispatchInfo
 				Ok(().into())
 			} else {
 				// more complex code path
 				let actual_weight =
 					todo!("this can likely come from another benchmark that is NOT the worst case");
 				let pays_fee = todo!("You can set this to `Pays::Yes` or `Pays::No` to change if this transaction should pay fees");
-				Ok(frame::deps::frame_support::dispatch::PostDispatchInfo {
+				Ok(frame::deps::pezframe_support::dispatch::PostDispatchInfo {
 					actual_weight: Some(actual_weight),
 					pays_fee,
 				})

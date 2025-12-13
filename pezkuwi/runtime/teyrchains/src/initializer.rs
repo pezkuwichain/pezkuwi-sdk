@@ -27,11 +27,11 @@ use crate::{
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use frame_support::{
+use pezframe_support::{
 	traits::{OneSessionHandler, Randomness},
 	weights::Weight,
 };
-use frame_system::limits::BlockWeights;
+use pezframe_system::limits::BlockWeights;
 use pezkuwi_primitives::{BlockNumber, ConsensusLog, SessionIndex, ValidatorId};
 use scale_info::TypeInfo;
 
@@ -103,11 +103,11 @@ impl WeightInfo for () {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::pallet]
 	#[pallet::without_storage_info]
@@ -115,7 +115,7 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config:
-		frame_system::Config
+		pezframe_system::Config
 		+ configuration::Config
 		+ shared::Config
 		+ paras::Config
@@ -129,7 +129,7 @@ pub mod pallet {
 		/// A randomness beacon.
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self>>;
 		/// An origin which is allowed to force updates to teyrchains.
-		type ForceOrigin: EnsureOrigin<<Self as frame_system::Config>::RuntimeOrigin>;
+		type ForceOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 		/// Temporary hack to call `Coretime::on_new_session` on chains that support `Coretime` or
 		/// to disable it on the ones that don't support it. Can be removed and replaced by a simple
 		/// bound to `coretime::Config` once all chains support it.
@@ -225,14 +225,14 @@ pub mod pallet {
 		#[pallet::call_index(0)]
 		#[pallet::weight((
 			<T as Config>::WeightInfo::force_approve(
-				frame_system::Pallet::<T>::digest().logs.len() as u32,
+				pezframe_system::Pallet::<T>::digest().logs.len() as u32,
 			),
 			DispatchClass::Operational,
 		))]
 		pub fn force_approve(origin: OriginFor<T>, up_to: BlockNumber) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 
-			frame_system::Pallet::<T>::deposit_log(ConsensusLog::ForceApprove(up_to).into());
+			pezframe_system::Pallet::<T>::deposit_log(ConsensusLog::ForceApprove(up_to).into());
 			Ok(())
 		}
 	}
@@ -247,7 +247,7 @@ impl<T: Config> Pallet<T> {
 		let random_seed = {
 			let mut buf = [0u8; 32];
 			// TODO: audit usage of randomness API
-			// https://github.com/paritytech/polkadot/issues/2601
+			// https://github.com/pezkuwichain/kurdistan-sdk/issues/139
 			let (random_hash, _) = T::Randomness::random(&b"paras"[..]);
 			let len = core::cmp::min(32, random_hash.as_ref().len());
 			buf[..len].copy_from_slice(&random_hash.as_ref()[..len]);
@@ -312,7 +312,7 @@ impl<T: Config> Pallet<T> {
 		}
 	}
 
-	// Allow to trigger `on_new_session` in tests, this is needed as long as `pallet_session` is not
+	// Allow to trigger `on_new_session` in tests, this is needed as long as `pezpallet_session` is not
 	// implemented in mock.
 	#[cfg(any(test, feature = "runtime-benchmarks"))]
 	pub(crate) fn test_trigger_on_new_session<'a, I: 'a>(
@@ -332,11 +332,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> sp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
 	type Public = ValidatorId;
 }
 
-impl<T: pallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: pezpallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pallet<T> {
 	type Key = ValidatorId;
 
 	fn on_genesis_session<'a, I: 'a>(validators: I)
@@ -350,7 +350,7 @@ impl<T: pallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pal
 	where
 		I: Iterator<Item = (&'a T::AccountId, Self::Key)>,
 	{
-		let session_index = pallet_session::Pallet::<T>::current_index();
+		let session_index = pezpallet_session::Pallet::<T>::current_index();
 		Pallet::<T>::on_new_session(changed, session_index, validators, Some(queued));
 	}
 

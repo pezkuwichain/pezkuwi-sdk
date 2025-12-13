@@ -29,8 +29,8 @@ pub mod api;
 pub mod weights;
 pub use weights::*;
 
-use frame_support::{pallet_prelude::*, traits::EnsureOrigin};
-use frame_system::pallet_prelude::*;
+use pezframe_support::{pezpallet_prelude::*, traits::EnsureOrigin};
+use pezframe_system::pezpallet_prelude::*;
 pub use pallet::*;
 use snowbridge_core::{
 	reward::{
@@ -44,19 +44,19 @@ use snowbridge_outbound_queue_primitives::{
 	OperatingMode, SendError,
 };
 use snowbridge_pallet_system::ForeignToNativeId;
-use sp_core::{H160, H256};
-use sp_io::hashing::blake2_256;
-use sp_runtime::traits::MaybeConvert;
-use sp_std::prelude::*;
+use pezsp_core::{H160, H256};
+use pezsp_io::hashing::blake2_256;
+use pezsp_runtime::traits::MaybeConvert;
+use pezsp_std::prelude::*;
 use xcm::prelude::*;
 use xcm_executor::traits::ConvertLocation;
 
 #[cfg(feature = "runtime-benchmarks")]
-use frame_support::traits::OriginTrait;
+use pezframe_support::traits::OriginTrait;
 
 pub const LOG_TARGET: &str = "snowbridge-system-v2";
 
-pub type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
+pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 #[cfg(feature = "runtime-benchmarks")]
 pub trait BenchmarkHelper<O>
 where
@@ -65,7 +65,7 @@ where
 	fn make_xcm_origin(location: Location) -> O;
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -73,9 +73,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + snowbridge_pallet_system::Config {
+	pub trait Config: pezframe_system::Config + snowbridge_pallet_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Send messages to Ethereum and add additional relayer rewards if deposited
 		type OutboundQueue: SendMessage + AddTip;
 		/// Add to the relayer reward for a specific message
@@ -286,7 +286,7 @@ pub mod pallet {
 		fn send(origin: H256, command: Command, fee: u128) -> DispatchResult {
 			let message = Message {
 				origin,
-				id: frame_system::unique((origin, &command, fee)).into(),
+				id: pezframe_system::unique((origin, &command, fee)).into(),
 				fee,
 				commands: BoundedVec::try_from(vec![command]).unwrap(),
 			};

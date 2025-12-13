@@ -20,7 +20,7 @@ use crate::{
 	mock::{new_test_ext, Configuration, MockGenesisConfig, ParasShared, RuntimeOrigin, Test},
 };
 use bitvec::{bitvec, prelude::Lsb0};
-use frame_support::{assert_err, assert_ok};
+use pezframe_support::{assert_err, assert_ok};
 
 fn on_new_session(session_index: SessionIndex) -> (HostConfiguration<u32>, HostConfiguration<u32>) {
 	ParasShared::set_session_index(session_index);
@@ -513,7 +513,7 @@ fn verify_externally_accessible() {
 		ActiveConfig::<Test>::put(ground_truth.clone());
 
 		// Extract the active config via the well known key.
-		let raw_active_config = sp_io::storage::get(well_known_keys::ACTIVE_CONFIG)
+		let raw_active_config = pezsp_io::storage::get(well_known_keys::ACTIVE_CONFIG)
 			.expect("config must be present in storage under ACTIVE_CONFIG");
 		let abridged_config = AbridgedHostConfiguration::decode(&mut &raw_active_config[..])
 			.expect("HostConfiguration must be decodable into AbridgedHostConfiguration");
@@ -539,7 +539,7 @@ fn verify_externally_accessible() {
 
 #[test]
 fn active_config_hrmp_channel_size_and_capacity_ratio_works() {
-	frame_support::parameter_types! {
+	pezframe_support::parameter_types! {
 		pub Ratio100: Percent = Percent::from_percent(100);
 		pub Ratio50: Percent = Percent::from_percent(50);
 	}

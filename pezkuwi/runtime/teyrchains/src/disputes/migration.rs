@@ -16,14 +16,14 @@
 
 //! Storage migration(s) related to disputes pallet
 
-use frame_support::traits::StorageVersion;
+use pezframe_support::traits::StorageVersion;
 
 pub mod v1 {
 	use super::*;
 	use crate::disputes::{Config, Pallet};
 	use alloc::vec::Vec;
-	use frame_support::{
-		pallet_prelude::*, storage_alias, traits::OnRuntimeUpgrade, weights::Weight,
+	use pezframe_support::{
+		pezpallet_prelude::*, storage_alias, traits::OnRuntimeUpgrade, weights::Weight,
 	};
 	use pezkuwi_primitives::SessionIndex;
 
@@ -51,7 +51,7 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 			log::trace!(
 				target: crate::disputes::LOG_TARGET,
 				"SpamSlots before migration: {}",
@@ -65,7 +65,7 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(_state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+		fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: crate::disputes::LOG_TARGET, "Running post_upgrade()");
 			ensure!(
 				StorageVersion::get::<Pallet<T>>() >= 1,

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 
-use frame_support::{
+use pezframe_support::{
 	dispatch::RawOrigin,
-	sp_runtime::traits::MaybeEquivalence,
+	pezsp_runtime::traits::MaybeEquivalence,
 	traits::{ContainsPair, EnsureOrigin, EnsureOriginWithArg, Everything, OriginTrait},
 };
-use frame_system::ensure_signed;
-use pallet_xcm::{EnsureXcm, Origin as XcmOrigin};
+use pezframe_system::ensure_signed;
+use pezpallet_xcm::{EnsureXcm, Origin as XcmOrigin};
 use xcm::prelude::Location;
 
 /// Origin check that verifies that an origin is the owner of a foreign asset.
@@ -19,7 +19,7 @@ pub struct ForeignAssetOwner<IsForeign, AssetInspect, AccountId, LocationToAccou
 );
 impl<
 		IsForeign: ContainsPair<L, L>,
-		AssetInspect: frame_support::traits::fungibles::roles::Inspect<AccountId>,
+		AssetInspect: pezframe_support::traits::fungibles::roles::Inspect<AccountId>,
 		AccountId: Eq + Clone,
 		LocationToAccountId: xcm_executor::traits::ConvertLocation<AccountId>,
 		RuntimeOrigin: From<XcmOrigin> + OriginTrait + Clone,
@@ -28,7 +28,7 @@ impl<
 	for ForeignAssetOwner<IsForeign, AssetInspect, AccountId, LocationToAccountId, L>
 where
 	for<'a> &'a RuntimeOrigin::PalletsOrigin: TryInto<&'a XcmOrigin>,
-	<AssetInspect as frame_support::traits::fungibles::Inspect<AccountId>>::AssetId: From<Location>,
+	<AssetInspect as pezframe_support::traits::fungibles::Inspect<AccountId>>::AssetId: From<Location>,
 {
 	type Success = L;
 
@@ -53,7 +53,7 @@ where
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin(a: &L) -> Result<RuntimeOrigin, ()> {
 		let latest_location: Location = (*a).clone().try_into().map_err(|_| ())?;
-		Ok(pallet_xcm::Origin::Xcm(latest_location).into())
+		Ok(pezpallet_xcm::Origin::Xcm(latest_location).into())
 	}
 }
 
@@ -66,7 +66,7 @@ pub struct LocalAssetOwner<MatchAssetId, AssetInspect, AccountId, AssetId, L = L
 );
 impl<
 		MatchAssetId: MaybeEquivalence<L, AssetId>,
-		AssetInspect: frame_support::traits::fungibles::roles::Inspect<AccountId>,
+		AssetInspect: pezframe_support::traits::fungibles::roles::Inspect<AccountId>,
 		AccountId: Eq + Clone + Into<L>,
 		AssetId: Eq + Clone,
 		RuntimeOrigin: OriginTrait + Clone,
@@ -75,7 +75,7 @@ impl<
 	for LocalAssetOwner<MatchAssetId, AssetInspect, AccountId, AssetId, L>
 where
 	RuntimeOrigin: Into<Result<RawOrigin<AccountId>, RuntimeOrigin>> + From<RawOrigin<AccountId>>,
-	<AssetInspect as frame_support::traits::fungibles::Inspect<AccountId>>::AssetId: From<AssetId>,
+	<AssetInspect as pezframe_support::traits::fungibles::Inspect<AccountId>>::AssetId: From<AssetId>,
 {
 	type Success = L;
 

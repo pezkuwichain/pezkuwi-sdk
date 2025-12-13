@@ -1,22 +1,22 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
-use frame_support::{
+use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::{tokens::fungible::Mutate, ConstU128, Contains},
 	PalletId,
 };
-use sp_core::H256;
+use pezsp_core::H256;
 
 use crate as snowbridge_system_v2;
-use frame_system::EnsureRootWithSuccess;
+use pezframe_system::EnsureRootWithSuccess;
 use snowbridge_core::{
 	gwei, meth, sibling_sovereign_account, AllowSiblingsOnly, ParaId, PricingParameters, Rewards,
 };
 
 pub use snowbridge_test_utils::{
-	mock_inbound_queue::*, mock_origin::pallet_xcm_origin, mock_outbound_queue::*,
+	mock_inbound_queue::*, mock_origin::pezpallet_xcm_origin, mock_outbound_queue::*,
 };
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{AccountIdConversion, BlakeTwo256, IdentityLookup},
 	AccountId32, BuildStorage, FixedU128,
 };
@@ -25,26 +25,26 @@ use xcm::{opaque::latest::ZAGROS_GENESIS_HASH, prelude::*};
 #[cfg(feature = "runtime-benchmarks")]
 use crate::BenchmarkHelper;
 
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 type Balance = u128;
 
 pub type AccountId = AccountId32;
 
 // Configure a mock runtime to test the pallet.
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
-		XcmOrigin: pallet_xcm_origin::{Pallet, Origin},
+		System: pezframe_system,
+		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
+		XcmOrigin: pezpallet_xcm_origin::{Pallet, Origin},
 		EthereumSystem: snowbridge_pallet_system,
 		EthereumSystemV2: snowbridge_system_v2,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
-	type BaseCallFilter = frame_support::traits::Everything;
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
+	type BaseCallFilter = pezframe_support::traits::Everything;
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	type RuntimeTask = RuntimeTask;
@@ -54,19 +54,19 @@ impl frame_system::Config for Test {
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type RuntimeEvent = RuntimeEvent;
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<u128>;
+	type AccountData = pezpallet_balances::AccountData<u128>;
 	type Nonce = u64;
 	type Block = Block;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ConstU128<1>;
 	type AccountStore = System;
 }
 
-impl pallet_xcm_origin::Config for Test {
+impl pezpallet_xcm_origin::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 }
 
@@ -92,7 +92,7 @@ parameter_types! {
 #[cfg(feature = "runtime-benchmarks")]
 impl BenchmarkHelper<RuntimeOrigin> for () {
 	fn make_xcm_origin(location: Location) -> RuntimeOrigin {
-		RuntimeOrigin::from(pallet_xcm_origin::Origin(location))
+		RuntimeOrigin::from(pezpallet_xcm_origin::Origin(location))
 	}
 }
 
@@ -107,7 +107,7 @@ impl crate::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type OutboundQueue = MockOkOutboundQueue;
 	type InboundQueue = MockOkInboundQueue;
-	type FrontendOrigin = pallet_xcm_origin::EnsureXcm<AllowFromAssetHub>;
+	type FrontendOrigin = pezpallet_xcm_origin::EnsureXcm<AllowFromAssetHub>;
 	type GovernanceOrigin = EnsureRootWithSuccess<AccountId, RootLocation>;
 	type WeightInfo = ();
 	#[cfg(feature = "runtime-benchmarks")]
@@ -128,14 +128,14 @@ parameter_types! {
 #[cfg(feature = "runtime-benchmarks")]
 impl snowbridge_pallet_system::BenchmarkHelper<RuntimeOrigin> for () {
 	fn make_xcm_origin(location: Location) -> RuntimeOrigin {
-		RuntimeOrigin::from(pallet_xcm_origin::Origin(location))
+		RuntimeOrigin::from(pezpallet_xcm_origin::Origin(location))
 	}
 }
 
 impl snowbridge_pallet_system::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type OutboundQueue = MockOkOutboundQueueV1;
-	type SiblingOrigin = pallet_xcm_origin::EnsureXcm<AllowSiblingsOnly>;
+	type SiblingOrigin = pezpallet_xcm_origin::EnsureXcm<AllowSiblingsOnly>;
 	type AgentIdOf = snowbridge_core::AgentIdOf;
 	type Token = Balances;
 	type TreasuryAccount = TreasuryAccount;
@@ -149,10 +149,10 @@ impl snowbridge_pallet_system::Config for Test {
 }
 
 // Build genesis storage according to the mock runtime.
-pub fn new_test_ext(_genesis_build: bool) -> sp_io::TestExternalities {
-	let storage = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+pub fn new_test_ext(_genesis_build: bool) -> pezsp_io::TestExternalities {
+	let storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
-	let mut ext: sp_io::TestExternalities = storage.into();
+	let mut ext: pezsp_io::TestExternalities = storage.into();
 	let initial_amount = InitialFunding::get();
 	let test_para_id = TestParaId::get();
 	let sovereign_account = sibling_sovereign_account::<Test>(test_para_id.into());
@@ -167,5 +167,5 @@ pub fn new_test_ext(_genesis_build: bool) -> sp_io::TestExternalities {
 // Test helpers
 
 pub fn make_xcm_origin(location: Location) -> RuntimeOrigin {
-	pallet_xcm_origin::Origin(location).into()
+	pezpallet_xcm_origin::Origin(location).into()
 }

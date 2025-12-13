@@ -31,8 +31,8 @@ use pezkuwi_primitives::{
 use pezkuwi_primitives_test_helpers::{
 	dummy_committed_candidate_receipt_v2, dummy_validation_code,
 };
-use sp_api::ApiError;
-use sp_core::testing::TaskExecutor;
+use pezsp_api::ApiError;
+use pezsp_core::testing::TaskExecutor;
 use std::{
 	collections::{BTreeMap, HashMap, VecDeque},
 	sync::{Arc, Mutex},
@@ -270,7 +270,7 @@ impl RuntimeApiSubsystemClient for MockSubsystemClient {
 		todo!("Not required for tests")
 	}
 
-	async fn current_epoch(&self, _: Hash) -> Result<sp_consensus_babe::Epoch, ApiError> {
+	async fn current_epoch(&self, _: Hash) -> Result<pezsp_consensus_babe::Epoch, ApiError> {
 		Ok(self.babe_epoch.as_ref().unwrap().clone())
 	}
 
@@ -338,7 +338,7 @@ fn requests_authorities() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -365,7 +365,7 @@ fn requests_validators() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -392,7 +392,7 @@ fn requests_validator_groups() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -419,7 +419,7 @@ fn requests_availability_cores() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -447,7 +447,7 @@ fn requests_persisted_validation_data() {
 	let relay_parent = [1; 32].into();
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let mut subsystem_client = MockSubsystemClient::default();
 	subsystem_client.validation_data.insert(para_a, Default::default());
@@ -494,7 +494,7 @@ fn requests_assumed_validation_data() {
 	let relay_parent = [1; 32].into();
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let validation_code = ValidationCode(vec![1, 2, 3]);
 	let expected_data_hash = <PersistedValidationData as Default>::default().hash();
@@ -549,7 +549,7 @@ fn requests_check_validation_outputs() {
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
 	let commitments = pezkuwi_primitives::CandidateCommitments::default();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	subsystem_client.validation_outputs_results.insert(para_a, false);
 	subsystem_client.validation_outputs_results.insert(para_b, true);
@@ -600,7 +600,7 @@ fn requests_session_index_for_child() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -646,7 +646,7 @@ fn requests_session_info() {
 	let session_index = 1;
 	subsystem_client.session_info.insert(session_index, dummy_session_info());
 	let subsystem_client = Arc::new(subsystem_client);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let relay_parent = [1; 32].into();
 
@@ -680,7 +680,7 @@ fn requests_validation_code() {
 	let relay_parent = [1; 32].into();
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	let validation_code = dummy_validation_code();
 
 	let mut subsystem_client = MockSubsystemClient::default();
@@ -728,7 +728,7 @@ fn requests_candidate_pending_availability() {
 	let relay_parent = [1; 32].into();
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	let candidate_receipt = dummy_committed_candidate_receipt_v2(relay_parent);
 
 	let mut subsystem_client = MockSubsystemClient::default();
@@ -778,7 +778,7 @@ fn requests_candidate_events() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -807,7 +807,7 @@ fn requests_dmq_contents() {
 	let relay_parent = [1; 32].into();
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem_client = Arc::new({
 		let mut subsystem_client = MockSubsystemClient::default();
@@ -857,7 +857,7 @@ fn requests_inbound_hrmp_channels_contents() {
 	let para_a = ParaId::from(99_u32);
 	let para_b = ParaId::from(66_u32);
 	let para_c = ParaId::from(33_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let para_b_inbound_channels = [
 		(para_a, vec![]),
@@ -909,7 +909,7 @@ fn requests_inbound_hrmp_channels_contents() {
 #[test]
 fn requests_validation_code_by_hash() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let (subsystem_client, validation_code) = {
 		let mut subsystem_client = MockSubsystemClient::default();
@@ -955,7 +955,7 @@ fn multiple_requests_in_parallel_are_working() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	let mutex = subsystem_client.availability_cores_wait.clone();
 
 	let subsystem =
@@ -1019,7 +1019,7 @@ fn requests_babe_epoch() {
 	subsystem_client.babe_epoch = Some(epoch.clone());
 	let subsystem_client = Arc::new(subsystem_client);
 	let relay_parent = [1; 32].into();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem =
 		RuntimeApiSubsystem::new(subsystem_client.clone(), Metrics(None), SpawnGlue(spawner));
@@ -1043,7 +1043,7 @@ fn requests_babe_epoch() {
 #[test]
 fn requests_submit_pvf_check_statement() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	let subsystem_client = Arc::new(MockSubsystemClient::default());
 
 	let subsystem =
@@ -1095,7 +1095,7 @@ fn requests_submit_pvf_check_statement() {
 			session_index: 1,
 			validator_index: 1.into(),
 		};
-		let sig = sp_keyring::Sr25519Keyring::Alice.sign(&stmt.signing_payload()).into();
+		let sig = pezsp_keyring::Sr25519Keyring::Alice.sign(&stmt.signing_payload()).into();
 		(stmt, sig)
 	}
 }
@@ -1103,7 +1103,7 @@ fn requests_submit_pvf_check_statement() {
 #[test]
 fn requests_pvfs_require_precheck() {
 	let (ctx, mut ctx_handle) = make_subsystem_context(TaskExecutor::new());
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	let subsystem_client = Arc::new({
 		let mut subsystem_client = MockSubsystemClient::default();
@@ -1139,7 +1139,7 @@ fn requests_validation_code_hash() {
 	let relay_parent = [1; 32].into();
 	let para_a = ParaId::from(5_u32);
 	let para_b = ParaId::from(6_u32);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	let validation_code_hash = dummy_validation_code().hash();
 
 	let mut subsystem_client = MockSubsystemClient::default();

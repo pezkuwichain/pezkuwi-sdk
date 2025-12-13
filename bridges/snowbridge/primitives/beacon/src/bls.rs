@@ -2,15 +2,15 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use crate::{PublicKey, Signature};
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::{ensure, PalletError};
+use pezframe_support::{ensure, PalletError};
 pub use milagro_bls::{
 	AggregatePublicKey, AggregateSignature, PublicKey as PublicKeyPrepared,
 	Signature as SignaturePrepared,
 };
 use scale_info::TypeInfo;
-use sp_core::H256;
-use sp_runtime::RuntimeDebug;
-use sp_std::prelude::*;
+use pezsp_core::H256;
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::prelude::*;
 
 #[derive(
 	Copy,

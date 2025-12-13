@@ -23,15 +23,15 @@ pub mod benchmarking;
 #[cfg(test)]
 mod mock;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
-	use frame_support::pallet_prelude::Get;
+	use pezframe_support::pezpallet_prelude::Get;
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config + crate::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config + crate::Config {
 		/// The type of `fungible` that is being used under the hood.
 		///
 		/// This is useful for testing and checking.
-		type TransactAsset: frame_support::traits::fungible::Mutate<Self::AccountId>;
+		type TransactAsset: pezframe_support::traits::fungible::Mutate<Self::AccountId>;
 
 		/// The account used to check assets being teleported.
 		type CheckedAccount: Get<Option<(Self::AccountId, xcm_builder::MintLocation)>>;

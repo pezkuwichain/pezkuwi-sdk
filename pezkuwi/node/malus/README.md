@@ -48,7 +48,7 @@ This will also teardown the namespace after completion.
 ## Container Image Building Note
 
 In order to build the container image you need to have the latest changes from
-PezkuwiChain and Substrate master branches.
+PezkuwiChain and Bizinikiwi master branches.
 
 ```sh
 pwd # run this from the current dir

@@ -3,7 +3,7 @@
 //! Helpers for implementing runtime api
 
 use crate::Config;
-use sp_core::H256;
+use pezsp_core::H256;
 use xcm::{prelude::*, VersionedLocation};
 
 pub fn agent_id<Runtime>(location: VersionedLocation) -> Option<H256>

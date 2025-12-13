@@ -50,9 +50,9 @@ use pezkuwi_primitives::{
 	ValidatorIndex, ValidatorSignature,
 };
 pub use rand;
-use sp_application_crypto::AppCrypto;
-use sp_core::ByteArray;
-use sp_keystore::{Error as KeystoreError, KeystorePtr};
+use pezsp_application_crypto::AppCrypto;
+use pezsp_core::ByteArray;
+use pezsp_keystore::{Error as KeystoreError, KeystorePtr};
 use std::{
 	collections::{BTreeMap, VecDeque},
 	time::Duration,

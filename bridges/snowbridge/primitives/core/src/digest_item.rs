@@ -15,8 +15,8 @@
 //! Custom digest items
 
 use codec::{Decode, Encode};
-use sp_core::{RuntimeDebug, H256};
-use sp_runtime::generic::DigestItem;
+use pezsp_core::{RuntimeDebug, H256};
+use pezsp_runtime::generic::DigestItem;
 
 /// Custom header digest items, inserted as DigestItem::Other
 #[derive(Encode, Decode, Copy, Clone, Eq, PartialEq, RuntimeDebug)]

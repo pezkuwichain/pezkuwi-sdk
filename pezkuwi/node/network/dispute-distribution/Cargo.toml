@@ -23,9 +23,9 @@ pezkuwi-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sc-network = { workspace = true, default-features = true }
-sp-application-crypto = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsp-application-crypto = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
@@ -34,9 +34,9 @@ async-channel = { workspace = true }
 async-trait = { workspace = true }
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives-test-helpers = { workspace = true }
-sc-keystore = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-tracing = { workspace = true, default-features = true }
+pezsc-keystore = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
@@ -48,6 +48,6 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

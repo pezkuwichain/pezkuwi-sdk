@@ -34,7 +34,7 @@ use pezkuwi_node_subsystem::{
 use pezkuwi_node_subsystem_util::reputation::{ReputationAggregator, REPUTATION_CHANGE_INTERVAL};
 
 use futures::{channel::mpsc, prelude::*};
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use fatality::Nested;
 

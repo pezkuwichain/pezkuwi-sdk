@@ -1,0 +1,81 @@
+[package]
+name = "relay-bizinikiwi-client"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+async-std = { features = ["attributes"], workspace = true }
+async-trait = { workspace = true }
+codec = { workspace = true, default-features = true }
+futures = { workspace = true }
+jsonrpsee = { features = ["macros", "ws-client"], workspace = true }
+num-traits = { workspace = true, default-features = true }
+quick_cache = { workspace = true }
+rand = { workspace = true, default-features = true }
+scale-info = { features = [
+	"derive",
+], workspace = true, default-features = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { features = [
+	"rt-multi-thread",
+], workspace = true, default-features = true }
+tracing = { workspace = true }
+
+# Bridge dependencies
+bp-header-chain = { workspace = true, default-features = true }
+bp-messages = { workspace = true, default-features = true }
+bp-pezkuwi-core = { workspace = true, default-features = true }
+bp-runtime = { workspace = true, default-features = true }
+finality-relay = { workspace = true }
+relay-utils = { workspace = true }
+
+# Bizinikiwi Dependencies
+pezframe-support = { workspace = true, default-features = true }
+pezpallet-transaction-payment = { workspace = true, default-features = true }
+pezpallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = true }
+pezpallet-utility = { workspace = true, default-features = true }
+pezsc-chain-spec = { workspace = true, default-features = true }
+pezsc-rpc-api = { workspace = true, default-features = true }
+pezsc-transaction-pool-api = { workspace = true, default-features = true }
+pezsp-consensus-grandpa = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-rpc = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
+pezsp-std = { workspace = true, default-features = true }
+pezsp-trie = { workspace = true, default-features = true }
+pezsp-version = { workspace = true, default-features = true }
+
+# Pezkuwi Dependencies
+xcm = { workspace = true, default-features = true }
+
+[features]
+default = []
+test-helpers = []
+runtime-benchmarks = [
+	"bp-header-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"finality-relay/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-rpc-api/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

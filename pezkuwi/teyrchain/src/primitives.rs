@@ -23,9 +23,9 @@ use bounded_collections::{BoundedVec, ConstU32};
 use codec::{CompactAs, Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
-use sp_core::{bytes, RuntimeDebug, TypeId};
-use sp_runtime::traits::Hash as _;
-use sp_weights::Weight;
+use pezsp_core::{bytes, RuntimeDebug, TypeId};
+use pezsp_runtime::traits::Hash as _;
+use pezsp_weights::Weight;
 
 use pezkuwi_core_primitives::{Hash, OutboundHrmpMessage};
 
@@ -59,7 +59,7 @@ impl core::fmt::Debug for HeadData {
 impl HeadData {
 	/// Returns the hash of this head data.
 	pub fn hash(&self) -> Hash {
-		sp_runtime::traits::BlakeTwo256::hash(&self.0)
+		pezsp_runtime::traits::BlakeTwo256::hash(&self.0)
 	}
 }
 
@@ -90,7 +90,7 @@ impl core::fmt::Debug for ValidationCode {
 impl ValidationCode {
 	/// Get the blake2-256 hash of the validation code bytes.
 	pub fn hash(&self) -> ValidationCodeHash {
-		ValidationCodeHash(sp_runtime::traits::BlakeTwo256::hash(&self.0[..]))
+		ValidationCodeHash(pezsp_runtime::traits::BlakeTwo256::hash(&self.0[..]))
 	}
 }
 
@@ -427,7 +427,7 @@ impl XcmpMessageHandler for () {
 }
 
 /// Validation parameters for evaluating the teyrchain validity function.
-// TODO: balance downloads (https://github.com/paritytech/polkadot/issues/220)
+// TODO: balance downloads (https://github.com/pezkuwichain/kurdistan-sdk/issues/131)
 #[derive(PartialEq, Eq, Decode, Clone)]
 #[cfg_attr(feature = "std", derive(Debug, Encode))]
 pub struct ValidationParams {
@@ -458,7 +458,7 @@ pub type HorizontalMessages =
 	BoundedVec<OutboundHrmpMessage<Id>, ConstU32<MAX_HORIZONTAL_MESSAGE_NUM>>;
 
 /// The result of teyrchain validation.
-// TODO: balance uploads (https://github.com/paritytech/polkadot/issues/220)
+// TODO: balance uploads (https://github.com/pezkuwichain/kurdistan-sdk/issues/131)
 #[derive(PartialEq, Eq, Clone, Encode)]
 #[cfg_attr(feature = "std", derive(Debug, Decode))]
 pub struct ValidationResult {

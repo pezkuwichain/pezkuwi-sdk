@@ -2,12 +2,12 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use codec::{Decode, Encode};
 use ethabi::Token;
-use frame_support::traits::ProcessMessage;
+use pezframe_support::traits::ProcessMessage;
 use scale_info::TypeInfo;
 use snowbridge_core::ChannelId;
-use sp_core::H256;
-use sp_runtime::RuntimeDebug;
-use sp_std::prelude::*;
+use pezsp_core::H256;
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::prelude::*;
 
 use super::Pallet;
 

@@ -19,14 +19,14 @@
 #[cfg(feature = "runtime-benchmarks")]
 use super::*;
 use crate::claims::Call;
-use frame_benchmarking::v2::*;
-use frame_support::{
+use pezframe_benchmarking::v2::*;
+use pezframe_support::{
 	dispatch::{DispatchInfo, GetDispatchInfo},
 	traits::UnfilteredDispatchable,
 };
-use frame_system::RawOrigin;
+use pezframe_system::RawOrigin;
 use secp_utils::*;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{DispatchTransaction, ValidateUnsigned},
 	DispatchResult,
 };
@@ -66,10 +66,10 @@ fn create_claim_attest<T: Config>(input: u32) -> DispatchResult {
 
 #[benchmarks(
 		where
-			<T as frame_system::Config>::RuntimeCall: IsSubType<Call<T>> + From<Call<T>>,
-			<T as frame_system::Config>::RuntimeCall: Dispatchable<Info = DispatchInfo> + GetDispatchInfo,
-			<<T as frame_system::Config>::RuntimeCall as Dispatchable>::RuntimeOrigin: AsSystemOriginSigner<T::AccountId> + AsTransactionAuthorizedOrigin + Clone,
-			<<T as frame_system::Config>::RuntimeCall as Dispatchable>::PostInfo: Default,
+			<T as pezframe_system::Config>::RuntimeCall: IsSubType<Call<T>> + From<Call<T>>,
+			<T as pezframe_system::Config>::RuntimeCall: Dispatchable<Info = DispatchInfo> + GetDispatchInfo,
+			<<T as pezframe_system::Config>::RuntimeCall as Dispatchable>::RuntimeOrigin: AsSystemOriginSigner<T::AccountId> + AsTransactionAuthorizedOrigin + Clone,
+			<<T as pezframe_system::Config>::RuntimeCall as Dispatchable>::PostInfo: Default,
 	)]
 mod benchmarks {
 	use super::*;
@@ -95,7 +95,7 @@ mod benchmarks {
 			None,
 		)?;
 		assert_eq!(Claims::<T>::get(eth_address), Some(VALUE.into()));
-		let source = sp_runtime::transaction_validity::TransactionSource::External;
+		let source = pezsp_runtime::transaction_validity::TransactionSource::External;
 		let call_enc =
 			Call::<T>::claim { dest: account.clone(), ethereum_signature: signature.clone() }
 				.encode();
@@ -162,7 +162,7 @@ mod benchmarks {
 			statement: StatementKind::Regular.to_text().to_vec(),
 		}
 		.encode();
-		let source = sp_runtime::transaction_validity::TransactionSource::External;
+		let source = pezsp_runtime::transaction_validity::TransactionSource::External;
 
 		#[block]
 		{
@@ -279,7 +279,7 @@ mod benchmarks {
 		}
 		let ext = PrevalidateAttests::<T>::new();
 		let call = super::Call::attest { statement: StatementKind::Regular.to_text().to_vec() };
-		let call: <T as frame_system::Config>::RuntimeCall = call.into();
+		let call: <T as pezframe_system::Config>::RuntimeCall = call.into();
 		let info = call.get_dispatch_info();
 		let attest_c = u32::MAX - c;
 		let secret_key = libsecp256k1::SecretKey::parse(&keccak_256(&attest_c.encode())).unwrap();

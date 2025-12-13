@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 pub use core::cell::RefCell;
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{
 		fungible::HoldConsideration, AsEnsureOriginWithArg, ConstU128, ConstU32, Contains, Equals,
@@ -23,11 +23,11 @@ use frame_support::{
 	},
 	weights::Weight,
 };
-use frame_system::EnsureRoot;
+use pezframe_system::EnsureRoot;
 use pezkuwi_runtime_teyrchains::origin;
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_core::H256;
-use sp_runtime::{
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{Convert, IdentityLookup},
 	AccountId32, BuildStorage,
 };
@@ -47,18 +47,18 @@ use xcm_executor::{
 };
 use xcm_simulator::helpers::derive_topic_id;
 
-use crate::{self as pallet_xcm, TestWeightInfo};
+use crate::{self as pezpallet_xcm, TestWeightInfo};
 
 pub type AccountId = AccountId32;
 pub type Balance = u128;
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 
-#[frame_support::pallet]
-pub mod pallet_test_notifier {
+#[pezframe_support::pallet]
+pub mod pezpallet_test_notifier {
 	use crate::{ensure_response, QueryId};
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
-	use sp_runtime::DispatchResult;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
+	use pezsp_runtime::DispatchResult;
 	use xcm::latest::prelude::*;
 	use xcm_executor::traits::QueryHandler;
 
@@ -66,10 +66,10 @@ pub mod pallet_test_notifier {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + crate::Config {
+	pub trait Config: pezframe_system::Config + crate::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: IsType<<Self as frame_system::Config>::RuntimeEvent> + From<Event<Self>>;
-		type RuntimeOrigin: IsType<<Self as frame_system::Config>::RuntimeOrigin>
+		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent> + From<Event<Self>>;
+		type RuntimeOrigin: IsType<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<Result<crate::Origin, <Self as Config>::RuntimeOrigin>>;
 		type RuntimeCall: IsType<<Self as crate::Config>::RuntimeCall> + From<Call<Self>>;
 	}
@@ -142,12 +142,12 @@ pub mod pallet_test_notifier {
 construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances,
-		AssetsPallet: pallet_assets,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		AssetsPallet: pezpallet_assets,
 		ParasOrigin: origin,
-		XcmPallet: pallet_xcm,
-		TestNotifier: pallet_test_notifier,
+		XcmPallet: pezpallet_xcm,
+		TestNotifier: pezpallet_test_notifier,
 	}
 );
 
@@ -249,13 +249,13 @@ impl SendXcm for TestPaidForPara3000SendXcm {
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	type Nonce = u64;
 	type Hash = H256;
-	type Hashing = ::sp_runtime::traits::BlakeTwo256;
+	type Hashing = ::pezsp_runtime::traits::BlakeTwo256;
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
@@ -264,7 +264,7 @@ impl frame_system::Config for Test {
 	type BlockLength = ();
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type DbWeight = ();
@@ -272,15 +272,15 @@ impl frame_system::Config for Test {
 	type SystemWeightInfo = ();
 	type SS58Prefix = ();
 	type OnSetCode = ();
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
 parameter_types! {
 	pub ExistentialDeposit: Balance = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -290,21 +290,21 @@ impl pallet_balances::Config for Test {
 /// Simple conversion of `u32` into an `AssetId` for use in benchmarking.
 pub struct XcmBenchmarkHelper;
 #[cfg(feature = "runtime-benchmarks")]
-impl pallet_assets::BenchmarkHelper<Location, ()> for XcmBenchmarkHelper {
+impl pezpallet_assets::BenchmarkHelper<Location, ()> for XcmBenchmarkHelper {
 	fn create_asset_id_parameter(id: u32) -> Location {
 		Location::new(1, [Teyrchain(id)])
 	}
 	fn create_reserve_id_parameter(_: u32) {}
 }
 
-impl pallet_assets::Config for Test {
+impl pezpallet_assets::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
 	type AssetId = Location;
 	type AssetIdParameter = Location;
 	type ReserveData = ();
 	type Currency = Balances;
-	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
+	type CreateOrigin = AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
 	type ForceOrigin = EnsureRoot<AccountId>;
 	type AssetDeposit = ConstU128<1>;
 	type AssetAccountDeposit = ConstU128<10>;
@@ -540,8 +540,8 @@ impl xcm_executor::Config for XcmConfig {
 pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, AnyNetwork>;
 
 parameter_types! {
-	pub static AdvertisedXcmVersion: pallet_xcm::XcmVersion = 4;
-	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::XcmPallet(pallet_xcm::HoldReason::AuthorizeAlias);
+	pub static AdvertisedXcmVersion: pezpallet_xcm::XcmVersion = 4;
+	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::XcmPallet(pezpallet_xcm::HoldReason::AuthorizeAlias);
 }
 
 pub struct ConvertDeposit;
@@ -559,7 +559,7 @@ impl Contains<(Location, Vec<Asset>)> for XcmTeleportFiltered {
 	}
 }
 
-impl pallet_xcm::Config for Test {
+impl pezpallet_xcm::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = xcm_builder::EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -579,8 +579,8 @@ impl pallet_xcm::Config for Test {
 	type SovereignAccountOf = AccountId32Aliases<(), AccountId32>;
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<RelayLocation>;
-	type MaxLockers = frame_support::traits::ConstU32<8>;
-	type MaxRemoteLockConsumers = frame_support::traits::ConstU32<0>;
+	type MaxLockers = pezframe_support::traits::ConstU32<8>;
+	type MaxRemoteLockConsumers = pezframe_support::traits::ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
 	type WeightInfo = TestWeightInfo;
 	type AuthorizedAliasConsideration =
@@ -589,7 +589,7 @@ impl pallet_xcm::Config for Test {
 
 impl origin::Config for Test {}
 
-impl pallet_test_notifier::Config for Test {
+impl pezpallet_test_notifier::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
@@ -608,7 +608,7 @@ impl xcm_builder::EnsureDelivery for TestDeliveryHelper {
 		let account = SovereignAccountOf::convert_location(origin_ref).expect("Valid location");
 		// Give the existential deposit at least
 		let balance = ExistentialDeposit::get();
-		let _ = <Balances as frame_support::traits::Currency<_>>::make_free_balance_be(
+		let _ = <Balances as pezframe_support::traits::Currency<_>>::make_free_balance_be(
 			&account, balance,
 		);
 		(None, None)
@@ -643,11 +643,11 @@ impl super::benchmarking::Config for Test {
 		let fee_amount = 2u128;
 
 		let existential_deposit = ExistentialDeposit::get();
-		let caller = frame_benchmarking::whitelisted_caller();
+		let caller = pezframe_benchmarking::whitelisted_caller();
 
 		// Give some multiple of the existential deposit
 		let balance = asset_amount + existential_deposit * 1000;
-		let _ = <Balances as frame_support::traits::Currency<_>>::make_free_balance_be(
+		let _ = <Balances as pezframe_support::traits::Currency<_>>::make_free_balance_be(
 			&caller, balance,
 		);
 		// create sufficient foreign asset USDT
@@ -721,7 +721,7 @@ pub(crate) fn buy_limited_execution<C>(
 
 pub(crate) fn new_test_ext_with_balances(
 	balances: Vec<(AccountId, Balance)>,
-) -> sp_io::TestExternalities {
+) -> pezsp_io::TestExternalities {
 	new_test_ext_with_balances_and_xcm_version(
 		balances,
 		// By default set actual latest XCM version
@@ -734,18 +734,18 @@ pub(crate) fn new_test_ext_with_balances_and_xcm_version(
 	balances: Vec<(AccountId, Balance)>,
 	safe_xcm_version: Option<XcmVersion>,
 	supported_version: Vec<(Location, XcmVersion)>,
-) -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+) -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Test> { balances, ..Default::default() }
+	pezpallet_balances::GenesisConfig::<Test> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	pallet_xcm::GenesisConfig::<Test> { safe_xcm_version, supported_version, ..Default::default() }
+	pezpallet_xcm::GenesisConfig::<Test> { safe_xcm_version, supported_version, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }

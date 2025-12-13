@@ -17,7 +17,7 @@
 //! Various implementations for the `MatchesFungible` trait.
 
 use core::marker::PhantomData;
-use frame_support::traits::Get;
+use pezframe_support::traits::Get;
 use xcm::latest::{
 	Asset, AssetId, AssetInstance,
 	Fungibility::{Fungible, NonFungible},
@@ -32,10 +32,10 @@ use xcm_executor::traits::{MatchesFungible, MatchesNonFungible};
 ///
 /// ```
 /// use xcm::latest::{Location, Parent};
-/// use staging_xcm_builder::IsConcrete;
+/// use pezstaging_xcm_builder::IsConcrete;
 /// use xcm_executor::traits::MatchesFungible;
 ///
-/// frame_support::parameter_types! {
+/// pezframe_support::parameter_types! {
 /// 	pub TargetLocation: Location = Parent.into();
 /// }
 ///

@@ -4,7 +4,7 @@
 
 use codec::DecodeAll;
 use core::slice::Iter;
-use frame_support::{ensure, BoundedVec};
+use pezframe_support::{ensure, BoundedVec};
 use snowbridge_core::{AgentIdOf, TokenId, TokenIdOf};
 
 use crate::v2::{
@@ -13,9 +13,9 @@ use crate::v2::{
 };
 
 use crate::v2::convert::XcmConverterError::{AssetResolutionFailed, FilterDoesNotConsumeAllAssets};
-use sp_core::H160;
-use sp_runtime::traits::MaybeConvert;
-use sp_std::{iter::Peekable, marker::PhantomData, prelude::*};
+use pezsp_core::H160;
+use pezsp_runtime::traits::MaybeConvert;
+use pezsp_std::{iter::Peekable, marker::PhantomData, prelude::*};
 use xcm::prelude::*;
 use xcm_executor::traits::ConvertLocation;
 use XcmConverterError::*;

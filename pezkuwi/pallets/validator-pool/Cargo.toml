@@ -1,5 +1,5 @@
 [package]
-name = "pallet-validator-pool"
+name = "pezpallet-validator-pool"
 version = "1.0.0"
 description = "Dynamic Validator Pool System for PezkuwiChain"
 authors.workspace = true
@@ -22,62 +22,62 @@ scale-info = { default-features = false, features = [
 ], workspace = true }
 serde = { workspace = true, features = ["derive"] }
 
-frame-benchmarking = { optional = true, workspace = true }
-frame-support = { default-features = false, workspace = true }
-frame-system = { default-features = false, workspace = true }
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-support = { default-features = false, workspace = true }
+pezframe-system = { default-features = false, workspace = true }
 log = { default-features = false, workspace = true }
-sp-core = { workspace = true, default-features = false, optional = true }
-sp-io = { workspace = true, default-features = false, optional = true }
-sp-runtime = { default-features = false, workspace = true }
-sp-std = { default-features = false, workspace = true }
+pezsp-core = { workspace = true, default-features = false, optional = true }
+pezsp-io = { workspace = true, default-features = false, optional = true }
+pezsp-runtime = { default-features = false, workspace = true }
+pezsp-std = { default-features = false, workspace = true }
 
-pallet-session = { default-features = false, workspace = true }
+pezpallet-session = { default-features = false, workspace = true }
 
 [dev-dependencies]
-pallet-balances = { workspace = true }
-pallet-timestamp = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-timestamp = { workspace = true }
 serde = { version = "1.0" }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-staking = { workspace = true, default-features = false }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-staking = { workspace = true, default-features = false }
 
 [features]
 default = ["std"]
 std = [
 	"codec/std",
-	"frame-benchmarking?/std",
-	"frame-support/std",
-	"frame-system/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"log/std",
-	"pallet-balances/std",
-	"pallet-session/std",
-	"pallet-timestamp/std",
+	"pezpallet-balances/std",
+	"pezpallet-session/std",
+	"pezpallet-timestamp/std",
 	"scale-info/std",
 	"serde/std",
-	"sp-core?/std",
-	"sp-io?/std",
-	"sp-runtime/std",
-	"sp-staking/std",
-	"sp-std/std",
+	"pezsp-core?/std",
+	"pezsp-io?/std",
+	"pezsp-runtime/std",
+	"pezsp-staking/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-session/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
-	"sp-core",
-	"sp-io",
-	"sp-io?/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-staking/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-session/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezsp-core",
+	"pezsp-io",
+	"pezsp-io?/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-staking/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"pallet-balances/try-runtime",
-	"pallet-session/try-runtime",
-	"pallet-timestamp/try-runtime",
-	"sp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-session/try-runtime",
+	"pezpallet-timestamp/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

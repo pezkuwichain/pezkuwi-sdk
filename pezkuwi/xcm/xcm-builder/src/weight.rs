@@ -16,7 +16,7 @@
 
 use codec::Decode;
 use core::{marker::PhantomData, result::Result};
-use frame_support::{
+use pezframe_support::{
 	dispatch::GetDispatchInfo,
 	traits::{
 		fungible::{Balanced, Credit, Inspect},
@@ -27,7 +27,7 @@ use frame_support::{
 		WeightToFee as WeightToFeeT,
 	},
 };
-use sp_runtime::traits::{SaturatedConversion, Saturating, Zero};
+use pezsp_runtime::traits::{SaturatedConversion, Saturating, Zero};
 use xcm::latest::{prelude::*, GetWeight, Weight};
 use xcm_executor::{
 	traits::{WeightBounds, WeightTrader},

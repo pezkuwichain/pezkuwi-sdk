@@ -18,11 +18,11 @@
 
 use super::{mock::*, *};
 
-use frame_support::{
+use pezframe_support::{
 	assert_ok,
 	traits::{tokens::GetSalary, RankedMembers},
 };
-use sp_runtime::{traits::ConvertToValue, DispatchResult};
+use pezsp_runtime::{traits::ConvertToValue, DispatchResult};
 
 parameter_types! {
 	pub Interior: InteriorLocation = Plurality { id: BodyId::Treasury, part: BodyPart::Voice }.into();
@@ -73,7 +73,7 @@ impl RankedMembers for TestClub {
 	}
 	fn demote(who: &Self::AccountId) -> DispatchResult {
 		CLUB.with(|club| match club.borrow().get(who) {
-			None => Err(sp_runtime::DispatchError::Unavailable),
+			None => Err(pezsp_runtime::DispatchError::Unavailable),
 			Some(&0) => {
 				club.borrow_mut().remove(&who);
 				Ok(())
@@ -104,7 +104,7 @@ impl GetSalary<Rank, AccountId, Balance> for FixedSalary {
 	}
 }
 
-impl pallet_salary::Config for Test {
+impl pezpallet_salary::Config for Test {
 	type WeightInfo = ();
 	type RuntimeEvent = RuntimeEvent;
 	type Paymaster = SalaryPayOverXcm;

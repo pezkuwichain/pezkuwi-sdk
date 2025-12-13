@@ -65,7 +65,7 @@ impl TestHost {
 	) -> Result<(), PrepareError> {
 		let (result_tx, result_rx) = futures::channel::oneshot::channel();
 
-		let code = sp_maybe_compressed_blob::decompress(code, 16 * 1024 * 1024)
+		let code = pezsp_maybe_compressed_blob::decompress(code, 16 * 1024 * 1024)
 			.expect("Compression works");
 
 		self.host
@@ -88,12 +88,12 @@ impl TestHost {
 }
 
 fn host_prepare_pezkuwichain_runtime(c: &mut Criterion) {
-	pezkuwi_node_core_pvf_common::sp_tracing::try_init_simple();
+	pezkuwi_node_core_pvf_common::pezsp_tracing::try_init_simple();
 
 	let rt = tokio::runtime::Runtime::new().unwrap();
 
 	let blob = WASM_BINARY.expect("You need to build the WASM binaries to run the tests!");
-	let pvf = match sp_maybe_compressed_blob::decompress(&blob, 64 * 1024 * 1024) {
+	let pvf = match pezsp_maybe_compressed_blob::decompress(&blob, 64 * 1024 * 1024) {
 		Ok(code) => PvfPrepData::from_code(
 			code.into_owned(),
 			ExecutorParams::default(),

@@ -15,10 +15,10 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use pezkuwi_primitives::ValidatorId;
-use sc_keystore::LocalKeystore;
-use sp_application_crypto::AppCrypto;
-use sp_core::sr25519::Public;
-use sp_keystore::Keystore;
+use pezsc_keystore::LocalKeystore;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_core::sr25519::Public;
+use pezsp_keystore::Keystore;
 use std::sync::Arc;
 
 /// Set of test accounts generated and kept safe by a keystore.

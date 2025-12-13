@@ -19,14 +19,14 @@ use codec::{Decode, Encode};
 use pezkuwi_primitives::{Block, InherentData as TeyrchainsInherentData};
 use pezkuwi_test_runtime::UncheckedExtrinsic;
 use pezkuwi_test_service::GetLastTimestamp;
-use sc_block_builder::{BlockBuilder, BlockBuilderBuilder};
-use sp_api::ProvideRuntimeApi;
-use sp_consensus_babe::{
+use pezsc_block_builder::{BlockBuilder, BlockBuilderBuilder};
+use pezsp_api::ProvideRuntimeApi;
+use pezsp_consensus_babe::{
 	digests::{PreDigest, SecondaryPlainPreDigest},
 	BABE_ENGINE_ID,
 };
-use sp_runtime::{traits::Block as BlockT, Digest, DigestItem};
-use sp_state_machine::BasicExternalities;
+use pezsp_runtime::{traits::Block as BlockT, Digest, DigestItem};
+use pezsp_state_machine::BasicExternalities;
 
 /// An extension for the test client to initialize a Pezkuwi specific block builder.
 pub trait InitPezkuwiBlockBuilder {
@@ -34,7 +34,7 @@ pub trait InitPezkuwiBlockBuilder {
 	///
 	/// This will automatically create and push the inherents for you to make the block valid for
 	/// the test runtime.
-	fn init_pezkuwi_block_builder(&self) -> sc_block_builder::BlockBuilder<'_, Block, Client>;
+	fn init_pezkuwi_block_builder(&self) -> pezsc_block_builder::BlockBuilder<'_, Block, Client>;
 
 	/// Init a Pezkuwi specific block builder at a specific block that works for the test runtime.
 	///
@@ -43,7 +43,7 @@ pub trait InitPezkuwiBlockBuilder {
 	fn init_pezkuwi_block_builder_at(
 		&self,
 		hash: <Block as BlockT>::Hash,
-	) -> sc_block_builder::BlockBuilder<'_, Block, Client>;
+	) -> pezsc_block_builder::BlockBuilder<'_, Block, Client>;
 }
 
 impl InitPezkuwiBlockBuilder for Client {
@@ -96,10 +96,10 @@ impl InitPezkuwiBlockBuilder for Client {
 			.build()
 			.expect("Creates new block builder for test runtime");
 
-		let mut inherent_data = sp_inherents::InherentData::new();
+		let mut inherent_data = pezsp_inherents::InherentData::new();
 
 		inherent_data
-			.put_data(sp_timestamp::INHERENT_IDENTIFIER, &timestamp)
+			.put_data(pezsp_timestamp::INHERENT_IDENTIFIER, &timestamp)
 			.expect("Put timestamp inherent data");
 
 		let parent_header = self
@@ -140,14 +140,14 @@ pub trait BlockBuilderExt {
 	fn push_pezkuwi_extrinsic(
 		&mut self,
 		ext: UncheckedExtrinsic,
-	) -> Result<(), sp_blockchain::Error>;
+	) -> Result<(), pezsp_blockchain::Error>;
 }
 
 impl BlockBuilderExt for BlockBuilder<'_, Block, Client> {
 	fn push_pezkuwi_extrinsic(
 		&mut self,
 		ext: UncheckedExtrinsic,
-	) -> Result<(), sp_blockchain::Error> {
+	) -> Result<(), pezsp_blockchain::Error> {
 		let encoded = ext.encode();
 		self.push(
 			Decode::decode(&mut &encoded[..]).expect(

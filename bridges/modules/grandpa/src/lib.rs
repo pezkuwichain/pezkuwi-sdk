@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Substrate GRANDPA Pallet
+//! Bizinikiwi GRANDPA Pallet
 //!
-//! This pallet is an on-chain GRANDPA light client for Substrate based chains.
+//! This pallet is an on-chain GRANDPA light client for Bizinikiwi based chains.
 //!
 //! This pallet achieves this by trustlessly verifying GRANDPA finality proofs on-chain. Once
 //! verified, finalized headers are stored in the pallet, thereby creating a sparse header chain.
@@ -43,13 +43,13 @@ use bp_header_chain::{
 	StoredHeaderGrandpaInfo,
 };
 use bp_runtime::{BlockNumberOf, HashOf, HasherOf, HeaderId, HeaderOf, OwnedBridgeModule};
-use frame_support::{dispatch::PostDispatchInfo, ensure, DefaultNoBound};
-use sp_consensus_grandpa::{AuthorityList, SetId};
-use sp_runtime::{
+use pezframe_support::{dispatch::PostDispatchInfo, ensure, DefaultNoBound};
+use pezsp_consensus_grandpa::{AuthorityList, SetId};
+use pezsp_runtime::{
 	traits::{Header as HeaderT, Zero},
 	SaturatedConversion,
 };
-use sp_std::{boxed::Box, prelude::*};
+use pezsp_std::{boxed::Box, prelude::*};
 
 mod call_ext;
 #[cfg(test)]
@@ -88,19 +88,19 @@ pub type BridgedHeader<T, I> = HeaderOf<<T as Config<I>>::BridgedChain>;
 pub type BridgedStoredHeaderData<T, I> =
 	StoredHeaderData<BridgedBlockNumber<T, I>, BridgedBlockHash<T, I>>;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 	use bp_runtime::BasicOperatingMode;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>;
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The chain we are bridging to here.
 		type BridgedChain: ChainWithGrandpa;
@@ -285,7 +285,7 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			finality_target: Box<BridgedHeader<T, I>>,
 			justification: GrandpaJustification<BridgedHeader<T, I>>,
-			current_set_id: sp_consensus_grandpa::SetId,
+			current_set_id: pezsp_consensus_grandpa::SetId,
 			_is_free_execution_expected: bool,
 		) -> DispatchResultWithPostInfo {
 			Self::ensure_not_halted().map_err(Error::<T, I>::BridgeModule)?;
@@ -610,7 +610,7 @@ pub mod pallet {
 	/// Returned value will indicate if a change was enacted or not.
 	pub(crate) fn try_enact_authority_change<T: Config<I>, I: 'static>(
 		header: &BridgedHeader<T, I>,
-		current_set_id: sp_consensus_grandpa::SetId,
+		current_set_id: pezsp_consensus_grandpa::SetId,
 	) -> Result<Option<AuthoritySet>, DispatchError> {
 		// We don't support forced changes - at that point governance intervention is required.
 		ensure!(
@@ -678,7 +678,7 @@ pub mod pallet {
 		hash: BridgedBlockHash<T, I>,
 		number: BridgedBlockNumber<T, I>,
 		authority_set: bp_header_chain::AuthoritySet,
-	) -> Result<(), sp_runtime::DispatchError> {
+	) -> Result<(), pezsp_runtime::DispatchError> {
 		use bp_header_chain::justification::verify_justification;
 
 		Ok(verify_justification::<BridgedHeader<T, I>>(
@@ -783,11 +783,11 @@ pub mod pallet {
 
 impl<T: Config<I>, I: 'static> Pallet<T, I>
 where
-	<T as frame_system::Config>::RuntimeEvent: TryInto<Event<T, I>>,
+	<T as pezframe_system::Config>::RuntimeEvent: TryInto<Event<T, I>>,
 {
 	/// Get the GRANDPA justifications accepted in the current block.
 	pub fn synced_headers_grandpa_info() -> Vec<StoredHeaderGrandpaInfo<BridgedHeader<T, I>>> {
-		frame_system::Pallet::<T>::read_events_no_consensus()
+		pezframe_system::Pallet::<T>::read_events_no_consensus()
 			.filter_map(|event| {
 				let Event::<T, I>::UpdatedBestFinalizedHeader { grandpa_info, .. } =
 					event.event.try_into().ok()?;
@@ -808,12 +808,12 @@ impl<T: Config<I>, I: 'static> HeaderChain<BridgedChain<T, I>> for GrandpaChainH
 	}
 }
 
-/// (Re)initialize bridge with given header for using it in `pallet-bridge-messages` benchmarks.
+/// (Re)initialize bridge with given header for using it in `pezpallet-bridge-messages` benchmarks.
 #[cfg(feature = "runtime-benchmarks")]
 pub fn initialize_for_benchmarks<T: Config<I>, I: 'static>(header: BridgedHeader<T, I>) {
 	initialize_bridge::<T, I>(InitializationData {
 		header: Box::new(header),
-		authority_list: sp_std::vec::Vec::new(), /* we don't verify any proofs in external
+		authority_list: pezsp_std::vec::Vec::new(), /* we don't verify any proofs in external
 		                                          * benchmarks */
 		set_id: 0,
 		operating_mode: bp_runtime::BasicOperatingMode::Normal,
@@ -843,17 +843,17 @@ mod tests {
 		TEST_GRANDPA_SET_ID,
 	};
 	use codec::Encode;
-	use frame_support::{
+	use pezframe_support::{
 		assert_err, assert_noop, assert_ok,
 		dispatch::{Pays, PostDispatchInfo},
 		storage::generator::StorageValue,
 	};
-	use frame_system::{EventRecord, Phase};
-	use sp_consensus_grandpa::{ConsensusLog, GRANDPA_ENGINE_ID};
-	use sp_core::Get;
-	use sp_runtime::{Digest, DigestItem, DispatchError};
+	use pezframe_system::{EventRecord, Phase};
+	use pezsp_consensus_grandpa::{ConsensusLog, GRANDPA_ENGINE_ID};
+	use pezsp_core::Get;
+	use pezsp_runtime::{Digest, DigestItem, DispatchError};
 
-	fn initialize_substrate_bridge() {
+	fn initialize_bizinikiwi_bridge() {
 		System::set_block_number(1);
 		System::reset_events();
 
@@ -864,7 +864,7 @@ mod tests {
 		origin: RuntimeOrigin,
 	) -> Result<
 		InitializationData<TestHeader>,
-		sp_runtime::DispatchErrorWithPostInfo<PostDispatchInfo>,
+		pezsp_runtime::DispatchErrorWithPostInfo<PostDispatchInfo>,
 	> {
 		let genesis = test_header(0);
 
@@ -878,7 +878,7 @@ mod tests {
 		Pallet::<TestRuntime>::initialize(origin, init_data.clone()).map(|_| init_data)
 	}
 
-	fn submit_finality_proof(header: u8) -> frame_support::dispatch::DispatchResultWithPostInfo {
+	fn submit_finality_proof(header: u8) -> pezframe_support::dispatch::DispatchResultWithPostInfo {
 		let header = test_header(header.into());
 		let justification = make_default_justification(&header);
 
@@ -894,7 +894,7 @@ mod tests {
 	fn submit_finality_proof_with_set_id(
 		header: u8,
 		set_id: u64,
-	) -> frame_support::dispatch::DispatchResultWithPostInfo {
+	) -> pezframe_support::dispatch::DispatchResultWithPostInfo {
 		let header = test_header(header.into());
 		let justification = make_justification_for_header(JustificationGeneratorParams {
 			header: header.clone(),
@@ -914,12 +914,12 @@ mod tests {
 	fn submit_mandatory_finality_proof(
 		number: u8,
 		set_id: u64,
-	) -> frame_support::dispatch::DispatchResultWithPostInfo {
+	) -> pezframe_support::dispatch::DispatchResultWithPostInfo {
 		let mut header = test_header(number.into());
 		// to ease tests that are using `submit_mandatory_finality_proof`, we'll be using the
 		// same set for all sessions
 		let consensus_log =
-			ConsensusLog::<TestNumber>::ScheduledChange(sp_consensus_grandpa::ScheduledChange {
+			ConsensusLog::<TestNumber>::ScheduledChange(pezsp_consensus_grandpa::ScheduledChange {
 				next_authorities: authority_list(),
 				delay: 0,
 			});
@@ -941,16 +941,16 @@ mod tests {
 	}
 
 	fn next_block() {
-		use frame_support::traits::OnInitialize;
+		use pezframe_support::traits::OnInitialize;
 
-		let current_number = frame_system::Pallet::<TestRuntime>::block_number();
-		frame_system::Pallet::<TestRuntime>::set_block_number(current_number + 1);
+		let current_number = pezframe_system::Pallet::<TestRuntime>::block_number();
+		pezframe_system::Pallet::<TestRuntime>::set_block_number(current_number + 1);
 		let _ = Pallet::<TestRuntime>::on_initialize(current_number);
 	}
 
 	fn change_log(delay: u64) -> Digest {
 		let consensus_log =
-			ConsensusLog::<TestNumber>::ScheduledChange(sp_consensus_grandpa::ScheduledChange {
+			ConsensusLog::<TestNumber>::ScheduledChange(pezsp_consensus_grandpa::ScheduledChange {
 				next_authorities: vec![(ALICE.into(), 1), (BOB.into(), 1)],
 				delay,
 			});
@@ -961,7 +961,7 @@ mod tests {
 	fn forced_change_log(delay: u64) -> Digest {
 		let consensus_log = ConsensusLog::<TestNumber>::ForcedChange(
 			delay,
-			sp_consensus_grandpa::ScheduledChange {
+			pezsp_consensus_grandpa::ScheduledChange {
 				next_authorities: vec![(ALICE.into(), 1), (BOB.into(), 1)],
 				delay,
 			},
@@ -972,7 +972,7 @@ mod tests {
 
 	fn many_authorities_log() -> Digest {
 		let consensus_log =
-			ConsensusLog::<TestNumber>::ScheduledChange(sp_consensus_grandpa::ScheduledChange {
+			ConsensusLog::<TestNumber>::ScheduledChange(pezsp_consensus_grandpa::ScheduledChange {
 				next_authorities: std::iter::repeat((ALICE.into(), 1))
 					.take(MAX_BRIDGED_AUTHORITIES as usize + 1)
 					.collect(),
@@ -1020,7 +1020,7 @@ mod tests {
 	#[test]
 	fn init_can_only_initialize_pallet_once() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 			assert_noop!(
 				init_with_origin(RuntimeOrigin::root()),
 				<Error<TestRuntime>>::AlreadyInitialized
@@ -1049,9 +1049,9 @@ mod tests {
 	}
 
 	#[test]
-	fn pallet_rejects_transactions_if_halted() {
+	fn pezpallet_rejects_transactions_if_halted() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			assert_ok!(Pallet::<TestRuntime>::set_operating_mode(
 				RuntimeOrigin::root(),
@@ -1071,7 +1071,7 @@ mod tests {
 	}
 
 	#[test]
-	fn pallet_rejects_header_if_not_initialized_yet() {
+	fn pezpallet_rejects_header_if_not_initialized_yet() {
 		run_test(|| {
 			assert_noop!(submit_finality_proof(1), Error::<TestRuntime>::NotInitialized);
 		});
@@ -1080,7 +1080,7 @@ mod tests {
 	#[test]
 	fn successfully_imports_header_with_valid_finality() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let header_number = 1;
 			let header = test_header(header_number.into());
@@ -1093,7 +1093,7 @@ mod tests {
 
 			let result = submit_finality_proof(header_number);
 			assert_ok!(result);
-			assert_eq!(result.unwrap().pays_fee, frame_support::dispatch::Pays::Yes);
+			assert_eq!(result.unwrap().pays_fee, pezframe_support::dispatch::Pays::Yes);
 			// our test config assumes 2048 max authorities and we are just using couple
 			let pre_dispatch_proof_size = pre_dispatch_weight.proof_size();
 			let actual_proof_size = result.unwrap().actual_weight.unwrap().proof_size();
@@ -1135,7 +1135,7 @@ mod tests {
 	#[test]
 	fn rejects_justification_that_skips_authority_set_transition() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let header = test_header(1);
 
@@ -1172,7 +1172,7 @@ mod tests {
 	#[test]
 	fn does_not_import_header_with_invalid_finality_proof() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let header = test_header(1);
 			let mut justification = make_default_justification(&header);
@@ -1225,7 +1225,7 @@ mod tests {
 	#[test]
 	fn importing_header_ensures_that_chain_is_extended() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			assert_ok!(submit_finality_proof(4));
 			assert_err!(submit_finality_proof(3), Error::<TestRuntime>::OldHeader);
@@ -1236,7 +1236,7 @@ mod tests {
 	#[test]
 	fn importing_header_enacts_new_authority_set() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let next_set_id = 2;
 			let next_authorities = vec![(ALICE.into(), 1), (BOB.into(), 1)];
@@ -1258,7 +1258,7 @@ mod tests {
 				false,
 			);
 			assert_ok!(result);
-			assert_eq!(result.unwrap().pays_fee, frame_support::dispatch::Pays::No);
+			assert_eq!(result.unwrap().pays_fee, pezframe_support::dispatch::Pays::No);
 
 			// Make sure that our header is the best finalized
 			assert_eq!(<BestFinalized<TestRuntime>>::get().unwrap().1, header.hash());
@@ -1304,7 +1304,7 @@ mod tests {
 	#[test]
 	fn relayer_pays_tx_fee_when_submitting_huge_mandatory_header() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			// let's prepare a huge authorities change header, which is definitely above size limits
 			let mut header = test_header(2);
@@ -1322,7 +1322,7 @@ mod tests {
 				false,
 			);
 			assert_ok!(result);
-			assert_eq!(result.unwrap().pays_fee, frame_support::dispatch::Pays::Yes);
+			assert_eq!(result.unwrap().pays_fee, pezframe_support::dispatch::Pays::Yes);
 
 			// Make sure that our header is the best finalized
 			assert_eq!(<BestFinalized<TestRuntime>>::get().unwrap().1, header.hash());
@@ -1333,7 +1333,7 @@ mod tests {
 	#[test]
 	fn relayer_pays_tx_fee_when_submitting_justification_with_long_ancestry_votes() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			// let's prepare a huge authorities change header, which is definitely above weight
 			// limits
@@ -1355,7 +1355,7 @@ mod tests {
 				false,
 			);
 			assert_ok!(result);
-			assert_eq!(result.unwrap().pays_fee, frame_support::dispatch::Pays::Yes);
+			assert_eq!(result.unwrap().pays_fee, pezframe_support::dispatch::Pays::Yes);
 
 			// Make sure that our header is the best finalized
 			assert_eq!(<BestFinalized<TestRuntime>>::get().unwrap().1, header.hash());
@@ -1366,7 +1366,7 @@ mod tests {
 	#[test]
 	fn importing_header_rejects_header_with_scheduled_change_delay() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			// Need to update the header digest to indicate that our header signals an authority set
 			// change. However, the change doesn't happen until the next block.
@@ -1393,7 +1393,7 @@ mod tests {
 	#[test]
 	fn importing_header_rejects_header_with_forced_changes() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			// Need to update the header digest to indicate that it signals a forced authority set
 			// change.
@@ -1420,7 +1420,7 @@ mod tests {
 	#[test]
 	fn importing_header_rejects_header_with_too_many_authorities() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			// Need to update the header digest to indicate that our header signals an authority set
 			// change. However, the change doesn't happen until the next block.
@@ -1477,7 +1477,7 @@ mod tests {
 	#[test]
 	fn rate_limiter_disallows_free_imports_once_limit_is_hit_in_single_block() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let result = submit_mandatory_finality_proof(1, 1);
 			assert_eq!(result.expect("call failed").pays_fee, Pays::No);
@@ -1508,7 +1508,7 @@ mod tests {
 				)
 			};
 
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			for _ in 0..<TestRuntime as Config>::MaxFreeHeadersPerBlock::get() + 1 {
 				assert_err!(submit_invalid_request(), <Error<TestRuntime>>::InvalidJustification);
@@ -1529,7 +1529,7 @@ mod tests {
 	#[test]
 	fn rate_limiter_allows_request_after_new_block_has_started() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let result = submit_mandatory_finality_proof(1, 1);
 			assert_eq!(result.expect("call failed").pays_fee, Pays::No);
@@ -1556,7 +1556,7 @@ mod tests {
 	#[test]
 	fn rate_limiter_ignores_non_mandatory_headers() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let result = submit_finality_proof(1);
 			assert_eq!(result.expect("call failed").pays_fee, Pays::Yes);
@@ -1581,7 +1581,7 @@ mod tests {
 	#[test]
 	fn may_import_non_mandatory_header_for_free() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			// set best finalized to `100`
 			const BEST: u8 = 12;
@@ -1639,7 +1639,7 @@ mod tests {
 	#[test]
 	fn should_prune_headers_over_headers_to_keep_parameter() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 			assert_ok!(submit_finality_proof(1));
 			let first_header_hash = Pallet::<TestRuntime>::best_finalized().unwrap().hash();
 			next_block();
@@ -1666,7 +1666,7 @@ mod tests {
 	fn storage_keys_computed_properly() {
 		assert_eq!(
 			PalletOperatingMode::<TestRuntime>::storage_value_final_key().to_vec(),
-			bp_header_chain::storage_keys::pallet_operating_mode_key("Grandpa").0,
+			bp_header_chain::storage_keys::pezpallet_operating_mode_key("Grandpa").0,
 		);
 
 		assert_eq!(
@@ -1721,7 +1721,7 @@ mod tests {
 	#[test]
 	fn submit_finality_proof_requires_signed_origin() {
 		run_test(|| {
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 
 			let header = test_header(1);
 			let justification = make_default_justification(&header);
@@ -1765,7 +1765,7 @@ mod tests {
 				.collect();
 
 			// initialize and import several headers
-			initialize_substrate_bridge();
+			initialize_bizinikiwi_bridge();
 			assert_ok!(submit_finality_proof(30));
 
 			// wrong origin => error

@@ -16,9 +16,9 @@
 
 use super::*;
 
-use frame_benchmarking::v2::*;
-use frame_system::RawOrigin;
-use sp_runtime::traits::One;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::RawOrigin;
+use pezsp_runtime::traits::One;
 
 #[benchmarks]
 mod benchmarks {

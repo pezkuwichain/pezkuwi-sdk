@@ -3,9 +3,9 @@
 use super::*;
 
 use crate::Pallet as InboundQueue;
-use frame_benchmarking::v2::*;
-use frame_support::assert_ok;
-use frame_system::RawOrigin;
+use pezframe_benchmarking::v2::*;
+use pezframe_support::assert_ok;
+use pezframe_system::RawOrigin;
 
 #[benchmarks]
 mod benchmarks {

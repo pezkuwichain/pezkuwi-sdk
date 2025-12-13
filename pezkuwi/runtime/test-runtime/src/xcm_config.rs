@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-use frame_support::{
+use pezframe_support::{
 	parameter_types,
 	traits::{Disabled, Everything, Get, Nothing},
 	weights::Weight,
 };
-use frame_system::EnsureRoot;
+use pezframe_system::EnsureRoot;
 use pezkuwi_runtime_common::xcm_sender::{ChildTeyrchainRouter, PriceForMessageDelivery};
 use pezkuwi_runtime_teyrchains::FeeTracker;
 use xcm::latest::prelude::*;
@@ -122,7 +122,7 @@ impl WeightTrader for DummyWeightTrader {
 }
 
 type OriginConverter = (
-	pallet_xcm::XcmPassthrough<super::RuntimeOrigin>,
+	pezpallet_xcm::XcmPassthrough<super::RuntimeOrigin>,
 	SignedAccountId32AsNative<AnyNetwork, super::RuntimeOrigin>,
 );
 
@@ -160,7 +160,7 @@ impl xcm_executor::Config for XcmConfig {
 	type XcmRecorder = ();
 }
 
-impl pallet_xcm::Config for crate::Runtime {
+impl pezpallet_xcm::Config for crate::Runtime {
 	// The config types here are entirely configurable, since the only one that is sorely needed
 	// is `XcmExecutor`, which will be used in unit tests located in xcm-executor.
 	type RuntimeEvent = crate::RuntimeEvent;
@@ -176,15 +176,15 @@ impl pallet_xcm::Config for crate::Runtime {
 	type RuntimeOrigin = crate::RuntimeOrigin;
 	type RuntimeCall = crate::RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = crate::Balances;
 	type CurrencyMatcher = ();
 	type TrustedLockers = ();
 	type SovereignAccountOf = ();
-	type MaxLockers = frame_support::traits::ConstU32<8>;
-	type MaxRemoteLockConsumers = frame_support::traits::ConstU32<0>;
+	type MaxLockers = pezframe_support::traits::ConstU32<8>;
+	type MaxRemoteLockConsumers = pezframe_support::traits::ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<crate::AccountId>;
 	// Aliasing is disabled: xcm_executor::Config::Aliasers is set to `Nothing`.
 	type AuthorizedAliasConsideration = Disabled;

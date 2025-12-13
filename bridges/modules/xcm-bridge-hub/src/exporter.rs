@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! The code that allows to use the pallet (`pallet-xcm-bridge-hub`) as XCM message
+//! The code that allows to use the pallet (`pezpallet-xcm-bridge-hub`) as XCM message
 //! exporter at the sending bridge hub. Internally, it just enqueues outbound blob
 //! in the messages pallet queue.
 //!
@@ -29,8 +29,8 @@ use bp_messages::{
 	MessageNonce,
 };
 use bp_xcm_bridge_hub::{BridgeId, BridgeState, LocalXcmChannelManager, XcmAsPlainPayload};
-use frame_support::{ensure, traits::Get};
-use pallet_bridge_messages::{
+use pezframe_support::{ensure, traits::Get};
+use pezpallet_bridge_messages::{
 	Config as BridgeMessagesConfig, Error, Pallet as BridgeMessagesPallet,
 };
 use xcm::prelude::*;
@@ -225,7 +225,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 			return;
 		}
 
-		// TODO: https://github.com/paritytech/parity-bridges-common/issues/2006 we either need fishermens
+		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/83 we either need fishermens
 		// to watch this rule violation (suspended, but keep sending new messages), or we need a
 		// hard limit for that like other XCM queues have
 
@@ -373,8 +373,8 @@ mod tests {
 
 	use bp_runtime::RangeInclusiveExt;
 	use bp_xcm_bridge_hub::{Bridge, BridgeLocations, BridgeState};
-	use frame_support::{assert_ok, traits::EnsureOrigin};
-	use pallet_bridge_messages::InboundLaneStorage;
+	use pezframe_support::{assert_ok, traits::EnsureOrigin};
+	use pezpallet_bridge_messages::InboundLaneStorage;
 	use xcm_builder::{NetworkExportTable, UnpaidRemoteExporter};
 	use xcm_executor::traits::{export_xcm, ConvertLocation};
 
@@ -663,7 +663,7 @@ mod tests {
 
 			// check before - no messages
 			assert_eq!(
-				pallet_bridge_messages::Pallet::<TestRuntime, ()>::outbound_lane_data(
+				pezpallet_bridge_messages::Pallet::<TestRuntime, ()>::outbound_lane_data(
 					expected_lane_id
 				)
 				.unwrap()
@@ -685,7 +685,7 @@ mod tests {
 			// we need to set `UniversalLocation` for `sibling_teyrchain_origin` for
 			// `XcmOverBridgeWrappedWithExportMessageRouterInstance`.
 			ExportMessageOriginUniversalLocation::set(Some(SiblingUniversalLocation::get()));
-			// send `ExportMessage(message)` by `pallet_xcm_bridge_hub_router`.
+			// send `ExportMessage(message)` by `pezpallet_xcm_bridge_hub_router`.
 			ExecuteXcmOverSendXcm::set_origin_for_execute(SiblingLocation::get());
 			assert_ok!(send_xcm::<XcmOverBridgeWrappedWithExportMessageRouter>(
 				dest.clone(),
@@ -694,7 +694,7 @@ mod tests {
 
 			// check after - a message ready to be relayed
 			assert_eq!(
-				pallet_bridge_messages::Pallet::<TestRuntime, ()>::outbound_lane_data(
+				pezpallet_bridge_messages::Pallet::<TestRuntime, ()>::outbound_lane_data(
 					expected_lane_id
 				)
 				.unwrap()
@@ -804,8 +804,8 @@ mod tests {
 			// valid routable destination
 			let dest = Location::new(2, BridgedUniversalDestination::get());
 
-			fn router_bridge_state() -> pallet_xcm_bridge_hub_router::BridgeState {
-				pallet_xcm_bridge_hub_router::Bridge::<
+			fn router_bridge_state() -> pezpallet_xcm_bridge_hub_router::BridgeState {
+				pezpallet_xcm_bridge_hub_router::Bridge::<
 					TestRuntime,
 					XcmOverBridgeWrappedWithExportMessageRouterInstance,
 				>::get()
@@ -835,7 +835,7 @@ mod tests {
 
 			// make bridges congested with sending too much messages
 			for _ in 1..(OUTBOUND_LANE_CONGESTED_THRESHOLD + 2) {
-				// send `ExportMessage(message)` by `pallet_xcm_bridge_hub_router`.
+				// send `ExportMessage(message)` by `pezpallet_xcm_bridge_hub_router`.
 				ExecuteXcmOverSendXcm::set_origin_for_execute(origin_as_location.clone());
 				assert_ok!(send_xcm::<XcmOverBridgeWrappedWithExportMessageRouter>(
 					dest.clone(),

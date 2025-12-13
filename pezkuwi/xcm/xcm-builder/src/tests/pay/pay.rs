@@ -18,7 +18,7 @@
 //! correct destination
 
 use super::{mock::*, *};
-use frame_support::{assert_ok, traits::tokens::Pay};
+use pezframe_support::{assert_ok, traits::tokens::Pay};
 
 parameter_types! {
 	pub SenderAccount: AccountId = AccountId::new([3u8; 32]);

@@ -19,7 +19,7 @@ use futures::StreamExt;
 use pezkuwi_node_subsystem_util::TimeoutExt;
 use std::{sync::Arc, time::Duration};
 
-use sp_core::testing::TaskExecutor;
+use pezsp_core::testing::TaskExecutor;
 
 use super::*;
 use codec::Encode;

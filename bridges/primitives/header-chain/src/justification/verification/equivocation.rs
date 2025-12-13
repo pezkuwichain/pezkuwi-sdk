@@ -29,9 +29,9 @@ use crate::{
 };
 
 use bp_runtime::{BlockNumberOf, HashOf, HeaderOf};
-use sp_consensus_grandpa::{AuthorityId, AuthoritySignature, EquivocationProof, Precommit};
-use sp_runtime::traits::Header as HeaderT;
-use sp_std::{
+use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature, EquivocationProof, Precommit};
+use pezsp_runtime::traits::Header as HeaderT;
+use pezsp_std::{
 	collections::{btree_map::BTreeMap, btree_set::BTreeSet},
 	prelude::*,
 	vec,
@@ -93,7 +93,7 @@ impl<'a, Header: HeaderT> EquivocationsCollector<'a, Header> {
 			if let AuthorityVotes::Equivocation(equivocation) = vote {
 				equivocations.push(EquivocationProof::new(
 					self.context.authority_set_id,
-					sp_consensus_grandpa::Equivocation::Precommit(equivocation),
+					pezsp_consensus_grandpa::Equivocation::Precommit(equivocation),
 				));
 			}
 		}
@@ -176,7 +176,7 @@ impl<'a, Header: HeaderT> JustificationVerifier<Header> for EquivocationsCollect
 }
 
 /// Helper struct for finding equivocations in GRANDPA proofs.
-pub struct GrandpaEquivocationsFinder<C>(sp_std::marker::PhantomData<C>);
+pub struct GrandpaEquivocationsFinder<C>(pezsp_std::marker::PhantomData<C>);
 
 impl<C: ChainWithGrandpa>
 	FindEquivocations<

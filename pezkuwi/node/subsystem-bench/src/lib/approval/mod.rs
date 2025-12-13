@@ -70,13 +70,13 @@ use pezkuwi_primitives::{
 	Header, Slot, ValidatorId, ValidatorIndex, ASSIGNMENT_KEY_TYPE_ID,
 };
 use prometheus::Registry;
-use sc_keystore::LocalKeystore;
-use sc_service::SpawnTaskHandle;
+use pezsc_keystore::LocalKeystore;
+use pezsc_service::SpawnTaskHandle;
 use serde::{Deserialize, Serialize};
-use sp_application_crypto::AppCrypto;
-use sp_consensus_babe::Epoch as BabeEpoch;
-use sp_core::H256;
-use sp_keystore::Keystore;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_consensus_babe::Epoch as BabeEpoch;
+use pezsp_core::H256;
+use pezsp_keystore::Keystore;
 use std::{
 	cmp::max,
 	collections::{HashMap, HashSet},

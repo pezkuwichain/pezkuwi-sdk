@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-use frame_support::traits::ContainsPair;
+use pezframe_support::traits::ContainsPair;
 use xcm::latest::{Asset, Location};
 
 /// Filters assets/location pairs.
 ///
 /// Can be amalgamated into tuples. If any item returns `true`, it short-circuits, else `false` is
 /// returned.
-#[deprecated = "Use `frame_support::traits::ContainsPair<Asset, Location>` instead"]
+#[deprecated = "Use `pezframe_support::traits::ContainsPair<Asset, Location>` instead"]
 pub trait FilterAssetLocation {
 	/// A filter to distinguish between asset/location pairs.
 	fn contains(asset: &Asset, origin: &Location) -> bool;

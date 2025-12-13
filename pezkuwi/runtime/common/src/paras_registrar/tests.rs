@@ -22,10 +22,10 @@ use crate::{
 	mock::conclude_pvf_checking, paras_registrar, paras_registrar::mock::*,
 	traits::Registrar as RegistrarTrait,
 };
-use frame_support::{assert_noop, assert_ok};
-use pallet_balances::Error as BalancesError;
+use pezframe_support::{assert_noop, assert_ok};
+use pezpallet_balances::Error as BalancesError;
 use pezkuwi_primitives::SessionIndex;
-use sp_runtime::traits::BadOrigin;
+use pezsp_runtime::traits::BadOrigin;
 
 #[test]
 fn end_to_end_scenario_works() {

@@ -26,7 +26,7 @@ use crate::{
 
 use pezkuwi_node_primitives::approval::v1::AssignmentCertKind;
 use pezkuwi_node_subsystem_util::database::Database;
-use sp_application_crypto::sp_core::H256;
+use pezsp_application_crypto::pezsp_core::H256;
 use std::{collections::HashSet, sync::Arc};
 
 fn make_block_entry_v1(

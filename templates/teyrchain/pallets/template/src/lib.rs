@@ -25,7 +25,7 @@
 //!
 //! <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html>
 //!
-//! And looking at the frame [`kitchen-sink`](https://docs.pezkuwichain.io/sdk/master/pallet_example_kitchensink/index.html)
+//! And looking at the frame [`kitchen-sink`](https://docs.pezkuwichain.io/sdk/master/pezpallet_example_kitchensink/index.html)
 //! pallet, a showcase of all pallet macros.
 //!
 //! ### Pallet Sections
@@ -34,7 +34,7 @@
 //!
 //! - A **configuration trait** that defines the types and parameters which the pallet depends on
 //!   (denoted by the `#[pallet::config]` attribute). See: [`Config`].
-//! - A **means to store pallet-specific data** (denoted by the `#[pallet::storage]` attribute).
+//! - A **means to store pezpallet-specific data** (denoted by the `#[pallet::storage]` attribute).
 //!   See: [`storage_types`].
 //! - A **declaration of the events** this pallet emits (denoted by the `#[pallet::event]`
 //!   attribute). See: [`Event`].
@@ -43,7 +43,7 @@
 //! - A **set of dispatchable functions** that define the pallet's functionality (denoted by the
 //!   `#[pallet::call]` attribute). See: [`dispatchables`].
 //!
-//! Run `cargo doc --package pallet-template --open` to view this pallet's documentation.
+//! Run `cargo doc --package pezpallet-template --open` to view this pallet's documentation.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -64,17 +64,17 @@ mod benchmarking;
 // <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html>
 //
 // To see a full list of `pallet` macros and their use cases, see:
-// <https://docs.pezkuwichain.io/sdk/master/pallet_example_kitchensink/index.html>
-// <https://docs.pezkuwichain.io/sdk/master/frame_support/pallet_macros/index.html>
+// <https://docs.pezkuwichain.io/sdk/master/pezpallet_example_kitchensink/index.html>
+// <https://docs.pezkuwichain.io/sdk/master/pezframe_support/pezpallet_macros/index.html>
 #[frame::pallet]
 pub mod pallet {
 	use frame::prelude::*;
 
 	/// Configure the pallet by specifying the parameters and types on which it depends.
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A type representing the weights required by the dispatchables of this pallet.
 		type WeightInfo: crate::weights::WeightInfo;
@@ -96,7 +96,7 @@ pub mod pallet {
 
 	/// The pallet's storage items.
 	/// <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#storage>
-	/// <https://docs.pezkuwichain.io/sdk/master/frame_support/pallet_macros/attr.storage.html>
+	/// <https://docs.pezkuwichain.io/sdk/master/pezframe_support/pezpallet_macros/attr.storage.html>
 	#[pallet::storage]
 	pub type Something<T: Config> = StorageValue<_, CompositeStruct<T>>;
 
@@ -139,7 +139,7 @@ pub mod pallet {
 			let who = ensure_signed(origin)?;
 
 			// Convert the u32 into a block number. This is possible because the set of trait bounds
-			// defined in [`frame_system::Config::BlockNumber`].
+			// defined in [`pezframe_system::Config::BlockNumber`].
 			let block_number: BlockNumberFor<T> = bn.into();
 
 			// Update storage.
@@ -174,7 +174,7 @@ pub mod pallet {
 					// Update the value in storage with the incremented result.
 					<Something<T>>::put(old);
 					// Explore how you can rewrite this using
-					// [`frame_support::storage::StorageValue::mutate`].
+					// [`pezframe_support::storage::StorageValue::mutate`].
 					Ok(().into())
 				},
 			}

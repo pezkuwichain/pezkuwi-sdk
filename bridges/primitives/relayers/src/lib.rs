@@ -26,14 +26,14 @@ pub use extension::{
 pub use registration::{ExplicitOrAccountParams, Registration, StakeAndSlash};
 
 use bp_runtime::{ChainId, StorageDoubleMapKeyProvider};
-use frame_support::{traits::tokens::Preservation, Blake2_128Concat, Identity};
+use pezframe_support::{traits::tokens::Preservation, Blake2_128Concat, Identity};
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen},
 	traits::AccountIdConversion,
 	TypeId,
 };
-use sp_std::{fmt::Debug, marker::PhantomData};
+use pezsp_std::{fmt::Debug, marker::PhantomData};
 
 mod extension;
 mod registration;
@@ -164,12 +164,12 @@ impl<T, Relayer, LaneId, RewardBalance>
 	PaymentProcedure<Relayer, RewardsAccountParams<LaneId>, RewardBalance>
 	for PayRewardFromAccount<T, Relayer, LaneId, RewardBalance>
 where
-	T: frame_support::traits::fungible::Mutate<Relayer>,
+	T: pezframe_support::traits::fungible::Mutate<Relayer>,
 	T::Balance: From<RewardBalance>,
 	Relayer: Clone + Debug + Decode + Encode + Eq + TypeInfo,
 	LaneId: Decode + Encode,
 {
-	type Error = sp_runtime::DispatchError;
+	type Error = pezsp_runtime::DispatchError;
 	type Beneficiary = Relayer;
 
 	fn pay_reward(
@@ -223,7 +223,7 @@ pub trait RewardLedger<Relayer, Reward, RewardBalance> {
 mod tests {
 	use super::*;
 	use bp_messages::{HashedLaneId, LaneIdType, LegacyLaneId};
-	use sp_runtime::{app_crypto::Ss58Codec, testing::H256};
+	use pezsp_runtime::{app_crypto::Ss58Codec, testing::H256};
 
 	#[test]
 	fn different_lanes_are_using_different_accounts() {
@@ -339,7 +339,7 @@ mod tests {
 		for (lane_id, bridged_chain_id, owner, (expected_ss58, expected_account)) in test_data {
 			assert_eq!(
 				expected_account,
-				sp_runtime::AccountId32::new(PayRewardFromAccount::<
+				pezsp_runtime::AccountId32::new(PayRewardFromAccount::<
 					[u8; 32],
 					[u8; 32],
 					LegacyLaneId,

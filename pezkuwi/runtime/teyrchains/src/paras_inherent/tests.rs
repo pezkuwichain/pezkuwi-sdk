@@ -55,8 +55,8 @@ mod enter {
 	use alloc::collections::btree_map::BTreeMap;
 	use assert_matches::assert_matches;
 	use core::panic;
-	use frame_support::assert_ok;
-	use frame_system::limits;
+	use pezframe_support::assert_ok;
+	use pezframe_system::limits;
 	use pezkuwi_primitives::{
 		ApprovedPeerId, AvailabilityBitfield, CandidateDescriptorV2, ClaimQueueOffset, CollatorId,
 		CollatorSignature, CommittedCandidateReceiptV2, CoreSelector, InternalVersion,
@@ -65,8 +65,8 @@ mod enter {
 	use pezkuwi_primitives_test_helpers::CandidateDescriptor;
 	use pretty_assertions::assert_eq;
 	use rstest::rstest;
-	use sp_core::ByteArray;
-	use sp_runtime::Perbill;
+	use pezsp_core::ByteArray;
+	use pezsp_runtime::Perbill;
 
 	struct TestConfig {
 		dispute_statements: BTreeMap<u32, u32>,
@@ -78,7 +78,7 @@ mod enter {
 		unavailable_cores: Vec<u32>,
 		v2_descriptor: bool,
 		approved_peer_signal: Option<ApprovedPeerId>,
-		candidate_modifier: Option<CandidateModifier<<Test as frame_system::Config>::Hash>>,
+		candidate_modifier: Option<CandidateModifier<<Test as pezframe_system::Config>::Hash>>,
 	}
 
 	fn make_inherent_data(
@@ -631,7 +631,7 @@ mod enter {
 			DisputeStatement, DisputeStatementSet, ExplicitDisputeStatement,
 			InvalidDisputeStatementKind, ValidDisputeStatementKind,
 		};
-		use sp_core::{crypto::CryptoType, Pair};
+		use pezsp_core::{crypto::CryptoType, Pair};
 
 		new_test_ext(Default::default()).execute_with(|| {
 			let v0 = <ValidatorId as CryptoType>::Pair::generate().0;
@@ -684,7 +684,7 @@ mod enter {
 				.collect::<Vec<CheckedDisputeStatementSet>>()
 			};
 
-			let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
+			let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 			let statements = generate_votes(3, candidate_hash);
 			set_scrapable_on_chain_disputes::<Test>(3, statements);
 			assert_matches!(pallet::OnChainVotes::<Test>::get(), Some(ScrapedOnChainVotes {
@@ -703,7 +703,7 @@ mod enter {
 				))
 			});
 
-			let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(2));
+			let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(2));
 			let statements = generate_votes(7, candidate_hash);
 			set_scrapable_on_chain_disputes::<Test>(7, statements);
 			assert_matches!(pallet::OnChainVotes::<Test>::get(), Some(ScrapedOnChainVotes {
@@ -770,7 +770,7 @@ mod enter {
 			clear_dispute_storage::<Test>();
 
 			assert_ok!(Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				multi_dispute_inherent_data,
 			));
 
@@ -793,7 +793,7 @@ mod enter {
 	// Ensure that when dispute data establishes an over weight block that we adequately
 	// filter out disputes according to our prioritization rule
 	fn limit_dispute_data() {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		new_test_ext(MockGenesisConfig::default()).execute_with(|| {
 			// Create the inherent data for this block
 			let dispute_statements = BTreeMap::new();
@@ -842,7 +842,7 @@ mod enter {
 			clear_dispute_storage::<Test>();
 
 			assert_ok!(Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
 
@@ -927,7 +927,7 @@ mod enter {
 			clear_dispute_storage::<Test>();
 
 			assert_ok!(Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
 
@@ -1017,7 +1017,7 @@ mod enter {
 			clear_dispute_storage::<Test>();
 
 			assert_ok!(Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data
 			));
 
@@ -1093,7 +1093,7 @@ mod enter {
 	// we still can import it.
 	#[test]
 	fn overweight_candidates_enactment_is_fine() {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		new_test_ext(MockGenesisConfig::default()).execute_with(|| {
 			use crate::inclusion::WeightInfo as _;
 
@@ -1109,7 +1109,7 @@ mod enter {
 			// The number of candidates is chosen to go over the weight limit
 			// of the mock runtime together with the `enact_candidate`s weight.
 			let num_candidates = 5u32;
-			let max_weight = <Test as frame_system::Config>::BlockWeights::get().max_block;
+			let max_weight = <Test as pezframe_system::Config>::BlockWeights::get().max_block;
 			assert!(<Test as inclusion::Config>::WeightInfo::enact_candidate(0, 0, 0)
 				.saturating_mul(u64::from(num_candidates))
 				.any_gt(max_weight));
@@ -1167,15 +1167,15 @@ mod enter {
 			scheduler::ClaimQueue::<Test>::set(cores);
 
 			assert_ok!(Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
 		});
 	}
 
 	fn max_block_weight_proof_size_adjusted() -> Weight {
-		let raw_weight = <Test as frame_system::Config>::BlockWeights::get().max_block;
-		let block_length = <Test as frame_system::Config>::BlockLength::get();
+		let raw_weight = <Test as pezframe_system::Config>::BlockWeights::get().max_block;
+		let block_length = <Test as pezframe_system::Config>::BlockLength::get();
 		raw_weight.set_proof_size(*block_length.max.get(DispatchClass::Mandatory) as u64)
 	}
 
@@ -1313,7 +1313,7 @@ mod enter {
 			clear_dispute_storage::<Test>();
 
 			assert_ok!(Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
 		});
@@ -1326,7 +1326,7 @@ mod enter {
 			Perbill::from_percent(75),
 		));
 		// Virtually no time based limit:
-		BlockWeights::set(frame_system::limits::BlockWeights::simple_max(Weight::from_parts(
+		BlockWeights::set(pezframe_system::limits::BlockWeights::simple_max(Weight::from_parts(
 			u64::MAX,
 			u64::MAX,
 		)));
@@ -1396,7 +1396,7 @@ mod enter {
 			Perbill::from_percent(75),
 		));
 		// Virtually no time based limit:
-		BlockWeights::set(frame_system::limits::BlockWeights::simple_max(Weight::from_parts(
+		BlockWeights::set(pezframe_system::limits::BlockWeights::simple_max(Weight::from_parts(
 			u64::MAX,
 			u64::MAX,
 		)));
@@ -1474,7 +1474,7 @@ mod enter {
 			Perbill::from_percent(75),
 		));
 		// Virtually no time based limit:
-		BlockWeights::set(frame_system::limits::BlockWeights::simple_max(Weight::from_parts(
+		BlockWeights::set(pezframe_system::limits::BlockWeights::simple_max(Weight::from_parts(
 			u64::MAX,
 			u64::MAX,
 		)));
@@ -1726,7 +1726,7 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 			let dispatch_error = Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				expected_para_inherent_data,
 			)
 			.unwrap_err()
@@ -1786,7 +1786,7 @@ mod enter {
 			assert_eq!(filtered_para_inherend_data.backed_candidates.len(), 0);
 
 			let dispatch_error = Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
 			.unwrap_err()
@@ -1854,7 +1854,7 @@ mod enter {
 				.unwrap();
 
 			let dispatch_error = Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
 			.unwrap_err()
@@ -1919,7 +1919,7 @@ mod enter {
 				.unwrap();
 
 			let dispatch_error = Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
 			.unwrap_err()
@@ -1979,7 +1979,7 @@ mod enter {
 				.unwrap();
 
 			let dispatch_error = Pallet::<Test>::enter(
-				frame_system::RawOrigin::None.into(),
+				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
 			.unwrap_err()
@@ -2040,7 +2040,7 @@ mod enter {
 			// * 5 v2 candidate descriptors.
 			assert_eq!(inherent_data.backed_candidates.len(), 5);
 
-			Pallet::<Test>::enter(frame_system::RawOrigin::None.into(), inherent_data).unwrap();
+			Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
 		});
 	}
 
@@ -2099,7 +2099,7 @@ mod enter {
 			// * 5 v2 candidate descriptors.
 			assert_eq!(inherent_data.backed_candidates.len(), 5);
 
-			Pallet::<Test>::enter(frame_system::RawOrigin::None.into(), inherent_data).unwrap();
+			Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
 		});
 	}
 
@@ -2264,7 +2264,7 @@ mod enter {
 				expected_inherent_data
 			);
 
-			Pallet::<Test>::enter(frame_system::RawOrigin::None.into(), inherent_data).unwrap_err();
+			Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap_err();
 		});
 	}
 
@@ -2343,7 +2343,7 @@ mod enter {
 			);
 
 			assert_eq!(
-				Pallet::<Test>::enter(frame_system::RawOrigin::None.into(), inherent_data)
+				Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data)
 					.unwrap_err()
 					.error,
 				Error::<Test>::InherentDataFilteredDuringExecution.into()
@@ -2375,15 +2375,15 @@ mod sanitizers {
 		ValidatorIndex,
 	};
 	use rstest::rstest;
-	use sp_core::crypto::UncheckedFrom;
+	use pezsp_core::crypto::UncheckedFrom;
 
 	use crate::mock::Test;
 	use pezkuwi_primitives::TEYRCHAIN_KEY_TYPE_ID;
-	use sc_keystore::LocalKeystore;
-	use sp_keystore::{Keystore, KeystorePtr};
+	use pezsc_keystore::LocalKeystore;
+	use pezsp_keystore::{Keystore, KeystorePtr};
 	use std::sync::Arc;
 
-	fn validator_pubkeys(val_ids: &[sp_keyring::Sr25519Keyring]) -> Vec<ValidatorId> {
+	fn validator_pubkeys(val_ids: &[pezsp_keyring::Sr25519Keyring]) -> Vec<ValidatorId> {
 		val_ids.iter().map(|v| v.public().into()).collect()
 	}
 
@@ -2400,10 +2400,10 @@ mod sanitizers {
 		let signing_context = SigningContext { parent_hash, session_index };
 
 		let validators = vec![
-			sp_keyring::Sr25519Keyring::Alice,
-			sp_keyring::Sr25519Keyring::Bob,
-			sp_keyring::Sr25519Keyring::Charlie,
-			sp_keyring::Sr25519Keyring::Dave,
+			pezsp_keyring::Sr25519Keyring::Alice,
+			pezsp_keyring::Sr25519Keyring::Bob,
+			pezsp_keyring::Sr25519Keyring::Charlie,
+			pezsp_keyring::Sr25519Keyring::Dave,
 		];
 		for validator in validators.iter() {
 			Keystore::sr25519_generate_new(
@@ -2663,15 +2663,15 @@ mod sanitizers {
 			let signing_context = SigningContext { parent_hash: relay_parent, session_index };
 
 			let validators = vec![
-				sp_keyring::Sr25519Keyring::Alice,
-				sp_keyring::Sr25519Keyring::Bob,
-				sp_keyring::Sr25519Keyring::Charlie,
-				sp_keyring::Sr25519Keyring::Dave,
-				sp_keyring::Sr25519Keyring::Eve,
-				sp_keyring::Sr25519Keyring::Ferdie,
-				sp_keyring::Sr25519Keyring::One,
-				sp_keyring::Sr25519Keyring::Two,
-				sp_keyring::Sr25519Keyring::AliceStash,
+				pezsp_keyring::Sr25519Keyring::Alice,
+				pezsp_keyring::Sr25519Keyring::Bob,
+				pezsp_keyring::Sr25519Keyring::Charlie,
+				pezsp_keyring::Sr25519Keyring::Dave,
+				pezsp_keyring::Sr25519Keyring::Eve,
+				pezsp_keyring::Sr25519Keyring::Ferdie,
+				pezsp_keyring::Sr25519Keyring::One,
+				pezsp_keyring::Sr25519Keyring::Two,
+				pezsp_keyring::Sr25519Keyring::AliceStash,
 			];
 			for validator in validators.iter() {
 				Keystore::sr25519_generate_new(
@@ -2858,14 +2858,14 @@ mod sanitizers {
 			let signing_context = SigningContext { parent_hash: relay_parent, session_index };
 
 			let validators = vec![
-				sp_keyring::Sr25519Keyring::Alice,
-				sp_keyring::Sr25519Keyring::Bob,
-				sp_keyring::Sr25519Keyring::Charlie,
-				sp_keyring::Sr25519Keyring::Dave,
-				sp_keyring::Sr25519Keyring::Eve,
-				sp_keyring::Sr25519Keyring::Ferdie,
-				sp_keyring::Sr25519Keyring::One,
-				sp_keyring::Sr25519Keyring::Two,
+				pezsp_keyring::Sr25519Keyring::Alice,
+				pezsp_keyring::Sr25519Keyring::Bob,
+				pezsp_keyring::Sr25519Keyring::Charlie,
+				pezsp_keyring::Sr25519Keyring::Dave,
+				pezsp_keyring::Sr25519Keyring::Eve,
+				pezsp_keyring::Sr25519Keyring::Ferdie,
+				pezsp_keyring::Sr25519Keyring::One,
+				pezsp_keyring::Sr25519Keyring::Two,
 			];
 			for validator in validators.iter() {
 				Keystore::sr25519_generate_new(
@@ -3389,15 +3389,15 @@ mod sanitizers {
 			let signing_context = SigningContext { parent_hash: relay_parent, session_index };
 
 			let validators = vec![
-				sp_keyring::Sr25519Keyring::Alice,
-				sp_keyring::Sr25519Keyring::Bob,
-				sp_keyring::Sr25519Keyring::Charlie,
-				sp_keyring::Sr25519Keyring::Dave,
-				sp_keyring::Sr25519Keyring::Eve,
-				sp_keyring::Sr25519Keyring::Ferdie,
-				sp_keyring::Sr25519Keyring::One,
-				sp_keyring::Sr25519Keyring::Two,
-				sp_keyring::Sr25519Keyring::AliceStash,
+				pezsp_keyring::Sr25519Keyring::Alice,
+				pezsp_keyring::Sr25519Keyring::Bob,
+				pezsp_keyring::Sr25519Keyring::Charlie,
+				pezsp_keyring::Sr25519Keyring::Dave,
+				pezsp_keyring::Sr25519Keyring::Eve,
+				pezsp_keyring::Sr25519Keyring::Ferdie,
+				pezsp_keyring::Sr25519Keyring::One,
+				pezsp_keyring::Sr25519Keyring::Two,
+				pezsp_keyring::Sr25519Keyring::AliceStash,
 			];
 			for validator in validators.iter() {
 				Keystore::sr25519_generate_new(
@@ -3911,12 +3911,12 @@ mod sanitizers {
 			let signing_context = SigningContext { parent_hash: relay_parent, session_index };
 
 			let validators = vec![
-				sp_keyring::Sr25519Keyring::Alice,
-				sp_keyring::Sr25519Keyring::Bob,
-				sp_keyring::Sr25519Keyring::Charlie,
-				sp_keyring::Sr25519Keyring::Dave,
-				sp_keyring::Sr25519Keyring::Eve,
-				sp_keyring::Sr25519Keyring::Ferdie,
+				pezsp_keyring::Sr25519Keyring::Alice,
+				pezsp_keyring::Sr25519Keyring::Bob,
+				pezsp_keyring::Sr25519Keyring::Charlie,
+				pezsp_keyring::Sr25519Keyring::Dave,
+				pezsp_keyring::Sr25519Keyring::Eve,
+				pezsp_keyring::Sr25519Keyring::Ferdie,
 			];
 			for validator in validators.iter() {
 				Keystore::sr25519_generate_new(

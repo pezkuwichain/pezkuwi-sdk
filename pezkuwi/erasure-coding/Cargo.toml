@@ -16,8 +16,8 @@ codec = { features = ["derive", "std"], workspace = true }
 novelpoly = { workspace = true }
 pezkuwi-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-trie = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-trie = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
@@ -32,5 +32,5 @@ harness = false
 runtime-benchmarks = [
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-trie/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

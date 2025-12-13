@@ -34,7 +34,7 @@ pub use pezkuwi_primitives::{Block, BlockNumber, Hash};
 ///
 /// This is useful for runtime API calls to blocks that are
 /// racing against finality, e.g. for slashing purposes.
-pub type UnpinHandle = sc_client_api::UnpinHandle<Block>;
+pub type UnpinHandle = pezsc_client_api::UnpinHandle<Block>;
 
 pub mod errors;
 pub mod messages;

@@ -34,10 +34,10 @@ use bp_teyrchains::{
 	ParaInfo, ParaStoredHeaderData, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 	SubmitTeyrchainHeadsInfo,
 };
-use frame_support::{dispatch::PostDispatchInfo, DefaultNoBound};
-use pallet_bridge_grandpa::SubmitFinalityProofHelper;
+use pezframe_support::{dispatch::PostDispatchInfo, DefaultNoBound};
+use pezpallet_bridge_grandpa::SubmitFinalityProofHelper;
 use proofs::{StorageProofAdapter, TeyrchainsStorageProofAdapter};
-use sp_std::{marker::PhantomData, vec::Vec};
+use pezsp_std::{marker::PhantomData, vec::Vec};
 
 #[cfg(feature = "runtime-benchmarks")]
 use bp_runtime::HeaderOf;
@@ -72,7 +72,7 @@ struct UpdateTeyrchainHeadArtifacts {
 	pub prune_happened: bool,
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 	use bp_runtime::{
@@ -83,8 +83,8 @@ pub mod pallet {
 		BestParaHeadHash, ImportedParaHeadsKeyProvider, OnNewHead, ParaStoredHeaderDataBuilder,
 		ParasInfoKeyProvider,
 	};
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	/// Stored teyrchain head data of given teyrchains pallet.
 	pub type StoredParaHeadDataOf<T, I> =
@@ -93,7 +93,7 @@ pub mod pallet {
 	pub type WeightInfoOf<T, I> = <T as Config<I>>::WeightInfo;
 	/// Bridge GRANDPA pallet that is used to verify teyrchain proofs.
 	pub type GrandpaPalletOf<T, I> =
-		pallet_bridge_grandpa::Pallet<T, <T as Config<I>>::BridgesGrandpaPalletInstance>;
+		pezpallet_bridge_grandpa::Pallet<T, <T as Config<I>>::BridgesGrandpaPalletInstance>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -158,7 +158,7 @@ pub mod pallet {
 
 	/// Convenience trait for defining `BridgedChain` bounds.
 	pub trait BoundedBridgeGrandpaConfig<I: 'static>:
-		pallet_bridge_grandpa::Config<I, BridgedChain = Self::BridgedRelayChain>
+		pezpallet_bridge_grandpa::Config<I, BridgedChain = Self::BridgedRelayChain>
 	{
 		/// Type of the bridged relay chain.
 		type BridgedRelayChain: Chain<
@@ -170,7 +170,7 @@ pub mod pallet {
 
 	impl<T, I: 'static> BoundedBridgeGrandpaConfig<I> for T
 	where
-		T: pallet_bridge_grandpa::Config<I>,
+		T: pezpallet_bridge_grandpa::Config<I>,
 		T::BridgedChain:
 			Chain<BlockNumber = RelayBlockNumber, Hash = RelayBlockHash, Hasher = RelayBlockHasher>,
 	{
@@ -178,14 +178,14 @@ pub mod pallet {
 	}
 
 	#[pallet::config]
-	#[pallet::disable_frame_system_supertrait_check]
+	#[pallet::disable_pezframe_system_supertrait_check]
 	pub trait Config<I: 'static = ()>:
 		BoundedBridgeGrandpaConfig<Self::BridgesGrandpaPalletInstance>
 	{
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>;
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Benchmarks results from runtime we're plugged into.
 		type WeightInfo: WeightInfoExt;
 
@@ -214,14 +214,14 @@ pub mod pallet {
 		/// chain.
 		///
 		/// Please keep in mind that this should be the name of the `runtime_teyrchains::paras`
-		/// pallet from pezkuwi repository, not the `pallet-bridge-teyrchains`.
+		/// pallet from pezkuwi repository, not the `pezpallet-bridge-teyrchains`.
 		#[pallet::constant]
 		type ParasPalletName: Get<&'static str>;
 
 		/// Teyrchain head data builder.
 		///
 		/// We never store teyrchain heads here, since they may be too big (e.g. because of large
-		/// digest items). Instead we're using the same approach as `pallet-bridge-grandpa`
+		/// digest items). Instead we're using the same approach as `pezpallet-bridge-grandpa`
 		/// pallet - we are only storing `bp_messages::StoredHeaderData` (number and state root),
 		/// which is enough for our applications. However, we work with different teyrchains here
 		/// and they can use different primitives (for block numbers and hash). So we can't store
@@ -433,7 +433,7 @@ pub mod pallet {
 
 			// we'll need relay chain header to verify that teyrchains heads are always increasing.
 			let (relay_block_number, relay_block_hash) = at_relay_block;
-			let relay_block = pallet_bridge_grandpa::ImportedHeaders::<
+			let relay_block = pezpallet_bridge_grandpa::ImportedHeaders::<
 				T,
 				T::BridgesGrandpaPalletInstance,
 			>::get(relay_block_hash)
@@ -583,7 +583,7 @@ pub mod pallet {
 				&& SubmitFinalityProofHelper::<T, T::BridgesGrandpaPalletInstance>::has_free_header_slots();
 			let pays_fee = if is_free {
 				tracing::trace!(target: LOG_TARGET, "Teyrchain heads update transaction is free");
-				pallet_bridge_grandpa::on_free_header_imported::<T, T::BridgesGrandpaPalletInstance>(
+				pezpallet_bridge_grandpa::on_free_header_imported::<T, T::BridgesGrandpaPalletInstance>(
 				);
 				Pays::No
 			} else {
@@ -743,7 +743,7 @@ pub mod pallet {
 		pub owner: Option<T::AccountId>,
 		/// Dummy marker.
 		#[serde(skip)]
-		pub _phantom: sp_std::marker::PhantomData<I>,
+		pub _phantom: pezsp_std::marker::PhantomData<I>,
 	}
 
 	#[pallet::genesis_build]
@@ -791,17 +791,17 @@ impl<T: Config<I>, I: 'static, C: Teyrchain<Hash = ParaHash>> HeaderChain<C>
 	}
 }
 
-/// (Re)initialize pallet with given header for using it in `pallet-bridge-messages` benchmarks.
+/// (Re)initialize pallet with given header for using it in `pezpallet-bridge-messages` benchmarks.
 #[cfg(feature = "runtime-benchmarks")]
 pub fn initialize_for_benchmarks<T: Config<I>, I: 'static, PC: Teyrchain<Hash = ParaHash>>(
 	header: HeaderOf<PC>,
 ) {
 	use bp_pezkuwi_core::teyrchains::ParaHead;
 	use bp_runtime::HeaderIdProvider;
-	use sp_runtime::traits::Header;
+	use pezsp_runtime::traits::Header;
 
 	let relay_head =
-		pallet_bridge_grandpa::BridgedHeader::<T, T::BridgesGrandpaPalletInstance>::new(
+		pezpallet_bridge_grandpa::BridgedHeader::<T, T::BridgesGrandpaPalletInstance>::new(
 			0,
 			Default::default(),
 			Default::default(),
@@ -812,7 +812,7 @@ pub fn initialize_for_benchmarks<T: Config<I>, I: 'static, PC: Teyrchain<Hash = 
 	let teyrchain_head = ParaHead(header.encode());
 	let updated_head_data = T::ParaStoredHeaderDataBuilder::try_build(teyrchain, &teyrchain_head)
 		.expect("failed to build stored teyrchain head in benchmarks");
-	pallet_bridge_grandpa::initialize_for_benchmarks::<T, T::BridgesGrandpaPalletInstance>(
+	pezpallet_bridge_grandpa::initialize_for_benchmarks::<T, T::BridgesGrandpaPalletInstance>(
 		relay_head.clone(),
 	);
 	Pallet::<T, I>::update_teyrchain_head(
@@ -850,25 +850,25 @@ pub(crate) mod tests {
 	use bp_teyrchains::{
 		BestParaHeadHash, BridgeTeyrchainCall, ImportedParaHeadsKeyProvider, ParasInfoKeyProvider,
 	};
-	use frame_support::{
+	use pezframe_support::{
 		assert_noop, assert_ok,
 		dispatch::DispatchResultWithPostInfo,
-		pallet_prelude::Pays,
+		pezpallet_prelude::Pays,
 		storage::generator::{StorageDoubleMap, StorageMap},
 		traits::Get,
 		weights::Weight,
 	};
-	use frame_system::{EventRecord, Pallet as System, Phase};
-	use sp_core::Hasher;
-	use sp_runtime::{traits::Header as HeaderT, DispatchError};
+	use pezframe_system::{EventRecord, Pallet as System, Phase};
+	use pezsp_core::Hasher;
+	use pezsp_runtime::{traits::Header as HeaderT, DispatchError};
 
-	type BridgesGrandpaPalletInstance = pallet_bridge_grandpa::Instance1;
+	type BridgesGrandpaPalletInstance = pezpallet_bridge_grandpa::Instance1;
 	type WeightInfo = <TestRuntime as Config>::WeightInfo;
-	type DbWeight = <TestRuntime as frame_system::Config>::DbWeight;
+	type DbWeight = <TestRuntime as pezframe_system::Config>::DbWeight;
 
 	pub(crate) fn initialize(state_root: RelayBlockHash) -> RelayBlockHash {
-		pallet_bridge_grandpa::FreeHeadersRemaining::<TestRuntime, BridgesGrandpaPalletInstance>::set(Some(100));
-		pallet_bridge_grandpa::Pallet::<TestRuntime, BridgesGrandpaPalletInstance>::initialize(
+		pezpallet_bridge_grandpa::FreeHeadersRemaining::<TestRuntime, BridgesGrandpaPalletInstance>::set(Some(100));
+		pezpallet_bridge_grandpa::Pallet::<TestRuntime, BridgesGrandpaPalletInstance>::initialize(
 			RuntimeOrigin::root(),
 			bp_header_chain::InitializationData {
 				header: Box::new(test_relay_header(0, state_root)),
@@ -893,7 +893,7 @@ pub(crate) mod tests {
 		let hash = header.hash();
 		let justification = make_default_justification(&header);
 		assert_ok!(
-			pallet_bridge_grandpa::Pallet::<TestRuntime, BridgesGrandpaPalletInstance>::submit_finality_proof_ex(
+			pezpallet_bridge_grandpa::Pallet::<TestRuntime, BridgesGrandpaPalletInstance>::submit_finality_proof_ex(
 				RuntimeOrigin::signed(1),
 				Box::new(header),
 				justification.clone(),
@@ -974,7 +974,7 @@ pub(crate) mod tests {
 	}
 
 	fn weight_of_import_teyrchain_1_head(proof: &ParaHeadsProof, prune_expected: bool) -> Weight {
-		let db_weight = <TestRuntime as frame_system::Config>::DbWeight::get();
+		let db_weight = <TestRuntime as pezframe_system::Config>::DbWeight::get();
 		WeightInfoOf::<TestRuntime, ()>::submit_teyrchain_heads_weight(db_weight, proof, 1)
 			.saturating_sub(if prune_expected {
 				Weight::zero()
@@ -1180,7 +1180,7 @@ pub(crate) mod tests {
 					EventRecord {
 						phase: Phase::Initialization,
 						event: TestEvent::Grandpa1(
-							pallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
+							pezpallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
 								number: 1,
 								hash: relay_1_hash,
 								grandpa_info: StoredHeaderGrandpaInfo {
@@ -1321,7 +1321,7 @@ pub(crate) mod tests {
 					EventRecord {
 						phase: Phase::Initialization,
 						event: TestEvent::Grandpa1(
-							pallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
+							pezpallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
 								number: 1,
 								hash: relay_1_hash,
 								grandpa_info: StoredHeaderGrandpaInfo {
@@ -1374,7 +1374,7 @@ pub(crate) mod tests {
 					EventRecord {
 						phase: Phase::Initialization,
 						event: TestEvent::Grandpa1(
-							pallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
+							pezpallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
 								number: 1,
 								hash: relay_1_hash,
 								grandpa_info: StoredHeaderGrandpaInfo {
@@ -1415,7 +1415,7 @@ pub(crate) mod tests {
 					EventRecord {
 						phase: Phase::Initialization,
 						event: TestEvent::Grandpa1(
-							pallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
+							pezpallet_bridge_grandpa::Event::UpdatedBestFinalizedHeader {
 								number: 1,
 								hash: relay_1_hash,
 								grandpa_info: StoredHeaderGrandpaInfo {
@@ -1842,7 +1842,7 @@ pub(crate) mod tests {
 			initialize(Default::default());
 			// set free headers limit to `4`
 			let mut free_headers_remaining = 4;
-			pallet_bridge_grandpa::FreeHeadersRemaining::<TestRuntime, BridgesGrandpaPalletInstance>::set(
+			pezpallet_bridge_grandpa::FreeHeadersRemaining::<TestRuntime, BridgesGrandpaPalletInstance>::set(
 				Some(free_headers_remaining),
 			);
 			// import free GRANDPA and teyrchain headers
@@ -1855,7 +1855,7 @@ pub(crate) mod tests {
 				relay_block_number = relay_block_number + FreeHeadersInterval::get();
 				proceed(relay_block_number, state_root);
 				assert_eq!(
-					pallet_bridge_grandpa::FreeHeadersRemaining::<
+					pezpallet_bridge_grandpa::FreeHeadersRemaining::<
 						TestRuntime,
 						BridgesGrandpaPalletInstance,
 					>::get(),
@@ -1870,7 +1870,7 @@ pub(crate) mod tests {
 					proof,
 				),);
 				assert_eq!(
-					pallet_bridge_grandpa::FreeHeadersRemaining::<
+					pezpallet_bridge_grandpa::FreeHeadersRemaining::<
 						TestRuntime,
 						BridgesGrandpaPalletInstance,
 					>::get(),
@@ -1882,7 +1882,7 @@ pub(crate) mod tests {
 			let (state_root, proof, teyrchains) =
 				prepare_teyrchain_heads_proof::<RegularTeyrchainHeader>(vec![(2, head_data(2, 7))]);
 			relay_block_number = relay_block_number + FreeHeadersInterval::get();
-			let result = pallet_bridge_grandpa::Pallet::<TestRuntime, BridgesGrandpaPalletInstance>::submit_finality_proof_ex(
+			let result = pezpallet_bridge_grandpa::Pallet::<TestRuntime, BridgesGrandpaPalletInstance>::submit_finality_proof_ex(
 				RuntimeOrigin::signed(1),
 				Box::new(test_relay_header(relay_block_number, state_root)),
 				make_default_justification(&test_relay_header(relay_block_number, state_root)),
@@ -1899,7 +1899,7 @@ pub(crate) mod tests {
 			);
 			assert_eq!(result.unwrap().pays_fee, Pays::Yes);
 			assert_eq!(
-				pallet_bridge_grandpa::FreeHeadersRemaining::<
+				pezpallet_bridge_grandpa::FreeHeadersRemaining::<
 					TestRuntime,
 					BridgesGrandpaPalletInstance,
 				>::get(),

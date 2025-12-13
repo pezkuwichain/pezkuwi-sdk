@@ -16,23 +16,23 @@ exclude-from-umbrella = true
 
 [dependencies]
 codec = { workspace = true }
-frame-support = { workspace = true }
+pezframe-support = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 snowbridge-beacon-primitives = { workspace = true }
-sp-core = { workspace = true }
-sp-std = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-std = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
 	"codec/std",
-	"frame-support/std",
+	"pezframe-support/std",
 	"scale-info/std",
 	"snowbridge-beacon-primitives/std",
-	"sp-core/std",
-	"sp-std/std",
+	"pezsp-core/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 	"snowbridge-beacon-primitives/runtime-benchmarks",
 ]

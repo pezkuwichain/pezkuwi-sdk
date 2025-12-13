@@ -910,7 +910,7 @@ impl Unscheduled {
 mod tests {
 	use pezkuwi_node_primitives::BlockData;
 	use pezkuwi_node_subsystem_test_helpers::mock::new_leaf;
-	use sp_core::H256;
+	use pezsp_core::H256;
 
 	use super::*;
 	use crate::testing::artifact_id;

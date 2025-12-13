@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Pezkuwi service. Specialized wrapper over substrate service.
+//! Pezkuwi service. Specialized wrapper over bizinikiwi service.
 
 #![deny(unused_results)]
 
@@ -62,31 +62,31 @@ pub use {
 	pezkuwi_overseer::{Handle, Overseer, OverseerConnector, OverseerHandle},
 	pezkuwi_primitives::runtime_api::TeyrchainHost,
 	relay_chain_selection::SelectRelayChain,
-	sc_client_api::AuxStore,
-	sp_authority_discovery::AuthorityDiscoveryApi,
-	sp_blockchain::{HeaderBackend, HeaderMetadata},
-	sp_consensus_babe::BabeApi,
+	pezsc_client_api::AuxStore,
+	pezsp_authority_discovery::AuthorityDiscoveryApi,
+	pezsp_blockchain::{HeaderBackend, HeaderMetadata},
+	pezsp_consensus_babe::BabeApi,
 };
 
 use std::{path::PathBuf, sync::Arc};
 
 use prometheus_endpoint::Registry;
-use sc_service::SpawnTaskHandle;
+use pezsc_service::SpawnTaskHandle;
 
 pub use chain_spec::{GenericChainSpec, PezkuwichainChainSpec, ZagrosChainSpec};
 pub use pezkuwi_primitives::{Block, BlockId, BlockNumber, CollatorPair, Hash, Id as ParaId};
-pub use sc_client_api::{Backend, CallExecutor};
-pub use sc_consensus::{BlockImport, LongestChain};
-pub use sc_executor::NativeExecutionDispatch;
-use sc_executor::WasmExecutor;
-pub use sc_service::{
+pub use pezsc_client_api::{Backend, CallExecutor};
+pub use pezsc_consensus::{BlockImport, LongestChain};
+pub use pezsc_executor::NativeExecutionDispatch;
+use pezsc_executor::WasmExecutor;
+pub use pezsc_service::{
 	config::{DatabaseSource, PrometheusConfig},
-	ChainSpec, Configuration, Error as SubstrateServiceError, PruningMode, Role, TFullBackend,
+	ChainSpec, Configuration, Error as BizinikiwiServiceError, PruningMode, Role, TFullBackend,
 	TFullCallExecutor, TFullClient, TaskManager, TransactionPoolOptions,
 };
-pub use sp_api::{ApiRef, ConstructRuntimeApi, Core as CoreApi, ProvideRuntimeApi};
-pub use sp_consensus::{Proposal, SelectChain};
-pub use sp_runtime::{
+pub use pezsp_api::{ApiRef, ConstructRuntimeApi, Core as CoreApi, ProvideRuntimeApi};
+pub use pezsp_consensus::{Proposal, SelectChain};
+pub use pezsp_runtime::{
 	generic,
 	traits::{self as runtime_traits, BlakeTwo256, Block as BlockT, Header as HeaderT, NumberFor},
 };
@@ -99,13 +99,13 @@ pub use {zagros_runtime, zagros_runtime_constants};
 pub use fake_runtime_api::{GetLastTimestamp, RuntimeApi};
 
 #[cfg(feature = "full-node")]
-pub type FullBackend = sc_service::TFullBackend<Block>;
+pub type FullBackend = pezsc_service::TFullBackend<Block>;
 
 #[cfg(feature = "full-node")]
-pub type FullClient = sc_service::TFullClient<
+pub type FullClient = pezsc_service::TFullClient<
 	Block,
 	RuntimeApi,
-	WasmExecutor<(sp_io::SubstrateHostFunctions, frame_benchmarking::benchmarking::HostFunctions)>,
+	WasmExecutor<(pezsp_io::BizinikiwiHostFunctions, pezframe_benchmarking::benchmarking::HostFunctions)>,
 >;
 
 /// The minimum period of blocks on which justifications will be
@@ -117,8 +117,8 @@ const KEEP_FINALIZED_FOR_LIVE_NETWORKS: u32 = 25;
 
 /// Provides the header and block number for a hash.
 ///
-/// Decouples `sc_client_api::Backend` and `sp_blockchain::HeaderBackend`.
-pub trait HeaderProvider<Block, Error = sp_blockchain::Error>: Send + Sync + 'static
+/// Decouples `pezsc_client_api::Backend` and `pezsp_blockchain::HeaderBackend`.
+pub trait HeaderProvider<Block, Error = pezsp_blockchain::Error>: Send + Sync + 'static
 where
 	Block: BlockT,
 	Error: std::fmt::Debug + Send + Sync + 'static,
@@ -138,19 +138,19 @@ where
 impl<Block, T> HeaderProvider<Block> for T
 where
 	Block: BlockT,
-	T: sp_blockchain::HeaderBackend<Block> + 'static,
+	T: pezsp_blockchain::HeaderBackend<Block> + 'static,
 {
 	fn header(
 		&self,
 		hash: Block::Hash,
-	) -> sp_blockchain::Result<Option<<Block as BlockT>::Header>> {
-		<Self as sp_blockchain::HeaderBackend<Block>>::header(self, hash)
+	) -> pezsp_blockchain::Result<Option<<Block as BlockT>::Header>> {
+		<Self as pezsp_blockchain::HeaderBackend<Block>>::header(self, hash)
 	}
 	fn number(
 		&self,
 		hash: Block::Hash,
-	) -> sp_blockchain::Result<Option<<<Block as BlockT>::Header as HeaderT>::Number>> {
-		<Self as sp_blockchain::HeaderBackend<Block>>::number(self, hash)
+	) -> pezsp_blockchain::Result<Option<<<Block as BlockT>::Header as HeaderT>::Number>> {
+		<Self as pezsp_blockchain::HeaderBackend<Block>>::number(self, hash)
 	}
 }
 
@@ -170,9 +170,9 @@ where
 impl<Block, T> HeaderProviderProvider<Block> for T
 where
 	Block: BlockT,
-	T: sc_client_api::Backend<Block> + 'static,
+	T: pezsc_client_api::Backend<Block> + 'static,
 {
-	type Provider = <T as sc_client_api::Backend<Block>>::Blockchain;
+	type Provider = <T as pezsc_client_api::Backend<Block>>::Blockchain;
 
 	fn header_provider(&self) -> &Self::Provider {
 		self.blockchain()
@@ -188,13 +188,13 @@ pub enum Error {
 	AddrFormatInvalid(#[from] std::net::AddrParseError),
 
 	#[error(transparent)]
-	Sub(#[from] SubstrateServiceError),
+	Sub(#[from] BizinikiwiServiceError),
 
 	#[error(transparent)]
-	Blockchain(#[from] sp_blockchain::Error),
+	Blockchain(#[from] pezsp_blockchain::Error),
 
 	#[error(transparent)]
-	Consensus(#[from] sp_consensus::Error),
+	Consensus(#[from] pezsp_consensus::Error),
 
 	#[error("Failed to create an overseer")]
 	Overseer(#[from] pezkuwi_overseer::SubsystemError),
@@ -203,7 +203,7 @@ pub enum Error {
 	Prometheus(#[from] prometheus_endpoint::PrometheusError),
 
 	#[error(transparent)]
-	Telemetry(#[from] sc_telemetry::Error),
+	Telemetry(#[from] pezsc_telemetry::Error),
 
 	#[cfg(feature = "full-node")]
 	#[error(transparent)]
@@ -361,7 +361,7 @@ pub enum IsTeyrchainNode {
 #[cfg(feature = "full-node")]
 impl std::fmt::Debug for IsTeyrchainNode {
 	fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
-		use sp_core::Pair;
+		use pezsp_core::Pair;
 		match self {
 			IsTeyrchainNode::Collator(pair) => write!(fmt, "Collator({})", pair.public()),
 			IsTeyrchainNode::FullNode => write!(fmt, "FullNode"),
@@ -395,11 +395,11 @@ macro_rules! chain_ops {
 		let mut config = $config;
 		let basics = new_partial_basics(config, telemetry_worker_handle)?;
 
-		use ::sc_consensus::LongestChain;
+		use ::pezsc_consensus::LongestChain;
 		// use the longest chain selection, since there is no overseer available
 		let chain_selection = LongestChain::new(basics.backend.clone());
 
-		let sc_service::PartialComponents { client, backend, import_queue, task_manager, .. } =
+		let pezsc_service::PartialComponents { client, backend, import_queue, task_manager, .. } =
 			new_partial::<LongestChain<_, Block>>(&mut config, basics, chain_selection)?;
 		Ok((client, backend, import_queue, task_manager))
 	}};
@@ -409,9 +409,9 @@ macro_rules! chain_ops {
 #[cfg(feature = "full-node")]
 pub fn new_chain_ops(
 	config: &mut Configuration,
-) -> Result<(Arc<FullClient>, Arc<FullBackend>, sc_consensus::BasicQueue<Block>, TaskManager), Error>
+) -> Result<(Arc<FullClient>, Arc<FullBackend>, pezsc_consensus::BasicQueue<Block>, TaskManager), Error>
 {
-	config.keystore = sc_service::config::KeystoreConfig::InMemory;
+	config.keystore = pezsc_service::config::KeystoreConfig::InMemory;
 
 	if config.chain_spec.is_pezkuwichain() || config.chain_spec.is_versi() {
 		chain_ops!(config, None)
@@ -444,10 +444,10 @@ pub fn build_full<OverseerGenerator: OverseerGen>(
 		});
 
 	match config.network.network_backend {
-		sc_network::config::NetworkBackendType::Libp2p =>
-			new_full::<_, sc_network::NetworkWorker<Block, Hash>>(config, params),
-		sc_network::config::NetworkBackendType::Litep2p =>
-			new_full::<_, sc_network::Litep2pNetworkBackend>(config, params),
+		pezsc_network::config::NetworkBackendType::Libp2p =>
+			new_full::<_, pezsc_network::NetworkWorker<Block, Hash>>(config, params),
+		pezsc_network::config::NetworkBackendType::Litep2p =>
+			new_full::<_, pezsc_network::Litep2pNetworkBackend>(config, params),
 	}
 }
 
@@ -475,25 +475,25 @@ pub fn revert_backend(
 
 	let number = best_number - revertible;
 	let hash = client.block_hash_from_id(&BlockId::Number(number))?.ok_or(
-		sp_blockchain::Error::Backend(format!(
+		pezsp_blockchain::Error::Backend(format!(
 			"Unexpected hash lookup failure for block number: {}",
 			number
 		)),
 	)?;
 
 	let teyrchains_db = open_database(&config.database)
-		.map_err(|err| sp_blockchain::Error::Backend(err.to_string()))?;
+		.map_err(|err| pezsp_blockchain::Error::Backend(err.to_string()))?;
 
 	revert_approval_voting(teyrchains_db.clone(), hash, task_handle)?;
 	revert_chain_selection(teyrchains_db, hash)?;
-	// Revert Substrate consensus related components
-	sc_consensus_babe::revert(client.clone(), backend, blocks)?;
-	sc_consensus_grandpa::revert(client, blocks)?;
+	// Revert Bizinikiwi consensus related components
+	pezsc_consensus_babe::revert(client.clone(), backend, blocks)?;
+	pezsc_consensus_grandpa::revert(client, blocks)?;
 
 	Ok(())
 }
 
-fn revert_chain_selection(db: Arc<dyn Database>, hash: Hash) -> sp_blockchain::Result<()> {
+fn revert_chain_selection(db: Arc<dyn Database>, hash: Hash) -> pezsp_blockchain::Result<()> {
 	let config = chain_selection_subsystem::Config {
 		col_data: teyrchains_db::REAL_COLUMNS.col_chain_selection_data,
 		stagnant_check_interval: chain_selection_subsystem::StagnantCheckInterval::never(),
@@ -504,14 +504,14 @@ fn revert_chain_selection(db: Arc<dyn Database>, hash: Hash) -> sp_blockchain::R
 
 	chain_selection
 		.revert_to(hash)
-		.map_err(|err| sp_blockchain::Error::Backend(err.to_string()))
+		.map_err(|err| pezsp_blockchain::Error::Backend(err.to_string()))
 }
 
 fn revert_approval_voting(
 	db: Arc<dyn Database>,
 	hash: Hash,
 	task_handle: SpawnTaskHandle,
-) -> sp_blockchain::Result<()> {
+) -> pezsp_blockchain::Result<()> {
 	let config = approval_voting_subsystem::Config {
 		col_approval_data: teyrchains_db::REAL_COLUMNS.col_approval_data,
 		slot_duration_millis: Default::default(),
@@ -520,13 +520,13 @@ fn revert_approval_voting(
 	let approval_voting = approval_voting_subsystem::ApprovalVotingSubsystem::with_config(
 		config,
 		db,
-		Arc::new(sc_keystore::LocalKeystore::in_memory()),
-		Box::new(sp_consensus::NoNetwork),
+		Arc::new(pezsc_keystore::LocalKeystore::in_memory()),
+		Box::new(pezsp_consensus::NoNetwork),
 		approval_voting_subsystem::Metrics::default(),
 		Arc::new(SpawnGlue(task_handle)),
 	);
 
 	approval_voting
 		.revert_to(hash)
-		.map_err(|err| sp_blockchain::Error::Backend(err.to_string()))
+		.map_err(|err| pezsp_blockchain::Error::Backend(err.to_string()))
 }

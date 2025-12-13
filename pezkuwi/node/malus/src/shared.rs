@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use futures::prelude::*;
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 pub const MALUS: &str = "MALUS";
 

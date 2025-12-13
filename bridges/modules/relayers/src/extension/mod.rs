@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Signed extension, built around `pallet-bridge-relayers`. It is able to:
+//! Signed extension, built around `pezpallet-bridge-relayers`. It is able to:
 //!
 //! - refund the cost of successful message delivery and confirmation transactions to the submitter
 //!   by registering corresponding reward in the pallet;
@@ -32,21 +32,21 @@ use bp_relayers::{
 use bp_runtime::{Chain, RangeInclusiveExt, StaticStrProvider};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::{fmt::Debug, marker::PhantomData};
-use frame_support::{
+use pezframe_support::{
 	dispatch::{DispatchInfo, PostDispatchInfo},
-	pallet_prelude::TransactionSource,
+	pezpallet_prelude::TransactionSource,
 	weights::Weight,
 	CloneNoBound, DefaultNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use frame_system::Config as SystemConfig;
-use pallet_bridge_messages::{
+use pezframe_system::Config as SystemConfig;
+use pezpallet_bridge_messages::{
 	CallHelper as MessagesCallHelper, Config as BridgeMessagesConfig, LaneIdOf,
 };
-use pallet_transaction_payment::{
+use pezpallet_transaction_payment::{
 	Config as TransactionPaymentConfig, OnChargeTransaction, Pallet as TransactionPaymentPallet,
 };
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{
 		AsSystemOriginSigner, DispatchInfoOf, Dispatchable, PostDispatchInfoOf,
 		TransactionExtension, ValidateResult, Zero,
@@ -106,13 +106,13 @@ pub enum RelayerAccountAction<AccountId, RewardBalance, LaneId> {
 	Slash(AccountId, RewardsAccountParams<LaneId>),
 }
 
-/// A signed extension, built around `pallet-bridge-relayers`.
+/// A signed extension, built around `pezpallet-bridge-relayers`.
 ///
 /// It may be incorporated into runtime to refund relayers for submitting correct
 /// message delivery and confirmation transactions, optionally batched with required
 /// finality proofs.
 ///
-/// (Works only with `pallet-bridge-messages` and `RewardsAccountParams` as the `Reward`)
+/// (Works only with `pezpallet-bridge-messages` and `RewardsAccountParams` as the `Reward`)
 #[derive(
 	DefaultNoBound,
 	CloneNoBound,
@@ -467,17 +467,17 @@ mod tests {
 	use bp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use bp_teyrchains::{BestParaHeadHash, ParaInfo, SubmitTeyrchainHeadsInfo};
-	use frame_support::{
-		__private::sp_tracing,
+	use pezframe_support::{
+		__private::pezsp_tracing,
 		assert_storage_noop, parameter_types,
 		traits::{fungible::Mutate, ReservableCurrency},
 		weights::Weight,
 	};
-	use pallet_bridge_grandpa::{Call as GrandpaCall, Pallet as GrandpaPallet, StoredAuthoritySet};
-	use pallet_bridge_messages::{Call as MessagesCall, Pallet as MessagesPallet};
-	use pallet_bridge_teyrchains::{Call as TeyrchainsCall, Pallet as TeyrchainsPallet};
-	use pallet_utility::Call as UtilityCall;
-	use sp_runtime::{
+	use pezpallet_bridge_grandpa::{Call as GrandpaCall, Pallet as GrandpaPallet, StoredAuthoritySet};
+	use pezpallet_bridge_messages::{Call as MessagesCall, Pallet as MessagesPallet};
+	use pezpallet_bridge_teyrchains::{Call as TeyrchainsCall, Pallet as TeyrchainsPallet};
+	use pezpallet_utility::Call as UtilityCall;
+	use pezsp_runtime::{
 		traits::{ConstU64, DispatchTransaction, Header as HeaderT},
 		transaction_validity::{
 			InvalidTransaction, TransactionSource::External, TransactionValidity, ValidTransaction,
@@ -565,11 +565,11 @@ mod tests {
 	) {
 		let authorities = test_keyring().into_iter().map(|(a, w)| (a.into(), w)).collect();
 		let best_relay_header = HeaderId(best_relay_header_number, BridgedChainHash::default());
-		pallet_bridge_grandpa::CurrentAuthoritySet::<TestRuntime>::put(
+		pezpallet_bridge_grandpa::CurrentAuthoritySet::<TestRuntime>::put(
 			StoredAuthoritySet::try_new(authorities, TEST_GRANDPA_SET_ID).unwrap(),
 		);
-		pallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(best_relay_header);
-		pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
+		pezpallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(best_relay_header);
+		pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 			best_relay_header.hash(),
 			bp_test_utils::test_header::<BridgedChainHeader>(0).build(),
 		);
@@ -582,16 +582,16 @@ mod tests {
 			},
 			next_imported_hash_position: 0,
 		};
-		pallet_bridge_teyrchains::ParasInfo::<TestRuntime>::insert(para_id, para_info);
+		pezpallet_bridge_teyrchains::ParasInfo::<TestRuntime>::insert(para_id, para_info);
 
 		let lane_id = test_lane_id();
 		let in_lane_data =
 			InboundLaneData { last_confirmed_nonce: best_message, ..Default::default() };
-		pallet_bridge_messages::InboundLanes::<TestRuntime>::insert(lane_id, in_lane_data);
+		pezpallet_bridge_messages::InboundLanes::<TestRuntime>::insert(lane_id, in_lane_data);
 
 		let out_lane_data =
 			OutboundLaneData { latest_received_nonce: best_message, ..Default::default() };
-		pallet_bridge_messages::OutboundLanes::<TestRuntime>::insert(lane_id, out_lane_data);
+		pezpallet_bridge_messages::OutboundLanes::<TestRuntime>::insert(lane_id, out_lane_data);
 
 		Balances::mint_into(&delivery_rewards_account(), ExistentialDeposit::get()).unwrap();
 		Balances::mint_into(&confirmation_rewards_account(), ExistentialDeposit::get()).unwrap();
@@ -670,7 +670,7 @@ mod tests {
 				bridged_header_hash: Default::default(),
 				storage_proof: Default::default(),
 				lane: test_lane_id(),
-				nonces_start: pallet_bridge_messages::InboundLanes::<TestRuntime>::get(
+				nonces_start: pezpallet_bridge_messages::InboundLanes::<TestRuntime>::get(
 					test_lane_id(),
 				)
 				.unwrap()
@@ -1137,7 +1137,7 @@ mod tests {
 		Option<PreDispatchData<ThisChainAccountId, BridgedChainBlockNumber, TestLaneIdType>>,
 		TransactionValidityError,
 	> {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		let extension: TestExtension = BridgeRelayersTransactionExtension(PhantomData);
 		extension
 			.validate_and_prepare(
@@ -1189,17 +1189,17 @@ mod tests {
 	fn dispatch_info() -> DispatchInfo {
 		DispatchInfo {
 			call_weight: Weight::from_parts(
-				frame_support::weights::constants::WEIGHT_REF_TIME_PER_SECOND,
+				pezframe_support::weights::constants::WEIGHT_REF_TIME_PER_SECOND,
 				0,
 			),
 			extension_weight: Weight::zero(),
-			class: frame_support::dispatch::DispatchClass::Normal,
-			pays_fee: frame_support::dispatch::Pays::Yes,
+			class: pezframe_support::dispatch::DispatchClass::Normal,
+			pays_fee: pezframe_support::dispatch::Pays::Yes,
 		}
 	}
 
 	fn post_dispatch_info() -> PostDispatchInfo {
-		PostDispatchInfo { actual_weight: None, pays_fee: frame_support::dispatch::Pays::Yes }
+		PostDispatchInfo { actual_weight: None, pays_fee: pezframe_support::dispatch::Pays::Yes }
 	}
 
 	fn run_post_dispatch(
@@ -1223,7 +1223,7 @@ mod tests {
 		let extra_weight = <TestRuntime as RelayersConfig>::WeightInfo::extra_weight_of_successful_receive_messages_proof_call();
 		post_dispatch_info.actual_weight =
 			Some(dispatch_info().call_weight.saturating_sub(extra_weight));
-		pallet_transaction_payment::Pallet::<TestRuntime>::compute_actual_fee(
+		pezpallet_transaction_payment::Pallet::<TestRuntime>::compute_actual_fee(
 			1024,
 			&dispatch_info(),
 			&post_dispatch_info,
@@ -1232,7 +1232,7 @@ mod tests {
 	}
 
 	fn expected_confirmation_reward() -> RewardBalance {
-		pallet_transaction_payment::Pallet::<TestRuntime>::compute_actual_fee(
+		pezpallet_transaction_payment::Pallet::<TestRuntime>::compute_actual_fee(
 			1024,
 			&dispatch_info(),
 			&post_dispatch_info(),
@@ -1783,7 +1783,7 @@ mod tests {
 
 			let mut dispatch_info = dispatch_info();
 			dispatch_info.call_weight = Weight::from_parts(
-				frame_support::weights::constants::WEIGHT_REF_TIME_PER_SECOND * 2,
+				pezframe_support::weights::constants::WEIGHT_REF_TIME_PER_SECOND * 2,
 				0,
 			);
 
@@ -1804,7 +1804,7 @@ mod tests {
 			match pre_dispatch_data.call_info {
 				ExtensionCallInfo::AllFinalityAndMsgs(ref mut info, ..) => {
 					info.extra_weight.set_ref_time(
-						frame_support::weights::constants::WEIGHT_REF_TIME_PER_SECOND,
+						pezframe_support::weights::constants::WEIGHT_REF_TIME_PER_SECOND,
 					);
 					info.extra_size = 32;
 				},
@@ -2424,7 +2424,7 @@ mod tests {
 				.into(),
 				..Default::default()
 			};
-			pallet_bridge_messages::InboundLanes::<TestRuntime>::insert(lane_id, in_lane_data);
+			pezpallet_bridge_messages::InboundLanes::<TestRuntime>::insert(lane_id, in_lane_data);
 
 			// now check that the priority of empty tx is the same as priority of 1-message tx
 			let priority_of_zero_messages_delivery =

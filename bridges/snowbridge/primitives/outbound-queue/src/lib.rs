@@ -8,10 +8,10 @@ pub mod v1;
 pub mod v2;
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::PalletError;
+use pezframe_support::PalletError;
 use scale_info::TypeInfo;
-use sp_arithmetic::traits::{BaseArithmetic, Unsigned};
-use sp_core::RuntimeDebug;
+use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned};
+use pezsp_core::RuntimeDebug;
 
 pub use snowbridge_verification_primitives::*;
 

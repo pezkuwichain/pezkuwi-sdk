@@ -24,10 +24,10 @@ use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
 use bp_runtime::record_all_trie_keys;
 use bp_teyrchains::teyrchain_head_storage_key_at_source;
 use codec::Encode;
-use sp_consensus_grandpa::{AuthorityId, AuthoritySignature, AuthorityWeight, SetId};
-use sp_runtime::traits::{Header as HeaderT, One, Zero};
-use sp_std::prelude::*;
-use sp_trie::{trie_types::TrieDBMutBuilderV1, LayoutV1, MemoryDB, TrieMut};
+use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature, AuthorityWeight, SetId};
+use pezsp_runtime::traits::{Header as HeaderT, One, Zero};
+use pezsp_std::prelude::*;
+use pezsp_trie::{trie_types::TrieDBMutBuilderV1, LayoutV1, MemoryDB, TrieMut};
 
 // Re-export all our test account utilities
 pub use keyring::*;
@@ -162,7 +162,7 @@ fn generate_chain<H: HeaderT>(fork_id: u32, depth: u32, ancestor: &H) -> Vec<H> 
 
 		// Modifying the digest so headers at the same height but in different forks have different
 		// hashes
-		header.digest_mut().logs.push(sp_runtime::DigestItem::Other(fork_id.encode()));
+		header.digest_mut().logs.push(pezsp_runtime::DigestItem::Other(fork_id.encode()));
 
 		headers.push(header);
 	}
@@ -208,7 +208,7 @@ pub fn signed_precommit<H: HeaderT>(
 ) -> finality_grandpa::SignedPrecommit<H::Hash, H::Number, AuthoritySignature, AuthorityId> {
 	let precommit = finality_grandpa::Precommit { target_hash: target.0, target_number: target.1 };
 
-	let encoded = sp_consensus_grandpa::localized_payload(
+	let encoded = pezsp_consensus_grandpa::localized_payload(
 		round,
 		set_id,
 		&finality_grandpa::Message::Precommit(precommit.clone()),

@@ -152,7 +152,7 @@ impl<Context> Subsystem2 {
 
 fn main() {
 	femme::with_level(femme::LevelFilter::Trace);
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	futures::executor::block_on(async {
 		let timer_stream = stream::repeat(()).then(|_| async {
 			Delay::new(Duration::from_secs(1)).await;

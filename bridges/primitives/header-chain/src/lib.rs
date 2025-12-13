@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Defines traits which represent a common interface for Substrate pallets which want to
+//! Defines traits which represent a common interface for Bizinikiwi pallets which want to
 //! incorporate bridge functionality.
 
 #![warn(missing_docs)]
@@ -29,14 +29,14 @@ use bp_runtime::{
 };
 use codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
 use core::{clone::Clone, cmp::Eq, default::Default, fmt::Debug};
-use frame_support::PalletError;
+use pezframe_support::PalletError;
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
-use sp_consensus_grandpa::{
+use pezsp_consensus_grandpa::{
 	AuthorityList, ConsensusLog, ScheduledChange, SetId, GRANDPA_ENGINE_ID,
 };
-use sp_runtime::{traits::Header as HeaderT, Digest, RuntimeDebug, SaturatedConversion};
-use sp_std::{boxed::Box, vec::Vec};
+use pezsp_runtime::{traits::Header as HeaderT, Digest, RuntimeDebug, SaturatedConversion};
+use pezsp_std::{boxed::Box, vec::Vec};
 
 pub use call_info::{BridgeGrandpaCall, BridgeGrandpaCallOf, SubmitFinalityProofInfo};
 
@@ -80,7 +80,7 @@ impl<H: HeaderT> StoredHeaderDataBuilder<H::Number, H::Hash> for H {
 	}
 }
 
-/// Substrate header chain, abstracted from the way it is stored.
+/// Bizinikiwi header chain, abstracted from the way it is stored.
 pub trait HeaderChain<C: Chain> {
 	/// Returns state (storage) root of given finalized header.
 	fn finalized_header_state_root(header_hash: HashOf<C>) -> Option<HashOf<C>>;
@@ -164,12 +164,12 @@ pub trait ConsensusLogReader {
 }
 
 /// A struct that provides helper methods for querying the GRANDPA consensus log.
-pub struct GrandpaConsensusLogReader<Number>(sp_std::marker::PhantomData<Number>);
+pub struct GrandpaConsensusLogReader<Number>(pezsp_std::marker::PhantomData<Number>);
 
 impl<Number: Codec> GrandpaConsensusLogReader<Number> {
 	/// Find and return scheduled (regular) change digest item.
 	pub fn find_scheduled_change(digest: &Digest) -> Option<ScheduledChange<Number>> {
-		use sp_runtime::generic::OpaqueDigestItemId;
+		use pezsp_runtime::generic::OpaqueDigestItemId;
 		let id = OpaqueDigestItemId::Consensus(&GRANDPA_ENGINE_ID);
 
 		let filter_log = |log: ConsensusLog<Number>| match log {
@@ -246,7 +246,7 @@ pub trait FindEquivocations<FinalityProof, FinalityVerificationContext, Equivoca
 	) -> Result<Vec<EquivocationProof>, Self::Error>;
 }
 
-/// Substrate-based chain that is using direct GRANDPA finality.
+/// Bizinikiwi-based chain that is using direct GRANDPA finality.
 ///
 /// Keep in mind that teyrchains are relying on relay chain GRANDPA, so they should not implement
 /// this trait.
@@ -394,8 +394,8 @@ pub fn max_expected_submit_finality_proof_arguments_size<C: ChainWithGrandpa>(
 mod tests {
 	use super::*;
 	use bp_runtime::ChainId;
-	use frame_support::weights::Weight;
-	use sp_runtime::{
+	use pezframe_support::weights::Weight;
+	use pezsp_runtime::{
 		testing::H256, traits::BlakeTwo256, DigestItem, MultiSignature, StateVersion,
 	};
 
@@ -407,7 +407,7 @@ mod tests {
 		type BlockNumber = u32;
 		type Hash = H256;
 		type Hasher = BlakeTwo256;
-		type Header = sp_runtime::generic::Header<u32, BlakeTwo256>;
+		type Header = pezsp_runtime::generic::Header<u32, BlakeTwo256>;
 		type AccountId = u64;
 		type Balance = u64;
 		type Nonce = u64;

@@ -7,7 +7,7 @@ These crates are used by external developers and need thorough documentation. Th
 development.
 
 - [Documentation Guidelines](#documentation-guidelines)
-  - [General/Non-Pallet Crates](#generalnon-pallet-crates)
+  - [General/Non-Pallet Crates](#generalnon-pezpallet-crates)
     - [What to Document?](#what-to-document)
       - [Rust Docs vs. Code Comments](#rust-docs-vs-code-comments)
     - [How to Document?](#how-to-document)
@@ -16,9 +16,9 @@ development.
     - [Other Guidelines](#other-guidelines)
       - [Document Through Code](#document-through-code)
       - [Formatting Matters](#formatting-matters)
-  - [Pallet Crates](#pallet-crates)
-    - [Top Level Pallet Docs (`lib.rs`)](#top-level-pallet-docs-librs)
-      - [Pezkuwi and Substrate](#pezkuwi-and-substrate)
+  - [Pallet Crates](#pezpallet-crates)
+    - [Top Level Pallet Docs (`lib.rs`)](#top-level-pezpallet-docs-librs)
+      - [Pezkuwi and Bizinikiwi](#pezkuwi-and-bizinikiwi)
     - [Dispatchables](#dispatchables)
     - [Storage Items](#storage-items)
     - [Errors and Events](#errors-and-events)
@@ -143,7 +143,7 @@ The following is a set of notes that may not necessarily hold in all circumstanc
 #### Document Through Code
 
 You should make sure that your code is properly-named and well-organized so that your code functions as a form of
-documentation. However, within the complexity of our projects in Pezkuwi/Substrate that is not enough. Particularly,
+documentation. However, within the complexity of our projects in Pezkuwi/Bizinikiwi that is not enough. Particularly,
 things like examples, errors and panics cannot be documented only through properly-named and well-organized code.
 
 > Our north star is self-documenting code that also happens to be well-documented and littered with examples.
@@ -209,7 +209,7 @@ The guidelines so far have been general in nature, and are applicable to crates 
 pallets.
 
 The following is relevant to how to document parts of a crate that is a pallet. See
-[`pallet-fast-unstake`](../../substrate/frame/fast-unstake/src/lib.rs) as one example of adhering these guidelines.
+[`pezpallet-fast-unstake`](../../bizinikiwi/pezframe/fast-unstake/src/lib.rs) as one example of adhering these guidelines.
 
 ---
 
@@ -283,14 +283,14 @@ and beyond are flexible.
 
 ---
 
-#### Pezkuwi and Substrate
+#### Pezkuwi and Bizinikiwi
 
 Optionally, in order to demonstrate the relation between the two, you can start the pallet documentation with:
 
 ```
-//! > Made with *Substrate*, for *Pezkuwi*.
+//! > Made with *Bizinikiwi*, for *Pezkuwi*.
 //!
-//! [![github]](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/substrate/frame/fast-unstake) -
+//! [![github]](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi/pezframe/fast-unstake) -
 //! [![pezkuwi]](https://pezkuwichain.io)
 //!
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white

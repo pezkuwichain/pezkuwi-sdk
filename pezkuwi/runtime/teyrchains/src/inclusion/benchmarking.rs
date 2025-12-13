@@ -15,8 +15,8 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use bitvec::{bitvec, prelude::Lsb0};
-use frame_benchmarking::v2::*;
-use pallet_message_queue as mq;
+use pezframe_benchmarking::v2::*;
+use pezpallet_message_queue as mq;
 use pezkuwi_primitives::{
 	CandidateCommitments, CommittedCandidateReceiptV2 as CommittedCandidateReceipt, HrmpChannelId,
 	OutboundHrmpMessage, SessionIndex,

@@ -20,8 +20,8 @@
 use bp_relayers::StakeAndSlash;
 use codec::Codec;
 use core::{fmt::Debug, marker::PhantomData};
-use frame_support::traits::{tokens::BalanceStatus, NamedReservableCurrency};
-use sp_runtime::{traits::Get, DispatchError, DispatchResult};
+use pezframe_support::traits::{tokens::BalanceStatus, NamedReservableCurrency};
+use pezsp_runtime::{traits::Get, DispatchError, DispatchResult};
 
 /// `StakeAndSlash` that works with `NamedReservableCurrency` and uses named
 /// reservations.
@@ -74,8 +74,8 @@ mod tests {
 	use crate::mock::*;
 	use bp_relayers::ExplicitOrAccountParams;
 
-	use frame_support::traits::fungible::Mutate;
-	use sp_runtime::traits::IdentifyAccount;
+	use pezframe_support::traits::fungible::Mutate;
+	use pezsp_runtime::traits::IdentifyAccount;
 
 	fn test_stake() -> ThisChainBalance {
 		Stake::get()

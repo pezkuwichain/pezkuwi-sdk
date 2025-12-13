@@ -18,9 +18,9 @@
 //! Implements both runtime APIs for fee estimation and getting the messages for transfers.
 
 use core::{cell::RefCell, marker::PhantomData};
-use frame_support::{
-	construct_runtime, derive_impl, parameter_types, sp_runtime,
-	sp_runtime::{
+use pezframe_support::{
+	construct_runtime, derive_impl, parameter_types, pezsp_runtime,
+	pezsp_runtime::{
 		traits::{Get, IdentityLookup, MaybeEquivalence, TryConvert},
 		BuildStorage, SaturatedConversion,
 	},
@@ -30,8 +30,8 @@ use frame_support::{
 	},
 	weights::WeightToFee as WeightToFeeT,
 };
-use frame_system::{EnsureRoot, RawOrigin as SystemRawOrigin};
-use pallet_xcm::TestWeightInfo;
+use pezframe_system::{EnsureRoot, RawOrigin as SystemRawOrigin};
+use pezpallet_xcm::TestWeightInfo;
 use xcm::{prelude::*, Version as XcmVersion};
 use xcm_builder::{
 	AllowTopLevelPaidExecutionFrom, ConvertedConcreteId, EnsureXcmOrigin, FixedRateOfFungible,
@@ -53,51 +53,51 @@ use xcm_simulator::helpers::derive_topic_id;
 
 construct_runtime! {
 	pub enum TestRuntime {
-		System: frame_system,
-		Balances: pallet_balances,
-		AssetsPallet: pallet_assets,
-		XcmPallet: pallet_xcm,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		AssetsPallet: pezpallet_assets,
+		XcmPallet: pezpallet_xcm,
 	}
 }
 
 pub type TxExtension =
-	(frame_system::CheckWeight<TestRuntime>, frame_system::WeightReclaim<TestRuntime>);
+	(pezframe_system::CheckWeight<TestRuntime>, pezframe_system::WeightReclaim<TestRuntime>);
 
 // we only use the hash type from this, so using the mock should be fine.
-pub(crate) type Extrinsic = sp_runtime::generic::UncheckedExtrinsic<
+pub(crate) type Extrinsic = pezsp_runtime::generic::UncheckedExtrinsic<
 	u64,
 	RuntimeCall,
-	sp_runtime::testing::UintAuthorityId,
+	pezsp_runtime::testing::UintAuthorityId,
 	TxExtension,
 >;
-type Block = sp_runtime::testing::Block<Extrinsic>;
+type Block = pezsp_runtime::testing::Block<Extrinsic>;
 type Balance = u128;
 type AssetIdForAssetsPallet = u32;
 type AccountId = u64;
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = Block;
 	type AccountId = AccountId;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type Lookup = IdentityLookup<AccountId>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for TestRuntime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for TestRuntime {
 	type AccountStore = System;
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 }
 
 // Assets instance
-#[derive_impl(pallet_assets::config_preludes::TestDefaultConfig)]
-impl pallet_assets::Config for TestRuntime {
+#[derive_impl(pezpallet_assets::config_preludes::TestDefaultConfig)]
+impl pezpallet_assets::Config for TestRuntime {
 	type AssetId = AssetIdForAssetsPallet;
 	type Balance = Balance;
 	type Currency = Balances;
-	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
-	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type CreateOrigin = AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
+	type ForceOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type Holder = ();
 	type Freezer = ();
 	type AssetDeposit = ConstU128<1>;
@@ -244,7 +244,7 @@ impl ConvertLocation<AccountId> for SiblingChainToIndex64 {
 pub type LocationToAccountId = (AccountIndex64Aliases<AnyNetwork, u64>, SiblingChainToIndex64);
 
 pub type NativeTokenTransactor = FungibleAdapter<
-	// We use pallet-balances for handling this fungible asset.
+	// We use pezpallet-balances for handling this fungible asset.
 	Balances,
 	// The fungible asset handled by this transactor is the native token of the chain.
 	IsConcrete<HereLocation>,
@@ -288,7 +288,7 @@ impl MaybeEquivalence<Location, AssetIdForAssetsPallet> for LocationToAssetIdFor
 
 /// AssetTransactor for handling assets other than the native one.
 pub type AssetsTransactor = FungiblesAdapter<
-	// We use pallet-assets for handling the relay token.
+	// We use pezpallet-assets for handling the relay token.
 	AssetsPallet,
 	// Matches the relay token.
 	ConvertedConcreteId<AssetIdForAssetsPallet, Balance, LocationToAssetIdForAssetsPallet, JustTry>,
@@ -311,7 +311,7 @@ impl Contains<Location> for HereAndInnerLocations {
 }
 
 pub type Barrier = (
-	TakeWeightCredit, // We need this for pallet-xcm's extrinsics to work.
+	TakeWeightCredit, // We need this for pezpallet-xcm's extrinsics to work.
 	AllowTopLevelPaidExecutionFrom<HereAndInnerLocations>, /* TODO: Technically, we should allow
 	                   * messages from "AssetHub". */
 );
@@ -440,7 +440,7 @@ where
 /// sending/executing XCMs.
 pub type LocalOriginToLocation = SignedToAccountIndex64<RuntimeOrigin, AccountId>;
 
-impl pallet_xcm::Config for TestRuntime {
+impl pezpallet_xcm::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, ()>;
 	type XcmRouter = XcmRouter;
@@ -454,7 +454,7 @@ impl pallet_xcm::Config for TestRuntime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type TrustedLockers = ();
 	type SovereignAccountOf = ();
@@ -468,14 +468,14 @@ impl pallet_xcm::Config for TestRuntime {
 }
 
 #[allow(dead_code)]
-pub fn new_test_ext_with_balances(balances: Vec<(AccountId, Balance)>) -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+pub fn new_test_ext_with_balances(balances: Vec<(AccountId, Balance)>) -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<TestRuntime> { balances, ..Default::default() }
+	pezpallet_balances::GenesisConfig::<TestRuntime> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }
@@ -484,14 +484,14 @@ pub fn new_test_ext_with_balances(balances: Vec<(AccountId, Balance)>) -> sp_io:
 pub fn new_test_ext_with_balances_and_assets(
 	balances: Vec<(AccountId, Balance)>,
 	assets: Vec<(AssetIdForAssetsPallet, AccountId, Balance)>,
-) -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+) -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<TestRuntime> { balances, ..Default::default() }
+	pezpallet_balances::GenesisConfig::<TestRuntime> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	pallet_assets::GenesisConfig::<TestRuntime> {
+	pezpallet_assets::GenesisConfig::<TestRuntime> {
 		assets: vec![
 			// id, owner, is_sufficient, min_balance.
 			// We don't actually need this to be sufficient, since we use the native assets in
@@ -511,7 +511,7 @@ pub fn new_test_ext_with_balances_and_assets(
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }
@@ -523,14 +523,14 @@ pub(crate) struct RuntimeApi {
 	_inner: TestClient,
 }
 
-impl sp_api::ProvideRuntimeApi<Block> for TestClient {
+impl pezsp_api::ProvideRuntimeApi<Block> for TestClient {
 	type Api = RuntimeApi;
-	fn runtime_api(&self) -> sp_api::ApiRef<'_, Self::Api> {
+	fn runtime_api(&self) -> pezsp_api::ApiRef<'_, Self::Api> {
 		RuntimeApi { _inner: self.clone() }.into()
 	}
 }
 
-sp_api::mock_impl_runtime_apis! {
+pezsp_api::mock_impl_runtime_apis! {
 	impl TrustedQueryApi<Block> for RuntimeApi {
 		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> Result<bool, TrustedQueryApiError> {
 			XcmPallet::is_trusted_reserve(asset, location)
@@ -598,18 +598,18 @@ sp_api::mock_impl_runtime_apis! {
 			call: RuntimeCall,
 			result_xcms_version: XcmVersion,
 		) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			pallet_xcm::Pallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
+			pezpallet_xcm::Pallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
 
 		fn dry_run_call_before_version_2(
 			origin: OriginCaller,
 			call: RuntimeCall,
 		) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			pallet_xcm::Pallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, xcm::latest::VERSION)
+			pezpallet_xcm::Pallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, xcm::latest::VERSION)
 		}
 
 		fn dry_run_xcm(origin_location: VersionedLocation, xcm: VersionedXcm<RuntimeCall>) -> Result<XcmDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			pallet_xcm::Pallet::<TestRuntime>::dry_run_xcm::<XcmRouter>(origin_location, xcm)
+			pezpallet_xcm::Pallet::<TestRuntime>::dry_run_xcm::<XcmRouter>(origin_location, xcm)
 		}
 	}
 }

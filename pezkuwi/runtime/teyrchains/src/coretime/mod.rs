@@ -20,16 +20,16 @@
 
 use alloc::{vec, vec::Vec};
 use core::result;
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{defensive_prelude::*, Currency},
 };
-use frame_system::pallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 pub use pallet::*;
-use pallet_broker::{CoreAssignment, CoreIndex as BrokerCoreIndex};
+use pezpallet_broker::{CoreAssignment, CoreIndex as BrokerCoreIndex};
 use pezkuwi_primitives::{Balance, BlockNumber, CoreIndex, Id as ParaId};
-use sp_arithmetic::traits::SaturatedConversion;
-use sp_runtime::traits::TryConvert;
+use pezsp_arithmetic::traits::SaturatedConversion;
+use pezsp_runtime::traits::TryConvert;
 use xcm::prelude::*;
 use xcm_executor::traits::TransactAsset;
 
@@ -72,7 +72,7 @@ impl WeightInfo for TestWeightInfo {
 
 /// Shorthand for the Balance type the runtime is using.
 pub type BalanceOf<T> = <<T as on_demand::Config>::Currency as Currency<
-	<T as frame_system::Config>::AccountId,
+	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 
 /// Broker pallet index on the coretime chain. Used to
@@ -89,9 +89,9 @@ enum BrokerRuntimePallets {
 #[derive(Encode, Decode)]
 enum CoretimeCalls {
 	#[codec(index = 1)]
-	Reserve(pallet_broker::Schedule),
+	Reserve(pezpallet_broker::Schedule),
 	#[codec(index = 3)]
-	SetLease(pallet_broker::TaskId, pallet_broker::Timeslice),
+	SetLease(pezpallet_broker::TaskId, pezpallet_broker::Timeslice),
 	#[codec(index = 19)]
 	NotifyCoreCount(u16),
 	#[codec(index = 20)]
@@ -100,11 +100,11 @@ enum CoretimeCalls {
 	SwapLeases(ParaId, ParaId),
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 
 	use crate::configuration;
-	use sp_runtime::traits::TryConvert;
+	use pezsp_runtime::traits::TryConvert;
 	use xcm::latest::InteriorLocation;
 	use xcm_executor::traits::TransactAsset;
 
@@ -115,11 +115,11 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + assigner_coretime::Config + on_demand::Config {
-		type RuntimeOrigin: From<<Self as frame_system::Config>::RuntimeOrigin>
+	pub trait Config: pezframe_system::Config + assigner_coretime::Config + on_demand::Config {
+		type RuntimeOrigin: From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<result::Result<Origin, <Self as Config>::RuntimeOrigin>>;
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The ParaId of the coretime chain.
 		#[pallet::constant]
 		type BrokerId: Get<u32>;
@@ -242,7 +242,7 @@ pub mod pallet {
 impl<T: Config> Pallet<T> {
 	/// Ensure the origin is one of Root or the `para` itself.
 	fn ensure_root_or_para(
-		origin: <T as frame_system::Config>::RuntimeOrigin,
+		origin: <T as pezframe_system::Config>::RuntimeOrigin,
 		id: ParaId,
 	) -> DispatchResult {
 		if let Ok(caller_id) = ensure_teyrchain(<T as Config>::RuntimeOrigin::from(origin.clone()))
@@ -287,7 +287,7 @@ impl<T: Config> Pallet<T> {
 	/// The Relay-chain must be configured to ensure that only a single revenue information
 	/// destination exists.
 	pub fn notify_revenue(until: BlockNumber) -> DispatchResult {
-		let now = <frame_system::Pallet<T>>::block_number();
+		let now = <pezframe_system::Pallet<T>>::block_number();
 		let until_bnf: BlockNumberFor<T> = until.into();
 
 		// When cannot be in the future.

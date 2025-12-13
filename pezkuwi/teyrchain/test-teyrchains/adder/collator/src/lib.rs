@@ -24,7 +24,7 @@ use pezkuwi_node_primitives::{
 	Statement,
 };
 use pezkuwi_primitives::{CollatorId, CollatorPair};
-use sp_core::{traits::SpawnNamed, Pair};
+use pezsp_core::{traits::SpawnNamed, Pair};
 use std::{
 	collections::HashMap,
 	sync::{
@@ -297,7 +297,7 @@ mod tests {
 
 	#[test]
 	fn collator_works() {
-		let spawner = sp_core::testing::TaskExecutor::new();
+		let spawner = pezsp_core::testing::TaskExecutor::new();
 		let collator = Collator::new();
 		let collation_function = collator.create_collation_function(spawner);
 

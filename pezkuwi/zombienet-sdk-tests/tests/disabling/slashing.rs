@@ -72,7 +72,7 @@ async fn dispute_past_session_slashing() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(1337)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec!["-lteyrchain=debug".into()])
 				.with_collator(|n| n.with_name("collator-1337"))
 		})

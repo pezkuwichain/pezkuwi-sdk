@@ -26,8 +26,8 @@ use crate::{
 	paras::{ParaGenesisArgs, ParaKind},
 	scheduler::common::Assignment,
 };
-use frame_support::{assert_noop, assert_ok, pallet_prelude::*};
-use pallet_broker::TaskId;
+use pezframe_support::{assert_noop, assert_ok, pezpallet_prelude::*};
+use pezpallet_broker::TaskId;
 use pezkuwi_primitives::{BlockNumber, Id as ParaId, SessionIndex, ValidationCode};
 
 fn schedule_blank_para(id: ParaId, parakind: ParaKind) {

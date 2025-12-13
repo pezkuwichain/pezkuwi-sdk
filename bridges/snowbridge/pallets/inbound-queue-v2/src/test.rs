@@ -4,14 +4,14 @@ use super::*;
 
 use crate::{mock::*, Error};
 use codec::Encode;
-use frame_support::{assert_noop, assert_ok};
+use pezframe_support::{assert_noop, assert_ok};
 use snowbridge_inbound_queue_primitives::{v2::XcmPayload, EventProof, Proof};
 use snowbridge_test_utils::{
 	mock_rewards::{RegisteredRewardAmount, RegisteredRewardsCount},
 	mock_xcm::{set_charge_fees_override, set_sender_override},
 };
-use sp_keyring::sr25519::Keyring;
-use sp_runtime::DispatchError;
+use pezsp_keyring::sr25519::Keyring;
+use pezsp_runtime::DispatchError;
 
 #[test]
 fn test_submit_happy_path() {
@@ -31,7 +31,7 @@ fn test_submit_happy_path() {
 
 		assert_ok!(InboundQueue::submit(origin.clone(), Box::new(event.clone())));
 
-		let events = frame_system::Pallet::<Test>::events();
+		let events = pezframe_system::Pallet::<Test>::events();
 		assert!(
 			events.iter().any(|event| matches!(
 				event.event,
@@ -132,7 +132,7 @@ fn test_using_same_nonce_fails() {
 
 		assert_ok!(InboundQueue::submit(origin.clone(), Box::new(event.clone())));
 
-		let events = frame_system::Pallet::<Test>::events();
+		let events = pezframe_system::Pallet::<Test>::events();
 		assert!(
 			events.iter().any(|event| matches!(
 				event.event,
@@ -226,7 +226,7 @@ fn test_xcm_send_validate_failure() {
 		set_sender_override(
 			|_, _| return Err(SendError::NotApplicable),
 			|xcm| {
-				let hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+				let hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 				Ok(hash)
 			},
 		);

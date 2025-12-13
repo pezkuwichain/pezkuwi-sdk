@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! All runtime calls, supported by `pallet-bridge-relayers` when it acts as a signed
+//! All runtime calls, supported by `pezpallet-bridge-relayers` when it acts as a signed
 //! extension.
 
 use bp_header_chain::SubmitFinalityProofInfo;
@@ -22,17 +22,17 @@ use bp_messages::MessagesCallInfo;
 use bp_runtime::StaticStrProvider;
 use bp_teyrchains::SubmitTeyrchainHeadsInfo;
 use codec::{Decode, Encode};
-use frame_support::{
+use pezframe_support::{
 	dispatch::CallableCallFor, traits::IsSubType, weights::Weight, RuntimeDebugNoBound,
 };
-use frame_system::Config as SystemConfig;
-use pallet_utility::{Call as UtilityCall, Pallet as UtilityPallet};
-use sp_runtime::{
+use pezframe_system::Config as SystemConfig;
+use pezpallet_utility::{Call as UtilityCall, Pallet as UtilityPallet};
+use pezsp_runtime::{
 	traits::Get,
 	transaction_validity::{TransactionPriority, TransactionValidityError},
 	RuntimeDebug,
 };
-use sp_std::{fmt::Debug, marker::PhantomData, vec, vec::Vec};
+use pezsp_std::{fmt::Debug, marker::PhantomData, vec, vec::Vec};
 
 /// Type of the call that the signed extension recognizes.
 #[derive(PartialEq, RuntimeDebugNoBound)]
@@ -113,7 +113,7 @@ pub struct ExtensionCallData {
 
 /// Signed extension configuration.
 ///
-/// The single `pallet-bridge-relayers` instance may be shared by multiple messages
+/// The single `pezpallet-bridge-relayers` instance may be shared by multiple messages
 /// pallet instances, bridging with different remote networks. We expect every instance
 /// of the messages pallet to add a separate signed extension to runtime. So it must
 /// have a separate configuration.
@@ -122,7 +122,7 @@ pub trait ExtensionConfig {
 	type IdProvider: StaticStrProvider;
 	/// Runtime that optionally supports batched calls. We assume that batched call
 	/// succeeds if and only if all of its nested calls succeed.
-	type Runtime: frame_system::Config;
+	type Runtime: pezframe_system::Config;
 	/// Relayers pallet instance.
 	type BridgeRelayersPalletInstance: 'static;
 	/// Messages pallet instance.
@@ -162,7 +162,7 @@ pub trait ExtensionConfig {
 }
 
 /// Something that can unpack batch calls (all-or-nothing flavor) of given size.
-pub trait BatchCallUnpacker<Runtime: frame_system::Config> {
+pub trait BatchCallUnpacker<Runtime: pezframe_system::Config> {
 	/// Unpack batch call with no more than `max_packed_calls` calls.
 	fn unpack(call: &Runtime::RuntimeCall, max_packed_calls: u32) -> Vec<&Runtime::RuntimeCall>;
 }
@@ -172,14 +172,14 @@ pub struct RuntimeWithUtilityPallet<Runtime>(PhantomData<Runtime>);
 
 impl<Runtime> BatchCallUnpacker<Runtime> for RuntimeWithUtilityPallet<Runtime>
 where
-	Runtime: pallet_utility::Config<RuntimeCall = <Runtime as SystemConfig>::RuntimeCall>,
+	Runtime: pezpallet_utility::Config<RuntimeCall = <Runtime as SystemConfig>::RuntimeCall>,
 	<Runtime as SystemConfig>::RuntimeCall:
 		IsSubType<CallableCallFor<UtilityPallet<Runtime>, Runtime>>,
 {
 	fn unpack(
-		call: &<Runtime as frame_system::Config>::RuntimeCall,
+		call: &<Runtime as pezframe_system::Config>::RuntimeCall,
 		max_packed_calls: u32,
-	) -> Vec<&<Runtime as frame_system::Config>::RuntimeCall> {
+	) -> Vec<&<Runtime as pezframe_system::Config>::RuntimeCall> {
 		match call.is_sub_type() {
 			Some(UtilityCall::<Runtime>::batch_all { ref calls })
 				if calls.len() <= max_packed_calls as usize =>
@@ -190,7 +190,7 @@ where
 	}
 }
 
-impl<Runtime: frame_system::Config> BatchCallUnpacker<Runtime> for () {
+impl<Runtime: pezframe_system::Config> BatchCallUnpacker<Runtime> for () {
 	fn unpack(call: &Runtime::RuntimeCall, _max_packed_calls: u32) -> Vec<&Runtime::RuntimeCall> {
 		vec![call]
 	}

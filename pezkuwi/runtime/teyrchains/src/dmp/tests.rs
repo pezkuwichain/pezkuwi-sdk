@@ -20,10 +20,10 @@ use crate::{
 	mock::{new_test_ext, Dmp, MockGenesisConfig, Paras, System, Test},
 };
 use codec::Encode;
-use frame_support::assert_ok;
+use pezframe_support::assert_ok;
 use hex_literal::hex;
 use pezkuwi_primitives::BlockNumber;
-use sp_arithmetic::traits::Saturating;
+use pezsp_arithmetic::traits::Saturating;
 
 pub(crate) fn run_to_block(to: BlockNumber, new_session: Option<Vec<BlockNumber>>) {
 	while System::block_number() < to {
@@ -255,12 +255,12 @@ fn verify_dmq_mqc_head_is_externally_accessible() {
 	new_test_ext(default_genesis_config()).execute_with(|| {
 		register_paras(&[a]);
 
-		let head = sp_io::storage::get(&well_known_keys::dmq_mqc_head(a));
+		let head = pezsp_io::storage::get(&well_known_keys::dmq_mqc_head(a));
 		assert_eq!(head, None);
 
 		queue_downward_message(a, vec![1, 2, 3]).unwrap();
 
-		let head = sp_io::storage::get(&well_known_keys::dmq_mqc_head(a));
+		let head = pezsp_io::storage::get(&well_known_keys::dmq_mqc_head(a));
 		assert_eq!(
 			head,
 			Some(

@@ -171,7 +171,7 @@ impl Labeled for HashedLaneId {
 fn lane_to_label_works() {
 	assert_eq!(
 		"0x0101010101010101010101010101010101010101010101010101010101010101",
-		HashedLaneId::from_inner(sp_core::H256::from([1u8; 32])).label(),
+		HashedLaneId::from_inner(pezsp_core::H256::from([1u8; 32])).label(),
 	);
 	assert_eq!("00000001", LegacyLaneId([0, 0, 0, 1]).label());
 }

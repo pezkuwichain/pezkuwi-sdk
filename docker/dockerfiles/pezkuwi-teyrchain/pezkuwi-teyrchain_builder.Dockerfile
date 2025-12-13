@@ -2,8 +2,8 @@
 # This is the build stage for polkadot-parachain. Here we create the binary in a temporary image.
 FROM docker.io/paritytech/ci-linux:production as builder
 
-WORKDIR /cumulus
-COPY . /cumulus
+WORKDIR /pezcumulus
+COPY . /pezcumulus
 
 RUN cargo build --release --locked -p polkadot-parachain
 
@@ -15,14 +15,14 @@ LABEL io.parity.image.type="builder" \
     io.parity.image.vendor="Parity Technologies" \
     io.parity.image.description="Multistage Docker image for polkadot-parachain" \
     io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/polkadot-parachain/polkadot-parachain_builder.Dockerfile" \
-    io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/tree/master/cumulus"
+    io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/tree/master/pezcumulus"
 
-COPY --from=builder /cumulus/target/release/polkadot-parachain /usr/local/bin
+COPY --from=builder /pezcumulus/target/release/polkadot-parachain /usr/local/bin
 
-RUN useradd -m -u 1000 -U -s /bin/sh -d /cumulus polkadot-parachain && \
-    mkdir -p /data /cumulus/.local/share && \
+RUN useradd -m -u 1000 -U -s /bin/sh -d /pezcumulus polkadot-parachain && \
+    mkdir -p /data /pezcumulus/.local/share && \
     chown -R polkadot-parachain:polkadot-parachain /data && \
-    ln -s /data /cumulus/.local/share/polkadot-parachain && \
+    ln -s /data /pezcumulus/.local/share/polkadot-parachain && \
 # unclutter and minimize the attack surface
     rm -rf /usr/bin /usr/sbin && \
 # check if executable works in this container

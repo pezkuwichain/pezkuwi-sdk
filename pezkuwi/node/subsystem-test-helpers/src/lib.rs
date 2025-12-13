@@ -29,7 +29,7 @@ use pezkuwi_primitives::{ChunkIndex, Hash};
 
 use futures::{channel::mpsc, poll, prelude::*};
 use parking_lot::Mutex;
-use sp_core::testing::TaskExecutor;
+use pezsp_core::testing::TaskExecutor;
 
 use std::{
 	collections::VecDeque,

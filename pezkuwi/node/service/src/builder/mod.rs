@@ -29,7 +29,7 @@ use crate::{
 	teyrchains_db, workers, Chain, Error, FullBackend, FullClient, IdentifyVariant,
 	IsTeyrchainNode, GRANDPA_JUSTIFICATION_PERIOD, KEEP_FINALIZED_FOR_LIVE_NETWORKS,
 };
-use frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
+use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use gum::info;
 use mmr_gadget::MmrGadget;
 use pezkuwi_availability_recovery::FETCH_CHUNKS_THRESHOLD;
@@ -47,15 +47,15 @@ use pezkuwi_node_network_protocol::{
 use pezkuwi_node_subsystem_types::DefaultSubsystemClient;
 use pezkuwi_overseer::{Handle, OverseerConnector};
 use pezkuwi_primitives::Block;
-use sc_client_api::Backend;
-use sc_network::config::FullNetworkConfiguration;
-use sc_network_sync::WarpSyncConfig;
-use sc_service::{Configuration, RpcHandlers, TaskManager};
-use sc_sysinfo::Metric;
-use sc_telemetry::TelemetryWorkerHandle;
-use sc_transaction_pool_api::OffchainTransactionPoolFactory;
-use sp_consensus_beefy::ecdsa_crypto;
-use sp_runtime::traits::Block as BlockT;
+use pezsc_client_api::Backend;
+use pezsc_network::config::FullNetworkConfiguration;
+use pezsc_network_sync::WarpSyncConfig;
+use pezsc_service::{Configuration, RpcHandlers, TaskManager};
+use pezsc_sysinfo::Metric;
+use pezsc_telemetry::TelemetryWorkerHandle;
+use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
+use pezsp_consensus_beefy::ecdsa_crypto;
+use pezsp_runtime::traits::Block as BlockT;
 use std::{
 	collections::{HashMap, HashSet},
 	sync::Arc,
@@ -92,7 +92,7 @@ pub struct NewFullParams<OverseerGenerator: OverseerGen> {
 	pub overseer_message_channel_capacity_override: Option<usize>,
 	#[allow(dead_code)]
 	pub malus_finality_delay: Option<u32>,
-	pub hwbench: Option<sc_sysinfo::HwBench>,
+	pub hwbench: Option<pezsc_sysinfo::HwBench>,
 	/// Set of invulnerable AH collator `PeerId`s
 	pub invulnerable_ah_collators: HashSet<pezkuwi_node_network_protocol::PeerId>,
 	/// Override for `HOLD_OFF_DURATION` constant .
@@ -104,8 +104,8 @@ pub struct NewFull {
 	pub task_manager: TaskManager,
 	pub client: Arc<FullClient>,
 	pub overseer_handle: Option<Handle>,
-	pub network: Arc<dyn sc_network::service::traits::NetworkService>,
-	pub sync_service: Arc<sc_network_sync::SyncingService<Block>>,
+	pub network: Arc<dyn pezsc_network::service::traits::NetworkService>,
+	pub sync_service: Arc<pezsc_network_sync::SyncingService<Block>>,
 	pub rpc_handlers: RpcHandlers,
 	pub backend: Arc<FullBackend>,
 }
@@ -113,7 +113,7 @@ pub struct NewFull {
 pub struct PezkuwiServiceBuilder<OverseerGenerator, Network>
 where
 	OverseerGenerator: OverseerGen,
-	Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Hash>,
+	Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>::Hash>,
 {
 	config: Configuration,
 	params: NewFullParams<OverseerGenerator>,
@@ -125,7 +125,7 @@ where
 impl<OverseerGenerator, Network> PezkuwiServiceBuilder<OverseerGenerator, Network>
 where
 	OverseerGenerator: OverseerGen,
-	Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Hash>,
+	Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>::Hash>,
 {
 	/// Create new pezkuwi service builder.
 	pub fn new(
@@ -157,7 +157,7 @@ where
 		let partial_components =
 			new_partial::<SelectRelayChain<_>>(&mut config, basics, select_chain)?;
 
-		let net_config = sc_network::config::FullNetworkConfiguration::<_, _, Network>::new(
+		let net_config = pezsc_network::config::FullNetworkConfiguration::<_, _, Network>::new(
 			&config.network,
 			config.prometheus_config.as_ref().map(|cfg| cfg.registry.clone()),
 		);
@@ -211,7 +211,7 @@ where
 				},
 			overseer_connector,
 			partial_components:
-				sc_service::PartialComponents::<_, _, SelectRelayChain<_>, _, _, _> {
+				pezsc_service::PartialComponents::<_, _, SelectRelayChain<_>, _, _, _> {
 					client,
 					backend,
 					mut task_manager,
@@ -237,7 +237,7 @@ where
 			// the block authoring backoff is disabled by default on production networks
 			None
 		} else {
-			let mut backoff = sc_consensus_slots::BackoffAuthoringOnFinalizedHeadLagging::default();
+			let mut backoff = pezsc_consensus_slots::BackoffAuthoringOnFinalizedHeadLagging::default();
 
 			if config.chain_spec.is_pezkuwichain() ||
 				config.chain_spec.is_versi() ||
@@ -265,11 +265,11 @@ where
 
 		// Note: GrandPa is pushed before the Pezkuwi-specific protocols. This doesn't change
 		// anything in terms of behaviour, but makes the logs more consistent with the other
-		// Substrate nodes.
+		// Bizinikiwi nodes.
 		let grandpa_protocol_name =
-			sc_consensus_grandpa::protocol_standard_name(&genesis_hash, &config.chain_spec);
+			pezsc_consensus_grandpa::protocol_standard_name(&genesis_hash, &config.chain_spec);
 		let (grandpa_protocol_config, grandpa_notification_service) =
-			sc_consensus_grandpa::grandpa_peers_set_config::<_, Network>(
+			pezsc_consensus_grandpa::grandpa_peers_set_config::<_, Network>(
 				grandpa_protocol_name.clone(),
 				metrics.clone(),
 				Arc::clone(&peer_store_handle),
@@ -277,11 +277,11 @@ where
 		net_config.add_notification_protocol(grandpa_protocol_config);
 
 		let beefy_gossip_proto_name =
-			sc_consensus_beefy::gossip_protocol_name(&genesis_hash, config.chain_spec.fork_id());
+			pezsc_consensus_beefy::gossip_protocol_name(&genesis_hash, config.chain_spec.fork_id());
 		// `beefy_on_demand_justifications_handler` is given to `beefy-gadget` task to be run,
 		// while `beefy_req_resp_cfg` is added to `config.network.request_response_protocols`.
 		let (beefy_on_demand_justifications_handler, beefy_req_resp_cfg) =
-			sc_consensus_beefy::communication::request_response::BeefyJustifsRequestHandler::new::<
+			pezsc_consensus_beefy::communication::request_response::BeefyJustifsRequestHandler::new::<
 				_,
 				Network,
 			>(
@@ -294,7 +294,7 @@ where
 			false => None,
 			true => {
 				let (beefy_notification_config, beefy_notification_service) =
-					sc_consensus_beefy::communication::beefy_peers_set_config::<_, Network>(
+					pezsc_consensus_beefy::communication::beefy_peers_set_config::<_, Network>(
 						beefy_gossip_proto_name.clone(),
 						metrics.clone(),
 						Arc::clone(&peer_store_handle),
@@ -332,7 +332,7 @@ where
 				net_config.add_notification_protocol(config);
 				(peerset, service)
 			})
-			.collect::<HashMap<PeerSet, Box<dyn sc_network::NotificationService>>>()
+			.collect::<HashMap<PeerSet, Box<dyn pezsc_network::NotificationService>>>()
 		} else {
 			std::collections::HashMap::new()
 		};
@@ -364,7 +364,7 @@ where
 			Vec::new()
 		};
 
-		let warp_sync = Arc::new(sc_consensus_grandpa::warp_proof::NetworkProvider::new(
+		let warp_sync = Arc::new(pezsc_consensus_grandpa::warp_proof::NetworkProvider::new(
 			backend.clone(),
 			import_setup.1.shared_authority_set().clone(),
 			grandpa_hard_forks,
@@ -458,7 +458,7 @@ where
 		};
 
 		let (network, system_rpc_tx, tx_handler_controller, sync_service) =
-			sc_service::build_network(sc_service::BuildNetworkParams {
+			pezsc_service::build_network(pezsc_service::BuildNetworkParams {
 				config: &config,
 				net_config,
 				client: client.clone(),
@@ -477,7 +477,7 @@ where
 			task_manager.spawn_handle().spawn(
 				"offchain-workers-runner",
 				"offchain-work",
-				sc_offchain::OffchainWorkers::new(sc_offchain::OffchainWorkerOptions {
+				pezsc_offchain::OffchainWorkers::new(pezsc_offchain::OffchainWorkerOptions {
 					runtime_api_provider: client.clone(),
 					keystore: Some(keystore_container.keystore()),
 					offchain_db: backend.offchain_storage(),
@@ -495,7 +495,7 @@ where
 		}
 
 		let network_config = config.network.clone();
-		let rpc_handlers = sc_service::spawn_tasks(sc_service::SpawnTasksParams {
+		let rpc_handlers = pezsc_service::spawn_tasks(pezsc_service::SpawnTasksParams {
 			config,
 			backend: backend.clone(),
 			client: client.clone(),
@@ -512,8 +512,8 @@ where
 		})?;
 
 		if let Some(hwbench) = hwbench {
-			sc_sysinfo::print_hwbench(&hwbench);
-			match SUBSTRATE_REFERENCE_HARDWARE.check_hardware(&hwbench, role.is_authority()) {
+			pezsc_sysinfo::print_hwbench(&hwbench);
+			match BIZINIKIWI_REFERENCE_HARDWARE.check_hardware(&hwbench, role.is_authority()) {
 				Err(err) if role.is_authority() => {
 					if err
 						.0
@@ -547,7 +547,7 @@ where
 				task_manager.spawn_handle().spawn(
 					"telemetry_hwbench",
 					None,
-					sc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
+					pezsc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
 				);
 			}
 		}
@@ -563,13 +563,13 @@ where
 		// their PoVs or recovering PoVs.
 		if role.is_authority() || is_teyrchain_node.is_running_alongside_teyrchain_node() {
 			use futures::StreamExt;
-			use sc_network::{Event, NetworkEventStream};
+			use pezsc_network::{Event, NetworkEventStream};
 
 			let authority_discovery_role = if role.is_authority() {
-				sc_authority_discovery::Role::PublishAndDiscover(keystore_container.keystore())
+				pezsc_authority_discovery::Role::PublishAndDiscover(keystore_container.keystore())
 			} else {
-				// don't publish our addresses when we're not an authority (collator, cumulus, ..)
-				sc_authority_discovery::Role::Discover
+				// don't publish our addresses when we're not an authority (collator, pezcumulus, ..)
+				pezsc_authority_discovery::Role::Discover
 			};
 			let dht_event_stream =
 				network.event_stream("authority-discovery").filter_map(|e| async move {
@@ -578,8 +578,8 @@ where
 						_ => None,
 					}
 				});
-			let (worker, service) = sc_authority_discovery::new_worker_and_service_with_config(
-				sc_authority_discovery::WorkerConfig {
+			let (worker, service) = pezsc_authority_discovery::new_worker_and_service_with_config(
+				pezsc_authority_discovery::WorkerConfig {
 					publish_non_global_ips: auth_disc_publish_non_global_ips,
 					public_addresses: auth_disc_public_addresses,
 					// Require that authority discovery records are signed.
@@ -613,7 +613,7 @@ where
 		let overseer_handle = if let Some(authority_discovery_service) = authority_discovery_service
 		{
 			let (overseer, overseer_handle) = overseer_gen
-				.generate::<sc_service::SpawnTaskHandle, DefaultSubsystemClient<FullClient>>(
+				.generate::<pezsc_service::SpawnTaskHandle, DefaultSubsystemClient<FullClient>>(
 					overseer_connector,
 					OverseerGenArgs {
 						runtime_client,
@@ -673,7 +673,7 @@ where
 		};
 
 		if role.is_authority() {
-			let proposer = sc_basic_authorship::ProposerFactory::new(
+			let proposer = pezsc_basic_authorship::ProposerFactory::new(
 				task_manager.spawn_handle(),
 				client.clone(),
 				transaction_pool.clone(),
@@ -685,7 +685,7 @@ where
 			let overseer_handle =
 				overseer_handle.as_ref().ok_or(Error::AuthoritiesRequireRealOverseer)?.clone();
 			let slot_duration = babe_link.config().slot_duration();
-			let babe_config = sc_consensus_babe::BabeParams {
+			let babe_config = pezsc_consensus_babe::BabeParams {
 				keystore: keystore_container.keystore(),
 				client: client.clone(),
 				select_chain,
@@ -705,10 +705,10 @@ where
 							parent,
 						);
 
-						let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
+						let timestamp = pezsp_timestamp::InherentDataProvider::from_system_time();
 
 						let slot =
-						sp_consensus_babe::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
+						pezsp_consensus_babe::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
 							*timestamp,
 							slot_duration,
 						);
@@ -719,12 +719,12 @@ where
 				force_authoring,
 				backoff_authoring_blocks,
 				babe_link,
-				block_proposal_slot_portion: sc_consensus_babe::SlotProportion::new(2f32 / 3f32),
+				block_proposal_slot_portion: pezsc_consensus_babe::SlotProportion::new(2f32 / 3f32),
 				max_block_proposal_slot_portion: None,
 				telemetry: telemetry.as_ref().map(|x| x.handle()),
 			};
 
-			let babe = sc_consensus_babe::start_babe(babe_config)?;
+			let babe = pezsc_consensus_babe::start_babe(babe_config)?;
 			task_manager.spawn_essential_handle().spawn_blocking("babe", None, babe);
 		}
 
@@ -737,7 +737,7 @@ where
 		if let Some(notification_service) = beefy_notification_service {
 			let justifications_protocol_name =
 				beefy_on_demand_justifications_handler.protocol_name();
-			let network_params = sc_consensus_beefy::BeefyNetworkParams {
+			let network_params = pezsc_consensus_beefy::BeefyNetworkParams {
 				network: Arc::new(network.clone()),
 				sync: sync_service.clone(),
 				gossip_protocol_name: beefy_gossip_proto_name,
@@ -745,8 +745,8 @@ where
 				notification_service,
 				_phantom: core::marker::PhantomData::<Block>,
 			};
-			let payload_provider = sp_consensus_beefy::mmr::MmrRootProvider::new(client.clone());
-			let beefy_params = sc_consensus_beefy::BeefyParams {
+			let payload_provider = pezsp_consensus_beefy::mmr::MmrRootProvider::new(client.clone());
+			let beefy_params = pezsc_consensus_beefy::BeefyParams {
 				client: client.clone(),
 				backend: backend.clone(),
 				payload_provider,
@@ -760,7 +760,7 @@ where
 				is_authority: role.is_authority(),
 			};
 
-			let gadget = sc_consensus_beefy::start_beefy_gadget::<
+			let gadget = pezsc_consensus_beefy::start_beefy_gadget::<
 				_,
 				_,
 				_,
@@ -785,15 +785,15 @@ where
 				MmrGadget::start(
 					client.clone(),
 					backend.clone(),
-					sp_mmr_primitives::INDEXING_PREFIX.to_vec(),
+					pezsp_mmr_primitives::INDEXING_PREFIX.to_vec(),
 				),
 			);
 		}
 
-		let config = sc_consensus_grandpa::Config {
-			// FIXME substrate#1578 make this available through chainspec
+		let config = pezsc_consensus_grandpa::Config {
+			// FIXME bizinikiwi#1578 make this available through chainspec
 			// Grandpa performance can be improved a bit by tuning this parameter, see:
-			// https://github.com/paritytech/polkadot/issues/5464
+			// https://github.com/pezkuwichain/kurdistan-sdk/issues/157
 			gossip_duration: Duration::from_millis(1000),
 			justification_generation_period: GRANDPA_JUSTIFICATION_PERIOD,
 			name: Some(name),
@@ -807,13 +807,13 @@ where
 		let enable_grandpa = !disable_grandpa;
 		if enable_grandpa {
 			// start the full GRANDPA voter
-			// NOTE: unlike in substrate we are currently running the full
+			// NOTE: unlike in bizinikiwi we are currently running the full
 			// GRANDPA voter protocol for all full nodes (regardless of whether
 			// they're validators or not). at this point the full voter should
 			// provide better guarantees of block and vote data availability than
 			// the observer.
 
-			let mut voting_rules_builder = sc_consensus_grandpa::VotingRulesBuilder::default();
+			let mut voting_rules_builder = pezsc_consensus_grandpa::VotingRulesBuilder::default();
 
 			#[cfg(not(feature = "malus"))]
 			let _malus_finality_delay = None;
@@ -821,10 +821,10 @@ where
 			if let Some(delay) = _malus_finality_delay {
 				info!(?delay, "Enabling malus finality delay",);
 				voting_rules_builder =
-					voting_rules_builder.add(sc_consensus_grandpa::BeforeBestBlockBy(delay));
+					voting_rules_builder.add(pezsc_consensus_grandpa::BeforeBestBlockBy(delay));
 			};
 
-			let grandpa_config = sc_consensus_grandpa::GrandpaParams {
+			let grandpa_config = pezsc_consensus_grandpa::GrandpaParams {
 				config,
 				link: link_half,
 				network: network.clone(),
@@ -842,7 +842,7 @@ where
 			task_manager.spawn_essential_handle().spawn_blocking(
 				"grandpa-voter",
 				None,
-				sc_consensus_grandpa::run_grandpa_voter(grandpa_config)?,
+				pezsc_consensus_grandpa::run_grandpa_voter(grandpa_config)?,
 			);
 		}
 
@@ -869,7 +869,7 @@ where
 /// both as preparation and execution worker (supposed to be used for tests only).
 pub fn new_full<
 	OverseerGenerator: OverseerGen,
-	Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Hash>,
+	Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>::Hash>,
 >(
 	config: Configuration,
 	params: NewFullParams<OverseerGenerator>,

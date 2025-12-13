@@ -1,6 +1,6 @@
 # Markdown linting
 
-Since the introduction of [PR #1309](https://github.com/paritytech/polkadot-sdk/pull/1309), the markdown
+Since the introduction of [PR #1309](https://github.com/pezkuwichain/kurdistan-sdk/issues/103), the markdown
 files in this repository are checked by a linter for formatting and consistency.
 
 The linter used is [`markdownlint`](https://github.com/DavidAnson/markdownlint) and can be installed locally on your

@@ -1,11 +1,11 @@
 //! # (Omni) Node
 //!
-//! This reference doc elaborates on what a Pezkuwi-SDK/Substrate node software is, and what
+//! This reference doc elaborates on what a Pezkuwi-SDK/Bizinikiwi node software is, and what
 //! various ways exist to run one.
 //!
 //! The node software, as denoted in [`crate::reference_docs::wasm_meta_protocol`], is everything in
 //! a blockchain other than the WASM runtime. It contains common components such as the database,
-//! networking, RPC server and consensus. Substrate-based nodes are native binaries that are
+//! networking, RPC server and consensus. Bizinikiwi-based nodes are native binaries that are
 //! compiled down from the Rust source code. The `node` folder in any of the [`templates`] are
 //! examples of this source.
 //!
@@ -42,7 +42,7 @@
 //! is the latter.
 //!
 //! > Note: The OmniNodes are mainly focused on the development needs of **Pezkuwi
-//! > teyrchains ONLY**, not (Substrate) solo-chains. For the time being, solo-chains are not
+//! > teyrchains ONLY**, not (Bizinikiwi) solo-chains. For the time being, solo-chains are not
 //! > supported by the OmniNodes. This might change in the future.
 //!
 //! ## Types of Nodes
@@ -95,7 +95,7 @@
 //!     * [`crate::guides::your_first_runtime`]
 //! * If need be, the weights of the runtime need to be updated using `frame-omni-bencher`.
 //!   References:
-//!     * [`crate::reference_docs::frame_benchmarking_weight`]
+//!     * [`crate::reference_docs::pezframe_benchmarking_weight`]
 //! * Next, [`chain-spec-builder`] is used to generate a `chain_spec.json`, either for development,
 //!   or for production. References:
 //!     * [`crate::reference_docs::chain_spec_genesis`]
@@ -115,7 +115,7 @@
 //!
 //! ### Consensus Engine
 //!
-//! In any given substrate-based chain, both the node and the runtime will have their own
+//! In any given bizinikiwi-based chain, both the node and the runtime will have their own
 //! opinion/information about what consensus engine is going to be used.
 //!
 //! In practice, the majority of the implementation of any consensus engine is in the node side, but
@@ -128,8 +128,8 @@
 //! configured to use the Aura consensus engine:
 //!
 //! ```text
-//! impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
-//!     fn slot_duration() -> sp_consensus_aura::SlotDuration {
+//! impl pezsp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+//!     fn slot_duration() -> pezsp_consensus_aura::SlotDuration {
 //!         ...
 //!     }
 //!     fn authorities() -> Vec<AuraId> {
@@ -145,16 +145,16 @@
 //!
 //! For block authoring, there are a number of options:
 //!
-//! * [`sc_consensus_manual_seal`]: Useful for testing, where any node can produce a block at any
+//! * [`pezsc_consensus_manual_seal`]: Useful for testing, where any node can produce a block at any
 //!   time. This is often combined with a fixed interval at which a block is produced.
-//! * [`sc_consensus_aura`]/[`pallet_aura`]: A simple round-robin block authoring mechanism.
-//! * [`sc_consensus_babe`]/[`pallet_babe`]: A more advanced block authoring mechanism, capable of
+//! * [`pezsc_consensus_aura`]/[`pezpallet_aura`]: A simple round-robin block authoring mechanism.
+//! * [`pezsc_consensus_babe`]/[`pezpallet_babe`]: A more advanced block authoring mechanism, capable of
 //!   anonymizing the next block author.
-//! * [`sc_consensus_pow`]: Proof of Work block authoring.
+//! * [`pezsc_consensus_pow`]: Proof of Work block authoring.
 //!
 //! For finality, there is one main option shipped with pezkuwi-sdk:
 //!
-//! * [`sc_consensus_grandpa`]/[`pallet_grandpa`]: A finality gadget that uses a voting mechanism to
+//! * [`pezsc_consensus_grandpa`]/[`pezpallet_grandpa`]: A finality gadget that uses a voting mechanism to
 //!   decide when a block
 //!
 //! **The most important lesson here is that the node and the runtime must have matching consensus
@@ -171,7 +171,7 @@
 //!   scaling). [`pezkuwi_omni_node_lib::cli::Cli::experimental_use_slot_based`] for fixed factor
 //!   scaling (a step
 //! * Ability to run any runtime with [`--dev-block-time`] flag. This uses
-//!   [`sc_consensus_manual_seal`] under the hood, and has no restrictions on the runtime's
+//!   [`pezsc_consensus_manual_seal`] under the hood, and has no restrictions on the runtime's
 //!   consensus.
 //!
 //! [This](https://github.com/pezkuwichain/pezkuwi-sdk/issues/143) future improvement to OmniNode
@@ -185,9 +185,9 @@
 //! failure.
 //!
 //! The list of checks may evolve in the future and for now only few rules are implemented:
-//! * runtimes must define a type for [`cumulus-pallet-teyrchain-system`], which is recommended to
+//! * runtimes must define a type for [`pezcumulus-pezpallet-teyrchain-system`], which is recommended to
 //!   be named as `TeyrchainSystem`.
-//! * runtimes must define a type for [`frame-system`] pallet, which is recommended to be named as
+//! * runtimes must define a type for [`pezframe-system`] pallet, which is recommended to be named as
 //!   `System`. The configured [`block number`] here will be used by Omni Node to configure AURA
 //!   accordingly.
 //!
@@ -195,7 +195,7 @@
 //! [`teyrchain-template`]: https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template
 //! [`--dev-block-time`]: pezkuwi_omni_node_lib::cli::Cli::dev_block_time
 //! [`pezkuwi-omni-node`]: https://crates.io/crates/polkadot-omni-node
-//! [`chain-spec-builder`]: https://crates.io/crates/staging-chain-spec-builder
-//! [`cumulus-pallet-teyrchain-system`]: https://docs.rs/cumulus-pallet-parachain-system/latest/cumulus_pallet_parachain_system/
-//! [`frame-system`]: https://docs.rs/frame-system/latest/frame_system/
-//! [`block number`]: https://docs.rs/frame-system/latest/frame_system/pallet/storage_types/struct.Number.html
+//! [`chain-spec-builder`]: https://crates.io/crates/pezstaging-chain-spec-builder
+//! [`pezcumulus-pezpallet-teyrchain-system`]: https://docs.rs/pezcumulus-pezpallet-parachain-system/latest/cumulus_pallet_parachain_system/
+//! [`pezframe-system`]: https://docs.rs/pezframe-system/latest/pezframe_system/
+//! [`block number`]: https://docs.rs/pezframe-system/latest/pezframe_system/pallet/storage_types/struct.Number.html

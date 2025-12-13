@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 function relayer_path() {
-    local default_path=~/local_bridge_testing/bin/substrate-relay
-    local path="${SUBSTRATE_RELAY_BINARY:-$default_path}"
+    local default_path=~/local_bridge_testing/bin/bizinikiwi-relay
+    local path="${BIZINIKIWI_RELAY_BINARY:-$default_path}"
     echo "$path"
 }
 
 function ensure_relayer() {
     local path=$(relayer_path)
     if [[ ! -f "$path" ]]; then
-        echo "  Required substrate-relay binary '$path' does not exist!"
+        echo "  Required bizinikiwi-relay binary '$path' does not exist!"
         echo "  You need to build it and copy to this location!"
         echo "  Please, check ./teyrchains/runtimes/bridge-hubs/README.md (Prepare/Build/Deploy)"
         exit 1

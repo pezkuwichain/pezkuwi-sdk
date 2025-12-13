@@ -1,8 +1,8 @@
 use super::*;
 use crate::{mock::*, types::OperationMode};
-use frame_support::{assert_noop, assert_ok};
+use pezframe_support::{assert_noop, assert_ok};
 // Import SessionManager trait for testing
-use pallet_session::SessionManager;
+use pezpallet_session::SessionManager;
 
 #[test]
 fn join_validator_pool_works() {
@@ -346,7 +346,7 @@ fn set_pool_parameters_works() {
 	new_test_ext().execute_with(|| {
 		assert_noop!(
 			ValidatorPool::set_pool_parameters(RuntimeOrigin::signed(1), 200),
-			sp_runtime::DispatchError::BadOrigin
+			pezsp_runtime::DispatchError::BadOrigin
 		);
 		assert_ok!(ValidatorPool::set_pool_parameters(RuntimeOrigin::root(), 200));
 		assert_eq!(ValidatorPool::era_length(), 200);
@@ -531,7 +531,7 @@ fn set_operation_mode_requires_root() {
 	new_test_ext().execute_with(|| {
 		assert_noop!(
 			ValidatorPool::set_operation_mode(RuntimeOrigin::signed(1), OperationMode::Shadow),
-			sp_runtime::DispatchError::BadOrigin
+			pezsp_runtime::DispatchError::BadOrigin
 		);
 	});
 }

@@ -34,7 +34,7 @@ use futures::{
 	stream::{FuturesUnordered, StreamExt},
 	task::{Context, Poll},
 };
-use sc_network::ProtocolName;
+use pezsc_network::ProtocolName;
 use schnellru::{ByLength, LruMap};
 use task::{
 	FetchChunks, FetchChunksParams, FetchFull, FetchFullParams, FetchSystematicChunks,

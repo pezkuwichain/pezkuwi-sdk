@@ -46,14 +46,14 @@ use pezkuwi_primitives::{
 use rand::{seq::SliceRandom, RngCore, SeedableRng};
 use rand_chacha::ChaCha20Rng;
 use rand_distr::{Distribution, Normal};
-use sc_keystore::LocalKeystore;
-use sc_network_types::PeerId;
-use sc_service::SpawnTaskHandle;
+use pezsc_keystore::LocalKeystore;
+use pezsc_network_types::PeerId;
+use pezsc_service::SpawnTaskHandle;
 use sha1::Digest;
-use sp_application_crypto::AppCrypto;
-use sp_consensus_babe::SlotDuration;
-use sp_keystore::Keystore;
-use sp_timestamp::Timestamp;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_consensus_babe::SlotDuration;
+use pezsp_keystore::Keystore;
+use pezsp_timestamp::Timestamp;
 use std::{
 	cmp::max,
 	collections::{BTreeMap, HashSet},

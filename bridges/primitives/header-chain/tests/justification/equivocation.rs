@@ -19,9 +19,9 @@
 use bp_header_chain::justification::EquivocationsCollector;
 use bp_test_utils::*;
 use finality_grandpa::Precommit;
-use sp_consensus_grandpa::EquivocationProof;
+use pezsp_consensus_grandpa::EquivocationProof;
 
-type TestHeader = sp_runtime::testing::Header;
+type TestHeader = pezsp_runtime::testing::Header;
 
 #[test]
 fn duplicate_votes_are_not_considered_equivocations() {
@@ -56,7 +56,7 @@ fn equivocations_are_detected_in_base_justification_redundant_votes() {
 		collector.into_equivocation_proofs(),
 		vec![EquivocationProof::new(
 			1,
-			sp_consensus_grandpa::Equivocation::Precommit(finality_grandpa::Equivocation {
+			pezsp_consensus_grandpa::Equivocation::Precommit(finality_grandpa::Equivocation {
 				round_number: 1,
 				identity: ALICE.into(),
 				first: (
@@ -101,7 +101,7 @@ fn equivocations_are_detected_in_extra_justification_redundant_votes() {
 		collector.into_equivocation_proofs(),
 		vec![EquivocationProof::new(
 			1,
-			sp_consensus_grandpa::Equivocation::Precommit(finality_grandpa::Equivocation {
+			pezsp_consensus_grandpa::Equivocation::Precommit(finality_grandpa::Equivocation {
 				round_number: 1,
 				identity: ALICE.into(),
 				first: (

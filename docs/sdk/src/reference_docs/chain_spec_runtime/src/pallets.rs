@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -22,11 +22,11 @@ use frame::prelude::*;
 
 #[docify::export]
 #[frame::pallet(dev_mode)]
-pub mod pallet_bar {
+pub mod pezpallet_bar {
 	use super::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -37,13 +37,13 @@ pub mod pallet_bar {
 	/// Simple `GenesisConfig`.
 	#[pallet::genesis_config]
 	#[derive(DefaultNoBound)]
-	#[docify::export(pallet_bar_GenesisConfig)]
+	#[docify::export(pezpallet_bar_GenesisConfig)]
 	pub struct GenesisConfig<T: Config> {
 		pub initial_account: Option<T::AccountId>,
 	}
 
 	#[pallet::genesis_build]
-	#[docify::export(pallet_bar_build)]
+	#[docify::export(pezpallet_bar_build)]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		/// The storage building function that presents a direct mapping of the initial config
 		/// values to the storage items.
@@ -80,7 +80,7 @@ pub struct SomeFooData1 {
 #[docify::export]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct SomeFooData2 {
-	#[serde(default, with = "sp_core::bytes")]
+	#[serde(default, with = "pezsp_core::bytes")]
 	pub values: Vec<u8>,
 }
 
@@ -95,11 +95,11 @@ pub enum FooEnum {
 
 #[docify::export]
 #[frame::pallet(dev_mode)]
-pub mod pallet_foo {
+pub mod pezpallet_foo {
 	use super::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -110,7 +110,7 @@ pub mod pallet_foo {
 	pub type SomeInteger<T> = StorageValue<Value = u32>;
 
 	/// The more sophisticated structure for conveying initial state.
-	#[docify::export(pallet_foo_GenesisConfig)]
+	#[docify::export(pezpallet_foo_GenesisConfig)]
 	#[pallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
@@ -122,7 +122,7 @@ pub mod pallet_foo {
 	}
 
 	#[pallet::genesis_build]
-	#[docify::export(pallet_foo_build)]
+	#[docify::export(pezpallet_foo_build)]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		/// The build method that indirectly maps an initial config values into the storage items.
 		fn build(&self) {

@@ -1,0 +1,62 @@
+[package]
+name = "pezframe-election-provider-support"
+version = "28.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+description = "election provider supporting traits"
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+pezframe-election-provider-solution-type = { workspace = true, default-features = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+pezsp-arithmetic = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-npos-elections = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
+
+
+[dev-dependencies]
+rand = { features = ["small_rng"], workspace = true, default-features = true }
+pezsp-io = { workspace = true, default-features = true }
+pezsp-npos-elections = { workspace = true, default-features = true }
+
+[features]
+default = ["std"]
+fuzz = ["default"]
+std = [
+	"codec/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"scale-info/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-npos-elections/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+]
+runtime-benchmarks = [
+	"pezframe-election-provider-solution-type/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-npos-elections/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
+]

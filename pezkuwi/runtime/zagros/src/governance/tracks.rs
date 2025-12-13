@@ -19,12 +19,12 @@
 use super::*;
 
 use alloc::borrow::Cow;
-use sp_runtime::str_array as s;
+use pezsp_runtime::str_array as s;
 
-const fn percent(x: i32) -> sp_arithmetic::FixedI64 {
-	sp_arithmetic::FixedI64::from_rational(x as u128, 100)
+const fn percent(x: i32) -> pezsp_arithmetic::FixedI64 {
+	pezsp_arithmetic::FixedI64::from_rational(x as u128, 100)
 }
-use pallet_referenda::Curve;
+use pezpallet_referenda::Curve;
 const APP_ROOT: Curve = Curve::make_reciprocal(4, 28, percent(80), percent(50), percent(100));
 const SUP_ROOT: Curve = Curve::make_linear(28, 28, percent(0), percent(50));
 const APP_STAKING_ADMIN: Curve = Curve::make_linear(17, 28, percent(50), percent(100));
@@ -68,10 +68,10 @@ const APP_WHITELISTED_CALLER: Curve =
 const SUP_WHITELISTED_CALLER: Curve =
 	Curve::make_reciprocal(1, 28, percent(20), percent(5), percent(50));
 
-const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
-	pallet_referenda::Track {
+const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
+	pezpallet_referenda::Track {
 		id: 0,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("root"),
 			max_deciding: 1,
 			decision_deposit: 100 * GRAND,
@@ -83,9 +83,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_ROOT,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 1,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("whitelisted_caller"),
 			max_deciding: 100,
 			decision_deposit: 10 * GRAND,
@@ -97,9 +97,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_WHITELISTED_CALLER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 10,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("staking_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
@@ -111,9 +111,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_STAKING_ADMIN,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 11,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("treasurer"),
 			max_deciding: 10,
 			decision_deposit: 1 * GRAND,
@@ -125,9 +125,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_TREASURER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 12,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("lease_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
@@ -139,9 +139,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_LEASE_ADMIN,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 13,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("fellowship_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
@@ -153,9 +153,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_FELLOWSHIP_ADMIN,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 14,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("general_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
@@ -167,9 +167,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_GENERAL_ADMIN,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 15,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("auction_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
@@ -181,9 +181,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_AUCTION_ADMIN,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 20,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("referendum_canceller"),
 			max_deciding: 1_000,
 			decision_deposit: 10 * GRAND,
@@ -195,9 +195,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_REFERENDUM_CANCELLER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 21,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("referendum_killer"),
 			max_deciding: 1_000,
 			decision_deposit: 50 * GRAND,
@@ -209,9 +209,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_REFERENDUM_KILLER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 30,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("small_tipper"),
 			max_deciding: 200,
 			decision_deposit: 1 * 3 * CENTS,
@@ -223,9 +223,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_SMALL_TIPPER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 31,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("big_tipper"),
 			max_deciding: 100,
 			decision_deposit: 10 * 3 * CENTS,
@@ -237,9 +237,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_BIG_TIPPER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 32,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("small_spender"),
 			max_deciding: 50,
 			decision_deposit: 100 * 3 * CENTS,
@@ -251,9 +251,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_SMALL_SPENDER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 33,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("medium_spender"),
 			max_deciding: 50,
 			decision_deposit: 200 * 3 * CENTS,
@@ -265,9 +265,9 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 			min_support: SUP_MEDIUM_SPENDER,
 		},
 	},
-	pallet_referenda::Track {
+	pezpallet_referenda::Track {
 		id: 34,
-		info: pallet_referenda::TrackInfo {
+		info: pezpallet_referenda::TrackInfo {
 			name: s("big_spender"),
 			max_deciding: 50,
 			decision_deposit: 400 * 3 * CENTS,
@@ -282,19 +282,19 @@ const TRACKS_DATA: [pallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
 ];
 
 pub struct TracksInfo;
-impl pallet_referenda::TracksInfo<Balance, BlockNumber> for TracksInfo {
+impl pezpallet_referenda::TracksInfo<Balance, BlockNumber> for TracksInfo {
 	type Id = u16;
-	type RuntimeOrigin = <RuntimeOrigin as frame_support::traits::OriginTrait>::PalletsOrigin;
+	type RuntimeOrigin = <RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin;
 
 	fn tracks(
-	) -> impl Iterator<Item = Cow<'static, pallet_referenda::Track<Self::Id, Balance, BlockNumber>>>
+	) -> impl Iterator<Item = Cow<'static, pezpallet_referenda::Track<Self::Id, Balance, BlockNumber>>>
 	{
 		TRACKS_DATA.iter().map(Cow::Borrowed)
 	}
 	fn track_for(id: &Self::RuntimeOrigin) -> Result<Self::Id, ()> {
-		if let Ok(system_origin) = frame_system::RawOrigin::try_from(id.clone()) {
+		if let Ok(system_origin) = pezframe_system::RawOrigin::try_from(id.clone()) {
 			match system_origin {
-				frame_system::RawOrigin::Root => Ok(0),
+				pezframe_system::RawOrigin::Root => Ok(0),
 				_ => Err(()),
 			}
 		} else if let Ok(custom_origin) = origins::Origin::try_from(id.clone()) {

@@ -18,21 +18,21 @@
 
 #![cfg(feature = "runtime-benchmarks")]
 use super::{Pallet as Auctions, *};
-use frame_support::{
+use pezframe_support::{
 	assert_ok,
 	traits::{EnsureOrigin, OnInitialize},
 };
-use frame_system::RawOrigin;
+use pezframe_system::RawOrigin;
 use pezkuwi_runtime_teyrchains::paras;
-use sp_runtime::{traits::Bounded, SaturatedConversion};
+use pezsp_runtime::{traits::Bounded, SaturatedConversion};
 
-use frame_benchmarking::v2::*;
+use pezframe_benchmarking::v2::*;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = frame_system::Pallet::<T>::events();
-	let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+	let events = pezframe_system::Pallet::<T>::events();
+	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
-	let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 	assert_eq!(event, &system_event);
 }
 
@@ -55,7 +55,7 @@ fn fill_winners<T: Config + paras::Config>(lease_period_index: LeasePeriodOf<T>)
 		.is_ok());
 	}
 	assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-		frame_system::Origin::<T>::Root.into(),
+		pezframe_system::Origin::<T>::Root.into(),
 		T::Registrar::worst_validation_code(),
 	));
 
@@ -81,7 +81,7 @@ fn fill_winners<T: Config + paras::Config>(lease_period_index: LeasePeriodOf<T>)
 }
 
 #[benchmarks(
-		where T: pallet_babe::Config + paras::Config,
+		where T: pezpallet_babe::Config + paras::Config,
 	)]
 mod benchmarks {
 	use super::*;
@@ -113,7 +113,7 @@ mod benchmarks {
 	fn bid() -> Result<(), BenchmarkError> {
 		// If there is an offset, we need to be on that block to be able to do lease things.
 		let (_, offset) = T::Leaser::lease_period_length();
-		frame_system::Pallet::<T>::set_block_number(offset + One::one());
+		pezframe_system::Pallet::<T>::set_block_number(offset + One::one());
 
 		// Create a new auction
 		let duration = BlockNumberFor::<T>::max_value();
@@ -138,7 +138,7 @@ mod benchmarks {
 		)?;
 		T::Registrar::register(owner, new_para, worst_head_data, worst_validation_code.clone())?;
 		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-			frame_system::Origin::<T>::Root.into(),
+			pezframe_system::Origin::<T>::Root.into(),
 			worst_validation_code,
 		));
 
@@ -188,12 +188,12 @@ mod benchmarks {
 	fn on_initialize() -> Result<(), BenchmarkError> {
 		// If there is an offset, we need to be on that block to be able to do lease things.
 		let (lease_length, offset) = T::Leaser::lease_period_length();
-		frame_system::Pallet::<T>::set_block_number(offset + One::one());
+		pezframe_system::Pallet::<T>::set_block_number(offset + One::one());
 
 		// Create a new auction
 		let duration: BlockNumberFor<T> = lease_length / 2u32.into();
 		let lease_period_index = LeasePeriodOf::<T>::zero();
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let origin = T::InitiateOrigin::try_successful_origin()
 			.expect("InitiateOrigin has no successful origin required for the benchmark");
 		Auctions::<T>::new_auction(origin, duration, lease_period_index)?;
@@ -211,16 +211,16 @@ mod benchmarks {
 		}
 
 		// Move ahead to the block we want to initialize
-		frame_system::Pallet::<T>::set_block_number(duration + now + T::EndingPeriod::get());
+		pezframe_system::Pallet::<T>::set_block_number(duration + now + T::EndingPeriod::get());
 
 		// Trigger epoch change for new random number value:
 		{
-			pallet_babe::EpochStart::<T>::set((Zero::zero(), u32::MAX.into()));
-			pallet_babe::Pallet::<T>::on_initialize(duration + now + T::EndingPeriod::get());
-			let authorities = pallet_babe::Pallet::<T>::authorities();
+			pezpallet_babe::EpochStart::<T>::set((Zero::zero(), u32::MAX.into()));
+			pezpallet_babe::Pallet::<T>::on_initialize(duration + now + T::EndingPeriod::get());
+			let authorities = pezpallet_babe::Pallet::<T>::authorities();
 			// Check for non empty authority set since it otherwise emits a No-OP warning.
 			if !authorities.is_empty() {
-				pallet_babe::Pallet::<T>::enact_epoch_change(
+				pezpallet_babe::Pallet::<T>::enact_epoch_change(
 					authorities.clone(),
 					authorities,
 					None,
@@ -245,7 +245,7 @@ mod benchmarks {
 	fn cancel_auction() -> Result<(), BenchmarkError> {
 		// If there is an offset, we need to be on that block to be able to do lease things.
 		let (lease_length, offset) = T::Leaser::lease_period_length();
-		frame_system::Pallet::<T>::set_block_number(offset + One::one());
+		pezframe_system::Pallet::<T>::set_block_number(offset + One::one());
 
 		// Create a new auction
 		let duration: BlockNumberFor<T> = lease_length / 2u32.into();

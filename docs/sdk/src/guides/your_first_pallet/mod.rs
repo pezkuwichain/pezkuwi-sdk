@@ -77,21 +77,21 @@
 //! details:
 //!
 //! - Where do `T::AccountId` and `T::RuntimeOrigin` come from? These are both defined in
-//!  [`frame::prelude::frame_system::Config`], therefore we can access them in `T`.
+//!  [`frame::prelude::pezframe_system::Config`], therefore we can access them in `T`.
 //! - What is `ensure_signed`, and what does it do with the aforementioned `T::RuntimeOrigin`? This
 //!   is outside the scope of this guide, and you can learn more about it in the origin reference
 //!   document ([`crate::reference_docs::frame_origin`]). For now, you should only know the
 //!   signature of the function: it takes a generic `T::RuntimeOrigin` and returns a
 //!   `Result<T::AccountId, _>`. So by the end of this function call, we know that this dispatchable
 //!   was signed by `sender`.
-#![doc = docify::embed!("../../substrate/frame/system/src/lib.rs", ensure_signed)]
+#![doc = docify::embed!("../../bizinikiwi/pezframe/system/src/lib.rs", ensure_signed)]
 //!
 //! - Where does `mutate`, `get` and `insert` and other storage APIs come from? All of them are
 //! explained in the corresponding `type`, for example, for `Balances::<T>::insert`, you can look
 //! into [`frame::prelude::StorageMap::insert`].
 //!
 //! - The return type of all dispatchable functions is [`frame::prelude::DispatchResult`]:
-#![doc = docify::embed!("../../substrate/frame/support/src/dispatch.rs", DispatchResult)]
+#![doc = docify::embed!("../../bizinikiwi/pezframe/support/src/dispatch.rs", DispatchResult)]
 //!
 //! Which is more or less a normal Rust `Result`, with a custom [`frame::prelude::DispatchError`] as
 //! the `Err` variant. We won't cover this error in detail here, but importantly you should know
@@ -143,16 +143,16 @@
 //! Next, we create a "test runtime" in order to test our pallet. Recall from
 //! [`crate::pezkuwi_sdk::frame_runtime`] that a runtime is a collection of pallets, expressed
 //! through [`frame::runtime::prelude::construct_runtime`]. All runtimes also have to include
-//! [`frame::prelude::frame_system`]. So we expect to see a runtime with two pallet, `frame_system`
+//! [`frame::prelude::pezframe_system`]. So we expect to see a runtime with two pallet, `pezframe_system`
 //! and the one we just wrote.
 #![doc = docify::embed!("./packages/guides/first-pallet/src/lib.rs", runtime)]
 //!
-//! > [`frame::pallet_macros::derive_impl`] is a FRAME feature that enables developers to have
+//! > [`frame::pezpallet_macros::derive_impl`] is a FRAME feature that enables developers to have
 //! > defaults for associated types.
 //!
 //! Recall that within our pallet, (almost) all blocks of code are generic over `<T: Config>`. And,
-//! because `trait Config: frame_system::Config`, we can get access to all items in `Config` (or
-//! `frame_system::Config`) using `T::NameOfItem`. This is all within the boundaries of how
+//! because `trait Config: pezframe_system::Config`, we can get access to all items in `Config` (or
+//! `pezframe_system::Config`) using `T::NameOfItem`. This is all within the boundaries of how
 //! Rust traits and generics work. If unfamiliar with this pattern, read
 //! [`crate::reference_docs::trait_based_programming`] before going further.
 //!
@@ -164,11 +164,11 @@
 //!
 //! Another way to think about this is that within a pallet, a lot of types are "unknown" and, we
 //! only know that they will be provided at some later point. For example, when you write
-//! `T::AccountId` (which is short for `<T as frame_system::Config>::AccountId`) in your pallet,
+//! `T::AccountId` (which is short for `<T as pezframe_system::Config>::AccountId`) in your pallet,
 //! you are in fact saying "*Some type `AccountId` that will be known later*". That "later" is in
 //! fact when you specify these types when you implement all `Config` traits for `Runtime`.
 //!
-//! As you see above, `frame_system::Config` is setting the `AccountId` to `u64`. Of course, a real
+//! As you see above, `pezframe_system::Config` is setting the `AccountId` to `u64`. Of course, a real
 //! runtime will not use this type, and instead reside to a proper type like a 32-byte standard
 //! public key. This is a HUGE benefit that FRAME developers can tap into: through the framework
 //! being so generic, different types can always be customized to simple things when needed.
@@ -259,7 +259,7 @@
 //!   by one character. FRAME errors are exactly a solution to maintain readability, whilst fixing
 //!   the drawbacks mentioned. In short, we use an enum to represent different variants of our
 //!   error. These variants are then mapped in an efficient way (using only `u8` indices) to
-//!   [`sp_runtime::DispatchError::Module`]. Read more about this in [`pallet::error`].
+//!   [`pezsp_runtime::DispatchError::Module`]. Read more about this in [`pallet::error`].
 //!
 //! - **Event**: Events are akin to the return type of dispatchables. They are mostly data blobs
 //!   emitted by the runtime to let outside world know what is happening inside the pallet. Since
@@ -304,7 +304,7 @@
 //! RuntimeEvent`) is generated by
 //! [`construct_runtime`](frame::runtime::prelude::construct_runtime). An interesting way to inspect
 //! this type is to see its definition in rust-docs:
-//! [`crate::guides::your_first_pallet::pallet_v2::tests::runtime_v2::RuntimeEvent`].
+//! [`crate::guides::your_first_pallet::pezpallet_v2::tests::runtime_v2::RuntimeEvent`].
 //!
 //!
 //! ## What Next?
@@ -317,15 +317,15 @@
 //! - [`crate::reference_docs::frame_runtime_types`].
 //! - The pallet we wrote in this guide was using `dev_mode`, learn more in [`pallet::config`].
 //! - Learn more about the individual pallet items/macros, such as event and errors and call, in
-//!   [`frame::pallet_macros`].
+//!   [`frame::pezpallet_macros`].
 //!
-//! [`pallet::storage`]: frame_support::pallet_macros::storage
-//! [`pallet::call`]: frame_support::pallet_macros::call
-//! [`pallet::event`]: frame_support::pallet_macros::event
-//! [`pallet::error`]: frame_support::pallet_macros::error
-//! [`pallet::pallet`]: frame_support::pallet
-//! [`pallet::config`]: frame_support::pallet_macros::config
-//! [`pallet::generate_deposit`]: frame_support::pallet_macros::generate_deposit
+//! [`pallet::storage`]: pezframe_support::pezpallet_macros::storage
+//! [`pallet::call`]: pezframe_support::pezpallet_macros::call
+//! [`pallet::event`]: pezframe_support::pezpallet_macros::event
+//! [`pallet::error`]: pezframe_support::pezpallet_macros::error
+//! [`pallet::pallet`]: pezframe_support::pallet
+//! [`pallet::config`]: pezframe_support::pezpallet_macros::config
+//! [`pallet::generate_deposit`]: pezframe_support::pezpallet_macros::generate_deposit
 
 #[docify::export]
 #[frame::pallet(dev_mode)]
@@ -333,7 +333,7 @@ pub mod shell_pallet {
 	use frame::prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -347,7 +347,7 @@ pub mod pallet {
 	pub type Balance = u128;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -459,26 +459,26 @@ pub mod pallet {
 			// we need to reference our `mod pallet` as an identifier to pass to
 			// `construct_runtime`.
 			// YOU HAVE TO CHANGE THIS LINE BASED ON YOUR TEMPLATE
-			use crate::guides::your_first_pallet::pallet as pallet_currency;
+			use crate::guides::your_first_pallet::pallet as pezpallet_currency;
 
 			construct_runtime!(
 				pub enum Runtime {
 					// ---^^^^^^ This is where `enum Runtime` is defined.
-					System: frame_system,
-					Currency: pallet_currency,
+					System: pezframe_system,
+					Currency: pezpallet_currency,
 				}
 			);
 
-			#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-			impl frame_system::Config for Runtime {
+			#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+			impl pezframe_system::Config for Runtime {
 				type Block = MockBlock<Runtime>;
-				// within pallet we just said `<T as frame_system::Config>::AccountId`, now we
+				// within pallet we just said `<T as pezframe_system::Config>::AccountId`, now we
 				// finally specified it.
 				type AccountId = u64;
 			}
 
 			// our simple pallet has nothing to be configured.
-			impl pallet_currency::Config for Runtime {}
+			impl pezpallet_currency::Config for Runtime {}
 		}
 
 		pub(crate) use runtime::*;
@@ -500,7 +500,7 @@ pub mod pallet {
 
 		#[docify::export]
 		pub(crate) struct StateBuilder {
-			balances: Vec<(<Runtime as frame_system::Config>::AccountId, Balance)>,
+			balances: Vec<(<Runtime as pezframe_system::Config>::AccountId, Balance)>,
 		}
 
 		#[docify::export(default_state_builder)]
@@ -514,7 +514,7 @@ pub mod pallet {
 		impl StateBuilder {
 			fn add_balance(
 				mut self,
-				who: <Runtime as frame_system::Config>::AccountId,
+				who: <Runtime as pezframe_system::Config>::AccountId,
 				amount: Balance,
 			) -> Self {
 				self.balances.push((who, amount));
@@ -665,17 +665,17 @@ pub mod pallet {
 }
 
 #[frame::pallet(dev_mode)]
-pub mod pallet_v2 {
+pub mod pezpallet_v2 {
 	use super::pallet::Balance;
 	use frame::prelude::*;
 
 	#[docify::export(config_v2)]
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type of the runtime.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>
 			+ TryInto<Event<Self>>;
 	}
 
@@ -740,22 +740,22 @@ pub mod pallet_v2 {
 		#[docify::export]
 		pub mod runtime_v2 {
 			use super::*;
-			use crate::guides::your_first_pallet::pallet_v2 as pallet_currency;
+			use crate::guides::your_first_pallet::pezpallet_v2 as pezpallet_currency;
 
 			construct_runtime!(
 				pub enum Runtime {
-					System: frame_system,
-					Currency: pallet_currency,
+					System: pezframe_system,
+					Currency: pezpallet_currency,
 				}
 			);
 
-			#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-			impl frame_system::Config for Runtime {
+			#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+			impl pezframe_system::Config for Runtime {
 				type Block = MockBlock<Runtime>;
 				type AccountId = u64;
 			}
 
-			impl pallet_currency::Config for Runtime {
+			impl pezpallet_currency::Config for Runtime {
 				type RuntimeEvent = RuntimeEvent;
 			}
 		}

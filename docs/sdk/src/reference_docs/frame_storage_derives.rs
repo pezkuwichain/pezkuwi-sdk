@@ -12,7 +12,7 @@
 //! pub mod pallet {
 //! 	# use frame::prelude::*;
 //! 	# #[pallet::config]
-//! 	# pub trait Config: frame_system::Config {}
+//! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pallet::pallet]
 //! 	# pub struct Pallet<T>(_);
 //! 	pub struct NewType(u32);
@@ -36,7 +36,7 @@
 //! pub mod pallet {
 //! 	# use frame::prelude::*;
 //! 	# #[pallet::config]
-//! 	# pub trait Config: frame_system::Config {}
+//! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pallet::pallet]
 //! 	# pub struct Pallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo)]
@@ -54,7 +54,7 @@
 //! pub mod pallet {
 //! 	# use frame::prelude::*;
 //! 	# #[pallet::config]
-//! 	# pub trait Config: frame_system::Config {}
+//! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pallet::pallet]
 //! 	# pub struct Pallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo)]
@@ -68,8 +68,8 @@
 //! Surprisingly, this will also raise a number of errors, like:
 //! ```text
 //! the trait `TypeInfo` is not implemented for `T`, which is required
-//! by`frame_support::pallet_prelude::StorageValue<pallet_2::_GeneratedPrefixForStorageSomething<T>,
-//! pallet_2::NewType<T>>:StorageEntryMetadataBuilder
+//! by`pezframe_support::pezpallet_prelude::StorageValue<pezpallet_2::_GeneratedPrefixForStorageSomething<T>,
+//! pezpallet_2::NewType<T>>:StorageEntryMetadataBuilder
 //! ```
 //! 
 //! Why is that? The underlying reason is that the `TypeInfo` `derive` macro will only work for
@@ -88,7 +88,7 @@
 //! pub mod pallet {
 //! 	# use frame::prelude::*;
 //! 	# #[pallet::config]
-//! 	# pub trait Config: frame_system::Config {}
+//! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pallet::pallet]
 //! 	# pub struct Pallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo)]
@@ -108,7 +108,7 @@
 //! pub mod pallet {
 //! 	# use frame::prelude::*;
 //! 	# #[pallet::config]
-//! 	# pub trait Config: frame_system::Config {}
+//! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pallet::pallet]
 //! 	# pub struct Pallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo, Default)]
@@ -146,7 +146,7 @@
 //! pub mod pallet {
 //! 	# use frame::prelude::*;
 //! 	# #[pallet::config]
-//! 	# pub trait Config: frame_system::Config {}
+//! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pallet::pallet]
 //! 	# pub struct Pallet<T>(_);
 //! 	#[derive(
@@ -171,7 +171,7 @@
 //! pub mod pallet {
 //! 	use frame::prelude::*;
 //! 	#[pallet::config]
-//! 	pub trait Config: frame_system::Config {
+//! 	pub trait Config: pezframe_system::Config {
 //! 		type CustomType;
 //! 	}
 //! 	#[pallet::pallet]
@@ -187,7 +187,7 @@
 //! pub mod pallet {
 //! 	use frame::prelude::*;
 //! 	#[pallet::config]
-//! 	pub trait Config: frame_system::Config {
+//! 	pub trait Config: pezframe_system::Config {
 //! 		type CustomType: codec::FullCodec
 //! 			+ codec::MaxEncodedLen
 //! 			+ scale_info::TypeInfo

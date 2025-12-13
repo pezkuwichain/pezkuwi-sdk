@@ -25,7 +25,7 @@ use futures::{
 	future::{FutureExt, Shared},
 	poll, select_biased,
 };
-use relay_substrate_client::{BlockNumberOf, Chain, HeaderIdOf, TeyrchainBase};
+use relay_bizinikiwi_client::{BlockNumberOf, Chain, HeaderIdOf, TeyrchainBase};
 use relay_utils::{
 	metrics::MetricsParams, relay_loop::Client as RelayClient, FailedClient,
 	TrackedTransactionStatus, TransactionTracker,
@@ -688,9 +688,9 @@ mod tests {
 	use super::*;
 	use async_std::sync::{Arc, Mutex};
 	use futures::{SinkExt, StreamExt};
-	use relay_substrate_client::test_chain::{TestChain, TestTeyrchain};
+	use relay_bizinikiwi_client::test_chain::{TestChain, TestTeyrchain};
 	use relay_utils::{HeaderId, MaybeConnectionError};
-	use sp_core::H256;
+	use pezsp_core::H256;
 	use std::collections::HashMap;
 
 	const PARA_10_HASH: ParaHash = H256([10u8; 32]);

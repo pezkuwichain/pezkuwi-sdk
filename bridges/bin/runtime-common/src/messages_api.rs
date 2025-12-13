@@ -17,7 +17,7 @@
 //! Helpers for implementing various message-related runtime API methods.
 
 use bp_messages::{InboundMessageDetails, MessageNonce, MessagePayload, OutboundMessageDetails};
-use sp_std::vec::Vec;
+use pezsp_std::vec::Vec;
 
 /// Implementation of the `To*OutboundLaneApi::message_details`.
 pub fn outbound_message_details<Runtime, MessagesPalletInstance>(
@@ -26,18 +26,18 @@ pub fn outbound_message_details<Runtime, MessagesPalletInstance>(
 	end: MessageNonce,
 ) -> Vec<OutboundMessageDetails>
 where
-	Runtime: pallet_bridge_messages::Config<MessagesPalletInstance>,
+	Runtime: pezpallet_bridge_messages::Config<MessagesPalletInstance>,
 	MessagesPalletInstance: 'static,
 {
 	(begin..=end)
 		.filter_map(|nonce| {
 			let message_data =
-				pallet_bridge_messages::Pallet::<Runtime, MessagesPalletInstance>::outbound_message_data(lane, nonce)?;
+				pezpallet_bridge_messages::Pallet::<Runtime, MessagesPalletInstance>::outbound_message_data(lane, nonce)?;
 			Some(OutboundMessageDetails {
 				nonce,
 				// dispatch message weight is always zero at the source chain, since we're paying for
 				// dispatch at the target chain
-				dispatch_weight: frame_support::weights::Weight::zero(),
+				dispatch_weight: pezframe_support::weights::Weight::zero(),
 				size: message_data.len() as _,
 			})
 		})
@@ -50,13 +50,13 @@ pub fn inbound_message_details<Runtime, MessagesPalletInstance>(
 	messages: Vec<(MessagePayload, OutboundMessageDetails)>,
 ) -> Vec<InboundMessageDetails>
 where
-	Runtime: pallet_bridge_messages::Config<MessagesPalletInstance>,
+	Runtime: pezpallet_bridge_messages::Config<MessagesPalletInstance>,
 	MessagesPalletInstance: 'static,
 {
 	messages
 		.into_iter()
 		.map(|(payload, details)| {
-			pallet_bridge_messages::Pallet::<Runtime, MessagesPalletInstance>::inbound_message_data(
+			pezpallet_bridge_messages::Pallet::<Runtime, MessagesPalletInstance>::inbound_message_data(
 				lane, payload, details,
 			)
 		})

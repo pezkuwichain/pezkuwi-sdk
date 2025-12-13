@@ -24,7 +24,7 @@ fn expect_pallet_should_work() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 42,
 	}]);
@@ -41,7 +41,7 @@ fn expect_pallet_should_work() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 41,
 	}]);
@@ -62,7 +62,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 60,
 	}]);
@@ -85,7 +85,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"System".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 42,
 	}]);
@@ -108,7 +108,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_system".as_ref().into(),
+		module_name: b"pezpallet_system".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 42,
 	}]);
@@ -131,7 +131,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 0,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 42,
 	}]);
@@ -154,7 +154,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 2,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 42,
 	}]);
@@ -177,7 +177,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 2,
 		min_crate_minor: 42,
 	}]);
@@ -200,7 +200,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 0,
 		min_crate_minor: 42,
 	}]);
@@ -223,7 +223,7 @@ fn expect_pallet_should_fail_correctly() {
 	let message = Xcm(vec![ExpectPallet {
 		index: 1,
 		name: b"Balances".as_ref().into(),
-		module_name: b"pallet_balances".as_ref().into(),
+		module_name: b"pezpallet_balances".as_ref().into(),
 		crate_major: 1,
 		min_crate_minor: 43,
 	}]);

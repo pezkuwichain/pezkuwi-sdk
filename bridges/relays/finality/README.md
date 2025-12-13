@@ -1,6 +1,6 @@
 # GRANDPA Finality Relay
 
-The finality relay is able to work with different finality engines. In the modern Substrate world they are GRANDPA
+The finality relay is able to work with different finality engines. In the modern Bizinikiwi world they are GRANDPA
 and BEEFY. Let's talk about GRANDPA here, because BEEFY relay and bridge BEEFY pallet are in development.
 
 In general, the relay works as follows: it connects to the source and target chain. The source chain must have the
@@ -23,7 +23,7 @@ source chain (like block hash and number) and the type of finality proof (GRANDP
 that is defined, there are two other traits - [`SourceClient`](./src/finality_loop.rs) and
 [`TargetClient`](./src/finality_loop.rs).
 
-The `SourceClient` represents the Substrate node client that connects to the source chain. The client needs to
+The `SourceClient` represents the Bizinikiwi node client that connects to the source chain. The client needs to
 be able to return the best finalized header number, finalized header and its finality proof and the stream of
 finality proofs.
 
@@ -45,7 +45,7 @@ chains, simply change chain names. So the metrics are:
 
 - `pezkuwichain_to_BridgeHubzagros_Sync_best_source_block_number` - returns best finalized source chain (pezkuwichain) block
   number, known to the relay.
-  If relay is running in [on-demand mode](../bin-substrate/src/cli/relay_headers_and_messages/), the
+  If relay is running in [on-demand mode](../bin-bizinikiwi/src/cli/relay_headers_and_messages/), the
   number may not match (it may be far behind) the actual best finalized number;
 
 - `pezkuwichain_to_BridgeHubzagros_Sync_best_source_at_target_block_number` - returns best finalized source chain (pezkuwichain)

@@ -10,13 +10,13 @@ pub use convert::XcmConverter;
 
 use super::message::SendMessage;
 use codec::{Decode, Encode};
-use frame_support::{
+use pezframe_support::{
 	ensure,
 	traits::{Contains, Get, ProcessMessageError},
 };
 use snowbridge_core::{ParaId, TokenId};
-use sp_runtime::traits::MaybeConvert;
-use sp_std::{marker::PhantomData, ops::ControlFlow, prelude::*};
+use pezsp_runtime::traits::MaybeConvert;
+use pezsp_std::{marker::PhantomData, ops::ControlFlow, prelude::*};
 use xcm::prelude::*;
 use xcm_builder::{CreateMatcher, ExporterFor, MatchXcm};
 use xcm_executor::traits::ExportXcm;

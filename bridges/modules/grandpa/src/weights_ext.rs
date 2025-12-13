@@ -18,7 +18,7 @@
 
 use crate::weights::{BridgeWeight, WeightInfo};
 
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 
 /// Extended weight info.
 pub trait WeightInfoExt: WeightInfo {
@@ -28,7 +28,7 @@ pub trait WeightInfoExt: WeightInfo {
 	//
 	// 2) slash relayer if he submits an invalid transaction.
 	//
-	// We read and update storage values of other pallets (`pallet-bridge-relayers` and
+	// We read and update storage values of other pallets (`pezpallet-bridge-relayers` and
 	// balances/assets pallet). So we need to add this weight to the weight of our call.
 	// Hence two following methods.
 
@@ -45,7 +45,7 @@ pub trait WeightInfoExt: WeightInfo {
 	}
 }
 
-impl<T: frame_system::Config> WeightInfoExt for BridgeWeight<T> {
+impl<T: pezframe_system::Config> WeightInfoExt for BridgeWeight<T> {
 	fn submit_finality_proof_overhead_from_runtime() -> Weight {
 		Weight::zero()
 	}

@@ -22,13 +22,13 @@ use crate::{
 	xcm_helpers::find_xcm_sent_message_id,
 	DispatchResult, OriginFor,
 };
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_ok,
 	traits::{tokens::fungibles::Inspect, Currency},
 	weights::Weight,
 };
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_runtime::traits::AccountIdConversion;
+use pezsp_runtime::traits::AccountIdConversion;
 use xcm::prelude::*;
 use xcm_executor::traits::ConvertLocation;
 
@@ -2032,7 +2032,7 @@ fn transfer_assets_with_filtered_teleported_fee_disallowed() {
 /// burn) effects are reverted.
 #[test]
 fn intermediary_error_reverts_side_effects() {
-	use sp_tracing::{
+	use pezsp_tracing::{
 		test_log_capture::init_log_capture,
 		tracing::{subscriber, Level},
 	};

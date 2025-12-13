@@ -18,8 +18,8 @@
 
 use crate::configuration::{Config, Pallet};
 use alloc::vec::Vec;
-use frame_support::pallet_prelude::*;
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_support::pezpallet_prelude::*;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 
 use pezkuwi_primitives::{AsyncBackingParams, Balance, ExecutorParams, SessionIndex};
 
@@ -122,11 +122,11 @@ impl<BlockNumber: Default + From<u32>> Default for V6HostConfiguration<BlockNumb
 mod v6 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V6HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V6HostConfiguration<BlockNumberFor<T>>)>,

@@ -49,17 +49,17 @@
 //! ### Dependencies
 //!
 //! This pallet requires integration with:
-//! - `pallet-trust` - Trust score provider
-//! - `pallet-tiki` - Tiki score provider
-//! - `pallet-referral` - Referral system provider
-//! - `pallet-perwerde` - Perwerde score provider
+//! - `pezpallet-trust` - Trust score provider
+//! - `pezpallet-tiki` - Tiki score provider
+//! - `pezpallet-referral` - Referral system provider
+//! - `pezpallet-perwerde` - Perwerde score provider
 //!
 //! ### Runtime Integration Example
 //!
 //! ```ignore
-//! impl pallet_validator_pool::Config for Runtime {
+//! impl pezpallet_validator_pool::Config for Runtime {
 //!     type RuntimeEvent = RuntimeEvent;
-//!     type WeightInfo = pallet_validator_pool::weights::SubstrateWeight<Runtime>;
+//!     type WeightInfo = pezpallet_validator_pool::weights::BizinikiwiWeight<Runtime>;
 //!     type Randomness = RandomnessCollectiveFlip;
 //!     type TrustSource = Trust;
 //!     type TikiSource = Tiki;
@@ -87,14 +87,14 @@ mod tests;
 
 use crate::types::*;
 use alloc::vec::Vec;
-use frame_support::{
+use pezframe_support::{
 	dispatch::DispatchResult,
-	pallet_prelude::*,
+	pezpallet_prelude::*,
 	traits::{Get, Randomness},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::*;
-use sp_runtime::traits::Zero;
+use pezframe_system::pezpallet_prelude::*;
+use pezsp_runtime::traits::Zero;
 
 /// Trust score provider trait
 pub trait TrustScoreProvider<AccountId> {
@@ -116,7 +116,7 @@ pub trait WeightInfo {
 	fn set_pool_parameters() -> Weight;
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -124,7 +124,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config<RuntimeEvent: From<Event<Self>>> {
+	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {
 		type WeightInfo: crate::WeightInfo;
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self>>;
 
@@ -543,7 +543,7 @@ pub mod pallet {
 				_ => {},
 			}
 
-			let current_block = frame_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pallet::<T>::block_number();
 
 			// Update mode
 			CurrentOperationMode::<T>::put(new_mode);
@@ -690,7 +690,7 @@ pub mod pallet {
 
 			// Update storage
 			CurrentEra::<T>::put(new_era);
-			EraStart::<T>::put(frame_system::Pallet::<T>::block_number());
+			EraStart::<T>::put(pezframe_system::Pallet::<T>::block_number());
 			CurrentValidatorSet::<T>::put(&new_validator_set);
 
 			// Update selection history for selected validators
@@ -863,7 +863,7 @@ pub mod pallet {
 			LatestShadowComparison::<T>::put(&comparison);
 
 			// Record era analysis
-			let block_number = frame_system::Pallet::<T>::block_number();
+			let block_number = pezframe_system::Pallet::<T>::block_number();
 			let era_analysis = EraAnalysis {
 				era_index,
 				recorded_at_block: block_number.try_into().unwrap_or(0u32),
@@ -1022,7 +1022,7 @@ pub mod pallet {
 	// SESSION MANAGER IMPLEMENTATION
 	// ============================================================================
 
-	impl<T: Config> pallet_session::SessionManager<T::AccountId> for Pallet<T> {
+	impl<T: Config> pezpallet_session::SessionManager<T::AccountId> for Pallet<T> {
 		fn new_session(new_index: u32) -> Option<Vec<T::AccountId>> {
 			// Behavior depends on operation mode
 			match Self::operation_mode() {
@@ -1038,7 +1038,7 @@ pub mod pallet {
 						new_index
 					);
 
-					// Return None - let pallet-staking/NPoS provide validators
+					// Return None - let pezpallet-staking/NPoS provide validators
 					None
 				},
 				OperationMode::Active => {
@@ -1094,7 +1094,7 @@ pub mod pallet {
 	// ============================================================================
 
 	#[pallet::genesis_config]
-	#[derive(frame_support::DefaultNoBound)]
+	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// Initial operation mode
 		pub operation_mode: OperationMode,

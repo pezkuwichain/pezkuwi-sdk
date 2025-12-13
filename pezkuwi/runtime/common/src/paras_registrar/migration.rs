@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use frame_support::traits::{Contains, UncheckedOnRuntimeUpgrade};
+use pezframe_support::traits::{Contains, UncheckedOnRuntimeUpgrade};
 
 #[derive(Encode, Decode)]
 pub struct ParaInfoV1<Account, Balance> {
@@ -46,12 +46,12 @@ impl<T: Config, UnlockParaIds: Contains<ParaId>> UncheckedOnRuntimeUpgrade
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		Ok((Paras::<T>::iter_keys().count() as u32).encode())
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+	fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		let old_count = u32::decode(&mut &state[..]).expect("Known good");
 		let new_count = Paras::<T>::iter_values().count() as u32;
 
@@ -60,10 +60,10 @@ impl<T: Config, UnlockParaIds: Contains<ParaId>> UncheckedOnRuntimeUpgrade
 	}
 }
 
-pub type MigrateToV1<T, UnlockParaIds> = frame_support::migrations::VersionedMigration<
+pub type MigrateToV1<T, UnlockParaIds> = pezframe_support::migrations::VersionedMigration<
 	0,
 	1,
 	VersionUncheckedMigrateToV1<T, UnlockParaIds>,
 	super::Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;

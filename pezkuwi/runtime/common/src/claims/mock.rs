@@ -23,34 +23,34 @@ use secp_utils::*;
 // The testing primitives are very useful for avoiding having to work with signatures
 // or public keys. `u64` is used as the `AccountId` and no `Signature`s are required.
 use crate::claims;
-use frame_support::{derive_impl, ord_parameter_types, parameter_types, traits::WithdrawReasons};
-use pallet_balances;
-use sp_runtime::{traits::Identity, BuildStorage};
+use pezframe_support::{derive_impl, ord_parameter_types, parameter_types, traits::WithdrawReasons};
+use pezpallet_balances;
+use pezsp_runtime::{traits::Identity, BuildStorage};
 
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances,
-		Vesting: pallet_vesting,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		Vesting: pezpallet_vesting,
 		Claims: claims,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	type Block = Block;
 	type RuntimeEvent = RuntimeEvent;
-	type AccountData = pallet_balances::AccountData<u64>;
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type AccountData = pezpallet_balances::AccountData<u64>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type AccountStore = System;
 }
 
@@ -60,7 +60,7 @@ parameter_types! {
 		WithdrawReasons::except(WithdrawReasons::TRANSFER | WithdrawReasons::RESERVE);
 }
 
-impl pallet_vesting::Config for Test {
+impl pezpallet_vesting::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type BlockNumberToBalance = Identity;
@@ -82,7 +82,7 @@ impl Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type VestingSchedule = Vesting;
 	type Prefix = Prefix;
-	type MoveClaimOrigin = frame_system::EnsureSignedBy<Six, u64>;
+	type MoveClaimOrigin = pezframe_system::EnsureSignedBy<Six, u64>;
 	type WeightInfo = TestWeightInfo;
 }
 
@@ -104,10 +104,10 @@ pub fn frank() -> libsecp256k1::SecretKey {
 
 // This function basically just builds a genesis storage key/value store according to
 // our desired mockup.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 	// We use default for brevity, but you can configure as desired if needed.
-	pallet_balances::GenesisConfig::<Test>::default()
+	pezpallet_balances::GenesisConfig::<Test>::default()
 		.assimilate_storage(&mut t)
 		.unwrap();
 	claims::GenesisConfig::<Test> {

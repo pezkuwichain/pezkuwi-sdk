@@ -30,18 +30,18 @@ mod v_coretime {
 	use codec::Encode;
 	use core::{iter, result};
 	#[cfg(feature = "try-runtime")]
-	use frame_support::ensure;
-	use frame_support::{
+	use pezframe_support::ensure;
+	use pezframe_support::{
 		traits::{OnRuntimeUpgrade, PalletInfoAccess, StorageVersion},
 		weights::Weight,
 	};
-	use frame_system::pallet_prelude::BlockNumberFor;
-	use pallet_broker::{CoreAssignment, CoreMask, ScheduleItem};
+	use pezframe_system::pezpallet_prelude::BlockNumberFor;
+	use pezpallet_broker::{CoreAssignment, CoreMask, ScheduleItem};
 	use pezkuwi_primitives::{CoreIndex, Id as ParaId};
 	use pezkuwi_teyrchain_primitives::primitives::IsSystem;
-	use sp_arithmetic::traits::SaturatedConversion;
-	use sp_core::Get;
-	use sp_runtime::BoundedVec;
+	use pezsp_arithmetic::traits::SaturatedConversion;
+	use pezsp_core::Get;
+	use pezsp_runtime::BoundedVec;
 	use xcm::prelude::{
 		send_xcm, Instruction, Junction, Location, SendError, SendXcm, WeightLimit, Xcm,
 	};
@@ -77,7 +77,7 @@ mod v_coretime {
 			let storage_version_key = StorageVersion::storage_key::<assigner_coretime::Pallet<T>>();
 
 			loop {
-				match sp_io::storage::next_key(&next_key) {
+				match pezsp_io::storage::next_key(&next_key) {
 					// StorageVersion is initialized before, so we need to ignore it.
 					Some(key) if &key == &storage_version_key => {
 						next_key = key;
@@ -112,7 +112,7 @@ mod v_coretime {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
 			if Self::already_migrated() {
 				return Ok(Vec::new());
 			}
@@ -130,7 +130,7 @@ mod v_coretime {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			if state.is_empty() {
 				return Ok(());
 			}
@@ -165,7 +165,7 @@ mod v_coretime {
 	>() -> Weight {
 		let legacy_paras = LegacyLease::get_all_teyrchains_with_leases();
 		let legacy_count = legacy_paras.len() as u32;
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		for (core, para_id) in legacy_paras.into_iter().enumerate() {
 			let r = assigner_coretime::Pallet::<T>::assign_core(
 				CoreIndex(core as u32),

@@ -24,13 +24,13 @@
 pub mod your_first_pallet;
 
 /// Write your first real [runtime](`crate::reference_docs::wasm_meta_protocol`),
-/// compiling it to [WASM](crate::pezkuwi_sdk::substrate#wasm-build).
+/// compiling it to [WASM](crate::pezkuwi_sdk::bizinikiwi#wasm-build).
 pub mod your_first_runtime;
 
 /// Running the given runtime with a node. No specific consensus mechanism is used at this stage.
 pub mod your_first_node;
 
-/// How to enhance a given runtime and node to be cumulus-enabled, run it as a teyrchain
+/// How to enhance a given runtime and node to be pezcumulus-enabled, run it as a teyrchain
 /// and connect it to a relay-chain.
 // pub mod your_first_teyrchain;
 

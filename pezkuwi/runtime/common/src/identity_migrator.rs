@@ -25,13 +25,13 @@
 //! After the migration is complete, the pallet may be removed from both chains' runtimes as well as
 //! the `pezkuwi-runtime-common` crate.
 
-use frame_support::{dispatch::DispatchResult, traits::Currency, weights::Weight};
+use pezframe_support::{dispatch::DispatchResult, traits::Currency, weights::Weight};
 pub use pallet::*;
-use pallet_identity;
-use sp_core::Get;
+use pezpallet_identity;
+use pezsp_core::Get;
 
 #[cfg(feature = "runtime-benchmarks")]
-use frame_benchmarking::{account, v2::*, BenchmarkError};
+use pezframe_benchmarking::{account, v2::*, BenchmarkError};
 
 pub trait WeightInfo {
 	fn reap_identity(r: u32, s: u32) -> Weight;
@@ -58,28 +58,28 @@ impl WeightInfo for TestWeightInfo {
 }
 
 // Must use the same `Balance` as `T`'s Identity pallet to handle deposits.
-type BalanceOf<T> = <<T as pallet_identity::Config>::Currency as Currency<
-	<T as frame_system::Config>::AccountId,
+type BalanceOf<T> = <<T as pezpallet_identity::Config>::Currency as Currency<
+	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::{
+	use pezframe_support::{
 		dispatch::{DispatchResultWithPostInfo, PostDispatchInfo},
-		pallet_prelude::*,
+		pezpallet_prelude::*,
 		traits::EnsureOrigin,
 	};
-	use frame_system::pallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + pallet_identity::Config {
+	pub trait Config: pezframe_system::Config + pezpallet_identity::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The origin that can reap identities. Expected to be `EnsureSigned<AccountId>` on the
 		/// source chain such that anyone can all this function.
@@ -119,7 +119,7 @@ pub mod pallet {
 			// - number of registrars (required to calculate weight)
 			// - byte size of `IdentityInfo` (required to calculate remote deposit)
 			// - number of sub accounts (required to calculate both weight and remote deposit)
-			let (registrars, bytes, subs) = pallet_identity::Pallet::<T>::reap_identity(&who)?;
+			let (registrars, bytes, subs) = pezpallet_identity::Pallet::<T>::reap_identity(&who)?;
 			T::ReapIdentityHandler::on_reap_identity(&who, bytes, subs)?;
 			Self::deposit_event(Event::IdentityReaped { who });
 			let post = PostDispatchInfo {
@@ -137,7 +137,7 @@ pub mod pallet {
 		#[pallet::weight(<T as pallet::Config>::WeightInfo::poke_deposit())]
 		pub fn poke_deposit(origin: OriginFor<T>, who: T::AccountId) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
-			let (id_deposit, subs_deposit) = pallet_identity::Pallet::<T>::poke_deposit(&who)?;
+			let (id_deposit, subs_deposit) = pezpallet_identity::Pallet::<T>::poke_deposit(&who)?;
 			Self::deposit_event(Event::DepositUpdated {
 				who,
 				identity: id_deposit,
@@ -185,10 +185,10 @@ mod benchmarks {
 	use super::*;
 	use alloc::{boxed::Box, vec, vec::Vec};
 	use codec::Encode;
-	use frame_support::traits::EnsureOrigin;
-	use frame_system::RawOrigin;
-	use pallet_identity::{Data, IdentityInformationProvider, Judgement, Pallet as Identity};
-	use sp_runtime::{
+	use pezframe_support::traits::EnsureOrigin;
+	use pezframe_system::RawOrigin;
+	use pezpallet_identity::{Data, IdentityInformationProvider, Judgement, Pallet as Identity};
+	use pezsp_runtime::{
 		traits::{Bounded, Hash, StaticLookup},
 		Saturating,
 	};
@@ -196,9 +196,9 @@ mod benchmarks {
 	const SEED: u32 = 0;
 
 	fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-		let events = frame_system::Pallet::<T>::events();
-		let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
-		let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+		let events = pezframe_system::Pallet::<T>::events();
+		let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
+		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 		assert_eq!(event, &system_event);
 	}
 
@@ -210,12 +210,12 @@ mod benchmarks {
 		// set up target
 		let target: T::AccountId = account("target", 0, SEED);
 		let target_origin =
-			<T as frame_system::Config>::RuntimeOrigin::from(RawOrigin::Signed(target.clone()));
+			<T as pezframe_system::Config>::RuntimeOrigin::from(RawOrigin::Signed(target.clone()));
 		let target_lookup = T::Lookup::unlookup(target.clone());
 		let _ = T::Currency::make_free_balance_be(&target, BalanceOf::<T>::max_value());
 
 		// set identity
-		let info = <T as pallet_identity::Config>::IdentityInformation::create_identity_info();
+		let info = <T as pezpallet_identity::Config>::IdentityInformation::create_identity_info();
 		Identity::<T>::set_identity(
 			RawOrigin::Signed(target.clone()).into(),
 			Box::new(info.clone()),
@@ -243,15 +243,15 @@ mod benchmarks {
 			// registrar account
 			let registrar: T::AccountId = account("registrar", ii, SEED);
 			let registrar_lookup = T::Lookup::unlookup(registrar.clone());
-			let _ = <T as pallet_identity::Config>::Currency::make_free_balance_be(
+			let _ = <T as pezpallet_identity::Config>::Currency::make_free_balance_be(
 				&registrar,
-				<T as pallet_identity::Config>::Currency::minimum_balance(),
+				<T as pezpallet_identity::Config>::Currency::minimum_balance(),
 			);
 
 			// add registrar
 			Identity::<T>::add_registrar(registrar_origin.clone(), registrar_lookup)?;
 			Identity::<T>::set_fee(RawOrigin::Signed(registrar.clone()).into(), ii, 10u32.into())?;
-			let fields = <T as pallet_identity::Config>::IdentityInformation::all_fields();
+			let fields = <T as pezpallet_identity::Config>::IdentityInformation::all_fields();
 			Identity::<T>::set_fields(RawOrigin::Signed(registrar.clone()).into(), ii, fields)?;
 
 			// request and provide judgement
@@ -261,7 +261,7 @@ mod benchmarks {
 				ii,
 				target_lookup.clone(),
 				Judgement::Reasonable,
-				<T as frame_system::Config>::Hashing::hash_of(&info),
+				<T as pezframe_system::Config>::Hashing::hash_of(&info),
 			)?;
 		}
 
@@ -272,7 +272,7 @@ mod benchmarks {
 
 		assert_last_event::<T>(Event::<T>::IdentityReaped { who: target.clone() }.into());
 
-		let fields = <T as pallet_identity::Config>::IdentityInformation::all_fields();
+		let fields = <T as pezpallet_identity::Config>::IdentityInformation::all_fields();
 		assert!(!Identity::<T>::has_identity(&target, fields));
 		assert_eq!(Identity::<T>::subs(&target).len(), 0);
 
@@ -283,7 +283,7 @@ mod benchmarks {
 	fn poke_deposit() -> Result<(), BenchmarkError> {
 		let target: T::AccountId = account("target", 0, SEED);
 		let _ = T::Currency::make_free_balance_be(&target, BalanceOf::<T>::max_value());
-		let info = <T as pallet_identity::Config>::IdentityInformation::create_identity_info();
+		let info = <T as pezpallet_identity::Config>::IdentityInformation::create_identity_info();
 
 		let _ = Identity::<T>::set_identity_no_deposit(&target, info.clone());
 
@@ -292,13 +292,13 @@ mod benchmarks {
 		let _ = Identity::<T>::set_subs_no_deposit(&target, vec![(sub_account.clone(), name)]);
 
 		// expected deposits
-		let expected_id_deposit = <T as pallet_identity::Config>::BasicDeposit::get()
+		let expected_id_deposit = <T as pezpallet_identity::Config>::BasicDeposit::get()
 			.saturating_add(
-				<T as pallet_identity::Config>::ByteDeposit::get()
+				<T as pezpallet_identity::Config>::ByteDeposit::get()
 					.saturating_mul(<BalanceOf<T>>::from(info.encoded_size() as u32)),
 			);
 		// only 1 sub
-		let expected_sub_deposit = <T as pallet_identity::Config>::SubAccountDeposit::get();
+		let expected_sub_deposit = <T as pezpallet_identity::Config>::SubAccountDeposit::get();
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, target.clone());

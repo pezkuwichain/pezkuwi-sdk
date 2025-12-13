@@ -23,11 +23,11 @@ serde = { optional = true, features = [
 	"derive",
 ], workspace = true, default-features = true }
 
-frame-support = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+pezframe-support = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 byte-slice-cast = { workspace = true }
 ssz_rs = { workspace = true }
@@ -44,22 +44,22 @@ default = ["std"]
 std = [
 	"byte-slice-cast/std",
 	"codec/std",
-	"frame-support/std",
+	"pezframe-support/std",
 	"hex/std",
 	"milagro-bls/std",
 	"rlp/std",
 	"scale-info/std",
 	"serde",
 	"snowbridge-ethereum/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 	"ssz_rs/std",
 ]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 	"snowbridge-ethereum/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

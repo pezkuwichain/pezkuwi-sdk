@@ -1,5 +1,5 @@
 [package]
-name = "pallet-bridge-teyrchains"
+name = "pezpallet-bridge-teyrchains"
 version = "0.7.0"
 description = "Module that allows bridged relay chains to exchange information on their teyrchains' heads."
 authors.workspace = true
@@ -20,20 +20,20 @@ bp-header-chain = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
 bp-runtime = { workspace = true }
 bp-teyrchains = { workspace = true }
-pallet-bridge-grandpa = { workspace = true }
+pezpallet-bridge-grandpa = { workspace = true }
 
-# Substrate Dependencies
-frame-benchmarking = { optional = true, workspace = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+# Bizinikiwi Dependencies
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 [dev-dependencies]
 bp-header-chain = { workspace = true, default-features = true }
 bp-test-utils = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-io = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-io = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
@@ -43,13 +43,13 @@ std = [
 	"bp-runtime/std",
 	"bp-teyrchains/std",
 	"codec/std",
-	"frame-benchmarking/std",
-	"frame-support/std",
-	"frame-system/std",
-	"pallet-bridge-grandpa/std",
+	"pezframe-benchmarking/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-bridge-grandpa/std",
 	"scale-info/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 	"tracing/std",
 ]
 runtime-benchmarks = [
@@ -58,16 +58,16 @@ runtime-benchmarks = [
 	"bp-runtime/runtime-benchmarks",
 	"bp-test-utils/runtime-benchmarks",
 	"bp-teyrchains/runtime-benchmarks",
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"pallet-bridge-grandpa/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-bridge-grandpa/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"pallet-bridge-grandpa/try-runtime",
-	"sp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-bridge-grandpa/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

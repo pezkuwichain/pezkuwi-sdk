@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Adapters to work with [`frame_support::traits::fungibles`] through XCM.
+//! Adapters to work with [`pezframe_support::traits::fungibles`] through XCM.
 
 use core::{marker::PhantomData, result};
-use frame_support::traits::{Contains, Get};
-use sp_runtime::traits::MaybeEquivalence;
+use pezframe_support::traits::{Contains, Get};
+use pezsp_runtime::traits::MaybeEquivalence;
 use xcm::latest::prelude::*;
 use xcm_executor::traits::{
 	Error as MatchError, MatchesFungibles, MatchesInstance, MatchesNonFungible, MatchesNonFungibles,
@@ -215,7 +215,7 @@ mod tests {
 	fn matched_converted_concrete_id_for_fungibles_works() {
 		type AssetIdForTrustBackedAssets = u32;
 		type Balance = u128;
-		frame_support::parameter_types! {
+		pezframe_support::parameter_types! {
 			pub TrustBackedAssetsPalletLocation: Location = PalletInstance(50).into();
 		}
 
@@ -280,7 +280,7 @@ mod tests {
 	fn matched_converted_concrete_id_for_nonfungibles_works() {
 		type ClassId = u32;
 		type ClassInstanceId = u64;
-		frame_support::parameter_types! {
+		pezframe_support::parameter_types! {
 			pub TrustBackedAssetsPalletLocation: Location = PalletInstance(50).into();
 		}
 

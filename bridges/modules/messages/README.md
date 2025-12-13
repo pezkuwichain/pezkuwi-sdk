@@ -80,11 +80,11 @@ chain" and the other chain as "bridged chain".
 
 Messages module doesn't simply accept transactions that are claiming that the bridged chain has some updated data for
 us. Instead of this, the module assumes that the bridged chain is able to prove that updated data in some way. The proof
-is abstracted from the module and may be of any kind. In our Substrate-to-Substrate bridge we're using runtime storage
-proofs. Other bridges may use transaction proofs, Substrate header digests or anything else that may be proved.
+is abstracted from the module and may be of any kind. In our Bizinikiwi-to-Bizinikiwi bridge we're using runtime storage
+proofs. Other bridges may use transaction proofs, Bizinikiwi header digests or anything else that may be proved.
 
 **IMPORTANT NOTE**: everything below in this chapter describes details of the messages module configuration. But if
-you're interested in well-probed and relatively easy integration of two Substrate-based chains, you may want to look at
+you're interested in well-probed and relatively easy integration of two Bizinikiwi-based chains, you may want to look at
 the [bridge-runtime-common](../../bin/runtime-common/) crate. This crate is providing a lot of helpers for integration,
 which may be directly used from within your runtime. Then if you'll decide to change something in this scheme, get back
 here for detailed information.
@@ -124,7 +124,7 @@ dispatch weight of the message before dispatch is called.
 
 The last type is the `pallet_bridge_messages::Config::DeliveryConfirmationPayments`. When confirmation
 transaction is received, we call the `pay_reward()` method, passing the range of delivered messages.
-You may use the [`pallet-bridge-relayers`](../relayers/) pallet and its
+You may use the [`pezpallet-bridge-relayers`](../relayers/) pallet and its
 [`DeliveryConfirmationPaymentsAdapter`](../relayers/src/payment_adapter.rs) adapter as a possible
 implementation. It allows you to pay fixed reward for relaying the message and some of its portion
 for confirming delivery.
@@ -162,7 +162,7 @@ confirmed message needs to be read. So there's another
 for that.
 
 When choosing values for these parameters, you must also keep in mind that if proof in your scheme
-is based on finality of headers (and it is the most obvious option for Substrate-based chains with
+is based on finality of headers (and it is the most obvious option for Bizinikiwi-based chains with
 finality notion), then choosing too small values for these parameters may cause significant delays
 in message delivery. That's because there are too many actors involved in this scheme: 1) authorities
 that are finalizing headers of the target chain need to finalize header with non-empty map; 2) the

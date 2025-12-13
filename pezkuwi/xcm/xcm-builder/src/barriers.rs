@@ -18,7 +18,7 @@
 
 use crate::{CreateMatcher, MatchXcm};
 use core::{cell::Cell, marker::PhantomData, ops::ControlFlow, result::Result};
-use frame_support::{
+use pezframe_support::{
 	ensure,
 	traits::{Contains, ContainsPair, Get, Nothing, ProcessMessageError},
 };
@@ -29,7 +29,7 @@ use xcm_executor::traits::{CheckSuspension, DenyExecution, OnResponse, Propertie
 /// Execution barrier that just takes `max_weight` from `properties.weight_credit`.
 ///
 /// Useful to allow XCM execution by local chain users via extrinsics.
-/// E.g. `pallet_xcm::reserve_asset_transfer` to transfer a reserve asset
+/// E.g. `pezpallet_xcm::reserve_asset_transfer` to transfer a reserve asset
 /// out of the local chain to another one.
 pub struct TakeWeightCredit;
 impl ShouldExecute for TakeWeightCredit {
@@ -546,7 +546,7 @@ where
 	}
 }
 
-// See issue <https://github.com/paritytech/polkadot/issues/5233>
+// See issue <https://github.com/pezkuwichain/kurdistan-sdk/issues/155>
 pub struct DenyReserveTransferToRelayChain;
 impl DenyExecution for DenyReserveTransferToRelayChain {
 	fn deny_execution<RuntimeCall>(
@@ -627,7 +627,7 @@ impl<Inner: DenyExecution> DenyRecursively<Inner> {
 			}).flatten().ok_or(ProcessMessageError::StackLimitReached)?;
 
 			// Ensure the counter is decremented even if an early return occurs.
-			sp_core::defer! {
+			pezsp_core::defer! {
 				recursion_count::with(|count| {
 					*count = count.saturating_sub(1);
 				});

@@ -121,7 +121,7 @@ use pezkuwi_statement_table::{
 	Context as TableContextTrait, Table,
 };
 use pezkuwi_teyrchain_primitives::primitives::IsSystem;
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 mod error;
 

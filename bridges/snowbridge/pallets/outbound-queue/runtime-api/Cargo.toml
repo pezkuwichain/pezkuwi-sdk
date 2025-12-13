@@ -19,28 +19,28 @@ exclude-from-umbrella = true
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-frame-support = { workspace = true }
+pezframe-support = { workspace = true }
 snowbridge-core = { workspace = true }
 snowbridge-merkle-tree = { workspace = true }
 snowbridge-outbound-queue-primitives = { workspace = true }
-sp-api = { workspace = true }
-sp-std = { workspace = true }
+pezsp-api = { workspace = true }
+pezsp-std = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
 	"codec/std",
-	"frame-support/std",
+	"pezframe-support/std",
 	"snowbridge-core/std",
 	"snowbridge-merkle-tree/std",
 	"snowbridge-outbound-queue-primitives/std",
-	"sp-api/std",
-	"sp-std/std",
+	"pezsp-api/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
 	"snowbridge-merkle-tree/runtime-benchmarks",
 	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
 ]

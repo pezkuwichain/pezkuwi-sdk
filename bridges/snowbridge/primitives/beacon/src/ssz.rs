@@ -7,8 +7,8 @@ use crate::{
 	},
 };
 use byte_slice_cast::AsByteSlice;
-use sp_core::H256;
-use sp_std::{vec, vec::Vec};
+use pezsp_core::H256;
+use pezsp_std::{vec, vec::Vec};
 use ssz_rs::{
 	prelude::{List, Vector},
 	Bitvector, Deserialize, DeserializeError, SimpleSerialize, SimpleSerializeError, Sized, U256,
@@ -200,8 +200,8 @@ pub mod deneb {
 		types::deneb::ExecutionPayloadHeader,
 	};
 	use byte_slice_cast::AsByteSlice;
-	use sp_core::H256;
-	use sp_std::{vec, vec::Vec};
+	use pezsp_core::H256;
+	use pezsp_std::{vec, vec::Vec};
 	use ssz_rs::{
 		prelude::{List, Vector},
 		Deserialize, DeserializeError, SimpleSerializeError, Sized, U256,

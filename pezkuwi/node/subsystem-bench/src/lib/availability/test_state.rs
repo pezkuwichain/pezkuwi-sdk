@@ -39,7 +39,7 @@ use pezkuwi_primitives::{
 	ValidatorIndex,
 };
 use pezkuwi_primitives_test_helpers::{dummy_candidate_receipt_v2, dummy_hash};
-use sp_core::H256;
+use pezsp_core::H256;
 use std::{collections::HashMap, iter::Cycle, sync::Arc};
 
 const LOG_TARGET: &str = "subsystem-bench::availability::test_state";

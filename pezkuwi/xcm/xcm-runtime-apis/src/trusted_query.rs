@@ -18,13 +18,13 @@
 //! Runtime API definition for checking if given <Asset, Location> is trusted reserve or teleporter.
 
 use codec::{Decode, Encode};
-use frame_support::pallet_prelude::TypeInfo;
+use pezframe_support::pezpallet_prelude::TypeInfo;
 use xcm::{VersionedAsset, VersionedLocation};
 
 /// Result of [`TrustedQueryApi`] functions.
 pub type XcmTrustedQueryResult = Result<bool, Error>;
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// API for querying trusted reserves and trusted teleporters.
 	pub trait TrustedQueryApi {
 		/// Returns if the location is a trusted reserve for the asset.

@@ -18,14 +18,14 @@
 
 use super::*;
 use crate::xcm_config::Collectives;
-use frame_support::{parameter_types, traits::EitherOf};
-use frame_system::EnsureRootWithSuccess;
-use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
+use pezframe_support::{parameter_types, traits::EitherOf};
+use pezframe_system::EnsureRootWithSuccess;
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use xcm::latest::BodyId;
 
 mod origins;
 pub use origins::{
-	pallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin,
+	pezpallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin,
 	ReferendumCanceller, ReferendumKiller, Spender, StakingAdmin, Treasurer, WhitelistedCaller,
 };
 mod tracks;
@@ -35,14 +35,14 @@ parameter_types! {
 	pub const VoteLockingPeriod: BlockNumber = 7 * DAYS;
 }
 
-impl pallet_conviction_voting::Config for Runtime {
-	type WeightInfo = weights::pallet_conviction_voting::WeightInfo<Self>;
+impl pezpallet_conviction_voting::Config for Runtime {
+	type WeightInfo = weights::pezpallet_conviction_voting::WeightInfo<Self>;
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type VoteLockingPeriod = VoteLockingPeriod;
 	type MaxVotes = ConstU32<512>;
 	type MaxTurnout =
-		frame_support::traits::tokens::currency::ActiveIssuanceOf<Balances, Self::AccountId>;
+		pezframe_support::traits::tokens::currency::ActiveIssuanceOf<Balances, Self::AccountId>;
 	type Polls = Referenda;
 	type BlockNumberProvider = System;
 	type VotingHooks = ();
@@ -59,15 +59,15 @@ parameter_types! {
 }
 pub type TreasurySpender = EitherOf<EnsureRootWithSuccess<AccountId, MaxBalance>, Spender>;
 
-impl origins::pallet_custom_origins::Config for Runtime {}
+impl origins::pezpallet_custom_origins::Config for Runtime {}
 
 parameter_types! {
 	// Fellows pluralistic body.
 	pub const FellowsBodyId: BodyId = BodyId::Technical;
 }
 
-impl pallet_whitelist::Config for Runtime {
-	type WeightInfo = weights::pallet_whitelist::WeightInfo<Self>;
+impl pezpallet_whitelist::Config for Runtime {
+	type WeightInfo = weights::pezpallet_whitelist::WeightInfo<Self>;
 	type RuntimeCall = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
 	type WhitelistOrigin = EitherOfDiverse<
@@ -78,18 +78,18 @@ impl pallet_whitelist::Config for Runtime {
 	type Preimages = Preimage;
 }
 
-impl pallet_referenda::Config for Runtime {
-	type WeightInfo = weights::pallet_referenda_referenda::WeightInfo<Self>;
+impl pezpallet_referenda::Config for Runtime {
+	type WeightInfo = weights::pezpallet_referenda_referenda::WeightInfo<Self>;
 	type RuntimeCall = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
 	type Scheduler = Scheduler;
 	type Currency = Balances;
-	type SubmitOrigin = frame_system::EnsureSigned<AccountId>;
+	type SubmitOrigin = pezframe_system::EnsureSigned<AccountId>;
 	type CancelOrigin = EitherOf<EnsureRoot<AccountId>, ReferendumCanceller>;
 	type KillOrigin = EitherOf<EnsureRoot<AccountId>, ReferendumKiller>;
 	type Slash = Treasury;
-	type Votes = pallet_conviction_voting::VotesOf<Runtime>;
-	type Tally = pallet_conviction_voting::TallyOf<Runtime>;
+	type Votes = pezpallet_conviction_voting::VotesOf<Runtime>;
+	type Tally = pezpallet_conviction_voting::TallyOf<Runtime>;
 	type SubmissionDeposit = SubmissionDeposit;
 	type MaxQueued = ConstU32<100>;
 	type UndecidingTimeout = UndecidingTimeout;

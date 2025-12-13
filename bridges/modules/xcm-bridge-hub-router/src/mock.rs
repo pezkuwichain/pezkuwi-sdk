@@ -16,20 +16,20 @@
 
 #![cfg(test)]
 
-use crate as pallet_xcm_bridge_hub_router;
+use crate as pezpallet_xcm_bridge_hub_router;
 
 use bp_xcm_bridge_hub_router::XcmChannelStatusProvider;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{Contains, Equals},
 };
-use sp_runtime::{traits::ConstU128, BuildStorage};
-use sp_std::cell::RefCell;
+use pezsp_runtime::{traits::ConstU128, BuildStorage};
+use pezsp_std::cell::RefCell;
 use xcm::prelude::*;
 use xcm_builder::{InspectMessageQueues, NetworkExportTable, NetworkExportTableItem};
 
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Block = pezframe_system::mocking::MockBlock<TestRuntime>;
 
 /// HRMP fee.
 pub const HRMP_FEE: u128 = 500;
@@ -41,8 +41,8 @@ pub const BYTE_FEE: u128 = 1_000;
 construct_runtime! {
 	pub enum TestRuntime
 	{
-		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		XcmBridgeHubRouter: pallet_xcm_bridge_hub_router::{Pallet, Storage, Event<T>},
+		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
+		XcmBridgeHubRouter: pezpallet_xcm_bridge_hub_router::{Pallet, Storage, Event<T>},
 	}
 }
 
@@ -64,12 +64,12 @@ parameter_types! {
 	pub UnknownXcmVersionForRoutableLocation: Location = Location::new(2, [GlobalConsensus(BridgedNetworkId::get()), Teyrchain(9999)]);
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = Block;
 }
 
-impl pallet_xcm_bridge_hub_router::Config<()> for TestRuntime {
+impl pezpallet_xcm_bridge_hub_router::Config<()> for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 
@@ -80,7 +80,7 @@ impl pallet_xcm_bridge_hub_router::Config<()> for TestRuntime {
 	type DestinationVersion =
 		LatestOrNoneForLocationVersionChecker<Equals<UnknownXcmVersionForRoutableLocation>>;
 
-	type BridgeHubOrigin = frame_system::EnsureRoot<u64>;
+	type BridgeHubOrigin = pezframe_system::EnsureRoot<u64>;
 	type ToBridgeHubSender = TestToBridgeHubSender;
 	type LocalXcmChannelManager = TestLocalXcmChannelManager;
 
@@ -88,7 +88,7 @@ impl pallet_xcm_bridge_hub_router::Config<()> for TestRuntime {
 	type FeeAsset = BridgeFeeAsset;
 }
 
-pub struct LatestOrNoneForLocationVersionChecker<Location>(sp_std::marker::PhantomData<Location>);
+pub struct LatestOrNoneForLocationVersionChecker<Location>(pezsp_std::marker::PhantomData<Location>);
 impl<LocationValue: Contains<Location>> GetVersion
 	for LatestOrNoneForLocationVersionChecker<LocationValue>
 {
@@ -155,7 +155,7 @@ pub struct TestLocalXcmChannelManager;
 
 impl TestLocalXcmChannelManager {
 	pub fn make_congested(with: &Location) {
-		frame_support::storage::unhashed::put(
+		pezframe_support::storage::unhashed::put(
 			&(b"TestLocalXcmChannelManager.Congested", with).encode()[..],
 			&true,
 		);
@@ -164,16 +164,16 @@ impl TestLocalXcmChannelManager {
 
 impl XcmChannelStatusProvider for TestLocalXcmChannelManager {
 	fn is_congested(with: &Location) -> bool {
-		frame_support::storage::unhashed::get_or_default(
+		pezframe_support::storage::unhashed::get_or_default(
 			&(b"TestLocalXcmChannelManager.Congested", with).encode()[..],
 		)
 	}
 }
 
 /// Return test externalities to use in tests.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let t = frame_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
-	sp_io::TestExternalities::new(t)
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	pezsp_io::TestExternalities::new(t)
 }
 
 /// Run pallet test.
@@ -187,5 +187,5 @@ pub fn run_test<T>(test: impl FnOnce() -> T) -> T {
 }
 
 pub(crate) fn fake_message_hash<T>(message: &Xcm<T>) -> XcmHash {
-	message.using_encoded(sp_io::hashing::blake2_256)
+	message.using_encoded(pezsp_io::hashing::blake2_256)
 }

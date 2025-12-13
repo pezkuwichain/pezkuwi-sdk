@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
-//! Benchmarking setup for pallet-template
+//! Benchmarking setup for pezpallet-template
 use super::*;
 
 #[allow(unused)]
 use crate::Pallet as SnowbridgeControl;
-use frame_benchmarking::v2::*;
-use frame_system::RawOrigin;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::RawOrigin;
 use xcm::prelude::*;
 
 #[benchmarks]

@@ -18,7 +18,7 @@
 //! on all modules.
 
 use alloc::{collections::btree_set::BTreeSet, vec::Vec};
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{HeadData, Id as ParaId, PersistedValidationData, ValidatorIndex};
 
 use crate::{configuration, hrmp, paras};

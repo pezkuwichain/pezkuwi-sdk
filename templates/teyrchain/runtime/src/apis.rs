@@ -26,23 +26,23 @@
 // External crates imports
 use alloc::vec::Vec;
 
-use pezkuwi_sdk::{staging_teyrchain_info as teyrchain_info, *};
+use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
 
 use cumulus_primitives_core::ParaId;
-use frame_support::{
+use pezframe_support::{
 	genesis_builder_helper::{build_state, get_preset},
 	weights::Weight,
 };
-use pallet_aura::Authorities;
-use sp_api::impl_runtime_apis;
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
-use sp_runtime::{
+use pezpallet_aura::Authorities;
+use pezsp_api::impl_runtime_apis;
+use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
+use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
+use pezsp_runtime::{
 	traits::Block as BlockT,
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult,
 };
-use sp_version::RuntimeVersion;
+use pezsp_version::RuntimeVersion;
 
 // Local module imports
 use super::{
@@ -54,8 +54,8 @@ use super::{
 // we move some impls outside so we can easily use them with `docify`.
 impl Runtime {
 	#[docify::export]
-	fn impl_slot_duration() -> sp_consensus_aura::SlotDuration {
-		sp_consensus_aura::SlotDuration::from_millis(SLOT_DURATION)
+	fn impl_slot_duration() -> pezsp_consensus_aura::SlotDuration {
+		pezsp_consensus_aura::SlotDuration::from_millis(SLOT_DURATION)
 	}
 
 	#[docify::export]
@@ -68,8 +68,8 @@ impl Runtime {
 }
 
 impl_runtime_apis! {
-	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
-		fn slot_duration() -> sp_consensus_aura::SlotDuration {
+	impl pezsp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+		fn slot_duration() -> pezsp_consensus_aura::SlotDuration {
 			Runtime::impl_slot_duration()
 		}
 
@@ -93,7 +93,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl sp_api::Core<Block> for Runtime {
+	impl pezsp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
 		}
@@ -102,12 +102,12 @@ impl_runtime_apis! {
 			Executive::execute_block(block)
 		}
 
-		fn initialize_block(header: &<Block as BlockT>::Header) -> sp_runtime::ExtrinsicInclusionMode {
+		fn initialize_block(header: &<Block as BlockT>::Header) -> pezsp_runtime::ExtrinsicInclusionMode {
 			Executive::initialize_block(header)
 		}
 	}
 
-	impl sp_api::Metadata<Block> for Runtime {
+	impl pezsp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			OpaqueMetadata::new(Runtime::metadata().into())
 		}
@@ -121,13 +121,13 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl frame_support::view_functions::runtime_api::RuntimeViewFunction<Block> for Runtime {
-		fn execute_view_function(id: frame_support::view_functions::ViewFunctionId, input: Vec<u8>) -> Result<Vec<u8>, frame_support::view_functions::ViewFunctionDispatchError> {
+	impl pezframe_support::view_functions::runtime_api::RuntimeViewFunction<Block> for Runtime {
+		fn execute_view_function(id: pezframe_support::view_functions::ViewFunctionId, input: Vec<u8>) -> Result<Vec<u8>, pezframe_support::view_functions::ViewFunctionDispatchError> {
 			Runtime::execute_view_function(id, input)
 		}
 	}
 
-	impl sp_block_builder::BlockBuilder<Block> for Runtime {
+	impl pezsp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
 		}
@@ -136,19 +136,19 @@ impl_runtime_apis! {
 			Executive::finalize_block()
 		}
 
-		fn inherent_extrinsics(data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+		fn inherent_extrinsics(data: pezsp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
 			data.create_extrinsics()
 		}
 
 		fn check_inherents(
 			block: <Block as BlockT>::LazyBlock,
-			data: sp_inherents::InherentData,
-		) -> sp_inherents::CheckInherentsResult {
+			data: pezsp_inherents::InherentData,
+		) -> pezsp_inherents::CheckInherentsResult {
 			data.check_extrinsics(&block)
 		}
 	}
 
-	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
+	impl pezsp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(
 			source: TransactionSource,
 			tx: <Block as BlockT>::Extrinsic,
@@ -158,13 +158,13 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl sp_offchain::OffchainWorkerApi<Block> for Runtime {
+	impl pezsp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(header: &<Block as BlockT>::Header) {
 			Executive::offchain_worker(header)
 		}
 	}
 
-	impl sp_session::SessionKeys<Block> for Runtime {
+	impl pezsp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			SessionKeys::generate(seed)
 		}
@@ -176,23 +176,23 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
+	impl pezframe_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
 		fn account_nonce(account: AccountId) -> Nonce {
 			System::account_nonce(account)
 		}
 	}
 
-	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<Block, Balance> for Runtime {
+	impl pezpallet_transaction_payment_rpc_runtime_api::TransactionPaymentApi<Block, Balance> for Runtime {
 		fn query_info(
 			uxt: <Block as BlockT>::Extrinsic,
 			len: u32,
-		) -> pallet_transaction_payment_rpc_runtime_api::RuntimeDispatchInfo<Balance> {
+		) -> pezpallet_transaction_payment_rpc_runtime_api::RuntimeDispatchInfo<Balance> {
 			TransactionPayment::query_info(uxt, len)
 		}
 		fn query_fee_details(
 			uxt: <Block as BlockT>::Extrinsic,
 			len: u32,
-		) -> pallet_transaction_payment::FeeDetails<Balance> {
+		) -> pezpallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_fee_details(uxt, len)
 		}
 		fn query_weight_to_fee(weight: Weight) -> Balance {
@@ -203,19 +203,19 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl pallet_transaction_payment_rpc_runtime_api::TransactionPaymentCallApi<Block, Balance, RuntimeCall>
+	impl pezpallet_transaction_payment_rpc_runtime_api::TransactionPaymentCallApi<Block, Balance, RuntimeCall>
 		for Runtime
 	{
 		fn query_call_info(
 			call: RuntimeCall,
 			len: u32,
-		) -> pallet_transaction_payment::RuntimeDispatchInfo<Balance> {
+		) -> pezpallet_transaction_payment::RuntimeDispatchInfo<Balance> {
 			TransactionPayment::query_call_info(call, len)
 		}
 		fn query_call_fee_details(
 			call: RuntimeCall,
 			len: u32,
-		) -> pallet_transaction_payment::FeeDetails<Balance> {
+		) -> pezpallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_call_fee_details(call, len)
 		}
 		fn query_weight_to_fee(weight: Weight) -> Balance {
@@ -233,8 +233,8 @@ impl_runtime_apis! {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	impl frame_try_runtime::TryRuntime<Block> for Runtime {
-		fn on_runtime_upgrade(checks: frame_try_runtime::UpgradeCheckSelect) -> (Weight, Weight) {
+	impl pezframe_try_runtime::TryRuntime<Block> for Runtime {
+		fn on_runtime_upgrade(checks: pezframe_try_runtime::UpgradeCheckSelect) -> (Weight, Weight) {
 			use super::configs::RuntimeBlockWeights;
 
 			let weight = Executive::try_runtime_upgrade(checks).unwrap();
@@ -245,7 +245,7 @@ impl_runtime_apis! {
 			block: <Block as BlockT>::LazyBlock,
 			state_root_check: bool,
 			signature_check: bool,
-			select: frame_try_runtime::TryStateSelect,
+			select: pezframe_try_runtime::TryStateSelect,
 		) -> Weight {
 			// NOTE: intentional unwrap: we don't want to propagate the error backwards, and want to
 			// have a backtrace here.
@@ -254,14 +254,14 @@ impl_runtime_apis! {
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]
-	impl frame_benchmarking::Benchmark<Block> for Runtime {
+	impl pezframe_benchmarking::Benchmark<Block> for Runtime {
 		fn benchmark_metadata(extra: bool) -> (
-			Vec<frame_benchmarking::BenchmarkList>,
-			Vec<pezkuwi_sdk::frame_support::traits::StorageInfo>,
+			Vec<pezframe_benchmarking::BenchmarkList>,
+			Vec<pezkuwi_sdk::pezframe_support::traits::StorageInfo>,
 		) {
-			use frame_benchmarking::BenchmarkList;
-			use pezkuwi_sdk::frame_support::traits::StorageInfoTrait;
-			use frame_system_benchmarking::Pallet as SystemBench;
+			use pezframe_benchmarking::BenchmarkList;
+			use pezkuwi_sdk::pezframe_support::traits::StorageInfoTrait;
+			use pezframe_system_benchmarking::Pallet as SystemBench;
 			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
 			use super::*;
 
@@ -274,13 +274,13 @@ impl_runtime_apis! {
 
 		#[allow(non_local_definitions)]
 		fn dispatch_benchmark(
-			config: frame_benchmarking::BenchmarkConfig
-		) -> Result<Vec<frame_benchmarking::BenchmarkBatch>, alloc::string::String> {
-			use frame_benchmarking::{BenchmarkError, BenchmarkBatch};
+			config: pezframe_benchmarking::BenchmarkConfig
+		) -> Result<Vec<pezframe_benchmarking::BenchmarkBatch>, alloc::string::String> {
+			use pezframe_benchmarking::{BenchmarkError, BenchmarkBatch};
 			use super::*;
 
-			use frame_system_benchmarking::Pallet as SystemBench;
-			impl frame_system_benchmarking::Config for Runtime {
+			use pezframe_system_benchmarking::Pallet as SystemBench;
+			impl pezframe_system_benchmarking::Config for Runtime {
 				fn setup_set_code_requirements(code: &Vec<u8>) -> Result<(), BenchmarkError> {
 					TeyrchainSystem::initialize_for_set_code_benchmark(code.len() as u32);
 					Ok(())
@@ -294,7 +294,7 @@ impl_runtime_apis! {
 			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
 			impl cumulus_pallet_session_benchmarking::Config for Runtime {}
 
-			use pezkuwi_sdk::frame_support::traits::WhitelistedStorageKeys;
+			use pezkuwi_sdk::pezframe_support::traits::WhitelistedStorageKeys;
 			let whitelist = AllPalletsWithSystem::whitelisted_storage_keys();
 
 			let mut batches = Vec::<BenchmarkBatch>::new();
@@ -306,16 +306,16 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl sp_genesis_builder::GenesisBuilder<Block> for Runtime {
-		fn build_state(config: Vec<u8>) -> sp_genesis_builder::Result {
+	impl pezsp_genesis_builder::GenesisBuilder<Block> for Runtime {
+		fn build_state(config: Vec<u8>) -> pezsp_genesis_builder::Result {
 			build_state::<RuntimeGenesisConfig>(config)
 		}
 
-		fn get_preset(id: &Option<sp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
+		fn get_preset(id: &Option<pezsp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
 			get_preset::<RuntimeGenesisConfig>(id, crate::genesis_config_presets::get_preset)
 		}
 
-		fn preset_names() -> Vec<sp_genesis_builder::PresetId> {
+		fn preset_names() -> Vec<pezsp_genesis_builder::PresetId> {
 			crate::genesis_config_presets::preset_names()
 		}
 	}

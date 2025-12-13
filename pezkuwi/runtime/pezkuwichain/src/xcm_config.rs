@@ -24,18 +24,18 @@ use super::{
 
 use crate::governance::StakingAdmin;
 
-use frame_support::{
+use pezframe_support::{
 	parameter_types,
 	traits::{Contains, Disabled, Equals, Everything, Nothing},
 	weights::Weight,
 };
-use frame_system::EnsureRoot;
+use pezframe_system::EnsureRoot;
 use pezkuwi_runtime_common::{
 	xcm_sender::{ChildTeyrchainRouter, ExponentialPrice},
 	ToAuthor,
 };
 use pezkuwichain_runtime_constants::{currency::CENTS, system_teyrchain::*};
-use sp_core::ConstU32;
+use pezsp_core::ConstU32;
 use xcm::latest::{prelude::*, PEZKUWICHAIN_GENESIS_HASH};
 use xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowKnownQueryResponses,
@@ -268,7 +268,7 @@ pub type LocalPalletOriginToLocation = (
 	TreasurerToPlurality,
 );
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	// Note that this configuration of `SendXcmOrigin` is different from the one present in
 	// production.
@@ -290,7 +290,7 @@ impl pallet_xcm::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<TokenLocation>;
 	type TrustedLockers = ();
@@ -298,7 +298,7 @@ impl pallet_xcm::Config for Runtime {
 	type MaxLockers = ConstU32<8>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = crate::weights::pallet_xcm::WeightInfo<Runtime>;
+	type WeightInfo = crate::weights::pezpallet_xcm::WeightInfo<Runtime>;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	// Aliasing is disabled: xcm_executor::Config::Aliasers is set to `Nothing`.
 	type AuthorizedAliasConsideration = Disabled;

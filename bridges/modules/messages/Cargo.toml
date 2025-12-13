@@ -1,5 +1,5 @@
 [package]
-name = "pallet-bridge-messages"
+name = "pezpallet-bridge-messages"
 description = "Module that allows bridged chains to exchange messages using lane concept."
 version = "0.7.0"
 authors.workspace = true
@@ -20,21 +20,21 @@ bp-header-chain = { workspace = true }
 bp-messages = { workspace = true }
 bp-runtime = { workspace = true }
 
-# Substrate Dependencies
-frame-benchmarking = { optional = true, workspace = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
-sp-trie = { optional = true, workspace = true }
+# Bizinikiwi Dependencies
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
+pezsp-trie = { optional = true, workspace = true }
 
 [dev-dependencies]
 bp-runtime = { features = ["test-helpers"], workspace = true }
 bp-test-utils = { workspace = true }
-pallet-balances = { workspace = true }
-pallet-bridge-grandpa = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-bridge-grandpa = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
 
 [features]
 default = ["std"]
@@ -44,17 +44,17 @@ std = [
 	"bp-runtime/std",
 	"bp-test-utils/std",
 	"codec/std",
-	"frame-benchmarking/std",
-	"frame-support/std",
-	"frame-system/std",
-	"pallet-balances/std",
-	"pallet-bridge-grandpa/std",
+	"pezframe-benchmarking/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-balances/std",
+	"pezpallet-bridge-grandpa/std",
 	"scale-info/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-std/std",
-	"sp-trie/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"pezsp-trie/std",
 	"tracing/std",
 ]
 runtime-benchmarks = [
@@ -63,20 +63,20 @@ runtime-benchmarks = [
 	"bp-runtime/runtime-benchmarks",
 	"bp-runtime/test-helpers",
 	"bp-test-utils/runtime-benchmarks",
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-bridge-grandpa/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-trie?/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-bridge-grandpa/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-trie?/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"pallet-balances/try-runtime",
-	"pallet-bridge-grandpa/try-runtime",
-	"sp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-bridge-grandpa/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]
-test-helpers = ["bp-runtime/test-helpers", "sp-trie"]
+test-helpers = ["bp-runtime/test-helpers", "pezsp-trie"]

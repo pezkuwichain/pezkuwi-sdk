@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Example command for updating pallet benchmarking
-pushd ../cumulus
+pushd ../pezcumulus
 cargo run --release --bin pezkuwi-teyrchain \
 --features runtime-benchmarks \
 -- \

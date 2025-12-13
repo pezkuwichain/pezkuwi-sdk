@@ -23,12 +23,12 @@ use alloc::{
 	collections::{btree_map::BTreeMap, btree_set::BTreeSet, vec_deque::VecDeque},
 	vec::Vec,
 };
-use frame_support::{pallet_prelude::*, traits::DisabledValidators};
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_support::{pezpallet_prelude::*, traits::DisabledValidators};
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{
 	transpose_claim_queue, CoreIndex, Id, SessionIndex, ValidatorId, ValidatorIndex,
 };
-use sp_runtime::traits::AtLeast32BitUnsigned;
+use pezsp_runtime::traits::AtLeast32BitUnsigned;
 
 use rand::{seq::SliceRandom, SeedableRng};
 use rand_chacha::ChaCha20Rng;
@@ -144,7 +144,7 @@ impl<Hash: PartialEq + Copy, BlockNumber: AtLeast32BitUnsigned + Copy>
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -156,8 +156,8 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
-		type DisabledValidators: frame_support::traits::DisabledValidators;
+	pub trait Config: pezframe_system::Config {
+		type DisabledValidators: pezframe_support::traits::DisabledValidators;
 	}
 
 	/// The current session index.

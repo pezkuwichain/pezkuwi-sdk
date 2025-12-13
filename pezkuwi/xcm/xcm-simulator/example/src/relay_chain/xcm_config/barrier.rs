@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-use frame_support::traits::Everything;
+use pezframe_support::traits::Everything;
 use xcm_builder::AllowUnpaidExecutionFrom;
 
 pub type Barrier = AllowUnpaidExecutionFrom<Everything>;

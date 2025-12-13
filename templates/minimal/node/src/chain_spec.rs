@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -17,12 +17,12 @@
 
 use minimal_template_runtime::WASM_BINARY;
 use pezkuwi_sdk::{
-	sc_service::{ChainType, Properties},
+	pezsc_service::{ChainType, Properties},
 	*,
 };
 
-/// This is a specialization of the general Substrate ChainSpec type.
-pub type ChainSpec = sc_service::GenericChainSpec;
+/// This is a specialization of the general Bizinikiwi ChainSpec type.
+pub type ChainSpec = pezsc_service::GenericChainSpec;
 
 fn props() -> Properties {
 	let mut properties = Properties::new();
@@ -36,7 +36,7 @@ pub fn development_chain_spec() -> Result<ChainSpec, String> {
 		.with_name("Development")
 		.with_id("dev")
 		.with_chain_type(ChainType::Development)
-		.with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
+		.with_genesis_config_preset_name(pezsp_genesis_builder::DEV_RUNTIME_PRESET)
 		.with_properties(props())
 		.build())
 }

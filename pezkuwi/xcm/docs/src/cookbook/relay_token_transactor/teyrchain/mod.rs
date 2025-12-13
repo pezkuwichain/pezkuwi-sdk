@@ -17,32 +17,32 @@
 
 //! # Runtime
 
-use frame::{deps::frame_system, runtime::prelude::*, traits::IdentityLookup};
+use frame::{deps::pezframe_system, runtime::prelude::*, traits::IdentityLookup};
 use xcm_executor::XcmExecutor;
 use xcm_simulator::mock_message_queue;
 
 mod xcm_config;
 use xcm_config::XcmConfig;
 
-pub type Block = frame_system::mocking::MockBlock<Runtime>;
-pub type AccountId = frame::deps::sp_runtime::AccountId32;
+pub type Block = pezframe_system::mocking::MockBlock<Runtime>;
+pub type AccountId = frame::deps::pezsp_runtime::AccountId32;
 pub type Balance = u64;
 
 construct_runtime! {
 	pub struct Runtime {
-		System: frame_system,
+		System: pezframe_system,
 		MessageQueue: mock_message_queue,
-		Balances: pallet_balances,
-		XcmPallet: pallet_xcm,
+		Balances: pezpallet_balances,
+		XcmPallet: pezpallet_xcm,
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type Block = Block;
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<AccountId>;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
 impl mock_message_queue::Config for Runtime {
@@ -50,7 +50,7 @@ impl mock_message_queue::Config for Runtime {
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type AccountStore = System;
 }

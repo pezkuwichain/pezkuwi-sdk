@@ -19,17 +19,17 @@
 
 use bp_header_chain::ChainWithGrandpa;
 use bp_runtime::{Chain, ChainId};
-use frame_support::{
-	construct_runtime, derive_impl, parameter_types, sp_runtime::StateVersion, traits::Hooks,
+use pezframe_support::{
+	construct_runtime, derive_impl, parameter_types, pezsp_runtime::StateVersion, traits::Hooks,
 	weights::Weight,
 };
-use sp_core::sr25519::Signature;
+use pezsp_core::sr25519::Signature;
 
 pub type AccountId = u64;
-pub type TestHeader = sp_runtime::testing::Header;
+pub type TestHeader = pezsp_runtime::testing::Header;
 pub type TestNumber = u64;
 
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Block = pezframe_system::mocking::MockBlock<TestRuntime>;
 
 pub const MAX_BRIDGED_AUTHORITIES: u32 = 5;
 
@@ -38,13 +38,13 @@ use crate as grandpa;
 construct_runtime! {
 	pub enum TestRuntime
 	{
-		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
+		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
 		Grandpa: grandpa::{Pallet, Call, Event<T>},
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = Block;
 }
 
@@ -69,9 +69,9 @@ pub struct TestBridgedChain;
 impl Chain for TestBridgedChain {
 	const ID: ChainId = *b"tbch";
 
-	type BlockNumber = frame_system::pallet_prelude::BlockNumberFor<TestRuntime>;
-	type Hash = <TestRuntime as frame_system::Config>::Hash;
-	type Hasher = <TestRuntime as frame_system::Config>::Hashing;
+	type BlockNumber = pezframe_system::pezpallet_prelude::BlockNumberFor<TestRuntime>;
+	type Hash = <TestRuntime as pezframe_system::Config>::Hash;
+	type Hasher = <TestRuntime as pezframe_system::Config>::Hashing;
 	type Header = TestHeader;
 
 	type AccountId = AccountId;
@@ -98,8 +98,8 @@ impl ChainWithGrandpa for TestBridgedChain {
 }
 
 /// Return test externalities to use in tests.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	sp_io::TestExternalities::new(Default::default())
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	pezsp_io::TestExternalities::new(Default::default())
 }
 
 /// Return test within default test externalities context.

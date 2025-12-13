@@ -25,20 +25,20 @@ use crate::{
 use alloc::{vec, vec::Vec};
 use codec::Decode;
 use core::mem::swap;
-use frame_support::{
+use pezframe_support::{
 	dispatch::DispatchResult,
 	ensure,
 	traits::{Currency, Get, Randomness, ReservableCurrency},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 pub use pallet::*;
 use pezkuwi_primitives::Id as ParaId;
-use sp_runtime::traits::{CheckedSub, One, Saturating, Zero};
+use pezsp_runtime::traits::{CheckedSub, One, Saturating, Zero};
 
 type CurrencyOf<T> = <<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Currency;
 type BalanceOf<T> = <<<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Currency as Currency<
-	<T as frame_system::Config>::AccountId,
+	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 
 pub trait WeightInfo {
@@ -70,28 +70,28 @@ pub type AuctionIndex = u32;
 type LeasePeriodOf<T> = <<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::LeasePeriod;
 
 // Winning data type. This encodes the top bidders of each range together with their bid.
-type WinningData<T> = [Option<(<T as frame_system::Config>::AccountId, ParaId, BalanceOf<T>)>;
+type WinningData<T> = [Option<(<T as pezframe_system::Config>::AccountId, ParaId, BalanceOf<T>)>;
 	SlotRange::SLOT_RANGE_COUNT];
 // Winners data type. This encodes each of the final winners of a teyrchain auction, the teyrchain
 // index assigned to them, their winning bid and the range that they won.
 type WinnersData<T> =
-	Vec<(<T as frame_system::Config>::AccountId, ParaId, BalanceOf<T>, SlotRange)>;
+	Vec<(<T as pezframe_system::Config>::AccountId, ParaId, BalanceOf<T>, SlotRange)>;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::{dispatch::DispatchClass, pallet_prelude::*, traits::EnsureOrigin};
-	use frame_system::{ensure_root, ensure_signed, pallet_prelude::*};
+	use pezframe_support::{dispatch::DispatchClass, pezpallet_prelude::*, traits::EnsureOrigin};
+	use pezframe_system::{ensure_root, ensure_signed, pezpallet_prelude::*};
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
 	/// The module's configuration trait.
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The type representing the leasing system.
 		type Leaser: Leaser<
@@ -373,7 +373,7 @@ impl<T: Config> Auctioneer<BlockNumberFor<T>> for Pallet<T> {
 
 impl<T: Config> Pallet<T> {
 	// A trick to allow me to initialize large arrays with nothing in them.
-	const EMPTY: Option<(<T as frame_system::Config>::AccountId, ParaId, BalanceOf<T>)> = None;
+	const EMPTY: Option<(<T as pezframe_system::Config>::AccountId, ParaId, BalanceOf<T>)> = None;
 
 	/// Create a new auction.
 	///
@@ -386,7 +386,7 @@ impl<T: Config> Pallet<T> {
 	) -> DispatchResult {
 		let maybe_auction = AuctionInfo::<T>::get();
 		ensure!(maybe_auction.is_none(), Error::<T>::AuctionInProgress);
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		if let Some((current_lease_period, _)) = T::Leaser::lease_period_index(now) {
 			// If there is no active lease period, then we don't need to make this check.
 			ensure!(lease_period_index >= current_lease_period, Error::<T>::LeasePeriodInPast);
@@ -399,7 +399,7 @@ impl<T: Config> Pallet<T> {
 		});
 
 		// Set the information.
-		let ending = frame_system::Pallet::<T>::block_number().saturating_add(duration);
+		let ending = pezframe_system::Pallet::<T>::block_number().saturating_add(duration);
 		AuctionInfo::<T>::put((lease_period_index, ending));
 
 		Self::deposit_event(Event::<T>::AuctionStarted {
@@ -435,7 +435,7 @@ impl<T: Config> Pallet<T> {
 
 		// Get the auction status and the current sample block. For the starting period, the sample
 		// block is zero.
-		let auction_status = Self::auction_status(frame_system::Pallet::<T>::block_number());
+		let auction_status = Self::auction_status(pezframe_system::Pallet::<T>::block_number());
 		// The offset into the ending samples of the auction.
 		let offset = match auction_status {
 			AuctionStatus::NotStarted => return Err(Error::<T>::AuctionEnded.into()),

@@ -24,7 +24,7 @@ use crate::{
 	mock::MockGenesisConfig,
 	paras::{ParaGenesisArgs, ParaKind},
 };
-use sp_runtime::Perbill;
+use pezsp_runtime::Perbill;
 
 use pezkuwi_primitives::{Balance, HeadData, ValidationCode};
 

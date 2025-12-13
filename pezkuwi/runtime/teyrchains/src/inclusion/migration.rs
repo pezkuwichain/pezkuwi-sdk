@@ -17,8 +17,8 @@ pub mod v0 {
 	use crate::inclusion::{Config, Pallet};
 	use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
 	use codec::{Decode, Encode};
-	use frame_support::{storage_alias, Twox64Concat};
-	use frame_system::pallet_prelude::BlockNumberFor;
+	use pezframe_support::{storage_alias, Twox64Concat};
+	use pezframe_system::pezpallet_prelude::BlockNumberFor;
 	use pezkuwi_primitives::{
 		AvailabilityBitfield, CandidateCommitments, CandidateDescriptorV2 as CandidateDescriptor,
 		CandidateHash, CoreIndex, GroupIndex, Id as ParaId, ValidatorIndex,
@@ -48,7 +48,7 @@ pub mod v0 {
 		Pallet<T>,
 		Twox64Concat,
 		ParaId,
-		CandidatePendingAvailability<<T as frame_system::Config>::Hash, BlockNumberFor<T>>,
+		CandidatePendingAvailability<<T as pezframe_system::Config>::Hash, BlockNumberFor<T>>,
 	>;
 
 	#[storage_alias]
@@ -74,13 +74,13 @@ mod v1 {
 		PendingAvailability as V1PendingAvailability,
 	};
 	use alloc::{collections::vec_deque::VecDeque, vec::Vec};
-	use frame_support::{traits::UncheckedOnRuntimeUpgrade, weights::Weight};
-	use sp_core::Get;
+	use pezframe_support::{traits::UncheckedOnRuntimeUpgrade, weights::Weight};
+	use pezsp_core::Get;
 
 	#[cfg(feature = "try-runtime")]
 	use codec::{Decode, Encode};
 	#[cfg(feature = "try-runtime")]
-	use frame_support::{
+	use pezframe_support::{
 		ensure,
 		traits::{GetStorageVersion, StorageVersion},
 	};
@@ -89,7 +89,7 @@ mod v1 {
 
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateToV1<T> {
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: crate::inclusion::LOG_TARGET, "Running pre_upgrade() for inclusion MigrateToV1");
 			let candidates_before_upgrade = V0PendingAvailability::<T>::iter().count();
 			let commitments_before_upgrade = V0PendingAvailabilityCommitments::<T>::iter().count();
@@ -155,7 +155,7 @@ mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: crate::inclusion::LOG_TARGET, "Running post_upgrade() for inclusion MigrateToV1");
 			ensure!(
 				Pallet::<T>::on_chain_storage_version() >= StorageVersion::new(1),
@@ -197,12 +197,12 @@ mod v1 {
 	/// - merges the `PendingAvailabilityCommitments` into the `CandidatePendingAvailability`
 	///   storage
 	/// - removes the `AvailabilityBitfields` storage, which was never read.
-	pub type MigrateToV1<T> = frame_support::migrations::VersionedMigration<
+	pub type MigrateToV1<T> = pezframe_support::migrations::VersionedMigration<
 		0,
 		1,
 		VersionUncheckedMigrateToV1<T>,
 		Pallet<T>,
-		<T as frame_system::Config>::DbWeight,
+		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
 
@@ -216,7 +216,7 @@ mod tests {
 		},
 		mock::{new_test_ext, MockGenesisConfig, Test},
 	};
-	use frame_support::traits::UncheckedOnRuntimeUpgrade;
+	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
 	use pezkuwi_primitives::{AvailabilityBitfield, Id as ParaId};
 	use pezkuwi_primitives_test_helpers::{
 		dummy_candidate_commitments, dummy_candidate_descriptor_v2, dummy_hash,

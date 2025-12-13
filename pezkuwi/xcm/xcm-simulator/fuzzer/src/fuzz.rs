@@ -25,12 +25,12 @@ mod relay_chain;
 use codec::DecodeLimit;
 use pezkuwi_core_primitives::AccountId;
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_runtime::{traits::AccountIdConversion, BuildStorage};
+use pezsp_runtime::{traits::AccountIdConversion, BuildStorage};
 use xcm_simulator::{decl_test_network, decl_test_relay_chain, decl_test_teyrchain, TestExt};
 
 #[cfg(feature = "try-runtime")]
-use frame_support::traits::{TryState, TryStateSelect::All};
-use frame_support::{assert_ok, traits::IntegrityTest};
+use pezframe_support::traits::{TryState, TryStateSelect::All};
+use pezframe_support::{assert_ok, traits::IntegrityTest};
 use xcm::{latest::prelude::*, MAX_XCM_DECODE_DEPTH};
 
 use arbitrary::{Arbitrary, Error, Unstructured};
@@ -115,19 +115,19 @@ pub fn para_account_id(id: u32) -> relay_chain::AccountId {
 	ParaId::from(id).into_account_truncating()
 }
 
-pub fn para_ext(para_id: u32) -> sp_io::TestExternalities {
+pub fn para_ext(para_id: u32) -> pezsp_io::TestExternalities {
 	use teyrchain::{MsgQueue, Runtime, System};
 
-	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Runtime> {
+	pezpallet_balances::GenesisConfig::<Runtime> {
 		balances: (0..6).map(|i| ([i; 32].into(), INITIAL_BALANCE)).collect(),
 		..Default::default()
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| {
 		System::set_block_number(1);
 		MsgQueue::set_para_id(para_id.into());
@@ -135,26 +135,26 @@ pub fn para_ext(para_id: u32) -> sp_io::TestExternalities {
 	ext
 }
 
-pub fn relay_ext() -> sp_io::TestExternalities {
+pub fn relay_ext() -> pezsp_io::TestExternalities {
 	use relay_chain::{Runtime, System};
 
-	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
 	let mut balances: Vec<(AccountId, u128)> = vec![];
 	balances.append(&mut (1..=3).map(|i| (para_account_id(i), INITIAL_BALANCE)).collect());
 	balances.append(&mut (0..6).map(|i| ([i; 32].into(), INITIAL_BALANCE)).collect());
 
-	pallet_balances::GenesisConfig::<Runtime> { balances, ..Default::default() }
+	pezpallet_balances::GenesisConfig::<Runtime> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }
 
-pub type RelayChainPalletXcm = pallet_xcm::Pallet<relay_chain::Runtime>;
-pub type TeyrchainPalletXcm = pallet_xcm::Pallet<teyrchain::Runtime>;
+pub type RelayChainPalletXcm = pezpallet_xcm::Pallet<relay_chain::Runtime>;
+pub type TeyrchainPalletXcm = pezpallet_xcm::Pallet<teyrchain::Runtime>;
 
 // We check XCM messages recursively for blocklisted messages
 fn recursively_matches_blocklisted_messages(message: &Instruction<()>) -> bool {

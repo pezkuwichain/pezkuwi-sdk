@@ -24,14 +24,14 @@
 //!
 //! ## General Overview
 //!
-//! When developing within the context of the Substrate runtime, there is one golden rule:
+//! When developing within the context of the Bizinikiwi runtime, there is one golden rule:
 //!
 //! ***DO NOT PANIC***. There are some exceptions, but generally, this is the default precedent.
 //!
 //! > It’s important to differentiate between the runtime and node. The runtime refers to the core
-//! > business logic of a Substrate-based chain, whereas the node refers to the outer client, which
+//! > business logic of a Bizinikiwi-based chain, whereas the node refers to the outer client, which
 //! > deals with telemetry and gossip from other nodes. For more information, read about
-//! > [Substrate's node
+//! > [Bizinikiwi's node
 //! > architecture](crate::reference_docs::wasm_meta_protocol#node-vs-runtime). It’s also important
 //! > to note that the criticality of the node is slightly lesser
 //! > than that of the runtime, which is why you may see `unwrap()` or other “non-defensive”
@@ -110,11 +110,11 @@
 //! unexpected consequences like a user balance over or underflowing.
 //!
 //! Fortunately, there are ways to both represent and handle these scenarios depending on our
-//! specific use case natively built into Rust and libraries like [`sp_arithmetic`].
+//! specific use case natively built into Rust and libraries like [`pezsp_arithmetic`].
 //!
 //! ## Infallible Arithmetic
 //!
-//! Both Rust and Substrate provide safe ways to deal with numbers and alternatives to floating
+//! Both Rust and Bizinikiwi provide safe ways to deal with numbers and alternatives to floating
 //! point arithmetic.
 //!
 //! Known scenarios that could be fallible should be avoided: i.e., avoiding the possibility of
@@ -124,8 +124,8 @@
 //! A developer should use fixed-point instead of floating-point arithmetic to mitigate the
 //! potential for inaccuracy, rounding errors, or other unexpected behavior.
 //!
-//! - [Fixed point types](sp_arithmetic::fixed_point) and their associated usage can be found here.
-//! - [PerThing](sp_arithmetic::per_things) and its associated types can be found here.
+//! - [Fixed point types](pezsp_arithmetic::fixed_point) and their associated usage can be found here.
+//! - [PerThing](pezsp_arithmetic::per_things) and its associated types can be found here.
 //!
 //! Using floating point number types (i.e. f32, f64) in the runtime should be avoided, as a single non-deterministic result could cause chaos for blockchain consensus along with the issues above. For more on the specifics of the peculiarities of floating point calculations, [watch this video by the Computerphile](https://www.youtube.com/watch?v=PZRI1IfStY0).
 //!
@@ -195,7 +195,7 @@
     saturated_defensive_example
 )]
 //!
-//! ### Mathematical Operations in Substrate Development - Further Context
+//! ### Mathematical Operations in Bizinikiwi Development - Further Context
 //!
 //! As a recap, we covered the following concepts:
 //!
@@ -267,16 +267,16 @@
 //! From the above, we can clearly see the problematic nature of seemingly simple operations in the
 //! runtime, and care should be given to ensure a defensive approach is taken.
 //!
-//! ### Edge cases of `panic!`-able instances in Substrate
+//! ### Edge cases of `panic!`-able instances in Bizinikiwi
 //!
-//! As you traverse through the codebase (particularly in `substrate/frame`, where the majority of
+//! As you traverse through the codebase (particularly in `bizinikiwi/frame`, where the majority of
 //! runtime code lives), you may notice that there (only a few!) occurrences where `panic!` is used
 //! explicitly. This is used when the runtime should stall, rather than keep running, as that is
 //! considered safer. Particularly when it comes to mission-critical components, such as block
 //! authoring, consensus, or other protocol-level dependencies, going through with an action may
 //! actually cause harm to the network, and thus stalling would be the better option.
 //!
-//! Take the example of the BABE pallet ([`pallet_babe`]), which doesn't allow for a validator to
+//! Take the example of the BABE pallet ([`pezpallet_babe`]), which doesn't allow for a validator to
 //! participate if it is disabled (see: [`frame::traits::DisabledValidators`]):
 //!
 //! ```ignore

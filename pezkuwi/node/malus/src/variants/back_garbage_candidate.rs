@@ -27,7 +27,7 @@ use pezkuwi_cli::{
 };
 use pezkuwi_node_subsystem::SpawnGlue;
 use pezkuwi_node_subsystem_types::{ChainApiBackend, RuntimeApiSubsystemClient};
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 use crate::{
 	interceptor::*,

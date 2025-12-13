@@ -15,23 +15,23 @@
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Transaction extension that rejects bridge-related transactions, that include
-//! obsolete (duplicated) data or do not pass some additional pallet-specific
+//! obsolete (duplicated) data or do not pass some additional pezpallet-specific
 //! checks.
 
 use bp_relayers::ExplicitOrAccountParams;
 use bp_runtime::Teyrchain;
 use bp_teyrchains::SubmitTeyrchainHeadsInfo;
-use pallet_bridge_grandpa::{
+use pezpallet_bridge_grandpa::{
 	BridgedBlockNumber, CallSubType as GrandpaCallSubType, SubmitFinalityProofHelper,
 };
-use pallet_bridge_messages::CallSubType as MessagesCallSubType;
-use pallet_bridge_relayers::Pallet as RelayersPallet;
-use pallet_bridge_teyrchains::{CallSubType as TeyrchainsCallSubtype, SubmitTeyrchainHeadsHelper};
-use sp_runtime::{
+use pezpallet_bridge_messages::CallSubType as MessagesCallSubType;
+use pezpallet_bridge_relayers::Pallet as RelayersPallet;
+use pezpallet_bridge_teyrchains::{CallSubType as TeyrchainsCallSubtype, SubmitTeyrchainHeadsHelper};
+use pezsp_runtime::{
 	traits::{Get, UniqueSaturatedInto},
 	transaction_validity::{TransactionPriority, TransactionValidity, ValidTransactionBuilder},
 };
-use sp_std::marker::PhantomData;
+use pezsp_std::marker::PhantomData;
 
 // Re-export to avoid include tuplex dependency everywhere.
 #[doc(hidden)]
@@ -68,7 +68,7 @@ impl<T, I: 'static, Priority: Get<TransactionPriority>, SlashAccount: Get<T::Acc
 	BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall>
 	for CheckAndBoostBridgeGrandpaTransactions<T, I, Priority, SlashAccount>
 where
-	T: pallet_bridge_relayers::Config + pallet_bridge_grandpa::Config<I>,
+	T: pezpallet_bridge_relayers::Config + pezpallet_bridge_grandpa::Config<I>,
 	T::RuntimeCall: GrandpaCallSubType<T, I>,
 {
 	// bridged header number, bundled in transaction
@@ -139,7 +139,7 @@ impl<
 	> BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall>
 	for CheckAndBoostBridgeTeyrchainsTransactions<T, TeyrchainsInstance, Para, Priority, SlashAccount>
 where
-	T: pallet_bridge_relayers::Config + pallet_bridge_teyrchains::Config<TeyrchainsInstance>,
+	T: pezpallet_bridge_relayers::Config + pezpallet_bridge_teyrchains::Config<TeyrchainsInstance>,
 	TeyrchainsInstance: 'static,
 	Para: Teyrchain,
 	T::RuntimeCall: TeyrchainsCallSubtype<T, TeyrchainsInstance>,
@@ -188,9 +188,9 @@ where
 }
 
 impl<T, I: 'static> BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall>
-	for pallet_bridge_grandpa::Pallet<T, I>
+	for pezpallet_bridge_grandpa::Pallet<T, I>
 where
-	T: pallet_bridge_grandpa::Config<I>,
+	T: pezpallet_bridge_grandpa::Config<I>,
 	T::RuntimeCall: GrandpaCallSubType<T, I>,
 {
 	type ToPostDispatch = ();
@@ -204,9 +204,9 @@ where
 }
 
 impl<T, I: 'static> BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall>
-	for pallet_bridge_teyrchains::Pallet<T, I>
+	for pezpallet_bridge_teyrchains::Pallet<T, I>
 where
-	T: pallet_bridge_teyrchains::Config<I>,
+	T: pezpallet_bridge_teyrchains::Config<I>,
 	T::RuntimeCall: TeyrchainsCallSubtype<T, I>,
 {
 	type ToPostDispatch = ();
@@ -219,8 +219,8 @@ where
 	}
 }
 
-impl<T: pallet_bridge_messages::Config<I>, I: 'static>
-	BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall> for pallet_bridge_messages::Pallet<T, I>
+impl<T: pezpallet_bridge_messages::Config<I>, I: 'static>
+	BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall> for pezpallet_bridge_messages::Pallet<T, I>
 where
 	T::RuntimeCall: MessagesCallSubType<T, I>,
 {
@@ -240,7 +240,7 @@ fn compute_priority_boost<T, N, Priority>(
 	improved_by: N,
 ) -> TransactionPriority
 where
-	T: pallet_bridge_relayers::Config,
+	T: pezpallet_bridge_relayers::Config,
 	N: UniqueSaturatedInto<TransactionPriority>,
 	Priority: Get<TransactionPriority>,
 {
@@ -271,9 +271,9 @@ where
 #[macro_export]
 macro_rules! generate_bridge_reject_obsolete_headers_and_messages {
 	($call:ty, $account_id:ty, $($filter_call:ty),*) => {
-		#[derive(Clone, codec::Decode, codec::DecodeWithMemTracking, Default, codec::Encode, Eq, PartialEq, sp_runtime::RuntimeDebug, scale_info::TypeInfo)]
+		#[derive(Clone, codec::Decode, codec::DecodeWithMemTracking, Default, codec::Encode, Eq, PartialEq, pezsp_runtime::RuntimeDebug, scale_info::TypeInfo)]
 		pub struct BridgeRejectObsoleteHeadersAndMessages;
-		impl sp_runtime::traits::TransactionExtension<$call> for BridgeRejectObsoleteHeadersAndMessages {
+		impl pezsp_runtime::traits::TransactionExtension<$call> for BridgeRejectObsoleteHeadersAndMessages {
 			const IDENTIFIER: &'static str = "BridgeRejectObsoleteHeadersAndMessages";
 			type Implicit = ();
 			type Val = Option<(
@@ -287,35 +287,35 @@ macro_rules! generate_bridge_reject_obsolete_headers_and_messages {
 			)>;
 			type Pre = Self::Val;
 
-			fn weight(&self, _: &$call) -> frame_support::pallet_prelude::Weight {
-				frame_support::pallet_prelude::Weight::zero()
+			fn weight(&self, _: &$call) -> pezframe_support::pezpallet_prelude::Weight {
+				pezframe_support::pezpallet_prelude::Weight::zero()
 			}
 
 			fn validate(
 				&self,
-				origin: <$call as sp_runtime::traits::Dispatchable>::RuntimeOrigin,
+				origin: <$call as pezsp_runtime::traits::Dispatchable>::RuntimeOrigin,
 				call: &$call,
-				_info: &sp_runtime::traits::DispatchInfoOf<$call>,
+				_info: &pezsp_runtime::traits::DispatchInfoOf<$call>,
 				_len: usize,
 				_self_implicit: Self::Implicit,
 				_inherited_implication: &impl codec::Encode,
-				_source: sp_runtime::transaction_validity::TransactionSource,
+				_source: pezsp_runtime::transaction_validity::TransactionSource,
 			) -> Result<
 				(
-					sp_runtime::transaction_validity::ValidTransaction,
+					pezsp_runtime::transaction_validity::ValidTransaction,
 					Self::Val,
-					<$call as sp_runtime::traits::Dispatchable>::RuntimeOrigin,
-				), sp_runtime::transaction_validity::TransactionValidityError
+					<$call as pezsp_runtime::traits::Dispatchable>::RuntimeOrigin,
+				), pezsp_runtime::transaction_validity::TransactionValidityError
 			> {
 				use $crate::extensions::__private::tuplex::PushBack;
-				use sp_runtime::traits::AsSystemOriginSigner;
+				use pezsp_runtime::traits::AsSystemOriginSigner;
 
 				let Some(who) = origin.as_system_origin_signer() else {
 					return Ok((Default::default(), None, origin));
 				};
 
 				let to_post_dispatch = ();
-				let tx_validity = sp_runtime::transaction_validity::ValidTransaction::default();
+				let tx_validity = pezsp_runtime::transaction_validity::ValidTransaction::default();
 				$(
 					let (from_validate, call_filter_validity) = <
 						$filter_call as
@@ -332,26 +332,26 @@ macro_rules! generate_bridge_reject_obsolete_headers_and_messages {
 			fn prepare(
 				self,
 				val: Self::Val,
-				_origin: &<$call as sp_runtime::traits::Dispatchable>::RuntimeOrigin,
+				_origin: &<$call as pezsp_runtime::traits::Dispatchable>::RuntimeOrigin,
 				_call: &$call,
-				_info: &sp_runtime::traits::DispatchInfoOf<$call>,
+				_info: &pezsp_runtime::traits::DispatchInfoOf<$call>,
 				_len: usize,
-			) -> Result<Self::Pre, sp_runtime::transaction_validity::TransactionValidityError> {
+			) -> Result<Self::Pre, pezsp_runtime::transaction_validity::TransactionValidityError> {
 				Ok(val)
 			}
 
 			#[allow(unused_variables)]
 			fn post_dispatch_details(
 				to_post_dispatch: Self::Pre,
-				info: &sp_runtime::traits::DispatchInfoOf<$call>,
-				post_info: &sp_runtime::traits::PostDispatchInfoOf<$call>,
+				info: &pezsp_runtime::traits::DispatchInfoOf<$call>,
+				post_info: &pezsp_runtime::traits::PostDispatchInfoOf<$call>,
 				len: usize,
-				result: &sp_runtime::DispatchResult,
-			) -> Result<frame_support::pallet_prelude::Weight, sp_runtime::transaction_validity::TransactionValidityError> {
+				result: &pezsp_runtime::DispatchResult,
+			) -> Result<pezframe_support::pezpallet_prelude::Weight, pezsp_runtime::transaction_validity::TransactionValidityError> {
 				use $crate::extensions::__private::tuplex::PopFront;
 
 				let Some((relayer, to_post_dispatch)) = to_post_dispatch else {
-					return Ok(frame_support::pallet_prelude::Weight::zero())
+					return Ok(pezframe_support::pezpallet_prelude::Weight::zero())
 				};
 
 				let has_failed = result.is_err();
@@ -364,7 +364,7 @@ macro_rules! generate_bridge_reject_obsolete_headers_and_messages {
 							$call,
 						>>::post_dispatch(&relayer, has_failed, item);
 				)*
-				Ok(frame_support::pallet_prelude::Weight::zero())
+				Ok(pezframe_support::pezpallet_prelude::Weight::zero())
 			}
 		}
 	};
@@ -382,11 +382,11 @@ mod tests {
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use bp_teyrchains::{BestParaHeadHash, ParaInfo};
 	use codec::{Decode, Encode, MaxEncodedLen};
-	use frame_support::{assert_err, assert_ok, traits::fungible::Mutate};
-	use pallet_bridge_grandpa::{Call as GrandpaCall, StoredAuthoritySet};
-	use pallet_bridge_teyrchains::Call as TeyrchainsCall;
+	use pezframe_support::{assert_err, assert_ok, traits::fungible::Mutate};
+	use pezpallet_bridge_grandpa::{Call as GrandpaCall, StoredAuthoritySet};
+	use pezpallet_bridge_teyrchains::Call as TeyrchainsCall;
 	use scale_info::TypeInfo;
-	use sp_runtime::{
+	use pezsp_runtime::{
 		traits::{
 			parameter_types, AsSystemOriginSigner, AsTransactionAuthorizedOrigin, ConstU64,
 			DispatchTransaction, Header as _, TransactionExtension,
@@ -436,7 +436,7 @@ mod tests {
 		}
 	}
 
-	impl sp_runtime::traits::Dispatchable for MockCall {
+	impl pezsp_runtime::traits::Dispatchable for MockCall {
 		type RuntimeOrigin = MockOrigin;
 		type Config = ();
 		type Info = ();
@@ -445,7 +445,7 @@ mod tests {
 		fn dispatch(
 			self,
 			_origin: Self::RuntimeOrigin,
-		) -> sp_runtime::DispatchResultWithInfo<Self::PostInfo> {
+		) -> pezsp_runtime::DispatchResultWithInfo<Self::PostInfo> {
 			unimplemented!()
 		}
 	}
@@ -453,11 +453,11 @@ mod tests {
 	pub struct FirstFilterCall;
 	impl FirstFilterCall {
 		fn post_dispatch_called_with(success: bool) {
-			frame_support::storage::unhashed::put(&[1], &success);
+			pezframe_support::storage::unhashed::put(&[1], &success);
 		}
 
 		fn verify_post_dispatch_called_with(success: bool) {
-			assert_eq!(frame_support::storage::unhashed::get::<bool>(&[1]), Some(success));
+			assert_eq!(pezframe_support::storage::unhashed::get::<bool>(&[1]), Some(success));
 		}
 	}
 
@@ -481,11 +481,11 @@ mod tests {
 
 	impl SecondFilterCall {
 		fn post_dispatch_called_with(success: bool) {
-			frame_support::storage::unhashed::put(&[2], &success);
+			pezframe_support::storage::unhashed::put(&[2], &success);
 		}
 
 		fn verify_post_dispatch_called_with(success: bool) {
-			assert_eq!(frame_support::storage::unhashed::get::<bool>(&[2]), Some(success));
+			assert_eq!(pezframe_support::storage::unhashed::get::<bool>(&[2]), Some(success));
 		}
 	}
 
@@ -532,11 +532,11 @@ mod tests {
 	) {
 		let authorities = test_keyring().into_iter().map(|(a, w)| (a.into(), w)).collect();
 		let best_relay_header = HeaderId(best_relay_header_number, BridgedChainHash::default());
-		pallet_bridge_grandpa::CurrentAuthoritySet::<TestRuntime>::put(
+		pezpallet_bridge_grandpa::CurrentAuthoritySet::<TestRuntime>::put(
 			StoredAuthoritySet::try_new(authorities, TEST_GRANDPA_SET_ID).unwrap(),
 		);
-		pallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(best_relay_header);
-		pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
+		pezpallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(best_relay_header);
+		pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 			best_relay_header.hash(),
 			bp_test_utils::test_header::<BridgedChainHeader>(0).build(),
 		);
@@ -549,16 +549,16 @@ mod tests {
 			},
 			next_imported_hash_position: 0,
 		};
-		pallet_bridge_teyrchains::ParasInfo::<TestRuntime>::insert(para_id, para_info);
+		pezpallet_bridge_teyrchains::ParasInfo::<TestRuntime>::insert(para_id, para_info);
 
 		let lane_id = test_lane_id();
 		let in_lane_data =
 			InboundLaneData { last_confirmed_nonce: best_message, ..Default::default() };
-		pallet_bridge_messages::InboundLanes::<TestRuntime>::insert(lane_id, in_lane_data);
+		pezpallet_bridge_messages::InboundLanes::<TestRuntime>::insert(lane_id, in_lane_data);
 
 		let out_lane_data =
 			OutboundLaneData { latest_received_nonce: best_message, ..Default::default() };
-		pallet_bridge_messages::OutboundLanes::<TestRuntime>::insert(lane_id, out_lane_data);
+		pezpallet_bridge_messages::OutboundLanes::<TestRuntime>::insert(lane_id, out_lane_data);
 
 		Balances::mint_into(&delivery_rewards_account(), ExistentialDeposit::get()).unwrap();
 		Balances::mint_into(&confirmation_rewards_account(), ExistentialDeposit::get()).unwrap();
@@ -694,7 +694,7 @@ mod tests {
 		});
 	}
 
-	frame_support::parameter_types! {
+	pezframe_support::parameter_types! {
 		pub SlashDestination: ThisChainAccountId = 42;
 	}
 

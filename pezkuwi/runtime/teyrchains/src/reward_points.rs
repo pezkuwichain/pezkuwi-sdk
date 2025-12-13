@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 //! An implementation of the `RewardValidators` trait used by `inclusion` that employs
-//! `pallet-staking` to compute the rewards.
+//! `pezpallet-staking` to compute the rewards.
 //!
 //! Based on <https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics.html>
 //! which doesn't currently mention availability bitfields. As such, we don't reward them
@@ -23,7 +23,7 @@
 
 use crate::{session_info, shared};
 use alloc::collections::btree_set::BTreeSet;
-use frame_support::traits::{Defensive, RewardsReporter, ValidatorSet};
+use pezframe_support::traits::{Defensive, RewardsReporter, ValidatorSet};
 use pezkuwi_primitives::{SessionIndex, ValidatorIndex};
 
 /// The amount of era points given by backing a candidate that is included.
@@ -31,7 +31,7 @@ pub const BACKING_POINTS: u32 = 20;
 /// The amount of era points given by dispute voting on a candidate.
 pub const DISPUTE_STATEMENT_POINTS: u32 = 20;
 
-/// Rewards validators for participating in teyrchains with era points in pallet-staking.
+/// Rewards validators for participating in teyrchains with era points in pezpallet-staking.
 pub struct RewardValidatorsWithEraPoints<C, R>(core::marker::PhantomData<(C, R)>);
 
 impl<C, R> RewardValidatorsWithEraPoints<C, R>

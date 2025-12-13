@@ -31,10 +31,10 @@ pezkuwi-service = { features = [
 ], workspace = true, default-features = true }
 test-teyrchain-undying = { workspace = true }
 
-sc-cli = { workspace = true, default-features = true }
-sc-client-api = { workspace = true, default-features = true }
-sc-service = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
+pezsc-cli = { workspace = true, default-features = true }
+pezsc-client-api = { workspace = true, default-features = true }
+pezsc-service = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
 
 [dev-dependencies]
 pezkuwi-node-core-pvf = { features = [
@@ -43,7 +43,7 @@ pezkuwi-node-core-pvf = { features = [
 pezkuwi-test-service = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 
-sp-keyring = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
 
 tokio = { features = ["macros"], workspace = true, default-features = true }
 
@@ -58,9 +58,9 @@ runtime-benchmarks = [
 	"pezkuwi-service/runtime-benchmarks",
 	"pezkuwi-test-service/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"sc-cli/runtime-benchmarks",
-	"sc-client-api/runtime-benchmarks",
-	"sc-service/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 	"test-teyrchain-undying/runtime-benchmarks",
 ]

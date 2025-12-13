@@ -27,9 +27,9 @@ use crate::{
 	},
 	shared,
 };
-use frame_support::{assert_noop, assert_ok};
+use pezframe_support::{assert_noop, assert_ok};
 use pezkuwi_primitives::{BlockNumber, InboundDownwardMessage};
-use sp_runtime::traits::BadOrigin;
+use pezsp_runtime::traits::BadOrigin;
 use std::collections::BTreeMap;
 
 pub(crate) fn run_to_block(to: BlockNumber, new_session: Option<Vec<BlockNumber>>) {
@@ -682,7 +682,7 @@ fn verify_externally_accessible() {
 		// decode it into the abridged version.
 		assert!(channel_exists(para_a, para_b));
 		let raw_hrmp_channel =
-			sp_io::storage::get(&well_known_keys::hrmp_channels(HrmpChannelId {
+			pezsp_io::storage::get(&well_known_keys::hrmp_channels(HrmpChannelId {
 				sender: para_a,
 				recipient: para_b,
 			}))
@@ -703,7 +703,7 @@ fn verify_externally_accessible() {
 		);
 
 		let raw_ingress_index =
-			sp_io::storage::get(&well_known_keys::hrmp_ingress_channel_index(para_b))
+			pezsp_io::storage::get(&well_known_keys::hrmp_ingress_channel_index(para_b))
 				.expect("the ingress index must be present for para_b");
 		let ingress_index = <Vec<ParaId>>::decode(&mut &raw_ingress_index[..])
 			.expect("ingress index should be decodable as a list of para ids");
@@ -711,7 +711,7 @@ fn verify_externally_accessible() {
 
 		// Now, verify that we can access and decode the egress index.
 		let raw_egress_index =
-			sp_io::storage::get(&well_known_keys::hrmp_egress_channel_index(para_a))
+			pezsp_io::storage::get(&well_known_keys::hrmp_egress_channel_index(para_a))
 				.expect("the egress index must be present for para_a");
 		let egress_index = <Vec<ParaId>>::decode(&mut &raw_egress_index[..])
 			.expect("egress index should be decodable as a list of para ids");
@@ -731,7 +731,7 @@ fn charging_deposits() {
 
 		assert_noop!(
 			Hrmp::init_open_channel(para_a, para_b, 2, 8),
-			pallet_balances::Error::<Test, _>::InsufficientBalance
+			pezpallet_balances::Error::<Test, _>::InsufficientBalance
 		);
 	});
 
@@ -744,7 +744,7 @@ fn charging_deposits() {
 
 		assert_noop!(
 			Hrmp::accept_open_channel(para_b, para_a),
-			pallet_balances::Error::<Test, _>::InsufficientBalance
+			pezpallet_balances::Error::<Test, _>::InsufficientBalance
 		);
 	});
 }

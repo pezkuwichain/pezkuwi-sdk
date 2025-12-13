@@ -13,7 +13,7 @@ extra_args = ["--alice"]
 
 [[relaychain.nodes.env]]
 name = "RUST_LOG"
-value = "runtime=debug,teyrchain=trace,cumulus-collator=trace,aura=trace"
+value = "runtime=debug,teyrchain=trace,pezcumulus-collator=trace,aura=trace"
 
 [[relaychain.nodes]]
 name = "bob"
@@ -21,7 +21,7 @@ extra_args = ["--bob"]
 
 [[relaychain.nodes.env]]
 name = "RUST_LOG"
-value = "runtime=debug,teyrchain=trace,cumulus-collator=trace,aura=trace"
+value = "runtime=debug,teyrchain=trace,pezcumulus-collator=trace,aura=trace"
 
 [[teyrchains]]
 id = 100
@@ -35,4 +35,4 @@ command = "pezkuwi-teyrchain"
 
 [[teyrchains.collator.env]]
 name = "RUST_LOG"
-value = "runtime=debug,teyrchain=trace,cumulus-collator=trace,aura=trace"
+value = "runtime=debug,teyrchain=trace,pezcumulus-collator=trace,aura=trace"

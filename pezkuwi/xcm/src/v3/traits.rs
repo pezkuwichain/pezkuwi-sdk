@@ -20,11 +20,11 @@ use crate::v5::Error as NewError;
 use core::result;
 use scale_info::TypeInfo;
 
-pub use sp_weights::Weight;
+pub use pezsp_weights::Weight;
 
 // A simple trait to get the weight of some object.
 pub trait GetWeight<W> {
-	fn weight(&self) -> sp_weights::Weight;
+	fn weight(&self) -> pezsp_weights::Weight;
 }
 
 use super::*;
@@ -44,7 +44,7 @@ use super::*;
 	TypeInfo,
 	MaxEncodedLen,
 )]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum Error {
 	// Errors that happen due to instructions being executed. These alone are defined in the
@@ -238,7 +238,7 @@ pub type Result = result::Result<(), Error>;
 
 /// Outcome of an XCM execution.
 #[derive(Clone, Encode, Decode, Eq, PartialEq, Debug, TypeInfo)]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum Outcome {
 	/// Execution completed successfully; given weight was used.
 	Complete(Weight),
@@ -384,7 +384,7 @@ impl<C> ExecuteXcm<C> for () {
 #[derive(
 	Clone, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, Debug, scale_info::TypeInfo,
 )]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum SendError {
 	/// The message and destination combination was not recognized as being reachable.
 	///
@@ -424,8 +424,8 @@ pub type SendResult<T> = result::Result<(T, MultiAssets), SendError>;
 /// # Example
 /// ```rust
 /// # use codec::Encode;
-/// # use staging_xcm::v3::{prelude::*, Weight};
-/// # use staging_xcm::VersionedXcm;
+/// # use pezstaging_xcm::v3::{prelude::*, Weight};
+/// # use pezstaging_xcm::VersionedXcm;
 /// # use std::convert::Infallible;
 ///
 /// /// A sender that only passes the message through and does nothing.
@@ -478,7 +478,7 @@ pub type SendResult<T> = result::Result<(T, MultiAssets), SendError>;
 ///     require_weight_at_most: Weight::zero(),
 ///     call: call.into(),
 /// }]);
-/// let message_hash = message.using_encoded(sp_io::hashing::blake2_256);
+/// let message_hash = message.using_encoded(pezsp_io::hashing::blake2_256);
 ///
 /// // Sender2 will block this.
 /// assert!(send_xcm::<(Sender1, Sender2, Sender3)>(Parent.into(), message.clone()).is_err());

@@ -21,14 +21,14 @@ serde_json = { workspace = true }
 frame = { workspace = true, features = ["runtime"] }
 
 # pallets that we want to use
-pallet-balances = { workspace = true }
-pallet-sudo = { workspace = true }
-pallet-timestamp = { workspace = true }
-pallet-transaction-payment = { workspace = true }
-pallet-transaction-payment-rpc-runtime-api = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-sudo = { workspace = true }
+pezpallet-timestamp = { workspace = true }
+pezpallet-transaction-payment = { workspace = true }
+pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 
 # other pezkuwi-sdk-deps
-sp-keyring = { workspace = true }
+pezsp-keyring = { workspace = true }
 
 # local pallet templates
 first-pallet = { workspace = true }
@@ -36,7 +36,7 @@ first-pallet = { workspace = true }
 docify = { workspace = true }
 
 [build-dependencies]
-substrate-wasm-builder = { workspace = true, optional = true }
+bizinikiwi-wasm-builder = { workspace = true, optional = true }
 
 [features]
 default = ["std"]
@@ -47,25 +47,25 @@ std = [
 
 	"frame/std",
 
-	"pallet-balances/std",
-	"pallet-sudo/std",
-	"pallet-timestamp/std",
-	"pallet-transaction-payment-rpc-runtime-api/std",
-	"pallet-transaction-payment/std",
+	"pezpallet-balances/std",
+	"pezpallet-sudo/std",
+	"pezpallet-timestamp/std",
+	"pezpallet-transaction-payment-rpc-runtime-api/std",
+	"pezpallet-transaction-payment/std",
 
 	"first-pallet/std",
-	"sp-keyring/std",
+	"pezsp-keyring/std",
 
-	"substrate-wasm-builder",
+	"bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
 	"first-pallet/runtime-benchmarks",
 	"frame/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-sudo/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
-	"pallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
-	"pallet-transaction-payment/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
-	"substrate-wasm-builder?/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-sudo/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]

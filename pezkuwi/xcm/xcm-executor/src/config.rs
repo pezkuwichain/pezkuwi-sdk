@@ -20,11 +20,11 @@ use crate::traits::{
 	HandleHrmpNewChannelOpenRequest, OnResponse, ProcessTransaction, RecordXcm, ShouldExecute,
 	TransactAsset, VersionChangeNotifier, WeightBounds, WeightTrader,
 };
-use frame_support::{
+use pezframe_support::{
 	dispatch::{GetDispatchInfo, Parameter, PostDispatchInfo},
 	traits::{Contains, ContainsPair, Get, PalletsInfoAccess},
 };
-use sp_runtime::traits::Dispatchable;
+use pezsp_runtime::traits::Dispatchable;
 use xcm::prelude::*;
 
 /// The trait to parameterize the `XcmExecutor`.

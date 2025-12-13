@@ -23,17 +23,17 @@ use crate::{
 #[cfg(not(feature = "std"))]
 use alloc::format;
 use alloc::{vec, vec::Vec};
-use frame_support::build_struct_json_patch;
-use pallet_staking::{Forcing, StakerStatus};
+use pezframe_support::build_struct_json_patch;
+use pezpallet_staking::{Forcing, StakerStatus};
 use pezkuwi_primitives::{AccountId, AssignmentId, SchedulerParams, ValidatorId};
-use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
-use sp_consensus_babe::AuthorityId as BabeId;
-use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
-use sp_consensus_grandpa::AuthorityId as GrandpaId;
-use sp_core::{crypto::get_public_from_string_or_panic, sr25519};
-use sp_genesis_builder::PresetId;
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::Perbill;
+use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+use pezsp_consensus_babe::AuthorityId as BabeId;
+use pezsp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
+use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
+use pezsp_core::{crypto::get_public_from_string_or_panic, sr25519};
+use pezsp_genesis_builder::PresetId;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::Perbill;
 use zagros_runtime_constants::currency::UNITS as ZGR;
 
 /// Helper function to generate stash, controller and session key from seed
@@ -212,10 +212,10 @@ fn zagros_testnet_genesis(
 	})
 }
 
-// staging_testnet
+// pezstaging_testnet
 fn zagros_staging_testnet_config_genesis() -> serde_json::Value {
 	use hex_literal::hex;
-	use sp_core::crypto::UncheckedInto;
+	use pezsp_core::crypto::UncheckedInto;
 
 	// Following keys are used in genesis config for development chains.
 	// DO NOT use them in production chains as the secret seed is public.
@@ -404,9 +404,9 @@ fn zagros_local_testnet_genesis() -> serde_json::Value {
 /// Provides the JSON representation of predefined genesis config for given `id`.
 pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 	let patch = match id.as_ref() {
-		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => zagros_local_testnet_genesis(),
-		sp_genesis_builder::DEV_RUNTIME_PRESET => zagros_development_config_genesis(),
-		"staging_testnet" => zagros_staging_testnet_config_genesis(),
+		pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => zagros_local_testnet_genesis(),
+		pezsp_genesis_builder::DEV_RUNTIME_PRESET => zagros_development_config_genesis(),
+		"pezstaging_testnet" => zagros_staging_testnet_config_genesis(),
 		_ => return None,
 	};
 	Some(
@@ -419,8 +419,8 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 /// List of supported presets.
 pub fn preset_names() -> Vec<PresetId> {
 	vec![
-		PresetId::from(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET),
-		PresetId::from(sp_genesis_builder::DEV_RUNTIME_PRESET),
-		PresetId::from("staging_testnet"),
+		PresetId::from(pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET),
+		PresetId::from(pezsp_genesis_builder::DEV_RUNTIME_PRESET),
+		PresetId::from("pezstaging_testnet"),
 	]
 }

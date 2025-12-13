@@ -24,8 +24,8 @@
 //! this chain.
 //!
 //! **A note on terminology**: when we mention the bridge hub here, we mean the chain that
-//! has the messages pallet deployed (`pallet-bridge-grandpa`, `pallet-bridge-messages`,
-//! `pallet-xcm-bridge-hub`, ...). It may be the system bridge hub teyrchain or any other
+//! has the messages pallet deployed (`pezpallet-bridge-grandpa`, `pezpallet-bridge-messages`,
+//! `pezpallet-xcm-bridge-hub`, ...). It may be the system bridge hub teyrchain or any other
 //! chain.
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -33,11 +33,11 @@
 use bp_xcm_bridge_hub_router::MINIMAL_DELIVERY_FEE_FACTOR;
 pub use bp_xcm_bridge_hub_router::{BridgeState, XcmChannelStatusProvider};
 use codec::Encode;
-use frame_support::traits::Get;
+use pezframe_support::traits::Get;
 use pezkuwi_runtime_teyrchains::FeeTracker;
-use sp_core::H256;
-use sp_runtime::{FixedPointNumber, FixedU128};
-use sp_std::vec::Vec;
+use pezsp_core::H256;
+use pezsp_runtime::{FixedPointNumber, FixedU128};
+use pezsp_std::vec::Vec;
 use xcm::prelude::*;
 use xcm_builder::{ExporterFor, InspectMessageQueues, SovereignPaidRemoteExporter};
 
@@ -63,18 +63,18 @@ pub const HARD_MESSAGE_SIZE_LIMIT: u32 = 32 * 1024;
 /// bridge hub teyrchain.
 pub const LOG_TARGET: &str = "xcm::bridge-hub-router";
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>;
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Benchmarks results from runtime we're plugged into.
 		type WeightInfo: WeightInfo;
 
@@ -445,12 +445,12 @@ impl<T: Config<I>, I: 'static> FeeTracker for Pallet<T, I> {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::assert_ok;
+	use pezframe_support::assert_ok;
 	use mock::*;
 
-	use frame_support::traits::Hooks;
-	use frame_system::{EventRecord, Phase};
-	use sp_runtime::traits::One;
+	use pezframe_support::traits::Hooks;
+	use pezframe_system::{EventRecord, Phase};
+	use pezsp_runtime::traits::One;
 
 	fn congested_bridge(delivery_fee_factor: FixedU128) -> BridgeState {
 		BridgeState { is_congested: true, delivery_fee_factor }

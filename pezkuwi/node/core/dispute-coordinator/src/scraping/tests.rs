@@ -20,7 +20,7 @@ use assert_matches::assert_matches;
 
 use codec::Encode;
 use futures::future::join;
-use sp_core::testing::TaskExecutor;
+use pezsp_core::testing::TaskExecutor;
 
 use pezkuwi_node_primitives::DISPUTE_CANDIDATE_LIFETIME_AFTER_FINALIZATION;
 use pezkuwi_node_subsystem::{

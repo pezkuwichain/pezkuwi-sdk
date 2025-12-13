@@ -1,6 +1,6 @@
 [package]
 name = "teyrchain-template-runtime"
-description = "A teyrchain runtime template built with Substrate and Cumulus, part of Pezkuwi Sdk."
+description = "A teyrchain runtime template built with Bizinikiwi and Pezcumulus, part of Pezkuwi Sdk."
 version = "0.0.0"
 license = "Unlicense"
 authors.workspace = true
@@ -27,70 +27,70 @@ serde_json = { workspace = true, default-features = false, features = [
 smallvec = { workspace = true, default-features = true }
 
 # Local
-pallet-teyrchain-template = { workspace = true }
+pezpallet-teyrchain-template = { workspace = true }
 
 pezkuwi-sdk = { workspace = true, default-features = false, features = [
-	"pallet-aura",
-	"pallet-authorship",
-	"pallet-balances",
-	"pallet-message-queue",
-	"pallet-session",
-	"pallet-sudo",
-	"pallet-timestamp",
-	"pallet-transaction-payment",
-	"pallet-transaction-payment-rpc-runtime-api",
+	"pezpallet-aura",
+	"pezpallet-authorship",
+	"pezpallet-balances",
+	"pezpallet-message-queue",
+	"pezpallet-session",
+	"pezpallet-sudo",
+	"pezpallet-timestamp",
+	"pezpallet-transaction-payment",
+	"pezpallet-transaction-payment-rpc-runtime-api",
 
-	"pallet-xcm",
+	"pezpallet-xcm",
 	"pezkuwi-runtime-common",
 	"pezkuwi-teyrchain-primitives",
-	"staging-xcm",
-	"staging-xcm-builder",
-	"staging-xcm-executor",
+	"pezstaging-xcm",
+	"pezstaging-xcm-builder",
+	"pezstaging-xcm-executor",
 
-	"cumulus-pallet-aura-ext",
-	"cumulus-pallet-session-benchmarking",
-	"cumulus-pallet-weight-reclaim",
-	"cumulus-pallet-xcm",
-	"cumulus-pallet-xcmp-queue",
-	"cumulus-primitives-aura",
-	"cumulus-primitives-core",
-	"cumulus-primitives-utility",
-	"pallet-collator-selection",
-	"staging-teyrchain-info",
+	"pezcumulus-pezpallet-aura-ext",
+	"pezcumulus-pezpallet-session-benchmarking",
+	"pezcumulus-pezpallet-weight-reclaim",
+	"pezcumulus-pezpallet-xcm",
+	"pezcumulus-pezpallet-xcmp-queue",
+	"pezcumulus-primitives-aura",
+	"pezcumulus-primitives-core",
+	"pezcumulus-primitives-utility",
+	"pezpallet-collator-selection",
+	"pezstaging-teyrchain-info",
 	"teyrchains-common",
 
 	"runtime",
 ] }
 
-# Cumulus
-cumulus-pallet-teyrchain-system = { workspace = true }
+# Pezcumulus
+pezcumulus-pezpallet-teyrchain-system = { workspace = true }
 
 [build-dependencies]
 docify = { workspace = true }
-substrate-wasm-builder = { optional = true, workspace = true, default-features = true }
+bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
 	"codec/std",
-	"cumulus-pallet-teyrchain-system/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
 	"log/std",
-	"pallet-teyrchain-template/std",
+	"pezpallet-teyrchain-template/std",
 	"pezkuwi-sdk/std",
 	"scale-info/std",
 	"serde_json/std",
-	"substrate-wasm-builder",
+	"bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-	"cumulus-pallet-teyrchain-system/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
 	"hex-literal",
-	"pallet-teyrchain-template/runtime-benchmarks",
+	"pezpallet-teyrchain-template/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
-	"substrate-wasm-builder?/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]
 try-runtime = [
-	"cumulus-pallet-teyrchain-system/try-runtime",
-	"pallet-teyrchain-template/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezpallet-teyrchain-template/try-runtime",
 	"pezkuwi-sdk/try-runtime",
 ]
 
@@ -101,7 +101,7 @@ try-runtime = [
 # generate the metadata hash and then a second time with the
 # `RUNTIME_METADATA_HASH` environment variable set for the `CheckMetadataHash`
 # extension.
-metadata-hash = ["substrate-wasm-builder/metadata-hash"]
+metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
 
 # A convenience feature for enabling things when doing a build
 # for an on-chain release.

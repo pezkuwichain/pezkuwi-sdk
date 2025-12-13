@@ -5,12 +5,12 @@
 use crate::{CallIndex, EthereumLocationsConverterFor};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::marker::PhantomData;
-use frame_support::{traits::tokens::Balance as BalanceT, PalletError};
+use pezframe_support::{traits::tokens::Balance as BalanceT, PalletError};
 use scale_info::TypeInfo;
 use snowbridge_core::TokenId;
-use sp_core::{Get, RuntimeDebug, H160, H256};
-use sp_runtime::{traits::MaybeConvert, MultiAddress};
-use sp_std::prelude::*;
+use pezsp_core::{Get, RuntimeDebug, H160, H256};
+use pezsp_runtime::{traits::MaybeConvert, MultiAddress};
+use pezsp_std::prelude::*;
 use xcm::prelude::{Junction::AccountKey20, *};
 
 const MINIMUM_DEPOSIT: u128 = 1;
@@ -462,13 +462,13 @@ mod tests {
 		v1::{Command, ConvertMessage, Destination, MessageToXcm, MessageV1, VersionedMessage},
 		CallIndex, EthereumLocationsConverterFor,
 	};
-	use frame_support::{assert_ok, parameter_types};
+	use pezframe_support::{assert_ok, parameter_types};
 	use hex_literal::hex;
 	use snowbridge_test_utils::mock_converter::{
 		add_location_override, reanchor_to_ethereum, LocationIdConvert,
 	};
-	use sp_core::H160;
-	use sp_runtime::{
+	use pezsp_core::H160;
+	use pezsp_runtime::{
 		traits::{IdentifyAccount, Verify},
 		MultiSignature,
 	};
@@ -547,7 +547,7 @@ mod tests {
 			Location::new(2, [GlobalConsensus(Kusama), Teyrchain(2000)]),
 		];
 		for asset in assets.iter() {
-			// reanchor logic in pallet_xcm on AH
+			// reanchor logic in pezpallet_xcm on AH
 			let mut reanchored_asset = asset.clone();
 			assert_ok!(reanchored_asset.reanchor(&ethereum, &ah_context));
 			// reanchor back to original location in context of Ethereum

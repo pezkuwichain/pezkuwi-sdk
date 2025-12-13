@@ -20,9 +20,9 @@ use crate::*;
 use std::collections::HashSet;
 
 use crate::xcm_config::LocationConverter;
-use frame_support::traits::WhitelistedStorageKeys;
-use sp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
-use sp_keyring::Sr25519Keyring::Alice;
+use pezframe_support::traits::WhitelistedStorageKeys;
+use pezsp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
+use pezsp_keyring::Sr25519Keyring::Alice;
 use xcm_runtime_apis::conversions::LocationToAccountHelper;
 
 #[test]
@@ -51,7 +51,7 @@ fn check_whitelist() {
 #[test]
 fn check_treasury_pallet_id() {
 	assert_eq!(
-		<Treasury as frame_support::traits::PalletInfoAccess>::index() as u8,
+		<Treasury as pezframe_support::traits::PalletInfoAccess>::index() as u8,
 		pezkuwichain_runtime_constants::TREASURY_PALLET_ID
 	);
 }

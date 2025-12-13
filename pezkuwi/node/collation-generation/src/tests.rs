@@ -32,8 +32,8 @@ use pezkuwi_primitives::{
 };
 use pezkuwi_primitives_test_helpers::dummy_head_data;
 use rstest::rstest;
-use sp_core::Pair;
-use sp_keyring::sr25519::Keyring as Sr25519Keyring;
+use pezsp_core::Pair;
+use pezsp_keyring::sr25519::Keyring as Sr25519Keyring;
 use std::{
 	collections::{BTreeMap, VecDeque},
 	sync::Mutex,
@@ -42,7 +42,7 @@ use std::{
 type VirtualOverseer = TestSubsystemContextHandle<CollationGenerationMessage>;
 
 fn test_harness<T: Future<Output = VirtualOverseer>>(test: impl FnOnce(VirtualOverseer) -> T) {
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool);
 	let subsystem = async move {

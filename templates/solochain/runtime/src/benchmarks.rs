@@ -23,12 +23,12 @@
 //
 // For more information, please refer to <http://unlicense.org>
 
-frame_benchmarking::define_benchmarks!(
-	[frame_benchmarking, BaselineBench::<Runtime>]
-	[frame_system, SystemBench::<Runtime>]
-	[frame_system_extensions, SystemExtensionsBench::<Runtime>]
-	[pallet_balances, Balances]
-	[pallet_timestamp, Timestamp]
-	[pallet_sudo, Sudo]
-	[pallet_template, Template]
+pezframe_benchmarking::define_benchmarks!(
+	[pezframe_benchmarking, BaselineBench::<Runtime>]
+	[pezframe_system, SystemBench::<Runtime>]
+	[pezframe_system_extensions, SystemExtensionsBench::<Runtime>]
+	[pezpallet_balances, Balances]
+	[pezpallet_timestamp, Timestamp]
+	[pezpallet_sudo, Sudo]
+	[pezpallet_template, Template]
 );

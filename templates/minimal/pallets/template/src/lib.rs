@@ -16,7 +16,7 @@ pub mod pallet {
 	use super::*;
 
 	#[pallet::config]
-	pub trait Config: pezkuwi_sdk::frame_system::Config {}
+	pub trait Config: pezkuwi_sdk::pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);

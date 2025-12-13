@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use pezkuwi_test_service::*;
-use sp_keyring::Sr25519Keyring::{Alice, Bob, Charlie};
+use pezsp_keyring::Sr25519Keyring::{Alice, Bob, Charlie};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn call_function_actually_work() {
@@ -25,7 +25,7 @@ async fn call_function_actually_work() {
 	let alice = run_validator_node(alice_config, None).await;
 
 	let function =
-		pezkuwi_test_runtime::RuntimeCall::Balances(pallet_balances::Call::transfer_allow_death {
+		pezkuwi_test_runtime::RuntimeCall::Balances(pezpallet_balances::Call::transfer_allow_death {
 			dest: Charlie.to_account_id().into(),
 			value: 1,
 		});

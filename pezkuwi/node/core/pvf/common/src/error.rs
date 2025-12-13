@@ -16,7 +16,7 @@
 
 use crate::prepare::{PrepareSuccess, PrepareWorkerSuccess};
 use codec::{Decode, Encode};
-pub use sc_executor_common::error::Error as ExecuteError;
+pub use pezsc_executor_common::error::Error as ExecuteError;
 
 /// Result of PVF preparation from a worker, with checksum of the compiled PVF and stats of the
 /// preparation if successful.

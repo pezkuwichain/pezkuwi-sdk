@@ -5,13 +5,13 @@ use crate::{
 
 use alloc::{vec, vec::Vec};
 
-use pezkuwi_sdk::{staging_xcm as xcm, *};
+use pezkuwi_sdk::{pezstaging_xcm as xcm, *};
 
 use cumulus_primitives_core::ParaId;
-use frame_support::build_struct_json_patch;
+use pezframe_support::build_struct_json_patch;
 use serde_json::Value;
-use sp_genesis_builder::PresetId;
-use sp_keyring::Sr25519Keyring;
+use pezsp_genesis_builder::PresetId;
+use pezsp_keyring::Sr25519Keyring;
 use teyrchains_common::AuraId;
 
 /// The default XCM version to set in genesis config.
@@ -92,8 +92,8 @@ fn development_config_genesis() -> Value {
 /// Provides the JSON representation of predefined genesis config for given `id`.
 pub fn get_preset(id: &PresetId) -> Option<vec::Vec<u8>> {
 	let patch = match id.as_ref() {
-		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => local_testnet_genesis(),
-		sp_genesis_builder::DEV_RUNTIME_PRESET => development_config_genesis(),
+		pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => local_testnet_genesis(),
+		pezsp_genesis_builder::DEV_RUNTIME_PRESET => development_config_genesis(),
 		_ => return None,
 	};
 	Some(
@@ -106,7 +106,7 @@ pub fn get_preset(id: &PresetId) -> Option<vec::Vec<u8>> {
 /// List of supported presets.
 pub fn preset_names() -> Vec<PresetId> {
 	vec![
-		PresetId::from(sp_genesis_builder::DEV_RUNTIME_PRESET),
-		PresetId::from(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET),
+		PresetId::from(pezsp_genesis_builder::DEV_RUNTIME_PRESET),
+		PresetId::from(pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET),
 	]
 }

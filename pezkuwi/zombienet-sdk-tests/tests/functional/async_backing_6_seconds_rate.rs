@@ -57,7 +57,7 @@ async fn async_backing_6_seconds_rate_test() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(2001)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec![("-lteyrchain=debug,aura=debug").into()])
 				.with_collator(|n| n.with_name("collator-2001"))
 		})
@@ -85,7 +85,7 @@ async fn async_backing_6_seconds_rate_test() -> Result<(), anyhow::Error> {
 	.await?;
 
 	// Assert the teyrchain finalized block height is also on par with the number of backed
-	// candidates. We can only do this for the collator based on cumulus.
+	// candidates. We can only do this for the collator based on pezcumulus.
 	assert_finality_lag(&para_node_2001.wait_client().await?, 6).await?;
 
 	log::info!("Test finished successfully");

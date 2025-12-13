@@ -37,14 +37,14 @@ use bp_messages::{
 use bp_runtime::{BasicOperatingMode, PreComputedSize, RangeInclusiveExt, Size};
 use bp_test_utils::generate_owned_bridge_module_tests;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::Pays,
 	storage::generator::{StorageMap, StorageValue},
 	weights::Weight,
 };
-use frame_system::{EventRecord, Pallet as System, Phase};
-use sp_runtime::{BoundedVec, DispatchError};
+use pezframe_system::{EventRecord, Pallet as System, Phase};
+use pezsp_runtime::{BoundedVec, DispatchError};
 
 fn get_ready_for_events() {
 	System::<TestRuntime>::set_block_number(1);
@@ -117,7 +117,7 @@ fn receive_messages_delivery_proof() {
 }
 
 #[test]
-fn pallet_rejects_transactions_if_halted() {
+fn pezpallet_rejects_transactions_if_halted() {
 	run_test(|| {
 		// send message first to be able to check that delivery_proof fails later
 		send_regular_message(test_lane_id());
@@ -187,7 +187,7 @@ fn receive_messages_fails_if_dispatcher_is_inactive() {
 }
 
 #[test]
-fn pallet_rejects_new_messages_in_rejecting_outbound_messages_operating_mode() {
+fn pezpallet_rejects_new_messages_in_rejecting_outbound_messages_operating_mode() {
 	run_test(|| {
 		// send message first to be able to check that delivery_proof fails later
 		send_regular_message(test_lane_id());
@@ -1222,7 +1222,7 @@ fn do_try_state_for_outbound_lanes_works() {
 		);
 		assert_err!(
 			Pallet::<TestRuntime>::do_try_state(),
-			sp_runtime::TryRuntimeError::Other("Found unpruned lanes!")
+			pezsp_runtime::TryRuntimeError::Other("Found unpruned lanes!")
 		);
 
 		// remove message for nonce 1

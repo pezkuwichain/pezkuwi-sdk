@@ -25,11 +25,11 @@ use crate::{
 	scheduler::common::AssignmentProvider,
 	session_info, shared, ParaId,
 };
-use frame_support::pallet_prelude::*;
+use pezframe_support::pezpallet_prelude::*;
 use pezkuwi_primitives::CoreIndex;
 
 use codec::Decode;
-use frame_support::{
+use pezframe_support::{
 	assert_ok, derive_impl,
 	dispatch::GetDispatchInfo,
 	parameter_types,
@@ -39,15 +39,15 @@ use frame_support::{
 	weights::{Weight, WeightMeter},
 	PalletId,
 };
-use frame_support_test::TestRandomness;
-use frame_system::{limits, EnsureRoot};
+use pezframe_support_test::TestRandomness;
+use pezframe_system::{limits, EnsureRoot};
 use pezkuwi_primitives::{
 	AuthorityDiscoveryId, Balance, BlockNumber, CandidateHash, Moment, SessionIndex, UpwardMessage,
 	ValidationCode, ValidatorIndex,
 };
-use sp_core::{ConstU32, H256};
-use sp_io::TestExternalities;
-use sp_runtime::{
+use pezsp_core::{ConstU32, H256};
+use pezsp_io::TestExternalities;
+use pezsp_runtime::{
 	traits::{AccountIdConversion, BlakeTwo256, IdentityLookup},
 	transaction_validity::TransactionPriority,
 	BuildStorage, FixedU128, Perbill, Permill,
@@ -62,15 +62,15 @@ use xcm::{
 	IntoVersion, VersionedXcm, WrapVersion,
 };
 
-type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
-type Block = frame_system::mocking::MockBlockU32<Test>;
+type UncheckedExtrinsic = pezframe_system::mocking::MockUncheckedExtrinsic<Test>;
+type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances,
-		MessageQueue: pallet_message_queue,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		MessageQueue: pezpallet_message_queue,
 		Paras: paras,
 		Configuration: configuration,
 		ParasShared: shared,
@@ -87,11 +87,11 @@ frame_support::construct_runtime!(
 		TeyrchainsOrigin: origin,
 		SessionInfo: session_info,
 		Disputes: disputes,
-		Babe: pallet_babe,
+		Babe: pezpallet_babe,
 	}
 );
 
-impl<C> frame_system::offchain::CreateTransactionBase<C> for Test
+impl<C> pezframe_system::offchain::CreateTransactionBase<C> for Test
 where
 	RuntimeCall: From<C>,
 {
@@ -99,7 +99,7 @@ where
 	type RuntimeCall = RuntimeCall;
 }
 
-impl<C> frame_system::offchain::CreateBare<C> for Test
+impl<C> pezframe_system::offchain::CreateBare<C> for Test
 where
 	RuntimeCall: From<C>,
 {
@@ -109,8 +109,8 @@ where
 }
 
 parameter_types! {
-	pub static BlockWeights: frame_system::limits::BlockWeights =
-		frame_system::limits::BlockWeights::simple_max(
+	pub static BlockWeights: pezframe_system::limits::BlockWeights =
+		pezframe_system::limits::BlockWeights::simple_max(
 			Weight::from_parts(4 * 1024 * 1024, u64::MAX),
 		);
 	pub static BlockLength: limits::BlockLength = limits::BlockLength::max_with_normal_ratio(u32::MAX, Perbill::from_percent(75));
@@ -118,9 +118,9 @@ parameter_types! {
 
 pub type AccountId = u64;
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
-	type BaseCallFilter = frame_support::traits::Everything;
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
+	type BaseCallFilter = pezframe_support::traits::Everything;
 	type BlockWeights = BlockWeights;
 	type BlockLength = BlockLength;
 	type DbWeight = ();
@@ -135,7 +135,7 @@ impl frame_system::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<u128>;
+	type AccountData = pezpallet_balances::AccountData<u128>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
@@ -148,8 +148,8 @@ parameter_types! {
 	pub static ExistentialDeposit: u64 = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -162,17 +162,17 @@ parameter_types! {
 	pub const MaxAuthorities: u32 = 100_000;
 }
 
-impl pallet_babe::Config for Test {
+impl pezpallet_babe::Config for Test {
 	type EpochDuration = EpochDuration;
 	type ExpectedBlockTime = ExpectedBlockTime;
 
 	// session module is the trigger
-	type EpochChangeTrigger = pallet_babe::ExternalTrigger;
+	type EpochChangeTrigger = pezpallet_babe::ExternalTrigger;
 	type DisabledValidators = ();
 	type WeightInfo = ();
 	type MaxAuthorities = MaxAuthorities;
 	type MaxNominators = ConstU32<0>;
-	type KeyOwnerProof = sp_core::Void;
+	type KeyOwnerProof = pezsp_core::Void;
 	type EquivocationReportSystem = ();
 }
 
@@ -180,7 +180,7 @@ parameter_types! {
 	pub const MinimumPeriod: Moment = 6_000 / 2;
 }
 
-impl pallet_timestamp::Config for Test {
+impl pezpallet_timestamp::Config for Test {
 	type Moment = Moment;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
@@ -189,7 +189,7 @@ impl pallet_timestamp::Config for Test {
 
 impl crate::initializer::Config for Test {
 	type Randomness = TestRandomness<Self>;
-	type ForceOrigin = frame_system::EnsureRoot<u64>;
+	type ForceOrigin = pezframe_system::EnsureRoot<u64>;
 	type WeightInfo = ();
 	type CoretimeOnNewSession = Coretime;
 }
@@ -199,7 +199,7 @@ impl crate::configuration::Config for Test {
 }
 
 pub struct MockDisabledValidators {}
-impl frame_support::traits::DisabledValidators for MockDisabledValidators {
+impl pezframe_support::traits::DisabledValidators for MockDisabledValidators {
 	/// Returns true if the given validator is disabled.
 	fn is_disabled(index: u32) -> bool {
 		disabled_validators().iter().any(|v| *v == index)
@@ -225,7 +225,7 @@ parameter_types! {
 /// is more to satisfy type requirements rather than to test anything.
 pub struct TestNextSessionRotation;
 
-impl frame_support::traits::EstimateNextSessionRotation<u32> for TestNextSessionRotation {
+impl pezframe_support::traits::EstimateNextSessionRotation<u32> for TestNextSessionRotation {
 	fn average_session_length() -> u32 {
 		10
 	}
@@ -286,8 +286,8 @@ impl TestUsesOnlyStoredVersionWrapper {
 impl crate::hrmp::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeEvent = RuntimeEvent;
-	type ChannelManager = frame_system::EnsureRoot<u64>;
-	type Currency = pallet_balances::Pallet<Test>;
+	type ChannelManager = pezframe_system::EnsureRoot<u64>;
+	type Currency = pezpallet_balances::Pallet<Test>;
 	type DefaultChannelSizeAndCapacityWithSystem = DefaultChannelSizeAndCapacityWithSystem;
 	type VersionWrapper = TestUsesOnlyStoredVersionWrapper;
 	type WeightInfo = crate::hrmp::TestWeightInfo;
@@ -352,7 +352,7 @@ impl crate::scheduler::Config for Test {
 }
 
 pub struct TestMessageQueueWeight;
-impl pallet_message_queue::WeightInfo for TestMessageQueueWeight {
+impl pezpallet_message_queue::WeightInfo for TestMessageQueueWeight {
 	fn ready_ring_knit() -> Weight {
 		Weight::zero()
 	}
@@ -393,7 +393,7 @@ parameter_types! {
 
 pub type MessageQueueSize = u32;
 
-impl pallet_message_queue::Config for Test {
+impl pezpallet_message_queue::Config for Test {
 	type Size = MessageQueueSize;
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = TestMessageQueueWeight;
@@ -510,7 +510,7 @@ pub mod mock_assigner {
 	use super::*;
 	pub use pallet::*;
 
-	#[frame_support::pallet]
+	#[pezframe_support::pallet]
 	pub mod pallet {
 		use super::*;
 
@@ -519,7 +519,7 @@ pub mod mock_assigner {
 		pub struct Pallet<T>(_);
 
 		#[pallet::config]
-		pub trait Config: frame_system::Config + configuration::Config + paras::Config {}
+		pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {}
 
 		#[pallet::storage]
 		pub(super) type MockAssignmentQueue<T: Config> =
@@ -567,14 +567,14 @@ pub mod mock_assigner {
 impl mock_assigner::pallet::Config for Test {}
 
 pub struct FoolIdentificationOf;
-impl sp_runtime::traits::Convert<AccountId, Option<()>> for FoolIdentificationOf {
+impl pezsp_runtime::traits::Convert<AccountId, Option<()>> for FoolIdentificationOf {
 	fn convert(_: AccountId) -> Option<()> {
 		Some(())
 	}
 }
 
 pub struct ValidatorIdOf;
-impl sp_runtime::traits::Convert<AccountId, Option<AccountId>> for ValidatorIdOf {
+impl pezsp_runtime::traits::Convert<AccountId, Option<AccountId>> for ValidatorIdOf {
 	fn convert(a: AccountId) -> Option<AccountId> {
 		Some(a)
 	}
@@ -684,10 +684,10 @@ impl inclusion::RewardValidators for TestRewardValidators {
 
 /// Create a new set of test externalities.
 pub fn new_test_ext(state: MockGenesisConfig) -> TestExternalities {
-	use sp_keystore::{testing::MemoryKeystore, KeystoreExt, KeystorePtr};
+	use pezsp_keystore::{testing::MemoryKeystore, KeystoreExt, KeystorePtr};
 	use std::sync::Arc;
 
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 
 	BACKING_REWARDS.with(|r| r.borrow_mut().clear());
 	AVAILABILITY_REWARDS.with(|r| r.borrow_mut().clear());
@@ -704,16 +704,16 @@ pub fn new_test_ext(state: MockGenesisConfig) -> TestExternalities {
 
 #[derive(Default)]
 pub struct MockGenesisConfig {
-	pub system: frame_system::GenesisConfig<Test>,
+	pub system: pezframe_system::GenesisConfig<Test>,
 	pub configuration: crate::configuration::GenesisConfig<Test>,
 	pub paras: crate::paras::GenesisConfig<Test>,
 }
 
 pub fn assert_last_event(generic_event: RuntimeEvent) {
-	let events = frame_system::Pallet::<Test>::events();
-	let system_event: <Test as frame_system::Config>::RuntimeEvent = generic_event.into();
+	let events = pezframe_system::Pallet::<Test>::events();
+	let system_event: <Test as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
-	let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 	assert_eq!(event, &system_event);
 }
 
@@ -721,11 +721,11 @@ pub fn assert_last_events<E>(generic_events: E)
 where
 	E: DoubleEndedIterator<Item = RuntimeEvent> + ExactSizeIterator,
 {
-	for (i, (got, want)) in frame_system::Pallet::<Test>::events()
+	for (i, (got, want)) in pezframe_system::Pallet::<Test>::events()
 		.into_iter()
 		.rev()
 		.map(|e| e.event)
-		.zip(generic_events.rev().map(<Test as frame_system::Config>::RuntimeEvent::from))
+		.zip(generic_events.rev().map(<Test as pezframe_system::Config>::RuntimeEvent::from))
 		.rev()
 		.enumerate()
 	{
@@ -761,7 +761,7 @@ pub(crate) fn deregister_teyrchain(id: ParaId) {
 
 /// Calls `schedule_para_cleanup` in a new storage transactions, since it assumes rollback on error.
 pub(crate) fn try_deregister_teyrchain(id: ParaId) -> crate::DispatchResult {
-	frame_support::storage::transactional::with_storage_layer(|| Paras::schedule_para_cleanup(id))
+	pezframe_support::storage::transactional::with_storage_layer(|| Paras::schedule_para_cleanup(id))
 }
 
 pub(crate) fn set_disabled_validators(disabled: Vec<u32>) {

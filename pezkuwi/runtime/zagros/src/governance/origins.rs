@@ -16,15 +16,15 @@
 
 //! Custom origins for governance interventions.
 
-pub use pallet_custom_origins::*;
+pub use pezpallet_custom_origins::*;
 
-#[frame_support::pallet]
-pub mod pallet_custom_origins {
+#[pezframe_support::pallet]
+pub mod pezpallet_custom_origins {
 	use crate::{Balance, CENTS, GRAND};
-	use frame_support::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);

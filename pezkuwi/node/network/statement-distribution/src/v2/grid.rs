@@ -1096,8 +1096,8 @@ mod tests {
 	use super::*;
 	use assert_matches::assert_matches;
 	use pezkuwi_node_network_protocol::grid_topology::TopologyPeerInfo;
-	use sp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
-	use sp_core::crypto::Pair as PairT;
+	use pezsp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
+	use pezsp_core::crypto::Pair as PairT;
 
 	fn dummy_groups(group_size: usize) -> Groups {
 		let groups = vec![(0..(group_size as u32)).map(ValidatorIndex).collect()].into();

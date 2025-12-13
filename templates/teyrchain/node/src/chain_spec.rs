@@ -1,12 +1,12 @@
 use pezkuwi_sdk::*;
 
-use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
-use sc_service::ChainType;
+use pezsc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
+use pezsc_service::ChainType;
 use serde::{Deserialize, Serialize};
 use teyrchain_template_runtime as runtime;
 
 /// Specialized `ChainSpec` for the normal teyrchain runtime.
-pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
+pub type ChainSpec = pezsc_service::GenericChainSpec<Extensions>;
 /// The relay chain that you want to configure this teyrchain to connect to.
 pub const RELAY_CHAIN: &str = "pezkuwichain-local";
 
@@ -20,14 +20,14 @@ pub struct Extensions {
 
 impl Extensions {
 	/// Try to get the extension from the given `ChainSpec`.
-	pub fn try_get(chain_spec: &dyn sc_service::ChainSpec) -> Option<&Self> {
-		sc_chain_spec::get_extension(chain_spec.extensions())
+	pub fn try_get(chain_spec: &dyn pezsc_service::ChainSpec) -> Option<&Self> {
+		pezsc_chain_spec::get_extension(chain_spec.extensions())
 	}
 }
 
 pub fn development_chain_spec() -> ChainSpec {
 	// Give your base currency a unit name and decimal places
-	let mut properties = sc_chain_spec::Properties::new();
+	let mut properties = pezsc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "UNIT".into());
 	properties.insert("tokenDecimals".into(), 12.into());
 	properties.insert("ss58Format".into(), 42.into());
@@ -39,14 +39,14 @@ pub fn development_chain_spec() -> ChainSpec {
 	.with_name("Development")
 	.with_id("dev")
 	.with_chain_type(ChainType::Development)
-	.with_genesis_config_preset_name(sp_genesis_builder::DEV_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsp_genesis_builder::DEV_RUNTIME_PRESET)
 	.with_properties(properties)
 	.build()
 }
 
 pub fn local_chain_spec() -> ChainSpec {
 	// Give your base currency a unit name and decimal places
-	let mut properties = sc_chain_spec::Properties::new();
+	let mut properties = pezsc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "UNIT".into());
 	properties.insert("tokenDecimals".into(), 12.into());
 	properties.insert("ss58Format".into(), 42.into());
@@ -58,7 +58,7 @@ pub fn local_chain_spec() -> ChainSpec {
 	.with_name("Local Testnet")
 	.with_id("local_testnet")
 	.with_chain_type(ChainType::Local)
-	.with_genesis_config_preset_name(sc_chain_spec::LOCAL_TESTNET_RUNTIME_PRESET)
+	.with_genesis_config_preset_name(pezsc_chain_spec::LOCAL_TESTNET_RUNTIME_PRESET)
 	.with_protocol_id("template-local")
 	.with_properties(properties)
 	.build()

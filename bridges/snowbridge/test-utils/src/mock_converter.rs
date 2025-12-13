@@ -2,9 +2,9 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 
 use codec::Encode;
-use frame_support::sp_runtime::traits::MaybeConvert;
+use pezframe_support::pezsp_runtime::traits::MaybeConvert;
 use snowbridge_core::TokenIdOf;
-use sp_core::H256;
+use pezsp_core::H256;
 use std::{cell::RefCell, collections::HashMap};
 use xcm::{
 	latest::InteriorLocation,

@@ -3,11 +3,11 @@
 //! Types for representing inbound messages
 #![cfg_attr(not(feature = "std"), no_std)]
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::PalletError;
+use pezframe_support::PalletError;
 use scale_info::TypeInfo;
 use snowbridge_beacon_primitives::{BeaconHeader, ExecutionProof};
-use sp_core::{RuntimeDebug, H160, H256};
-use sp_std::prelude::*;
+use pezsp_core::{RuntimeDebug, H160, H256};
+use pezsp_std::prelude::*;
 
 /// A trait for verifying inbound messages from Ethereum.
 pub trait Verifier {

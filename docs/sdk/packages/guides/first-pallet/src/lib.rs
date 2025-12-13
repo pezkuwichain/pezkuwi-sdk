@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -25,7 +25,7 @@ pub mod shell_pallet {
 	use frame::prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -39,7 +39,7 @@ pub mod pallet {
 	pub type Balance = u128;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -151,26 +151,26 @@ pub mod pallet {
 			// we need to reference our `mod pallet` as an identifier to pass to
 			// `construct_runtime`.
 			// YOU HAVE TO CHANGE THIS LINE BASED ON YOUR TEMPLATE
-			use crate::pallet as pallet_currency;
+			use crate::pallet as pezpallet_currency;
 
 			construct_runtime!(
 				pub enum Runtime {
 					// ---^^^^^^ This is where `enum Runtime` is defined.
-					System: frame_system,
-					Currency: pallet_currency,
+					System: pezframe_system,
+					Currency: pezpallet_currency,
 				}
 			);
 
-			#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-			impl frame_system::Config for Runtime {
+			#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+			impl pezframe_system::Config for Runtime {
 				type Block = MockBlock<Runtime>;
-				// within pallet we just said `<T as frame_system::Config>::AccountId`, now we
+				// within pallet we just said `<T as pezframe_system::Config>::AccountId`, now we
 				// finally specified it.
 				type AccountId = u64;
 			}
 
 			// our simple pallet has nothing to be configured.
-			impl pallet_currency::Config for Runtime {}
+			impl pezpallet_currency::Config for Runtime {}
 		}
 
 		pub(crate) use runtime::*;
@@ -192,7 +192,7 @@ pub mod pallet {
 
 		#[docify::export]
 		pub(crate) struct StateBuilder {
-			balances: Vec<(<Runtime as frame_system::Config>::AccountId, Balance)>,
+			balances: Vec<(<Runtime as pezframe_system::Config>::AccountId, Balance)>,
 		}
 
 		#[docify::export(default_state_builder)]
@@ -206,7 +206,7 @@ pub mod pallet {
 		impl StateBuilder {
 			fn add_balance(
 				mut self,
-				who: <Runtime as frame_system::Config>::AccountId,
+				who: <Runtime as pezframe_system::Config>::AccountId,
 				amount: Balance,
 			) -> Self {
 				self.balances.push((who, amount));
@@ -357,17 +357,17 @@ pub mod pallet {
 }
 
 #[frame::pallet(dev_mode)]
-pub mod pallet_v2 {
+pub mod pezpallet_v2 {
 	use super::pallet::Balance;
 	use frame::prelude::*;
 
 	#[docify::export(config_v2)]
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type of the runtime.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>
 			+ TryInto<Event<Self>>;
 	}
 
@@ -432,22 +432,22 @@ pub mod pallet_v2 {
 		#[docify::export]
 		pub mod runtime_v2 {
 			use super::*;
-			use crate::pallet_v2 as pallet_currency;
+			use crate::pezpallet_v2 as pezpallet_currency;
 
 			construct_runtime!(
 				pub enum Runtime {
-					System: frame_system,
-					Currency: pallet_currency,
+					System: pezframe_system,
+					Currency: pezpallet_currency,
 				}
 			);
 
-			#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-			impl frame_system::Config for Runtime {
+			#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+			impl pezframe_system::Config for Runtime {
 				type Block = MockBlock<Runtime>;
 				type AccountId = u64;
 			}
 
-			impl pallet_currency::Config for Runtime {
+			impl pezpallet_currency::Config for Runtime {
 				type RuntimeEvent = RuntimeEvent;
 			}
 		}

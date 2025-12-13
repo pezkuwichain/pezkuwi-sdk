@@ -30,14 +30,14 @@ use bp_runtime::{
 	Chain, ChainId, TransactionEra,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::{
+use pezframe_support::{
 	dispatch::DispatchClass,
 	parameter_types,
 	weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 };
-use frame_system::limits;
+use pezframe_system::limits;
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	impl_tx_ext_default, traits::Dispatchable, transaction_validity::TransactionValidityError,
 	Perbill, StateVersion,
 };
@@ -63,14 +63,14 @@ pub const WITH_PEZKUWI_BULLETIN_MESSAGES_PALLET_NAME: &str = "BridgePezkuwiBulle
 // percentage of the block for data storage.
 const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(90);
 
-// Re following constants - we are using the same values at Cumulus teyrchains. They are limited
+// Re following constants - we are using the same values at Pezcumulus teyrchains. They are limited
 // by the maximal transaction weight/size. Since block limits at Bulletin Chain are larger than
-// at the Cumulus Bridge Hubs, we could reuse the same values.
+// at the Pezcumulus Bridge Hubs, we could reuse the same values.
 
-/// Maximal number of unrewarded relayer entries at inbound lane for Cumulus-based teyrchains.
+/// Maximal number of unrewarded relayer entries at inbound lane for Pezcumulus-based teyrchains.
 pub const MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX: MessageNonce = 1024;
 
-/// Maximal number of unconfirmed messages at inbound lane for Cumulus-based teyrchains.
+/// Maximal number of unconfirmed messages at inbound lane for Pezcumulus-based teyrchains.
 pub const MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX: MessageNonce = 4096;
 
 /// This signed extension is used to ensure that the chain transactions are signed by proper
@@ -94,16 +94,16 @@ pub type TransactionExtensionSchema = GenericTransactionExtension<(
 #[derive(Encode, Decode, DecodeWithMemTracking, Debug, PartialEq, Eq, Clone, TypeInfo)]
 pub struct TransactionExtension(TransactionExtensionSchema);
 
-impl<C> sp_runtime::traits::TransactionExtension<C> for TransactionExtension
+impl<C> pezsp_runtime::traits::TransactionExtension<C> for TransactionExtension
 where
 	C: Dispatchable,
 {
 	const IDENTIFIER: &'static str = "Not needed.";
 	type Implicit =
-		<TransactionExtensionSchema as sp_runtime::traits::TransactionExtension<C>>::Implicit;
+		<TransactionExtensionSchema as pezsp_runtime::traits::TransactionExtension<C>>::Implicit;
 
 	fn implicit(&self) -> Result<Self::Implicit, TransactionValidityError> {
-		<TransactionExtensionSchema as sp_runtime::traits::TransactionExtension<C>>::implicit(
+		<TransactionExtensionSchema as pezsp_runtime::traits::TransactionExtension<C>>::implicit(
 			&self.0,
 		)
 	}

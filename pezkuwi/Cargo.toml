@@ -1,6 +1,6 @@
 [package]
 name = "pezkuwi"
-description = "Implementation of a `https://pezkuwichain.io` node in Rust based on the Substrate framework."
+description = "Implementation of a `https://pezkuwichain.io` node in Rust based on the Bizinikiwi framework."
 license = "GPL-3.0-only"
 rust-version = "1.64.0"
 readme = "README.md"
@@ -17,7 +17,7 @@ maintenance = { status = "actively-developed" }
 # Configuration for building a .deb package - for use with `cargo-deb`
 [package.metadata.deb]
 name = "pezkuwi"
-extended-description = "Implementation of a https://pezkuwichain.io node in Rust based on the Substrate framework."
+extended-description = "Implementation of a https://pezkuwichain.io node in Rust based on the Bizinikiwi framework."
 section = "misc"
 maintainer = "security@parity.io"
 license-file = ["LICENSE", "0"]
@@ -93,12 +93,12 @@ tikv-jemallocator = { workspace = true, features = [
 assert_cmd = { workspace = true }
 nix = { features = ["signal"], workspace = true }
 pezkuwi-core-primitives = { workspace = true, default-features = true }
-substrate-rpc-client = { workspace = true, default-features = true }
+bizinikiwi-rpc-client = { workspace = true, default-features = true }
 tempfile = { workspace = true }
 tokio = { workspace = true, default-features = true }
 
 [build-dependencies]
-substrate-build-script-utils = { workspace = true, default-features = true }
+bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
@@ -109,7 +109,7 @@ runtime-benchmarks = [
 	"pezkuwi-node-core-pvf-prepare-worker/runtime-benchmarks",
 	"pezkuwi-node-core-pvf/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
-	"substrate-rpc-client/runtime-benchmarks",
+	"bizinikiwi-rpc-client/runtime-benchmarks",
 ]
 try-runtime = ["pezkuwi-cli/try-runtime"]
 fast-runtime = ["pezkuwi-cli/fast-runtime"]

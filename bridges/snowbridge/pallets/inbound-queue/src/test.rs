@@ -2,13 +2,13 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use super::*;
 
-use frame_support::{assert_noop, assert_ok};
+use pezframe_support::{assert_noop, assert_ok};
 use hex_literal::hex;
 use snowbridge_core::ChannelId;
 use snowbridge_inbound_queue_primitives::Proof;
-use sp_keyring::Sr25519Keyring as Keyring;
-use sp_runtime::DispatchError;
-use sp_std::convert::From;
+use pezsp_keyring::Sr25519Keyring as Keyring;
+use pezsp_runtime::DispatchError;
+use pezsp_std::convert::From;
 
 use crate::Error;
 
@@ -37,9 +37,9 @@ fn test_submit_happy_path() {
 
 		assert_ok!(InboundQueue::submit(origin.clone(), event.clone()));
 
-		let pallet_events = frame_system::Pallet::<Test>::events();
+		let pezpallet_events = pezframe_system::Pallet::<Test>::events();
 		assert!(
-			pallet_events.iter().any(|event| matches!(
+			pezpallet_events.iter().any(|event| matches!(
 				event.event,
 				RuntimeEvent::InboundQueue(Event::MessageReceived { nonce, ..})
 					if nonce == 1

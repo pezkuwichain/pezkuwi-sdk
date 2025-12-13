@@ -19,11 +19,11 @@ serde = { features = ["alloc", "derive"], workspace = true }
 bp-messages = { workspace = true }
 bp-runtime = { workspace = true }
 
-# Substrate Dependencies
-frame-support = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-std = { workspace = true }
+# Bizinikiwi Dependencies
+pezframe-support = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-std = { workspace = true }
 
 # Pezkuwi Dependencies
 xcm = { workspace = true }
@@ -34,18 +34,18 @@ std = [
 	"bp-messages/std",
 	"bp-runtime/std",
 	"codec/std",
-	"frame-support/std",
+	"pezframe-support/std",
 	"scale-info/std",
 	"serde/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-std/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-std/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
 	"bp-messages/runtime-benchmarks",
 	"bp-runtime/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]

@@ -12,7 +12,7 @@ publish = false
 [dependencies]
 codec = { workspace = true }
 docify = { workspace = true }
-frame-support = { workspace = true }
+pezframe-support = { workspace = true }
 scale-info = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -21,18 +21,18 @@ serde_json = { workspace = true }
 frame = { features = ["experimental", "runtime"], workspace = true }
 
 # genesis builder that allows us to interact with runtime genesis config
-sp-application-crypto = { features = ["serde"], workspace = true }
-sp-core = { workspace = true }
-sp-genesis-builder = { workspace = true }
-sp-keyring = { workspace = true }
-sp-runtime = { features = ["serde"], workspace = true }
+pezsp-application-crypto = { features = ["serde"], workspace = true }
+pezsp-core = { workspace = true }
+pezsp-genesis-builder = { workspace = true }
+pezsp-keyring = { workspace = true }
+pezsp-runtime = { features = ["serde"], workspace = true }
 
 [dev-dependencies]
 cmd_lib = { workspace = true }
-sc-chain-spec = { workspace = true, default-features = true }
+pezsc-chain-spec = { workspace = true, default-features = true }
 
 [build-dependencies]
-substrate-wasm-builder = { optional = true, workspace = true, default-features = true }
+bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
 default = ["std"]
@@ -40,25 +40,25 @@ std = [
 	"codec/std",
 	"scale-info/std",
 
-	"frame-support/std",
+	"pezframe-support/std",
 	"frame/std",
 
-	"sp-application-crypto/std",
-	"sp-core/std",
-	"sp-genesis-builder/std",
-	"sp-keyring/std",
-	"sp-runtime/std",
+	"pezsp-application-crypto/std",
+	"pezsp-core/std",
+	"pezsp-genesis-builder/std",
+	"pezsp-keyring/std",
+	"pezsp-runtime/std",
 
 	"serde/std",
 	"serde_json/std",
-	"substrate-wasm-builder",
+	"bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 	"frame/runtime-benchmarks",
-	"sc-chain-spec/runtime-benchmarks",
-	"sp-genesis-builder/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"substrate-wasm-builder?/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]

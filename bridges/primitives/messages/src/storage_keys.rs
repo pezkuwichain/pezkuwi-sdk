@@ -28,14 +28,14 @@ pub const INBOUND_LANES_MAP_NAME: &str = "InboundLanes";
 use crate::{MessageKey, MessageNonce};
 
 use codec::Encode;
-use frame_support::Blake2_128Concat;
-use sp_core::storage::StorageKey;
+use pezframe_support::Blake2_128Concat;
+use pezsp_core::storage::StorageKey;
 
 /// Storage key of the `PalletOperatingMode` value in the runtime storage.
-pub fn operating_mode_key(pallet_prefix: &str) -> StorageKey {
+pub fn operating_mode_key(pezpallet_prefix: &str) -> StorageKey {
 	StorageKey(
 		bp_runtime::storage_value_final_key(
-			pallet_prefix.as_bytes(),
+			pezpallet_prefix.as_bytes(),
 			OPERATING_MODE_VALUE_NAME.as_bytes(),
 		)
 		.to_vec(),
@@ -44,30 +44,30 @@ pub fn operating_mode_key(pallet_prefix: &str) -> StorageKey {
 
 /// Storage key of the outbound message in the runtime storage.
 pub fn message_key<LaneId: Encode>(
-	pallet_prefix: &str,
+	pezpallet_prefix: &str,
 	lane: LaneId,
 	nonce: MessageNonce,
 ) -> StorageKey {
 	bp_runtime::storage_map_final_key::<Blake2_128Concat>(
-		pallet_prefix,
+		pezpallet_prefix,
 		OUTBOUND_MESSAGES_MAP_NAME,
 		&MessageKey { lane_id: lane, nonce }.encode(),
 	)
 }
 
 /// Storage key of the outbound message lane state in the runtime storage.
-pub fn outbound_lane_data_key<LaneId: Encode>(pallet_prefix: &str, lane: &LaneId) -> StorageKey {
+pub fn outbound_lane_data_key<LaneId: Encode>(pezpallet_prefix: &str, lane: &LaneId) -> StorageKey {
 	bp_runtime::storage_map_final_key::<Blake2_128Concat>(
-		pallet_prefix,
+		pezpallet_prefix,
 		OUTBOUND_LANES_MAP_NAME,
 		&lane.encode(),
 	)
 }
 
 /// Storage key of the inbound message lane state in the runtime storage.
-pub fn inbound_lane_data_key<LaneId: Encode>(pallet_prefix: &str, lane: &LaneId) -> StorageKey {
+pub fn inbound_lane_data_key<LaneId: Encode>(pezpallet_prefix: &str, lane: &LaneId) -> StorageKey {
 	bp_runtime::storage_map_final_key::<Blake2_128Concat>(
-		pallet_prefix,
+		pezpallet_prefix,
 		INBOUND_LANES_MAP_NAME,
 		&lane.encode(),
 	)

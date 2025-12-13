@@ -32,15 +32,15 @@ pub mod api;
 pub mod weights;
 pub use weights::*;
 
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{
 		fungible::{Inspect, Mutate},
 		tokens::Preservation,
 		Contains, EnsureOrigin,
 	},
 };
-use frame_system::pallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 use snowbridge_core::{
 	meth, AgentId, AssetMetadata, Channel, ChannelId, ParaId,
 	PricingParameters as PricingParametersRecord, TokenId, TokenIdOf, PRIMARY_GOVERNANCE_CHANNEL,
@@ -50,21 +50,21 @@ use snowbridge_outbound_queue_primitives::{
 	v1::{Command, Initializer, Message, SendMessage},
 	OperatingMode, SendError,
 };
-use sp_core::{RuntimeDebug, H160, H256};
-use sp_io::hashing::blake2_256;
-use sp_runtime::{traits::MaybeConvert, DispatchError, SaturatedConversion};
-use sp_std::prelude::*;
+use pezsp_core::{RuntimeDebug, H160, H256};
+use pezsp_io::hashing::blake2_256;
+use pezsp_runtime::{traits::MaybeConvert, DispatchError, SaturatedConversion};
+use pezsp_std::prelude::*;
 use xcm::prelude::*;
 use xcm_executor::traits::ConvertLocation;
 
 #[cfg(feature = "runtime-benchmarks")]
-use frame_support::traits::OriginTrait;
+use pezframe_support::traits::OriginTrait;
 
 pub use pallet::*;
 
 pub type BalanceOf<T> =
-	<<T as pallet::Config>::Token as Inspect<<T as frame_system::Config>::AccountId>>::Balance;
-pub type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
+	<<T as pallet::Config>::Token as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
+pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 pub type PricingParametersOf<T> = PricingParametersRecord<BalanceOf<T>>;
 
 /// Hash the location to produce an agent id
@@ -94,11 +94,11 @@ where
 	No,
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
-	use frame_support::dispatch::PostDispatchInfo;
+	use pezframe_support::dispatch::PostDispatchInfo;
 	use snowbridge_core::StaticLookup;
-	use sp_core::U256;
+	use pezsp_core::U256;
 
 	use super::*;
 
@@ -107,9 +107,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Send messages to Ethereum
 		type OutboundQueue: SendMessage<Balance = BalanceOf<Self>>;
@@ -234,7 +234,7 @@ pub mod pallet {
 		StorageMap<_, Blake2_128Concat, TokenId, Location, OptionQuery>;
 
 	#[pallet::genesis_config]
-	#[derive(frame_support::DefaultNoBound)]
+	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		// Own teyrchain id
 		pub para_id: ParaId,

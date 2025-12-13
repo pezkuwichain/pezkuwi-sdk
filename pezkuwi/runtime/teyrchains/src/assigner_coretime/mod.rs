@@ -35,11 +35,11 @@ use crate::{
 };
 
 use alloc::{vec, vec::Vec};
-use frame_support::{defensive, pallet_prelude::*};
-use frame_system::pallet_prelude::*;
-use pallet_broker::CoreAssignment;
+use pezframe_support::{defensive, pezpallet_prelude::*};
+use pezframe_system::pezpallet_prelude::*;
+use pezpallet_broker::CoreAssignment;
 use pezkuwi_primitives::CoreIndex;
-use sp_runtime::traits::{One, Saturating};
+use pezsp_runtime::traits::{One, Saturating};
 
 pub use pallet::*;
 
@@ -204,7 +204,7 @@ impl<N> From<Schedule<N>> for WorkState<N> {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -213,7 +213,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + configuration::Config + on_demand::Config {}
+	pub trait Config: pezframe_system::Config + configuration::Config + on_demand::Config {}
 
 	/// Scheduled assignment sets.
 	///
@@ -256,7 +256,7 @@ pub mod pallet {
 
 impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pallet<T> {
 	fn pop_assignment_for_core(core_idx: CoreIndex) -> Option<Assignment> {
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 
 		CoreDescriptors::<T>::mutate(core_idx, |core_state| {
 			Self::ensure_workload(now, core_idx, core_state);
@@ -402,7 +402,7 @@ impl<T: Config> Pallet<T> {
 	/// Inserting arbitrarily causes a `DispatchError::DisallowedInsert` error.
 	// With this restriction this function allows for O(1) complexity. It could easily be lifted, if
 	// need be and in fact an implementation is available
-	// [here](https://github.com/paritytech/polkadot-sdk/pull/1694/commits/c0c23b01fd2830910cde92c11960dad12cdff398#diff-0c85a46e448de79a5452395829986ee8747e17a857c27ab624304987d2dde8baR386).
+	// [here](https://github.com/pezkuwichain/kurdistan-sdk/issues/107/commits/c0c23b01fd2830910cde92c11960dad12cdff398#diff-0c85a46e448de79a5452395829986ee8747e17a857c27ab624304987d2dde8baR386).
 	// The problem is that insertion complexity then depends on the size of the existing queue,
 	// which makes determining weights hard and could lead to issues like overweight blocks (at
 	// least in theory).
@@ -461,7 +461,7 @@ impl<T: Config> Pallet<T> {
 
 impl<T: Config> AssignCoretime for Pallet<T> {
 	fn assign_coretime(id: ParaId) -> DispatchResult {
-		let current_block = frame_system::Pallet::<T>::block_number();
+		let current_block = pezframe_system::Pallet::<T>::block_number();
 
 		// Add a new core and assign the para to it.
 		let mut config = configuration::ActiveConfig::<T>::get();
@@ -473,7 +473,7 @@ impl<T: Config> AssignCoretime for Pallet<T> {
 		configuration::Pallet::<T>::force_set_active_config(config);
 
 		let begin = current_block + One::one();
-		let assignment = vec![(pallet_broker::CoreAssignment::Task(id.into()), PartsOf57600::FULL)];
+		let assignment = vec![(pezpallet_broker::CoreAssignment::Task(id.into()), PartsOf57600::FULL)];
 		Pallet::<T>::assign_core(CoreIndex(core), begin, assignment, None)
 	}
 }

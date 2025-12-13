@@ -26,18 +26,18 @@ pub mod migration;
 
 use crate::traits::{LeaseError, Leaser, Registrar};
 use alloc::{vec, vec::Vec};
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{Currency, ReservableCurrency},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 pub use pallet::*;
 use pezkuwi_primitives::Id as ParaId;
-use sp_runtime::traits::{CheckedConversion, CheckedSub, Saturating, Zero};
+use pezsp_runtime::traits::{CheckedConversion, CheckedSub, Saturating, Zero};
 
 type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 type LeasePeriodOf<T> = BlockNumberFor<T>;
 
 pub trait WeightInfo {
@@ -63,7 +63,7 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -72,10 +72,10 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency type used for bidding.
 		type Currency: ReservableCurrency<Self::AccountId>;
@@ -92,7 +92,7 @@ pub mod pallet {
 		type LeaseOffset: Get<BlockNumberFor<Self>>;
 
 		/// The origin which may forcibly create or clear leases. Root can always do this.
-		type ForceOrigin: EnsureOrigin<<Self as frame_system::Config>::RuntimeOrigin>;
+		type ForceOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 
 		/// Weight Information for the Extrinsics in the Pallet
 		type WeightInfo: WeightInfo;
@@ -346,7 +346,7 @@ impl<T: Config> Leaser<BlockNumberFor<T>> for Pallet<T> {
 		period_begin: Self::LeasePeriod,
 		period_count: Self::LeasePeriod,
 	) -> Result<(), LeaseError> {
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let (current_lease_period, _) =
 			Self::lease_period_index(now).ok_or(LeaseError::NoLeasePeriod)?;
 		// Finally, we update the deposit held so it is `amount` for the new lease period
@@ -462,7 +462,7 @@ impl<T: Config> Leaser<BlockNumberFor<T>> for Pallet<T> {
 		first_period: Self::LeasePeriod,
 		last_period: Self::LeasePeriod,
 	) -> bool {
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let (current_lease_period, _) = match Self::lease_period_index(now) {
 			Some(clp) => clp,
 			None => return true,
@@ -504,31 +504,31 @@ mod tests {
 	use super::*;
 
 	use crate::{mock::TestRegistrar, slots};
-	use frame_support::{assert_noop, assert_ok, derive_impl, parameter_types};
-	use frame_system::EnsureRoot;
-	use pallet_balances;
+	use pezframe_support::{assert_noop, assert_ok, derive_impl, parameter_types};
+	use pezframe_system::EnsureRoot;
+	use pezpallet_balances;
 	use pezkuwi_primitives::BlockNumber;
 	use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
-	use sp_core::H256;
-	use sp_runtime::{
+	use pezsp_core::H256;
+	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},
 		BuildStorage,
 	};
 
-	type Block = frame_system::mocking::MockBlockU32<Test>;
+	type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
-	frame_support::construct_runtime!(
+	pezframe_support::construct_runtime!(
 		pub enum Test
 		{
-			System: frame_system,
-			Balances: pallet_balances,
+			System: pezframe_system,
+			Balances: pezpallet_balances,
 			Slots: slots,
 		}
 	);
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Test {
-		type BaseCallFilter = frame_support::traits::Everything;
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Test {
+		type BaseCallFilter = pezframe_support::traits::Everything;
 		type BlockWeights = ();
 		type BlockLength = ();
 		type RuntimeOrigin = RuntimeOrigin;
@@ -543,17 +543,17 @@ mod tests {
 		type DbWeight = ();
 		type Version = ();
 		type PalletInfo = PalletInfo;
-		type AccountData = pallet_balances::AccountData<u64>;
+		type AccountData = pezpallet_balances::AccountData<u64>;
 		type OnNewAccount = ();
 		type OnKilledAccount = ();
 		type SystemWeightInfo = ();
 		type SS58Prefix = ();
 		type OnSetCode = ();
-		type MaxConsumers = frame_support::traits::ConstU32<16>;
+		type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	}
 
-	#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-	impl pallet_balances::Config for Test {
+	#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+	impl pezpallet_balances::Config for Test {
 		type AccountStore = System;
 	}
 
@@ -575,9 +575,9 @@ mod tests {
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mock up.
-	pub fn new_test_ext() -> sp_io::TestExternalities {
-		let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-		pallet_balances::GenesisConfig::<Test> {
+	pub fn new_test_ext() -> pezsp_io::TestExternalities {
+		let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		pezpallet_balances::GenesisConfig::<Test> {
 			balances: vec![(1, 10), (2, 20), (3, 30), (4, 40), (5, 50), (6, 60)],
 			..Default::default()
 		}
@@ -958,20 +958,20 @@ mod tests {
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking {
 	use super::*;
-	use frame_support::assert_ok;
-	use frame_system::RawOrigin;
+	use pezframe_support::assert_ok;
+	use pezframe_system::RawOrigin;
 	use pezkuwi_runtime_teyrchains::paras;
-	use sp_runtime::traits::{Bounded, One};
+	use pezsp_runtime::traits::{Bounded, One};
 
-	use frame_benchmarking::v2::*;
+	use pezframe_benchmarking::v2::*;
 
 	use crate::slots::Pallet as Slots;
 
 	fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-		let events = frame_system::Pallet::<T>::events();
-		let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+		let events = pezframe_system::Pallet::<T>::events();
+		let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 		// compare to the last event record
-		let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 		assert_eq!(event, &system_event);
 	}
 
@@ -990,7 +990,7 @@ mod benchmarking {
 			worst_validation_code.clone(),
 		));
 		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-			frame_system::Origin::<T>::Root.into(),
+			pezframe_system::Origin::<T>::Root.into(),
 			worst_validation_code,
 		));
 
@@ -1009,7 +1009,7 @@ mod benchmarking {
 		#[benchmark]
 		fn force_lease() -> Result<(), BenchmarkError> {
 			// If there is an offset, we need to be on that block to be able to do lease things.
-			frame_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
+			pezframe_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
 			let para = ParaId::from(1337);
 			let leaser: T::AccountId = account("leaser", 0, 0);
 			T::Currency::make_free_balance_be(&leaser, BalanceOf::<T>::max_value());
@@ -1048,7 +1048,7 @@ mod benchmarking {
 			let period_count = 4u32.into();
 
 			// If there is an offset, we need to be on that block to be able to do lease things.
-			frame_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
+			pezframe_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
 
 			// Make T parathreads (on-demand teyrchains)
 			let paras_info = (0..t).map(|i| register_a_parathread::<T>(i)).collect::<Vec<_>>();
@@ -1105,7 +1105,7 @@ mod benchmarking {
 			let (para, _) = register_a_parathread::<T>(1);
 
 			// If there is an offset, we need to be on that block to be able to do lease things.
-			frame_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
+			pezframe_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
 
 			for i in 0..max_people {
 				let leaser = account("lease_deposit", i, 0);

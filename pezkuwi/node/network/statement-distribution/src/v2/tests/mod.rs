@@ -37,11 +37,11 @@ use pezkuwi_primitives::{
 	GroupRotationInfo, HeadData, Header, IndexedVec, NodeFeatures, PersistedValidationData,
 	SessionIndex, SessionInfo, ValidatorPair, DEFAULT_SCHEDULING_LOOKAHEAD,
 };
-use sc_keystore::LocalKeystore;
-use sc_network::ProtocolName;
-use sp_application_crypto::Pair as PairT;
-use sp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
-use sp_keyring::Sr25519Keyring;
+use pezsc_keystore::LocalKeystore;
+use pezsc_network::ProtocolName;
+use pezsp_application_crypto::Pair as PairT;
+use pezsp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
+use pezsp_keyring::Sr25519Keyring;
 
 use assert_matches::assert_matches;
 use codec::Encode;
@@ -93,14 +93,14 @@ struct TestState {
 	local: Option<TestLocalValidator>,
 	validators: Vec<ValidatorPair>,
 	session_info: SessionInfo,
-	req_sender: async_channel::Sender<sc_network::config::IncomingRequest>,
+	req_sender: async_channel::Sender<pezsc_network::config::IncomingRequest>,
 	node_features: NodeFeatures,
 }
 
 impl TestState {
 	fn from_config(
 		config: TestConfig,
-		req_sender: async_channel::Sender<sc_network::config::IncomingRequest>,
+		req_sender: async_channel::Sender<pezsc_network::config::IncomingRequest>,
 		rng: &mut impl Rng,
 	) -> Self {
 		if config.group_size == 0 {
@@ -364,9 +364,9 @@ impl TestState {
 		&mut self,
 		peer: PeerId,
 		request: AttestedCandidateRequest,
-	) -> impl Future<Output = Option<sc_network::config::OutgoingResponse>> {
+	) -> impl Future<Output = Option<pezsc_network::config::OutgoingResponse>> {
 		let (tx, rx) = futures::channel::oneshot::channel();
-		let req = sc_network::config::IncomingRequest {
+		let req = pezsc_network::config::IncomingRequest {
 			peer,
 			payload: request.encode(),
 			pending_response: tx,
@@ -381,7 +381,7 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	config: TestConfig,
 	test: impl FnOnce(TestState, VirtualOverseer) -> T,
 ) {
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let keystore = if let LocalRole::Validator = config.local_validator {
 		test_helpers::mock::make_ferdie_keystore()
 	} else {
@@ -390,7 +390,7 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	let req_protocol_names = ReqProtocolNames::new(&GENESIS_HASH, None);
 	let (candidate_req_receiver, req_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(0);
 

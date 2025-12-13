@@ -14,23 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Defines structures related to calls of the `pallet-bridge-grandpa` pallet.
+//! Defines structures related to calls of the `pezpallet-bridge-grandpa` pallet.
 
 use crate::{justification, InitializationData};
 
 use bp_runtime::HeaderOf;
 use codec::{Decode, Encode};
-use frame_support::{weights::Weight, RuntimeDebugNoBound};
+use pezframe_support::{weights::Weight, RuntimeDebugNoBound};
 use scale_info::TypeInfo;
-use sp_consensus_grandpa::SetId;
-use sp_runtime::traits::{Header as HeaderT, Zero};
-use sp_std::{boxed::Box, fmt::Debug};
+use pezsp_consensus_grandpa::SetId;
+use pezsp_runtime::traits::{Header as HeaderT, Zero};
+use pezsp_std::{boxed::Box, fmt::Debug};
 
-/// A minimized version of `pallet-bridge-grandpa::Call` that can be used without a runtime.
+/// A minimized version of `pezpallet-bridge-grandpa::Call` that can be used without a runtime.
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 #[allow(non_camel_case_types)]
 pub enum BridgeGrandpaCall<Header: HeaderT> {
-	/// `pallet-bridge-grandpa::Call::submit_finality_proof`
+	/// `pezpallet-bridge-grandpa::Call::submit_finality_proof`
 	#[codec(index = 0)]
 	submit_finality_proof {
 		/// The header that we are going to finalize.
@@ -38,13 +38,13 @@ pub enum BridgeGrandpaCall<Header: HeaderT> {
 		/// Finality justification for the `finality_target`.
 		justification: justification::GrandpaJustification<Header>,
 	},
-	/// `pallet-bridge-grandpa::Call::initialize`
+	/// `pezpallet-bridge-grandpa::Call::initialize`
 	#[codec(index = 1)]
 	initialize {
 		/// All data, required to initialize the pallet.
 		init_data: InitializationData<Header>,
 	},
-	/// `pallet-bridge-grandpa::Call::submit_finality_proof_ex`
+	/// `pezpallet-bridge-grandpa::Call::submit_finality_proof_ex`
 	#[codec(index = 4)]
 	submit_finality_proof_ex {
 		/// The header that we are going to finalize.

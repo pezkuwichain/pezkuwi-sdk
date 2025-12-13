@@ -59,7 +59,7 @@ macro_rules! decl_worker_main {
 			#[cfg(target_os = "linux")]
 			use $crate::worker::security;
 
-			$crate::sp_tracing::try_init_simple();
+			$crate::pezsp_tracing::try_init_simple();
 
 			let args = std::env::args().collect::<Vec<_>>();
 			if args.len() == 1 {

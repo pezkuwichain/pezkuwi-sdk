@@ -2,16 +2,16 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 //! Governance API for controlling the Ethereum side of the bridge
 use super::*;
-use frame_support::{
+use pezframe_support::{
 	migrations::VersionedMigration,
-	pallet_prelude::*,
+	pezpallet_prelude::*,
 	traits::{OnRuntimeUpgrade, UncheckedOnRuntimeUpgrade},
 	weights::Weight,
 };
-use sp_std::marker::PhantomData;
+use pezsp_std::marker::PhantomData;
 
 #[cfg(feature = "try-runtime")]
-use sp_runtime::TryRuntimeError;
+use pezsp_runtime::TryRuntimeError;
 
 const LOG_TARGET: &str = "ethereum_system::migration";
 
@@ -71,7 +71,7 @@ pub mod v0 {
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(_: Vec<u8>) -> Result<(), TryRuntimeError> {
-			frame_support::ensure!(
+			pezframe_support::ensure!(
 				Pallet::<T>::is_initialized(),
 				"Agents and channels were not initialized."
 			);
@@ -84,7 +84,7 @@ pub mod v1 {
 	use super::*;
 
 	#[cfg(feature = "try-runtime")]
-	use sp_core::U256;
+	use pezsp_core::U256;
 
 	/// Descreases the fee per gas.
 	pub struct FeePerGasMigration<T>(PhantomData<T>);
@@ -219,5 +219,5 @@ pub type FeePerGasMigrationV0ToV1<T> = VersionedMigration<
 	1,
 	v1::FeePerGasMigration<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;

@@ -22,8 +22,8 @@
 //! single message with nonce `N`, then the transaction with nonces `N..=N+100` will
 //! be rejected. This can lower bridge throughput down to one message per block.
 
-use frame_support::traits::Get;
-use sp_runtime::transaction_validity::TransactionPriority;
+use pezframe_support::traits::Get;
+use pezsp_runtime::transaction_validity::TransactionPriority;
 
 // reexport everything from `integrity_tests` module
 #[allow(unused_imports)]
@@ -53,19 +53,19 @@ mod integrity_tests {
 
 	use bp_messages::MessageNonce;
 	use bp_runtime::PreComputedSize;
-	use frame_support::{
+	use pezframe_support::{
 		dispatch::{DispatchClass, DispatchInfo, Pays, PostDispatchInfo},
 		traits::Get,
 	};
-	use pallet_transaction_payment::OnChargeTransaction;
-	use sp_runtime::{
+	use pezpallet_transaction_payment::OnChargeTransaction;
+	use pezsp_runtime::{
 		traits::{Dispatchable, UniqueSaturatedInto, Zero},
 		transaction_validity::TransactionPriority,
 		FixedPointOperand, SaturatedConversion, Saturating,
 	};
 
 	type BalanceOf<T> =
-		<<T as pallet_transaction_payment::Config>::OnChargeTransaction as OnChargeTransaction<
+		<<T as pezpallet_transaction_payment::Config>::OnChargeTransaction as OnChargeTransaction<
 			T,
 		>>::Balance;
 
@@ -145,7 +145,7 @@ mod integrity_tests {
 		use bp_header_chain::{
 			max_expected_submit_finality_proof_arguments_size, ChainWithGrandpa,
 		};
-		use pallet_bridge_grandpa::WeightInfoExt;
+		use pezpallet_bridge_grandpa::WeightInfoExt;
 
 		/// Ensures that the value of `PriorityBoostPerHeader` matches the value of
 		/// `tip_boost_per_header`.
@@ -158,7 +158,7 @@ mod integrity_tests {
 			tip_boost_per_header: BalanceOf<Runtime>,
 		) where
 			Runtime:
-				pallet_transaction_payment::Config + pallet_bridge_grandpa::Config<GrandpaInstance>,
+				pezpallet_transaction_payment::Config + pezpallet_bridge_grandpa::Config<GrandpaInstance>,
 			GrandpaInstance: 'static,
 			PriorityBoostPerHeader: Get<TransactionPriority>,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
@@ -190,7 +190,7 @@ mod integrity_tests {
 		) -> TransactionPriority
 		where
 			Runtime:
-				pallet_transaction_payment::Config + pallet_bridge_grandpa::Config<GrandpaInstance>,
+				pezpallet_transaction_payment::Config + pezpallet_bridge_grandpa::Config<GrandpaInstance>,
 			GrandpaInstance: 'static,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
 			BalanceOf<Runtime>: Send + Sync + FixedPointOperand,
@@ -206,14 +206,14 @@ mod integrity_tests {
 
 			// finally we are able to estimate transaction size and weight
 			let transaction_size = base_tx_size.saturating_add(tx_call_size);
-			let transaction_weight = <Runtime as ::pallet_bridge_grandpa::Config<
+			let transaction_weight = <Runtime as ::pezpallet_bridge_grandpa::Config<
 				GrandpaInstance,
 			>>::WeightInfo::submit_finality_proof_weight(
 				Runtime::BridgedChain::MAX_AUTHORITIES_COUNT * 2 / 3 + 1,
 				Runtime::BridgedChain::REASONABLE_HEADERS_IN_JUSTIFICATION_ANCESTRY,
 			);
 
-			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::get_priority(
+			pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::get_priority(
 				&DispatchInfo {
 					call_weight: transaction_weight,
 					extension_weight: Default::default(),
@@ -232,7 +232,7 @@ mod integrity_tests {
 		use super::*;
 
 		use bp_runtime::Teyrchain;
-		use pallet_bridge_teyrchains::WeightInfoExt;
+		use pezpallet_bridge_teyrchains::WeightInfoExt;
 
 		/// Ensures that the value of `PriorityBoostPerHeader` matches the value of
 		/// `tip_boost_per_header`.
@@ -249,8 +249,8 @@ mod integrity_tests {
 		>(
 			tip_boost_per_header: BalanceOf<Runtime>,
 		) where
-			Runtime: pallet_transaction_payment::Config
-				+ pallet_bridge_teyrchains::Config<TeyrchainsInstance>,
+			Runtime: pezpallet_transaction_payment::Config
+				+ pezpallet_bridge_teyrchains::Config<TeyrchainsInstance>,
 			TeyrchainsInstance: 'static,
 			Para: Teyrchain,
 			PriorityBoostPerHeader: Get<TransactionPriority>,
@@ -288,8 +288,8 @@ mod integrity_tests {
 			tip: BalanceOf<Runtime>,
 		) -> TransactionPriority
 		where
-			Runtime: pallet_transaction_payment::Config
-				+ pallet_bridge_teyrchains::Config<TeyrchainsInstance>,
+			Runtime: pezpallet_transaction_payment::Config
+				+ pezpallet_bridge_teyrchains::Config<TeyrchainsInstance>,
 			TeyrchainsInstance: 'static,
 			Para: Teyrchain,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
@@ -300,14 +300,14 @@ mod integrity_tests {
 			// all call arguments except the proof itself)
 			let base_tx_size = 512;
 			// let's say we are relaying largest teyrchain headers and proof takes some more bytes
-			let tx_call_size = <Runtime as pallet_bridge_teyrchains::Config<
+			let tx_call_size = <Runtime as pezpallet_bridge_teyrchains::Config<
 				TeyrchainsInstance,
 			>>::WeightInfo::expected_extra_storage_proof_size()
 			.saturating_add(Para::MAX_HEADER_SIZE);
 
 			// finally we are able to estimate transaction size and weight
 			let transaction_size = base_tx_size.saturating_add(tx_call_size);
-			let transaction_weight = <Runtime as pallet_bridge_teyrchains::Config<
+			let transaction_weight = <Runtime as pezpallet_bridge_teyrchains::Config<
 				TeyrchainsInstance,
 			>>::WeightInfo::submit_teyrchain_heads_weight(
 				Runtime::DbWeight::get(),
@@ -316,7 +316,7 @@ mod integrity_tests {
 				1,
 			);
 
-			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::get_priority(
+			pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::get_priority(
 				&DispatchInfo {
 					call_weight: transaction_weight,
 					extension_weight: Default::default(),
@@ -335,7 +335,7 @@ mod integrity_tests {
 		use super::*;
 
 		use bp_messages::ChainWithMessages;
-		use pallet_bridge_messages::WeightInfoExt;
+		use pezpallet_bridge_messages::WeightInfoExt;
 
 		/// Ensures that the value of `PriorityBoostPerMessage` matches the value of
 		/// `tip_boost_per_message`.
@@ -347,8 +347,8 @@ mod integrity_tests {
 		pub fn ensure_priority_boost_is_sane<Runtime, MessagesInstance, PriorityBoostPerMessage>(
 			tip_boost_per_message: BalanceOf<Runtime>,
 		) where
-			Runtime: pallet_transaction_payment::Config
-				+ pallet_bridge_messages::Config<MessagesInstance>,
+			Runtime: pezpallet_transaction_payment::Config
+				+ pezpallet_bridge_messages::Config<MessagesInstance>,
 			MessagesInstance: 'static,
 			PriorityBoostPerMessage: Get<TransactionPriority>,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
@@ -375,8 +375,8 @@ mod integrity_tests {
 			tip: BalanceOf<Runtime>,
 		) -> TransactionPriority
 		where
-			Runtime: pallet_transaction_payment::Config
-				+ pallet_bridge_messages::Config<MessagesInstance>,
+			Runtime: pezpallet_transaction_payment::Config
+				+ pezpallet_bridge_messages::Config<MessagesInstance>,
 			MessagesInstance: 'static,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
 			BalanceOf<Runtime>: Send + Sync + FixedPointOperand,
@@ -389,7 +389,7 @@ mod integrity_tests {
 			// trie nodes to the proof (x0.5 because we expect some nodes to be reused)
 			let estimated_message_size = 512;
 			// let's say all our messages have the same dispatch weight
-			let estimated_message_dispatch_weight = <Runtime as pallet_bridge_messages::Config<
+			let estimated_message_dispatch_weight = <Runtime as pezpallet_bridge_messages::Config<
 				MessagesInstance,
 			>>::WeightInfo::message_dispatch_weight(
 				estimated_message_size
@@ -397,7 +397,7 @@ mod integrity_tests {
 			// messages proof argument size is (for every message) messages size + some additional
 			// trie nodes. Some of them are reused by different messages, so let's take 2/3 of
 			// default "overhead" constant
-			let messages_proof_size = <Runtime as pallet_bridge_messages::Config<
+			let messages_proof_size = <Runtime as pezpallet_bridge_messages::Config<
 				MessagesInstance,
 			>>::WeightInfo::expected_extra_storage_proof_size()
 			.saturating_mul(2)
@@ -407,7 +407,7 @@ mod integrity_tests {
 
 			// finally we are able to estimate transaction size and weight
 			let transaction_size = base_tx_size.saturating_add(messages_proof_size);
-			let transaction_weight = <Runtime as pallet_bridge_messages::Config<
+			let transaction_weight = <Runtime as pezpallet_bridge_messages::Config<
 				MessagesInstance,
 			>>::WeightInfo::receive_messages_proof_weight(
 				&PreComputedSize(transaction_size as _),
@@ -415,7 +415,7 @@ mod integrity_tests {
 				estimated_message_dispatch_weight.saturating_mul(messages),
 			);
 
-			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::get_priority(
+			pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::get_priority(
 				&DispatchInfo {
 					call_weight: transaction_weight,
 					extension_weight: Default::default(),

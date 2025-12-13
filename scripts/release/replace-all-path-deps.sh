@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Find all Cargo.toml files excluding the root,umbrella/Cargo.toml,
-# substrate/frame/contracts/fixtures/build/Cargo.toml,
-# substrate/frame/contracts/fixtures/contracts/common/Cargo.toml
+# bizinikiwi/frame/contracts/fixtures/build/Cargo.toml,
+# bizinikiwi/frame/contracts/fixtures/contracts/common/Cargo.toml
 find . -name "Cargo.toml" \
   ! -path "./Cargo.toml" \
   ! -path "./umbrella/Cargo.toml" \
-  ! -path "./substrate/frame/contracts/fixtures/build/Cargo.toml" \
-  ! -path "./substrate/frame/contracts/fixtures/contracts/common/Cargo.toml"| while read -r file; do
+  ! -path "./bizinikiwi/frame/contracts/fixtures/build/Cargo.toml" \
+  ! -path "./bizinikiwi/frame/contracts/fixtures/contracts/common/Cargo.toml"| while read -r file; do
 
   echo "Processing $file..."
 

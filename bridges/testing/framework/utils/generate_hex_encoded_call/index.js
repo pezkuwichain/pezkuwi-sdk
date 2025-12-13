@@ -3,7 +3,7 @@ const { exit } = require("process");
 const { WsProvider, ApiPromise } = require("@polkadot/api");
 const util = require("@polkadot/util");
 
-// connect to a substrate chain and return the api object
+// connect to a bizinikiwi chain and return the api object
 async function connect(endpoint, types = {}) {
 	const provider = new WsProvider(endpoint);
 	const api = await ApiPromise.create({

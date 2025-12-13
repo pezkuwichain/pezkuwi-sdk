@@ -24,7 +24,7 @@ use codec::{Decode, Encode};
 use pezkuwi_primitives::{
 	AssignmentId, CandidateHash, CoreIndex, GroupIndex, IndexedVec, SessionInfo, ValidatorIndex,
 };
-use sc_keystore::LocalKeystore;
+use pezsc_keystore::LocalKeystore;
 
 use std::collections::HashMap;
 

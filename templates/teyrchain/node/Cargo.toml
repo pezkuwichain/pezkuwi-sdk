@@ -1,6 +1,6 @@
 [package]
 name = "teyrchain-template-node"
-description = "A teyrchain node template built with Substrate and Cumulus, part of Pezkuwi Sdk."
+description = "A teyrchain node template built with Bizinikiwi and Pezcumulus, part of Pezkuwi Sdk."
 version = "0.0.0"
 license = "Unlicense"
 authors.workspace = true
@@ -27,11 +27,11 @@ pezkuwi-sdk = { workspace = true, features = ["node", "pezkuwi-primitives"] }
 
 teyrchain-template-runtime = { workspace = true }
 
-# Substrate
+# Bizinikiwi
 prometheus-endpoint = { workspace = true, default-features = true }
 
 [build-dependencies]
-pezkuwi-sdk = { workspace = true, features = ["substrate-build-script-utils"] }
+pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]

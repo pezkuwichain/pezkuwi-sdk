@@ -55,7 +55,7 @@ requester is responsible of making that availability a reality.
 
 It does that by querying checking occupied cores for all active leaves. For each occupied core it will spawn a task
 fetching the erasure chunk which has the `ValidatorIndex` of the node. For this an `ChunkFetchingRequest` is issued, via
-Substrate's generic request/response protocol.
+Bizinikiwi's generic request/response protocol.
 
 The spawned task will start trying to fetch the chunk from validators in responsible group of the occupied core, in a
 random order. For ensuring that we use already open TCP connections wherever possible, the requester maintains a cache
@@ -65,13 +65,13 @@ Note however that, because not all validators in a group have to be actual backe
 the needed chunk. This in turn could lead to low throughput, as we have to wait for fetches to fail, before reaching a
 validator finally having our chunk. We do rank back validators not delivering our chunk, but as backers could vary from
 block to block on a perfectly legitimate basis, this is still not ideal. See issues
-[2509](https://github.com/paritytech/polkadot/issues/2509) and
-[2512](https://github.com/paritytech/polkadot/issues/2512) for more information.
+[2509](https://github.com/pezkuwichain/kurdistan-sdk/issues/136) and
+[2512](https://github.com/pezkuwichain/kurdistan-sdk/issues/137) for more information.
 
 The current implementation also only fetches chunks for occupied cores in blocks in active leaves. This means though, if
 active leaves skips a block or we are particularly slow in fetching our chunk, we might not fetch our chunk if
 availability reached 2/3 fast enough (slot becomes free). This is not desirable as we would like as many validators as
-possible to have their chunk. See this [issue](https://github.com/paritytech/polkadot/issues/2513) for more details.
+possible to have their chunk. See this [issue](https://github.com/pezkuwichain/kurdistan-sdk/issues/138) for more details.
 
 
 ### Serving

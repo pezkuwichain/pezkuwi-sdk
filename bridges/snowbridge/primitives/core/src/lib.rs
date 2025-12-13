@@ -21,16 +21,16 @@ pub use pezkuwi_teyrchain_primitives::primitives::{
 	Id as ParaId, IsSystem, Sibling as SiblingParaId,
 };
 pub use ringbuffer::{RingBufferMap, RingBufferMapImpl};
-pub use sp_core::U256;
+pub use pezsp_core::U256;
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::{traits::Contains, BoundedVec};
+use pezframe_support::{traits::Contains, BoundedVec};
 use hex_literal::hex;
 use scale_info::TypeInfo;
-use sp_core::{ConstU32, H256};
-use sp_io::hashing::keccak_256;
-use sp_runtime::{traits::AccountIdConversion, RuntimeDebug};
-use sp_std::prelude::*;
+use pezsp_core::{ConstU32, H256};
+use pezsp_io::hashing::keccak_256;
+use pezsp_runtime::{traits::AccountIdConversion, RuntimeDebug};
+use pezsp_std::prelude::*;
 use xcm::latest::{Asset, Junction::Teyrchain, Location, Result as XcmResult, XcmContext};
 use xcm_executor::traits::TransactAsset;
 
@@ -41,7 +41,7 @@ pub use pricing::{PricingParameters, Rewards};
 
 pub fn sibling_sovereign_account<T>(para_id: ParaId) -> T::AccountId
 where
-	T: frame_system::Config,
+	T: pezframe_system::Config,
 {
 	SiblingParaId::from(para_id).into_account_truncating()
 }

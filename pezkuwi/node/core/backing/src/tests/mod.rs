@@ -35,10 +35,10 @@ use pezkuwi_primitives_test_helpers::{
 	dummy_committed_candidate_receipt_v2, dummy_hash, validator_pubkeys, CandidateDescriptor,
 };
 use pezkuwi_statement_table::v2::Misbehavior;
-use sp_application_crypto::AppCrypto;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::Keystore;
-use sp_tracing as _;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::Keystore;
+use pezsp_tracing as _;
 use std::{
 	collections::{BTreeMap, HashMap, VecDeque},
 	time::Duration,
@@ -115,7 +115,7 @@ impl Default for TestState {
 			Sr25519Keyring::One,
 		];
 
-		let keystore = Arc::new(sc_keystore::LocalKeystore::in_memory());
+		let keystore = Arc::new(pezsc_keystore::LocalKeystore::in_memory());
 		// Make sure `Alice` key is in the keystore, so this mocked node will be a teyrchain
 		// validator.
 		Keystore::sr25519_generate_new(&*keystore, ValidatorId::ID, Some(&validators[0].to_seed()))
@@ -187,9 +187,9 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	keystore: KeystorePtr,
 	test: impl FnOnce(VirtualOverseer) -> T,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
@@ -2156,7 +2156,7 @@ fn backing_works_after_failed_validation() {
 
 #[test]
 fn candidate_backing_reorders_votes() {
-	use sp_core::Encode;
+	use pezsp_core::Encode;
 
 	let core_idx = CoreIndex(10);
 	let validators = vec![
@@ -2419,7 +2419,7 @@ fn retry_works() {
 #[test]
 fn observes_backing_even_if_not_validator() {
 	let mut test_state = TestState::default();
-	let empty_keystore = Arc::new(sc_keystore::LocalKeystore::in_memory());
+	let empty_keystore = Arc::new(pezsc_keystore::LocalKeystore::in_memory());
 	test_harness(empty_keystore, |mut virtual_overseer| async move {
 		let para_id = activate_initial_leaf(&mut virtual_overseer, &mut test_state).await;
 

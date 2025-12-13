@@ -42,7 +42,7 @@ has exactly one downward message queue.
 - **Lease holding teyrchain:** A teyrchain possessing an active slot lease. The lease holder is assigned a single
   availability core for the duration of the lease, granting consistent blockspace scheduling at the rate 1 parablock per
   relay block.
-- **PDK (Teyrchain Development Kit):** A toolset that allows one to develop a teyrchain. Cumulus is a PDK.
+- **PDK (Teyrchain Development Kit):** A toolset that allows one to develop a teyrchain. Pezcumulus is a PDK.
 - **Preimage:** In our context, if `H(X) = Y` where `H` is a hash function and `Y` is the hash, then `X` is the hash
   preimage.
 - **Proof-of-Validity (PoV):** A stateless-client proof that a teyrchain candidate is valid, with respect to some
@@ -74,6 +74,6 @@ has exactly one downward message queue.
 
 ## See Also
 
-Also of use is the [Substrate Glossary](https://substrate.dev/docs/en/knowledgebase/getting-started/glossary).
+Also of use is the [Bizinikiwi Glossary](https://bizinikiwi.dev/docs/en/knowledgebase/getting-started/glossary).
 
 [0]: https://wiki.network.pezkuwichain.io/docs/learn-consensus

@@ -29,7 +29,7 @@ use bp_runtime::{
 	},
 	EncodedOrDecodedCall, StorageMapKeyProvider, TransactionEra,
 };
-use frame_support::{
+use pezframe_support::{
 	dispatch::DispatchClass,
 	parameter_types,
 	weights::{
@@ -38,18 +38,18 @@ use frame_support::{
 	},
 	Blake2_128Concat,
 };
-use frame_system::limits;
-use sp_core::{storage::StorageKey, Hasher as HasherT};
-use sp_runtime::{
+use pezframe_system::limits;
+use pezsp_core::{storage::StorageKey, Hasher as HasherT};
+use pezsp_runtime::{
 	generic,
 	traits::{BlakeTwo256, IdentifyAccount, Verify},
 	MultiAddress, MultiSignature, OpaqueExtrinsic,
 };
-use sp_std::prelude::Vec;
+use pezsp_std::prelude::Vec;
 
-// Re-export's to avoid extra substrate dependencies in chain-specific crates.
-pub use frame_support::{weights::constants::ExtrinsicBaseWeight, Parameter};
-pub use sp_runtime::{traits::Convert, Perbill};
+// Re-export's to avoid extra bizinikiwi dependencies in chain-specific crates.
+pub use pezframe_support::{weights::constants::ExtrinsicBaseWeight, Parameter};
+pub use pezsp_runtime::{traits::Convert, Perbill};
 
 pub mod teyrchains;
 
@@ -159,7 +159,7 @@ parameter_types! {
 		.build_or_panic();
 }
 
-// TODO [#78] may need to be updated after https://github.com/paritytech/parity-bridges-common/issues/78
+// TODO [#78] may need to be updated after https://github.com/pezkuwichain/kurdistan-sdk/issues/88
 /// Maximal number of messages in single delivery transaction.
 pub const MAX_MESSAGES_IN_DELIVERY_TRANSACTION: MessageNonce = 128;
 
@@ -256,7 +256,7 @@ pub fn max_extrinsic_weight() -> Weight {
 ///
 /// We need to use this approach when we don't have access to the runtime.
 /// The equivalent command to invoke in case full `Runtime` is known is this:
-/// `let key = frame_system::Account::<Runtime>::storage_map_final_key(&account_id);`
+/// `let key = pezframe_system::Account::<Runtime>::storage_map_final_key(&account_id);`
 pub struct AccountInfoStorageMapKeyProvider;
 
 impl StorageMapKeyProvider for AccountInfoStorageMapKeyProvider {

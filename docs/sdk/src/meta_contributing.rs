@@ -63,7 +63,7 @@
 //!
 //! > A prime example of this, the list of CLI arguments of a particular binary should not be
 //! > documented in multiple places across this crate. It should be only be documented in the
-//! > corresponding crate (e.g. `sc_cli`).
+//! > corresponding crate (e.g. `pezsc_cli`).
 //!
 //! > Moreover, this means that as a contributor, **it is your responsibility to have a grasp over
 //! > what topics are already covered in this crate, and how you can build on top of the information
@@ -86,7 +86,7 @@
 //! pub mod pallet {
 //! #   use frame::prelude::*;
 //! #   #[pallet::config]
-//! #   pub trait Config: frame_system::Config {}
+//! #   pub trait Config: pezframe_system::Config {}
 //! #   #[pallet::pallet]
 //! #   pub struct Pallet<T>(_);
 //!     #[pallet::call]
@@ -146,6 +146,6 @@
 //! ```
 //!
 //! If even faster build time for docs is needed, you can temporarily remove most of the
-//! substrate/cumulus dependencies that are only used for linking purposes.
+//! bizinikiwi/pezcumulus dependencies that are only used for linking purposes.
 //!
 //! For more on local development, see [`crate::reference_docs::development_environment_advice`].

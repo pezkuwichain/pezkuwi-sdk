@@ -19,10 +19,10 @@ bp-header-chain = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
 bp-runtime = { workspace = true }
 
-# Substrate Based Dependencies
-frame-support = { workspace = true }
-sp-api = { workspace = true }
-sp-std = { workspace = true }
+# Bizinikiwi Based Dependencies
+pezframe-support = { workspace = true }
+pezsp-api = { workspace = true }
+pezsp-std = { workspace = true }
 
 [features]
 default = ["std"]
@@ -30,14 +30,14 @@ std = [
 	"bp-header-chain/std",
 	"bp-pezkuwi-core/std",
 	"bp-runtime/std",
-	"frame-support/std",
-	"sp-api/std",
-	"sp-std/std",
+	"pezframe-support/std",
+	"pezsp-api/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
 	"bp-header-chain/runtime-benchmarks",
 	"bp-pezkuwi-core/runtime-benchmarks",
 	"bp-runtime/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
 ]

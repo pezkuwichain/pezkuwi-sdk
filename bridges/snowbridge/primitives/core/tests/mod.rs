@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-	use frame_support::traits::Contains;
+	use pezframe_support::traits::Contains;
 	use snowbridge_core::AllowSiblingsOnly;
 	use xcm::prelude::{Junction::Teyrchain, Location};
 

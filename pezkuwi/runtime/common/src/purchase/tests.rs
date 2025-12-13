@@ -19,11 +19,11 @@
 #[cfg(test)]
 use super::*;
 
-use sp_core::crypto::AccountId32;
+use pezsp_core::crypto::AccountId32;
 // The testing primitives are very useful for avoiding having to work with signatures
 // or public keys. `u64` is used as the `AccountId` and no `Signature`s are required.
-use frame_support::{assert_noop, assert_ok, traits::Currency};
-use sp_runtime::{traits::Dispatchable, ArithmeticError, DispatchError::BadOrigin};
+use pezframe_support::{assert_noop, assert_ok, traits::Currency};
+use pezsp_runtime::{traits::Dispatchable, ArithmeticError, DispatchError::BadOrigin};
 
 use crate::purchase::mock::*;
 
@@ -451,7 +451,7 @@ fn payout_works() {
 		);
 		// Vesting lock is removed in whole on block 101 (100 blocks after block 1)
 		System::set_block_number(100);
-		let vest_call = RuntimeCall::Vesting(pallet_vesting::Call::<Test>::vest {});
+		let vest_call = RuntimeCall::Vesting(pezpallet_vesting::Call::<Test>::vest {});
 		assert_ok!(vest_call.clone().dispatch(RuntimeOrigin::signed(alice())));
 		assert_ok!(vest_call.clone().dispatch(RuntimeOrigin::signed(bob())));
 		assert_eq!(<Test as Config>::VestingSchedule::vesting_balance(&alice()), Some(45));

@@ -16,26 +16,26 @@
 
 //! Chain specifications for the test runtime.
 
-use pallet_staking::Forcing;
+use pezpallet_staking::Forcing;
 use pezkuwi_primitives::{
 	node_features, AccountId, AssignmentId, NodeFeatures, SchedulerParams, ValidatorId,
 	MAX_CODE_SIZE, MAX_POV_SIZE,
 };
 use pezkuwi_service::chain_spec::Extensions;
 use pezkuwi_test_runtime::BABE_GENESIS_EPOCH_CONFIG;
-use sc_chain_spec::{ChainSpec, ChainType};
-use sc_consensus_grandpa::AuthorityId as GrandpaId;
-use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
-use sp_consensus_babe::AuthorityId as BabeId;
-use sp_core::{crypto::get_public_from_string_or_panic, sr25519};
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::Perbill;
+use pezsc_chain_spec::{ChainSpec, ChainType};
+use pezsc_consensus_grandpa::AuthorityId as GrandpaId;
+use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+use pezsp_consensus_babe::AuthorityId as BabeId;
+use pezsp_core::{crypto::get_public_from_string_or_panic, sr25519};
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::Perbill;
 use test_runtime_constants::currency::DOTS;
 
 const DEFAULT_PROTOCOL_ID: &str = "hez";
 
 /// The `ChainSpec` parameterized for pezkuwi test runtime.
-pub type PezkuwiChainSpec = sc_service::GenericChainSpec<Extensions>;
+pub type PezkuwiChainSpec = pezsc_service::GenericChainSpec<Extensions>;
 
 /// Returns the properties for the [`PezkuwiChainSpec`].
 pub fn pezkuwi_chain_spec_properties() -> serde_json::map::Map<String, serde_json::Value> {

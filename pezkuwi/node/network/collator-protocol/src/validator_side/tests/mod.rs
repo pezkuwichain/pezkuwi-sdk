@@ -17,10 +17,10 @@
 use super::*;
 use assert_matches::assert_matches;
 use futures::{executor, future, Future};
-use sc_network::ProtocolName;
-use sp_core::{crypto::Pair, Encode};
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::Keystore;
+use pezsc_network::ProtocolName;
+use pezsp_core::{crypto::Pair, Encode};
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::Keystore;
 use std::{
 	collections::{BTreeMap, VecDeque},
 	iter,
@@ -208,14 +208,14 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	ah_invulnerable_collators: HashSet<PeerId>,
 	test: impl FnOnce(TestHarness) -> T,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
 
-	let keystore = Arc::new(sc_keystore::LocalKeystore::in_memory());
+	let keystore = Arc::new(pezsc_keystore::LocalKeystore::in_memory());
 	Keystore::sr25519_generate_new(
 		&*keystore,
 		pezkuwi_primitives::TEYRCHAIN_KEY_TYPE_ID,

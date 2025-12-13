@@ -22,21 +22,21 @@ use pezkuwi_primitives::BlockNumber as RelayBlockNumber;
 use pezkuwi_teyrchain_primitives::primitives::{
 	DmpMessageHandler, Id as ParaId, XcmpMessageFormat, XcmpMessageHandler,
 };
-use sp_runtime::traits::{Get, Hash};
+use pezsp_runtime::traits::{Get, Hash};
 
 use xcm::{latest::prelude::*, VersionedXcm};
 
 pub use pallet::*;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}
 
@@ -96,7 +96,7 @@ pub mod pallet {
 			max_weight: xcm::latest::Weight,
 		) -> Result<xcm::latest::Weight, XcmError> {
 			let hash = Encode::using_encoded(&xcm, T::Hashing::hash);
-			let mut message_hash = Encode::using_encoded(&xcm, sp_io::hashing::blake2_256);
+			let mut message_hash = Encode::using_encoded(&xcm, pezsp_io::hashing::blake2_256);
 			let (result, event) = match Xcm::<T::RuntimeCall>::try_from(xcm) {
 				Ok(xcm) => {
 					let location = (Parent, Teyrchain(sender.into()));
@@ -159,7 +159,7 @@ pub mod pallet {
 			limit: Weight,
 		) -> Weight {
 			for (_sent_at, data) in iter {
-				let mut id = sp_io::hashing::blake2_256(&data[..]);
+				let mut id = pezsp_io::hashing::blake2_256(&data[..]);
 				let maybe_versioned = VersionedXcm::<T::RuntimeCall>::decode(&mut &data[..]);
 				match maybe_versioned {
 					Err(_) => {

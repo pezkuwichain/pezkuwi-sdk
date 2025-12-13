@@ -17,9 +17,9 @@
 //! Primitives that may be used by different message delivery and dispatch mechanisms.
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 use scale_info::TypeInfo;
-use sp_runtime::RuntimeDebug;
+use pezsp_runtime::RuntimeDebug;
 
 /// Message dispatch result.
 #[derive(Encode, Decode, DecodeWithMemTracking, RuntimeDebug, Clone, PartialEq, Eq, TypeInfo)]

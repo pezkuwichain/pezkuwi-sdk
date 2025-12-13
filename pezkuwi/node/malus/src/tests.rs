@@ -63,7 +63,7 @@ async fn overseer_send<T: Into<AllMessages>>(overseer: &mut TestSubsystemContext
 	overseer.send(FromOrchestra::Communication { msg }).await;
 }
 
-use sp_core::testing::TaskExecutor;
+use pezsp_core::testing::TaskExecutor;
 
 fn launch_harness<F, M, Sub, G>(test_gen: G)
 where

@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -19,32 +19,32 @@ use crate::cli::Consensus;
 use futures::FutureExt;
 use minimal_template_runtime::{interface::OpaqueBlock as Block, RuntimeApi};
 use pezkuwi_sdk::{
-	sc_client_api::backend::Backend,
-	sc_executor::WasmExecutor,
-	sc_service::{error::Error as ServiceError, Configuration, TaskManager},
-	sc_telemetry::{Telemetry, TelemetryWorker},
-	sc_transaction_pool_api::OffchainTransactionPoolFactory,
-	sp_runtime::traits::Block as BlockT,
+	pezsc_client_api::backend::Backend,
+	pezsc_executor::WasmExecutor,
+	pezsc_service::{error::Error as ServiceError, Configuration, TaskManager},
+	pezsc_telemetry::{Telemetry, TelemetryWorker},
+	pezsc_transaction_pool_api::OffchainTransactionPoolFactory,
+	pezsp_runtime::traits::Block as BlockT,
 	*,
 };
 use std::sync::Arc;
 
-type HostFunctions = sp_io::SubstrateHostFunctions;
+type HostFunctions = pezsp_io::BizinikiwiHostFunctions;
 
 #[docify::export]
 pub(crate) type FullClient =
-	sc_service::TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>;
+	pezsc_service::TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>;
 
-type FullBackend = sc_service::TFullBackend<Block>;
-type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
+type FullBackend = pezsc_service::TFullBackend<Block>;
+type FullSelectChain = pezsc_consensus::LongestChain<FullBackend, Block>;
 
 /// Assembly of PartialComponents (enough to run chain ops subcommands)
-pub type Service = sc_service::PartialComponents<
+pub type Service = pezsc_service::PartialComponents<
 	FullClient,
 	FullBackend,
 	FullSelectChain,
-	sc_consensus::DefaultImportQueue<Block>,
-	sc_transaction_pool::TransactionPoolHandle<Block, FullClient>,
+	pezsc_consensus::DefaultImportQueue<Block>,
+	pezsc_transaction_pool::TransactionPoolHandle<Block, FullClient>,
 	Option<Telemetry>,
 >;
 
@@ -53,17 +53,17 @@ pub fn new_partial(config: &Configuration) -> Result<Service, ServiceError> {
 		.telemetry_endpoints
 		.clone()
 		.filter(|x| !x.is_empty())
-		.map(|endpoints| -> Result<_, sc_telemetry::Error> {
+		.map(|endpoints| -> Result<_, pezsc_telemetry::Error> {
 			let worker = TelemetryWorker::new(16)?;
 			let telemetry = worker.handle().new_telemetry(endpoints);
 			Ok((worker, telemetry))
 		})
 		.transpose()?;
 
-	let executor = sc_service::new_wasm_executor(&config.executor);
+	let executor = pezsc_service::new_wasm_executor(&config.executor);
 
 	let (client, backend, keystore_container, task_manager) =
-		sc_service::new_full_parts::<Block, RuntimeApi, _>(
+		pezsc_service::new_full_parts::<Block, RuntimeApi, _>(
 			config,
 			telemetry.as_ref().map(|(_, telemetry)| telemetry.handle()),
 			executor,
@@ -75,10 +75,10 @@ pub fn new_partial(config: &Configuration) -> Result<Service, ServiceError> {
 		telemetry
 	});
 
-	let select_chain = sc_consensus::LongestChain::new(backend.clone());
+	let select_chain = pezsc_consensus::LongestChain::new(backend.clone());
 
 	let transaction_pool = Arc::from(
-		sc_transaction_pool::Builder::new(
+		pezsc_transaction_pool::Builder::new(
 			task_manager.spawn_essential_handle(),
 			client.clone(),
 			config.role.is_authority().into(),
@@ -88,13 +88,13 @@ pub fn new_partial(config: &Configuration) -> Result<Service, ServiceError> {
 		.build(),
 	);
 
-	let import_queue = sc_consensus_manual_seal::import_queue(
+	let import_queue = pezsc_consensus_manual_seal::import_queue(
 		Box::new(client.clone()),
 		&task_manager.spawn_essential_handle(),
 		config.prometheus_registry(),
 	);
 
-	Ok(sc_service::PartialComponents {
+	Ok(pezsc_service::PartialComponents {
 		client,
 		backend,
 		task_manager,
@@ -107,11 +107,11 @@ pub fn new_partial(config: &Configuration) -> Result<Service, ServiceError> {
 }
 
 /// Builds a new service for a full client.
-pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Hash>>(
+pub fn new_full<Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>::Hash>>(
 	config: Configuration,
 	consensus: Consensus,
 ) -> Result<TaskManager, ServiceError> {
-	let sc_service::PartialComponents {
+	let pezsc_service::PartialComponents {
 		client,
 		backend,
 		mut task_manager,
@@ -122,7 +122,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 		other: mut telemetry,
 	} = new_partial(&config)?;
 
-	let net_config = sc_network::config::FullNetworkConfiguration::<
+	let net_config = pezsc_network::config::FullNetworkConfiguration::<
 		Block,
 		<Block as BlockT>::Hash,
 		Network,
@@ -135,7 +135,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 	);
 
 	let (network, system_rpc_tx, tx_handler_controller, sync_service) =
-		sc_service::build_network(sc_service::BuildNetworkParams {
+		pezsc_service::build_network(pezsc_service::BuildNetworkParams {
 			config: &config,
 			net_config,
 			client: client.clone(),
@@ -150,7 +150,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 
 	if config.offchain_worker.enabled {
 		let offchain_workers =
-			sc_offchain::OffchainWorkers::new(sc_offchain::OffchainWorkerOptions {
+			pezsc_offchain::OffchainWorkers::new(pezsc_offchain::OffchainWorkerOptions {
 				runtime_api_provider: client.clone(),
 				is_validator: config.role.is_authority(),
 				keystore: Some(keystore_container.keystore()),
@@ -181,7 +181,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 
 	let prometheus_registry = config.prometheus_registry().cloned();
 
-	let _rpc_handlers = sc_service::spawn_tasks(sc_service::SpawnTasksParams {
+	let _rpc_handlers = pezsc_service::spawn_tasks(pezsc_service::SpawnTasksParams {
 		network,
 		client: client.clone(),
 		keystore: keystore_container.keystore(),
@@ -197,7 +197,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 		tracing_execute_block: None,
 	})?;
 
-	let proposer = sc_basic_authorship::ProposerFactory::new(
+	let proposer = pezsc_basic_authorship::ProposerFactory::new(
 		task_manager.spawn_handle(),
 		client.clone(),
 		transaction_pool.clone(),
@@ -207,7 +207,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 
 	match consensus {
 		Consensus::InstantSeal => {
-			let params = sc_consensus_manual_seal::InstantSealParams {
+			let params = pezsc_consensus_manual_seal::InstantSealParams {
 				block_import: client.clone(),
 				env: proposer,
 				client,
@@ -215,11 +215,11 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 				select_chain,
 				consensus_data_provider: None,
 				create_inherent_data_providers: move |_, ()| async move {
-					Ok(sp_timestamp::InherentDataProvider::from_system_time())
+					Ok(pezsp_timestamp::InherentDataProvider::from_system_time())
 				},
 			};
 
-			let authorship_future = sc_consensus_manual_seal::run_instant_seal(params);
+			let authorship_future = pezsc_consensus_manual_seal::run_instant_seal(params);
 
 			task_manager.spawn_essential_handle().spawn_blocking(
 				"instant-seal",
@@ -232,7 +232,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 			task_manager.spawn_handle().spawn("block_authoring", None, async move {
 				loop {
 					futures_timer::Delay::new(std::time::Duration::from_millis(block_time)).await;
-					sink.try_send(sc_consensus_manual_seal::EngineCommand::SealNewBlock {
+					sink.try_send(pezsc_consensus_manual_seal::EngineCommand::SealNewBlock {
 						create_empty: true,
 						finalize: true,
 						parent_hash: None,
@@ -242,7 +242,7 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 				}
 			});
 
-			let params = sc_consensus_manual_seal::ManualSealParams {
+			let params = pezsc_consensus_manual_seal::ManualSealParams {
 				block_import: client.clone(),
 				env: proposer,
 				client,
@@ -251,10 +251,10 @@ pub fn new_full<Network: sc_network::NetworkBackend<Block, <Block as BlockT>::Ha
 				commands_stream: Box::pin(commands_stream),
 				consensus_data_provider: None,
 				create_inherent_data_providers: move |_, ()| async move {
-					Ok(sp_timestamp::InherentDataProvider::from_system_time())
+					Ok(pezsp_timestamp::InherentDataProvider::from_system_time())
 				},
 			};
-			let authorship_future = sc_consensus_manual_seal::run_manual_seal(params);
+			let authorship_future = pezsc_consensus_manual_seal::run_manual_seal(params);
 
 			task_manager.spawn_essential_handle().spawn_blocking(
 				"manual-seal",

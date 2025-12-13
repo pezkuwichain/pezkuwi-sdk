@@ -11,7 +11,7 @@
 # 	./rust-features.sh <CARGO-ROOT-PATH>
 #
 # Example:
-# 	./rust-features.sh path/to/substrate
+# 	./rust-features.sh path/to/bizinikiwi
 #
 # The steps of this script:
 #   1. Check that all required dependencies are installed.

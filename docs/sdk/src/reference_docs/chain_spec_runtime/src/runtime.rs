@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -22,19 +22,19 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use crate::{
-	pallets::{pallet_bar, pallet_foo},
+	pallets::{pezpallet_bar, pezpallet_foo},
 	presets::*,
 };
 use alloc::{vec, vec::Vec};
 use frame::{
-	deps::frame_support::{
+	deps::pezframe_support::{
 		genesis_builder_helper::{build_state, get_preset},
 		runtime,
 	},
 	prelude::*,
 	runtime::{apis, prelude::*},
 };
-use sp_genesis_builder::PresetId;
+use pezsp_genesis_builder::PresetId;
 
 /// The runtime version.
 #[runtime_version]
@@ -68,16 +68,16 @@ mod runtime {
 	pub struct Runtime;
 
 	/// Mandatory system pallet that should always be included in a FRAME runtime.
-	#[runtime::pallet_index(0)]
-	pub type System = frame_system;
+	#[runtime::pezpallet_index(0)]
+	pub type System = pezframe_system;
 
 	/// Sample pallet 1
-	#[runtime::pallet_index(1)]
-	pub type Bar = pallet_bar;
+	#[runtime::pezpallet_index(1)]
+	pub type Bar = pezpallet_bar;
 
 	/// Sample pallet 2
-	#[runtime::pallet_index(2)]
-	pub type Foo = pallet_foo;
+	#[runtime::pezpallet_index(2)]
+	pub type Foo = pezpallet_foo;
 }
 
 parameter_types! {
@@ -85,30 +85,30 @@ parameter_types! {
 }
 
 /// Implements the types required for the system pallet.
-#[derive_impl(frame_system::config_preludes::SolochainDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::SolochainDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type Block = Block;
 	type Version = Version;
 }
 
-impl pallet_bar::Config for Runtime {}
-impl pallet_foo::Config for Runtime {}
+impl pezpallet_bar::Config for Runtime {}
+impl pezpallet_foo::Config for Runtime {}
 
 type Block = frame::runtime::types_common::BlockOf<Runtime, SignedExtra>;
 type Header = HeaderFor<Runtime>;
 
 #[docify::export(runtime_impl)]
 impl_runtime_apis! {
-	impl sp_genesis_builder::GenesisBuilder<Block> for Runtime {
-		fn build_state(config: Vec<u8>) -> sp_genesis_builder::Result {
+	impl pezsp_genesis_builder::GenesisBuilder<Block> for Runtime {
+		fn build_state(config: Vec<u8>) -> pezsp_genesis_builder::Result {
 			build_state::<RuntimeGenesisConfig>(config)
 		}
 
-		fn get_preset(id: &Option<sp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
+		fn get_preset(id: &Option<pezsp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
 			get_preset::<RuntimeGenesisConfig>(id, get_builtin_preset)
 		}
 
-		fn preset_names() -> Vec<sp_genesis_builder::PresetId> {
+		fn preset_names() -> Vec<pezsp_genesis_builder::PresetId> {
 			vec![
 				PresetId::from(PRESET_1),
 				PresetId::from(PRESET_2),

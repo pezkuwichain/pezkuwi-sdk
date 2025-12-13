@@ -1,0 +1,66 @@
+[package]
+name = "pezpallet-identity-kyc"
+version = "1.0.0"
+description = "PezkuwiChain Identity and KYC Management Pallet"
+authors.workspace = true
+homepage.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+repository.workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { workspace = true, default-features = false, features = ["derive"] }
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-support = { default-features = false, workspace = true }
+pezframe-system = { default-features = false, workspace = true }
+log = { default-features = false, workspace = true }
+scale-info = { default-features = false, features = [
+	"derive",
+], workspace = true }
+pezsp-core = { default-features = false, workspace = true }
+pezsp-runtime = { default-features = false, workspace = true }
+pezsp-std = { default-features = false, workspace = true }
+
+# Projemizin özel tiplerini ve trait'lerini içeren kütüphane
+pezkuwi-primitives = { workspace = true, default-features = false }
+
+[dev-dependencies]
+pezpallet-balances = { workspace = true }
+pezsp-io = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"log/std",
+	"pezpallet-balances/std",
+	"pezkuwi-primitives/std",
+	"scale-info/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+]
+runtime-benchmarks = [
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+]
+
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-runtime/try-runtime",
+]

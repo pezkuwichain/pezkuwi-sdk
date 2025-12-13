@@ -17,20 +17,20 @@
 //! Teyrchain runtime mock.
 
 use codec::{Decode, Encode};
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{Disabled, Everything, Nothing},
 	weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 };
 
-use frame_system::EnsureRoot;
-use sp_runtime::{
+use pezframe_system::EnsureRoot;
+use pezsp_runtime::{
 	generic,
 	traits::{AccountIdLookup, BlakeTwo256, Hash, IdentifyAccount, Verify},
 	MultiAddress, MultiSignature,
 };
 
-use pallet_xcm::XcmPassthrough;
+use pezpallet_xcm::XcmPassthrough;
 use pezkuwi_core_primitives::BlockNumber as RelayBlockNumber;
 use pezkuwi_teyrchain_primitives::primitives::{
 	DmpMessageHandler, Id as ParaId, Sibling, XcmpMessageFormat, XcmpMessageHandler,
@@ -44,7 +44,7 @@ use xcm_builder::{
 };
 use xcm_executor::{Config, XcmExecutor};
 
-pub type TxExtension = (frame_system::CheckNonZeroSender<Runtime>,);
+pub type TxExtension = (pezframe_system::CheckNonZeroSender<Runtime>,);
 
 pub type BlockNumber = u64;
 pub type Address = MultiAddress<AccountId, ()>;
@@ -61,20 +61,20 @@ parameter_types! {
 	pub const BlockHashCount: u32 = 250;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 	type Lookup = AccountIdLookup<AccountId, ()>;
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
 parameter_types! {
 	pub ExistentialDeposit: Balance = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -150,15 +150,15 @@ impl Config for XcmConfig {
 	type XcmRecorder = ();
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod mock_msg_queue {
 	use super::*;
-	use frame_support::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}
 
@@ -226,7 +226,7 @@ pub mod mock_msg_queue {
 			max_weight: Weight,
 		) -> Result<Weight, XcmError> {
 			let hash = Encode::using_encoded(&xcm, T::Hashing::hash);
-			let mut message_hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+			let mut message_hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 			let (result, event) = match Xcm::<T::RuntimeCall>::try_from(xcm) {
 				Ok(xcm) => {
 					let location = Location::new(1, [Teyrchain(sender.into())]);
@@ -285,7 +285,7 @@ pub mod mock_msg_queue {
 			limit: Weight,
 		) -> Weight {
 			for (_i, (_sent_at, data)) in iter.enumerate() {
-				let mut id = sp_io::hashing::blake2_256(&data[..]);
+				let mut id = pezsp_io::hashing::blake2_256(&data[..]);
 				let maybe_msg = VersionedXcm::<T::RuntimeCall>::decode(&mut &data[..])
 					.map(Xcm::<T::RuntimeCall>::try_from);
 				match maybe_msg {
@@ -320,7 +320,7 @@ impl mock_msg_queue::Config for Runtime {
 
 pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, RelayNetwork>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -334,15 +334,15 @@ impl pallet_xcm::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = ();
 	type TrustedLockers = ();
 	type SovereignAccountOf = LocationToAccountId;
-	type MaxLockers = frame_support::traits::ConstU32<8>;
-	type MaxRemoteLockConsumers = frame_support::traits::ConstU32<0>;
+	type MaxLockers = pezframe_support::traits::ConstU32<8>;
+	type MaxRemoteLockConsumers = pezframe_support::traits::ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type AuthorizedAliasConsideration = Disabled;
 }
@@ -350,9 +350,9 @@ impl pallet_xcm::Config for Runtime {
 construct_runtime!(
 	pub enum Runtime
 	{
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		MsgQueue: mock_msg_queue,
-		PezkuwiXcm: pallet_xcm,
+		PezkuwiXcm: pezpallet_xcm,
 	}
 );

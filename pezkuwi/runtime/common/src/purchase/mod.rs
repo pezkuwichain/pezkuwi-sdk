@@ -18,21 +18,21 @@
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{Currency, EnsureOrigin, ExistenceRequirement, Get, VestingSchedule},
 };
-use frame_system::pallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 pub use pallet::*;
 use scale_info::TypeInfo;
-use sp_core::sr25519;
-use sp_runtime::{
+use pezsp_core::sr25519;
+use pezsp_runtime::{
 	traits::{CheckedAdd, Saturating, Verify, Zero},
 	AnySignature, DispatchError, DispatchResult, Permill, RuntimeDebug,
 };
 
 type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 /// The kind of statement an account needs to make for a claim to be valid.
 #[derive(
@@ -89,7 +89,7 @@ pub struct AccountStatus<Balance> {
 	vat: Permill,
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -98,10 +98,10 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Balances Pallet
 		type Currency: Currency<Self::AccountId>;
@@ -414,7 +414,7 @@ pub mod pallet {
 		) -> DispatchResult {
 			T::ConfigurationOrigin::ensure_origin(origin)?;
 			ensure!(
-				unlock_block > frame_system::Pallet::<T>::block_number(),
+				unlock_block > pezframe_system::Pallet::<T>::block_number(),
 				Error::<T>::InvalidUnlockBlock
 			);
 			// Possibly this is worse than having the caller account be the payment account?
@@ -460,12 +460,12 @@ where
 
 /// WARNING: Executing this function will clear all storage used by this pallet.
 /// Be sure this is what you want...
-pub fn remove_pallet<T>() -> frame_support::weights::Weight
+pub fn remove_pallet<T>() -> pezframe_support::weights::Weight
 where
-	T: frame_system::Config,
+	T: pezframe_system::Config,
 {
 	#[allow(deprecated)]
-	use frame_support::migration::remove_storage_prefix;
+	use pezframe_support::migration::remove_storage_prefix;
 	#[allow(deprecated)]
 	remove_storage_prefix(b"Purchase", b"Accounts", b"");
 	#[allow(deprecated)]
@@ -475,7 +475,7 @@ where
 	#[allow(deprecated)]
 	remove_storage_prefix(b"Purchase", b"UnlockBlock", b"");
 
-	<T as frame_system::Config>::BlockWeights::get().max_block
+	<T as pezframe_system::Config>::BlockWeights::get().max_block
 }
 
 #[cfg(test)]

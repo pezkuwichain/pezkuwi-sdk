@@ -45,8 +45,8 @@ use pezkuwi_primitives::{
 	MutateDescriptorV2, NodeFeatures, PersistedValidationData, SessionInfo, ValidatorId,
 };
 use pezkuwi_primitives_test_helpers::{dummy_candidate_receipt, dummy_hash};
-use sc_network::{IfDisconnected, OutboundFailure, ProtocolName, RequestFailure};
-use sp_keyring::Sr25519Keyring;
+use pezsc_network::{IfDisconnected, OutboundFailure, ProtocolName, RequestFailure};
+use pezsp_keyring::Sr25519Keyring;
 
 type VirtualOverseer = TestSubsystemContextHandle<AvailabilityRecoveryMessage>;
 
@@ -149,7 +149,7 @@ fn request_receiver(
 ) -> IncomingRequestReceiver<AvailableDataFetchingRequest> {
 	let receiver = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(req_protocol_names);
 	// Don't close the sending end of the request protocol. Otherwise, the subsystem will terminate.
 	std::mem::forget(receiver.1.inbound_queue);
@@ -160,9 +160,9 @@ fn test_harness<Fut: Future<Output = VirtualOverseer>>(
 	subsystem: AvailabilityRecoverySubsystem,
 	test: impl FnOnce(VirtualOverseer) -> Fut,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 
 	let (context, virtual_overseer) = make_subsystem_context(pool.clone());
 

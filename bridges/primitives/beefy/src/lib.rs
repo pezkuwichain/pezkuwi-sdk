@@ -20,12 +20,12 @@
 #![warn(missing_docs)]
 
 pub use binary_merkle_tree::merkle_root;
-pub use pallet_beefy_mmr::BeefyEcdsaToEthereum;
-pub use pallet_mmr::{
+pub use pezpallet_beefy_mmr::BeefyEcdsaToEthereum;
+pub use pezpallet_mmr::{
 	primitives::{DataOrHash as MmrDataOrHash, LeafProof as MmrProof},
 	verify_leaves_proof as verify_mmr_leaves_proof,
 };
-pub use sp_consensus_beefy::{
+pub use pezsp_consensus_beefy::{
 	ecdsa_crypto::{
 		AuthorityId as EcdsaValidatorId, AuthoritySignature as EcdsaValidatorSignature,
 	},
@@ -37,16 +37,16 @@ pub use sp_consensus_beefy::{
 
 use bp_runtime::{BasicOperatingMode, BlockNumberOf, Chain, HashOf};
 use codec::{Decode, Encode};
-use frame_support::Parameter;
+use pezframe_support::Parameter;
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{Convert, MaybeSerializeDeserialize},
 	RuntimeAppPublic, RuntimeDebug,
 };
-use sp_std::prelude::*;
+use pezsp_std::prelude::*;
 
-/// Substrate-based chain with BEEFY && MMR pallets deployed.
+/// Bizinikiwi-based chain with BEEFY && MMR pallets deployed.
 ///
 /// Both BEEFY and MMR pallets and their clients may be configured to use different
 /// primitives. Some of types can be configured in low-level pallets, but are constrained
@@ -54,23 +54,23 @@ use sp_std::prelude::*;
 pub trait ChainWithBeefy: Chain {
 	/// The hashing algorithm used to compute the digest of the BEEFY commitment.
 	///
-	/// Corresponds to the hashing algorithm, used by `sc_consensus_beefy::BeefyKeystore`.
-	type CommitmentHasher: sp_runtime::traits::Hash;
+	/// Corresponds to the hashing algorithm, used by `pezsc_consensus_beefy::BeefyKeystore`.
+	type CommitmentHasher: pezsp_runtime::traits::Hash;
 
 	/// The hashing algorithm used to build the MMR.
 	///
 	/// The same algorithm is also used to compute merkle roots in BEEFY
 	/// (e.g. validator addresses root in leaf data).
 	///
-	/// Corresponds to the `Hashing` field of the `pallet-mmr` configuration.
-	type MmrHashing: sp_runtime::traits::Hash<Output = Self::MmrHash>;
+	/// Corresponds to the `Hashing` field of the `pezpallet-mmr` configuration.
+	type MmrHashing: pezsp_runtime::traits::Hash<Output = Self::MmrHash>;
 
 	/// The output type of the hashing algorithm used to build the MMR.
 	///
 	/// This type is actually stored in the MMR.
 
-	/// Corresponds to the `Hash` field of the `pallet-mmr` configuration.
-	type MmrHash: sp_std::hash::Hash
+	/// Corresponds to the `Hash` field of the `pezpallet-mmr` configuration.
+	type MmrHash: pezsp_std::hash::Hash
 		+ Parameter
 		+ Copy
 		+ AsRef<[u8]>
@@ -83,43 +83,43 @@ pub trait ChainWithBeefy: Chain {
 
 	/// A way to identify a BEEFY validator.
 	///
-	/// Corresponds to the `BeefyId` field of the `pallet-beefy` configuration.
+	/// Corresponds to the `BeefyId` field of the `pezpallet-beefy` configuration.
 	type AuthorityId: BeefyAuthorityId<Self::CommitmentHasher> + Parameter;
 
 	/// A way to convert validator id to its raw representation in the BEEFY merkle tree.
 	///
-	/// Corresponds to the `BeefyAuthorityToMerkleLeaf` field of the `pallet-beefy-mmr`
+	/// Corresponds to the `BeefyAuthorityToMerkleLeaf` field of the `pezpallet-beefy-mmr`
 	/// configuration.
 	type AuthorityIdToMerkleLeaf: Convert<Self::AuthorityId, Vec<u8>>;
 }
 
-/// BEEFY validator id used by given Substrate chain.
+/// BEEFY validator id used by given Bizinikiwi chain.
 pub type BeefyAuthorityIdOf<C> = <C as ChainWithBeefy>::AuthorityId;
 /// BEEFY validator set, containing both validator identifiers and the numeric set id.
 pub type BeefyAuthoritySetOf<C> = ValidatorSet<BeefyAuthorityIdOf<C>>;
 /// BEEFY authority set, containing both validator identifiers and the numeric set id.
-pub type BeefyAuthoritySetInfoOf<C> = sp_consensus_beefy::mmr::BeefyAuthoritySet<MmrHashOf<C>>;
-/// BEEFY validator signature used by given Substrate chain.
+pub type BeefyAuthoritySetInfoOf<C> = pezsp_consensus_beefy::mmr::BeefyAuthoritySet<MmrHashOf<C>>;
+/// BEEFY validator signature used by given Bizinikiwi chain.
 pub type BeefyValidatorSignatureOf<C> =
 	<<C as ChainWithBeefy>::AuthorityId as RuntimeAppPublic>::Signature;
-/// Signed BEEFY commitment used by given Substrate chain.
+/// Signed BEEFY commitment used by given Bizinikiwi chain.
 pub type BeefySignedCommitmentOf<C> =
 	SignedCommitment<BlockNumberOf<C>, BeefyValidatorSignatureOf<C>>;
 /// Hash algorithm, used to compute the digest of the BEEFY commitment before signing it.
 pub type BeefyCommitmentHasher<C> = <C as ChainWithBeefy>::CommitmentHasher;
-/// Hash algorithm used in Beefy MMR construction by given Substrate chain.
+/// Hash algorithm used in Beefy MMR construction by given Bizinikiwi chain.
 pub type MmrHashingOf<C> = <C as ChainWithBeefy>::MmrHashing;
-/// Hash type, used in MMR construction by given Substrate chain.
+/// Hash type, used in MMR construction by given Bizinikiwi chain.
 pub type MmrHashOf<C> = <C as ChainWithBeefy>::MmrHash;
-/// BEEFY MMR proof type used by the given Substrate chain.
+/// BEEFY MMR proof type used by the given Bizinikiwi chain.
 pub type MmrProofOf<C> = MmrProof<MmrHashOf<C>>;
-/// The type of the MMR leaf extra data used by the given Substrate chain.
+/// The type of the MMR leaf extra data used by the given Bizinikiwi chain.
 pub type BeefyMmrLeafExtraOf<C> = <C as ChainWithBeefy>::BeefyMmrLeafExtra;
 /// A way to convert a validator id to its raw representation in the BEEFY merkle tree, used by
-/// the given Substrate chain.
+/// the given Bizinikiwi chain.
 pub type BeefyAuthorityIdToMerkleLeafOf<C> = <C as ChainWithBeefy>::AuthorityIdToMerkleLeaf;
 /// Actual type of leafs in the BEEFY MMR.
-pub type BeefyMmrLeafOf<C> = sp_consensus_beefy::mmr::MmrLeaf<
+pub type BeefyMmrLeafOf<C> = pezsp_consensus_beefy::mmr::MmrLeaf<
 	BlockNumberOf<C>,
 	HashOf<C>,
 	MmrHashOf<C>,

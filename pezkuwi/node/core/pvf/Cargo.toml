@@ -44,9 +44,9 @@ pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 
 pezkuwi-node-core-pvf-execute-worker = { optional = true, workspace = true, default-features = true }
 pezkuwi-node-core-pvf-prepare-worker = { optional = true, workspace = true, default-features = true }
-sc-tracing = { workspace = true }
-sp-core = { workspace = true, default-features = true }
-sp-maybe-compressed-blob = { optional = true, workspace = true, default-features = true }
+pezsc-tracing = { workspace = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-maybe-compressed-blob = { optional = true, workspace = true, default-features = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
@@ -72,7 +72,7 @@ test-teyrchain-halt = { workspace = true }
 libc = { workspace = true }
 procfs = { workspace = true }
 rusty-fork = { workspace = true, default-features = true }
-sc-sysinfo = { workspace = true, default-features = true }
+pezsc-sysinfo = { workspace = true, default-features = true }
 
 [features]
 ci-only-tests = []
@@ -82,7 +82,7 @@ test-utils = [
 	"dep:is_executable",
 	"dep:pezkuwi-node-core-pvf-execute-worker",
 	"dep:pezkuwi-node-core-pvf-prepare-worker",
-	"dep:sp-maybe-compressed-blob",
+	"dep:pezsp-maybe-compressed-blob",
 ]
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
@@ -97,7 +97,7 @@ runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"pezkuwichain-runtime/runtime-benchmarks",
-	"sc-sysinfo/runtime-benchmarks",
-	"sc-tracing/runtime-benchmarks",
+	"pezsc-sysinfo/runtime-benchmarks",
+	"pezsc-tracing/runtime-benchmarks",
 	"test-teyrchain-adder/runtime-benchmarks",
 ]

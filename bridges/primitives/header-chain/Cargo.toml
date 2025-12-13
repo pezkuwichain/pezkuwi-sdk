@@ -19,12 +19,12 @@ serde = { features = ["alloc", "derive"], workspace = true }
 # Bridge dependencies
 bp-runtime = { workspace = true }
 
-# Substrate Dependencies
-frame-support = { workspace = true }
-sp-consensus-grandpa = { features = ["serde"], workspace = true }
-sp-core = { features = ["serde"], workspace = true }
-sp-runtime = { features = ["serde"], workspace = true }
-sp-std = { workspace = true }
+# Bizinikiwi Dependencies
+pezframe-support = { workspace = true }
+pezsp-consensus-grandpa = { features = ["serde"], workspace = true }
+pezsp-core = { features = ["serde"], workspace = true }
+pezsp-runtime = { features = ["serde"], workspace = true }
+pezsp-std = { workspace = true }
 
 [dev-dependencies]
 bp-test-utils = { workspace = true, default-features = true }
@@ -37,18 +37,18 @@ std = [
 	"bp-runtime/std",
 	"codec/std",
 	"finality-grandpa/std",
-	"frame-support/std",
+	"pezframe-support/std",
 	"scale-info/std",
 	"serde/std",
-	"sp-consensus-grandpa/std",
-	"sp-core/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-consensus-grandpa/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
 	"bp-runtime/runtime-benchmarks",
 	"bp-test-utils/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"sp-consensus-grandpa/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

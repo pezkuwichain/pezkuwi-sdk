@@ -21,26 +21,26 @@ pub mod benchmarking;
 #[cfg(test)]
 mod mock;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
-	use frame_benchmarking::BenchmarkError;
-	use frame_support::{dispatch::GetDispatchInfo, pallet_prelude::Encode};
-	use sp_runtime::traits::Dispatchable;
+	use pezframe_benchmarking::BenchmarkError;
+	use pezframe_support::{dispatch::GetDispatchInfo, pezpallet_prelude::Encode};
+	use pezsp_runtime::traits::Dispatchable;
 	use xcm::latest::{
 		Asset, Assets, InteriorLocation, Junction, Location, NetworkId, Response, WeightLimit,
 	};
 
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config + crate::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config + crate::Config {
 		type RuntimeCall: Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
 			+ GetDispatchInfo
-			+ From<frame_system::Call<Self>>
+			+ From<pezframe_system::Call<Self>>
 			+ Encode;
 
 		/// The type of `fungible` that is being used under the hood.
 		///
 		/// This is useful for testing and checking.
-		type TransactAsset: frame_support::traits::fungible::Mutate<Self::AccountId>;
+		type TransactAsset: pezframe_support::traits::fungible::Mutate<Self::AccountId>;
 
 		///	The response which causes the most runtime weight.
 		fn worst_case_response() -> (u64, Response);
@@ -99,13 +99,13 @@ pub mod pallet {
 
 		/// Returns a valid pallet info for `ExpectPallet` or `QueryPallet` benchmark.
 		///
-		/// By default returns `frame_system::Pallet` info with expected pallet index `0`.
-		fn valid_pallet() -> frame_support::traits::PalletInfoData {
-			frame_support::traits::PalletInfoData {
-				index: <frame_system::Pallet<Self> as frame_support::traits::PalletInfoAccess>::index(),
-				name: <frame_system::Pallet<Self> as frame_support::traits::PalletInfoAccess>::name(),
-				module_name: <frame_system::Pallet<Self> as frame_support::traits::PalletInfoAccess>::module_name(),
-				crate_version: <frame_system::Pallet<Self> as frame_support::traits::PalletInfoAccess>::crate_version(),
+		/// By default returns `pezframe_system::Pallet` info with expected pallet index `0`.
+		fn valid_pallet() -> pezframe_support::traits::PalletInfoData {
+			pezframe_support::traits::PalletInfoData {
+				index: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::index(),
+				name: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::name(),
+				module_name: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::module_name(),
+				crate_version: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::crate_version(),
 			}
 		}
 	}

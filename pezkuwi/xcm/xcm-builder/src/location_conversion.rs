@@ -18,9 +18,9 @@ use crate::universal_exports::ensure_is_remote;
 use alloc::vec::Vec;
 use codec::{Compact, Decode, Encode};
 use core::marker::PhantomData;
-use frame_support::traits::Get;
-use sp_io::hashing::blake2_256;
-use sp_runtime::traits::{AccountIdConversion, TrailingZeroInput, TryConvert};
+use pezframe_support::traits::Get;
+use pezsp_io::hashing::blake2_256;
+use pezsp_runtime::traits::{AccountIdConversion, TrailingZeroInput, TryConvert};
 use xcm::latest::prelude::*;
 use xcm_executor::traits::ConvertLocation;
 
@@ -521,7 +521,7 @@ mod tests {
 	pub type ForeignChainAliasTreasuryAccount<AccountId> =
 		HashedDescription<AccountId, DescribeFamily<DescribeTreasuryVoiceTerminal>>;
 
-	use frame_support::parameter_types;
+	use pezframe_support::parameter_types;
 	use xcm::latest::Junction;
 
 	fn account20() -> Junction {

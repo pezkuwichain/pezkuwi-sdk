@@ -18,8 +18,8 @@
 
 use super::*;
 use alloc::vec::Vec;
-use frame_support::{
-	migrations::VersionedMigration, pallet_prelude::ValueQuery, storage_alias,
+use pezframe_support::{
+	migrations::VersionedMigration, pezpallet_prelude::ValueQuery, storage_alias,
 	traits::UncheckedOnRuntimeUpgrade, weights::Weight,
 };
 
@@ -105,11 +105,11 @@ mod v0 {
 // - Items are `Option` for some weird reason.
 // - Assignments only consist of `ParaId`, `Assignment` is a concrete type (Same as V0Assignment).
 mod v1 {
-	use frame_support::{
-		pallet_prelude::ValueQuery, storage_alias, traits::UncheckedOnRuntimeUpgrade,
+	use pezframe_support::{
+		pezpallet_prelude::ValueQuery, storage_alias, traits::UncheckedOnRuntimeUpgrade,
 		weights::Weight,
 	};
-	use frame_system::pallet_prelude::BlockNumberFor;
+	use pezframe_system::pezpallet_prelude::BlockNumberFor;
 
 	use super::*;
 	use crate::scheduler;
@@ -173,7 +173,7 @@ mod v1 {
 			v0::ParathreadQueue::<T>::kill();
 			v0::ParathreadClaimIndex::<T>::kill();
 
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 			let scheduled = v0::Scheduled::<T>::take();
 			let sched_len = scheduled.len() as u64;
 			for core_assignment in scheduled {
@@ -221,7 +221,7 @@ mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
 			let n: u32 = v0::Scheduled::<T>::get().len() as u32 +
 				v0::AvailabilityCores::<T>::get().iter().filter(|c| c.is_some()).count() as u32;
 
@@ -234,7 +234,7 @@ mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			log::info!(target: crate::scheduler::LOG_TARGET, "Running post_upgrade()");
 
 			ensure!(
@@ -265,7 +265,7 @@ pub type MigrateV0ToV1<T> = VersionedMigration<
 	1,
 	v1::UncheckedMigrateToV1<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;
 
 pub(crate) mod v2 {
@@ -371,7 +371,7 @@ pub(crate) mod v2 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
 			log::trace!(
 				target: crate::scheduler::LOG_TARGET,
 				"ClaimQueue before migration: {}",
@@ -384,7 +384,7 @@ pub(crate) mod v2 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			log::trace!(target: crate::scheduler::LOG_TARGET, "Running post_upgrade()");
 
 			let old_len = u32::from_be_bytes(state.try_into().unwrap());
@@ -404,7 +404,7 @@ pub type MigrateV1ToV2<T> = VersionedMigration<
 	2,
 	v2::UncheckedMigrateToV2<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;
 
 /// Migration for TTL and availability timeout retries removal.
@@ -452,7 +452,7 @@ mod v3 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
 			log::trace!(
 				target: crate::scheduler::LOG_TARGET,
 				"ClaimQueue before migration: {}",
@@ -465,7 +465,7 @@ mod v3 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			log::trace!(target: crate::scheduler::LOG_TARGET, "Running post_upgrade()");
 
 			let old_len = u32::from_be_bytes(state.try_into().unwrap());
@@ -490,5 +490,5 @@ pub type MigrateV2ToV3<T> = VersionedMigration<
 	3,
 	v3::UncheckedMigrateToV3<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;

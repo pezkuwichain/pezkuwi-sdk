@@ -19,7 +19,7 @@
 
 use super::{mock::*, *};
 use crate::AliasesIntoAccountId32;
-use frame_support::{
+use pezframe_support::{
 	assert_ok, parameter_types,
 	traits::{fungible::Mutate, fungibles::Mutate as FungiblesMutate},
 };

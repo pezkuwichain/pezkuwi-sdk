@@ -61,7 +61,7 @@ is the relayer, which is following our rules:
   pays the full cost of the transaction;
 
 - we compensate the cost of message delivery and all required finality calls, if they are part of the same
-  [`frame_utility::batch_all`](https://github.com/paritytech/substrate/blob/891d6a5c870ab88521183facafc811a203bb6541/frame/utility/src/lib.rs#L326)
+  [`frame_utility::batch_all`](https://github.com/paritytech/bizinikiwi/blob/891d6a5c870ab88521183facafc811a203bb6541/frame/utility/src/lib.rs#L326)
   transaction. Of course, the calls inside the batch must be linked - e.g. the submitted teyrchain head must be used to
   prove messages. Relay header must be used to prove teyrchain head finality. If one of calls fails, or if they are not
   linked together, the relayer pays the full transaction cost.
@@ -126,6 +126,6 @@ bridge transactions with obsolete data from including into the block. We are rej
 - transactions, that are confirming delivery of already confirmed messages. If at least one of confirmations is new, the
   transaction is not rejected;
 
-- [`frame_utility::batch_all`](https://github.com/paritytech/substrate/blob/891d6a5c870ab88521183facafc811a203bb6541/frame/utility/src/lib.rs#L326)
+- [`frame_utility::batch_all`](https://github.com/paritytech/bizinikiwi/blob/891d6a5c870ab88521183facafc811a203bb6541/frame/utility/src/lib.rs#L326)
   transactions, that have both finality and message delivery calls. All restrictions from the [Compensating the Cost of
   Message Delivery Transactions](#compensating-the-cost-of-message-delivery-transactions) are applied.

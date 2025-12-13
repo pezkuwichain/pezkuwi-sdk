@@ -69,8 +69,8 @@ use bp_runtime::{
 	Size,
 };
 use codec::{Decode, Encode};
-use frame_support::{dispatch::PostDispatchInfo, ensure, fail, traits::Get, DefaultNoBound};
-use sp_std::{marker::PhantomData, prelude::*};
+use pezframe_support::{dispatch::PostDispatchInfo, ensure, fail, traits::Get, DefaultNoBound};
+use pezsp_std::{marker::PhantomData, prelude::*};
 
 mod call_ext;
 mod inbound_lane;
@@ -94,22 +94,22 @@ pub use tests::*;
 /// The target that will be used when publishing logs related to this pallet.
 pub const LOG_TARGET: &str = "runtime::bridge-messages";
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 	use bp_messages::{LaneIdType, ReceivedMessages, ReceptionResult};
 	use bp_runtime::RangeInclusiveExt;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		// General types
 
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>;
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Benchmarks results from runtime we're plugged into.
 		type WeightInfo: WeightInfoExt;
 
@@ -411,11 +411,11 @@ pub mod pallet {
 				);
 
 				// update relayers state with actual numbers to compute actual weight below
-				relayers_state.unrewarded_relayer_entries = sp_std::cmp::min(
+				relayers_state.unrewarded_relayer_entries = pezsp_std::cmp::min(
 					relayers_state.unrewarded_relayer_entries,
 					actually_rewarded_relayers,
 				);
-				relayers_state.total_messages = sp_std::cmp::min(
+				relayers_state.total_messages = pezsp_std::cmp::min(
 					relayers_state.total_messages,
 					received_range.checked_len().unwrap_or(MessageNonce::MAX),
 				);
@@ -516,7 +516,7 @@ pub mod pallet {
 	pub type PalletOperatingMode<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, MessagesOperatingMode, ValueQuery>;
 
-	// TODO: https://github.com/paritytech/parity-bridges-common/pull/2213: let's limit number of
+	// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/89: let's limit number of
 	// possible opened lanes && use it to constraint maps below
 
 	/// Map of lane id => inbound lane data.
@@ -549,7 +549,7 @@ pub mod pallet {
 		pub opened_lanes: Vec<T::LaneId>,
 		/// Dummy marker.
 		#[serde(skip)]
-		pub _phantom: sp_std::marker::PhantomData<I>,
+		pub _phantom: pezsp_std::marker::PhantomData<I>,
 	}
 
 	#[pallet::genesis_build]
@@ -570,7 +570,7 @@ pub mod pallet {
 	#[pallet::hooks]
 	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
 		#[cfg(feature = "try-runtime")]
-		fn try_state(_n: BlockNumberFor<T>) -> Result<(), sp_runtime::TryRuntimeError> {
+		fn try_state(_n: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
 		}
 	}
@@ -615,14 +615,14 @@ pub mod pallet {
 	#[cfg(any(feature = "try-runtime", test))]
 	impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		/// Ensure the correctness of the state of this pallet.
-		pub fn do_try_state() -> Result<(), sp_runtime::TryRuntimeError> {
+		pub fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state_for_outbound_lanes()
 		}
 
 		/// Ensure the correctness of the state of outbound lanes.
-		pub fn do_try_state_for_outbound_lanes() -> Result<(), sp_runtime::TryRuntimeError> {
-			use sp_runtime::traits::One;
-			use sp_std::vec::Vec;
+		pub fn do_try_state_for_outbound_lanes() -> Result<(), pezsp_runtime::TryRuntimeError> {
+			use pezsp_runtime::traits::One;
+			use pezsp_std::vec::Vec;
 
 			// collect unpruned lanes
 			let mut unpruned_lanes = Vec::new();

@@ -27,16 +27,16 @@ use core::{
 };
 use scale_info::TypeInfo;
 
-use sp_application_crypto::KeyTypeId;
-use sp_arithmetic::{
+use pezsp_application_crypto::KeyTypeId;
+use pezsp_arithmetic::{
 	traits::{BaseArithmetic, Saturating},
 	Perbill,
 };
-use sp_core::RuntimeDebug;
-use sp_inherents::InherentIdentifier;
-use sp_runtime::traits::{AppVerify, Header as HeaderT};
+use pezsp_core::RuntimeDebug;
+use pezsp_inherents::InherentIdentifier;
+use pezsp_runtime::traits::{AppVerify, Header as HeaderT};
 
-pub use sp_runtime::traits::{BlakeTwo256, Hash as HashT};
+pub use pezsp_runtime::traits::{BlakeTwo256, Hash as HashT};
 
 // Export some core primitives.
 pub use pezkuwi_core_primitives::v2::{
@@ -53,9 +53,9 @@ pub use pezkuwi_teyrchain_primitives::primitives::{
 
 use serde::{Deserialize, Serialize};
 
-pub use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
-pub use sp_consensus_slots::Slot;
-pub use sp_staking::SessionIndex;
+pub use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+pub use pezsp_consensus_slots::Slot;
+pub use pezsp_staking::SessionIndex;
 
 /// Signed data.
 mod signed;
@@ -81,7 +81,7 @@ pub const COLLATOR_KEY_TYPE_ID: KeyTypeId = KeyTypeId(*b"coll");
 const LOG_TARGET: &str = "runtime::primitives";
 
 mod collator_app {
-	use sp_application_crypto::{app_crypto, sr25519};
+	use pezsp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, super::COLLATOR_KEY_TYPE_ID);
 }
 
@@ -99,7 +99,7 @@ pub type CollatorSignature = collator_app::Signature;
 pub const PARACHAIN_KEY_TYPE_ID: KeyTypeId = KeyTypeId(*b"para");
 
 mod validator_app {
-	use sp_application_crypto::{app_crypto, sr25519};
+	use pezsp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, super::PARACHAIN_KEY_TYPE_ID);
 }
 
@@ -174,7 +174,7 @@ impl TypeIndex for ValidatorIndex {
 	}
 }
 
-sp_application_crypto::with_pair! {
+pezsp_application_crypto::with_pair! {
 	/// A Parachain validator keypair.
 	pub type ValidatorPair = validator_app::Pair;
 }
@@ -191,7 +191,7 @@ pub mod well_known_keys {
 	use alloc::vec::Vec;
 	use codec::Encode as _;
 	use hex_literal::hex;
-	use sp_io::hashing::twox_64;
+	use pezsp_io::hashing::twox_64;
 
 	// A note on generating these magic values below:
 	//
@@ -462,7 +462,7 @@ pub const DEFAULT_SCHEDULING_LOOKAHEAD: u32 = 3;
 // The public key of a keypair used by a validator for determining assignments
 /// to approve included parachain candidates.
 mod assignment_app {
-	use sp_application_crypto::{app_crypto, sr25519};
+	use pezsp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, super::ASSIGNMENT_KEY_TYPE_ID);
 }
 
@@ -470,7 +470,7 @@ mod assignment_app {
 /// to approve included parachain candidates.
 pub type AssignmentId = assignment_app::Public;
 
-sp_application_crypto::with_pair! {
+pezsp_application_crypto::with_pair! {
 	/// The full keypair used by a validator for determining assignments to approve included
 	/// parachain candidates.
 	pub type AssignmentPair = assignment_app::Pair;
@@ -1300,7 +1300,7 @@ impl From<ValidityError> for u8 {
 }
 
 /// Abridged version of `HostConfiguration` (from the `Configuration` parachains host runtime
-/// module) meant to be used by a parachain or PDK such as cumulus.
+/// module) meant to be used by a parachain or PDK such as pezcumulus.
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct AbridgedHostConfiguration {
@@ -1335,7 +1335,7 @@ pub struct AbridgedHostConfiguration {
 }
 
 /// Abridged version of `HrmpChannel` (from the `Hrmp` parachains host runtime module) meant to be
-/// used by a parachain or PDK such as cumulus.
+/// used by a parachain or PDK such as pezcumulus.
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct AbridgedHrmpChannel {
@@ -1395,7 +1395,7 @@ pub enum UpgradeGoAhead {
 }
 
 /// Consensus engine id for pezkuwi v1 consensus engine.
-pub const PEZKUWI_ENGINE_ID: sp_runtime::ConsensusEngineId = *b"POL1";
+pub const PEZKUWI_ENGINE_ID: pezsp_runtime::ConsensusEngineId = *b"POL1";
 
 /// A consensus log item for pezkuwi validation. To be used with [`PEZKUWI_ENGINE_ID`].
 #[derive(Decode, Encode, Clone, PartialEq, Eq)]
@@ -1425,18 +1425,18 @@ pub enum ConsensusLog {
 impl ConsensusLog {
 	/// Attempt to convert a reference to a generic digest item into a consensus log.
 	pub fn from_digest_item(
-		digest_item: &sp_runtime::DigestItem,
+		digest_item: &pezsp_runtime::DigestItem,
 	) -> Result<Option<Self>, codec::Error> {
 		match digest_item {
-			sp_runtime::DigestItem::Consensus(id, encoded) if id == &PEZKUWI_ENGINE_ID =>
+			pezsp_runtime::DigestItem::Consensus(id, encoded) if id == &PEZKUWI_ENGINE_ID =>
 				Ok(Some(Self::decode(&mut &encoded[..])?)),
 			_ => Ok(None),
 		}
 	}
 }
 
-impl From<ConsensusLog> for sp_runtime::DigestItem {
-	fn from(c: ConsensusLog) -> sp_runtime::DigestItem {
+impl From<ConsensusLog> for pezsp_runtime::DigestItem {
+	fn from(c: ConsensusLog) -> pezsp_runtime::DigestItem {
 		Self::Consensus(PEZKUWI_ENGINE_ID, c.encode())
 	}
 }
@@ -1735,7 +1735,7 @@ impl ValidityAttestation {
 #[derive(Clone, Eq, PartialEq, Default, Decode, Encode, RuntimeDebug)]
 pub struct SigningContext<H = Hash> {
 	/// Current session index.
-	pub session_index: sp_staking::SessionIndex,
+	pub session_index: pezsp_staking::SessionIndex,
 	/// Hash of the parent.
 	pub parent_hash: H,
 }
@@ -2018,7 +2018,7 @@ impl<T> AsRef<[u8]> for WellKnownKey<T> {
 impl<T: Decode> WellKnownKey<T> {
 	/// Gets the value or `None` if it does not exist or decoding failed.
 	pub fn get(&self) -> Option<T> {
-		sp_io::storage::get(&self.key)
+		pezsp_io::storage::get(&self.key)
 			.and_then(|raw| codec::DecodeAll::decode_all(&mut raw.as_ref()).ok())
 	}
 }
@@ -2026,7 +2026,7 @@ impl<T: Decode> WellKnownKey<T> {
 impl<T: Encode> WellKnownKey<T> {
 	/// Sets the value.
 	pub fn set(&self, value: T) {
-		sp_io::storage::set(&self.key, &value.encode());
+		pezsp_io::storage::set(&self.key, &value.encode());
 	}
 }
 
@@ -2084,7 +2084,7 @@ pub mod node_features {
 	#[derive(Clone, Copy)]
 	pub enum FeatureIndex {
 		/// Tells if tranch0 assignments could be sent in a single certificate.
-		/// Reserved for: `<https://github.com/paritytech/polkadot-sdk/issues/628>`
+		/// Reserved for: `<https://github.com/pezkuwichain/kurdistan-sdk/issues/99>`
 		EnableAssignmentsV2 = 0,
 		/// This feature enables the extension of `BackedCandidate::validator_indices` by 8 bits.
 		/// The value stored there represents the assumed core index where the candidates
@@ -2149,7 +2149,7 @@ pub struct SchedulerParams<BlockNumber> {
 	/// How many cores are managed by the coretime chain.
 	pub num_cores: u32,
 	/// Deprecated and no longer used by the runtime.
-	/// Removal is tracked by <https://github.com/paritytech/polkadot-sdk/issues/6067>.
+	/// Removal is tracked by <https://github.com/pezkuwichain/kurdistan-sdk/issues/98>.
 	#[deprecated]
 	pub max_availability_timeouts: u32,
 	/// The maximum queue size of the pay as you go module.
@@ -2162,7 +2162,7 @@ pub struct SchedulerParams<BlockNumber> {
 	/// The minimum amount needed to claim a slot in the spot pricing queue.
 	pub on_demand_base_fee: Balance,
 	/// Deprecated and no longer used by the runtime.
-	/// Removal is tracked by <https://github.com/paritytech/polkadot-sdk/issues/6067>.
+	/// Removal is tracked by <https://github.com/pezkuwichain/kurdistan-sdk/issues/98>.
 	#[deprecated]
 	pub ttl: BlockNumber,
 }
@@ -2191,7 +2191,7 @@ impl<BlockNumber: Default + From<u32>> Default for SchedulerParams<BlockNumber> 
 pub mod tests {
 	use super::*;
 	use bitvec::bitvec;
-	use sp_core::sr25519;
+	use pezsp_core::sr25519;
 
 	/// Create a dummy committed candidate receipt
 	pub fn dummy_committed_candidate_receipt() -> CommittedCandidateReceipt {

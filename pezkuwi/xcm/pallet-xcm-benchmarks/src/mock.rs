@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::*;
-use frame_support::{parameter_types, traits::ContainsPair};
+use pezframe_support::{parameter_types, traits::ContainsPair};
 use xcm::latest::Weight;
 
 // An xcm sender/receiver akin to > /dev/null

@@ -19,12 +19,12 @@
 #[cfg(test)]
 use super::*;
 use crate::{auctions::mock::*, mock::TestRegistrar};
-use frame_support::{assert_noop, assert_ok, assert_storage_noop};
-use pallet_balances;
+use pezframe_support::{assert_noop, assert_ok, assert_storage_noop};
+use pezpallet_balances;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_primitives_test_helpers::{dummy_hash, dummy_head_data, dummy_validation_code};
-use sp_core::H256;
-use sp_runtime::DispatchError::BadOrigin;
+use pezsp_core::H256;
+use pezsp_runtime::DispatchError::BadOrigin;
 
 #[test]
 fn basic_setup_works() {
@@ -525,7 +525,7 @@ fn lower_bids_are_correctly_refunded() {
 #[test]
 fn initialize_winners_in_ending_period_works() {
 	new_test_ext().execute_with(|| {
-		let ed: u64 = <Test as pallet_balances::Config>::ExistentialDeposit::get();
+		let ed: u64 = <Test as pezpallet_balances::Config>::ExistentialDeposit::get();
 		assert_eq!(ed, 1);
 		System::run_to_block::<AllPalletsWithSystem>(1);
 		assert_ok!(Auctions::new_auction(RuntimeOrigin::signed(6), 9, 1));
@@ -639,7 +639,7 @@ fn handle_bid_checks_existing_lease_periods() {
 #[test]
 fn less_winning_samples_work() {
 	new_test_ext().execute_with(|| {
-		let ed: u64 = <Test as pallet_balances::Config>::ExistentialDeposit::get();
+		let ed: u64 = <Test as pezpallet_balances::Config>::ExistentialDeposit::get();
 		assert_eq!(ed, 1);
 		EndingPeriod::set(30);
 		SampleLength::set(10);

@@ -35,7 +35,7 @@ use pezkuwi_node_subsystem_util::{
 	self as util, request_availability_cores, runtime::recv_runtime, Validator,
 };
 use pezkuwi_primitives::{AvailabilityBitfield, CoreState, Hash, ValidatorIndex};
-use sp_keystore::{Error as KeystoreError, KeystorePtr};
+use pezsp_keystore::{Error as KeystoreError, KeystorePtr};
 use std::{collections::HashMap, time::Duration};
 use wasm_timer::{Delay, Instant};
 
@@ -49,7 +49,7 @@ mod tests;
 const SPAWNED_TASK_DELAY: Duration = Duration::from_millis(1500);
 const LOG_TARGET: &str = "teyrchain::bitfield-signing";
 
-// TODO: use `fatality` (https://github.com/paritytech/polkadot/issues/5540).
+// TODO: use `fatality` (https://github.com/pezkuwichain/kurdistan-sdk/issues/158).
 /// Errors we may encounter in the course of executing the `BitfieldSigningSubsystem`.
 #[derive(Debug, thiserror::Error)]
 #[allow(missing_docs)]

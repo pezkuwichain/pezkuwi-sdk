@@ -23,9 +23,9 @@ use crate::{
 
 use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHeadsProof, ParaId};
 use bp_runtime::UnverifiedStorageProofParams;
-use frame_benchmarking::{account, benchmarks_instance_pallet};
-use frame_system::RawOrigin;
-use sp_std::prelude::*;
+use pezframe_benchmarking::{account, benchmarks_instance_pallet};
+use pezframe_system::RawOrigin;
+use pezsp_std::prelude::*;
 
 /// Pallet we're benchmarking here.
 pub struct Pallet<T: Config<I>, I: 'static = ()>(crate::Pallet<T, I>);
@@ -45,7 +45,7 @@ pub trait Config<I: 'static>: crate::Config<I> {
 benchmarks_instance_pallet! {
 	where_clause {
 		where
-			<T as pallet_bridge_grandpa::Config<T::BridgesGrandpaPalletInstance>>::BridgedChain:
+			<T as pezpallet_bridge_grandpa::Config<T::BridgesGrandpaPalletInstance>>::BridgedChain:
 				bp_runtime::Chain<
 					BlockNumber = RelayBlockNumber,
 					Hash = RelayBlockHash,

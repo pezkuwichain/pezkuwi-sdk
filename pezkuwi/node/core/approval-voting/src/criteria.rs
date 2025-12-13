@@ -34,8 +34,8 @@ use pezkuwi_primitives::{
 };
 use rand::{seq::SliceRandom, SeedableRng};
 use rand_chacha::ChaCha20Rng;
-use sc_keystore::LocalKeystore;
-use sp_application_crypto::ByteArray;
+use pezsc_keystore::LocalKeystore;
+use pezsp_application_crypto::ByteArray;
 
 use merlin::Transcript;
 use schnorrkel::vrf::VRFInOut;
@@ -261,8 +261,8 @@ pub fn compute_assignments(
 			match keystore.key_pair(p) {
 				Ok(Some(pair)) => Some((ValidatorIndex(i as _), pair)),
 				Ok(None) => None,
-				Err(sc_keystore::Error::Unavailable) => None,
-				Err(sc_keystore::Error::Io(e)) if e.kind() == std::io::ErrorKind::NotFound => None,
+				Err(pezsc_keystore::Error::Unavailable) => None,
+				Err(pezsc_keystore::Error::Io(e)) if e.kind() == std::io::ErrorKind::NotFound => None,
 				Err(e) => {
 					gum::warn!(target: LOG_TARGET, "Encountered keystore error: {:?}", e);
 					None
@@ -292,7 +292,7 @@ pub fn compute_assignments(
 		"Assigning to candidates from different backing groups"
 	);
 
-	let assignments_key: &sp_application_crypto::sr25519::Pair = assignments_key.as_ref();
+	let assignments_key: &pezsp_application_crypto::sr25519::Pair = assignments_key.as_ref();
 	let assignments_key: &schnorrkel::Keypair = assignments_key.as_ref();
 
 	let mut assignments = HashMap::new();
@@ -719,10 +719,10 @@ mod tests {
 	use super::*;
 	use crate::import::tests::garbage_vrf_signature;
 	use pezkuwi_primitives::{AssignmentId, Hash, ASSIGNMENT_KEY_TYPE_ID};
-	use sp_application_crypto::sr25519;
-	use sp_core::crypto::Pair as PairT;
-	use sp_keyring::sr25519::Keyring as Sr25519Keyring;
-	use sp_keystore::Keystore;
+	use pezsp_application_crypto::sr25519;
+	use pezsp_core::crypto::Pair as PairT;
+	use pezsp_keyring::sr25519::Keyring as Sr25519Keyring;
+	use pezsp_keystore::Keystore;
 
 	// sets up a keystore with the given keyring accounts.
 	fn make_keystore(accounts: &[Sr25519Keyring]) -> LocalKeystore {

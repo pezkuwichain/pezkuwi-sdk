@@ -25,7 +25,7 @@ use codec::{Decode, Encode};
 use futures::prelude::*;
 use parking_lot::Mutex;
 
-use sp_consensus::SyncOracle;
+use pezsp_consensus::SyncOracle;
 
 use pezkuwi_node_network_protocol::{
 	peer_set::{PeerSet, ProtocolVersion},

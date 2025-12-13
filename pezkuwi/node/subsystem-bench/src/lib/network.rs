@@ -66,12 +66,12 @@ use pezkuwi_overseer::AllMessages;
 use pezkuwi_primitives::AuthorityDiscoveryId;
 use prometheus_endpoint::U64;
 use rand::{seq::SliceRandom, thread_rng};
-use sc_network::{
+use pezsc_network::{
 	request_responses::{IncomingRequest, OutgoingResponse},
 	RequestFailure,
 };
-use sc_network_types::PeerId;
-use sc_service::SpawnTaskHandle;
+use pezsc_network_types::PeerId;
+use pezsc_service::SpawnTaskHandle;
 use std::{
 	collections::HashMap,
 	sync::Arc,

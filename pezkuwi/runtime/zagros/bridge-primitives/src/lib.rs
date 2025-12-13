@@ -22,7 +22,7 @@ pub use bp_pezkuwi_core::*;
 
 use bp_header_chain::ChainWithGrandpa;
 use bp_runtime::{decl_bridge_finality_runtime_apis, Chain, ChainId};
-use frame_support::{sp_runtime::StateVersion, weights::Weight};
+use pezframe_support::{pezsp_runtime::StateVersion, weights::Weight};
 
 /// Zagros Chain
 pub struct Zagros;

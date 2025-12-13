@@ -25,8 +25,8 @@
 //! This approach allows tracking up to 2^64 nonces while only storing buckets that actually contain
 //! data, making it suitable for sparse sets of nonces across a wide range.
 
-use frame_support::storage::StorageMap;
-use sp_std::marker::PhantomData;
+use pezframe_support::storage::StorageMap;
+use pezsp_std::marker::PhantomData;
 
 /// Sparse bitmap interface.
 pub trait SparseBitmap<BitMap>
@@ -86,17 +86,17 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::{
+	use pezframe_support::{
 		storage::{generator::StorageMap as StorageMapHelper, storage_prefix},
 		Twox64Concat,
 	};
-	use sp_io::TestExternalities;
+	use pezsp_io::TestExternalities;
 	pub struct MockStorageMap;
 
 	impl StorageMapHelper<u64, u128> for MockStorageMap {
 		type Query = u128;
 		type Hasher = Twox64Concat;
-		fn pallet_prefix() -> &'static [u8] {
+		fn pezpallet_prefix() -> &'static [u8] {
 			b"MyModule"
 		}
 
@@ -105,7 +105,7 @@ mod tests {
 		}
 
 		fn prefix_hash() -> [u8; 32] {
-			storage_prefix(Self::pallet_prefix(), Self::storage_prefix())
+			storage_prefix(Self::pezpallet_prefix(), Self::storage_prefix())
 		}
 
 		fn from_optional_value_to_query(v: Option<u128>) -> Self::Query {

@@ -16,15 +16,15 @@
 
 //! Relay chain runtime mock.
 
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{Disabled, Everything, Nothing, ProcessMessage, ProcessMessageError},
 	weights::{Weight, WeightMeter},
 };
 
-use frame_system::EnsureRoot;
-use sp_core::ConstU32;
-use sp_runtime::{
+use pezframe_system::EnsureRoot;
+use pezsp_core::ConstU32;
+use pezsp_runtime::{
 	generic,
 	traits::{BlakeTwo256, IdentifyAccount, Verify},
 	MultiAddress, MultiSignature,
@@ -45,7 +45,7 @@ use xcm_builder::{
 };
 use xcm_executor::{Config, XcmExecutor};
 
-pub type TxExtension = (frame_system::CheckNonZeroSender<Runtime>,);
+pub type TxExtension = (pezframe_system::CheckNonZeroSender<Runtime>,);
 
 pub type BlockNumber = u64;
 pub type Address = MultiAddress<AccountId, ()>;
@@ -62,20 +62,20 @@ parameter_types! {
 	pub const BlockHashCount: u32 = 250;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
-	type Lookup = sp_runtime::traits::AccountIdLookup<AccountId, ()>;
+	type Lookup = pezsp_runtime::traits::AccountIdLookup<AccountId, ()>;
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
 parameter_types! {
 	pub ExistentialDeposit: Balance = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -155,7 +155,7 @@ impl Config for XcmConfig {
 
 pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, ThisNetwork>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = xcm_builder::EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -170,7 +170,7 @@ impl pallet_xcm::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = ();
 	type TrustedLockers = ();
@@ -178,7 +178,7 @@ impl pallet_xcm::Config for Runtime {
 	type MaxLockers = ConstU32<8>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type AuthorizedAliasConsideration = Disabled;
 }
@@ -214,7 +214,7 @@ impl ProcessMessage for MessageProcessor {
 	}
 }
 
-impl pallet_message_queue::Config for Runtime {
+impl pezpallet_message_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Size = u32;
 	type HeapSize = MessageQueueHeapSize;
@@ -225,7 +225,7 @@ impl pallet_message_queue::Config for Runtime {
 	type MessageProcessor = MessageProcessor;
 	#[cfg(feature = "runtime-benchmarks")]
 	type MessageProcessor =
-		pallet_message_queue::mock_helpers::NoopMessageProcessor<AggregateMessageOrigin>;
+		pezpallet_message_queue::mock_helpers::NoopMessageProcessor<AggregateMessageOrigin>;
 	type QueueChangeHandler = ();
 	type QueuePausedQuery = ();
 	type WeightInfo = ();
@@ -234,10 +234,10 @@ impl pallet_message_queue::Config for Runtime {
 construct_runtime!(
 	pub enum Runtime
 	{
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		ParasOrigin: origin,
-		XcmPallet: pallet_xcm,
-		MessageQueue: pallet_message_queue,
+		XcmPallet: pezpallet_xcm,
+		MessageQueue: pezpallet_message_queue,
 	}
 );

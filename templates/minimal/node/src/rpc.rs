@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -16,8 +16,8 @@
 // limitations under the License.
 
 //! A collection of node-specific RPC methods.
-//! Substrate provides the `sc-rpc` crate, which defines the core RPC layer
-//! used by Substrate nodes. This file extends those RPC definitions with
+//! Bizinikiwi provides the `sc-rpc` crate, which defines the core RPC layer
+//! used by Bizinikiwi nodes. This file extends those RPC definitions with
 //! capabilities that are specific to this project's runtime configuration.
 
 #![warn(missing_docs)]
@@ -25,8 +25,8 @@
 use jsonrpsee::RpcModule;
 use minimal_template_runtime::interface::{AccountId, Nonce, OpaqueBlock};
 use pezkuwi_sdk::{
-	sc_transaction_pool_api::TransactionPool,
-	sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata},
+	pezsc_transaction_pool_api::TransactionPool,
+	pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata},
 	*,
 };
 use std::sync::Arc;
@@ -48,15 +48,15 @@ where
 	C: Send
 		+ Sync
 		+ 'static
-		+ sp_api::ProvideRuntimeApi<OpaqueBlock>
+		+ pezsp_api::ProvideRuntimeApi<OpaqueBlock>
 		+ HeaderBackend<OpaqueBlock>
 		+ HeaderMetadata<OpaqueBlock, Error = BlockChainError>
 		+ 'static,
-	C::Api: sp_block_builder::BlockBuilder<OpaqueBlock>,
-	C::Api: substrate_frame_rpc_system::AccountNonceApi<OpaqueBlock, AccountId, Nonce>,
+	C::Api: pezsp_block_builder::BlockBuilder<OpaqueBlock>,
+	C::Api: bizinikiwi_frame_rpc_system::AccountNonceApi<OpaqueBlock, AccountId, Nonce>,
 	P: TransactionPool + 'static,
 {
-	use pezkuwi_sdk::substrate_frame_rpc_system::{System, SystemApiServer};
+	use pezkuwi_sdk::bizinikiwi_frame_rpc_system::{System, SystemApiServer};
 	let mut module = RpcModule::new(());
 	let FullDeps { client, pool } = deps;
 

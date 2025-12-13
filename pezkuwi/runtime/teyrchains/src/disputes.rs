@@ -23,8 +23,8 @@ use alloc::{collections::btree_set::BTreeSet, vec::Vec};
 use bitvec::{bitvec, order::Lsb0 as BitOrderLsb0};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::cmp::Ordering;
-use frame_support::{ensure, weights::Weight};
-use frame_system::pallet_prelude::*;
+use pezframe_support::{ensure, weights::Weight};
+use pezframe_system::pezpallet_prelude::*;
 use pezkuwi_primitives::{
 	byzantine_threshold, supermajority_threshold, ApprovalVote, ApprovalVoteMultipleCandidates,
 	CandidateHash, CheckedDisputeStatementSet, CheckedMultiDisputeStatementSet, CompactStatement,
@@ -34,7 +34,7 @@ use pezkuwi_primitives::{
 };
 use pezkuwi_runtime_metrics::get_current_time;
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{AppVerify, One, Saturating, Zero},
 	DispatchError, RuntimeDebug, SaturatedConversion,
 };
@@ -194,7 +194,7 @@ pub trait DisputesHandler<BlockNumber: Ord> {
 	) -> Result<(), ()> {
 		// TODO: Consider trade-of to avoid `O(n * log(n))` average lookups of `included_state`
 		// TODO: instead make a single pass and store the values lazily.
-		// TODO: https://github.com/paritytech/polkadot/issues/4527
+		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/150
 		let n = statement_sets.len();
 
 		statement_sets.sort_by(dispute_ordering_compare::<Self, BlockNumber>);
@@ -366,15 +366,15 @@ impl WeightInfo for TestWeightInfo {
 }
 
 pub use pallet::*;
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + configuration::Config + session_info::Config {
+	pub trait Config: pezframe_system::Config + configuration::Config + session_info::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type RewardValidators: RewardValidators;
 		type SlashingHandler: SlashingHandler<BlockNumberFor<Self>>;
 
@@ -890,7 +890,7 @@ impl<T: Config> Pallet<T> {
 				BackersOnDisputes::<T>::remove_prefix(to_prune, None);
 
 				// This is larger, and will be extracted to the `shared` pallet for more proper
-				// pruning. TODO: https://github.com/paritytech/polkadot/issues/3469
+				// pruning. TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/145
 				#[allow(deprecated)]
 				Included::<T>::remove_prefix(to_prune, None);
 			}
@@ -945,7 +945,7 @@ impl<T: Config> Pallet<T> {
 
 		// Dispute statement sets on any dispute which concluded
 		// before this point are to be rejected.
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let oldest_accepted = now.saturating_sub(post_conclusion_acceptance_period);
 
 		// Load session info to access validators
@@ -1063,7 +1063,7 @@ impl<T: Config> Pallet<T> {
 	) -> Result<bool, DispatchError> {
 		// Dispute statement sets on any dispute which concluded
 		// before this point are to be rejected.
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let oldest_accepted = now.saturating_sub(dispute_post_conclusion_acceptance_period);
 
 		let set = set.as_ref();
@@ -1253,7 +1253,7 @@ impl<T: Config> Pallet<T> {
 			// block X+1.
 			let revert = revert_to + One::one();
 			Self::deposit_event(Event::Revert(revert));
-			frame_system::Pallet::<T>::deposit_log(
+			pezframe_system::Pallet::<T>::deposit_log(
 				ConsensusLog::Revert(revert.saturated_into()).into(),
 			);
 		}

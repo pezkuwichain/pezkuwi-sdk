@@ -32,7 +32,7 @@ use futures::{
 };
 
 use pezkuwi_node_subsystem_util::reputation::ReputationAggregator;
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use pezkuwi_node_network_protocol::{
 	request_response::{v2 as protocol_v2, IncomingRequestReceiver},

@@ -38,16 +38,16 @@ use alloc::{
 };
 use bitvec::prelude::BitVec;
 use core::result::Result;
-use frame_support::{
+use pezframe_support::{
 	defensive,
 	dispatch::{DispatchErrorWithPostInfo, PostDispatchInfo},
 	inherent::{InherentData, InherentIdentifier, MakeFatalError, ProvideInherent},
-	pallet_prelude::*,
+	pezpallet_prelude::*,
 	traits::Randomness,
 };
 
-use frame_system::pallet_prelude::*;
-use pallet_babe::{self, ParentBlockRandomness};
+use pezframe_system::pezpallet_prelude::*;
+use pezpallet_babe::{self, ParentBlockRandomness};
 use pezkuwi_primitives::{
 	effective_minimum_backing_votes, node_features::FeatureIndex, BackedCandidate,
 	CandidateDescriptorVersion, CandidateHash, CandidateReceiptV2 as CandidateReceipt,
@@ -59,7 +59,7 @@ use pezkuwi_primitives::{
 };
 use rand::{seq::SliceRandom, SeedableRng};
 use scale_info::TypeInfo;
-use sp_runtime::traits::{Header as HeaderT, One};
+use pezsp_runtime::traits::{Header as HeaderT, One};
 
 mod misc;
 mod weights;
@@ -103,7 +103,7 @@ impl DisputedBitfield {
 
 pub use pallet::*;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -112,9 +112,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	#[pallet::disable_frame_system_supertrait_check]
+	#[pallet::disable_pezframe_system_supertrait_check]
 	pub trait Config:
-		inclusion::Config + scheduler::Config + initializer::Config + pallet_babe::Config
+		inclusion::Config + scheduler::Config + initializer::Config + pezpallet_babe::Config
 	{
 		/// Weight information for extrinsics in this pallet.
 		type WeightInfo: WeightInfo;
@@ -282,7 +282,7 @@ impl<T: Config> Pallet<T> {
 	) -> Result<(TeyrchainsInherentData<HeaderFor<T>>, PostDispatchInfo), DispatchErrorWithPostInfo>
 	{
 		#[cfg(feature = "runtime-metrics")]
-		sp_io::init_tracing();
+		pezsp_io::init_tracing();
 
 		let TeyrchainsInherentData {
 			mut bitfields,
@@ -299,14 +299,14 @@ impl<T: Config> Pallet<T> {
 			disputes.len()
 		);
 
-		let parent_hash = frame_system::Pallet::<T>::parent_hash();
+		let parent_hash = pezframe_system::Pallet::<T>::parent_hash();
 
 		ensure!(
 			parent_header.hash().as_ref() == parent_hash.as_ref(),
 			Error::<T>::InvalidParentHeader,
 		);
 
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let config = configuration::ActiveConfig::<T>::get();
 
 		// Before anything else, update the allowed relay-parents.
@@ -353,7 +353,7 @@ impl<T: Config> Pallet<T> {
 		// to subtract BlockWeights::base_block to reduce chances of becoming overweight.
 		let max_block_weight = {
 			let dispatch_class = DispatchClass::Mandatory;
-			let max_block_weight_full = <T as frame_system::Config>::BlockWeights::get();
+			let max_block_weight_full = <T as pezframe_system::Config>::BlockWeights::get();
 			log::debug!(target: LOG_TARGET, "Max block weight: {}", max_block_weight_full.max_block);
 			// Get max block weight for the mandatory class if defined, otherwise total max weight
 			// of the block.
@@ -364,7 +364,7 @@ impl<T: Config> Pallet<T> {
 				.unwrap_or(max_block_weight_full.max_block);
 			log::debug!(target: LOG_TARGET, "Used max block time weight: {}", max_weight);
 
-			let max_block_size_full = <T as frame_system::Config>::BlockLength::get();
+			let max_block_size_full = <T as pezframe_system::Config>::BlockLength::get();
 			let max_block_size = max_block_size_full.max.get(dispatch_class);
 			log::debug!(target: LOG_TARGET, "Used max block size: {}", max_block_size);
 
@@ -832,7 +832,7 @@ pub(crate) fn apply_weight_limit<T: Config + inclusion::Config>(
 		max_consumable_weight.checked_sub(&total_bitfields_weight)
 	{
 		let (acc_candidate_weight, chained_indices) =
-			random_sel::<Vec<BackedCandidate<<T as frame_system::Config>::Hash>>, _>(
+			random_sel::<Vec<BackedCandidate<<T as pezframe_system::Config>::Hash>>, _>(
 				rng,
 				&chained_candidates,
 				preferred_chain_indices,
@@ -1257,7 +1257,7 @@ fn filter_backed_statements_from_disabled_validators<
 >(
 	backed_candidates_with_core: &mut BTreeMap<
 		ParaId,
-		Vec<(BackedCandidate<<T as frame_system::Config>::Hash>, CoreIndex)>,
+		Vec<(BackedCandidate<<T as pezframe_system::Config>::Hash>, CoreIndex)>,
 	>,
 	allowed_relay_parents: &AllowedRelayParentsTracker<T::Hash, BlockNumberFor<T>>,
 ) {

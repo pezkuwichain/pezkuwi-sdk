@@ -90,7 +90,7 @@ impl WeightInfo for TestWeightInfo {
 }
 
 pub fn paras_inherent_total_weight<T: Config>(
-	backed_candidates: &[BackedCandidate<<T as frame_system::Config>::Hash>],
+	backed_candidates: &[BackedCandidate<<T as pezframe_system::Config>::Hash>],
 	bitfields: &UncheckedSignedAvailabilityBitfields,
 	disputes: &MultiDisputeStatementSet,
 ) -> Weight {
@@ -182,7 +182,7 @@ pub fn enact_candidates_max_weight<T: Config>(
 	)
 }
 
-pub fn backed_candidate_weight<T: frame_system::Config + Config>(
+pub fn backed_candidate_weight<T: pezframe_system::Config + Config>(
 	candidate: &BackedCandidate<T::Hash>,
 ) -> Weight {
 	set_proof_size_to_tx_size(
@@ -198,7 +198,7 @@ pub fn backed_candidate_weight<T: frame_system::Config + Config>(
 	)
 }
 
-pub fn backed_candidates_weight<T: frame_system::Config + Config>(
+pub fn backed_candidates_weight<T: pezframe_system::Config + Config>(
 	candidates: &[BackedCandidate<T::Hash>],
 ) -> Weight {
 	candidates

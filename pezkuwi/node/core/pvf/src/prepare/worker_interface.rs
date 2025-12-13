@@ -33,7 +33,7 @@ use pezkuwi_node_core_pvf_common::{
 	worker_dir, SecurityStatus,
 };
 
-use sp_core::hexdisplay::HexDisplay;
+use pezsp_core::hexdisplay::HexDisplay;
 use std::{
 	path::{Path, PathBuf},
 	time::Duration,

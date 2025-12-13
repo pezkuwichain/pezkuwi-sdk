@@ -20,16 +20,16 @@ mod xcm_config;
 pub use xcm_config::*;
 
 use core::marker::PhantomData;
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{
 		ConstU128, ContainsPair, Disabled, EnsureOrigin, EnsureOriginWithArg, Everything, Nothing,
 	},
 	weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 };
-use frame_system::EnsureRoot;
-use sp_core::ConstU32;
-use sp_runtime::{
+use pezframe_system::EnsureRoot;
+use pezsp_core::ConstU32;
+use pezsp_runtime::{
 	traits::{Get, IdentityLookup},
 	AccountId32,
 };
@@ -45,16 +45,16 @@ parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	type ExistentialDeposit = ConstU128<1>;
 	type AccountStore = System;
@@ -63,7 +63,7 @@ impl pallet_balances::Config for Runtime {
 #[cfg(feature = "runtime-benchmarks")]
 pub struct UniquesHelper;
 #[cfg(feature = "runtime-benchmarks")]
-impl pallet_uniques::BenchmarkHelper<Location, AssetInstance> for UniquesHelper {
+impl pezpallet_uniques::BenchmarkHelper<Location, AssetInstance> for UniquesHelper {
 	fn collection(i: u16) -> Location {
 		GeneralIndex(i as u128).into()
 	}
@@ -72,18 +72,18 @@ impl pallet_uniques::BenchmarkHelper<Location, AssetInstance> for UniquesHelper 
 	}
 }
 
-impl pallet_uniques::Config for Runtime {
+impl pezpallet_uniques::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type CollectionId = Location;
 	type ItemId = AssetInstance;
 	type Currency = Balances;
 	type CreateOrigin = ForeignCreators;
-	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
-	type CollectionDeposit = frame_support::traits::ConstU128<1_000>;
-	type ItemDeposit = frame_support::traits::ConstU128<1_000>;
-	type MetadataDepositBase = frame_support::traits::ConstU128<1_000>;
-	type AttributeDepositBase = frame_support::traits::ConstU128<1_000>;
-	type DepositPerByte = frame_support::traits::ConstU128<1>;
+	type ForceOrigin = pezframe_system::EnsureRoot<AccountId>;
+	type CollectionDeposit = pezframe_support::traits::ConstU128<1_000>;
+	type ItemDeposit = pezframe_support::traits::ConstU128<1_000>;
+	type MetadataDepositBase = pezframe_support::traits::ConstU128<1_000>;
+	type AttributeDepositBase = pezframe_support::traits::ConstU128<1_000>;
+	type DepositPerByte = pezframe_support::traits::ConstU128<1>;
 	type StringLimit = ConstU32<64>;
 	type KeyLimit = ConstU32<64>;
 	type ValueLimit = ConstU32<128>;
@@ -103,7 +103,7 @@ impl EnsureOriginWithArg<RuntimeOrigin, Location> for ForeignCreators {
 		o: RuntimeOrigin,
 		a: &Location,
 	) -> core::result::Result<Self::Success, RuntimeOrigin> {
-		let origin_location = pallet_xcm::EnsureXcm::<Everything>::try_origin(o.clone())?;
+		let origin_location = pezpallet_xcm::EnsureXcm::<Everything>::try_origin(o.clone())?;
 		if !a.starts_with(&origin_location) {
 			return Err(o);
 		}
@@ -113,7 +113,7 @@ impl EnsureOriginWithArg<RuntimeOrigin, Location> for ForeignCreators {
 
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin(a: &Location) -> Result<RuntimeOrigin, ()> {
-		Ok(pallet_xcm::Origin::Xcm(a.clone()).into())
+		Ok(pezpallet_xcm::Origin::Xcm(a.clone()).into())
 	}
 }
 
@@ -144,7 +144,7 @@ parameter_types! {
 
 pub type TrustedLockers = TrustedLockerCase<RelayTokenForRelay>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -158,7 +158,7 @@ impl pallet_xcm::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = ();
 	type TrustedLockers = TrustedLockers;
@@ -166,19 +166,19 @@ impl pallet_xcm::Config for Runtime {
 	type MaxLockers = ConstU32<8>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type AuthorizedAliasConsideration = Disabled;
 }
 
-type Block = frame_system::mocking::MockBlock<Runtime>;
+type Block = pezframe_system::mocking::MockBlock<Runtime>;
 
 construct_runtime!(
 	pub struct Runtime {
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		MsgQueue: mock_message_queue,
-		PezkuwiXcm: pallet_xcm,
-		ForeignUniques: pallet_uniques,
+		PezkuwiXcm: pezpallet_xcm,
+		ForeignUniques: pezpallet_uniques,
 	}
 );

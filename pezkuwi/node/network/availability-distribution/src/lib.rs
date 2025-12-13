@@ -16,7 +16,7 @@
 
 use futures::{future::Either, FutureExt, StreamExt, TryFutureExt};
 
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use pezkuwi_node_network_protocol::request_response::{
 	v1, v2, IncomingRequestReceiver, ReqProtocolNames,

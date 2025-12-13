@@ -399,7 +399,7 @@ Implementation of the above design covers a few additional areas that allow for 
     - Expose a ``disabled_validators`` map through a Runtime API
 1. Enforce Backing Disabling (**Runtime**) [#1592](https://github.com/pezkuwichain/pezkuwi-sdk/issues/110)
     - Filter out votes from ``disabled_validators`` in ``BackedCandidates`` in ``process_inherent_data``
-1. Substrate Byzantine Threshold (BZT) as Limit for Disabling
+1. Bizinikiwi Byzantine Threshold (BZT) as Limit for Disabling
    [#1963](https://github.com/pezkuwichain/pezkuwi-sdk/issues/114)
     - Can be parametrized but default to BZT
     - Disable only up to 1/3 of validators
@@ -430,7 +430,7 @@ Implementation of the above design covers a few additional areas that allow for 
     > This would guarantee determinism as different nodes can see different leaves, but this approach was leaving too
     > wide of a window because of Async-Backing. Relay Parent could have been significantly in the past and it would
     > give a lot of time for past session disputes to be spammed.
-1. Do not block finality for "disabled" disputes [#3358](https://github.com/paritytech/polkadot-sdk/pull/3358)
+1. Do not block finality for "disabled" disputes [#3358](https://github.com/pezkuwichain/kurdistan-sdk/issues/114)
     - Emergency fix to not block finality for disputes initiated only by disabled validators
 1. Re-enable small offender when approaching BZT (**Runtime**) #TODO
     - When BZT limit is reached and there are more offenders to be disabled re-enable the smallest offenders to disable

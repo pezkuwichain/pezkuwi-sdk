@@ -41,7 +41,7 @@ use pezkuwi_primitives::{
 	BackedCandidate, CandidateEvent, CandidateHash, CoreIndex, CoreState, Hash, Id as ParaId,
 	SignedAvailabilityBitfield, ValidatorIndex,
 };
-use sc_consensus_slots::time_until_next_slot;
+use pezsc_consensus_slots::time_until_next_slot;
 use schnellru::{ByLength, LruMap};
 use std::{
 	collections::{BTreeMap, HashMap},
@@ -416,7 +416,7 @@ fn note_provisionable_data(
 		// parablocks once they are included. But we can do slightly better by
 		// allowing disagreeing backers to record their disagreement and initiate a
 		// dispute once the parablock in question has been included. This potential
-		// change is tracked by: https://github.com/paritytech/polkadot/issues/3232
+		// change is tracked by: https://github.com/pezkuwichain/kurdistan-sdk/issues/140
 		ProvisionableData::Dispute(_, _) => {},
 	}
 }

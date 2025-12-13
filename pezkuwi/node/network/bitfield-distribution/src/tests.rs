@@ -30,11 +30,11 @@ use pezkuwi_node_subsystem_test_helpers::make_subsystem_context;
 use pezkuwi_node_subsystem_util::TimeoutExt;
 use pezkuwi_primitives::{AvailabilityBitfield, Signed, ValidatorIndex};
 use rand_chacha::ChaCha12Rng;
-use sp_application_crypto::AppCrypto;
-use sp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
-use sp_core::Pair as PairT;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{testing::MemoryKeystore, Keystore, KeystorePtr};
+use pezsp_application_crypto::AppCrypto;
+use pezsp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
+use pezsp_core::Pair as PairT;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{testing::MemoryKeystore, Keystore, KeystorePtr};
 
 use std::{sync::Arc, time::Duration};
 
@@ -131,7 +131,7 @@ fn state_with_view(
 
 #[test]
 fn receive_invalid_signature() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash_a: Hash = [0; 32].into();
 
@@ -192,7 +192,7 @@ fn receive_invalid_signature() {
 	let valid_msg =
 		BitfieldGossipMessage { relay_parent: hash_a, signed_availability: valid_signed.clone() };
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 
 	let mut state =
@@ -245,7 +245,7 @@ fn receive_invalid_signature() {
 
 #[test]
 fn receive_invalid_validator_index() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash_a: Hash = [0; 32].into();
 	let hash_b: Hash = [1; 32].into(); // other
@@ -274,7 +274,7 @@ fn receive_invalid_validator_index() {
 
 	let msg = BitfieldGossipMessage { relay_parent: hash_a, signed_availability: signed.clone() };
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 
@@ -305,7 +305,7 @@ fn receive_invalid_validator_index() {
 
 #[test]
 fn receive_duplicate_messages() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash_a: Hash = [0; 32].into();
 	let hash_b: Hash = [1; 32].into();
@@ -336,7 +336,7 @@ fn receive_duplicate_messages() {
 		signed_availability: signed_bitfield.clone(),
 	};
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 
@@ -427,7 +427,7 @@ fn receive_duplicate_messages() {
 fn delay_reputation_change() {
 	use pezkuwi_node_subsystem_util::reputation::add_reputation;
 
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash_a: Hash = [0; 32].into();
 	let hash_b: Hash = [1; 32].into();
@@ -456,7 +456,7 @@ fn delay_reputation_change() {
 		signed_availability: signed_bitfield.clone(),
 	};
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 	let reputation_interval = Duration::from_millis(100);
@@ -532,7 +532,7 @@ fn delay_reputation_change() {
 
 #[test]
 fn do_not_relay_message_twice() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash = Hash::random();
 
@@ -563,7 +563,7 @@ fn do_not_relay_message_twice() {
 	let msg =
 		BitfieldGossipMessage { relay_parent: hash, signed_availability: signed_bitfield.clone() };
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 
@@ -637,7 +637,7 @@ fn do_not_relay_message_twice() {
 
 #[test]
 fn changing_view() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash_a: Hash = [0; 32].into();
 	let hash_b: Hash = [1; 32].into();
@@ -668,7 +668,7 @@ fn changing_view() {
 		signed_availability: signed_bitfield.clone(),
 	};
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 
@@ -809,7 +809,7 @@ fn changing_view() {
 
 #[test]
 fn do_not_send_message_back_to_origin() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash: Hash = [0; 32].into();
 
@@ -840,7 +840,7 @@ fn do_not_send_message_back_to_origin() {
 	let msg =
 		BitfieldGossipMessage { relay_parent: hash, signed_availability: signed_bitfield.clone() };
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 
@@ -893,7 +893,7 @@ fn do_not_send_message_back_to_origin() {
 
 #[test]
 fn topology_test() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let hash: Hash = [0; 32].into();
 
@@ -955,7 +955,7 @@ fn topology_test() {
 	let msg =
 		BitfieldGossipMessage { relay_parent: hash, signed_availability: signed_bitfield.clone() };
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut ctx, mut handle) = make_subsystem_context::<BitfieldDistributionMessage, _>(pool);
 	let mut rng = dummy_rng();
 

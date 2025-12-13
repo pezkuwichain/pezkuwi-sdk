@@ -3,7 +3,7 @@
 //! Implementation for [`snowbridge_outbound_queue_primitives::v2::SendMessage`]
 use super::*;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	ensure,
 	traits::{EnqueueMessage, Get},
 };
@@ -11,8 +11,8 @@ use snowbridge_outbound_queue_primitives::{
 	v2::{Message, SendMessage},
 	SendError,
 };
-use sp_core::H256;
-use sp_runtime::BoundedVec;
+use pezsp_core::H256;
+use pezsp_runtime::BoundedVec;
 
 impl<T> SendMessage for Pallet<T>
 where

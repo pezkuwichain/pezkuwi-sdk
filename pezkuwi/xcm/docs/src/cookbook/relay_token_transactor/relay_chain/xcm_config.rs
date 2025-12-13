@@ -18,7 +18,7 @@
 //! Relay chain XCM configuration
 
 use frame::{
-	deps::frame_system,
+	deps::pezframe_system,
 	runtime::prelude::*,
 	traits::{Disabled, Everything, Nothing},
 };
@@ -125,7 +125,7 @@ impl xcm_executor::Config for XcmConfig {
 /// sending/executing XCMs.
 pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, ThisNetwork>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	// No one can call `send`
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, ()>;
 	type XcmRouter = super::super::network::RelayChainXcmRouter; // Provided by xcm-simulator
@@ -146,8 +146,8 @@ impl pallet_xcm::Config for Runtime {
 	type UniversalLocation = UniversalLocation;
 	// No version discovery needed
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 0;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
-	type AdminOrigin = frame_system::EnsureRoot<AccountId>;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
+	type AdminOrigin = pezframe_system::EnsureRoot<AccountId>;
 	// No locking
 	type TrustedLockers = ();
 	type MaxLockers = frame::traits::ConstU32<0>;
@@ -159,7 +159,7 @@ impl pallet_xcm::Config for Runtime {
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<HereLocation>;
 	// Pallet benchmarks, no need for this example
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	// Runtime types
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;

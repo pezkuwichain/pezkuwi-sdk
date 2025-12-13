@@ -21,7 +21,7 @@ use scale_info::TypeInfo;
 use xcm::VersionedLocation;
 use xcm_executor::traits::ConvertLocation;
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// API for useful conversions between XCM `Location` and `AccountId`.
 	pub trait LocationToAccountApi<AccountId> where AccountId: Decode {
 		/// Converts `Location` to `AccountId`.

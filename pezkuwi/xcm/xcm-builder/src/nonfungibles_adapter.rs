@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Adapters to work with [`frame_support::traits::tokens::nonfungibles`] through XCM.
+//! Adapters to work with [`pezframe_support::traits::tokens::nonfungibles`] through XCM.
 
 use crate::{AssetChecking, MintLocation};
 use core::{fmt::Debug, marker::PhantomData, result};
-use frame_support::{
+use pezframe_support::{
 	ensure,
 	traits::{tokens::nonfungibles, Get},
 };

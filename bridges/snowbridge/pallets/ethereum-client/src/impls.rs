@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use super::*;
-use frame_support::ensure;
+use pezframe_support::ensure;
 use snowbridge_beacon_primitives::ExecutionProof;
 
 use snowbridge_beacon_primitives::{

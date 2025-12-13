@@ -21,18 +21,18 @@ scale-info = { features = ["bit-vec", "derive", "serde"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 thiserror = { workspace = true, optional = true }
 
-sp-api = { workspace = true }
-sp-application-crypto = { features = ["serde"], workspace = true }
-sp-arithmetic = { features = ["serde"], workspace = true }
-sp-authority-discovery = { features = ["serde"], workspace = true }
-sp-consensus-slots = { features = ["serde"], workspace = true }
-sp-core = { workspace = true }
-sp-inherents = { workspace = true }
-sp-io = { workspace = true }
-sp-keystore = { optional = true, workspace = true }
-sp-runtime = { workspace = true }
-sp-staking = { features = ["serde"], workspace = true }
-sp-std = { workspace = true, optional = true }
+pezsp-api = { workspace = true }
+pezsp-application-crypto = { features = ["serde"], workspace = true }
+pezsp-arithmetic = { features = ["serde"], workspace = true }
+pezsp-authority-discovery = { features = ["serde"], workspace = true }
+pezsp-consensus-slots = { features = ["serde"], workspace = true }
+pezsp-core = { workspace = true }
+pezsp-inherents = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-keystore = { optional = true, workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-staking = { features = ["serde"], workspace = true }
+pezsp-std = { workspace = true, optional = true }
 
 pezkuwi-core-primitives = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true }
@@ -48,30 +48,30 @@ std = [
 	"pezkuwi-teyrchain-primitives/std",
 	"scale-info/std",
 	"serde/std",
-	"sp-api/std",
-	"sp-application-crypto/std",
-	"sp-arithmetic/std",
-	"sp-authority-discovery/std",
-	"sp-consensus-slots/std",
-	"sp-core/std",
-	"sp-inherents/std",
-	"sp-io/std",
-	"sp-keystore",
-	"sp-keystore?/std",
-	"sp-runtime/std",
-	"sp-staking/std",
-	"sp-std/std",
+	"pezsp-api/std",
+	"pezsp-application-crypto/std",
+	"pezsp-arithmetic/std",
+	"pezsp-authority-discovery/std",
+	"pezsp-consensus-slots/std",
+	"pezsp-core/std",
+	"pezsp-inherents/std",
+	"pezsp-io/std",
+	"pezsp-keystore",
+	"pezsp-keystore?/std",
+	"pezsp-runtime/std",
+	"pezsp-staking/std",
+	"pezsp-std/std",
 	"thiserror",
 ]
 runtime-benchmarks = [
 	"pezkuwi-core-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
-	"sp-authority-discovery/runtime-benchmarks",
-	"sp-consensus-slots/runtime-benchmarks",
-	"sp-inherents/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-staking/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-consensus-slots/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-staking/runtime-benchmarks",
 ]
 test = []

@@ -23,10 +23,10 @@
 //! Subsystems' APIs are defined separately from their implementation, leading to easier mocking.
 
 use futures::channel::oneshot;
-use sc_network::{Multiaddr, ReputationChange};
+use pezsc_network::{Multiaddr, ReputationChange};
 use thiserror::Error;
 
-pub use sc_network::IfDisconnected;
+pub use pezsc_network::IfDisconnected;
 
 use pezkuwi_node_network_protocol::{
 	self as net_protocol, peer_set::PeerSet, request_response::Requests, PeerId,
@@ -262,10 +262,10 @@ pub enum CollatorProtocolMessage {
 	///
 	/// The hash is the relay parent.
 	Seconded(Hash, SignedFullStatement),
-	/// A message sent by Cumulus consensus engine to the collator protocol to
+	/// A message sent by Pezcumulus consensus engine to the collator protocol to
 	/// pre-connect to backing groups at all allowed relay parents.
 	ConnectToBackingGroups,
-	/// A message sent by Cumulus consensus engine to the collator protocol to
+	/// A message sent by Pezcumulus consensus engine to the collator protocol to
 	/// disconnect from backing groups.
 	DisconnectFromBackingGroups,
 }
@@ -434,7 +434,7 @@ pub enum NetworkBridgeTxMessage {
 	/// NOTE: Messages will be processed in order.
 	SendCollationMessages(Vec<(Vec<PeerId>, net_protocol::VersionedCollationProtocol)>),
 
-	/// Send requests via substrate request/response.
+	/// Send requests via bizinikiwi request/response.
 	/// Second parameter, tells what to do if we are not yet connected to the peer.
 	SendRequests(Vec<Requests>, IfDisconnected),
 

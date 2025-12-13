@@ -4,19 +4,19 @@
 use super::*;
 use bridge_hub_common::AggregateMessageOrigin;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	ensure,
 	traits::{EnqueueMessage, Get},
 	CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use frame_system::unique;
+use pezframe_system::unique;
 use snowbridge_core::{ChannelId, PRIMARY_GOVERNANCE_CHANNEL};
 use snowbridge_outbound_queue_primitives::{
 	v1::{Fee, Message, QueuedMessage, SendMessage, VersionedQueuedMessage},
 	SendError, SendMessageFeeProvider,
 };
-use sp_core::H256;
-use sp_runtime::BoundedVec;
+use pezsp_core::H256;
+use pezsp_runtime::BoundedVec;
 
 /// The maximal length of an enqueued message, as determined by the MessageQueue pallet
 pub type MaxEnqueuedMessageSizeOf<T> =

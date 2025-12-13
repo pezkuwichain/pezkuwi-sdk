@@ -45,8 +45,8 @@ use pezkuwi_overseer::{OverseerSignal, Priority, SubsystemSender, TimeoutExt};
 use pezkuwi_primitives::{CandidateIndex, Hash, ValidatorIndex, ValidatorSignature};
 use rand::SeedableRng;
 
-use sc_keystore::LocalKeystore;
-use sp_consensus::SyncOracle;
+use pezsc_keystore::LocalKeystore;
+use pezsp_consensus::SyncOracle;
 
 use futures::{channel::oneshot, prelude::*, StreamExt};
 pub use metrics::Metrics;

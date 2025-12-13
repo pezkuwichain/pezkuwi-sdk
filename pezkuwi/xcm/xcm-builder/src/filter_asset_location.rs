@@ -19,7 +19,7 @@
 
 use alloc::vec::Vec;
 use core::marker::PhantomData;
-use frame_support::traits::{Contains, ContainsPair, Get};
+use pezframe_support::traits::{Contains, ContainsPair, Get};
 use xcm::latest::{Asset, AssetFilter, AssetId, Location, WildAsset};
 
 /// Accepts an asset iff it is a native asset.
@@ -83,12 +83,12 @@ impl Get<Vec<AssetFilter>> for AllAssets {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::traits::Equals;
+	use pezframe_support::traits::Equals;
 	use xcm::latest::prelude::*;
 
 	#[test]
 	fn location_with_asset_filters_works() {
-		frame_support::parameter_types! {
+		pezframe_support::parameter_types! {
 			pub ParaA: Location = Location::new(1, [Teyrchain(1001)]);
 			pub ParaB: Location = Location::new(1, [Teyrchain(1002)]);
 			pub ParaC: Location = Location::new(1, [Teyrchain(1003)]);

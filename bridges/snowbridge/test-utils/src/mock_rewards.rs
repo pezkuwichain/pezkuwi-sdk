@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use bp_relayers::{PaymentProcedure, RewardLedger, RewardsAccountOwner, RewardsAccountParams};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::{pallet_prelude::DispatchResult, parameter_types, sp_runtime};
+use pezframe_support::{pezpallet_prelude::DispatchResult, parameter_types, pezsp_runtime};
 use scale_info::TypeInfo;
 use xcm::opaque::latest::Location;
 
@@ -27,13 +27,13 @@ pub enum BridgeReward {
 pub struct MockPaymentProcedure;
 
 // Provide a no-op or mock implementation for the required trait
-impl PaymentProcedure<sp_runtime::AccountId32, RewardsAccountParams<u64>, u128>
+impl PaymentProcedure<pezsp_runtime::AccountId32, RewardsAccountParams<u64>, u128>
 	for MockPaymentProcedure
 {
 	type Error = DispatchResult;
 	type Beneficiary = Location;
 	fn pay_reward(
-		_who: &sp_runtime::AccountId32,
+		_who: &pezsp_runtime::AccountId32,
 		_reward_params: bp_relayers::RewardsAccountParams<u64>,
 		_reward_balance: u128,
 		_beneficiary: Self::Beneficiary,
@@ -55,9 +55,9 @@ parameter_types! {
 
 pub struct MockRewardLedger;
 
-impl RewardLedger<sp_runtime::AccountId32, BridgeReward, u128> for MockRewardLedger {
+impl RewardLedger<pezsp_runtime::AccountId32, BridgeReward, u128> for MockRewardLedger {
 	fn register_reward(
-		_relayer: &sp_runtime::AccountId32,
+		_relayer: &pezsp_runtime::AccountId32,
 		_reward: BridgeReward,
 		reward_balance: u128,
 	) {

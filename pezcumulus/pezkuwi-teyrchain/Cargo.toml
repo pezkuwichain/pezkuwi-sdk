@@ -1,0 +1,116 @@
+[package]
+name = "pezkuwi-teyrchain-bin"
+version = "4.0.0"
+authors.workspace = true
+edition.workspace = true
+build = "build.rs"
+description = "Runs a pezkuwi teyrchain node"
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "pezkuwi-teyrchain"
+path = "src/main.rs"
+
+[dependencies]
+color-eyre = { workspace = true }
+hex-literal = { workspace = true, default-features = true }
+log = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
+
+# Local
+asset-hub-pezkuwichain-runtime = { workspace = true, default-features = true }
+asset-hub-zagros-runtime = { workspace = true, default-features = true }
+bridge-hub-pezkuwichain-runtime = { workspace = true, default-features = true }
+bridge-hub-zagros-runtime = { workspace = true, default-features = true }
+collectives-zagros-runtime = { workspace = true }
+coretime-pezkuwichain-runtime = { workspace = true }
+coretime-zagros-runtime = { workspace = true }
+glutton-zagros-runtime = { workspace = true }
+penpal-runtime = { workspace = true }
+people-pezkuwichain-runtime = { workspace = true }
+people-zagros-runtime = { workspace = true }
+pezkuwi-omni-node-lib = { features = [
+	"pezkuwichain-native",
+	"zagros-native",
+], workspace = true }
+pezkuwichain-teyrchain-runtime = { workspace = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+# Bizinikiwi
+pezsc-chain-spec = { workspace = true, default-features = true }
+pezsc-cli = { workspace = true, default-features = true }
+pezsc-service = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-genesis-builder = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+
+# Pezkuwi
+xcm = { workspace = true, default-features = true }
+
+# Pezcumulus
+pezcumulus-client-consensus-aura = { workspace = true }
+pezcumulus-primitives-core = { workspace = true, default-features = true }
+yet-another-teyrchain-runtime = { workspace = true }
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+
+[build-dependencies]
+bizinikiwi-build-script-utils = { workspace = true, default-features = true }
+
+[features]
+default = []
+runtime-benchmarks = [
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezkuwi-omni-node-lib/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+
+	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
+	"asset-hub-zagros-runtime/runtime-benchmarks",
+	"bridge-hub-pezkuwichain-runtime/runtime-benchmarks",
+	"bridge-hub-zagros-runtime/runtime-benchmarks",
+	"collectives-zagros-runtime/runtime-benchmarks",
+	"coretime-pezkuwichain-runtime/runtime-benchmarks",
+	"coretime-zagros-runtime/runtime-benchmarks",
+	"pezcumulus-client-consensus-aura/runtime-benchmarks",
+	"glutton-zagros-runtime/runtime-benchmarks",
+	"penpal-runtime/runtime-benchmarks",
+	"people-pezkuwichain-runtime/runtime-benchmarks",
+	"people-zagros-runtime/runtime-benchmarks",
+	"pezkuwichain-teyrchain-runtime/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"yet-another-teyrchain-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"pezkuwi-omni-node-lib/try-runtime",
+
+	"asset-hub-pezkuwichain-runtime/try-runtime",
+	"asset-hub-zagros-runtime/try-runtime",
+	"bridge-hub-pezkuwichain-runtime/try-runtime",
+	"bridge-hub-zagros-runtime/try-runtime",
+	"collectives-zagros-runtime/try-runtime",
+	"coretime-pezkuwichain-runtime/try-runtime",
+	"coretime-zagros-runtime/try-runtime",
+	"glutton-zagros-runtime/try-runtime",
+	"penpal-runtime/try-runtime",
+	"people-pezkuwichain-runtime/try-runtime",
+	"people-zagros-runtime/try-runtime",
+	"teyrchains-common/try-runtime",
+]
+fast-runtime = [
+	"bridge-hub-pezkuwichain-runtime/fast-runtime",
+	"bridge-hub-zagros-runtime/fast-runtime",
+	"coretime-pezkuwichain-runtime/fast-runtime",
+	"coretime-zagros-runtime/fast-runtime",
+]

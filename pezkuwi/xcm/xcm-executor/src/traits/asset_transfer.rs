@@ -15,9 +15,9 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::traits::TransactAsset;
-use frame_support::traits::ContainsPair;
+use pezframe_support::traits::ContainsPair;
 use scale_info::TypeInfo;
-use sp_runtime::codec::{Decode, DecodeWithMemTracking, Encode};
+use pezsp_runtime::codec::{Decode, DecodeWithMemTracking, Encode};
 use xcm::prelude::*;
 
 /// Errors related to determining asset transfer support.

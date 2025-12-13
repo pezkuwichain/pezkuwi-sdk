@@ -47,9 +47,9 @@ pub struct Histogram {
 /// Convenience trait implemented for all metric types.
 trait MetricEmitter {
 	fn emit(metric_op: &RuntimeMetricUpdate) {
-		sp_tracing::event!(
+		pezsp_tracing::event!(
 			target: TRACING_TARGET,
-			sp_tracing::Level::TRACE,
+			pezsp_tracing::Level::TRACE,
 			update_op = bs58::encode(&metric_op.encode()).into_string().as_str()
 		);
 	}
@@ -142,5 +142,5 @@ impl Histogram {
 
 /// Returns current time in ns
 pub fn get_current_time() -> u128 {
-	frame_benchmarking::current_time()
+	pezframe_benchmarking::current_time()
 }

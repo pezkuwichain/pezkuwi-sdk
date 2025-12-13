@@ -16,7 +16,7 @@
 
 use std::fmt::Debug;
 
-use relay_substrate_client::{Chain, Teyrchain};
+use relay_bizinikiwi_client::{Chain, Teyrchain};
 
 pub mod teyrchains_loop;
 pub mod teyrchains_loop_metrics;

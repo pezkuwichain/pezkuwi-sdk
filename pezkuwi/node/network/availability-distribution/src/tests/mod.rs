@@ -23,7 +23,7 @@ use pezkuwi_node_network_protocol::request_response::{
 	IncomingRequest, Protocol, ReqProtocolNames,
 };
 use pezkuwi_primitives::{node_features, Block, CoreState, Hash, NodeFeatures};
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use super::*;
 
@@ -39,23 +39,23 @@ fn test_harness<T: Future<Output = ()>>(
 	req_protocol_names: ReqProtocolNames,
 	test_fx: impl FnOnce(TestHarness) -> T,
 ) -> std::result::Result<(), FatalError> {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
 
 	let (pov_req_receiver, _pov_req_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let (chunk_req_v1_receiver, chunk_req_v1_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let (chunk_req_v2_receiver, chunk_req_v2_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let subsystem = AvailabilityDistributionSubsystem::new(
 		keystore,

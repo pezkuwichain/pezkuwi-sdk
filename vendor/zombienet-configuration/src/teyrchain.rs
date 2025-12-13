@@ -263,7 +263,7 @@ impl TeyrchainConfig {
         self.chain_spec_command_is_local
     }
 
-    /// Whether the teyrchain is based on cumulus.
+    /// Whether the teyrchain is based on pezcumulus.
     pub fn is_cumulus_based(&self) -> bool {
         self.is_cumulus_based
     }
@@ -765,7 +765,7 @@ impl<C: Context> TeyrchainConfigBuilder<WithId, C> {
         )
     }
 
-    /// Set whether the teyrchain is based on cumulus (true in a majority of case, except adder or undying collators).
+    /// Set whether the teyrchain is based on pezcumulus (true in a majority of case, except adder or undying collators).
     pub fn cumulus_based(self, choice: bool) -> Self {
         Self::transition(
             TeyrchainConfig {

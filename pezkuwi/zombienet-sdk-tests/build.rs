@@ -1,7 +1,7 @@
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
-use sc_executor::WasmExecutor;
+use pezsc_executor::WasmExecutor;
 use std::{
 	env, fs, path,
 	path::{Path, PathBuf},
@@ -82,10 +82,10 @@ fn build_wasm(chain: &str) -> PathBuf {
 }
 
 type HostFunctions = (
-	sp_io::allocator::HostFunctions,
-	sp_io::logging::HostFunctions,
-	sp_io::storage::HostFunctions,
-	sp_io::hashing::HostFunctions,
+	pezsp_io::allocator::HostFunctions,
+	pezsp_io::logging::HostFunctions,
+	pezsp_io::storage::HostFunctions,
+	pezsp_io::hashing::HostFunctions,
 );
 
 fn generate_metadata_file(wasm_path: &Path, output_path: &Path) {
@@ -96,7 +96,7 @@ fn generate_metadata_file(wasm_path: &Path, output_path: &Path) {
 		.build();
 
 	let metadata =
-		sc_runtime_utilities::fetch_latest_metadata_from_code_blob(&executor, wasm_bytes.into())
+		pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob(&executor, wasm_bytes.into())
 			.expect("Failed to fetch metadata from runtime");
 
 	fs::write(output_path, &*metadata).expect("Failed to write metadata file");
@@ -151,7 +151,7 @@ fn main() {
 		};
 	}
 
-	substrate_build_script_utils::generate_cargo_keys();
-	substrate_build_script_utils::rerun_if_git_head_changed();
+	bizinikiwi_build_script_utils::generate_cargo_keys();
+	bizinikiwi_build_script_utils::rerun_if_git_head_changed();
 	println!("cargo:rerun-if-changed={metadata_path}");
 }

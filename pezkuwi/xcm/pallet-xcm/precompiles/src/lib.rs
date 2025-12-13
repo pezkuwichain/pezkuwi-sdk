@@ -22,15 +22,15 @@ extern crate alloc;
 use alloc::vec::Vec;
 use codec::{DecodeAll, DecodeLimit};
 use core::{fmt, marker::PhantomData, num::NonZero};
-use frame_support::dispatch::RawOrigin;
-use pallet_revive::{
+use pezframe_support::dispatch::RawOrigin;
+use pezpallet_revive::{
 	precompiles::{
 		alloy::{self, sol_types::SolValue},
 		AddressMatcher, Error, Ext, Precompile,
 	},
 	DispatchInfo, ExecOrigin as Origin, Weight,
 };
-use pallet_xcm::{Config, WeightInfo};
+use pezpallet_xcm::{Config, WeightInfo};
 use tracing::error;
 use xcm::{v5, IdentifyVersion, VersionedLocation, VersionedXcm, MAX_XCM_DECODE_DEPTH};
 use xcm_executor::traits::WeightBounds;
@@ -63,7 +63,7 @@ pub struct XcmPrecompile<T>(PhantomData<T>);
 
 impl<Runtime> Precompile for XcmPrecompile<Runtime>
 where
-	Runtime: crate::Config + pallet_revive::Config,
+	Runtime: crate::Config + pezpallet_revive::Config,
 {
 	type T = Runtime;
 	const MATCHER: AddressMatcher = AddressMatcher::Fixed(NonZero::new(10).unwrap());
@@ -83,7 +83,7 @@ where
 
 		match input {
 			IXcmCalls::send(_) | IXcmCalls::execute(_) if env.is_read_only() =>
-				Err(Error::Error(pallet_revive::Error::<Self::T>::StateChangeDenied.into())),
+				Err(Error::Error(pezpallet_revive::Error::<Self::T>::StateChangeDenied.into())),
 			IXcmCalls::send(IXcm::sendCall { destination, message }) => {
 				let _ = env.charge(<Runtime as Config>::WeightInfo::send())?;
 
@@ -102,7 +102,7 @@ where
 
 				ensure_xcm_version(&final_message)?;
 
-				pallet_xcm::Pallet::<Runtime>::send(
+				pezpallet_xcm::Pallet::<Runtime>::send(
 					frame_origin,
 					final_destination.into(),
 					final_message.into(),
@@ -129,7 +129,7 @@ where
 
 				ensure_xcm_version(&final_message)?;
 
-				let result = pallet_xcm::Pallet::<Runtime>::execute(
+				let result = pezpallet_xcm::Pallet::<Runtime>::execute(
 					frame_origin,
 					final_message.into(),
 					max_weight,
@@ -142,7 +142,7 @@ where
 				};
 
 				// Adjust gas using actual weight or fallback to initially charged weight
-				let actual_weight = frame_support::dispatch::extract_actual_weight(&result, &pre);
+				let actual_weight = pezframe_support::dispatch::extract_actual_weight(&result, &pre);
 				env.adjust_gas(charged_amount, actual_weight);
 
 				result.map(|_| Vec::new()).map_err(|error| {

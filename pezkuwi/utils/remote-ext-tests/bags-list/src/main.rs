@@ -47,7 +47,7 @@ struct Cli {
 #[tokio::main]
 async fn main() {
 	let options = Cli::parse();
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 
 	log::info!(
 		target: "remote-ext-tests",
@@ -56,10 +56,10 @@ async fn main() {
 		options.command
 	);
 
-	use pallet_bags_list_remote_tests::*;
+	use pezpallet_bags_list_remote_tests::*;
 	match options.runtime {
-		Runtime::Zagros => sp_core::crypto::set_default_ss58_version(
-			<zagros_runtime::Runtime as frame_system::Config>::SS58Prefix::get()
+		Runtime::Zagros => pezsp_core::crypto::set_default_ss58_version(
+			<zagros_runtime::Runtime as pezframe_system::Config>::SS58Prefix::get()
 				.try_into()
 				.unwrap(),
 		),

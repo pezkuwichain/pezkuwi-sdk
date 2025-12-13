@@ -2,9 +2,9 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use codec::FullCodec;
 use core::{cmp::Ord, marker::PhantomData, ops::Add};
-use frame_support::storage::{types::QueryKindTrait, StorageMap, StorageValue};
-use sp_core::{Get, GetDefault};
-use sp_runtime::traits::{One, Zero};
+use pezframe_support::storage::{types::QueryKindTrait, StorageMap, StorageValue};
+use pezsp_core::{Get, GetDefault};
+use pezsp_runtime::traits::{One, Zero};
 
 /// Trait object presenting the ringbuffer interface.
 pub trait RingBufferMap<Key, Value, QueryKind>

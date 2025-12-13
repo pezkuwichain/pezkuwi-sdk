@@ -35,7 +35,7 @@ use pezkuwi_node_subsystem_types::{ChainApiBackend, RuntimeApiSubsystemClient};
 use pezkuwi_primitives::{CandidateDescriptorV2, CandidateReceiptV2, CoreIndex};
 
 use pezkuwi_node_subsystem_util::request_validators;
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 use rand::distributions::{Bernoulli, Distribution};
 

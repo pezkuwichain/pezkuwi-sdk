@@ -21,7 +21,7 @@
 mod block_builder;
 
 use pezkuwi_primitives::Block;
-use sp_runtime::BuildStorage;
+use pezsp_runtime::BuildStorage;
 use std::sync::Arc;
 
 pub use block_builder::*;
@@ -29,27 +29,27 @@ pub use pezkuwi_test_runtime as runtime;
 pub use pezkuwi_test_service::{
 	construct_extrinsic, construct_transfer_extrinsic, Client, FullBackend,
 };
-pub use substrate_test_client::*;
+pub use bizinikiwi_test_client::*;
 
 /// Test client executor.
 pub type Executor = client::LocalCallExecutor<
 	Block,
 	FullBackend,
-	WasmExecutor<(sp_io::SubstrateHostFunctions, frame_benchmarking::benchmarking::HostFunctions)>,
+	WasmExecutor<(pezsp_io::BizinikiwiHostFunctions, pezframe_benchmarking::benchmarking::HostFunctions)>,
 >;
 
 /// Test client builder for Pezkuwi.
 pub type TestClientBuilder =
-	substrate_test_client::TestClientBuilder<Block, Executor, FullBackend, GenesisParameters>;
+	bizinikiwi_test_client::TestClientBuilder<Block, Executor, FullBackend, GenesisParameters>;
 
 /// `LongestChain` type for the test runtime/client.
-pub type LongestChain = sc_consensus::LongestChain<FullBackend, Block>;
+pub type LongestChain = pezsc_consensus::LongestChain<FullBackend, Block>;
 
 /// Parameters of test-client builder with test-runtime.
 #[derive(Default)]
 pub struct GenesisParameters;
 
-impl substrate_test_client::GenesisInit for GenesisParameters {
+impl bizinikiwi_test_client::GenesisInit for GenesisParameters {
 	fn genesis_storage(&self) -> Storage {
 		pezkuwi_test_service::chain_spec::pezkuwi_local_testnet_config()
 			.build_storage()
@@ -98,7 +98,7 @@ impl DefaultTestClientBuilderExt for TestClientBuilder {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use sp_consensus::BlockOrigin;
+	use pezsp_consensus::BlockOrigin;
 
 	#[test]
 	fn ensure_test_client_can_build_and_import_block() {
@@ -117,8 +117,8 @@ mod tests {
 
 		let transfer = construct_transfer_extrinsic(
 			&client,
-			sp_keyring::Sr25519Keyring::Alice,
-			sp_keyring::Sr25519Keyring::Bob,
+			pezsp_keyring::Sr25519Keyring::Alice,
+			pezsp_keyring::Sr25519Keyring::Bob,
 			1000,
 		);
 		let mut block_builder = client.init_pezkuwi_block_builder();

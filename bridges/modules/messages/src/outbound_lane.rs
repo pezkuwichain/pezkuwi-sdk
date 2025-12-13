@@ -23,10 +23,10 @@ use bp_messages::{
 	UnrewardedRelayer,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::{traits::Get, BoundedVec, PalletError};
+use pezframe_support::{traits::Get, BoundedVec, PalletError};
 use scale_info::TypeInfo;
-use sp_runtime::RuntimeDebug;
-use sp_std::{collections::vec_deque::VecDeque, marker::PhantomData, ops::RangeInclusive};
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::{collections::vec_deque::VecDeque, marker::PhantomData, ops::RangeInclusive};
 
 /// Outbound lane storage.
 pub trait OutboundLaneStorage {
@@ -233,7 +233,7 @@ mod tests {
 			TestRuntime, REGULAR_PAYLOAD,
 		},
 	};
-	use sp_std::ops::RangeInclusive;
+	use pezsp_std::ops::RangeInclusive;
 
 	fn unrewarded_relayers(
 		nonces: RangeInclusive<MessageNonce>,

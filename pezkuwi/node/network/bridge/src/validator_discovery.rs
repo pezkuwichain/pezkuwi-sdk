@@ -23,7 +23,7 @@ use std::collections::HashSet;
 
 use futures::channel::oneshot;
 
-use sc_network::multiaddr::{self, Multiaddr};
+use pezsc_network::multiaddr::{self, Multiaddr};
 
 pub use pezkuwi_node_network_protocol::authority_discovery::AuthorityDiscovery;
 use pezkuwi_node_network_protocol::{
@@ -202,8 +202,8 @@ mod tests {
 		PeerId,
 	};
 	use pezkuwi_primitives::Hash;
-	use sc_network::{IfDisconnected, ProtocolName, ReputationChange};
-	use sp_keyring::Sr25519Keyring;
+	use pezsc_network::{IfDisconnected, ProtocolName, ReputationChange};
+	use pezsp_keyring::Sr25519Keyring;
 	use std::collections::{HashMap, HashSet};
 
 	fn new_service() -> Service<TestNetwork, TestAuthorityDiscovery> {
@@ -299,7 +299,7 @@ mod tests {
 			&self,
 			_peer_id: PeerId,
 			_handshake: Vec<u8>,
-		) -> Option<sc_network::ObservedRole> {
+		) -> Option<pezsc_network::ObservedRole> {
 			panic!()
 		}
 	}

@@ -14,26 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Interface to the Substrate Executor
+//! Interface to the Bizinikiwi Executor
 
 use crate::error::ExecuteError;
 use pezkuwi_primitives::{
 	executor_params::{DEFAULT_LOGICAL_STACK_MAX, DEFAULT_NATIVE_STACK_MAX},
 	ExecutorParam, ExecutorParams,
 };
-use sc_executor_common::{
+use pezsc_executor_common::{
 	error::WasmError,
 	runtime_blob::RuntimeBlob,
 	wasm_runtime::{HeapAllocStrategy, WasmModule as _},
 };
-use sc_executor_wasmtime::{Config, DeterministicStackLimit, Semantics, WasmtimeRuntime};
-use sp_core::storage::{ChildInfo, TrackedStorageKey};
-use sp_externalities::MultiRemovalResults;
+use pezsc_executor_wasmtime::{Config, DeterministicStackLimit, Semantics, WasmtimeRuntime};
+use pezsp_core::storage::{ChildInfo, TrackedStorageKey};
+use pezsp_externalities::MultiRemovalResults;
 use std::any::{Any, TypeId};
 
 // Memory configuration
 //
-// When Substrate Runtime is instantiated, a number of WASM pages are allocated for the Substrate
+// When Bizinikiwi Runtime is instantiated, a number of WASM pages are allocated for the Bizinikiwi
 // Runtime instance's linear memory. The exact number of pages is a sum of whatever the WASM blob
 // itself requests (by default at least enough to hold the data section as well as have some space
 // left for the stack; this is, of course, overridable at link time when compiling the runtime)
@@ -54,12 +54,12 @@ pub const DEFAULT_CONFIG: Config = Config {
 	allow_missing_func_imports: true,
 	cache_path: None,
 	semantics: Semantics {
-		heap_alloc_strategy: sc_executor_common::wasm_runtime::HeapAllocStrategy::Dynamic {
+		heap_alloc_strategy: pezsc_executor_common::wasm_runtime::HeapAllocStrategy::Dynamic {
 			maximum_pages: Some(DEFAULT_HEAP_PAGES_ESTIMATE + EXTRA_HEAP_PAGES),
 		},
 
 		instantiation_strategy:
-			sc_executor_wasmtime::InstantiationStrategy::RecreateInstanceCopyOnWrite,
+			pezsc_executor_wasmtime::InstantiationStrategy::RecreateInstanceCopyOnWrite,
 
 		// Enable deterministic stack limit to pin down the exact number of items the wasmtime stack
 		// can contain before it traps with stack overflow.
@@ -111,13 +111,13 @@ pub unsafe fn execute_artifact(
 	executor_params: &ExecutorParams,
 	params: &[u8],
 ) -> Result<Vec<u8>, ExecuteError> {
-	let mut extensions = sp_externalities::Extensions::new();
+	let mut extensions = pezsp_externalities::Extensions::new();
 
-	extensions.register(sp_core::traits::ReadRuntimeVersionExt::new(ReadRuntimeVersion));
+	extensions.register(pezsp_core::traits::ReadRuntimeVersionExt::new(ReadRuntimeVersion));
 
 	let mut ext = ValidationExternalities(extensions);
 
-	match sc_executor::with_externalities_safe(&mut ext, || {
+	match pezsc_executor::with_externalities_safe(&mut ext, || {
 		let runtime = create_runtime_from_artifact_bytes(compiled_artifact_blob, executor_params)?;
 		runtime.new_instance()?.call("validate_block", params)
 	}) {
@@ -142,7 +142,7 @@ pub unsafe fn create_runtime_from_artifact_bytes(
 	let mut config = DEFAULT_CONFIG.clone();
 	config.semantics = params_to_wasmtime_semantics(executor_params).0;
 
-	sc_executor_wasmtime::create_runtime_from_artifact_bytes::<HostFunctions>(
+	pezsc_executor_wasmtime::create_runtime_from_artifact_bytes::<HostFunctions>(
 		compiled_artifact_blob,
 		config,
 	)
@@ -177,7 +177,7 @@ pub fn params_to_wasmtime_semantics(par: &ExecutorParams) -> (Semantics, Determi
 }
 
 /// Runs the prevalidation on the given code. Returns a [`RuntimeBlob`] if it succeeds.
-pub fn prevalidate(code: &[u8]) -> Result<RuntimeBlob, sc_executor_common::error::WasmError> {
+pub fn prevalidate(code: &[u8]) -> Result<RuntimeBlob, pezsc_executor_common::error::WasmError> {
 	// Construct the runtime blob and do some basic checks for consistency.
 	let blob = RuntimeBlob::new(code)?;
 	// In the future this function should take care of any further prevalidation logic.
@@ -189,9 +189,9 @@ pub fn prevalidate(code: &[u8]) -> Result<RuntimeBlob, sc_executor_common::error
 pub fn prepare(
 	blob: RuntimeBlob,
 	executor_params: &ExecutorParams,
-) -> Result<Vec<u8>, sc_executor_common::error::WasmError> {
+) -> Result<Vec<u8>, pezsc_executor_common::error::WasmError> {
 	let (semantics, _) = params_to_wasmtime_semantics(executor_params);
-	sc_executor_wasmtime::prepare_runtime_artifact(blob, &semantics)
+	pezsc_executor_wasmtime::prepare_runtime_artifact(blob, &semantics)
 }
 
 /// Available host functions. We leave out:
@@ -202,19 +202,19 @@ pub fn prepare(
 /// 4. runtime tasks
 /// 5. sandbox
 type HostFunctions = (
-	sp_io::misc::HostFunctions,
-	sp_io::crypto::HostFunctions,
-	sp_io::hashing::HostFunctions,
-	sp_io::allocator::HostFunctions,
-	sp_io::logging::HostFunctions,
-	sp_io::trie::HostFunctions,
+	pezsp_io::misc::HostFunctions,
+	pezsp_io::crypto::HostFunctions,
+	pezsp_io::hashing::HostFunctions,
+	pezsp_io::allocator::HostFunctions,
+	pezsp_io::logging::HostFunctions,
+	pezsp_io::trie::HostFunctions,
 );
 
 /// The validation externalities that will panic on any storage related access. (PVFs should not
 /// have a notion of a persistent storage/trie.)
-struct ValidationExternalities(sp_externalities::Extensions);
+struct ValidationExternalities(pezsp_externalities::Extensions);
 
-impl sp_externalities::Externalities for ValidationExternalities {
+impl pezsp_externalities::Externalities for ValidationExternalities {
 	fn storage(&mut self, _: &[u8]) -> Option<Vec<u8>> {
 		panic!("storage: unsupported feature for teyrchain validation")
 	}
@@ -267,11 +267,11 @@ impl sp_externalities::Externalities for ValidationExternalities {
 		panic!("place_child_storage: unsupported feature for teyrchain validation")
 	}
 
-	fn storage_root(&mut self, _: sp_core::storage::StateVersion) -> Vec<u8> {
+	fn storage_root(&mut self, _: pezsp_core::storage::StateVersion) -> Vec<u8> {
 		panic!("storage_root: unsupported feature for teyrchain validation")
 	}
 
-	fn child_storage_root(&mut self, _: &ChildInfo, _: sp_core::storage::StateVersion) -> Vec<u8> {
+	fn child_storage_root(&mut self, _: &ChildInfo, _: pezsp_core::storage::StateVersion) -> Vec<u8> {
 		panic!("child_storage_root: unsupported feature for teyrchain validation")
 	}
 
@@ -332,7 +332,7 @@ impl sp_externalities::Externalities for ValidationExternalities {
 	}
 }
 
-impl sp_externalities::ExtensionStore for ValidationExternalities {
+impl pezsp_externalities::ExtensionStore for ValidationExternalities {
 	fn extension_by_type_id(&mut self, type_id: TypeId) -> Option<&mut dyn Any> {
 		self.0.get_mut(type_id)
 	}
@@ -340,35 +340,35 @@ impl sp_externalities::ExtensionStore for ValidationExternalities {
 	fn register_extension_with_type_id(
 		&mut self,
 		type_id: TypeId,
-		extension: Box<dyn sp_externalities::Extension>,
-	) -> Result<(), sp_externalities::Error> {
+		extension: Box<dyn pezsp_externalities::Extension>,
+	) -> Result<(), pezsp_externalities::Error> {
 		self.0.register_with_type_id(type_id, extension)
 	}
 
 	fn deregister_extension_by_type_id(
 		&mut self,
 		type_id: TypeId,
-	) -> Result<(), sp_externalities::Error> {
+	) -> Result<(), pezsp_externalities::Error> {
 		if self.0.deregister(type_id) {
 			Ok(())
 		} else {
-			Err(sp_externalities::Error::ExtensionIsNotRegistered(type_id))
+			Err(pezsp_externalities::Error::ExtensionIsNotRegistered(type_id))
 		}
 	}
 }
 
 struct ReadRuntimeVersion;
 
-impl sp_core::traits::ReadRuntimeVersion for ReadRuntimeVersion {
+impl pezsp_core::traits::ReadRuntimeVersion for ReadRuntimeVersion {
 	fn read_runtime_version(
 		&self,
 		wasm_code: &[u8],
-		_ext: &mut dyn sp_externalities::Externalities,
+		_ext: &mut dyn pezsp_externalities::Externalities,
 	) -> Result<Vec<u8>, String> {
 		let blob = RuntimeBlob::uncompress_if_needed(wasm_code)
 			.map_err(|e| format!("Failed to read the PVF runtime blob: {:?}", e))?;
 
-		match sc_executor::read_embedded_version(&blob)
+		match pezsc_executor::read_embedded_version(&blob)
 			.map_err(|e| format!("Failed to read the static section from the PVF blob: {:?}", e))?
 		{
 			Some(version) => {

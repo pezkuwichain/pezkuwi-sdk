@@ -20,25 +20,25 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use codec::{Decode, DecodeWithMemTracking, Encode, FullCodec, MaxEncodedLen};
-use frame_support::{
-	pallet_prelude::DispatchResult, weights::Weight, PalletError, StorageHasher, StorageValue,
+use pezframe_support::{
+	pezpallet_prelude::DispatchResult, weights::Weight, PalletError, StorageHasher, StorageValue,
 };
-use frame_system::RawOrigin;
+use pezframe_system::RawOrigin;
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
-use sp_core::storage::StorageKey;
-use sp_runtime::{
+use pezsp_core::storage::StorageKey;
+use pezsp_runtime::{
 	traits::{BadOrigin, Header as HeaderT, UniqueSaturatedInto},
 	RuntimeDebug,
 };
-use sp_std::{fmt::Debug, ops::RangeInclusive, vec, vec::Vec};
+use pezsp_std::{fmt::Debug, ops::RangeInclusive, vec, vec::Vec};
 
 pub use chain::{
 	AccountIdOf, AccountPublicOf, BalanceOf, BlockNumberOf, Chain, EncodedOrDecodedCall, HashOf,
 	HasherOf, HeaderOf, NonceOf, SignatureOf, Teyrchain, TeyrchainIdOf, TransactionEraOf,
 	UnderlyingChainOf, UnderlyingChainProvider, __private,
 };
-pub use frame_support::storage::storage_prefix as storage_value_final_key;
+pub use pezframe_support::storage::storage_prefix as storage_value_final_key;
 use num_traits::{CheckedAdd, CheckedSub, One, SaturatingAdd, Zero};
 #[cfg(feature = "std")]
 pub use storage_proof::craft_valid_storage_proof;
@@ -62,7 +62,7 @@ mod storage_proof;
 mod storage_types;
 
 // Re-export macro to avoid include paste dependency everywhere
-pub use sp_runtime::paste;
+pub use pezsp_runtime::paste;
 
 // Re-export for usage in macro.
 #[doc(hidden)]
@@ -200,13 +200,13 @@ impl<BlockNumber: Copy + UniqueSaturatedInto<u64>, BlockHash: Copy>
 	}
 
 	/// Returns era that is used by FRAME-based runtimes.
-	pub fn frame_era(&self) -> sp_runtime::generic::Era {
+	pub fn frame_era(&self) -> pezsp_runtime::generic::Era {
 		match *self {
-			TransactionEra::Immortal => sp_runtime::generic::Era::immortal(),
+			TransactionEra::Immortal => pezsp_runtime::generic::Era::immortal(),
 			// `unique_saturated_into` is fine here - mortality `u64::MAX` is not something we
 			// expect to see on any chain
 			TransactionEra::Mortal(header_id, period) =>
-				sp_runtime::generic::Era::mortal(period as _, header_id.0.unique_saturated_into()),
+				pezsp_runtime::generic::Era::mortal(period as _, header_id.0.unique_saturated_into()),
 		}
 	}
 
@@ -220,25 +220,25 @@ impl<BlockNumber: Copy + UniqueSaturatedInto<u64>, BlockHash: Copy>
 }
 
 /// This is a copy of the
-/// `frame_support::storage::generator::StorageMap::storage_map_final_key` for maps based
+/// `pezframe_support::storage::generator::StorageMap::storage_map_final_key` for maps based
 /// on selected hasher.
 ///
 /// We're using it because to call `storage_map_final_key` directly, we need access to the runtime
 /// and pallet instance, which (sometimes) is impossible.
 pub fn storage_map_final_key<H: StorageHasher>(
-	pallet_prefix: &str,
+	pezpallet_prefix: &str,
 	map_name: &str,
 	key: &[u8],
 ) -> StorageKey {
 	let key_hashed = H::hash(key);
-	let pallet_prefix_hashed = frame_support::Twox128::hash(pallet_prefix.as_bytes());
-	let storage_prefix_hashed = frame_support::Twox128::hash(map_name.as_bytes());
+	let pezpallet_prefix_hashed = pezframe_support::Twox128::hash(pezpallet_prefix.as_bytes());
+	let storage_prefix_hashed = pezframe_support::Twox128::hash(map_name.as_bytes());
 
 	let mut final_key = Vec::with_capacity(
-		pallet_prefix_hashed.len() + storage_prefix_hashed.len() + key_hashed.as_ref().len(),
+		pezpallet_prefix_hashed.len() + storage_prefix_hashed.len() + key_hashed.as_ref().len(),
 	);
 
-	final_key.extend_from_slice(&pallet_prefix_hashed[..]);
+	final_key.extend_from_slice(&pezpallet_prefix_hashed[..]);
 	final_key.extend_from_slice(&storage_prefix_hashed[..]);
 	final_key.extend_from_slice(key_hashed.as_ref());
 
@@ -247,13 +247,13 @@ pub fn storage_map_final_key<H: StorageHasher>(
 
 /// This is how a storage key of storage value is computed.
 ///
-/// Copied from `frame_support::storage::storage_prefix`.
-pub fn storage_value_key(pallet_prefix: &str, value_name: &str) -> StorageKey {
-	let pallet_hash = sp_io::hashing::twox_128(pallet_prefix.as_bytes());
-	let storage_hash = sp_io::hashing::twox_128(value_name.as_bytes());
+/// Copied from `pezframe_support::storage::storage_prefix`.
+pub fn storage_value_key(pezpallet_prefix: &str, value_name: &str) -> StorageKey {
+	let pezpallet_hash = pezsp_io::hashing::twox_128(pezpallet_prefix.as_bytes());
+	let storage_hash = pezsp_io::hashing::twox_128(value_name.as_bytes());
 
 	let mut final_key = vec![0u8; 32];
-	final_key[..16].copy_from_slice(&pallet_hash);
+	final_key[..16].copy_from_slice(&pezpallet_hash);
 	final_key[16..].copy_from_slice(&storage_hash);
 
 	StorageKey(final_key)
@@ -272,12 +272,12 @@ pub trait StorageMapKeyProvider {
 	type Value: 'static + FullCodec;
 
 	/// This is a copy of the
-	/// `frame_support::storage::generator::StorageMap::storage_map_final_key`.
+	/// `pezframe_support::storage::generator::StorageMap::storage_map_final_key`.
 	///
 	/// We're using it because to call `storage_map_final_key` directly, we need access
 	/// to the runtime and pallet instance, which (sometimes) is impossible.
-	fn final_key(pallet_prefix: &str, key: &Self::Key) -> StorageKey {
-		storage_map_final_key::<Self::Hasher>(pallet_prefix, Self::MAP_NAME, &key.encode())
+	fn final_key(pezpallet_prefix: &str, key: &Self::Key) -> StorageKey {
+		storage_map_final_key::<Self::Hasher>(pezpallet_prefix, Self::MAP_NAME, &key.encode())
 	}
 }
 
@@ -298,24 +298,24 @@ pub trait StorageDoubleMapKeyProvider {
 	type Value: 'static + FullCodec;
 
 	/// This is a copy of the
-	/// `frame_support::storage::generator::StorageDoubleMap::storage_double_map_final_key`.
+	/// `pezframe_support::storage::generator::StorageDoubleMap::storage_double_map_final_key`.
 	///
 	/// We're using it because to call `storage_double_map_final_key` directly, we need access
 	/// to the runtime and pallet instance, which (sometimes) is impossible.
-	fn final_key(pallet_prefix: &str, key1: &Self::Key1, key2: &Self::Key2) -> StorageKey {
+	fn final_key(pezpallet_prefix: &str, key1: &Self::Key1, key2: &Self::Key2) -> StorageKey {
 		let key1_hashed = Self::Hasher1::hash(&key1.encode());
 		let key2_hashed = Self::Hasher2::hash(&key2.encode());
-		let pallet_prefix_hashed = frame_support::Twox128::hash(pallet_prefix.as_bytes());
-		let storage_prefix_hashed = frame_support::Twox128::hash(Self::MAP_NAME.as_bytes());
+		let pezpallet_prefix_hashed = pezframe_support::Twox128::hash(pezpallet_prefix.as_bytes());
+		let storage_prefix_hashed = pezframe_support::Twox128::hash(Self::MAP_NAME.as_bytes());
 
 		let mut final_key = Vec::with_capacity(
-			pallet_prefix_hashed.len() +
+			pezpallet_prefix_hashed.len() +
 				storage_prefix_hashed.len() +
 				key1_hashed.as_ref().len() +
 				key2_hashed.as_ref().len(),
 		);
 
-		final_key.extend_from_slice(&pallet_prefix_hashed[..]);
+		final_key.extend_from_slice(&pezpallet_prefix_hashed[..]);
 		final_key.extend_from_slice(&storage_prefix_hashed[..]);
 		final_key.extend_from_slice(key1_hashed.as_ref());
 		final_key.extend_from_slice(key2_hashed.as_ref());
@@ -374,7 +374,7 @@ impl OperatingMode for BasicOperatingMode {
 const COMMON_LOG_TARGET: &'static str = "runtime::bridge-module";
 
 /// Bridge module that has owner and operating mode
-pub trait OwnedBridgeModule<T: frame_system::Config> {
+pub trait OwnedBridgeModule<T: pezframe_system::Config> {
 	/// The target that will be used when publishing logs related to this module.
 	const LOG_TARGET: &'static str;
 
@@ -463,7 +463,7 @@ pub trait WeightExtraOps {
 
 impl WeightExtraOps for Weight {
 	fn min_components_checked_div(&self, other: Weight) -> Option<u64> {
-		Some(sp_std::cmp::min(
+		Some(pezsp_std::cmp::min(
 			self.ref_time().checked_div(other.ref_time())?,
 			self.proof_size().checked_div(other.proof_size())?,
 		))

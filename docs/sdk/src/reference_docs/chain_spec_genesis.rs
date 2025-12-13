@@ -10,44 +10,44 @@
 //! interact with the runtime in order to build the genesis state.
 //!
 //! For more information on chain specification and its properties, refer to
-//! [`sc_chain_spec#from-initial-state-to-raw-genesis`].
+//! [`pezsc_chain_spec#from-initial-state-to-raw-genesis`].
 //!
 //! The initial genesis state can be provided in the following formats:
 //!   - full
 //!   - patch
 //!   - raw
 //!
-//! Each of the formats is explained in [_chain-spec-format_][`sc_chain_spec#chain-spec-formats`].
+//! Each of the formats is explained in [_chain-spec-format_][`pezsc_chain_spec#chain-spec-formats`].
 //!
 //!
 //! # `GenesisConfig` for `pallet`
 //!
 //! Every frame pallet may have its initial state which is defined by the `GenesisConfig` internal
 //! struct. It is a regular Rust struct, annotated with the [`pallet::genesis_config`] attribute.
-#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pallet_bar_GenesisConfig)]
+#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pezpallet_bar_GenesisConfig)]
 //!
 //! The struct shall be defined within the pallet `mod`, as in the following code:
-#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pallet_bar)]
+#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pezpallet_bar)]
 //!
 //! The initial state conveyed in  the `GenesisConfig` struct is transformed into state storage
 //! items by means of the [`BuildGenesisConfig`] trait, which shall be implemented for the pallet's
 //! `GenesisConfig` struct. The [`pallet::genesis_build`] attribute shall be attached to the `impl`
 //! block:
-#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pallet_bar_build)]
+#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pezpallet_bar_build)]
 //!
 //! `GenesisConfig` may also contain more complicated types, including nested structs or enums, as
-//! in the example for `pallet_foo`:
-#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pallet_foo_GenesisConfig)]
+//! in the example for `pezpallet_foo`:
+#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pezpallet_foo_GenesisConfig)]
 //!
 //! Note that [`serde`] attributes can be used to control how the data
-//! structures are stored into JSON. In the following example, the [`sp_core::bytes`] function is
+//! structures are stored into JSON. In the following example, the [`pezsp_core::bytes`] function is
 //! used to serialize the `values` field.
 #![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", SomeFooData2)]
 //!
 //! Please note that fields of `GenesisConfig` may not be directly mapped to storage items. In the
 //! following example, the initial struct fields are used to compute (sum) the value that will be
 //! stored in the state as `ProcessedEnumValue`:
-#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pallet_foo_build)]
+#![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/pallets.rs", pezpallet_foo_build)]
 //!
 //! # `GenesisConfig` for `runtimes`
 //!
@@ -80,10 +80,10 @@
 //! ## Implementing `GenesisBuilder` for runtime
 //!
 //! The runtime exposes a dedicated runtime API for interacting with its genesis config:
-//! [`sp_genesis_builder::GenesisBuilder`]. The implementation shall be provided within
-//! the [`sp_api::impl_runtime_apis`] macro, typically making use of some helpers provided:
+//! [`pezsp_genesis_builder::GenesisBuilder`]. The implementation shall be provided within
+//! the [`pezsp_api::impl_runtime_apis`] macro, typically making use of some helpers provided:
 //! [`build_state`], [`get_preset`].
-//! A typical implementation of [`sp_genesis_builder::GenesisBuilder`] looks as follows:
+//! A typical implementation of [`pezsp_genesis_builder::GenesisBuilder`] looks as follows:
 #![doc = docify::embed!("./src/reference_docs/chain_spec_runtime/src/runtime.rs", runtime_impl)]
 //!
 //! Please note that two functions are customized: `preset_names` and `get_preset`. The first one
@@ -150,9 +150,9 @@
 //! recommended for production chains.
 //!
 //! For a detailed description of how the raw format is built, please refer to
-//! [_chain-spec-raw-genesis_][`sc_chain_spec#from-initial-state-to-raw-genesis`]. Plain and
+//! [_chain-spec-raw-genesis_][`pezsc_chain_spec#from-initial-state-to-raw-genesis`]. Plain and
 //! corresponding raw examples of chain-spec are given in
-//! [_chain-spec-examples_][`sc_chain_spec#json-chain-specification-example`].
+//! [_chain-spec-examples_][`pezsc_chain_spec#json-chain-specification-example`].
 //! The [`chain_spec_builder`] util supports building the raw storage.
 //!
 //! # Interacting with the tool
@@ -163,13 +163,13 @@
 //! the following command:
 //!
 //! ```ignore
-//! cargo build -p staging-chain-spec-builder -p chain-spec-guide-runtime --release
+//! cargo build -p pezstaging-chain-spec-builder -p chain-spec-guide-runtime --release
 //! ```
 //!
 //! The `chain-spec-builder` util can also be installed with `cargo install`:
 //!
 //! ```ignore
-//! cargo install staging-chain-spec-builder
+//! cargo install pezstaging-chain-spec-builder
 //! cargo build -p chain-spec-guide-runtime --release
 //! ```
 //! Here are some examples in the form of rust tests:
@@ -187,14 +187,14 @@
 //! [`FooStruct`]:
 //!     chain_spec_guide_runtime::pallets::FooStruct
 //! [`impl_runtime_apis`]: frame::runtime::prelude::impl_runtime_apis
-//! [`build_state`]: frame_support::genesis_builder_helper::build_state
-//! [`get_preset`]: frame_support::genesis_builder_helper::get_preset
-//! [`pallet::genesis_build`]: frame_support::pallet_macros::genesis_build
-//! [`pallet::genesis_config`]: frame_support::pallet_macros::genesis_config
-//! [`build_struct_json_patch`]: frame_support::build_struct_json_patch
-//! [`BuildGenesisConfig`]: frame_support::traits::BuildGenesisConfig
+//! [`build_state`]: pezframe_support::genesis_builder_helper::build_state
+//! [`get_preset`]: pezframe_support::genesis_builder_helper::get_preset
+//! [`pallet::genesis_build`]: pezframe_support::pezpallet_macros::genesis_build
+//! [`pallet::genesis_config`]: pezframe_support::pezpallet_macros::genesis_config
+//! [`build_struct_json_patch`]: pezframe_support::build_struct_json_patch
+//! [`BuildGenesisConfig`]: pezframe_support::traits::BuildGenesisConfig
 //! [`serde`]: https://serde.rs/field-attrs.html
-//! [`get_storage_for_patch`]: sc_chain_spec::GenesisConfigBuilderRuntimeCaller::get_storage_for_patch
-//! [`GenesisBuilder::get_preset`]: sp_genesis_builder::GenesisBuilder::get_preset
+//! [`get_storage_for_patch`]: pezsc_chain_spec::GenesisConfigBuilderRuntimeCaller::get_storage_for_patch
+//! [`GenesisBuilder::get_preset`]: pezsp_genesis_builder::GenesisBuilder::get_preset
 //! [`deny_unknown_fields`]: https://serde.rs/container-attrs.html#deny_unknown_fields
 //! [`camelCase`]: https://serde.rs/container-attrs.html#rename_all

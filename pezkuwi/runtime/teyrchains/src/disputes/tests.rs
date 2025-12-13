@@ -24,13 +24,13 @@ use crate::{
 		REWARD_VALIDATORS,
 	},
 };
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	traits::{OnFinalize, OnInitialize},
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::BlockNumber;
-use sp_core::{crypto::CryptoType, Pair};
+use pezsp_core::{crypto::CryptoType, Pair};
 
 const VOTE_FOR: VoteKind = VoteKind::ExplicitValid;
 const VOTE_AGAINST: VoteKind = VoteKind::Invalid;
@@ -384,7 +384,7 @@ fn test_initializer_on_new_session() {
 	new_test_ext(mock_genesis_config).execute_with(|| {
 		let v0 = <ValidatorId as CryptoType>::Pair::generate().0;
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 		Pallet::<Test>::note_included(0, candidate_hash, 0);
 		Pallet::<Test>::note_included(1, candidate_hash, 1);
 		Pallet::<Test>::note_included(2, candidate_hash, 2);
@@ -414,8 +414,8 @@ fn test_initializer_on_new_session() {
 #[test]
 fn test_provide_data_duplicate_error() {
 	new_test_ext(Default::default()).execute_with(|| {
-		let candidate_hash_1 = CandidateHash(sp_core::H256::repeat_byte(1));
-		let candidate_hash_2 = CandidateHash(sp_core::H256::repeat_byte(2));
+		let candidate_hash_1 = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let candidate_hash_2 = CandidateHash(pezsp_core::H256::repeat_byte(2));
 
 		let mut stmts = vec![
 			DisputeStatementSet {
@@ -460,8 +460,8 @@ fn test_provide_multi_dispute_is_providing() {
 			}
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-		let inclusion_parent = sp_core::H256::repeat_byte(0xff);
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let inclusion_parent = pezsp_core::H256::repeat_byte(0xff);
 		let session = 1;
 		let stmts = vec![DisputeStatementSet {
 			candidate_hash,
@@ -519,7 +519,7 @@ fn test_disputes_with_missing_backing_votes_are_rejected() {
 			}
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 		let session = 1;
 
 		let stmts = vec![DisputeStatementSet {
@@ -571,8 +571,8 @@ fn test_freeze_on_note_included() {
 			))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-		let inclusion_parent = sp_core::H256::repeat_byte(0xff);
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let inclusion_parent = pezsp_core::H256::repeat_byte(0xff);
 		let session = 3;
 
 		// v0 votes for 3
@@ -636,8 +636,8 @@ fn test_freeze_provided_against_supermajority_for_included() {
 			))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-		let inclusion_parent = sp_core::H256::repeat_byte(0xff);
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let inclusion_parent = pezsp_core::H256::repeat_byte(0xff);
 		let session = 3;
 
 		// v0 votes for 3
@@ -709,8 +709,8 @@ fn test_freeze_provided_against_byzantine_threshold_for_included() {
 		run_to_block(6, |b| Some((true, b, active_set.clone(), Some(active_set.clone()))));
 
 		// A candidate which will be disputed
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-		let inclusion_parent = sp_core::H256::repeat_byte(0xff);
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let inclusion_parent = pezsp_core::H256::repeat_byte(0xff);
 		let session = 3;
 
 		// A byzantine threshold of INVALID
@@ -768,7 +768,7 @@ fn test_freeze_provided_against_byzantine_threshold_for_included() {
 
 		// Now include one more block
 		run_to_block(7, |b| Some((true, b, active_set.clone(), Some(active_set.clone()))));
-		Pallet::<Test>::note_included(3, CandidateHash(sp_core::H256::repeat_byte(2)), 3);
+		Pallet::<Test>::note_included(3, CandidateHash(pezsp_core::H256::repeat_byte(2)), 3);
 
 		// And generate enough votes to reach supermajority of invalid votes
 		let stmts = vec![DisputeStatementSet {
@@ -816,7 +816,7 @@ fn test_freeze_provided_against_byzantine_threshold_for_included() {
 mod unconfirmed_disputes {
 	use super::*;
 	use assert_matches::assert_matches;
-	use sp_runtime::ModuleError;
+	use pezsp_runtime::ModuleError;
 
 	// Shared initialization code between `test_unconfirmed_are_ignored` and
 	// `test_unconfirmed_disputes_cause_block_import_error`
@@ -865,7 +865,7 @@ mod unconfirmed_disputes {
 			))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		// v0 votes for 4, v1 votes against 4.
 		DisputeStatementSet {
@@ -970,8 +970,8 @@ fn test_provide_multi_dispute_success_and_other() {
 			))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-		let inclusion_parent = sp_core::H256::repeat_byte(0xff);
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let inclusion_parent = pezsp_core::H256::repeat_byte(0xff);
 		let session = 3;
 
 		// v0 and v1 vote for 3, v6 votes against
@@ -1262,8 +1262,8 @@ fn test_punish_post_conclusion() {
 			))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-		let inclusion_parent = sp_core::H256::repeat_byte(0xff);
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let inclusion_parent = pezsp_core::H256::repeat_byte(0xff);
 		let session = 3;
 
 		let stmts = vec![DisputeStatementSet {
@@ -1465,10 +1465,10 @@ fn test_check_signature() {
 
 	let session = 0;
 	let wrong_session = 1;
-	let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
-	let wrong_candidate_hash = CandidateHash(sp_core::H256::repeat_byte(2));
-	let inclusion_parent = sp_core::H256::repeat_byte(3);
-	let wrong_inclusion_parent = sp_core::H256::repeat_byte(4);
+	let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
+	let wrong_candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(2));
+	let inclusion_parent = pezsp_core::H256::repeat_byte(3);
+	let wrong_inclusion_parent = pezsp_core::H256::repeat_byte(4);
 
 	let statement_1 = DisputeStatement::Valid(ValidDisputeStatementKind::Explicit);
 	let statement_2 =
@@ -1902,9 +1902,9 @@ fn deduplication_and_sorting_works() {
 			))
 		});
 
-		let candidate_hash_a = CandidateHash(sp_core::H256::repeat_byte(1));
-		let candidate_hash_b = CandidateHash(sp_core::H256::repeat_byte(2));
-		let candidate_hash_c = CandidateHash(sp_core::H256::repeat_byte(3));
+		let candidate_hash_a = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let candidate_hash_b = CandidateHash(pezsp_core::H256::repeat_byte(2));
+		let candidate_hash_c = CandidateHash(pezsp_core::H256::repeat_byte(3));
 
 		let create_explicit_statement = |vidx: ValidatorIndex,
 		                                 validator: &<ValidatorId as CryptoType>::Pair,
@@ -2017,7 +2017,7 @@ fn filter_removes_duplicates_within_set() {
 			))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		let payload =
 			ExplicitDisputeStatement { valid: true, candidate_hash, session: 1 }.signing_payload();
@@ -2109,7 +2109,7 @@ fn filter_bad_signatures_correctly_detects_single_sided() {
 			))
 		});
 
-		let candidate_hash_a = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash_a = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		let payload = |c_hash: &CandidateHash, valid| {
 			ExplicitDisputeStatement { valid, candidate_hash: *c_hash, session: 1 }
@@ -2155,7 +2155,7 @@ fn filter_removes_session_out_of_bounds() {
 			Some((true, b, vec![(&0, v0.public())], Some(vec![(&0, v0.public())])))
 		});
 
-		let candidate_hash = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		let payload =
 			ExplicitDisputeStatement { valid: true, candidate_hash, session: 1 }.signing_payload();
@@ -2200,8 +2200,8 @@ fn filter_removes_concluded_ancient() {
 			Some((true, b, vec![(&0, v0.public())], Some(vec![(&0, v0.public())])))
 		});
 
-		let candidate_hash_a = CandidateHash(sp_core::H256::repeat_byte(1));
-		let candidate_hash_b = CandidateHash(sp_core::H256::repeat_byte(2));
+		let candidate_hash_a = CandidateHash(pezsp_core::H256::repeat_byte(1));
+		let candidate_hash_b = CandidateHash(pezsp_core::H256::repeat_byte(2));
 
 		Disputes::<Test>::insert(
 			&1,
@@ -2290,7 +2290,7 @@ fn filter_removes_duplicate_statements_sets() {
 			))
 		});
 
-		let candidate_hash_a = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash_a = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		let payload =
 			ExplicitDisputeStatement { valid: true, candidate_hash: candidate_hash_a, session: 1 }
@@ -2352,7 +2352,7 @@ fn filter_ignores_single_sided() {
 			Some((true, b, vec![(&0, v0.public())], Some(vec![(&0, v0.public())])))
 		});
 
-		let candidate_hash_a = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash_a = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		let payload =
 			ExplicitDisputeStatement { valid: true, candidate_hash: candidate_hash_a, session: 1 }
@@ -2386,7 +2386,7 @@ fn import_ignores_single_sided() {
 			Some((true, b, vec![(&0, v0.public())], Some(vec![(&0, v0.public())])))
 		});
 
-		let candidate_hash_a = CandidateHash(sp_core::H256::repeat_byte(1));
+		let candidate_hash_a = CandidateHash(pezsp_core::H256::repeat_byte(1));
 
 		let payload =
 			ExplicitDisputeStatement { valid: true, candidate_hash: candidate_hash_a, session: 1 }

@@ -121,7 +121,7 @@
 
 ## 3. Asset Hub PezkuwiChain Teyrchain Runtime
 
-**Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/src/lib.rs`
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/src/lib.rs`
 **Spec Name:** `asset-hub-pezkuwichain`
 **Spec Version:** 1_020_001
 **Benchmarks:** ✅ Yes
@@ -204,7 +204,7 @@
 
 ## 4. Asset Hub Zagros Teyrchain Runtime
 
-**Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/runtimes/assets/asset-hub-zagros/src/lib.rs`
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros/src/lib.rs`
 **Spec Name:** `asset-hub-zagros`
 **Spec Version:** 1_020_001
 **Benchmarks:** ✅ Yes
@@ -295,7 +295,7 @@
 
 ## 5. People PezkuwiChain Teyrchain Runtime
 
-**Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/runtimes/people/people-pezkuwichain/src/lib.rs`
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/runtimes/people/people-pezkuwichain/src/lib.rs`
 **Spec Name:** `people-pezkuwichain`
 **Spec Version:** 1_020_001
 **Benchmarks:** ✅ Yes
@@ -368,7 +368,7 @@
 
 ## 6. People Zagros Teyrchain Runtime
 
-**Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/runtimes/people/people-zagros/src/lib.rs`
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/runtimes/people/people-zagros/src/lib.rs`
 **Spec Name:** `people-zagros`
 **Spec Version:** 1_020_001
 **Benchmarks:** ✅ Yes
@@ -417,7 +417,7 @@
 
 ## 7. Penpal Test Teyrchain Runtime
 
-**Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/runtimes/testing/penpal/src/lib.rs`
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/runtimes/testing/penpal/src/lib.rs`
 **Spec Name:** `penpal-teyrchain`
 **Spec Version:** 1
 **Benchmarks:** ⚠️ Limited
@@ -454,7 +454,7 @@
 
 ## 8. PezkuwiChain Test Teyrchain Runtime
 
-**Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/runtimes/testing/pezkuwichain-teyrchain/src/lib.rs`
+**Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/runtimes/testing/pezkuwichain-teyrchain/src/lib.rs`
 **Spec Name:** `test-teyrchain`
 **Spec Version:** 1_020_001
 **Benchmarks:** ❌ No
@@ -499,19 +499,19 @@
 
 | Pallet Name | Asset Hub PZ | Asset Hub ZG | People PZ | People ZG | PZ Relay | Test Runtimes | Benchmarks |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **pallet-pez-treasury** | ✓ | | | | | | ✅ |
-| **pallet-presale** | ✓ | | | | | | ✅ |
-| **pallet-token-wrapper** | ✓ | | | | | | ✅ |
-| **pallet-identity-kyc** | | | ✓ | | | | ✅ |
-| **pallet-referral** | | | ✓ | | | | ✅ |
-| **pallet-perwerde** | | | ✓ | | | | ✅ |
-| **pallet-tiki** | | | ✓ | | | | ✅ |
-| **pallet-welati** | | | ✓ | | | | ✅ |
-| **pallet-staking-score** | | | ✓ | | | | ✅ |
-| **pallet-trust** | | | ✓ | | | | ✅ |
-| **pallet-pez-rewards** | | | ✓ | | | | ✅ |
-| **pallet-validator-pool** | | | | | ✓ | | ❌ |
-| **pallet-collective-content** | | | | | | | ❌ |
+| **pezpallet-pez-treasury** | ✓ | | | | | | ✅ |
+| **pezpallet-presale** | ✓ | | | | | | ✅ |
+| **pezpallet-token-wrapper** | ✓ | | | | | | ✅ |
+| **pezpallet-identity-kyc** | | | ✓ | | | | ✅ |
+| **pezpallet-referral** | | | ✓ | | | | ✅ |
+| **pezpallet-perwerde** | | | ✓ | | | | ✅ |
+| **pezpallet-tiki** | | | ✓ | | | | ✅ |
+| **pezpallet-welati** | | | ✓ | | | | ✅ |
+| **pezpallet-staking-score** | | | ✓ | | | | ✅ |
+| **pezpallet-trust** | | | ✓ | | | | ✅ |
+| **pezpallet-pez-rewards** | | | ✓ | | | | ✅ |
+| **pezpallet-validator-pool** | | | | | ✓ | | ❌ |
+| **pezpallet-collective-content** | | | | | | | ❌ |
 | **teyrchain-info** | ✓ | ✓ | ✓ | ✓ | | ✓ | ❌ |
 
 **Legend:**
@@ -524,86 +524,86 @@
 
 ## Custom Pallets Details
 
-### 1. **pallet-pez-treasury** 💰
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/pez-treasury`
+### 1. **pezpallet-pez-treasury** 💰
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/pez-treasury`
 - **Runtime:** Asset Hub PezkuwiChain
 - **Purpose:** PEZ token treasury management and distribution
 - **Benchmarks:** ✅ Yes
 
-### 2. **pallet-presale** 🎫
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/presale`
+### 2. **pezpallet-presale** 🎫
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/presale`
 - **Runtime:** Asset Hub PezkuwiChain
 - **Purpose:** Token presale management
 - **Benchmarks:** ✅ Yes
 
-### 3. **pallet-token-wrapper** 🔄
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/token-wrapper`
+### 3. **pezpallet-token-wrapper** 🔄
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/token-wrapper`
 - **Runtime:** Asset Hub PezkuwiChain
 - **Purpose:** Token wrapping/unwrapping functionality
 - **Benchmarks:** ✅ Yes
 
-### 4. **pallet-identity-kyc** 🆔
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/identity-kyc`
+### 4. **pezpallet-identity-kyc** 🆔
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/identity-kyc`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Enhanced identity with KYC capabilities
 - **Benchmarks:** ✅ Yes
 
-### 5. **pallet-referral** 🤝
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/referral`
+### 5. **pezpallet-referral** 🤝
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/referral`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Referral program management
 - **Benchmarks:** ✅ Yes
 
-### 6. **pallet-perwerde** 📚
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/perwerde`
+### 6. **pezpallet-perwerde** 📚
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/perwerde`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Educational credentials and achievements
 - **Benchmarks:** ✅ Yes
 
-### 7. **pallet-tiki** 🎖️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/tiki`
+### 7. **pezpallet-tiki** 🎖️
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/tiki`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Role-based NFT badges system
 - **Benchmarks:** ✅ Yes
 
-### 8. **pallet-welati** 🏛️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/welati`
+### 8. **pezpallet-welati** 🏛️
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/welati`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** PezkuwiChain governance (Serok, Parlement, Diwan)
 - **Benchmarks:** ✅ Yes
 
-### 9. **pallet-staking-score** 📊
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/staking-score`
+### 9. **pezpallet-staking-score** 📊
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/staking-score`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Trust and participation scoring
 - **Benchmarks:** ✅ Yes
 
-### 10. **pallet-trust** 🛡️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/trust`
+### 10. **pezpallet-trust** 🛡️
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/trust`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Trust-based interactions and reputation
 - **Benchmarks:** ✅ Yes
 
-### 11. **pallet-pez-rewards** 🎁
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/pez-rewards`
+### 11. **pezpallet-pez-rewards** 🎁
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/pez-rewards`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** PEZ token rewards distribution
 - **Benchmarks:** ✅ Yes
 
-### 12. **pallet-validator-pool** ⛏️
+### 12. **pezpallet-validator-pool** ⛏️
 - **Location:** `/home/mamostehp/Pezkuwi-SDK/pezkuwi/pallets/validator-pool`
 - **Runtime:** PezkuwiChain Relay Chain
 - **Purpose:** TNPoS validator pool (shadow mode, runs parallel to NPoS)
 - **Benchmarks:** ❌ No
 
-### 13. **pallet-collective-content** 📝
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/collective-content`
+### 13. **pezpallet-collective-content** 📝
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/collective-content`
 - **Runtime:** None (not integrated yet)
 - **Purpose:** Content management for collectives
 - **Benchmarks:** ❌ No
 
 ### 14. **teyrchain-info** ℹ️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/cumulus/teyrchains/pallets/teyrchain-info`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/teyrchain-info`
 - **Runtime:** All teyrchain runtimes
 - **Purpose:** Provides teyrchain ID information
 - **Benchmarks:** ❌ No (infrastructure pallet)
@@ -644,8 +644,8 @@
 - **Total Custom Pallets:** 14
 - **With Benchmarks:** 11 (79%)
 - **Without Benchmarks:** 3 (21%)
-  - pallet-validator-pool (relay chain)
-  - pallet-collective-content (not integrated)
+  - pezpallet-validator-pool (relay chain)
+  - pezpallet-collective-content (not integrated)
   - teyrchain-info (infrastructure)
 
 ---
@@ -660,7 +660,7 @@
 
 ### 2. Benchmark Coverage
 - ✅ Good coverage for production pallets (79%)
-- ⚠️ Add benchmarks for `pallet-validator-pool` if going to production
+- ⚠️ Add benchmarks for `pezpallet-validator-pool` if going to production
 - ℹ️ `teyrchain-info` and `collective-content` can stay without benchmarks
 
 ### 3. Runtime Organization

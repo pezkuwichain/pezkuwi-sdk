@@ -1,14 +1,14 @@
-//! Benchmarking setup for pallet-template
+//! Benchmarking setup for pezpallet-template
 
 use super::*;
-use frame::{deps::frame_benchmarking::v2::*, prelude::*};
+use frame::{deps::pezframe_benchmarking::v2::*, prelude::*};
 
 #[benchmarks]
 mod benchmarks {
 	use super::*;
 	#[cfg(test)]
 	use crate::pallet::Pallet as Template;
-	use frame_system::RawOrigin;
+	use pezframe_system::RawOrigin;
 
 	#[benchmark]
 	fn do_something() {

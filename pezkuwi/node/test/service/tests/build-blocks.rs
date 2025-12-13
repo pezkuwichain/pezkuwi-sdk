@@ -16,11 +16,11 @@
 
 use futures::{future, pin_mut, select, FutureExt};
 use pezkuwi_test_service::*;
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn ensure_test_service_build_blocks() {
-	let mut builder = sc_cli::LoggerBuilder::new("");
+	let mut builder = pezsc_cli::LoggerBuilder::new("");
 	builder.with_colors(false);
 	builder.init().expect("Sets up logger");
 	let alice_config = node_config(

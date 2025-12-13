@@ -17,7 +17,7 @@
 //! A module that is responsible for migration of storage.
 
 use crate::{Config, Pallet, LOG_TARGET};
-use frame_support::{
+use pezframe_support::{
 	traits::{Get, OnRuntimeUpgrade, StorageVersion},
 	weights::Weight,
 };
@@ -121,7 +121,7 @@ impl<
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(_state: sp_std::vec::Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+	fn post_upgrade(_state: pezsp_std::vec::Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 		let bridge_origin_relative_location = SourceRelativeLocation::get();
 		let bridge_destination_universal_location = BridgedUniversalLocation::get();
 		let lane_id = Lane::get();
@@ -131,12 +131,12 @@ impl<
 			bridge_origin_relative_location.clone(),
 			bridge_destination_universal_location.clone(),
 		) else {
-			return Err(sp_runtime::DispatchError::Other("Invalid locations!"));
+			return Err(pezsp_runtime::DispatchError::Other("Invalid locations!"));
 		};
 		let Some((bridge_id, _)) = Pallet::<T, I>::bridge_by_lane_id(&lane_id) else {
-			return Err(sp_runtime::DispatchError::Other("Missing bridge!"));
+			return Err(pezsp_runtime::DispatchError::Other("Missing bridge!"));
 		};
-		frame_support::ensure!(
+		pezframe_support::ensure!(
 			locations.bridge_id() == &bridge_id,
 			"Bridge is not stored correctly!"
 		);

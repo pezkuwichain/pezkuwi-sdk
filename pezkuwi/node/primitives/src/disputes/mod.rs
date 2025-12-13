@@ -21,8 +21,8 @@ use std::collections::{
 
 use codec::{Decode, Encode};
 
-use sp_application_crypto::AppCrypto;
-use sp_keystore::{Error as KeystoreError, KeystorePtr};
+use pezsp_application_crypto::AppCrypto;
+use pezsp_keystore::{Error as KeystoreError, KeystorePtr};
 
 use pezkuwi_primitives::{
 	CandidateHash, CandidateReceiptV2 as CandidateReceipt, CompactStatement, DisputeStatement,

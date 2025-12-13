@@ -16,7 +16,7 @@
 
 use pezkuwi_node_subsystem::HeadSupportsTeyrchains;
 use pezkuwi_node_subsystem_types::Hash;
-use sp_consensus::SyncOracle;
+use pezsp_consensus::SyncOracle;
 
 pub mod approval_voting_parallel;
 pub mod av_store;

@@ -1,9 +1,9 @@
-//! Benchmarking setup for pallet-validator-pool
+//! Benchmarking setup for pezpallet-validator-pool
 
 use super::*;
-use frame_benchmarking::v2::*;
-use frame_system::{pallet_prelude::BlockNumberFor, RawOrigin};
-use sp_std::vec;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
+use pezsp_std::vec;
 
 #[benchmarks]
 mod benchmarks {

@@ -34,16 +34,16 @@ use crate::{
 #[cfg(not(feature = "std"))]
 use alloc::format;
 use alloc::{vec, vec::Vec};
-use frame_support::build_struct_json_patch;
+use pezframe_support::build_struct_json_patch;
 use pezkuwi_primitives::{AccountId, AssignmentId, SchedulerParams, ValidatorId};
 use pezkuwichain_runtime_constants::currency::UNITS as TYR;
-use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
-use sp_consensus_babe::AuthorityId as BabeId;
-use sp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
-use sp_consensus_grandpa::AuthorityId as GrandpaId;
-use sp_core::{crypto::get_public_from_string_or_panic, sr25519};
-use sp_genesis_builder::PresetId;
-use sp_keyring::Sr25519Keyring;
+use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+use pezsp_consensus_babe::AuthorityId as BabeId;
+use pezsp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
+use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
+use pezsp_core::{crypto::get_public_from_string_or_panic, sr25519};
+use pezsp_genesis_builder::PresetId;
+use pezsp_keyring::Sr25519Keyring;
 
 // ============================================================================
 // HEZ TOKEN GENESIS CONSTANTS
@@ -248,10 +248,10 @@ fn pezkuwichain_testnet_genesis(
 	})
 }
 
-// staging_testnet
+// pezstaging_testnet
 fn pezkuwichain_staging_testnet_config_genesis() -> serde_json::Value {
 	use hex_literal::hex;
-	use sp_core::crypto::UncheckedInto;
+	use pezsp_core::crypto::UncheckedInto;
 
 	// subkey inspect "$SECRET"
 	let endowed_accounts = Vec::from([
@@ -534,7 +534,7 @@ mod preset_names {
 /// Accounts from Founder_treasury_presale_wallets.json
 fn pezkuwichain_genesis_config() -> serde_json::Value {
 	use hex_literal::hex;
-	use sp_core::crypto::UncheckedInto;
+	use pezsp_core::crypto::UncheckedInto;
 
 	// ==========================================================================
 	// MAINNET ACCOUNTS - Real addresses from founder_governance.json & presale_airdrop_wallets.json
@@ -694,17 +694,17 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		// ====================================================================
 		// LOCAL TESTNET PRESET - For local multi-node testing
 		// ====================================================================
-		sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => pezkuwichain_local_testnet_genesis(),
+		pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET => pezkuwichain_local_testnet_genesis(),
 
 		// ====================================================================
 		// DEV PRESET - For single-node development
 		// ====================================================================
-		sp_genesis_builder::DEV_RUNTIME_PRESET => pezkuwichain_development_config_genesis(),
+		pezsp_genesis_builder::DEV_RUNTIME_PRESET => pezkuwichain_development_config_genesis(),
 
 		// ====================================================================
 		// STAGING TESTNET - For pre-production testing
 		// ====================================================================
-		"staging_testnet" => pezkuwichain_staging_testnet_config_genesis(),
+		"pezstaging_testnet" => pezkuwichain_staging_testnet_config_genesis(),
 
 		// ====================================================================
 		// VERSI LOCAL TESTNET - Extended local testing
@@ -725,9 +725,9 @@ pub fn preset_names() -> Vec<PresetId> {
 	use preset_names::*;
 	vec![
 		PresetId::from(PRESET_GENESIS),
-		PresetId::from(sp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET),
-		PresetId::from(sp_genesis_builder::DEV_RUNTIME_PRESET),
-		PresetId::from("staging_testnet"),
+		PresetId::from(pezsp_genesis_builder::LOCAL_TESTNET_RUNTIME_PRESET),
+		PresetId::from(pezsp_genesis_builder::DEV_RUNTIME_PRESET),
+		PresetId::from("pezstaging_testnet"),
 		PresetId::from("versi_local_testnet"),
 	]
 }

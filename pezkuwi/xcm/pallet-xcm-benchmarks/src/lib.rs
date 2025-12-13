@@ -22,7 +22,7 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::Encode;
-use frame_benchmarking::{account, BenchmarkError};
+use pezframe_benchmarking::{account, BenchmarkError};
 use xcm::latest::prelude::*;
 use xcm_builder::EnsureDelivery;
 use xcm_executor::{traits::ConvertLocation, Config as XcmConfig};
@@ -34,7 +34,7 @@ pub mod generic;
 mod mock;
 
 /// A base trait for all individual pallets
-pub trait Config: frame_system::Config {
+pub trait Config: pezframe_system::Config {
 	/// The XCM configurations.
 	///
 	/// These might affect the execution of XCM messages, such as defining how the
@@ -62,7 +62,7 @@ const SEED: u32 = 0;
 /// The XCM executor to use for doing stuff.
 pub type ExecutorOf<T> = xcm_executor::XcmExecutor<<T as Config>::XcmConfig>;
 /// The overarching call type.
-pub type RuntimeCallOf<T> = <T as frame_system::Config>::RuntimeCall;
+pub type RuntimeCallOf<T> = <T as pezframe_system::Config>::RuntimeCall;
 /// The asset transactor of our executor
 pub type AssetTransactorOf<T> = <<T as Config>::XcmConfig as XcmConfig>::AssetTransactor;
 /// The call type of executor's config. Should eventually resolve to the same overarching call type.
@@ -104,7 +104,7 @@ pub fn new_executor<T: Config>(origin: Location) -> ExecutorOf<T> {
 }
 
 /// Build a location from an account id.
-fn account_id_junction<T: frame_system::Config>(index: u32) -> Junction {
+fn account_id_junction<T: pezframe_system::Config>(index: u32) -> Junction {
 	let account: T::AccountId = account("account", index, SEED);
 	let mut encoded = account.encode();
 	encoded.resize(32, 0u8);

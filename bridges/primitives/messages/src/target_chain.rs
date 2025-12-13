@@ -20,10 +20,10 @@ use crate::{Message, MessageKey, MessageNonce, MessagePayload, OutboundLaneData}
 
 use bp_runtime::{messages::MessageDispatchResult, raw_storage_proof_size, RawStorageProof, Size};
 use codec::{Decode, DecodeWithMemTracking, Encode, Error as CodecError};
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 use scale_info::TypeInfo;
-use sp_core::RuntimeDebug;
-use sp_std::{fmt::Debug, marker::PhantomData, prelude::*};
+use pezsp_core::RuntimeDebug;
+use pezsp_std::{fmt::Debug, marker::PhantomData, prelude::*};
 
 /// Messages proof from bridged chain.
 ///
@@ -53,7 +53,7 @@ pub struct FromBridgedChainMessagesProof<BridgedHeaderHash, Lane> {
 
 impl<BridgedHeaderHash, Lane> Size for FromBridgedChainMessagesProof<BridgedHeaderHash, Lane> {
 	fn size(&self) -> u32 {
-		use frame_support::sp_runtime::SaturatedConversion;
+		use pezframe_support::pezsp_runtime::SaturatedConversion;
 		raw_storage_proof_size(&self.storage_proof).saturated_into()
 	}
 }
@@ -94,7 +94,7 @@ pub trait MessageDispatch {
 	type DispatchPayload: Decode;
 
 	/// Fine-grained result of single message dispatch (for better diagnostic purposes)
-	type DispatchLevelResult: Clone + sp_std::fmt::Debug + Eq;
+	type DispatchLevelResult: Clone + pezsp_std::fmt::Debug + Eq;
 
 	/// Lane identifier type.
 	type LaneId: Encode;

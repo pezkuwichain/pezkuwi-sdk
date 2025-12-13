@@ -15,7 +15,7 @@
 // limitations under the License.
 
 pub use core::cell::RefCell;
-use frame_support::{
+use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::{
 		fungible::HoldConsideration, AsEnsureOriginWithArg, ConstU32, Equals, Everything,
@@ -23,9 +23,9 @@ use frame_support::{
 	},
 	weights::Weight,
 };
-use frame_system::EnsureRoot;
+use pezframe_system::EnsureRoot;
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{Convert, IdentityLookup},
 	AccountId32, BuildStorage,
 };
@@ -46,7 +46,7 @@ use crate::XcmPrecompile;
 
 pub type AccountId = AccountId32;
 pub type Balance = u128;
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 
 pub const ALICE: AccountId32 = AccountId::new([0u8; 32]);
 
@@ -54,22 +54,22 @@ parameter_types! {
 	pub const MinimumPeriod: u64 = 1;
 }
 
-impl pallet_timestamp::Config for Test {
+impl pezpallet_timestamp::Config for Test {
 	type Moment = u64;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
 	type WeightInfo = ();
 }
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		AssetsPallet: pallet_assets,
-		Balances: pallet_balances,
-		XcmPallet: pallet_xcm,
-		Revive: pallet_revive,
-		Timestamp: pallet_timestamp,
+		System: pezframe_system,
+		AssetsPallet: pezpallet_assets,
+		Balances: pezpallet_balances,
+		XcmPallet: pezpallet_xcm,
+		Revive: pezpallet_revive,
+		Timestamp: pezpallet_timestamp,
 	}
 );
 
@@ -129,20 +129,20 @@ impl SendXcm for TestSendXcmErrX8 {
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
 parameter_types! {
 	pub ExistentialDeposit: Balance = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -152,20 +152,20 @@ impl pallet_balances::Config for Test {
 /// Simple conversion of `u32` into an `AssetId` for use in benchmarking.
 pub struct XcmBenchmarkHelper;
 #[cfg(feature = "runtime-benchmarks")]
-impl pallet_assets::BenchmarkHelper<Location, ()> for XcmBenchmarkHelper {
+impl pezpallet_assets::BenchmarkHelper<Location, ()> for XcmBenchmarkHelper {
 	fn create_asset_id_parameter(id: u32) -> Location {
 		Location::new(1, [Teyrchain(id)])
 	}
 	fn create_reserve_id_parameter(_: u32) {}
 }
 
-#[derive_impl(pallet_assets::config_preludes::TestDefaultConfig)]
-impl pallet_assets::Config for Test {
+#[derive_impl(pezpallet_assets::config_preludes::TestDefaultConfig)]
+impl pezpallet_assets::Config for Test {
 	type Balance = Balance;
 	type AssetId = Location;
 	type AssetIdParameter = Location;
 	type Currency = Balances;
-	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
+	type CreateOrigin = AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
 	type ForceOrigin = EnsureRoot<AccountId>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = XcmBenchmarkHelper;
@@ -258,7 +258,7 @@ pub type LocalOriginToLocation = xcm_builder::SignedToAccountId32<RuntimeOrigin,
 
 parameter_types! {
 	pub static AdvertisedXcmVersion: xcm::prelude::XcmVersion = 4;
-	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::XcmPallet(pallet_xcm::HoldReason::AuthorizeAlias);
+	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::XcmPallet(pezpallet_xcm::HoldReason::AuthorizeAlias);
 }
 
 pub struct ConvertDeposit;
@@ -268,7 +268,7 @@ impl Convert<Footprint, u128> for ConvertDeposit {
 	}
 }
 
-impl pallet_xcm::Config for Test {
+impl pezpallet_xcm::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = xcm_builder::EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -290,21 +290,21 @@ impl pallet_xcm::Config for Test {
 	type MaxLockers = ConstU32<8>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type AuthorizedAliasConsideration =
 		HoldConsideration<AccountId, Balances, AuthorizeAliasHoldReason, ConvertDeposit>;
 }
 
-#[derive_impl(pallet_revive::config_preludes::TestDefaultConfig)]
-impl pallet_revive::Config for Test {
-	type AddressMapper = pallet_revive::AccountId32Mapper<Self>;
+#[derive_impl(pezpallet_revive::config_preludes::TestDefaultConfig)]
+impl pezpallet_revive::Config for Test {
+	type AddressMapper = pezpallet_revive::AccountId32Mapper<Self>;
 	type Balance = Balance;
 	type Currency = Balances;
 	type Precompiles = (XcmPrecompile<Self>,);
 	type Time = Timestamp;
-	type UploadOrigin = frame_system::EnsureSigned<AccountId>;
-	type InstantiateOrigin = frame_system::EnsureSigned<AccountId>;
+	type UploadOrigin = pezframe_system::EnsureSigned<AccountId>;
+	type InstantiateOrigin = pezframe_system::EnsureSigned<AccountId>;
 }
 
 pub(crate) fn buy_execution<C>(fees: impl Into<Asset>) -> Instruction<C> {
@@ -314,7 +314,7 @@ pub(crate) fn buy_execution<C>(fees: impl Into<Asset>) -> Instruction<C> {
 
 pub(crate) fn new_test_ext_with_balances(
 	balances: Vec<(AccountId, Balance)>,
-) -> sp_io::TestExternalities {
+) -> pezsp_io::TestExternalities {
 	new_test_ext_with_balances_and_xcm_version(balances, Some(XCM_VERSION), vec![])
 }
 
@@ -322,22 +322,22 @@ pub fn new_test_ext_with_balances_and_xcm_version(
 	balances: Vec<(AccountId, Balance)>,
 	safe_xcm_version: Option<XcmVersion>,
 	supported_version: Vec<(Location, XcmVersion)>,
-) -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+) -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Test> { balances, ..Default::default() }
+	pezpallet_balances::GenesisConfig::<Test> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	pallet_xcm::GenesisConfig::<Test> { safe_xcm_version, supported_version, ..Default::default() }
+	pezpallet_xcm::GenesisConfig::<Test> { safe_xcm_version, supported_version, ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	pallet_revive::GenesisConfig::<Test> { mapped_accounts: vec![ALICE], ..Default::default() }
+	pezpallet_revive::GenesisConfig::<Test> { mapped_accounts: vec![ALICE], ..Default::default() }
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
 }

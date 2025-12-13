@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-use substrate_wasm_builder::WasmBuilder;
+use bizinikiwi_wasm_builder::WasmBuilder;
 
 fn main() {
 	WasmBuilder::build_using_defaults();

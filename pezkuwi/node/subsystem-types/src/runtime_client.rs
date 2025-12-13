@@ -25,13 +25,13 @@ use pezkuwi_primitives::{
 	PvfCheckStatement, ScrapedOnChainVotes, SessionIndex, SessionInfo, ValidationCode,
 	ValidationCodeHash, ValidatorId, ValidatorIndex, ValidatorSignature,
 };
-use sc_client_api::{AuxStore, HeaderBackend};
-use sc_transaction_pool_api::OffchainTransactionPoolFactory;
-use sp_api::{ApiError, ApiExt, ProvideRuntimeApi};
-use sp_authority_discovery::AuthorityDiscoveryApi;
-use sp_blockchain::{BlockStatus, Info};
-use sp_consensus_babe::{BabeApi, Epoch};
-use sp_runtime::traits::{Block as BlockT, Header as HeaderT, NumberFor};
+use pezsc_client_api::{AuxStore, HeaderBackend};
+use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
+use pezsp_api::{ApiError, ApiExt, ProvideRuntimeApi};
+use pezsp_authority_discovery::AuthorityDiscoveryApi;
+use pezsp_blockchain::{BlockStatus, Info};
+use pezsp_consensus_babe::{BabeApi, Epoch};
+use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT, NumberFor};
 use std::{
 	collections::{BTreeMap, VecDeque},
 	sync::Arc,
@@ -47,16 +47,16 @@ use std::{
 #[async_trait]
 pub trait ChainApiBackend: Send + Sync {
 	/// Get block header. Returns `None` if block is not found.
-	async fn header(&self, hash: Hash) -> sp_blockchain::Result<Option<Header>>;
+	async fn header(&self, hash: Hash) -> pezsp_blockchain::Result<Option<Header>>;
 	/// Get blockchain info.
-	async fn info(&self) -> sp_blockchain::Result<Info<Block>>;
+	async fn info(&self) -> pezsp_blockchain::Result<Info<Block>>;
 	/// Get block number by hash. Returns `None` if the header is not in the chain.
 	async fn number(
 		&self,
 		hash: Hash,
-	) -> sp_blockchain::Result<Option<<Header as HeaderT>::Number>>;
+	) -> pezsp_blockchain::Result<Option<<Header as HeaderT>::Number>>;
 	/// Get block hash by number. Returns `None` if the header is not in the chain.
-	async fn hash(&self, number: NumberFor<Block>) -> sp_blockchain::Result<Option<Hash>>;
+	async fn hash(&self, number: NumberFor<Block>) -> pezsp_blockchain::Result<Option<Hash>>;
 }
 
 #[async_trait]
@@ -65,12 +65,12 @@ where
 	T: HeaderBackend<Block>,
 {
 	/// Get block header. Returns `None` if block is not found.
-	async fn header(&self, hash: Hash) -> sp_blockchain::Result<Option<Header>> {
+	async fn header(&self, hash: Hash) -> pezsp_blockchain::Result<Option<Header>> {
 		HeaderBackend::header(self, hash)
 	}
 
 	/// Get blockchain info.
-	async fn info(&self) -> sp_blockchain::Result<Info<Block>> {
+	async fn info(&self) -> pezsp_blockchain::Result<Info<Block>> {
 		Ok(HeaderBackend::info(self))
 	}
 
@@ -78,12 +78,12 @@ where
 	async fn number(
 		&self,
 		hash: Hash,
-	) -> sp_blockchain::Result<Option<<Header as HeaderT>::Number>> {
+	) -> pezsp_blockchain::Result<Option<<Header as HeaderT>::Number>> {
 		HeaderBackend::number(self, hash)
 	}
 
 	/// Get block hash by number. Returns `None` if the header is not in the chain.
-	async fn hash(&self, number: NumberFor<Block>) -> sp_blockchain::Result<Option<Hash>> {
+	async fn hash(&self, number: NumberFor<Block>) -> pezsp_blockchain::Result<Option<Hash>> {
 		HeaderBackend::hash(self, number)
 	}
 }
@@ -275,7 +275,7 @@ pub trait RuntimeApiSubsystemClient {
 	async fn authorities(
 		&self,
 		at: Hash,
-	) -> std::result::Result<Vec<sp_authority_discovery::AuthorityId>, ApiError>;
+	) -> std::result::Result<Vec<pezsp_authority_discovery::AuthorityId>, ApiError>;
 
 	/// Get the execution environment parameter set by parent hash, if stored
 	async fn session_executor_params(
@@ -553,7 +553,7 @@ where
 	async fn authorities(
 		&self,
 		at: Hash,
-	) -> std::result::Result<Vec<sp_authority_discovery::AuthorityId>, ApiError> {
+	) -> std::result::Result<Vec<pezsp_authority_discovery::AuthorityId>, ApiError> {
 		self.client.runtime_api().authorities(at)
 	}
 
@@ -673,12 +673,12 @@ where
 impl<Client, Block> HeaderBackend<Block> for DefaultSubsystemClient<Client>
 where
 	Client: HeaderBackend<Block>,
-	Block: sp_runtime::traits::Block,
+	Block: pezsp_runtime::traits::Block,
 {
 	fn header(
 		&self,
 		hash: Block::Hash,
-	) -> sc_client_api::blockchain::Result<Option<Block::Header>> {
+	) -> pezsc_client_api::blockchain::Result<Option<Block::Header>> {
 		self.client.header(hash)
 	}
 
@@ -686,14 +686,14 @@ where
 		self.client.info()
 	}
 
-	fn status(&self, hash: Block::Hash) -> sc_client_api::blockchain::Result<BlockStatus> {
+	fn status(&self, hash: Block::Hash) -> pezsc_client_api::blockchain::Result<BlockStatus> {
 		self.client.status(hash)
 	}
 
 	fn number(
 		&self,
 		hash: Block::Hash,
-	) -> sc_client_api::blockchain::Result<Option<<<Block as BlockT>::Header as HeaderT>::Number>>
+	) -> pezsc_client_api::blockchain::Result<Option<<<Block as BlockT>::Header as HeaderT>::Number>>
 	{
 		self.client.number(hash)
 	}
@@ -701,7 +701,7 @@ where
 	fn hash(
 		&self,
 		number: NumberFor<Block>,
-	) -> sc_client_api::blockchain::Result<Option<Block::Hash>> {
+	) -> pezsc_client_api::blockchain::Result<Option<Block::Hash>> {
 		self.client.hash(number)
 	}
 }
@@ -720,11 +720,11 @@ where
 		&self,
 		insert: I,
 		delete: D,
-	) -> sp_blockchain::Result<()> {
+	) -> pezsp_blockchain::Result<()> {
 		self.client.insert_aux(insert, delete)
 	}
 
-	fn get_aux(&self, key: &[u8]) -> sp_blockchain::Result<Option<Vec<u8>>> {
+	fn get_aux(&self, key: &[u8]) -> pezsp_blockchain::Result<Option<Vec<u8>>> {
 		self.client.get_aux(key)
 	}
 }

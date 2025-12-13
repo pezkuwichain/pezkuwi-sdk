@@ -16,9 +16,9 @@
 
 //! Runtime Metrics helpers.
 //!
-//! A runtime metric provider implementation that builds on top of Substrate wasm
+//! A runtime metric provider implementation that builds on top of Bizinikiwi wasm
 //! tracing support. This requires that the custom profiler (`TraceHandler`) to be
-//! registered in substrate via a `logger_hook()`. Events emitted from runtime are
+//! registered in bizinikiwi via a `logger_hook()`. Events emitted from runtime are
 //! then captured/processed by the `TraceHandler` implementation.
 //!
 //! Don't add logs in this file because it gets executed before the logger is
@@ -149,9 +149,9 @@ impl RuntimeMetricsProvider {
 	}
 }
 
-impl sc_tracing::TraceHandler for RuntimeMetricsProvider {
-	fn handle_span(&self, _span: &sc_tracing::SpanDatum) {}
-	fn handle_event(&self, event: &sc_tracing::TraceEvent) {
+impl pezsc_tracing::TraceHandler for RuntimeMetricsProvider {
+	fn handle_span(&self, _span: &pezsc_tracing::SpanDatum) {}
+	fn handle_event(&self, event: &pezsc_tracing::TraceEvent) {
 		if event
 			.values
 			.string_values
@@ -213,7 +213,7 @@ impl RuntimeMetricsProvider {
 }
 
 /// Returns the custom profiling closure that we'll apply to the `LoggerBuilder`.
-pub fn logger_hook() -> impl FnOnce(&mut sc_cli::LoggerBuilder, &sc_service::Configuration) -> () {
+pub fn logger_hook() -> impl FnOnce(&mut pezsc_cli::LoggerBuilder, &pezsc_service::Configuration) -> () {
 	|logger_builder, config| {
 		if config.prometheus_registry().is_none() {
 			return;

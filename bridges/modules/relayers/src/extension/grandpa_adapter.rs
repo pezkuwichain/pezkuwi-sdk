@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Adapter that allows using `pallet-bridge-relayers` as a signed extension in the
+//! Adapter that allows using `pezpallet-bridge-relayers` as a signed extension in the
 //! bridge with remote GRANDPA chain.
 
 use crate::{
@@ -24,16 +24,16 @@ use crate::{
 use bp_relayers::{BatchCallUnpacker, ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
 use bp_runtime::{Chain, StaticStrProvider};
 use core::marker::PhantomData;
-use frame_support::dispatch::{DispatchInfo, PostDispatchInfo};
-use frame_system::Config as SystemConfig;
-use pallet_bridge_grandpa::{
+use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
+use pezframe_system::Config as SystemConfig;
+use pezpallet_bridge_grandpa::{
 	CallSubType as BridgeGrandpaCallSubtype, Config as BridgeGrandpaConfig,
 	SubmitFinalityProofHelper,
 };
-use pallet_bridge_messages::{
+use pezpallet_bridge_messages::{
 	CallSubType as BridgeMessagesCallSubType, Config as BridgeMessagesConfig, LaneIdOf,
 };
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{Dispatchable, Get},
 	transaction_validity::{TransactionPriority, TransactionValidityError},
 	Saturating,
@@ -50,11 +50,11 @@ pub struct WithGrandpaChainExtensionConfig<
 	Runtime,
 	// batch call unpacker
 	BatchCallUnpacker,
-	// instance of the `pallet-bridge-grandpa`, tracked by this extension
+	// instance of the `pezpallet-bridge-grandpa`, tracked by this extension
 	BridgeGrandpaPalletInstance,
-	// instance of BridgedChain `pallet-bridge-messages`, tracked by this extension
+	// instance of BridgedChain `pezpallet-bridge-messages`, tracked by this extension
 	BridgeMessagesPalletInstance,
-	// instance of `pallet-bridge-relayers`, tracked by this extension
+	// instance of `pezpallet-bridge-relayers`, tracked by this extension
 	BridgeRelayersPalletInstance,
 	// message delivery transaction priority boost for every additional message
 	PriorityBoostPerMessage,
@@ -75,7 +75,7 @@ impl<ID, R, BCU, GI, MI, RI, P> ExtensionConfig
 where
 	ID: StaticStrProvider,
 	R: BridgeRelayersConfig<RI>
-		+ BridgeMessagesConfig<MI, BridgedChain = pallet_bridge_grandpa::BridgedChain<R, GI>>
+		+ BridgeMessagesConfig<MI, BridgedChain = pezpallet_bridge_grandpa::BridgedChain<R, GI>>
 		+ BridgeGrandpaConfig<GI>,
 	BCU: BatchCallUnpacker<R>,
 	GI: 'static,
@@ -91,7 +91,7 @@ where
 	type BridgeMessagesPalletInstance = MI;
 	type BridgeRelayersPalletInstance = RI;
 	type PriorityBoostPerMessage = P;
-	type RemoteGrandpaChainBlockNumber = pallet_bridge_grandpa::BridgedBlockNumber<R, GI>;
+	type RemoteGrandpaChainBlockNumber = pezpallet_bridge_grandpa::BridgedBlockNumber<R, GI>;
 	type LaneId = LaneIdOf<R, Self::BridgeMessagesPalletInstance>;
 
 	fn parse_and_check_for_obsolete_call(

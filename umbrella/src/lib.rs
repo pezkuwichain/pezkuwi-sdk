@@ -19,7 +19,7 @@ pub use asset_test_utils;
 #[cfg(feature = "assets-common")]
 pub use assets_common;
 
-/// A no-std/Substrate compatible library to construct binary merkle tree.
+/// A no-std/Bizinikiwi compatible library to construct binary merkle tree.
 #[cfg(feature = "binary-merkle-tree")]
 pub use binary_merkle_tree;
 
@@ -43,7 +43,7 @@ pub use bp_relayers;
 #[cfg(feature = "bp-runtime")]
 pub use bp_runtime;
 
-/// Utilities for testing substrate-based runtime bridge code.
+/// Utilities for testing bizinikiwi-based runtime bridge code.
 #[cfg(feature = "bp-test-utils")]
 pub use bp_test_utils;
 
@@ -67,147 +67,147 @@ pub use bridge_hub_common;
 #[cfg(feature = "bridge-hub-test-utils")]
 pub use bridge_hub_test_utils;
 
-/// Common types and functions that may be used by substrate-based runtimes of all bridged
+/// Common types and functions that may be used by bizinikiwi-based runtimes of all bridged
 /// chains.
 #[cfg(feature = "bridge-runtime-common")]
 pub use bridge_runtime_common;
 
 /// Teyrchain bootnodes registration and discovery.
-#[cfg(feature = "cumulus-client-bootnodes")]
+#[cfg(feature = "pezcumulus-client-bootnodes")]
 pub use cumulus_client_bootnodes;
 
 /// Teyrchain node CLI utilities.
-#[cfg(feature = "cumulus-client-cli")]
+#[cfg(feature = "pezcumulus-client-cli")]
 pub use cumulus_client_cli;
 
 /// Common node-side functionality and glue code to collate teyrchain blocks.
-#[cfg(feature = "cumulus-client-collator")]
+#[cfg(feature = "pezcumulus-client-collator")]
 pub use cumulus_client_collator;
 
 /// AURA consensus algorithm for teyrchains.
-#[cfg(feature = "cumulus-client-consensus-aura")]
+#[cfg(feature = "pezcumulus-client-consensus-aura")]
 pub use cumulus_client_consensus_aura;
 
-/// Cumulus specific common consensus implementations.
-#[cfg(feature = "cumulus-client-consensus-common")]
+/// Pezcumulus specific common consensus implementations.
+#[cfg(feature = "pezcumulus-client-consensus-common")]
 pub use cumulus_client_consensus_common;
 
-/// A Substrate `Proposer` for building teyrchain blocks.
-#[cfg(feature = "cumulus-client-consensus-proposer")]
+/// A Bizinikiwi `Proposer` for building teyrchain blocks.
+#[cfg(feature = "pezcumulus-client-consensus-proposer")]
 pub use cumulus_client_consensus_proposer;
 
 /// The relay-chain provided consensus algorithm.
-#[cfg(feature = "cumulus-client-consensus-relay-chain")]
+#[cfg(feature = "pezcumulus-client-consensus-relay-chain")]
 pub use cumulus_client_consensus_relay_chain;
 
-/// Cumulus-specific networking protocol.
-#[cfg(feature = "cumulus-client-network")]
+/// Pezcumulus-specific networking protocol.
+#[cfg(feature = "pezcumulus-client-network")]
 pub use cumulus_client_network;
 
 /// Teyrchain PoV recovery.
-#[cfg(feature = "cumulus-client-pov-recovery")]
+#[cfg(feature = "pezcumulus-client-pov-recovery")]
 pub use cumulus_client_pov_recovery;
 
 /// Common functions used to assemble the components of a teyrchain node.
-#[cfg(feature = "cumulus-client-service")]
+#[cfg(feature = "pezcumulus-client-service")]
 pub use cumulus_client_service;
 
 /// Inherent that needs to be present in every teyrchain block. Contains messages and a relay
 /// chain storage-proof.
-#[cfg(feature = "cumulus-client-teyrchain-inherent")]
+#[cfg(feature = "pezcumulus-client-teyrchain-inherent")]
 pub use cumulus_client_teyrchain_inherent;
 
 /// AURA consensus extension pallet for teyrchains.
-#[cfg(feature = "cumulus-pallet-aura-ext")]
+#[cfg(feature = "pezcumulus-pezpallet-aura-ext")]
 pub use cumulus_pallet_aura_ext;
 
 /// Migrates messages from the old DMP queue pallet.
-#[cfg(feature = "cumulus-pallet-dmp-queue")]
+#[cfg(feature = "pezcumulus-pezpallet-dmp-queue")]
 pub use cumulus_pallet_dmp_queue;
 
 /// FRAME sessions pallet benchmarking.
-#[cfg(feature = "cumulus-pallet-session-benchmarking")]
+#[cfg(feature = "pezcumulus-pezpallet-session-benchmarking")]
 pub use cumulus_pallet_session_benchmarking;
 
 /// Adds functionality to migrate from a Solo to a Teyrchain.
-#[cfg(feature = "cumulus-pallet-solo-to-para")]
+#[cfg(feature = "pezcumulus-pezpallet-solo-to-para")]
 pub use cumulus_pallet_solo_to_para;
 
-/// Base pallet for cumulus-based teyrchains.
-#[cfg(feature = "cumulus-pallet-teyrchain-system")]
+/// Base pallet for pezcumulus-based teyrchains.
+#[cfg(feature = "pezcumulus-pezpallet-teyrchain-system")]
 pub use cumulus_pallet_teyrchain_system;
 
 /// Proc macros provided by the teyrchain-system pallet.
-#[cfg(feature = "cumulus-pallet-teyrchain-system-proc-macro")]
+#[cfg(feature = "pezcumulus-pezpallet-teyrchain-system-proc-macro")]
 pub use cumulus_pallet_teyrchain_system_proc_macro;
 
 /// pallet and transaction extensions for accurate proof size reclaim.
-#[cfg(feature = "cumulus-pallet-weight-reclaim")]
+#[cfg(feature = "pezcumulus-pezpallet-weight-reclaim")]
 pub use cumulus_pallet_weight_reclaim;
 
 /// Pallet for stuff specific to teyrchains' usage of XCM.
-#[cfg(feature = "cumulus-pallet-xcm")]
+#[cfg(feature = "pezcumulus-pezpallet-xcm")]
 pub use cumulus_pallet_xcm;
 
 /// Pallet to queue outbound and inbound XCMP messages.
-#[cfg(feature = "cumulus-pallet-xcmp-queue")]
+#[cfg(feature = "pezcumulus-pezpallet-xcmp-queue")]
 pub use cumulus_pallet_xcmp_queue;
 
-/// Ping Pallet for Cumulus XCM/UMP testing.
-#[cfg(feature = "cumulus-ping")]
+/// Ping Pallet for Pezcumulus XCM/UMP testing.
+#[cfg(feature = "pezcumulus-ping")]
 pub use cumulus_ping;
 
-/// Core primitives for Aura in Cumulus.
-#[cfg(feature = "cumulus-primitives-aura")]
+/// Core primitives for Aura in Pezcumulus.
+#[cfg(feature = "pezcumulus-primitives-aura")]
 pub use cumulus_primitives_aura;
 
-/// Cumulus related core primitive types and traits.
-#[cfg(feature = "cumulus-primitives-core")]
+/// Pezcumulus related core primitive types and traits.
+#[cfg(feature = "pezcumulus-primitives-core")]
 pub use cumulus_primitives_core;
 
 /// Hostfunction exposing storage proof size to the runtime.
-#[cfg(feature = "cumulus-primitives-proof-size-hostfunction")]
+#[cfg(feature = "pezcumulus-primitives-proof-size-hostfunction")]
 pub use cumulus_primitives_proof_size_hostfunction;
 
 /// Utilities to reclaim storage weight.
-#[cfg(feature = "cumulus-primitives-storage-weight-reclaim")]
+#[cfg(feature = "pezcumulus-primitives-storage-weight-reclaim")]
 pub use cumulus_primitives_storage_weight_reclaim;
 
 /// Inherent that needs to be present in every teyrchain block. Contains messages and a relay
 /// chain storage-proof.
-#[cfg(feature = "cumulus-primitives-teyrchain-inherent")]
+#[cfg(feature = "pezcumulus-primitives-teyrchain-inherent")]
 pub use cumulus_primitives_teyrchain_inherent;
 
 /// Provides timestamp related functionality for teyrchains.
-#[cfg(feature = "cumulus-primitives-timestamp")]
+#[cfg(feature = "pezcumulus-primitives-timestamp")]
 pub use cumulus_primitives_timestamp;
 
-/// Helper datatypes for Cumulus.
-#[cfg(feature = "cumulus-primitives-utility")]
+/// Helper datatypes for Pezcumulus.
+#[cfg(feature = "pezcumulus-primitives-utility")]
 pub use cumulus_primitives_utility;
 
 /// Implementation of the RelayChainInterface trait for Pezkuwi full-nodes.
-#[cfg(feature = "cumulus-relay-chain-inprocess-interface")]
+#[cfg(feature = "pezcumulus-relay-chain-inprocess-interface")]
 pub use cumulus_relay_chain_inprocess_interface;
 
 /// Common interface for different relay chain datasources.
-#[cfg(feature = "cumulus-relay-chain-interface")]
+#[cfg(feature = "pezcumulus-relay-chain-interface")]
 pub use cumulus_relay_chain_interface;
 
 /// Minimal node implementation to be used in tandem with RPC or light-client mode.
-#[cfg(feature = "cumulus-relay-chain-minimal-node")]
+#[cfg(feature = "pezcumulus-relay-chain-minimal-node")]
 pub use cumulus_relay_chain_minimal_node;
 
 /// Implementation of the RelayChainInterface trait that connects to a remote RPC-node.
-#[cfg(feature = "cumulus-relay-chain-rpc-interface")]
+#[cfg(feature = "pezcumulus-relay-chain-rpc-interface")]
 pub use cumulus_relay_chain_rpc_interface;
 
-/// Cumulus client common relay chain streams.
-#[cfg(feature = "cumulus-relay-chain-streams")]
+/// Pezcumulus client common relay chain streams.
+#[cfg(feature = "pezcumulus-relay-chain-streams")]
 pub use cumulus_relay_chain_streams;
 
-/// Mocked relay state proof builder for testing Cumulus.
-#[cfg(feature = "cumulus-test-relay-sproof-builder")]
+/// Mocked relay state proof builder for testing Pezcumulus.
+#[cfg(feature = "pezcumulus-test-relay-sproof-builder")]
 pub use cumulus_test_relay_sproof_builder;
 
 /// Common resources for integration testing with xcm-emulator.
@@ -224,32 +224,32 @@ pub use ethereum_standards;
 pub use fork_tree;
 
 /// Macro for benchmarking a FRAME runtime.
-#[cfg(feature = "frame-benchmarking")]
-pub use frame_benchmarking;
+#[cfg(feature = "pezframe-benchmarking")]
+pub use pezframe_benchmarking;
 
 /// CLI for benchmarking FRAME.
-#[cfg(feature = "frame-benchmarking-cli")]
-pub use frame_benchmarking_cli;
+#[cfg(feature = "pezframe-benchmarking-cli")]
+pub use pezframe_benchmarking_cli;
 
 /// Pallet for testing FRAME PoV benchmarking.
-#[cfg(feature = "frame-benchmarking-pallet-pov")]
-pub use frame_benchmarking_pallet_pov;
+#[cfg(feature = "pezframe-benchmarking-pezpallet-pov")]
+pub use pezframe_benchmarking_pallet_pov;
 
 /// NPoS Solution Type.
-#[cfg(feature = "frame-election-provider-solution-type")]
-pub use frame_election_provider_solution_type;
+#[cfg(feature = "pezframe-election-provider-solution-type")]
+pub use pezframe_election_provider_solution_type;
 
 /// election provider supporting traits.
-#[cfg(feature = "frame-election-provider-support")]
-pub use frame_election_provider_support;
+#[cfg(feature = "pezframe-election-provider-support")]
+pub use pezframe_election_provider_support;
 
 /// FRAME executives engine.
-#[cfg(feature = "frame-executive")]
-pub use frame_executive;
+#[cfg(feature = "pezframe-executive")]
+pub use pezframe_executive;
 
 /// FRAME signed extension for verifying the metadata hash.
-#[cfg(feature = "frame-metadata-hash-extension")]
-pub use frame_metadata_hash_extension;
+#[cfg(feature = "pezframe-metadata-hash-extension")]
+pub use pezframe_metadata_hash_extension;
 
 /// An externalities provided environment that can load itself from remote nodes or cached
 /// files.
@@ -257,42 +257,42 @@ pub use frame_metadata_hash_extension;
 pub use frame_remote_externalities;
 
 /// Support code for the runtime.
-#[cfg(feature = "frame-support")]
-pub use frame_support;
+#[cfg(feature = "pezframe-support")]
+pub use pezframe_support;
 
 /// Proc macro of Support code for the runtime.
-#[cfg(feature = "frame-support-procedural")]
-pub use frame_support_procedural;
+#[cfg(feature = "pezframe-support-procedural")]
+pub use pezframe_support_procedural;
 
 /// Proc macro helpers for procedural macros.
-#[cfg(feature = "frame-support-procedural-tools")]
-pub use frame_support_procedural_tools;
+#[cfg(feature = "pezframe-support-procedural-tools")]
+pub use pezframe_support_procedural_tools;
 
 /// Use to derive parsing for parsing struct.
-#[cfg(feature = "frame-support-procedural-tools-derive")]
-pub use frame_support_procedural_tools_derive;
+#[cfg(feature = "pezframe-support-procedural-tools-derive")]
+pub use pezframe_support_procedural_tools_derive;
 
 /// FRAME system module.
-#[cfg(feature = "frame-system")]
-pub use frame_system;
+#[cfg(feature = "pezframe-system")]
+pub use pezframe_system;
 
 /// FRAME System benchmarking.
-#[cfg(feature = "frame-system-benchmarking")]
-pub use frame_system_benchmarking;
+#[cfg(feature = "pezframe-system-benchmarking")]
+pub use pezframe_system_benchmarking;
 
 /// Runtime API definition required by System RPC extensions.
-#[cfg(feature = "frame-system-rpc-runtime-api")]
-pub use frame_system_rpc_runtime_api;
+#[cfg(feature = "pezframe-system-rpc-runtime-api")]
+pub use pezframe_system_rpc_runtime_api;
 
 /// Supporting types for try-runtime, testing and dry-running commands.
-#[cfg(feature = "frame-try-runtime")]
-pub use frame_try_runtime;
+#[cfg(feature = "pezframe-try-runtime")]
+pub use pezframe_try_runtime;
 
-/// Bag threshold generation script for pallet-bag-list.
+/// Bag threshold generation script for pezpallet-bag-list.
 #[cfg(feature = "generate-bags")]
 pub use generate_bags;
 
-/// MMR Client gadget for substrate.
+/// MMR Client gadget for bizinikiwi.
 #[cfg(feature = "mmr-gadget")]
 pub use mmr_gadget;
 
@@ -301,515 +301,515 @@ pub use mmr_gadget;
 pub use mmr_rpc;
 
 /// The Alliance pallet provides a collective for standard-setting industry collaboration.
-#[cfg(feature = "pallet-alliance")]
-pub use pallet_alliance;
+#[cfg(feature = "pezpallet-alliance")]
+pub use pezpallet_alliance;
 
 /// FRAME asset conversion pallet.
-#[cfg(feature = "pallet-asset-conversion")]
-pub use pallet_asset_conversion;
+#[cfg(feature = "pezpallet-asset-conversion")]
+pub use pezpallet_asset_conversion;
 
 /// FRAME asset conversion pallet's operations suite.
-#[cfg(feature = "pallet-asset-conversion-ops")]
-pub use pallet_asset_conversion_ops;
+#[cfg(feature = "pezpallet-asset-conversion-ops")]
+pub use pezpallet_asset_conversion_ops;
 
 /// Pallet to manage transaction payments in assets by converting them to native assets.
-#[cfg(feature = "pallet-asset-conversion-tx-payment")]
-pub use pallet_asset_conversion_tx_payment;
+#[cfg(feature = "pezpallet-asset-conversion-tx-payment")]
+pub use pezpallet_asset_conversion_tx_payment;
 
 /// Whitelist non-native assets for treasury spending and provide conversion to native balance.
-#[cfg(feature = "pallet-asset-rate")]
-pub use pallet_asset_rate;
+#[cfg(feature = "pezpallet-asset-rate")]
+pub use pezpallet_asset_rate;
 
 /// FRAME asset rewards pallet.
-#[cfg(feature = "pallet-asset-rewards")]
-pub use pallet_asset_rewards;
+#[cfg(feature = "pezpallet-asset-rewards")]
+pub use pezpallet_asset_rewards;
 
 /// pallet to manage transaction payments in assets.
-#[cfg(feature = "pallet-asset-tx-payment")]
-pub use pallet_asset_tx_payment;
+#[cfg(feature = "pezpallet-asset-tx-payment")]
+pub use pezpallet_asset_tx_payment;
 
 /// FRAME asset management pallet.
-#[cfg(feature = "pallet-assets")]
-pub use pallet_assets;
+#[cfg(feature = "pezpallet-assets")]
+pub use pezpallet_assets;
 
-/// Provides freezing features to `pallet-assets`.
-#[cfg(feature = "pallet-assets-freezer")]
-pub use pallet_assets_freezer;
+/// Provides freezing features to `pezpallet-assets`.
+#[cfg(feature = "pezpallet-assets-freezer")]
+pub use pezpallet_assets_freezer;
 
-/// Provides holding features to `pallet-assets`.
-#[cfg(feature = "pallet-assets-holder")]
-pub use pallet_assets_holder;
+/// Provides holding features to `pezpallet-assets`.
+#[cfg(feature = "pezpallet-assets-holder")]
+pub use pezpallet_assets_holder;
 
-/// Provides precompiles for `pallet-assets`.
-#[cfg(feature = "pallet-assets-precompiles")]
-pub use pallet_assets_precompiles;
+/// Provides precompiles for `pezpallet-assets`.
+#[cfg(feature = "pezpallet-assets-precompiles")]
+pub use pezpallet_assets_precompiles;
 
 /// FRAME atomic swap pallet.
-#[cfg(feature = "pallet-atomic-swap")]
-pub use pallet_atomic_swap;
+#[cfg(feature = "pezpallet-atomic-swap")]
+pub use pezpallet_atomic_swap;
 
 /// FRAME AURA consensus pallet.
-#[cfg(feature = "pallet-aura")]
-pub use pallet_aura;
+#[cfg(feature = "pezpallet-aura")]
+pub use pezpallet_aura;
 
 /// FRAME pallet for authority discovery.
-#[cfg(feature = "pallet-authority-discovery")]
-pub use pallet_authority_discovery;
+#[cfg(feature = "pezpallet-authority-discovery")]
+pub use pezpallet_authority_discovery;
 
 /// Block and Uncle Author tracking for the FRAME.
-#[cfg(feature = "pallet-authorship")]
-pub use pallet_authorship;
+#[cfg(feature = "pezpallet-authorship")]
+pub use pezpallet_authorship;
 
 /// Consensus extension module for BABE consensus. Collects on-chain randomness from VRF
 /// outputs and manages epoch transitions.
-#[cfg(feature = "pallet-babe")]
-pub use pallet_babe;
+#[cfg(feature = "pezpallet-babe")]
+pub use pezpallet_babe;
 
 /// FRAME pallet bags list.
-#[cfg(feature = "pallet-bags-list")]
-pub use pallet_bags_list;
+#[cfg(feature = "pezpallet-bags-list")]
+pub use pezpallet_bags_list;
 
 /// FRAME pallet to manage balances.
-#[cfg(feature = "pallet-balances")]
-pub use pallet_balances;
+#[cfg(feature = "pezpallet-balances")]
+pub use pezpallet_balances;
 
 /// BEEFY FRAME pallet.
-#[cfg(feature = "pallet-beefy")]
-pub use pallet_beefy;
+#[cfg(feature = "pezpallet-beefy")]
+pub use pezpallet_beefy;
 
 /// BEEFY + MMR runtime utilities.
-#[cfg(feature = "pallet-beefy-mmr")]
-pub use pallet_beefy_mmr;
+#[cfg(feature = "pezpallet-beefy-mmr")]
+pub use pezpallet_beefy_mmr;
 
 /// FRAME pallet to manage bounties.
-#[cfg(feature = "pallet-bounties")]
-pub use pallet_bounties;
+#[cfg(feature = "pezpallet-bounties")]
+pub use pezpallet_bounties;
 
 /// Module implementing GRANDPA on-chain light client used for bridging consensus of
-/// substrate-based chains.
-#[cfg(feature = "pallet-bridge-grandpa")]
-pub use pallet_bridge_grandpa;
+/// bizinikiwi-based chains.
+#[cfg(feature = "pezpallet-bridge-grandpa")]
+pub use pezpallet_bridge_grandpa;
 
 /// Module that allows bridged chains to exchange messages using lane concept.
-#[cfg(feature = "pallet-bridge-messages")]
-pub use pallet_bridge_messages;
+#[cfg(feature = "pezpallet-bridge-messages")]
+pub use pezpallet_bridge_messages;
 
 /// Module used to store relayer rewards and coordinate relayers set.
-#[cfg(feature = "pallet-bridge-relayers")]
-pub use pallet_bridge_relayers;
+#[cfg(feature = "pezpallet-bridge-relayers")]
+pub use pezpallet_bridge_relayers;
 
 /// Module that allows bridged relay chains to exchange information on their teyrchains' heads.
-#[cfg(feature = "pallet-bridge-teyrchains")]
-pub use pallet_bridge_teyrchains;
+#[cfg(feature = "pezpallet-bridge-teyrchains")]
+pub use pezpallet_bridge_teyrchains;
 
 /// Brokerage tool for managing Pezkuwi Core scheduling.
-#[cfg(feature = "pallet-broker")]
-pub use pallet_broker;
+#[cfg(feature = "pezpallet-broker")]
+pub use pezpallet_broker;
 
 /// FRAME pallet to manage child bounties.
-#[cfg(feature = "pallet-child-bounties")]
-pub use pallet_child_bounties;
+#[cfg(feature = "pezpallet-child-bounties")]
+pub use pezpallet_child_bounties;
 
 /// Simple pallet to select collators for a teyrchain.
-#[cfg(feature = "pallet-collator-selection")]
-pub use pallet_collator_selection;
+#[cfg(feature = "pezpallet-collator-selection")]
+pub use pezpallet_collator_selection;
 
 /// Collective system: Members of a set of account IDs can make their collective feelings known
 /// through dispatched calls from one of two specialized origins.
-#[cfg(feature = "pallet-collective")]
-pub use pallet_collective;
+#[cfg(feature = "pezpallet-collective")]
+pub use pezpallet_collective;
 
 /// Managed content.
-#[cfg(feature = "pallet-collective-content")]
-pub use pallet_collective_content;
+#[cfg(feature = "pezpallet-collective-content")]
+pub use pezpallet_collective_content;
 
 /// FRAME pallet for WASM contracts.
-#[cfg(feature = "pallet-contracts")]
-pub use pallet_contracts;
+#[cfg(feature = "pezpallet-contracts")]
+pub use pezpallet_contracts;
 
-/// A mock network for testing pallet-contracts.
-#[cfg(feature = "pallet-contracts-mock-network")]
-pub use pallet_contracts_mock_network;
+/// A mock network for testing pezpallet-contracts.
+#[cfg(feature = "pezpallet-contracts-mock-network")]
+pub use pezpallet_contracts_mock_network;
 
-/// Procedural macros used in pallet_contracts.
-#[cfg(feature = "pallet-contracts-proc-macro")]
-pub use pallet_contracts_proc_macro;
+/// Procedural macros used in pezpallet_contracts.
+#[cfg(feature = "pezpallet-contracts-proc-macro")]
+pub use pezpallet_contracts_proc_macro;
 
 /// Exposes all the host functions that a contract can import.
-#[cfg(feature = "pallet-contracts-uapi")]
-pub use pallet_contracts_uapi;
+#[cfg(feature = "pezpallet-contracts-uapi")]
+pub use pezpallet_contracts_uapi;
 
 /// FRAME pallet for conviction voting in referenda.
-#[cfg(feature = "pallet-conviction-voting")]
-pub use pallet_conviction_voting;
+#[cfg(feature = "pezpallet-conviction-voting")]
+pub use pezpallet_conviction_voting;
 
 /// Logic as per the description of The Fellowship for core Pezkuwi technology.
-#[cfg(feature = "pallet-core-fellowship")]
-pub use pallet_core_fellowship;
+#[cfg(feature = "pezpallet-core-fellowship")]
+pub use pezpallet_core_fellowship;
 
 /// FRAME delegated staking pallet.
-#[cfg(feature = "pallet-delegated-staking")]
-pub use pallet_delegated_staking;
+#[cfg(feature = "pezpallet-delegated-staking")]
+pub use pezpallet_delegated_staking;
 
 /// FRAME pallet for democracy.
-#[cfg(feature = "pallet-democracy")]
-pub use pallet_democracy;
+#[cfg(feature = "pezpallet-democracy")]
+pub use pezpallet_democracy;
 
 /// FRAME derivatives pallet.
-#[cfg(feature = "pallet-derivatives")]
-pub use pallet_derivatives;
+#[cfg(feature = "pezpallet-derivatives")]
+pub use pezpallet_derivatives;
 
 /// FRAME example pallet.
-#[cfg(feature = "pallet-dev-mode")]
-pub use pallet_dev_mode;
+#[cfg(feature = "pezpallet-dev-mode")]
+pub use pezpallet_dev_mode;
 
 /// Dummy DIM Pallet.
-#[cfg(feature = "pallet-dummy-dim")]
-pub use pallet_dummy_dim;
+#[cfg(feature = "pezpallet-dummy-dim")]
+pub use pezpallet_dummy_dim;
 
 /// PALLET multi phase+block election providers.
-#[cfg(feature = "pallet-election-provider-multi-block")]
-pub use pallet_election_provider_multi_block;
+#[cfg(feature = "pezpallet-election-provider-multi-block")]
+pub use pezpallet_election_provider_multi_block;
 
 /// PALLET two phase election providers.
-#[cfg(feature = "pallet-election-provider-multi-phase")]
-pub use pallet_election_provider_multi_phase;
+#[cfg(feature = "pezpallet-election-provider-multi-phase")]
+pub use pezpallet_election_provider_multi_phase;
 
 /// Benchmarking for election provider support onchain config trait.
-#[cfg(feature = "pallet-election-provider-support-benchmarking")]
-pub use pallet_election_provider_support_benchmarking;
+#[cfg(feature = "pezpallet-election-provider-support-benchmarking")]
+pub use pezpallet_election_provider_support_benchmarking;
 
 /// FRAME pallet based on seq-Phragmén election method.
-#[cfg(feature = "pallet-elections-phragmen")]
-pub use pallet_elections_phragmen;
+#[cfg(feature = "pezpallet-elections-phragmen")]
+pub use pezpallet_elections_phragmen;
 
 /// FRAME fast unstake pallet.
-#[cfg(feature = "pallet-fast-unstake")]
-pub use pallet_fast_unstake;
+#[cfg(feature = "pezpallet-fast-unstake")]
+pub use pezpallet_fast_unstake;
 
 /// FRAME pallet for pushing a chain to its weight limits.
-#[cfg(feature = "pallet-glutton")]
-pub use pallet_glutton;
+#[cfg(feature = "pezpallet-glutton")]
+pub use pezpallet_glutton;
 
 /// FRAME pallet for GRANDPA finality gadget.
-#[cfg(feature = "pallet-grandpa")]
-pub use pallet_grandpa;
+#[cfg(feature = "pezpallet-grandpa")]
+pub use pezpallet_grandpa;
 
 /// FRAME identity management pallet.
-#[cfg(feature = "pallet-identity")]
-pub use pallet_identity;
+#[cfg(feature = "pezpallet-identity")]
+pub use pezpallet_identity;
 
 /// FRAME's I'm online pallet.
-#[cfg(feature = "pallet-im-online")]
-pub use pallet_im_online;
+#[cfg(feature = "pezpallet-im-online")]
+pub use pezpallet_im_online;
 
 /// FRAME indices management pallet.
-#[cfg(feature = "pallet-indices")]
-pub use pallet_indices;
+#[cfg(feature = "pezpallet-indices")]
+pub use pezpallet_indices;
 
 /// Insecure do not use in production: FRAME randomness collective flip pallet.
-#[cfg(feature = "pallet-insecure-randomness-collective-flip")]
-pub use pallet_insecure_randomness_collective_flip;
+#[cfg(feature = "pezpallet-insecure-randomness-collective-flip")]
+pub use pezpallet_insecure_randomness_collective_flip;
 
 /// FRAME Participation Lottery Pallet.
-#[cfg(feature = "pallet-lottery")]
-pub use pallet_lottery;
+#[cfg(feature = "pezpallet-lottery")]
+pub use pezpallet_lottery;
 
 /// FRAME membership management pallet.
-#[cfg(feature = "pallet-membership")]
-pub use pallet_membership;
+#[cfg(feature = "pezpallet-membership")]
+pub use pezpallet_membership;
 
 /// FRAME pallet to queue and process messages.
-#[cfg(feature = "pallet-message-queue")]
-pub use pallet_message_queue;
+#[cfg(feature = "pezpallet-message-queue")]
+pub use pezpallet_message_queue;
 
 /// FRAME pallet enabling meta transactions.
-#[cfg(feature = "pallet-meta-tx")]
-pub use pallet_meta_tx;
+#[cfg(feature = "pezpallet-meta-tx")]
+pub use pezpallet_meta_tx;
 
 /// FRAME pallet to execute multi-block migrations.
-#[cfg(feature = "pallet-migrations")]
-pub use pallet_migrations;
+#[cfg(feature = "pezpallet-migrations")]
+pub use pezpallet_migrations;
 
 /// FRAME's mixnet pallet.
-#[cfg(feature = "pallet-mixnet")]
-pub use pallet_mixnet;
+#[cfg(feature = "pezpallet-mixnet")]
+pub use pezpallet_mixnet;
 
 /// FRAME Merkle Mountain Range pallet.
-#[cfg(feature = "pallet-mmr")]
-pub use pallet_mmr;
+#[cfg(feature = "pezpallet-mmr")]
+pub use pezpallet_mmr;
 
 /// FRAME pallet to manage multi-asset and cross-chain bounties.
-#[cfg(feature = "pallet-multi-asset-bounties")]
-pub use pallet_multi_asset_bounties;
+#[cfg(feature = "pezpallet-multi-asset-bounties")]
+pub use pezpallet_multi_asset_bounties;
 
 /// FRAME multi-signature dispatch pallet.
-#[cfg(feature = "pallet-multisig")]
-pub use pallet_multisig;
+#[cfg(feature = "pezpallet-multisig")]
+pub use pezpallet_multisig;
 
 /// FRAME pallet to convert non-fungible to fungible tokens.
-#[cfg(feature = "pallet-nft-fractionalization")]
-pub use pallet_nft_fractionalization;
+#[cfg(feature = "pezpallet-nft-fractionalization")]
+pub use pezpallet_nft_fractionalization;
 
 /// FRAME NFTs pallet.
-#[cfg(feature = "pallet-nfts")]
-pub use pallet_nfts;
+#[cfg(feature = "pezpallet-nfts")]
+pub use pezpallet_nfts;
 
 /// Runtime API for the FRAME NFTs pallet.
-#[cfg(feature = "pallet-nfts-runtime-api")]
-pub use pallet_nfts_runtime_api;
+#[cfg(feature = "pezpallet-nfts-runtime-api")]
+pub use pezpallet_nfts_runtime_api;
 
 /// FRAME pallet for rewarding account freezing.
-#[cfg(feature = "pallet-nis")]
-pub use pallet_nis;
+#[cfg(feature = "pezpallet-nis")]
+pub use pezpallet_nis;
 
 /// FRAME pallet for node authorization.
-#[cfg(feature = "pallet-node-authorization")]
-pub use pallet_node_authorization;
+#[cfg(feature = "pezpallet-node-authorization")]
+pub use pezpallet_node_authorization;
 
 /// FRAME nomination pools pallet.
-#[cfg(feature = "pallet-nomination-pools")]
-pub use pallet_nomination_pools;
+#[cfg(feature = "pezpallet-nomination-pools")]
+pub use pezpallet_nomination_pools;
 
 /// FRAME nomination pools pallet benchmarking.
-#[cfg(feature = "pallet-nomination-pools-benchmarking")]
-pub use pallet_nomination_pools_benchmarking;
+#[cfg(feature = "pezpallet-nomination-pools-benchmarking")]
+pub use pezpallet_nomination_pools_benchmarking;
 
 /// Runtime API for nomination-pools FRAME pallet.
-#[cfg(feature = "pallet-nomination-pools-runtime-api")]
-pub use pallet_nomination_pools_runtime_api;
+#[cfg(feature = "pezpallet-nomination-pools-runtime-api")]
+pub use pezpallet_nomination_pools_runtime_api;
 
 /// FRAME offences pallet.
-#[cfg(feature = "pallet-offences")]
-pub use pallet_offences;
+#[cfg(feature = "pezpallet-offences")]
+pub use pezpallet_offences;
 
 /// FRAME offences pallet benchmarking.
-#[cfg(feature = "pallet-offences-benchmarking")]
-pub use pallet_offences_benchmarking;
+#[cfg(feature = "pezpallet-offences-benchmarking")]
+pub use pezpallet_offences_benchmarking;
 
 /// FRAME oracle pallet for off-chain data.
-#[cfg(feature = "pallet-oracle")]
-pub use pallet_oracle;
+#[cfg(feature = "pezpallet-oracle")]
+pub use pezpallet_oracle;
 
 /// Runtime API for the oracle pallet.
-#[cfg(feature = "pallet-oracle-runtime-api")]
-pub use pallet_oracle_runtime_api;
+#[cfg(feature = "pezpallet-oracle-runtime-api")]
+pub use pezpallet_oracle_runtime_api;
 
 /// Pallet to give some execution allowance for some origins.
-#[cfg(feature = "pallet-origin-restriction")]
-pub use pallet_origin_restriction;
+#[cfg(feature = "pezpallet-origin-restriction")]
+pub use pezpallet_origin_restriction;
 
 /// FRAME pallet that provides a paged list data structure.
-#[cfg(feature = "pallet-paged-list")]
-pub use pallet_paged_list;
+#[cfg(feature = "pezpallet-paged-list")]
+pub use pezpallet_paged_list;
 
 /// Pallet to store and configure parameters.
-#[cfg(feature = "pallet-parameters")]
-pub use pallet_parameters;
+#[cfg(feature = "pezpallet-parameters")]
+pub use pezpallet_parameters;
 
 /// Personhood-tracking pallet.
-#[cfg(feature = "pallet-people")]
-pub use pallet_people;
+#[cfg(feature = "pezpallet-people")]
+pub use pezpallet_people;
 
 /// FRAME pallet for storing preimages of hashes.
-#[cfg(feature = "pallet-preimage")]
-pub use pallet_preimage;
+#[cfg(feature = "pezpallet-preimage")]
+pub use pezpallet_preimage;
 
 /// FRAME proxying pallet.
-#[cfg(feature = "pallet-proxy")]
-pub use pallet_proxy;
+#[cfg(feature = "pezpallet-proxy")]
+pub use pezpallet_proxy;
 
 /// Ranked collective system: Members of a set of account IDs can make their collective
 /// feelings known through dispatched calls from one of two specialized origins.
-#[cfg(feature = "pallet-ranked-collective")]
-pub use pallet_ranked_collective;
+#[cfg(feature = "pezpallet-ranked-collective")]
+pub use pezpallet_ranked_collective;
 
 /// FRAME account recovery pallet.
-#[cfg(feature = "pallet-recovery")]
-pub use pallet_recovery;
+#[cfg(feature = "pezpallet-recovery")]
+pub use pezpallet_recovery;
 
 /// FRAME pallet for inclusive on-chain decisions.
-#[cfg(feature = "pallet-referenda")]
-pub use pallet_referenda;
+#[cfg(feature = "pezpallet-referenda")]
+pub use pezpallet_referenda;
 
 /// Remark storage pallet.
-#[cfg(feature = "pallet-remark")]
-pub use pallet_remark;
+#[cfg(feature = "pezpallet-remark")]
+pub use pezpallet_remark;
 
 /// FRAME pallet for PolkaVM contracts.
-#[cfg(feature = "pallet-revive")]
-pub use pallet_revive;
+#[cfg(feature = "pezpallet-revive")]
+pub use pezpallet_revive;
 
-/// Procedural macros used in pallet_revive.
-#[cfg(feature = "pallet-revive-proc-macro")]
-pub use pallet_revive_proc_macro;
+/// Procedural macros used in pezpallet_revive.
+#[cfg(feature = "pezpallet-revive-proc-macro")]
+pub use pezpallet_revive_proc_macro;
 
 /// Exposes all the host functions that a contract can import.
-#[cfg(feature = "pallet-revive-uapi")]
-pub use pallet_revive_uapi;
+#[cfg(feature = "pezpallet-revive-uapi")]
+pub use pezpallet_revive_uapi;
 
 /// FRAME root offences pallet.
-#[cfg(feature = "pallet-root-offences")]
-pub use pallet_root_offences;
+#[cfg(feature = "pezpallet-root-offences")]
+pub use pezpallet_root_offences;
 
 /// FRAME root testing pallet.
-#[cfg(feature = "pallet-root-testing")]
-pub use pallet_root_testing;
+#[cfg(feature = "pezpallet-root-testing")]
+pub use pezpallet_root_testing;
 
 /// FRAME safe-mode pallet.
-#[cfg(feature = "pallet-safe-mode")]
-pub use pallet_safe_mode;
+#[cfg(feature = "pezpallet-safe-mode")]
+pub use pezpallet_safe_mode;
 
 /// Paymaster.
-#[cfg(feature = "pallet-salary")]
-pub use pallet_salary;
+#[cfg(feature = "pezpallet-salary")]
+pub use pezpallet_salary;
 
 /// FRAME Scheduler pallet.
-#[cfg(feature = "pallet-scheduler")]
-pub use pallet_scheduler;
+#[cfg(feature = "pezpallet-scheduler")]
+pub use pezpallet_scheduler;
 
 /// FRAME pallet for scored pools.
-#[cfg(feature = "pallet-scored-pool")]
-pub use pallet_scored_pool;
+#[cfg(feature = "pezpallet-scored-pool")]
+pub use pezpallet_scored_pool;
 
 /// FRAME sessions pallet.
-#[cfg(feature = "pallet-session")]
-pub use pallet_session;
+#[cfg(feature = "pezpallet-session")]
+pub use pezpallet_session;
 
 /// FRAME sessions pallet benchmarking.
-#[cfg(feature = "pallet-session-benchmarking")]
-pub use pallet_session_benchmarking;
+#[cfg(feature = "pezpallet-session-benchmarking")]
+pub use pezpallet_session_benchmarking;
 
 /// Pallet to skip payments for calls annotated with `feeless_if` if the respective conditions
 /// are satisfied.
-#[cfg(feature = "pallet-skip-feeless-payment")]
-pub use pallet_skip_feeless_payment;
+#[cfg(feature = "pezpallet-skip-feeless-payment")]
+pub use pezpallet_skip_feeless_payment;
 
 /// FRAME society pallet.
-#[cfg(feature = "pallet-society")]
-pub use pallet_society;
+#[cfg(feature = "pezpallet-society")]
+pub use pezpallet_society;
 
 /// FRAME pallet staking.
-#[cfg(feature = "pallet-staking")]
-pub use pallet_staking;
+#[cfg(feature = "pezpallet-staking")]
+pub use pezpallet_staking;
 
 /// FRAME pallet staking async.
-#[cfg(feature = "pallet-staking-async")]
-pub use pallet_staking_async;
+#[cfg(feature = "pezpallet-staking-async")]
+pub use pezpallet_staking_async;
 
 /// Pallet handling the communication with staking-rc-client. It's role is to glue the staking
 /// pallet (on AssetHub chain) and session pallet (on Relay Chain) in a transparent way.
-#[cfg(feature = "pallet-staking-async-ah-client")]
-pub use pallet_staking_async_ah_client;
+#[cfg(feature = "pezpallet-staking-async-ah-client")]
+pub use pezpallet_staking_async_ah_client;
 
 /// Pallet handling the communication with staking-ah-client. It's role is to glue the staking
 /// pallet (on AssetHub chain) and session pallet (on Relay Chain) in a transparent way.
-#[cfg(feature = "pallet-staking-async-rc-client")]
-pub use pallet_staking_async_rc_client;
+#[cfg(feature = "pezpallet-staking-async-rc-client")]
+pub use pezpallet_staking_async_rc_client;
 
 /// Reward function for FRAME staking pallet.
-#[cfg(feature = "pallet-staking-async-reward-fn")]
-pub use pallet_staking_async_reward_fn;
+#[cfg(feature = "pezpallet-staking-async-reward-fn")]
+pub use pezpallet_staking_async_reward_fn;
 
 /// RPC runtime API for transaction payment FRAME pallet.
-#[cfg(feature = "pallet-staking-async-runtime-api")]
-pub use pallet_staking_async_runtime_api;
+#[cfg(feature = "pezpallet-staking-async-runtime-api")]
+pub use pezpallet_staking_async_runtime_api;
 
 /// Reward Curve for FRAME staking pallet.
-#[cfg(feature = "pallet-staking-reward-curve")]
-pub use pallet_staking_reward_curve;
+#[cfg(feature = "pezpallet-staking-reward-curve")]
+pub use pezpallet_staking_reward_curve;
 
 /// Reward function for FRAME staking pallet.
-#[cfg(feature = "pallet-staking-reward-fn")]
-pub use pallet_staking_reward_fn;
+#[cfg(feature = "pezpallet-staking-reward-fn")]
+pub use pezpallet_staking_reward_fn;
 
 /// RPC runtime API for transaction payment FRAME pallet.
-#[cfg(feature = "pallet-staking-runtime-api")]
-pub use pallet_staking_runtime_api;
+#[cfg(feature = "pezpallet-staking-runtime-api")]
+pub use pezpallet_staking_runtime_api;
 
 /// FRAME pallet migration of trie.
-#[cfg(feature = "pallet-state-trie-migration")]
-pub use pallet_state_trie_migration;
+#[cfg(feature = "pezpallet-state-trie-migration")]
+pub use pezpallet_state_trie_migration;
 
 /// FRAME pallet for statement store.
-#[cfg(feature = "pallet-statement")]
-pub use pallet_statement;
+#[cfg(feature = "pezpallet-statement")]
+pub use pezpallet_statement;
 
 /// FRAME pallet for sudo.
-#[cfg(feature = "pallet-sudo")]
-pub use pallet_sudo;
+#[cfg(feature = "pezpallet-sudo")]
+pub use pezpallet_sudo;
 
 /// FRAME Timestamp Module.
-#[cfg(feature = "pallet-timestamp")]
-pub use pallet_timestamp;
+#[cfg(feature = "pezpallet-timestamp")]
+pub use pezpallet_timestamp;
 
 /// FRAME pallet to manage tips.
-#[cfg(feature = "pallet-tips")]
-pub use pallet_tips;
+#[cfg(feature = "pezpallet-tips")]
+pub use pezpallet_tips;
 
 /// FRAME pallet to manage transaction payments.
-#[cfg(feature = "pallet-transaction-payment")]
-pub use pallet_transaction_payment;
+#[cfg(feature = "pezpallet-transaction-payment")]
+pub use pezpallet_transaction_payment;
 
 /// RPC interface for the transaction payment pallet.
-#[cfg(feature = "pallet-transaction-payment-rpc")]
-pub use pallet_transaction_payment_rpc;
+#[cfg(feature = "pezpallet-transaction-payment-rpc")]
+pub use pezpallet_transaction_payment_rpc;
 
 /// RPC runtime API for transaction payment FRAME pallet.
-#[cfg(feature = "pallet-transaction-payment-rpc-runtime-api")]
-pub use pallet_transaction_payment_rpc_runtime_api;
+#[cfg(feature = "pezpallet-transaction-payment-rpc-runtime-api")]
+pub use pezpallet_transaction_payment_rpc_runtime_api;
 
 /// Storage chain pallet.
-#[cfg(feature = "pallet-transaction-storage")]
-pub use pallet_transaction_storage;
+#[cfg(feature = "pezpallet-transaction-storage")]
+pub use pezpallet_transaction_storage;
 
 /// FRAME pallet to manage treasury.
-#[cfg(feature = "pallet-treasury")]
-pub use pallet_treasury;
+#[cfg(feature = "pezpallet-treasury")]
+pub use pezpallet_treasury;
 
 /// FRAME transaction pause pallet.
-#[cfg(feature = "pallet-tx-pause")]
-pub use pallet_tx_pause;
+#[cfg(feature = "pezpallet-tx-pause")]
+pub use pezpallet_tx_pause;
 
 /// FRAME NFT asset management pallet.
-#[cfg(feature = "pallet-uniques")]
-pub use pallet_uniques;
+#[cfg(feature = "pezpallet-uniques")]
+pub use pezpallet_uniques;
 
 /// FRAME utilities pallet.
-#[cfg(feature = "pallet-utility")]
-pub use pallet_utility;
+#[cfg(feature = "pezpallet-utility")]
+pub use pezpallet_utility;
 
 /// FRAME verify signature pallet.
-#[cfg(feature = "pallet-verify-signature")]
-pub use pallet_verify_signature;
+#[cfg(feature = "pezpallet-verify-signature")]
+pub use pezpallet_verify_signature;
 
 /// FRAME pallet for manage vesting.
-#[cfg(feature = "pallet-vesting")]
-pub use pallet_vesting;
+#[cfg(feature = "pezpallet-vesting")]
+pub use pezpallet_vesting;
 
 /// FRAME pallet for whitelisting calls, and dispatching from a specific origin.
-#[cfg(feature = "pallet-whitelist")]
-pub use pallet_whitelist;
+#[cfg(feature = "pezpallet-whitelist")]
+pub use pezpallet_whitelist;
 
 /// A pallet for handling XCM programs.
-#[cfg(feature = "pallet-xcm")]
-pub use pallet_xcm;
+#[cfg(feature = "pezpallet-xcm")]
+pub use pezpallet_xcm;
 
 /// Benchmarks for the XCM pallet.
-#[cfg(feature = "pallet-xcm-benchmarks")]
-pub use pallet_xcm_benchmarks;
+#[cfg(feature = "pezpallet-xcm-benchmarks")]
+pub use pezpallet_xcm_benchmarks;
 
 /// Module that adds dynamic bridges/lanes support to XCM infrastructure at the bridge hub.
-#[cfg(feature = "pallet-xcm-bridge-hub")]
-pub use pallet_xcm_bridge_hub;
+#[cfg(feature = "pezpallet-xcm-bridge-hub")]
+pub use pezpallet_xcm_bridge_hub;
 
 /// Bridge hub interface for sibling/parent chains with dynamic fees support.
-#[cfg(feature = "pallet-xcm-bridge-hub-router")]
-pub use pallet_xcm_bridge_hub_router;
+#[cfg(feature = "pezpallet-xcm-bridge-hub-router")]
+pub use pezpallet_xcm_bridge_hub_router;
 
-/// Provides precompiles for `pallet-xcm`.
-#[cfg(feature = "pallet-xcm-precompiles")]
-pub use pallet_xcm_precompiles;
+/// Provides precompiles for `pezpallet-xcm`.
+#[cfg(feature = "pezpallet-xcm-precompiles")]
+pub use pezpallet_xcm_precompiles;
 
 /// Pezkuwi Approval Distribution subsystem for the distribution of assignments and approvals
 /// for approval checks on candidates over the network.
@@ -1025,515 +1025,515 @@ pub use pezkuwi_teyrchain_primitives;
 
 /// Collection of allocator implementations.
 #[cfg(feature = "sc-allocator")]
-pub use sc_allocator;
+pub use pezsc_allocator;
 
-/// Substrate authority discovery.
+/// Bizinikiwi authority discovery.
 #[cfg(feature = "sc-authority-discovery")]
-pub use sc_authority_discovery;
+pub use pezsc_authority_discovery;
 
 /// Basic implementation of block-authoring logic.
 #[cfg(feature = "sc-basic-authorship")]
-pub use sc_basic_authorship;
+pub use pezsc_basic_authorship;
 
-/// Substrate block builder.
+/// Bizinikiwi block builder.
 #[cfg(feature = "sc-block-builder")]
-pub use sc_block_builder;
+pub use pezsc_block_builder;
 
-/// Substrate chain configurations.
+/// Bizinikiwi chain configurations.
 #[cfg(feature = "sc-chain-spec")]
-pub use sc_chain_spec;
+pub use pezsc_chain_spec;
 
 /// Macros to derive chain spec extension traits implementation.
 #[cfg(feature = "sc-chain-spec-derive")]
-pub use sc_chain_spec_derive;
+pub use pezsc_chain_spec_derive;
 
-/// Substrate CLI interface.
+/// Bizinikiwi CLI interface.
 #[cfg(feature = "sc-cli")]
-pub use sc_cli;
+pub use pezsc_cli;
 
-/// Substrate client interfaces.
+/// Bizinikiwi client interfaces.
 #[cfg(feature = "sc-client-api")]
-pub use sc_client_api;
+pub use pezsc_client_api;
 
 /// Client backend that uses RocksDB database as storage.
 #[cfg(feature = "sc-client-db")]
-pub use sc_client_db;
+pub use pezsc_client_db;
 
-/// Collection of common consensus specific implementations for Substrate (client).
+/// Collection of common consensus specific implementations for Bizinikiwi (client).
 #[cfg(feature = "sc-consensus")]
-pub use sc_consensus;
+pub use pezsc_consensus;
 
-/// Aura consensus algorithm for substrate.
+/// Aura consensus algorithm for bizinikiwi.
 #[cfg(feature = "sc-consensus-aura")]
-pub use sc_consensus_aura;
+pub use pezsc_consensus_aura;
 
-/// BABE consensus algorithm for substrate.
+/// BABE consensus algorithm for bizinikiwi.
 #[cfg(feature = "sc-consensus-babe")]
-pub use sc_consensus_babe;
+pub use pezsc_consensus_babe;
 
 /// RPC extensions for the BABE consensus algorithm.
 #[cfg(feature = "sc-consensus-babe-rpc")]
-pub use sc_consensus_babe_rpc;
+pub use pezsc_consensus_babe_rpc;
 
-/// BEEFY Client gadget for substrate.
+/// BEEFY Client gadget for bizinikiwi.
 #[cfg(feature = "sc-consensus-beefy")]
-pub use sc_consensus_beefy;
+pub use pezsc_consensus_beefy;
 
-/// RPC for the BEEFY Client gadget for substrate.
+/// RPC for the BEEFY Client gadget for bizinikiwi.
 #[cfg(feature = "sc-consensus-beefy-rpc")]
-pub use sc_consensus_beefy_rpc;
+pub use pezsc_consensus_beefy_rpc;
 
 /// Generic epochs-based utilities for consensus.
 #[cfg(feature = "sc-consensus-epochs")]
-pub use sc_consensus_epochs;
+pub use pezsc_consensus_epochs;
 
-/// Integration of the GRANDPA finality gadget into substrate.
+/// Integration of the GRANDPA finality gadget into bizinikiwi.
 #[cfg(feature = "sc-consensus-grandpa")]
-pub use sc_consensus_grandpa;
+pub use pezsc_consensus_grandpa;
 
 /// RPC extensions for the GRANDPA finality gadget.
 #[cfg(feature = "sc-consensus-grandpa-rpc")]
-pub use sc_consensus_grandpa_rpc;
+pub use pezsc_consensus_grandpa_rpc;
 
-/// Manual sealing engine for Substrate.
+/// Manual sealing engine for Bizinikiwi.
 #[cfg(feature = "sc-consensus-manual-seal")]
-pub use sc_consensus_manual_seal;
+pub use pezsc_consensus_manual_seal;
 
-/// PoW consensus algorithm for substrate.
+/// PoW consensus algorithm for bizinikiwi.
 #[cfg(feature = "sc-consensus-pow")]
-pub use sc_consensus_pow;
+pub use pezsc_consensus_pow;
 
 /// Generic slots-based utilities for consensus.
 #[cfg(feature = "sc-consensus-slots")]
-pub use sc_consensus_slots;
+pub use pezsc_consensus_slots;
 
 /// A crate that provides means of executing/dispatching calls into the runtime.
 #[cfg(feature = "sc-executor")]
-pub use sc_executor;
+pub use pezsc_executor;
 
 /// A set of common definitions that are needed for defining execution engines.
 #[cfg(feature = "sc-executor-common")]
-pub use sc_executor_common;
+pub use pezsc_executor_common;
 
-/// PolkaVM executor for Substrate.
+/// PolkaVM executor for Bizinikiwi.
 #[cfg(feature = "sc-executor-polkavm")]
-pub use sc_executor_polkavm;
+pub use pezsc_executor_polkavm;
 
 /// Defines a `WasmRuntime` that uses the Wasmtime JIT to execute.
 #[cfg(feature = "sc-executor-wasmtime")]
-pub use sc_executor_wasmtime;
+pub use pezsc_executor_wasmtime;
 
-/// Substrate informant.
+/// Bizinikiwi informant.
 #[cfg(feature = "sc-informant")]
-pub use sc_informant;
+pub use pezsc_informant;
 
 /// Keystore (and session key management) for ed25519 based chains like Pezkuwi.
 #[cfg(feature = "sc-keystore")]
-pub use sc_keystore;
+pub use pezsc_keystore;
 
-/// Substrate mixnet service.
+/// Bizinikiwi mixnet service.
 #[cfg(feature = "sc-mixnet")]
-pub use sc_mixnet;
+pub use pezsc_mixnet;
 
-/// Substrate network protocol.
+/// Bizinikiwi network protocol.
 #[cfg(feature = "sc-network")]
-pub use sc_network;
+pub use pezsc_network;
 
-/// Substrate network common.
+/// Bizinikiwi network common.
 #[cfg(feature = "sc-network-common")]
-pub use sc_network_common;
+pub use pezsc_network_common;
 
-/// Gossiping for the Substrate network protocol.
+/// Gossiping for the Bizinikiwi network protocol.
 #[cfg(feature = "sc-network-gossip")]
-pub use sc_network_gossip;
+pub use pezsc_network_gossip;
 
-/// Substrate light network protocol.
+/// Bizinikiwi light network protocol.
 #[cfg(feature = "sc-network-light")]
-pub use sc_network_light;
+pub use pezsc_network_light;
 
-/// Substrate statement protocol.
+/// Bizinikiwi statement protocol.
 #[cfg(feature = "sc-network-statement")]
-pub use sc_network_statement;
+pub use pezsc_network_statement;
 
-/// Substrate sync network protocol.
+/// Bizinikiwi sync network protocol.
 #[cfg(feature = "sc-network-sync")]
-pub use sc_network_sync;
+pub use pezsc_network_sync;
 
-/// Substrate transaction protocol.
+/// Bizinikiwi transaction protocol.
 #[cfg(feature = "sc-network-transactions")]
-pub use sc_network_transactions;
+pub use pezsc_network_transactions;
 
-/// Substrate network types.
+/// Bizinikiwi network types.
 #[cfg(feature = "sc-network-types")]
-pub use sc_network_types;
+pub use pezsc_network_types;
 
-/// Substrate offchain workers.
+/// Bizinikiwi offchain workers.
 #[cfg(feature = "sc-offchain")]
-pub use sc_offchain;
+pub use pezsc_offchain;
 
 /// Basic metrics for block production.
 #[cfg(feature = "sc-proposer-metrics")]
-pub use sc_proposer_metrics;
+pub use pezsc_proposer_metrics;
 
-/// Substrate Client RPC.
+/// Bizinikiwi Client RPC.
 #[cfg(feature = "sc-rpc")]
-pub use sc_rpc;
+pub use pezsc_rpc;
 
-/// Substrate RPC interfaces.
+/// Bizinikiwi RPC interfaces.
 #[cfg(feature = "sc-rpc-api")]
-pub use sc_rpc_api;
+pub use pezsc_rpc_api;
 
-/// Substrate RPC servers.
+/// Bizinikiwi RPC servers.
 #[cfg(feature = "sc-rpc-server")]
-pub use sc_rpc_server;
+pub use pezsc_rpc_server;
 
-/// Substrate RPC interface v2.
+/// Bizinikiwi RPC interface v2.
 #[cfg(feature = "sc-rpc-spec-v2")]
-pub use sc_rpc_spec_v2;
+pub use pezsc_rpc_spec_v2;
 
-/// Substrate client utilities for frame runtime functions calls.
+/// Bizinikiwi client utilities for frame runtime functions calls.
 #[cfg(feature = "sc-runtime-utilities")]
-pub use sc_runtime_utilities;
+pub use pezsc_runtime_utilities;
 
-/// Substrate service. Starts a thread that spins up the network, client, and extrinsic pool.
+/// Bizinikiwi service. Starts a thread that spins up the network, client, and extrinsic pool.
 /// Manages communication between them.
 #[cfg(feature = "sc-service")]
-pub use sc_service;
+pub use pezsc_service;
 
 /// State database maintenance. Handles canonicalization and pruning in the database.
 #[cfg(feature = "sc-state-db")]
-pub use sc_state_db;
+pub use pezsc_state_db;
 
-/// Substrate statement store.
+/// Bizinikiwi statement store.
 #[cfg(feature = "sc-statement-store")]
-pub use sc_statement_store;
+pub use pezsc_statement_store;
 
-/// Storage monitor service for substrate.
+/// Storage monitor service for bizinikiwi.
 #[cfg(feature = "sc-storage-monitor")]
-pub use sc_storage_monitor;
+pub use pezsc_storage_monitor;
 
 /// A RPC handler to create sync states for light clients.
 #[cfg(feature = "sc-sync-state-rpc")]
-pub use sc_sync_state_rpc;
+pub use pezsc_sync_state_rpc;
 
 /// A crate that provides basic hardware and software telemetry information.
 #[cfg(feature = "sc-sysinfo")]
-pub use sc_sysinfo;
+pub use pezsc_sysinfo;
 
 /// Telemetry utils.
 #[cfg(feature = "sc-telemetry")]
-pub use sc_telemetry;
+pub use pezsc_telemetry;
 
-/// Instrumentation implementation for substrate.
+/// Instrumentation implementation for bizinikiwi.
 #[cfg(feature = "sc-tracing")]
-pub use sc_tracing;
+pub use pezsc_tracing;
 
-/// Helper macros for Substrate's client CLI.
+/// Helper macros for Bizinikiwi's client CLI.
 #[cfg(feature = "sc-tracing-proc-macro")]
-pub use sc_tracing_proc_macro;
+pub use pezsc_tracing_proc_macro;
 
-/// Substrate transaction pool implementation.
+/// Bizinikiwi transaction pool implementation.
 #[cfg(feature = "sc-transaction-pool")]
-pub use sc_transaction_pool;
+pub use pezsc_transaction_pool;
 
 /// Transaction pool client facing API.
 #[cfg(feature = "sc-transaction-pool-api")]
-pub use sc_transaction_pool_api;
+pub use pezsc_transaction_pool_api;
 
-/// I/O for Substrate runtimes.
+/// I/O for Bizinikiwi runtimes.
 #[cfg(feature = "sc-utils")]
-pub use sc_utils;
+pub use pezsc_utils;
 
 /// Helper crate for generating slot ranges for the Pezkuwi runtime.
 #[cfg(feature = "slot-range-helper")]
 pub use slot_range_helper;
 
-/// Substrate runtime api primitives.
+/// Bizinikiwi runtime api primitives.
 #[cfg(feature = "sp-api")]
-pub use sp_api;
+pub use pezsp_api;
 
 /// Macros for declaring and implementing runtime apis.
 #[cfg(feature = "sp-api-proc-macro")]
-pub use sp_api_proc_macro;
+pub use pezsp_api_proc_macro;
 
 /// Provides facilities for generating application specific crypto wrapper types.
 #[cfg(feature = "sp-application-crypto")]
-pub use sp_application_crypto;
+pub use pezsp_application_crypto;
 
 /// Minimal fixed point arithmetic primitives and types for runtime.
 #[cfg(feature = "sp-arithmetic")]
-pub use sp_arithmetic;
+pub use pezsp_arithmetic;
 
 /// Authority discovery primitives.
 #[cfg(feature = "sp-authority-discovery")]
-pub use sp_authority_discovery;
+pub use pezsp_authority_discovery;
 
 /// The block builder runtime api.
 #[cfg(feature = "sp-block-builder")]
-pub use sp_block_builder;
+pub use pezsp_block_builder;
 
-/// Substrate blockchain traits and primitives.
+/// Bizinikiwi blockchain traits and primitives.
 #[cfg(feature = "sp-blockchain")]
-pub use sp_blockchain;
+pub use pezsp_blockchain;
 
-/// Common utilities for building and using consensus engines in substrate.
+/// Common utilities for building and using consensus engines in bizinikiwi.
 #[cfg(feature = "sp-consensus")]
-pub use sp_consensus;
+pub use pezsp_consensus;
 
 /// Primitives for Aura consensus.
 #[cfg(feature = "sp-consensus-aura")]
-pub use sp_consensus_aura;
+pub use pezsp_consensus_aura;
 
 /// Primitives for BABE consensus.
 #[cfg(feature = "sp-consensus-babe")]
-pub use sp_consensus_babe;
+pub use pezsp_consensus_babe;
 
 /// Primitives for BEEFY protocol.
 #[cfg(feature = "sp-consensus-beefy")]
-pub use sp_consensus_beefy;
+pub use pezsp_consensus_beefy;
 
 /// Primitives for GRANDPA integration, suitable for WASM compilation.
 #[cfg(feature = "sp-consensus-grandpa")]
-pub use sp_consensus_grandpa;
+pub use pezsp_consensus_grandpa;
 
 /// Primitives for Aura consensus.
 #[cfg(feature = "sp-consensus-pow")]
-pub use sp_consensus_pow;
+pub use pezsp_consensus_pow;
 
 /// Primitives for slots-based consensus.
 #[cfg(feature = "sp-consensus-slots")]
-pub use sp_consensus_slots;
+pub use pezsp_consensus_slots;
 
-/// Shareable Substrate types.
+/// Shareable Bizinikiwi types.
 #[cfg(feature = "sp-core")]
-pub use sp_core;
+pub use pezsp_core;
 
 /// Hashing primitives (deprecated: use sp-crypto-hashing for new applications).
 #[cfg(feature = "sp-core-hashing")]
-pub use sp_core_hashing;
+pub use pezsp_core_hashing;
 
 /// Procedural macros for calculating static hashes (deprecated in favor of
 /// `sp-crypto-hashing-proc-macro`).
 #[cfg(feature = "sp-core-hashing-proc-macro")]
-pub use sp_core_hashing_proc_macro;
+pub use pezsp_core_hashing_proc_macro;
 
 /// Host functions for common Arkworks elliptic curve operations.
 #[cfg(feature = "sp-crypto-ec-utils")]
-pub use sp_crypto_ec_utils;
+pub use pezsp_crypto_ec_utils;
 
 /// Hashing primitives.
 #[cfg(feature = "sp-crypto-hashing")]
-pub use sp_crypto_hashing;
+pub use pezsp_crypto_hashing;
 
 /// Procedural macros for calculating static hashes.
 #[cfg(feature = "sp-crypto-hashing-proc-macro")]
-pub use sp_crypto_hashing_proc_macro;
+pub use pezsp_crypto_hashing_proc_macro;
 
-/// Substrate database trait.
+/// Bizinikiwi database trait.
 #[cfg(feature = "sp-database")]
-pub use sp_database;
+pub use pezsp_database;
 
 /// Macros to derive runtime debug implementation.
 #[cfg(feature = "sp-debug-derive")]
-pub use sp_debug_derive;
+pub use pezsp_debug_derive;
 
-/// Substrate externalities abstraction.
+/// Bizinikiwi externalities abstraction.
 #[cfg(feature = "sp-externalities")]
-pub use sp_externalities;
+pub use pezsp_externalities;
 
-/// Substrate RuntimeGenesisConfig builder API.
+/// Bizinikiwi RuntimeGenesisConfig builder API.
 #[cfg(feature = "sp-genesis-builder")]
-pub use sp_genesis_builder;
+pub use pezsp_genesis_builder;
 
 /// Provides types and traits for creating and checking inherents.
 #[cfg(feature = "sp-inherents")]
-pub use sp_inherents;
+pub use pezsp_inherents;
 
-/// I/O for Substrate runtimes.
+/// I/O for Bizinikiwi runtimes.
 #[cfg(feature = "sp-io")]
-pub use sp_io;
+pub use pezsp_io;
 
 /// Keyring support code for the runtime. A set of test accounts.
 #[cfg(feature = "sp-keyring")]
-pub use sp_keyring;
+pub use pezsp_keyring;
 
 /// Keystore primitives.
 #[cfg(feature = "sp-keystore")]
-pub use sp_keystore;
+pub use pezsp_keystore;
 
 /// Handling of blobs, usually Wasm code, which may be compressed.
 #[cfg(feature = "sp-maybe-compressed-blob")]
-pub use sp_maybe_compressed_blob;
+pub use pezsp_maybe_compressed_blob;
 
 /// Intermediate representation of the runtime metadata.
 #[cfg(feature = "sp-metadata-ir")]
-pub use sp_metadata_ir;
+pub use pezsp_metadata_ir;
 
-/// Substrate mixnet types and runtime interface.
+/// Bizinikiwi mixnet types and runtime interface.
 #[cfg(feature = "sp-mixnet")]
-pub use sp_mixnet;
+pub use pezsp_mixnet;
 
 /// Merkle Mountain Range primitives.
 #[cfg(feature = "sp-mmr-primitives")]
-pub use sp_mmr_primitives;
+pub use pezsp_mmr_primitives;
 
 /// NPoS election algorithm primitives.
 #[cfg(feature = "sp-npos-elections")]
-pub use sp_npos_elections;
+pub use pezsp_npos_elections;
 
-/// Substrate offchain workers primitives.
+/// Bizinikiwi offchain workers primitives.
 #[cfg(feature = "sp-offchain")]
-pub use sp_offchain;
+pub use pezsp_offchain;
 
 /// Custom panic hook with bug report link.
 #[cfg(feature = "sp-panic-handler")]
-pub use sp_panic_handler;
+pub use pezsp_panic_handler;
 
-/// Substrate RPC primitives and utilities.
+/// Bizinikiwi RPC primitives and utilities.
 #[cfg(feature = "sp-rpc")]
-pub use sp_rpc;
+pub use pezsp_rpc;
 
 /// Runtime Modules shared primitive types.
 #[cfg(feature = "sp-runtime")]
-pub use sp_runtime;
+pub use pezsp_runtime;
 
-/// Substrate runtime interface.
+/// Bizinikiwi runtime interface.
 #[cfg(feature = "sp-runtime-interface")]
-pub use sp_runtime_interface;
+pub use pezsp_runtime_interface;
 
-/// This crate provides procedural macros for usage within the context of the Substrate runtime
+/// This crate provides procedural macros for usage within the context of the Bizinikiwi runtime
 /// interface.
 #[cfg(feature = "sp-runtime-interface-proc-macro")]
-pub use sp_runtime_interface_proc_macro;
+pub use pezsp_runtime_interface_proc_macro;
 
 /// Primitives for sessions.
 #[cfg(feature = "sp-session")]
-pub use sp_session;
+pub use pezsp_session;
 
 /// A crate which contains primitives that are useful for implementation that uses staking
 /// approaches in general. Definitions related to sessions, slashing, etc go here.
 #[cfg(feature = "sp-staking")]
-pub use sp_staking;
+pub use pezsp_staking;
 
-/// Substrate State Machine.
+/// Bizinikiwi State Machine.
 #[cfg(feature = "sp-state-machine")]
-pub use sp_state_machine;
+pub use pezsp_state_machine;
 
 /// A crate which contains primitives related to the statement store.
 #[cfg(feature = "sp-statement-store")]
-pub use sp_statement_store;
+pub use pezsp_statement_store;
 
-/// Lowest-abstraction level for the Substrate runtime: just exports useful primitives from std
+/// Lowest-abstraction level for the Bizinikiwi runtime: just exports useful primitives from std
 /// or client/alloc to be used with any code that depends on the runtime.
 #[cfg(feature = "sp-std")]
-pub use sp_std;
+pub use pezsp_std;
 
 /// Storage related primitives.
 #[cfg(feature = "sp-storage")]
-pub use sp_storage;
+pub use pezsp_storage;
 
-/// Substrate core types and inherents for timestamps.
+/// Bizinikiwi core types and inherents for timestamps.
 #[cfg(feature = "sp-timestamp")]
-pub use sp_timestamp;
+pub use pezsp_timestamp;
 
-/// Instrumentation primitives and macros for Substrate.
+/// Instrumentation primitives and macros for Bizinikiwi.
 #[cfg(feature = "sp-tracing")]
-pub use sp_tracing;
+pub use pezsp_tracing;
 
 /// Transaction pool runtime facing API.
 #[cfg(feature = "sp-transaction-pool")]
-pub use sp_transaction_pool;
+pub use pezsp_transaction_pool;
 
 /// Transaction storage proof primitives.
 #[cfg(feature = "sp-transaction-storage-proof")]
-pub use sp_transaction_storage_proof;
+pub use pezsp_transaction_storage_proof;
 
 /// Patricia trie stuff using a parity-scale-codec node format.
 #[cfg(feature = "sp-trie")]
-pub use sp_trie;
+pub use pezsp_trie;
 
-/// Version module for the Substrate runtime; Provides a function that returns the runtime
+/// Version module for the Bizinikiwi runtime; Provides a function that returns the runtime
 /// version.
 #[cfg(feature = "sp-version")]
-pub use sp_version;
+pub use pezsp_version;
 
 /// Macro for defining a runtime version.
 #[cfg(feature = "sp-version-proc-macro")]
-pub use sp_version_proc_macro;
+pub use pezsp_version_proc_macro;
 
 /// Types and traits for interfacing between the host and the wasm runtime.
 #[cfg(feature = "sp-wasm-interface")]
-pub use sp_wasm_interface;
+pub use pezsp_wasm_interface;
 
 /// Types and traits for interfacing between the host and the wasm runtime.
 #[cfg(feature = "sp-weights")]
-pub use sp_weights;
+pub use pezsp_weights;
 
-/// Utility for building chain-specification files for Substrate-based runtimes based on
+/// Utility for building chain-specification files for Bizinikiwi-based runtimes based on
 /// `sp-genesis-builder`.
-#[cfg(feature = "staging-chain-spec-builder")]
-pub use staging_chain_spec_builder;
+#[cfg(feature = "pezstaging-chain-spec-builder")]
+pub use pezstaging_chain_spec_builder;
 
-/// Substrate node block inspection tool.
-#[cfg(feature = "staging-node-inspect")]
-pub use staging_node_inspect;
+/// Bizinikiwi node block inspection tool.
+#[cfg(feature = "pezstaging-node-inspect")]
+pub use pezstaging_node_inspect;
 
 /// Pallet to store the teyrchain ID.
-#[cfg(feature = "staging-teyrchain-info")]
-pub use staging_teyrchain_info;
+#[cfg(feature = "pezstaging-teyrchain-info")]
+pub use pezstaging_teyrchain_info;
 
 /// Tracking allocator to control the amount of memory consumed by the process.
-#[cfg(feature = "staging-tracking-allocator")]
-pub use staging_tracking_allocator;
+#[cfg(feature = "pezstaging-tracking-allocator")]
+pub use pezstaging_tracking_allocator;
 
 /// The basic XCM datastructures.
-#[cfg(feature = "staging-xcm")]
-pub use staging_xcm;
+#[cfg(feature = "pezstaging-xcm")]
+pub use pezstaging_xcm;
 
 /// Tools & types for building with XCM and its executor.
-#[cfg(feature = "staging-xcm-builder")]
-pub use staging_xcm_builder;
+#[cfg(feature = "pezstaging-xcm-builder")]
+pub use pezstaging_xcm_builder;
 
 /// An abstract and configurable XCM message executor.
-#[cfg(feature = "staging-xcm-executor")]
-pub use staging_xcm_executor;
+#[cfg(feature = "pezstaging-xcm-executor")]
+pub use pezstaging_xcm_executor;
 
-/// Generate and restore keys for Substrate based chains such as Pezkuwi, Kusama and a growing
-/// number of teyrchains and Substrate based projects.
+/// Generate and restore keys for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing
+/// number of teyrchains and Bizinikiwi based projects.
 #[cfg(feature = "subkey")]
 pub use subkey;
 
-/// Converting BIP39 entropy to valid Substrate (sr25519) SecretKeys.
-#[cfg(feature = "substrate-bip39")]
-pub use substrate_bip39;
+/// Converting BIP39 entropy to valid Bizinikiwi (sr25519) SecretKeys.
+#[cfg(feature = "bizinikiwi-bip39")]
+pub use bizinikiwi_bip39;
 
 /// Crate with utility functions for `build.rs` scripts.
-#[cfg(feature = "substrate-build-script-utils")]
-pub use substrate_build_script_utils;
+#[cfg(feature = "bizinikiwi-build-script-utils")]
+pub use bizinikiwi_build_script_utils;
 
-/// Substrate RPC for FRAME's support.
-#[cfg(feature = "substrate-frame-rpc-support")]
-pub use substrate_frame_rpc_support;
+/// Bizinikiwi RPC for FRAME's support.
+#[cfg(feature = "bizinikiwi-frame-rpc-support")]
+pub use bizinikiwi_frame_rpc_support;
 
-/// FRAME's system exposed over Substrate RPC.
-#[cfg(feature = "substrate-frame-rpc-system")]
-pub use substrate_frame_rpc_system;
+/// FRAME's system exposed over Bizinikiwi RPC.
+#[cfg(feature = "bizinikiwi-frame-rpc-system")]
+pub use bizinikiwi_frame_rpc_system;
 
 /// Endpoint to expose Prometheus metrics.
-#[cfg(feature = "substrate-prometheus-endpoint")]
-pub use substrate_prometheus_endpoint;
+#[cfg(feature = "bizinikiwi-prometheus-endpoint")]
+pub use bizinikiwi_prometheus_endpoint;
 
 /// Shared JSON-RPC client.
-#[cfg(feature = "substrate-rpc-client")]
-pub use substrate_rpc_client;
+#[cfg(feature = "bizinikiwi-rpc-client")]
+pub use bizinikiwi_rpc_client;
 
 /// Node-specific RPC methods for interaction with state trie migration.
-#[cfg(feature = "substrate-state-trie-migration-rpc")]
-pub use substrate_state_trie_migration_rpc;
+#[cfg(feature = "bizinikiwi-state-trie-migration-rpc")]
+pub use bizinikiwi_state_trie_migration_rpc;
 
 /// Utility for building WASM binaries.
-#[cfg(feature = "substrate-wasm-builder")]
-pub use substrate_wasm_builder;
+#[cfg(feature = "bizinikiwi-wasm-builder")]
+pub use bizinikiwi_wasm_builder;
 
 /// Common constants for Testnet Teyrchains runtimes.
 #[cfg(feature = "testnet-teyrchains-constants")]

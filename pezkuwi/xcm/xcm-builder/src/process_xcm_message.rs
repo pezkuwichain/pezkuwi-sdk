@@ -18,12 +18,12 @@
 
 use codec::{Decode, DecodeLimit, FullCodec, MaxEncodedLen};
 use core::{fmt::Debug, marker::PhantomData};
-use frame_support::{
+use pezframe_support::{
 	dispatch::GetDispatchInfo,
 	traits::{ProcessMessage, ProcessMessageError},
 };
 use scale_info::TypeInfo;
-use sp_weights::{Weight, WeightMeter};
+use pezsp_weights::{Weight, WeightMeter};
 use xcm::{prelude::*, MAX_XCM_DECODE_DEPTH};
 
 const LOG_TARGET: &str = "xcm::process-message";
@@ -133,7 +133,7 @@ mod tests {
 	use super::*;
 	use alloc::vec;
 	use codec::Encode;
-	use frame_support::{
+	use pezframe_support::{
 		assert_err, assert_ok,
 		traits::{ProcessMessageError, ProcessMessageError::*},
 	};
@@ -156,7 +156,7 @@ mod tests {
 	#[test]
 	fn process_message_trivial_fails() {
 		// Trap makes it fail.
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			assert!(!process(v3_xcm(false)).unwrap());
 			assert!(!process(v4_xcm(false)).unwrap());
 			assert!(!process(v5_xcm(false)).unwrap());
@@ -216,7 +216,7 @@ mod tests {
 
 	#[test]
 	fn process_message_overweight_fails() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			for msg in [v4_xcm(true), v4_xcm(false), v4_xcm(false), v3_xcm(false)] {
 				let msg = &msg.encode()[..];
 

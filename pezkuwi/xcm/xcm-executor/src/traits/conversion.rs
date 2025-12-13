@@ -15,8 +15,8 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use core::{marker::PhantomData, result::Result};
-use frame_support::traits::{Contains, OriginTrait};
-use sp_runtime::{traits::Dispatchable, DispatchErrorWithPostInfo};
+use pezframe_support::traits::{Contains, OriginTrait};
+use pezsp_runtime::{traits::Dispatchable, DispatchErrorWithPostInfo};
 use xcm::latest::prelude::*;
 
 /// Means of converting a location into an account identifier.
@@ -46,7 +46,7 @@ impl<AccountId> ConvertLocation<AccountId> for Tuple {
 ///
 /// ```rust
 /// # use xcm::latest::{Location, Junctions, Junction, OriginKind};
-/// # use staging_xcm_executor::traits::ConvertOrigin;
+/// # use pezstaging_xcm_executor::traits::ConvertOrigin;
 /// // A convertor that will bump the para id and pass it to the next one.
 /// struct BumpParaId;
 /// impl ConvertOrigin<u32> for BumpParaId {

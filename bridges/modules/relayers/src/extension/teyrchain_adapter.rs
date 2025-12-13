@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Adapter that allows using `pallet-bridge-relayers` as a signed extension in the
+//! Adapter that allows using `pezpallet-bridge-relayers` as a signed extension in the
 //! bridge with remote teyrchain.
 
 use crate::{
@@ -27,19 +27,19 @@ use crate::{
 use bp_relayers::{BatchCallUnpacker, ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
 use bp_runtime::{StaticStrProvider, Teyrchain};
 use core::marker::PhantomData;
-use frame_support::dispatch::{DispatchInfo, PostDispatchInfo};
-use frame_system::Config as SystemConfig;
-use pallet_bridge_grandpa::{
+use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
+use pezframe_system::Config as SystemConfig;
+use pezpallet_bridge_grandpa::{
 	CallSubType as BridgeGrandpaCallSubtype, Config as BridgeGrandpaConfig,
 };
-use pallet_bridge_messages::{
+use pezpallet_bridge_messages::{
 	CallSubType as BridgeMessagesCallSubType, Config as BridgeMessagesConfig, LaneIdOf,
 };
-use pallet_bridge_teyrchains::{
+use pezpallet_bridge_teyrchains::{
 	CallSubType as BridgeTeyrchainsCallSubtype, Config as BridgeTeyrchainsConfig,
 	SubmitTeyrchainHeadsHelper,
 };
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{Dispatchable, Get},
 	transaction_validity::{TransactionPriority, TransactionValidityError},
 };
@@ -54,11 +54,11 @@ pub struct WithTeyrchainExtensionConfig<
 	Runtime,
 	// batch call unpacker
 	BatchCallUnpacker,
-	// instance of the `pallet-bridge-teyrchains`, tracked by this extension
+	// instance of the `pezpallet-bridge-teyrchains`, tracked by this extension
 	BridgeTeyrchainsPalletInstance,
-	// instance of BridgedChain `pallet-bridge-messages`, tracked by this extension
+	// instance of BridgedChain `pezpallet-bridge-messages`, tracked by this extension
 	BridgeMessagesPalletInstance,
-	// instance of `pallet-bridge-relayers`, tracked by this extension
+	// instance of `pezpallet-bridge-relayers`, tracked by this extension
 	BridgeRelayersPalletInstance,
 	// message delivery transaction priority boost for every additional message
 	PriorityBoostPerMessage,
@@ -99,7 +99,7 @@ where
 	type BridgeRelayersPalletInstance = RI;
 	type PriorityBoostPerMessage = P;
 	type RemoteGrandpaChainBlockNumber =
-		pallet_bridge_grandpa::BridgedBlockNumber<R, R::BridgesGrandpaPalletInstance>;
+		pezpallet_bridge_grandpa::BridgedBlockNumber<R, R::BridgesGrandpaPalletInstance>;
 	type LaneId = LaneIdOf<R, Self::BridgeMessagesPalletInstance>;
 
 	fn parse_and_check_for_obsolete_call(

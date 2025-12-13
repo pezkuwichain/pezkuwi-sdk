@@ -48,11 +48,11 @@ use bp_test_utils::{
 	accounts, make_justification_for_header, JustificationGeneratorParams, TEST_GRANDPA_ROUND,
 	TEST_GRANDPA_SET_ID,
 };
-use frame_benchmarking::{benchmarks_instance_pallet, whitelisted_caller};
-use frame_system::RawOrigin;
-use sp_consensus_grandpa::AuthorityId;
-use sp_runtime::traits::{One, Zero};
-use sp_std::vec::Vec;
+use pezframe_benchmarking::{benchmarks_instance_pallet, whitelisted_caller};
+use pezframe_system::RawOrigin;
+use pezsp_consensus_grandpa::AuthorityId;
+use pezsp_runtime::traits::{One, Zero};
+use pezsp_std::vec::Vec;
 
 /// The maximum number of vote ancestries to include in a justification.
 ///
@@ -71,7 +71,7 @@ const MAX_VOTE_ANCESTRIES_RANGE_END: u32 =
 fn precommits_range_end<T: Config<I>, I: 'static>() -> u32 {
 	let max_bridged_authorities = T::BridgedChain::MAX_AUTHORITIES_COUNT;
 	let max_bridged_authorities = if max_bridged_authorities > 128 {
-		sp_std::cmp::max(128, max_bridged_authorities / 5)
+		pezsp_std::cmp::max(128, max_bridged_authorities / 5)
 	} else {
 		max_bridged_authorities
 	};

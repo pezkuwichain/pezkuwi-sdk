@@ -33,13 +33,13 @@ if [ "$ZOMBIENET_DOCKER_PATHS" -eq 1 ]; then
     export PEZKUWI_TEYRCHAIN_BINARY=/usr/local/bin/pezkuwi-teyrchain
 
     export ZOMBIENET_BINARY=/usr/local/bin/zombie
-    export SUBSTRATE_RELAY_BINARY=/usr/local/bin/substrate-relay
+    export BIZINIKIWI_RELAY_BINARY=/usr/local/bin/bizinikiwi-relay
 else
     export PEZKUWI_BINARY=$PEZKUWI_SDK_PATH/target/release/pezkuwi
     export PEZKUWI_TEYRCHAIN_BINARY=$PEZKUWI_SDK_PATH/target/release/pezkuwi-teyrchain
 
     export ZOMBIENET_BINARY=~/local_bridge_testing/bin/zombienet
-    export SUBSTRATE_RELAY_BINARY=~/local_bridge_testing/bin/substrate-relay
+    export BIZINIKIWI_RELAY_BINARY=~/local_bridge_testing/bin/bizinikiwi-relay
 fi
 
 export TEST_DIR=`mktemp -d /tmp/bridges-tests-run-XXXXX`

@@ -10,8 +10,8 @@ use alloy_core::{
 };
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-use sp_core::{RuntimeDebug, H160, H256};
-use sp_std::prelude::*;
+use pezsp_core::{RuntimeDebug, H160, H256};
+use pezsp_std::prelude::*;
 
 sol! {
 	interface IGatewayV2 {
@@ -154,7 +154,7 @@ impl TryFrom<&Log> for Message {
 
 		let payload = event.payload;
 
-		let substrate_assets = Self::extract_assets(&payload)?;
+		let bizinikiwi_assets = Self::extract_assets(&payload)?;
 
 		let xcm = XcmPayload::try_from(&payload)?;
 
@@ -167,7 +167,7 @@ impl TryFrom<&Log> for Message {
 			gateway: log.address,
 			nonce: event.nonce,
 			origin: H160::from(payload.origin.as_ref()),
-			assets: substrate_assets,
+			assets: bizinikiwi_assets,
 			xcm,
 			claimer,
 			value: payload.value,
@@ -183,11 +183,11 @@ impl Message {
 	fn extract_assets(
 		payload: &IGatewayV2::Payload,
 	) -> Result<Vec<EthereumAsset>, MessageDecodeError> {
-		let mut substrate_assets = vec![];
+		let mut bizinikiwi_assets = vec![];
 		for asset in &payload.assets {
-			substrate_assets.push(EthereumAsset::try_from(asset)?);
+			bizinikiwi_assets.push(EthereumAsset::try_from(asset)?);
 		}
-		Ok(substrate_assets)
+		Ok(bizinikiwi_assets)
 	}
 }
 
@@ -245,9 +245,9 @@ impl TryFrom<&IGatewayV2::EthereumAsset> for EthereumAsset {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::assert_ok;
+	use pezframe_support::assert_ok;
 	use hex_literal::hex;
-	use sp_core::H160;
+	use pezsp_core::H160;
 
 	#[test]
 	fn test_decode() {

@@ -28,12 +28,12 @@ pub mod worker_dir;
 pub use cpu_time::ProcessTime;
 
 // Used by `decl_worker_main!`.
-pub use sp_tracing;
+pub use pezsp_tracing;
 
 const LOG_TARGET: &str = "teyrchain::pvf-common";
 
 use codec::{Decode, Encode};
-use sp_core::H256;
+use pezsp_core::H256;
 use std::{
 	io::{self, Read, Write},
 	mem,
@@ -95,7 +95,7 @@ pub struct ArtifactChecksum(H256);
 
 /// Compute the checksum of the given artifact.
 pub fn compute_checksum(data: &[u8]) -> ArtifactChecksum {
-	ArtifactChecksum(H256::from_slice(&sp_crypto_hashing::twox_256(data)))
+	ArtifactChecksum(H256::from_slice(&pezsp_crypto_hashing::twox_256(data)))
 }
 
 #[cfg(all(test, not(feature = "test-utils")))]

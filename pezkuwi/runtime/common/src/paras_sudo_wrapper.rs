@@ -18,8 +18,8 @@
 
 use alloc::boxed::Box;
 use codec::Encode;
-use frame_support::pallet_prelude::*;
-use frame_system::pallet_prelude::*;
+use pezframe_support::pezpallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 pub use pallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_runtime_teyrchains::{
@@ -28,7 +28,7 @@ use pezkuwi_runtime_teyrchains::{
 	ParaLifecycle,
 };
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -36,7 +36,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	#[pallet::disable_frame_system_supertrait_check]
+	#[pallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: configuration::Config + paras::Config + dmp::Config + hrmp::Config {}
 
 	#[pallet::error]

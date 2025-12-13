@@ -17,7 +17,7 @@
 //! Cross-Consensus Message format data structures.
 
 // NOTE, this crate is meant to be used in many different environments, notably wasm, but not
-// necessarily related to FRAME or even Substrate.
+// necessarily related to FRAME or even Bizinikiwi.
 //
 // Hence, `no_std` rather than sp-runtime.
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -28,7 +28,7 @@ use codec::{
 	Decode, DecodeLimit, DecodeWithMemTracking, Encode, Error as CodecError, Input, MaxEncodedLen,
 };
 use derive_where::derive_where;
-use frame_support::dispatch::GetDispatchInfo;
+use pezframe_support::dispatch::GetDispatchInfo;
 use scale_info::TypeInfo;
 
 pub mod v3;
@@ -99,7 +99,7 @@ macro_rules! versioned_type {
 		#[derive(Clone, Eq, PartialEq, Debug, Encode, Decode, DecodeWithMemTracking, TypeInfo)]
 		#[codec(encode_bound())]
 		#[codec(decode_bound())]
-		#[scale_info(replace_segment("staging_xcm", "xcm"))]
+		#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 		$(#[$attr])*
 		pub enum $n {
 			$(#[$index3])*
@@ -323,7 +323,7 @@ versioned_type! {
 #[codec(encode_bound())]
 #[codec(decode_bound())]
 #[scale_info(bounds(), skip_type_params(RuntimeCall))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum VersionedXcm<RuntimeCall> {
 	#[codec(index = 3)]
 	V3(v3::Xcm<RuntimeCall>),

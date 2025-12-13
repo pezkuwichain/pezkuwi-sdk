@@ -1,4 +1,4 @@
-//! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
+//! Service and ServiceFactory implementation. Specialized wrapper over bizinikiwi service.
 
 // std
 use std::{sync::Arc, time::Duration};
@@ -12,7 +12,7 @@ use teyrchain_template_runtime::{
 use codec::Encode;
 use pezkuwi_sdk::{cumulus_client_service::TeyrchainTracingExecuteBlock, *};
 
-// Cumulus Imports
+// Pezcumulus Imports
 use cumulus_client_bootnodes::{start_bootnode_tasks, StartBootnodeTasksParams};
 use cumulus_client_cli::CollatorOptions;
 use cumulus_client_collator::service::CollatorService;
@@ -31,19 +31,19 @@ use cumulus_primitives_core::{
 };
 use cumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
 
-// Substrate Imports
-use frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
-use pezkuwi_sdk::sc_network::PeerId;
+// Bizinikiwi Imports
+use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
+use pezkuwi_sdk::pezsc_network::PeerId;
 use prometheus_endpoint::Registry;
-use sc_client_api::Backend;
-use sc_consensus::ImportQueue;
-use sc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
-use sc_network::{NetworkBackend, NetworkBlock};
-use sc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
-use sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
-use sc_transaction_pool_api::OffchainTransactionPoolFactory;
-use sp_api::ProvideRuntimeApi;
-use sp_keystore::KeystorePtr;
+use pezsc_client_api::Backend;
+use pezsc_consensus::ImportQueue;
+use pezsc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
+use pezsc_network::{NetworkBackend, NetworkBlock};
+use pezsc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
+use pezsc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
+use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
+use pezsp_api::ProvideRuntimeApi;
+use pezsp_keystore::KeystorePtr;
 
 #[docify::export(wasm_executor)]
 type TeyrchainExecutor = WasmExecutor<TeyrchainHostFunctions>;
@@ -59,8 +59,8 @@ pub type Service = PartialComponents<
 	TeyrchainClient,
 	TeyrchainBackend,
 	(),
-	sc_consensus::DefaultImportQueue<Block>,
-	sc_transaction_pool::TransactionPoolHandle<Block, TeyrchainClient>,
+	pezsc_consensus::DefaultImportQueue<Block>,
+	pezsc_transaction_pool::TransactionPoolHandle<Block, TeyrchainClient>,
 	(TeyrchainBlockImport, Option<Telemetry>, Option<TelemetryWorkerHandle>),
 >;
 
@@ -69,12 +69,12 @@ pub type Service = PartialComponents<
 /// Use this macro if you don't actually need the full service, but just the builder in order to
 /// be able to perform chain operations.
 #[docify::export(component_instantiation)]
-pub fn new_partial(config: &Configuration) -> Result<Service, sc_service::Error> {
+pub fn new_partial(config: &Configuration) -> Result<Service, pezsc_service::Error> {
 	let telemetry = config
 		.telemetry_endpoints
 		.clone()
 		.filter(|x| !x.is_empty())
-		.map(|endpoints| -> Result<_, sc_telemetry::Error> {
+		.map(|endpoints| -> Result<_, pezsc_telemetry::Error> {
 			let worker = TelemetryWorker::new(16)?;
 			let telemetry = worker.handle().new_telemetry(endpoints);
 			Ok((worker, telemetry))
@@ -95,7 +95,7 @@ pub fn new_partial(config: &Configuration) -> Result<Service, sc_service::Error>
 		.build();
 
 	let (client, backend, keystore_container, task_manager) =
-		sc_service::new_full_parts_record_import::<Block, RuntimeApi, _>(
+		pezsc_service::new_full_parts_record_import::<Block, RuntimeApi, _>(
 			config,
 			telemetry.as_ref().map(|(_, telemetry)| telemetry.handle()),
 			executor,
@@ -111,7 +111,7 @@ pub fn new_partial(config: &Configuration) -> Result<Service, sc_service::Error>
 	});
 
 	let transaction_pool = Arc::from(
-		sc_transaction_pool::Builder::new(
+		pezsc_transaction_pool::Builder::new(
 			task_manager.spawn_essential_handle(),
 			client.clone(),
 			config.role.is_authority().into(),
@@ -150,9 +150,9 @@ fn build_import_queue(
 	config: &Configuration,
 	telemetry: Option<TelemetryHandle>,
 	task_manager: &TaskManager,
-) -> sc_consensus::DefaultImportQueue<Block> {
+) -> pezsc_consensus::DefaultImportQueue<Block> {
 	cumulus_client_consensus_aura::equivocation_import_queue::fully_verifying_import_queue::<
-		sp_consensus_aura::sr25519::AuthorityPair,
+		pezsp_consensus_aura::sr25519::AuthorityPair,
 		_,
 		_,
 		_,
@@ -161,7 +161,7 @@ fn build_import_queue(
 		client,
 		block_import,
 		move |_, _| async move {
-			let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
+			let timestamp = pezsp_timestamp::InherentDataProvider::from_system_time();
 			Ok(timestamp)
 		},
 		&task_manager.spawn_essential_handle(),
@@ -179,7 +179,7 @@ fn start_consensus(
 	telemetry: Option<TelemetryHandle>,
 	task_manager: &TaskManager,
 	relay_chain_interface: Arc<dyn RelayChainInterface>,
-	transaction_pool: Arc<sc_transaction_pool::TransactionPoolHandle<Block, TeyrchainClient>>,
+	transaction_pool: Arc<pezsc_transaction_pool::TransactionPoolHandle<Block, TeyrchainClient>>,
 	keystore: KeystorePtr,
 	relay_chain_slot_duration: Duration,
 	para_id: ParaId,
@@ -187,8 +187,8 @@ fn start_consensus(
 	collator_peer_id: PeerId,
 	overseer_handle: OverseerHandle,
 	announce_block: Arc<dyn Fn(Hash, Option<Vec<u8>>) + Send + Sync>,
-) -> Result<(), sc_service::Error> {
-	let proposer = sc_basic_authorship::ProposerFactory::with_proof_recording(
+) -> Result<(), pezsc_service::Error> {
+	let proposer = pezsc_basic_authorship::ProposerFactory::with_proof_recording(
 		task_manager.spawn_handle(),
 		client.clone(),
 		transaction_pool,
@@ -223,7 +223,7 @@ fn start_consensus(
 		reinitialize: false,
 		max_pov_percentage: None,
 	};
-	let fut = aura::run::<Block, sp_consensus_aura::sr25519::AuthorityPair, _, _, _, _, _, _, _, _>(
+	let fut = aura::run::<Block, pezsp_consensus_aura::sr25519::AuthorityPair, _, _, _, _, _, _, _, _>(
 		params,
 	);
 	task_manager.spawn_essential_handle().spawn("aura", None, fut);
@@ -232,23 +232,23 @@ fn start_consensus(
 }
 
 /// Start a node with the given teyrchain `Configuration` and relay chain `Configuration`.
-#[sc_tracing::logging::prefix_logs_with("Teyrchain")]
+#[pezsc_tracing::logging::prefix_logs_with("Teyrchain")]
 pub async fn start_teyrchain_node(
 	teyrchain_config: Configuration,
 	pezkuwi_config: Configuration,
 	collator_options: CollatorOptions,
-	hwbench: Option<sc_sysinfo::HwBench>,
-) -> sc_service::error::Result<(TaskManager, Arc<TeyrchainClient>)> {
+	hwbench: Option<pezsc_sysinfo::HwBench>,
+) -> pezsc_service::error::Result<(TaskManager, Arc<TeyrchainClient>)> {
 	let teyrchain_config = prepare_node_config(teyrchain_config);
 
 	let params = new_partial(&teyrchain_config)?;
 	let (block_import, mut telemetry, telemetry_worker_handle) = params.other;
 
 	let prometheus_registry = teyrchain_config.prometheus_registry().cloned();
-	let net_config = sc_network::config::FullNetworkConfiguration::<
+	let net_config = pezsc_network::config::FullNetworkConfiguration::<
 		_,
 		_,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>::new(&teyrchain_config.network, prometheus_registry.clone());
 
 	let client = params.client.clone();
@@ -270,7 +270,7 @@ pub async fn start_teyrchain_node(
 			hwbench.clone(),
 		)
 		.await
-		.map_err(|e| sc_service::Error::Application(Box::new(e) as Box<_>))?;
+		.map_err(|e| pezsc_service::Error::Application(Box::new(e) as Box<_>))?;
 
 	let validator = teyrchain_config.role.is_authority();
 	let transaction_pool = params.transaction_pool.clone();
@@ -296,7 +296,7 @@ pub async fn start_teyrchain_node(
 			relay_chain_interface: relay_chain_interface.clone(),
 			import_queue: params.import_queue,
 			sybil_resistance_level: CollatorSybilResistance::Resistant, // because of Aura
-			metrics: sc_network::NetworkWorker::<Block, Hash>::register_notification_metrics(
+			metrics: pezsc_network::NetworkWorker::<Block, Hash>::register_notification_metrics(
 				teyrchain_config.prometheus_config.as_ref().map(|config| &config.registry),
 			),
 		})
@@ -307,7 +307,7 @@ pub async fn start_teyrchain_node(
 		use futures::FutureExt;
 
 		let offchain_workers =
-			sc_offchain::OffchainWorkers::new(sc_offchain::OffchainWorkerOptions {
+			pezsc_offchain::OffchainWorkers::new(pezsc_offchain::OffchainWorkerOptions {
 				runtime_api_provider: client.clone(),
 				keystore: Some(params.keystore_container.keystore()),
 				offchain_db: backend.offchain_storage(),
@@ -338,7 +338,7 @@ pub async fn start_teyrchain_node(
 		})
 	};
 
-	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
+	pezsc_service::spawn_tasks(pezsc_service::SpawnTasksParams {
 		rpc_builder,
 		client: client.clone(),
 		transaction_pool: transaction_pool.clone(),
@@ -355,11 +355,11 @@ pub async fn start_teyrchain_node(
 	})?;
 
 	if let Some(hwbench) = hwbench {
-		sc_sysinfo::print_hwbench(&hwbench);
+		pezsc_sysinfo::print_hwbench(&hwbench);
 		// Here you can check whether the hardware meets your chains' requirements. Putting a link
 		// in there and swapping out the requirements for your own are probably a good idea. The
 		// requirements for a para-chain are dictated by its relay-chain.
-		match SUBSTRATE_REFERENCE_HARDWARE.check_hardware(&hwbench, false) {
+		match BIZINIKIWI_REFERENCE_HARDWARE.check_hardware(&hwbench, false) {
 			Err(err) if validator => {
 				log::warn!(
 				"⚠️  The hardware does not meet the minimal requirements {} for role 'Authority'.",
@@ -374,7 +374,7 @@ pub async fn start_teyrchain_node(
 			task_manager.spawn_handle().spawn(
 				"telemetry_hwbench",
 				None,
-				sc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
+				pezsc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
 			);
 		}
 	}
@@ -388,7 +388,7 @@ pub async fn start_teyrchain_node(
 
 	let overseer_handle = relay_chain_interface
 		.overseer_handle()
-		.map_err(|e| sc_service::Error::Application(Box::new(e)))?;
+		.map_err(|e| pezsc_service::Error::Application(Box::new(e)))?;
 
 	start_relay_chain_tasks(StartRelayChainTasksParams {
 		client: client.clone(),

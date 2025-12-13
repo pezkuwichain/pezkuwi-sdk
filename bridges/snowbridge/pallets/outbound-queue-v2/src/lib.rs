@@ -5,7 +5,7 @@
 //! # Overview
 //!
 //! Messages come either from sibling teyrchains via XCM, or BridgeHub itself
-//! via the `snowbridge-pallet-system-v2`:
+//! via the `snowbridge-pezpallet-system-v2`:
 //!
 //! 1. `snowbridge_outbound_queue_primitives::v2::EthereumBlobExporter::deliver`
 //! 2. `snowbridge_pallet_system_v2::Pallet::send`
@@ -17,7 +17,7 @@
 //!    [`snowbridge_outbound_queue_primitives::v2::SendMessage::deliver`]
 //! 3. The underlying message queue is implemented by [`Config::MessageQueue`]
 //! 4. The message queue delivers messages to this pallet via the implementation for
-//!    [`frame_support::traits::ProcessMessage::process_message`]
+//!    [`pezframe_support::traits::ProcessMessage::process_message`]
 //! 5. The message is processed in `Pallet::do_process_message`:
 //! 	a. Convert to `OutboundMessage`, and stored into the `Messages` vector storage
 //! 	b. ABI-encode the `OutboundMessage` and store the committed Keccak256 hash in `MessageLeaves`
@@ -73,7 +73,7 @@ use alloy_core::{
 };
 use bp_relayers::RewardLedger;
 use codec::{Decode, FullCodec};
-use frame_support::{
+use pezframe_support::{
 	storage::StorageStreamIter,
 	traits::{tokens::Balance, EnqueueMessage, Get, ProcessMessageError},
 	weights::{Weight, WeightToFee},
@@ -91,12 +91,12 @@ use snowbridge_outbound_queue_primitives::{
 	},
 	EventProof, VerificationError, Verifier,
 };
-use sp_core::{H160, H256};
-use sp_runtime::{
+use pezsp_core::{H160, H256};
+use pezsp_runtime::{
 	traits::{BlockNumberProvider, Debug, Hash},
 	DigestItem,
 };
-use sp_std::prelude::*;
+use pezsp_std::prelude::*;
 pub use types::{OnNewCommitment, PendingOrder, ProcessMessageOriginOf};
 pub use weights::WeightInfo;
 use xcm::prelude::NetworkId;
@@ -106,19 +106,19 @@ use snowbridge_beacon_primitives::BeaconHeader;
 
 pub use pallet::*;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type Hashing: Hash<Output = H256>;
 
@@ -248,7 +248,7 @@ pub mod pallet {
 	/// Is never read in the runtime, only by offchain message relayers.
 	/// Because of this, it will never go into the PoV of a block.
 	///
-	/// Inspired by the `frame_system::Pallet::Events` storage value
+	/// Inspired by the `pezframe_system::Pallet::Events` storage value
 	#[pallet::storage]
 	#[pallet::unbounded]
 	pub type Messages<T: Config> = StorageValue<_, Vec<OutboundMessage>, ValueQuery>;
@@ -293,7 +293,7 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T>
 	where
-		<T as frame_system::Config>::AccountId: From<[u8; 32]>,
+		<T as pezframe_system::Config>::AccountId: From<[u8; 32]>,
 	{
 		#[pallet::call_index(1)]
 		#[pallet::weight(T::WeightInfo::submit_delivery_receipt())]
@@ -302,7 +302,7 @@ pub mod pallet {
 			event: Box<EventProof>,
 		) -> DispatchResult
 		where
-			<T as frame_system::Config>::AccountId: From<[u8; 32]>,
+			<T as pezframe_system::Config>::AccountId: From<[u8; 32]>,
 		{
 			let relayer = ensure_signed(origin)?;
 
@@ -331,7 +331,7 @@ pub mod pallet {
 			let digest_item: DigestItem = SnowbridgeDigestItem::SnowbridgeV2(root).into();
 
 			// Insert merkle root into the header digest
-			<frame_system::Pallet<T>>::deposit_log(digest_item);
+			<pezframe_system::Pallet<T>>::deposit_log(digest_item);
 
 			T::OnNewCommitment::on_new_commitment(root);
 
@@ -431,7 +431,7 @@ pub mod pallet {
 			let order = PendingOrder {
 				nonce,
 				fee,
-				block_number: frame_system::Pallet::<T>::current_block_number(),
+				block_number: pezframe_system::Pallet::<T>::current_block_number(),
 			};
 			<PendingOrders<T>>::insert(nonce, order);
 
@@ -444,11 +444,11 @@ pub mod pallet {
 
 		/// Process a delivery receipt from a relayer, to allocate the relayer reward.
 		pub fn process_delivery_receipt(
-			relayer: <T as frame_system::Config>::AccountId,
+			relayer: <T as pezframe_system::Config>::AccountId,
 			receipt: DeliveryReceipt,
 		) -> DispatchResult
 		where
-			<T as frame_system::Config>::AccountId: From<[u8; 32]>,
+			<T as pezframe_system::Config>::AccountId: From<[u8; 32]>,
 		{
 			// Verify that the message was submitted from the known Gateway contract
 			ensure!(T::GatewayAddress::get() == receipt.gateway, Error::<T>::InvalidGateway);

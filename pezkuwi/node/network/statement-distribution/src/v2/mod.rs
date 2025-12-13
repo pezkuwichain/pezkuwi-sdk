@@ -53,7 +53,7 @@ use pezkuwi_primitives::{
 	SigningContext, TransposedClaimQueue, UncheckedSignedStatement, ValidatorId, ValidatorIndex,
 };
 
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 use fatality::Nested;
 use futures::{
@@ -483,7 +483,7 @@ pub(crate) async fn handle_network_update<Context>(
 				state.unused_topologies.insert(*new_session_index, topology);
 			}
 
-			// TODO [https://github.com/paritytech/polkadot/issues/6194]
+			// TODO [https://github.com/pezkuwichain/kurdistan-sdk/issues/165]
 			// technically, we should account for the fact that the session topology might
 			// come late, and for all relay-parents with this session, send all grid peers
 			// any `BackedCandidateInv` messages they might need.

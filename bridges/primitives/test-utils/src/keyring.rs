@@ -20,9 +20,9 @@ use bp_header_chain::{justification::JustificationVerificationContext, Authority
 use codec::Encode;
 use ed25519_dalek::{Signature, SigningKey, VerifyingKey};
 use finality_grandpa::voter_set::VoterSet;
-use sp_consensus_grandpa::{AuthorityId, AuthorityList, AuthorityWeight, SetId};
-use sp_runtime::RuntimeDebug;
-use sp_std::prelude::*;
+use pezsp_consensus_grandpa::{AuthorityId, AuthorityList, AuthorityWeight, SetId};
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::prelude::*;
 
 /// Set of test accounts with friendly names: Alice.
 pub const ALICE: Account = Account(0);
@@ -64,7 +64,7 @@ impl Account {
 
 impl From<Account> for AuthorityId {
 	fn from(p: Account) -> Self {
-		sp_application_crypto::UncheckedFrom::unchecked_from(p.public().to_bytes())
+		pezsp_application_crypto::UncheckedFrom::unchecked_from(p.public().to_bytes())
 	}
 }
 

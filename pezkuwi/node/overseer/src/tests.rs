@@ -46,7 +46,7 @@ use crate::{
 use metered;
 
 use assert_matches::assert_matches;
-use sp_core::crypto::Pair as _;
+use pezsp_core::crypto::Pair as _;
 
 use super::*;
 
@@ -163,7 +163,7 @@ impl HeadSupportsTeyrchains for MockSupportsTeyrchains {
 // Checks that a minimal configuration of two jobs can run and exchange messages.
 #[test]
 fn overseer_works() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let (s1_tx, s1_rx) = metered::channel::<usize>(64);
@@ -216,7 +216,7 @@ fn overseer_works() {
 // Checks activated/deactivated metrics are updated properly.
 #[test]
 fn overseer_metrics_work() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let first_block_hash = [1; 32].into();
@@ -296,7 +296,7 @@ fn extract_metrics(registry: &prometheus::Registry) -> HashMap<&'static str, u64
 // Should immediately conclude the overseer itself.
 #[test]
 fn overseer_ends_on_subsystem_exit() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let (overseer, _handle) = dummy_overseer_builder(spawner, MockSupportsTeyrchains, None)
@@ -377,7 +377,7 @@ where
 // notifications on imported blocks triggers expected `StartWork` and `StopWork` heartbeats.
 #[test]
 fn overseer_start_stop_works() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let first_block_hash = [1; 32].into();
@@ -463,7 +463,7 @@ fn overseer_start_stop_works() {
 // notifications on imported blocks triggers expected `StartWork` and `StopWork` heartbeats.
 #[test]
 fn overseer_finalize_works() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let first_block_hash = [1; 32].into();
@@ -574,7 +574,7 @@ fn overseer_finalize_works() {
 // the leaves set.
 #[test]
 fn overseer_finalize_leaf_preserves_it() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let first_block_hash = [1; 32].into();
@@ -675,7 +675,7 @@ fn overseer_finalize_leaf_preserves_it() {
 
 #[test]
 fn do_not_send_empty_leaves_update_on_block_finalization() {
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 
 	executor::block_on(async move {
 		let unpin_handle = dummy_unpin_handle(dummy_hash());
@@ -951,12 +951,12 @@ fn test_dispute_distribution_msg() -> DisputeDistributionMessage {
 		session_index: 0,
 		invalid_vote: InvalidDisputeVote {
 			validator_index: ValidatorIndex(0),
-			signature: sp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]),
+			signature: pezsp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]),
 			kind: InvalidDisputeStatementKind::Explicit,
 		},
 		valid_vote: ValidDisputeVote {
 			validator_index: ValidatorIndex(0),
-			signature: sp_core::crypto::UncheckedFrom::unchecked_from([2u8; 64]),
+			signature: pezsp_core::crypto::UncheckedFrom::unchecked_from([2u8; 64]),
 			kind: ValidDisputeStatementKind::Explicit,
 		},
 	};
@@ -987,7 +987,7 @@ fn overseer_all_subsystems_receive_signals_and_messages() {
 	// -4 for BitfieldSigning, GossipSupport, AvailabilityDistribution and PvfCheckerSubsystem.
 	const NUM_SUBSYSTEMS_MESSAGED: usize = NUM_SUBSYSTEMS - 4;
 
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	executor::block_on(async move {
 		let stop_signals_received = Arc::new(atomic::AtomicUsize::new(0));
 		let signals_received = Arc::new(atomic::AtomicUsize::new(0));
@@ -1438,7 +1438,7 @@ fn overseer_check_subsystem_can_receive_their_priority_messages(
 ) {
 	let num_normal_messages = normal_msgs.len();
 	let num_prio_messages: usize = prio_msgs.len();
-	let spawner = sp_core::testing::TaskExecutor::new();
+	let spawner = pezsp_core::testing::TaskExecutor::new();
 	executor::block_on(async move {
 		let msgs_received = Arc::new(atomic::AtomicUsize::new(0));
 		let prio_msgs_received = Arc::new(atomic::AtomicUsize::new(0));

@@ -32,13 +32,13 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-use frame_support::{
+use pezframe_support::{
 	dispatch::{DispatchResult, PostDispatchInfo},
-	pallet_prelude::OptionQuery,
+	pezpallet_prelude::OptionQuery,
 	traits::Get,
 	transactional,
 };
-use frame_system::ensure_signed;
+use pezframe_system::ensure_signed;
 use snowbridge_beacon_primitives::{
 	fast_aggregate_verify,
 	merkle_proof::{generalized_index_length, subtree_index},
@@ -46,8 +46,8 @@ use snowbridge_beacon_primitives::{
 	ForkVersions, PublicKeyPrepared, SigningData,
 };
 use snowbridge_core::{BasicOperatingMode, RingBufferMap};
-use sp_core::H256;
-use sp_std::prelude::*;
+use pezsp_core::H256;
+use pezsp_std::prelude::*;
 pub use weights::WeightInfo;
 
 use functions::{
@@ -61,12 +61,12 @@ pub use config::SLOTS_PER_HISTORICAL_ROOT;
 
 pub const LOG_TARGET: &str = "ethereum-client";
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[derive(scale_info::TypeInfo, codec::Encode, codec::Decode, codec::MaxEncodedLen)]
 	#[codec(mel_bound(T: Config))]
@@ -83,9 +83,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		#[pallet::constant]
 		type ForkVersions: Get<ForkVersions>;
 		/// Minimum gap between finalized headers for an update to be free.

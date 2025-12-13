@@ -32,25 +32,25 @@ use core::{
 	slice::{Iter, IterMut},
 };
 
-use sp_application_crypto::{ByteArray, KeyTypeId};
-use sp_arithmetic::{
+use pezsp_application_crypto::{ByteArray, KeyTypeId};
+use pezsp_arithmetic::{
 	traits::{BaseArithmetic, Saturating},
 	Perbill,
 };
 
 use bounded_collections::BoundedVec;
 use serde::{Deserialize, Serialize};
-use sp_core::{ConstU32, RuntimeDebug};
-use sp_inherents::InherentIdentifier;
+use pezsp_core::{ConstU32, RuntimeDebug};
+use pezsp_inherents::InherentIdentifier;
 
 // ==========
 // PUBLIC RE-EXPORTS
 // ==========
 
-pub use sp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
-pub use sp_consensus_slots::Slot;
-pub use sp_runtime::traits::{AppVerify, BlakeTwo256, Hash as HashT, Header as HeaderT};
-pub use sp_staking::SessionIndex;
+pub use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
+pub use pezsp_consensus_slots::Slot;
+pub use pezsp_runtime::traits::{AppVerify, BlakeTwo256, Hash as HashT, Header as HeaderT};
+pub use pezsp_staking::SessionIndex;
 
 // Export some core primitives.
 pub use pezkuwi_core_primitives::v2::{
@@ -89,7 +89,7 @@ pub const COLLATOR_KEY_TYPE_ID: KeyTypeId = KeyTypeId(*b"coll");
 const LOG_TARGET: &str = "runtime::primitives";
 
 mod collator_app {
-	use sp_application_crypto::{app_crypto, sr25519};
+	use pezsp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, super::COLLATOR_KEY_TYPE_ID);
 }
 
@@ -107,7 +107,7 @@ pub type CollatorSignature = collator_app::Signature;
 pub const TEYRCHAIN_KEY_TYPE_ID: KeyTypeId = KeyTypeId(*b"para");
 
 mod validator_app {
-	use sp_application_crypto::{app_crypto, sr25519};
+	use pezsp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, super::TEYRCHAIN_KEY_TYPE_ID);
 }
 
@@ -169,7 +169,7 @@ impl From<u32> for ChunkIndex {
 	}
 }
 
-// We should really get https://github.com/paritytech/polkadot/issues/2403 going ..
+// We should really get https://github.com/pezkuwichain/kurdistan-sdk/issues/133 going ..
 impl From<u32> for ValidatorIndex {
 	fn from(n: u32) -> Self {
 		ValidatorIndex(n)
@@ -182,7 +182,7 @@ impl TypeIndex for ValidatorIndex {
 	}
 }
 
-sp_application_crypto::with_pair! {
+pezsp_application_crypto::with_pair! {
 	/// A Teyrchain validator keypair.
 	pub type ValidatorPair = validator_app::Pair;
 }
@@ -199,7 +199,7 @@ pub mod well_known_keys {
 	use alloc::vec::Vec;
 	use codec::Encode as _;
 	use hex_literal::hex;
-	use sp_io::hashing::twox_64;
+	use pezsp_io::hashing::twox_64;
 
 	// A note on generating these magic values below:
 	//
@@ -484,7 +484,7 @@ pub const DEFAULT_SCHEDULING_LOOKAHEAD: u32 = 3;
 // The public key of a keypair used by a validator for determining assignments
 /// to approve included teyrchain candidates.
 mod assignment_app {
-	use sp_application_crypto::{app_crypto, sr25519};
+	use pezsp_application_crypto::{app_crypto, sr25519};
 	app_crypto!(sr25519, super::ASSIGNMENT_KEY_TYPE_ID);
 }
 
@@ -492,7 +492,7 @@ mod assignment_app {
 /// to approve included teyrchain candidates.
 pub type AssignmentId = assignment_app::Public;
 
-sp_application_crypto::with_pair! {
+pezsp_application_crypto::with_pair! {
 	/// The full keypair used by a validator for determining assignments to approve included
 	/// teyrchain candidates.
 	pub type AssignmentPair = assignment_app::Pair;
@@ -838,7 +838,7 @@ impl<N: Saturating + BaseArithmetic + Copy> GroupRotationInfo<N> {
 pub struct ScheduledCore {
 	/// The ID of a para scheduled.
 	pub para_id: Id,
-	/// DEPRECATED: see: <https://github.com/paritytech/polkadot/issues/7575>
+	/// DEPRECATED: see: <https://github.com/pezkuwichain/kurdistan-sdk/issues/171>
 	///
 	/// Will be removed in a future version.
 	pub collator: Option<CollatorId>,
@@ -939,7 +939,7 @@ impl From<ValidityError> for u8 {
 }
 
 /// Abridged version of `HostConfiguration` (from the `Configuration` teyrchains host runtime
-/// module) meant to be used by a teyrchain or PDK such as cumulus.
+/// module) meant to be used by a teyrchain or PDK such as pezcumulus.
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct AbridgedHostConfiguration {
@@ -974,7 +974,7 @@ pub struct AbridgedHostConfiguration {
 }
 
 /// Abridged version of `HrmpChannel` (from the `Hrmp` teyrchains host runtime module) meant to be
-/// used by a teyrchain or PDK such as cumulus.
+/// used by a teyrchain or PDK such as pezcumulus.
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Default, PartialEq))]
 pub struct AbridgedHrmpChannel {
@@ -1034,7 +1034,7 @@ pub enum UpgradeGoAhead {
 }
 
 /// Consensus engine id for pezkuwi v1 consensus engine.
-pub const PEZKUWI_ENGINE_ID: sp_runtime::ConsensusEngineId = *b"POL1";
+pub const PEZKUWI_ENGINE_ID: pezsp_runtime::ConsensusEngineId = *b"POL1";
 
 /// A consensus log item for pezkuwi validation. To be used with [`PEZKUWI_ENGINE_ID`].
 #[derive(Decode, Encode, Clone, PartialEq, Eq)]
@@ -1064,18 +1064,18 @@ pub enum ConsensusLog {
 impl ConsensusLog {
 	/// Attempt to convert a reference to a generic digest item into a consensus log.
 	pub fn from_digest_item(
-		digest_item: &sp_runtime::DigestItem,
+		digest_item: &pezsp_runtime::DigestItem,
 	) -> Result<Option<Self>, codec::Error> {
 		match digest_item {
-			sp_runtime::DigestItem::Consensus(id, encoded) if id == &PEZKUWI_ENGINE_ID =>
+			pezsp_runtime::DigestItem::Consensus(id, encoded) if id == &PEZKUWI_ENGINE_ID =>
 				Ok(Some(Self::decode(&mut &encoded[..])?)),
 			_ => Ok(None),
 		}
 	}
 }
 
-impl From<ConsensusLog> for sp_runtime::DigestItem {
-	fn from(c: ConsensusLog) -> sp_runtime::DigestItem {
+impl From<ConsensusLog> for pezsp_runtime::DigestItem {
+	fn from(c: ConsensusLog) -> pezsp_runtime::DigestItem {
 		Self::Consensus(PEZKUWI_ENGINE_ID, c.encode())
 	}
 }
@@ -1361,7 +1361,7 @@ impl ValidityAttestation {
 #[derive(Clone, Eq, PartialEq, Default, Decode, Encode, RuntimeDebug)]
 pub struct SigningContext<H = Hash> {
 	/// Current session index.
-	pub session_index: sp_staking::SessionIndex,
+	pub session_index: pezsp_staking::SessionIndex,
 	/// Hash of the parent.
 	pub parent_hash: H,
 }
@@ -1536,7 +1536,7 @@ pub fn effective_minimum_backing_votes(
 /// Information about validator sets of a session.
 ///
 /// NOTE: `SessionInfo` is frozen. Do not include new fields, consider creating a separate runtime
-/// API. Reasoning and further outlook [here](https://github.com/paritytech/polkadot/issues/6586).
+/// API. Reasoning and further outlook [here](https://github.com/pezkuwichain/kurdistan-sdk/issues/167).
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct SessionInfo {
@@ -1644,7 +1644,7 @@ impl<T> AsRef<[u8]> for WellKnownKey<T> {
 impl<T: Decode> WellKnownKey<T> {
 	/// Gets the value or `None` if it does not exist or decoding failed.
 	pub fn get(&self) -> Option<T> {
-		sp_io::storage::get(&self.key)
+		pezsp_io::storage::get(&self.key)
 			.and_then(|raw| codec::DecodeAll::decode_all(&mut raw.as_ref()).ok())
 	}
 }
@@ -1652,7 +1652,7 @@ impl<T: Decode> WellKnownKey<T> {
 impl<T: Encode> WellKnownKey<T> {
 	/// Sets the value.
 	pub fn set(&self, value: T) {
-		sp_io::storage::set(&self.key, &value.encode());
+		pezsp_io::storage::set(&self.key, &value.encode());
 	}
 }
 

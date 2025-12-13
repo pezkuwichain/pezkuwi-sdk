@@ -16,16 +16,16 @@
 
 mod mock;
 
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_ok,
-	sp_runtime::{
+	pezsp_runtime::{
 		testing::H256,
 		traits::{IdentifyAccount, Verify},
 		AccountId32, MultiSignature,
 	},
 };
 use mock::*;
-use sp_api::ProvideRuntimeApi;
+use pezsp_api::ProvideRuntimeApi;
 use xcm::prelude::*;
 use xcm_runtime_apis::conversions::{
 	Error as LocationToAccountApiError, LocationToAccountApi, LocationToAccountHelper,
@@ -33,7 +33,7 @@ use xcm_runtime_apis::conversions::{
 
 #[test]
 fn convert_location_to_account_works() {
-	sp_io::TestExternalities::default().execute_with(|| {
+	pezsp_io::TestExternalities::default().execute_with(|| {
 		let client = TestClient {};
 		let runtime_api = client.runtime_api();
 

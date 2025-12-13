@@ -30,7 +30,7 @@
 //!
 //! Past session slashing edgecase:
 //!
-//! The `offences` pallet from Substrate provides us with a way to do both.
+//! The `offences` pallet from Bizinikiwi provides us with a way to do both.
 //! Currently, the interface expects us to provide staking information including
 //! nominator exposure in order to submit an offence.
 //!
@@ -50,12 +50,12 @@
 //! offender and submit it to the runtime to produce an offence.
 
 use crate::{disputes, initializer::ValidatorSetCount, session_info::IdentificationTuple};
-use frame_support::{
+use pezframe_support::{
 	dispatch::Pays,
 	traits::{Defensive, Get, KeyOwnerProofSystem, ValidatorSet, ValidatorSetWithIdentification},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 
 use alloc::{
 	boxed::Box,
@@ -68,7 +68,7 @@ use pezkuwi_primitives::{
 	CandidateHash, DisputeOffenceKind, SessionIndex, ValidatorId, ValidatorIndex,
 };
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::Convert,
 	transaction_validity::{
 		InvalidTransaction, TransactionPriority, TransactionSource, TransactionValidity,
@@ -76,8 +76,8 @@ use sp_runtime::{
 	},
 	KeyTypeId, Perbill,
 };
-use sp_session::{GetSessionNumber, GetValidatorCount};
-use sp_staking::offence::{Kind, Offence, OffenceError, ReportOffence};
+use pezsp_session::{GetSessionNumber, GetValidatorCount};
+use pezsp_staking::offence::{Kind, Offence, OffenceError, ReportOffence};
 
 const LOG_TARGET: &str = "runtime::teyrchains::slashing";
 
@@ -349,7 +349,7 @@ pub trait HandleReports<T: Config> {
 	fn submit_unsigned_slashing_report(
 		dispute_proof: DisputeProof,
 		key_owner_proof: T::KeyOwnerProof,
-	) -> Result<(), sp_runtime::TryRuntimeError>;
+	) -> Result<(), pezsp_runtime::TryRuntimeError>;
 }
 
 impl<T: Config> HandleReports<T> for () {
@@ -371,7 +371,7 @@ impl<T: Config> HandleReports<T> for () {
 	fn submit_unsigned_slashing_report(
 		_dispute_proof: DisputeProof,
 		_key_owner_proof: T::KeyOwnerProof,
-	) -> Result<(), sp_runtime::TryRuntimeError> {
+	) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		Ok(())
 	}
 }
@@ -388,14 +388,14 @@ impl WeightInfo for TestWeightInfo {
 }
 
 pub use pallet::*;
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + crate::disputes::Config {
+	pub trait Config: pezframe_system::Config + crate::disputes::Config {
 		/// The proof of key ownership, used for validating slashing reports.
 		/// The proof must include the session index and validator count of the
 		/// session at which the offence occurred.
@@ -675,7 +675,7 @@ impl<I, R, L> Default for SlashingReportHandler<I, R, L> {
 
 impl<T, R, L> HandleReports<T> for SlashingReportHandler<T::KeyOwnerIdentification, R, L>
 where
-	T: Config + frame_system::offchain::CreateBare<Call<T>>,
+	T: Config + pezframe_system::offchain::CreateBare<Call<T>>,
 	R: ReportOffence<
 		T::AccountId,
 		T::KeyOwnerIdentification,
@@ -706,8 +706,8 @@ where
 	fn submit_unsigned_slashing_report(
 		dispute_proof: DisputeProof,
 		key_owner_proof: <T as Config>::KeyOwnerProof,
-	) -> Result<(), sp_runtime::TryRuntimeError> {
-		use frame_system::offchain::{CreateBare, SubmitTransaction};
+	) -> Result<(), pezsp_runtime::TryRuntimeError> {
+		use pezframe_system::offchain::{CreateBare, SubmitTransaction};
 
 		let session_index = dispute_proof.time_slot.session_index;
 		let validator_index = dispute_proof.validator_index.0;
@@ -738,7 +738,7 @@ where
 					validator_index,
 					kind,
 				);
-				Err(sp_runtime::DispatchError::Other(""))
+				Err(pezsp_runtime::DispatchError::Other(""))
 			},
 		}
 	}

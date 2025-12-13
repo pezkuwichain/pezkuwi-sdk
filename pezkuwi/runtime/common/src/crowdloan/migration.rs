@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use frame_support::{
+use pezframe_support::{
 	storage_alias,
 	traits::{GetStorageVersion, OnRuntimeUpgrade, StorageVersion},
 	Twox64Concat,
@@ -45,7 +45,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToTrackInactiveV2<T> {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		let total = Funds::<T>::iter_values()
 			.map(|item| {
 				CurrencyOf::<T>::total_balance(&Pallet::<T>::fund_account_id(item.fund_index))
@@ -55,7 +55,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToTrackInactiveV2<T> {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(total: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+	fn post_upgrade(total: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		if let Ok((total, active)) = <(BalanceOf<T>, BalanceOf<T>)>::decode(&mut total.as_slice()) {
 			ensure!(active - total == CurrencyOf::<T>::active_issuance(), "the total be correct");
 			Ok(())
@@ -77,7 +77,7 @@ pub mod crowdloan_index_migration {
 		Slots,
 		Twox64Concat,
 		ParaId,
-		Vec<Option<(<T as frame_system::Config>::AccountId, BalanceOf<T>)>>,
+		Vec<Option<(<T as pezframe_system::Config>::AccountId, BalanceOf<T>)>>,
 	>;
 
 	// The old way we generated fund accounts.
@@ -135,7 +135,7 @@ pub mod crowdloan_index_migration {
 
 	/// This migration converts crowdloans to use a crowdloan index rather than the teyrchain id as
 	/// a unique identifier. This makes it easier to swap two crowdloans between teyrchains.
-	pub fn migrate<T: Config>() -> frame_support::weights::Weight {
+	pub fn migrate<T: Config>() -> pezframe_support::weights::Weight {
 		let mut weight = Weight::zero();
 
 		// First migrate `NextTrieIndex` counter to `NextFundIndex`.
@@ -152,8 +152,8 @@ pub mod crowdloan_index_migration {
 
 			// Funds should only have a free balance and a reserve balance. Both of these are in the
 			// `Account` storage item, so we just swap them.
-			let account_info = frame_system::Account::<T>::take(&old_fund_account);
-			frame_system::Account::<T>::insert(&new_fund_account, account_info);
+			let account_info = pezframe_system::Account::<T>::take(&old_fund_account);
+			pezframe_system::Account::<T>::insert(&new_fund_account, account_info);
 
 			weight = weight.saturating_add(T::DbWeight::get().reads_writes(1, 2));
 
@@ -191,7 +191,7 @@ pub mod crowdloan_index_migration {
 			// Old fund account is deleted.
 			let old_fund_account = old_fund_account_id::<T>(para_id);
 			ensure!(
-				frame_system::Account::<T>::get(&old_fund_account) == Default::default(),
+				pezframe_system::Account::<T>::get(&old_fund_account) == Default::default(),
 				"Old account wasn't reset to default value."
 			);
 

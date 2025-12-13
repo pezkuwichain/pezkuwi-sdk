@@ -20,7 +20,7 @@ use crate::weights::WeightInfo;
 
 use bp_messages::{MessageNonce, UnrewardedRelayersState};
 use bp_runtime::{PreComputedSize, Size};
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 
 /// Size of the message being delivered in benchmarks.
 pub const EXPECTED_DEFAULT_MESSAGE_LENGTH: u32 = 128;
@@ -284,7 +284,7 @@ pub trait WeightInfoExt: WeightInfo {
 	// storage values that are read during the call. So we may ignore the weight of this check.
 	//
 	// However, during (2) we read and update storage values of other pallets
-	// (`pallet-bridge-relayers` and balances/assets pallet). So we need to add this weight to the
+	// (`pezpallet-bridge-relayers` and balances/assets pallet). So we need to add this weight to the
 	// weight of our call. Hence two following methods.
 
 	/// Extra weight that is added to the `receive_messages_proof` call weight by signed extensions
@@ -444,7 +444,7 @@ impl WeightInfoExt for () {
 	}
 }
 
-impl<T: frame_system::Config> WeightInfoExt for crate::weights::BridgeWeight<T> {
+impl<T: pezframe_system::Config> WeightInfoExt for crate::weights::BridgeWeight<T> {
 	fn expected_extra_storage_proof_size() -> u32 {
 		EXTRA_STORAGE_PROOF_SIZE
 	}

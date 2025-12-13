@@ -29,11 +29,11 @@ use bp_runtime::{
 	HashOf, HasherOf, RangeInclusiveExt, RawStorageProof, StorageProofChecker, StorageProofError,
 };
 use codec::Decode;
-use sp_std::vec::Vec;
+use pezsp_std::vec::Vec;
 
 /// 'Parsed' message delivery proof - inbound lane id and its state.
 pub(crate) type ParsedMessagesDeliveryProofFromBridgedChain<T, I> =
-	(<T as Config<I>>::LaneId, InboundLaneData<<T as frame_system::Config>::AccountId>);
+	(<T as Config<I>>::LaneId, InboundLaneData<<T as pezframe_system::Config>::AccountId>);
 
 /// Verify proof of Bridged -> This chain messages.
 ///
@@ -171,7 +171,7 @@ type MessagesStorageProofAdapter<T, I> = StorageProofCheckerAdapter<T, I>;
 /// A `StorageProofAdapter` implementation for raw storage proofs.
 struct StorageProofCheckerAdapter<T: Config<I>, I: 'static> {
 	storage: StorageProofChecker<HasherOf<BridgedChainOf<T, I>>>,
-	_dummy: sp_std::marker::PhantomData<(T, I)>,
+	_dummy: pezsp_std::marker::PhantomData<(T, I)>,
 }
 
 impl<T: Config<I>, I: 'static> StorageProofCheckerAdapter<T, I> {
@@ -220,7 +220,7 @@ mod tests {
 	use bp_messages::LaneState;
 	use bp_runtime::{HeaderId, StorageProofError};
 	use codec::Encode;
-	use sp_runtime::traits::Header;
+	use pezsp_runtime::traits::Header;
 
 	fn using_messages_proof<R>(
 		nonces_end: MessageNonce,
@@ -244,7 +244,7 @@ mod tests {
 				add_unused_key,
 			);
 
-		sp_io::TestExternalities::new(Default::default()).execute_with(move || {
+		pezsp_io::TestExternalities::new(Default::default()).execute_with(move || {
 			let bridged_header = BridgedChainHeader::new(
 				0,
 				Default::default(),
@@ -254,11 +254,11 @@ mod tests {
 			);
 			let bridged_header_hash = bridged_header.hash();
 
-			pallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(HeaderId(
+			pezpallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(HeaderId(
 				0,
 				bridged_header_hash,
 			));
-			pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
+			pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 				bridged_header_hash,
 				bridged_header.build(),
 			);
@@ -316,8 +316,8 @@ mod tests {
 				false,
 				|proof| {
 					let bridged_header_hash =
-						pallet_bridge_grandpa::BestFinalized::<TestRuntime>::get().unwrap().1;
-					pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::remove(
+						pezpallet_bridge_grandpa::BestFinalized::<TestRuntime>::get().unwrap().1;
+					pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::remove(
 						bridged_header_hash,
 					);
 					verify_messages_proof::<TestRuntime, ()>(proof, 10)
@@ -339,8 +339,8 @@ mod tests {
 				false,
 				|proof| {
 					let bridged_header_hash =
-						pallet_bridge_grandpa::BestFinalized::<TestRuntime>::get().unwrap().1;
-					pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
+						pezpallet_bridge_grandpa::BestFinalized::<TestRuntime>::get().unwrap().1;
+					pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 						bridged_header_hash,
 						BridgedChainHeader::new(
 							0,

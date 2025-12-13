@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use sc_network::ReputationChange;
+pub use pezsc_network::ReputationChange;
 
 /// Unified annoyance cost and good behavior benefits.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

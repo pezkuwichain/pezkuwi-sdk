@@ -15,20 +15,20 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use frame_benchmarking::v2::*;
-use frame_support::{assert_ok, weights::Weight};
-use frame_system::RawOrigin;
+use pezframe_benchmarking::v2::*;
+use pezframe_support::{assert_ok, weights::Weight};
+use pezframe_system::RawOrigin;
 use xcm::{latest::prelude::*, MAX_INSTRUCTIONS_TO_DECODE};
 use xcm_builder::EnsureDelivery;
 use xcm_executor::traits::FeeReason;
 
-type RuntimeOrigin<T> = <T as frame_system::Config>::RuntimeOrigin;
+type RuntimeOrigin<T> = <T as pezframe_system::Config>::RuntimeOrigin;
 
 /// Pallet we're benchmarking here.
 pub struct Pallet<T: Config>(crate::Pallet<T>);
 
 /// Trait that must be implemented by runtime to be able to benchmark pallet properly.
-pub trait Config: crate::Config + pallet_balances::Config {
+pub trait Config: crate::Config + pezpallet_balances::Config {
 	/// Helper that ensures successful delivery for extrinsics/benchmarks which need `SendXcm`.
 	type DeliveryHelper: EnsureDelivery;
 
@@ -607,7 +607,7 @@ mod benchmarks {
 			T::ExecuteXcmOrigin::try_origin(origin.clone().into())
 				.map_err(|_| {
 					tracing::error!(
-						target: "xcm::benchmarking::pallet_xcm::add_authorized_alias",
+						target: "xcm::benchmarking::pezpallet_xcm::add_authorized_alias",
 						?origin,
 						"try_origin failed",
 					);
@@ -618,7 +618,7 @@ mod benchmarks {
 		// Give some multiple of ED
 		let balance = T::ExistentialDeposit::get() * 1000000u32.into();
 		let _ =
-			<pallet_balances::Pallet::<T> as frame_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
+			<pezpallet_balances::Pallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
 
 		let mut existing_aliases = BoundedVec::<OriginAliaser, MaxAuthorizedAliases>::new();
 		// prepopulate list with `max-1` aliases to benchmark worst case
@@ -632,7 +632,7 @@ mod benchmarks {
 		let footprint = aliasers_footprint(existing_aliases.len());
 		let ticket = TicketOf::<T>::new(&who, footprint).map_err(|e| {
 			tracing::error!(
-				target: "xcm::benchmarking::pallet_xcm::add_authorized_alias",
+				target: "xcm::benchmarking::pezpallet_xcm::add_authorized_alias",
 				?who,
 				?footprint,
 				error=?e,
@@ -662,7 +662,7 @@ mod benchmarks {
 		let origin_location =
 			T::ExecuteXcmOrigin::try_origin(origin.clone().into()).map_err(|_| {
 				tracing::error!(
-					target: "xcm::benchmarking::pallet_xcm::remove_authorized_alias",
+					target: "xcm::benchmarking::pezpallet_xcm::remove_authorized_alias",
 					?origin,
 					"try_origin failed",
 				);
@@ -675,7 +675,7 @@ mod benchmarks {
 				Location::new(0, [AccountId32 { network: None, id: *id }]).into(),
 			_ => {
 				tracing::error!(
-					target: "xcm::benchmarking::pallet_xcm::remove_authorized_alias",
+					target: "xcm::benchmarking::pezpallet_xcm::remove_authorized_alias",
 					?origin_location,
 					"unexpected origin failed",
 				);
@@ -686,7 +686,7 @@ mod benchmarks {
 		// Give some multiple of ED
 		let balance = T::ExistentialDeposit::get() * 1000000u32.into();
 		let _ =
-			<pallet_balances::Pallet::<T> as frame_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
+			<pezpallet_balances::Pallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
 
 		let mut existing_aliases = BoundedVec::<OriginAliaser, MaxAuthorizedAliases>::new();
 		// prepopulate list with `max` aliases to benchmark worst case
@@ -700,7 +700,7 @@ mod benchmarks {
 		let footprint = aliasers_footprint(existing_aliases.len());
 		let ticket = TicketOf::<T>::new(&who, footprint).map_err(|e| {
 			tracing::error!(
-				target: "xcm::benchmarking::pallet_xcm::remove_authorized_alias",
+				target: "xcm::benchmarking::pezpallet_xcm::remove_authorized_alias",
 				?who,
 				?footprint,
 				error=?e,
@@ -749,8 +749,8 @@ pub mod helpers {
 		destination: Location,
 	) -> Option<(Assets, AssetId, Location, Box<dyn FnOnce()>)>
 	where
-		T: Config + pallet_balances::Config,
-		u128: From<<T as pallet_balances::Config>::Balance>,
+		T: Config + pezpallet_balances::Config,
+		u128: From<<T as pezpallet_balances::Config>::Balance>,
 	{
 		// Relay/native token can be teleported to/from AH.
 		let amount = T::ExistentialDeposit::get() * 100u32.into();
@@ -763,14 +763,14 @@ pub mod helpers {
 		let balance = amount * 10u32.into();
 		let who = whitelisted_caller();
 		let _ =
-			<pallet_balances::Pallet::<T> as frame_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
+			<pezpallet_balances::Pallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
 		// verify initial balance
-		assert_eq!(pallet_balances::Pallet::<T>::free_balance(&who), balance);
+		assert_eq!(pezpallet_balances::Pallet::<T>::free_balance(&who), balance);
 
 		// verify transferred successfully
 		let verify = Box::new(move || {
 			// verify balance after transfer, decreased by transferred amount (and delivery fees)
-			assert!(pallet_balances::Pallet::<T>::free_balance(&who) <= balance - amount);
+			assert!(pezpallet_balances::Pallet::<T>::free_balance(&who) <= balance - amount);
 		});
 		Some((assets, fee_asset_id, destination, verify))
 	}

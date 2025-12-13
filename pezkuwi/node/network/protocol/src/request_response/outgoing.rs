@@ -19,8 +19,8 @@ use futures::{channel::oneshot, prelude::Future, FutureExt};
 use codec::{Decode, Encode, Error as DecodingError};
 use network::ProtocolName;
 
-use sc_network as network;
-use sc_network_types::PeerId;
+use pezsc_network as network;
+use pezsc_network_types::PeerId;
 
 use pezkuwi_primitives::AuthorityDiscoveryId;
 
@@ -78,7 +78,7 @@ pub enum RequestError {
 	#[error("Response could not be decoded: {0}")]
 	InvalidResponse(#[from] DecodingError),
 
-	/// Some error in substrate/libp2p happened.
+	/// Some error in bizinikiwi/libp2p happened.
 	#[error("{0}")]
 	NetworkError(#[from] network::RequestFailure),
 

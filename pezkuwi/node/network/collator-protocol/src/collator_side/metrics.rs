@@ -22,7 +22,7 @@ use std::{
 use pezkuwi_node_subsystem::prometheus::prometheus::HistogramTimer;
 use pezkuwi_node_subsystem_util::metrics::{self, prometheus};
 use pezkuwi_primitives::{BlockNumber, CandidateReceiptV2 as CandidateReceipt, Hash};
-use sp_core::H256;
+use pezsp_core::H256;
 
 use super::collation::CollationStatus;
 

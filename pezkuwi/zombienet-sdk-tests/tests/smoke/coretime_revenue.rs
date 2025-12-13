@@ -21,7 +21,7 @@ mod pezkuwichain {}
 
 use pezkuwichain::runtime_types::{
 	pezkuwi_teyrchain_primitives::primitives,
-	staging_xcm::v4::{
+	pezstaging_xcm::v4::{
 		asset::{Asset, AssetId, Assets, Fungibility},
 		junction::Junction,
 		junctions::Junctions,
@@ -43,15 +43,15 @@ use coretime_pezkuwichain::{
 	self as coretime_api,
 	broker::events as broker_events,
 	runtime_types::{
-		pallet_broker::types::{ConfigRecord as BrokerConfigRecord, Finality as BrokerFinality},
-		sp_arithmetic::per_things::Perbill,
+		pezpallet_broker::types::{ConfigRecord as BrokerConfigRecord, Finality as BrokerFinality},
+		pezsp_arithmetic::per_things::Perbill,
 	},
 };
 use pezkuwichain::on_demand_assignment_provider::events as on_demand_events;
 
 type CoretimeRuntimeCall = coretime_api::runtime_types::coretime_pezkuwichain_runtime::RuntimeCall;
-type CoretimeUtilityCall = coretime_api::runtime_types::pallet_utility::pallet::Call;
-type CoretimeBrokerCall = coretime_api::runtime_types::pallet_broker::pallet::Call;
+type CoretimeUtilityCall = coretime_api::runtime_types::pezpallet_utility::pallet::Call;
+type CoretimeBrokerCall = coretime_api::runtime_types::pezpallet_broker::pallet::Call;
 
 // On-demand coretime base fee (set at the genesis)
 const ON_DEMAND_BASE_FEE: u128 = 50_000_000;
@@ -121,12 +121,12 @@ async fn para_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 
 		for event in block.events().await.unwrap().iter() {
 			let event = event.unwrap();
-			log::debug!("Got event: {} :: {}", event.pallet_name(), event.variant_name());
+			log::debug!("Got event: {} :: {}", event.pezpallet_name(), event.variant_name());
 			{
 				events.write().await.push((block.number().into(), event.clone()));
 			}
 
-			if event.pallet_name() == "Broker" {
+			if event.pezpallet_name() == "Broker" {
 				trace_event!(event: broker_events =>
 					Purchased, SaleInitialized, HistoryInitialized, CoreAssigned, Pooled,
 					ClaimsReady, RevenueClaimBegun,	RevenueClaimItem, RevenueClaimPaid
@@ -151,12 +151,12 @@ async fn relay_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 
 		for event in block.events().await.unwrap().iter() {
 			let event = event.unwrap();
-			log::debug!("Got event: {} :: {}", event.pallet_name(), event.variant_name());
+			log::debug!("Got event: {} :: {}", event.pezpallet_name(), event.variant_name());
 			{
 				events.write().await.push((block.number().into(), event.clone()));
 			}
 
-			if event.pallet_name() == "OnDemandAssignmentProvider" {
+			if event.pezpallet_name() == "OnDemandAssignmentProvider" {
 				trace_event!(event: on_demand_events =>
 					AccountCredited, SpotPriceSet, OnDemandOrderPlaced
 				);
@@ -178,7 +178,7 @@ async fn wait_for_event<
 	loop {
 		let mut events = events.write().await;
 		if let Some(entry) = events.iter().find(|&e| {
-			e.1.pallet_name() == pallet &&
+			e.1.pezpallet_name() == pallet &&
 				e.1.variant_name() == variant &&
 				predicate(&e.1.as_event::<E>().unwrap().unwrap())
 		}) {
@@ -243,7 +243,7 @@ async fn coretime_revenue_test() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(1005)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_chain("coretime-pezkuwichain-local")
 				.with_collator(|n| n.with_name("coretime"))
 		})

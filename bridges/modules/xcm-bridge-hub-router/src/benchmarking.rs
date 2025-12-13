@@ -19,10 +19,10 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::{Bridge, BridgeState, Call};
-use frame_benchmarking::{benchmarks_instance_pallet, BenchmarkError};
-use frame_support::traits::{EnsureOrigin, Get, Hooks, UnfilteredDispatchable};
+use pezframe_benchmarking::{benchmarks_instance_pallet, BenchmarkError};
+use pezframe_support::traits::{EnsureOrigin, Get, Hooks, UnfilteredDispatchable};
 use pezkuwi_runtime_teyrchains::FeeTracker;
-use sp_runtime::{traits::Zero, Saturating};
+use pezsp_runtime::{traits::Zero, Saturating};
 use xcm::prelude::*;
 
 /// Pallet we're benchmarking here.

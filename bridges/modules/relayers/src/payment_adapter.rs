@@ -15,7 +15,7 @@
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Code that allows relayers pallet to be used as a payment mechanism for
-//! the `pallet-bridge-messages` pallet using `RewardsAccountParams`.
+//! the `pezpallet-bridge-messages` pallet using `RewardsAccountParams`.
 
 use crate::{Config, Pallet};
 
@@ -28,12 +28,12 @@ pub use bp_relayers::PayRewardFromAccount;
 use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use bp_runtime::Chain;
 use core::{marker::PhantomData, ops::RangeInclusive};
-use frame_support::{sp_runtime::SaturatedConversion, traits::Get};
-use pallet_bridge_messages::LaneIdOf;
-use sp_arithmetic::traits::{Saturating, Zero};
+use pezframe_support::{pezsp_runtime::SaturatedConversion, traits::Get};
+use pezpallet_bridge_messages::LaneIdOf;
+use pezsp_arithmetic::traits::{Saturating, Zero};
 
 /// Adapter that allows relayers pallet to be used as a delivery+dispatch payment mechanism
-/// for the `pallet-bridge-messages` pallet and using `RewardsAccountParams`.
+/// for the `pezpallet-bridge-messages` pallet and using `RewardsAccountParams`.
 pub struct DeliveryConfirmationPaymentsAdapter<T, MI, RI, DeliveryReward>(
 	PhantomData<(T, MI, RI, DeliveryReward)>,
 );
@@ -41,7 +41,7 @@ pub struct DeliveryConfirmationPaymentsAdapter<T, MI, RI, DeliveryReward>(
 impl<T, MI, RI, DeliveryReward> DeliveryConfirmationPayments<T::AccountId, LaneIdOf<T, MI>>
 	for DeliveryConfirmationPaymentsAdapter<T, MI, RI, DeliveryReward>
 where
-	T: Config<RI> + pallet_bridge_messages::Config<MI>,
+	T: Config<RI> + pezpallet_bridge_messages::Config<MI>,
 	MI: 'static,
 	RI: 'static,
 	DeliveryReward: Get<T::RewardBalance>,
@@ -76,7 +76,7 @@ where
 
 // Update rewards to given relayers, optionally rewarding confirmation relayer.
 fn register_relayers_rewards<
-	T: Config<RI> + pallet_bridge_messages::Config<MI>,
+	T: Config<RI> + pezpallet_bridge_messages::Config<MI>,
 	RI: 'static,
 	MI: 'static,
 >(
@@ -117,7 +117,7 @@ mod tests {
 	use crate::{mock::*, RelayerRewards};
 	use bp_messages::LaneIdType;
 	use bp_relayers::PaymentProcedure;
-	use frame_support::{
+	use pezframe_support::{
 		assert_ok,
 		traits::fungible::{Inspect, Mutate},
 	};
@@ -178,7 +178,7 @@ mod tests {
 
 	#[test]
 	fn pay_reward_from_account_actually_pays_reward() {
-		type Balances = pallet_balances::Pallet<TestRuntime>;
+		type Balances = pezpallet_balances::Pallet<TestRuntime>;
 		type PayLaneRewardFromAccount =
 			PayRewardFromAccount<Balances, ThisChainAccountId, TestLaneIdType, RewardBalance>;
 

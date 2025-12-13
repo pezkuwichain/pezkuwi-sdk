@@ -22,11 +22,11 @@ use pezkuwi_node_network_protocol::authority_discovery::AuthorityDiscovery;
 use pezkuwi_primitives::{AssignmentId, AuthorityDiscoveryId, ValidatorId, ValidatorPair};
 use rand::thread_rng;
 use rand_distr::{Distribution, Normal, Uniform};
-use sc_network::Multiaddr;
-use sc_network_types::PeerId;
+use pezsc_network::Multiaddr;
+use pezsc_network_types::PeerId;
 use serde::{Deserialize, Serialize};
-use sp_consensus_babe::AuthorityId;
-use sp_core::Pair;
+use pezsp_consensus_babe::AuthorityId;
+use pezsp_core::Pair;
 use std::collections::{HashMap, HashSet};
 
 /// Peer networking latency configuration.

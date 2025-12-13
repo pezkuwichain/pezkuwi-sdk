@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -18,13 +18,13 @@
 pub mod constants {
 	use pezkuwi_sdk::*;
 
-	use frame_support::{
+	use pezframe_support::{
 		parameter_types,
 		weights::{constants, RuntimeDbWeight},
 	};
 
 	parameter_types! {
-		/// By default, Substrate uses `RocksDB`, so this will be the weight used throughout
+		/// By default, Bizinikiwi uses `RocksDB`, so this will be the weight used throughout
 		/// the runtime.
 		pub const RocksDbWeight: RuntimeDbWeight = RuntimeDbWeight {
 			read: 25_000 * constants::WEIGHT_REF_TIME_PER_NANOS,
@@ -37,7 +37,7 @@ pub mod constants {
 		use pezkuwi_sdk::*;
 
 		use super::constants::RocksDbWeight as W;
-		use frame_support::weights::constants;
+		use pezframe_support::weights::constants;
 
 		/// Checks that all weights exist and have sane values.
 		// NOTE: If this test fails but you are sure that the generated values are fine,

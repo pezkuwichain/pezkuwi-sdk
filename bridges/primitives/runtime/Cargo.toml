@@ -19,15 +19,15 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 tracing = { workspace = true }
 
-# Substrate Dependencies
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-runtime = { features = ["serde"], workspace = true }
-sp-state-machine = { workspace = true }
-sp-std = { workspace = true }
-sp-trie = { workspace = true }
+# Bizinikiwi Dependencies
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { features = ["serde"], workspace = true }
+pezsp-state-machine = { workspace = true }
+pezsp-std = { workspace = true }
+pezsp-trie = { workspace = true }
 trie-db = { workspace = true }
 
 [dev-dependencies]
@@ -37,27 +37,27 @@ hex-literal = { workspace = true, default-features = true }
 default = ["std"]
 std = [
 	"codec/std",
-	"frame-support/std",
-	"frame-system/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"hash-db/std",
 	"num-traits/std",
 	"scale-info/std",
 	"serde/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-state-machine/std",
-	"sp-std/std",
-	"sp-trie/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-state-machine/std",
+	"pezsp-std/std",
+	"pezsp-trie/std",
 	"tracing/std",
 	"trie-db/std",
 ]
 test-helpers = []
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-state-machine/runtime-benchmarks",
-	"sp-trie/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

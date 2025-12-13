@@ -10,11 +10,11 @@ use core::slice::Iter;
 use codec::{Decode, Encode};
 
 use super::message::{Command, Message, SendMessage};
-use frame_support::{ensure, traits::Get};
+use pezframe_support::{ensure, traits::Get};
 use snowbridge_core::{AgentId, ChannelId, ParaId, TokenId, TokenIdOf};
-use sp_core::{H160, H256};
-use sp_runtime::traits::MaybeConvert;
-use sp_std::{iter::Peekable, marker::PhantomData, prelude::*};
+use pezsp_core::{H160, H256};
+use pezsp_runtime::traits::MaybeConvert;
+use pezsp_std::{iter::Peekable, marker::PhantomData, prelude::*};
 use xcm::prelude::*;
 use xcm_executor::traits::{ConvertLocation, ExportXcm};
 

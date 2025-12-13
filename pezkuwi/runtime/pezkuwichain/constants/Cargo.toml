@@ -17,12 +17,12 @@ workspace = true
 [dependencies]
 smallvec = { workspace = true, default-features = true }
 
-frame-support = { workspace = true }
+pezframe-support = { workspace = true }
 pezkuwi-primitives = { workspace = true }
 pezkuwi-runtime-common = { workspace = true }
-sp-core = { workspace = true }
-sp-runtime = { workspace = true }
-sp-weights = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-weights = { workspace = true }
 
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
@@ -30,12 +30,12 @@ xcm-builder = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"frame-support/std",
+	"pezframe-support/std",
 	"pezkuwi-primitives/std",
 	"pezkuwi-runtime-common/std",
-	"sp-core/std",
-	"sp-runtime/std",
-	"sp-weights/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"pezsp-weights/std",
 	"xcm-builder/std",
 	"xcm/std",
 ]
@@ -43,10 +43,10 @@ std = [
 # Set timing constants (e.g. session period) to faster versions to speed up testing.
 fast-runtime = []
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-runtime-common/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]

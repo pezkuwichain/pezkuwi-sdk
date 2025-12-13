@@ -18,7 +18,7 @@
 
 use pezkuwi_primitives::{IndexedVec, SessionIndex, ValidatorId, ValidatorIndex};
 use schnellru::{ByLength, LruMap};
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 /// Keeps track of the validator indices controlled by the local validator in a given session. For
 /// better performance, the values for each session are cached.

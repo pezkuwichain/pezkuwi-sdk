@@ -24,8 +24,8 @@ use pezkuwi_node_primitives::BlockWeight;
 use pezkuwi_node_subsystem_test_helpers::{make_subsystem_context, TestSubsystemContextHandle};
 use pezkuwi_node_subsystem_types::ChainApiBackend;
 use pezkuwi_primitives::{Block, BlockNumber, Hash, Header};
-use sp_blockchain::Info as BlockInfo;
-use sp_core::testing::TaskExecutor;
+use pezsp_blockchain::Info as BlockInfo;
+use pezsp_core::testing::TaskExecutor;
 
 #[derive(Clone)]
 struct TestClient {
@@ -111,7 +111,7 @@ fn last_key_value<K: Clone, V: Clone>(map: &BTreeMap<K, V>) -> (K, V) {
 	map.iter().last().map(|(k, v)| (k.clone(), v.clone())).unwrap()
 }
 
-impl sp_blockchain::HeaderBackend<Block> for TestClient {
+impl pezsp_blockchain::HeaderBackend<Block> for TestClient {
 	fn info(&self) -> BlockInfo<Block> {
 		let genesis_hash = self.blocks.iter().next().map(|(h, _)| *h).unwrap();
 		let (best_hash, best_number) = last_key_value(&self.blocks);
@@ -128,20 +128,20 @@ impl sp_blockchain::HeaderBackend<Block> for TestClient {
 			block_gap: None,
 		}
 	}
-	fn number(&self, hash: Hash) -> sp_blockchain::Result<Option<BlockNumber>> {
+	fn number(&self, hash: Hash) -> pezsp_blockchain::Result<Option<BlockNumber>> {
 		Ok(self.blocks.get(&hash).copied())
 	}
-	fn hash(&self, number: BlockNumber) -> sp_blockchain::Result<Option<Hash>> {
+	fn hash(&self, number: BlockNumber) -> pezsp_blockchain::Result<Option<Hash>> {
 		Ok(self.finalized_blocks.get(&number).copied())
 	}
-	fn header(&self, hash: Hash) -> sp_blockchain::Result<Option<Header>> {
+	fn header(&self, hash: Hash) -> pezsp_blockchain::Result<Option<Header>> {
 		if hash.is_zero() {
-			Err(sp_blockchain::Error::Backend("Zero hashes are illegal!".into()))
+			Err(pezsp_blockchain::Error::Backend("Zero hashes are illegal!".into()))
 		} else {
 			Ok(self.headers.get(&hash).cloned())
 		}
 	}
-	fn status(&self, _hash: Hash) -> sp_blockchain::Result<sp_blockchain::BlockStatus> {
+	fn status(&self, _hash: Hash) -> pezsp_blockchain::Result<pezsp_blockchain::BlockStatus> {
 		unimplemented!()
 	}
 }
@@ -173,15 +173,15 @@ impl AuxStore for TestClient {
 		&self,
 		_insert: I,
 		_delete: D,
-	) -> sp_blockchain::Result<()> {
+	) -> pezsp_blockchain::Result<()> {
 		unimplemented!()
 	}
 
-	fn get_aux(&self, key: &[u8]) -> sp_blockchain::Result<Option<Vec<u8>>> {
+	fn get_aux(&self, key: &[u8]) -> pezsp_blockchain::Result<Option<Vec<u8>>> {
 		Ok(self
 			.block_weights
 			.iter()
-			.find(|(hash, _)| sc_consensus_babe::aux_schema::block_weight_key(hash) == key)
+			.find(|(hash, _)| pezsc_consensus_babe::aux_schema::block_weight_key(hash) == key)
 			.map(|(_, weight)| weight.encode()))
 	}
 }
@@ -246,9 +246,9 @@ fn request_block_weight() {
 		async move {
 			const NOT_HERE: Hash = Hash::repeat_byte(0x5);
 			let test_cases = [
-				(TWO, sc_consensus_babe::block_weight(&*client, TWO).unwrap()),
-				(FOUR, sc_consensus_babe::block_weight(&*client, FOUR).unwrap()),
-				(NOT_HERE, sc_consensus_babe::block_weight(&*client, NOT_HERE).unwrap()),
+				(TWO, pezsc_consensus_babe::block_weight(&*client, TWO).unwrap()),
+				(FOUR, pezsc_consensus_babe::block_weight(&*client, FOUR).unwrap()),
+				(NOT_HERE, pezsc_consensus_babe::block_weight(&*client, NOT_HERE).unwrap()),
 			];
 			for (hash, expected) in &test_cases {
 				let (tx, rx) = oneshot::channel();

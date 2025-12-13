@@ -50,7 +50,7 @@ impl PvfPrepData {
 		validation_code_bomb_limit: u32,
 	) -> Self {
 		let maybe_compressed_code = Arc::new(code);
-		let code_hash = sp_crypto_hashing::blake2_256(&maybe_compressed_code).into();
+		let code_hash = pezsp_crypto_hashing::blake2_256(&maybe_compressed_code).into();
 		let executor_params = Arc::new(executor_params);
 		Self {
 			maybe_compressed_code,

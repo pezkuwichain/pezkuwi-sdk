@@ -7,7 +7,7 @@
 //! This crate implements a simple binary Merkle Tree utilities required for inter-op with Ethereum
 //! bridge & Solidity contract.
 //!
-//! The implementation is optimised for usage within Substrate Runtime and supports no-std
+//! The implementation is optimised for usage within Bizinikiwi Runtime and supports no-std
 //! compilation targets.
 //!
 //! Merkle Tree is constructed from arbitrary-length leaves, that are initially hashed using the
@@ -26,8 +26,8 @@ use alloc::vec::Vec;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-use sp_core::{RuntimeDebug, H256};
-use sp_runtime::traits::Hash;
+use pezsp_core::{RuntimeDebug, H256};
+use pezsp_runtime::traits::Hash;
 
 /// Construct a root hash of a Binary Merkle Tree created from given leaves.
 ///
@@ -237,7 +237,7 @@ where
 		Leaf::Hash(hash) => hash,
 	};
 
-	let hash_len = <H as sp_core::Hasher>::LENGTH;
+	let hash_len = <H as pezsp_core::Hasher>::LENGTH;
 	let mut combined = [0_u8; 64];
 	let computed = proof.into_iter().fold(leaf_hash, |a, b| {
 		if a < b {
@@ -270,7 +270,7 @@ where
 {
 	next.clear();
 
-	let hash_len = <H as sp_core::Hasher>::LENGTH;
+	let hash_len = <H as pezsp_core::Hasher>::LENGTH;
 	let mut index = 0;
 	let mut combined = vec![0_u8; hash_len * 2];
 	loop {
@@ -307,8 +307,8 @@ where
 mod tests {
 	use super::*;
 	use hex_literal::hex;
-	use sp_crypto_hashing::keccak_256;
-	use sp_runtime::traits::Keccak256;
+	use pezsp_crypto_hashing::keccak_256;
+	use pezsp_runtime::traits::Keccak256;
 
 	fn make_leaves(count: u64) -> Vec<H256> {
 		(0..count).map(|i| keccak_256(&i.to_le_bytes()).into()).collect()
@@ -317,7 +317,7 @@ mod tests {
 	#[test]
 	fn should_generate_empty_root() {
 		// given
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		let data = vec![];
 
 		// when
@@ -333,7 +333,7 @@ mod tests {
 	#[test]
 	fn should_generate_single_root() {
 		// given
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		let data = make_leaves(1);
 
 		// when
@@ -349,7 +349,7 @@ mod tests {
 	#[test]
 	fn should_generate_root_pow_2() {
 		// given
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		let data = make_leaves(2);
 
 		// when
@@ -364,7 +364,7 @@ mod tests {
 
 	#[test]
 	fn should_generate_root_complex() {
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		let test = |root, data: Vec<H256>| {
 			assert_eq!(
 				array_bytes::bytes2hex("", merkle_root::<Keccak256, _>(data.into_iter()).as_ref()),
@@ -383,7 +383,7 @@ mod tests {
 	#[ignore]
 	fn should_generate_and_verify_proof() {
 		// given
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		let data: Vec<H256> = make_leaves(3);
 
 		// when
@@ -440,7 +440,7 @@ mod tests {
 	#[test]
 	#[should_panic]
 	fn should_panic_on_invalid_leaf_index() {
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		merkle_proof::<Keccak256, _>(make_leaves(1).into_iter(), 5);
 	}
 }

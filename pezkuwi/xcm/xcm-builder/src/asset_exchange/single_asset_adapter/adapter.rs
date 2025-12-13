@@ -19,16 +19,16 @@
 extern crate alloc;
 use alloc::vec;
 use core::marker::PhantomData;
-use frame_support::{ensure, traits::tokens::fungibles};
-use pallet_asset_conversion::{QuotePrice, SwapCredit};
+use pezframe_support::{ensure, traits::tokens::fungibles};
+use pezpallet_asset_conversion::{QuotePrice, SwapCredit};
 use xcm::prelude::*;
 use xcm_executor::{
 	traits::{AssetExchange, MatchesFungibles},
 	AssetsInHolding,
 };
 
-/// An adapter from [`pallet_asset_conversion::SwapCredit`] and
-/// [`pallet_asset_conversion::QuotePrice`] to [`xcm_executor::traits::AssetExchange`].
+/// An adapter from [`pezpallet_asset_conversion::SwapCredit`] and
+/// [`pezpallet_asset_conversion::QuotePrice`] to [`xcm_executor::traits::AssetExchange`].
 ///
 /// This adapter takes just one fungible asset in `give` and allows only one fungible asset in
 /// `want`. If you need to handle more assets in either `give` or `want`, then you should use

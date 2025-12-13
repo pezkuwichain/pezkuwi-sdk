@@ -10,16 +10,16 @@
 //! A runtime shares a few similar setup requirements as with a pallet:
 //!
 //! * importing [`frame`], [`codec`], and [`scale_info`] crates.
-//! * following the [`std` feature-gating](crate::pezkuwi_sdk::substrate#wasm-build) pattern.
+//! * following the [`std` feature-gating](crate::pezkuwi_sdk::bizinikiwi#wasm-build) pattern.
 //!
 //! But, more specifically, it also contains:
 //!
-//! * a `build.rs` that uses [`substrate_wasm_builder`]. This entails declaring
+//! * a `build.rs` that uses [`bizinikiwi_wasm_builder`]. This entails declaring
 //!   `[build-dependencies]` in the Cargo manifest file:
 //!
 //! ```ignore
 //! [build-dependencies]
-//! substrate-wasm-builder = { ... }
+//! bizinikiwi-wasm-builder = { ... }
 //! ```
 //!
 //! >Note that a runtime must always be one-runtime-per-crate. You cannot define multiple runtimes
@@ -49,13 +49,13 @@
 //! their `Config` need to be implemented for `struct Runtime`:
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", config_impls)]
 //!
-//! Notice how we use [`frame::pallet_macros::derive_impl`] to provide "default" configuration items
+//! Notice how we use [`frame::pezpallet_macros::derive_impl`] to provide "default" configuration items
 //! for each pallet. Feel free to dive into the definition of each default prelude (eg.
-//! [`frame::prelude::frame_system::pallet::config_preludes`]) to learn more which types are exactly
+//! [`frame::prelude::pezframe_system::pallet::config_preludes`]) to learn more which types are exactly
 //! used.
 //!
 //! Recall that in test runtime in [`crate::guides::your_first_pallet`], we provided `type AccountId
-//! = u64` to `frame_system`, while in this case we rely on whatever is provided by
+//! = u64` to `pezframe_system`, while in this case we rely on whatever is provided by
 //! [`SolochainDefaultConfig`], which is indeed a "real" 32 byte account id.
 //!
 //! Then, a familiar instance of `construct_runtime` amalgamates all of the pallets:
@@ -101,7 +101,7 @@
 //!
 //! Once you compile a crate that contains a runtime as above, simply running `cargo build` will
 //! generate the wasm blobs and place them under `./target/release/wbuild`, as explained
-//! [here](crate::pezkuwi_sdk::substrate#wasm-build).
+//! [here](crate::pezkuwi_sdk::bizinikiwi#wasm-build).
 //!
 //! ## Genesis Configuration
 //!
@@ -110,7 +110,7 @@
 //! what is known as a  **Chain Specification, or chain spec for short**. A chain spec is the
 //! primary way to run a new chain.
 //!
-//! These APIs are defined in [`sp_genesis_builder`], and are re-exposed as a part of
+//! These APIs are defined in [`pezsp_genesis_builder`], and are re-exposed as a part of
 //! [`frame::runtime::apis`]. Therefore, the implementation blocks can be found inside of
 //! `impl_runtime_apis!` similar to:
 //!
@@ -136,7 +136,7 @@
 //! The implementation of these function can naturally vary from one runtime to the other, but the
 //! overall pattern is common. For the case of this runtime, we do the following:
 //!
-//! 1. Expose one non-default preset, namely [`sp_genesis_builder::DEV_RUNTIME_PRESET`]. This means
+//! 1. Expose one non-default preset, namely [`pezsp_genesis_builder::DEV_RUNTIME_PRESET`]. This means
 //!    our runtime has two "presets" of genesis state in total: `DEV_RUNTIME_PRESET` and `None`.
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", preset_names)]
 //!
@@ -167,7 +167,7 @@
 //! 5. To see a complete example of a runtime+pallet that is similar to this guide, please see
 //!    [`crate::pezkuwi_sdk::templates`].
 //!
-//! [`SolochainDefaultConfig`]: struct@frame_system::pallet::config_preludes::SolochainDefaultConfig
+//! [`SolochainDefaultConfig`]: struct@pezframe_system::pallet::config_preludes::SolochainDefaultConfig
 
 #[cfg(test)]
 mod tests {

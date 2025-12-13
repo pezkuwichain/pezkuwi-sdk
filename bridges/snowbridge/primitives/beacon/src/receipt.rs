@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use snowbridge_ethereum::{mpt, Decodable, ReceiptEnvelope};
-use sp_core::H256;
-use sp_io::hashing::keccak_256;
-use sp_std::prelude::*;
+use pezsp_core::H256;
+use pezsp_io::hashing::keccak_256;
+use pezsp_std::prelude::*;
 
 pub fn verify_receipt_proof(receipts_root: H256, values: &[Vec<u8>]) -> Option<ReceiptEnvelope> {
 	match apply_merkle_proof(values) {

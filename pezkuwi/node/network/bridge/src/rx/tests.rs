@@ -29,9 +29,9 @@ use std::{
 	time::Duration,
 };
 
-use sc_network::{
+use pezsc_network::{
 	service::traits::{Direction, MessageSink, NotificationService},
-	IfDisconnected, Multiaddr, ObservedRole as SubstrateObservedRole, ProtocolName,
+	IfDisconnected, Multiaddr, ObservedRole as BizinikiwiObservedRole, ProtocolName,
 	ReputationChange, Roles,
 };
 
@@ -53,7 +53,7 @@ use pezkuwi_node_subsystem_test_helpers::{
 use pezkuwi_node_subsystem_util::metered;
 use pezkuwi_primitives::{AuthorityDiscoveryId, Hash};
 
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
 use crate::{network::Network, validator_discovery::AuthorityDiscovery};
 
@@ -167,10 +167,10 @@ impl Network for TestNetwork {
 			.unwrap();
 	}
 
-	fn peer_role(&self, _peer_id: PeerId, handshake: Vec<u8>) -> Option<SubstrateObservedRole> {
+	fn peer_role(&self, _peer_id: PeerId, handshake: Vec<u8>) -> Option<BizinikiwiObservedRole> {
 		Roles::decode_all(&mut &handshake[..])
 			.ok()
-			.and_then(|role| Some(SubstrateObservedRole::from(role)))
+			.and_then(|role| Some(BizinikiwiObservedRole::from(role)))
 	}
 }
 
@@ -352,7 +352,7 @@ impl MessageSink for TestMessageSink {
 	async fn send_async_notification(
 		&self,
 		_notification: Vec<u8>,
-	) -> Result<(), sc_network::error::Error> {
+	) -> Result<(), pezsc_network::error::Error> {
 		unimplemented!();
 	}
 }
@@ -379,7 +379,7 @@ impl NotificationService for TestNotificationService {
 		&mut self,
 		_peer: &PeerId,
 		_notification: Vec<u8>,
-	) -> Result<(), sc_network::error::Error> {
+	) -> Result<(), pezsc_network::error::Error> {
 		unimplemented!();
 	}
 
@@ -507,7 +507,7 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	let fork_id = None;
 	let peerset_protocol_names = PeerSetProtocolNames::new(genesis_hash, fork_id);
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (network, network_handle, discovery, validation_service, collation_service) =
 		new_test_network(peerset_protocol_names.clone());
 	let (context, virtual_overseer) =
@@ -1193,7 +1193,7 @@ fn relays_collation_protocol_messages() {
 		let collator_protocol_message = protocol_v1::CollatorProtocolMessage::Declare(
 			Sr25519Keyring::Alice.public().into(),
 			Default::default(),
-			sp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]),
+			pezsp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]),
 		);
 
 		let message_v1 =
@@ -1691,7 +1691,7 @@ fn network_protocol_versioning_subsystem_msg() {
 		let collator_protocol_message = protocol_v1::CollatorProtocolMessage::Declare(
 			Sr25519Keyring::Alice.public().into(),
 			Default::default(),
-			sp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]),
+			pezsp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]),
 		);
 
 		let msg =

@@ -29,7 +29,7 @@ codec = { features = ["derive"], workspace = true }
 pezkuwi-node-core-pvf-common = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 
-sp-maybe-compressed-blob = { workspace = true, default-features = true }
+pezsp-maybe-compressed-blob = { workspace = true, default-features = true }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 tikv-jemallocator = { workspace = true }

@@ -29,7 +29,7 @@ pub fn derive(input: DeriveInput) -> Result<TokenStream2> {
 	let number_of_variants: usize = data_enum.variants.iter().count();
 	Ok(quote! {
 		pub struct #ident;
-		impl ::frame_support::traits::Get<u32> for #ident {
+		impl ::pezframe_support::traits::Get<u32> for #ident {
 			fn get() -> u32 {
 				#number_of_variants as u32
 			}

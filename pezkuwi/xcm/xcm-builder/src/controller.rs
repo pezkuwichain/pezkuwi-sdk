@@ -19,9 +19,9 @@
 //! from `xcm-executor` to perform their tasks.
 
 use alloc::boxed::Box;
-use frame_support::{
+use pezframe_support::{
 	dispatch::{DispatchErrorWithPostInfo, WithPostDispatchInfo},
-	pallet_prelude::DispatchError,
+	pezpallet_prelude::DispatchError,
 };
 use xcm::prelude::*;
 pub use xcm_executor::traits::QueryHandler;

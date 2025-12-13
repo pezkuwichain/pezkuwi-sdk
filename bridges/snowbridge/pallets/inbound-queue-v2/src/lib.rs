@@ -37,7 +37,7 @@ mod test;
 
 pub use crate::weights::WeightInfo;
 use bp_relayers::RewardLedger;
-use frame_system::ensure_signed;
+use pezframe_system::ensure_signed;
 use snowbridge_core::{
 	reward::{AddTip, AddTipError},
 	sparse_bitmap::{SparseBitmap, SparseBitmapImpl},
@@ -47,25 +47,25 @@ use snowbridge_inbound_queue_primitives::{
 	v2::{ConvertMessage, ConvertMessageError, Message},
 	EventProof, VerificationError, Verifier,
 };
-use sp_core::H160;
-use sp_runtime::traits::TryConvert;
-use sp_std::prelude::*;
+use pezsp_core::H160;
+use pezsp_runtime::traits::TryConvert;
+use pezsp_std::prelude::*;
 use xcm::prelude::{ExecuteXcm, Junction::*, Location, SendXcm, *};
 
 pub use pallet::*;
 
-pub const LOG_TARGET: &str = "snowbridge-pallet-inbound-queue-v2";
+pub const LOG_TARGET: &str = "snowbridge-pezpallet-inbound-queue-v2";
 
-pub type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
+pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 
 pub type Nonce<T> = SparseBitmapImpl<crate::NonceBitmap<T>>;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[cfg(feature = "runtime-benchmarks")]
 	use snowbridge_inbound_queue_primitives::EventFixture;
@@ -79,9 +79,9 @@ pub mod pallet {
 	}
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The verifier for inbound messages from Ethereum.
 		type Verifier: Verifier;
 		/// XCM message sender.

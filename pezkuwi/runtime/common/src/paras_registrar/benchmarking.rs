@@ -19,19 +19,19 @@
 #[cfg(feature = "runtime-benchmarks")]
 use super::{Pallet as Registrar, *};
 use crate::traits::Registrar as RegistrarT;
-use frame_support::assert_ok;
-use frame_system::RawOrigin;
+use pezframe_support::assert_ok;
+use pezframe_system::RawOrigin;
 use pezkuwi_primitives::{MAX_CODE_SIZE, MAX_HEAD_DATA_SIZE, MIN_CODE_SIZE};
 use pezkuwi_runtime_teyrchains::{paras, shared, Origin as ParaOrigin};
-use sp_runtime::traits::Bounded;
+use pezsp_runtime::traits::Bounded;
 
-use frame_benchmarking::v2::*;
+use pezframe_benchmarking::v2::*;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = frame_system::Pallet::<T>::events();
-	let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+	let events = pezframe_system::Pallet::<T>::events();
+	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
-	let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 	assert_eq!(event, &system_event);
 }
 
@@ -49,7 +49,7 @@ fn register_para<T: Config>(id: u32) -> ParaId {
 		validation_code.clone()
 	));
 	assert_ok!(pezkuwi_runtime_teyrchains::paras::Pallet::<T>::add_trusted_validation_code(
-		frame_system::Origin::<T>::Root.into(),
+		pezframe_system::Origin::<T>::Root.into(),
 		validation_code,
 	));
 	return para;
@@ -66,7 +66,7 @@ fn next_scheduled_session<T: Config>() {
 }
 
 #[benchmarks(
-		where ParaOrigin: Into<<T as frame_system::Config>::RuntimeOrigin>,
+		where ParaOrigin: Into<<T as pezframe_system::Config>::RuntimeOrigin>,
 	)]
 mod benchmarks {
 	use super::*;
@@ -103,7 +103,7 @@ mod benchmarks {
 		assert_last_event::<T>(Event::<T>::Registered { para_id: para, manager: caller }.into());
 		assert_eq!(paras::Pallet::<T>::lifecycle(para), Some(ParaLifecycle::Onboarding));
 		assert_ok!(pezkuwi_runtime_teyrchains::paras::Pallet::<T>::add_trusted_validation_code(
-			frame_system::Origin::<T>::Root.into(),
+			pezframe_system::Origin::<T>::Root.into(),
 			validation_code,
 		));
 		next_scheduled_session::<T>();
@@ -126,7 +126,7 @@ mod benchmarks {
 		assert_last_event::<T>(Event::<T>::Registered { para_id: para, manager }.into());
 		assert_eq!(paras::Pallet::<T>::lifecycle(para), Some(ParaLifecycle::Onboarding));
 		assert_ok!(pezkuwi_runtime_teyrchains::paras::Pallet::<T>::add_trusted_validation_code(
-			frame_system::Origin::<T>::Root.into(),
+			pezframe_system::Origin::<T>::Root.into(),
 			validation_code,
 		));
 		next_scheduled_session::<T>();

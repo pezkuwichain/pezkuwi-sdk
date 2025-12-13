@@ -30,13 +30,13 @@ use crate::{
 	VersionNotifiers, VersionNotifyTargets, WeightInfo,
 };
 use bounded_collections::BoundedVec;
-use frame_support::{
+use pezframe_support::{
 	assert_err_ignore_postinfo, assert_noop, assert_ok, assert_storage_noop,
 	traits::{ContainsPair, Currency, Hooks},
 	weights::Weight,
 };
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{AccountIdConversion, BlakeTwo256, BlockNumberProvider, Hash},
 	SaturatedConversion, TokenError,
 };
@@ -65,7 +65,7 @@ fn report_outcome_notify_works() {
 		assets: (Here, SEND_AMOUNT).into(),
 		beneficiary: sender.clone(),
 	}]);
-	let call = pallet_test_notifier::Call::notification_received {
+	let call = pezpallet_test_notifier::Call::notification_received {
 		query_id: 0,
 		response: Default::default(),
 	};
@@ -116,14 +116,14 @@ fn report_outcome_notify_works() {
 		assert_eq!(
 			last_events(2),
 			vec![
-				RuntimeEvent::TestNotifier(pallet_test_notifier::Event::ResponseReceived(
+				RuntimeEvent::TestNotifier(pezpallet_test_notifier::Event::ResponseReceived(
 					Teyrchain(OTHER_PARA_ID).into(),
 					0,
 					Response::ExecutionResult(None),
 				)),
 				RuntimeEvent::XcmPallet(crate::Event::Notified {
 					query_id: 0,
-					pallet_index: 5,
+					pezpallet_index: 5,
 					call_index: 2
 				}),
 			]
@@ -345,7 +345,7 @@ fn send_works() {
 /// Asserts that `send` fails with `Error::SendFailure`
 #[test]
 fn send_fails_when_xcm_router_blocks() {
-	use sp_tracing::{
+	use pezsp_tracing::{
 		test_log_capture::init_log_capture,
 		tracing::{subscriber, Level},
 	};
@@ -370,7 +370,7 @@ fn send_fails_when_xcm_router_blocks() {
 			);
 			assert_noop!(result, Error::<Test>::SendFailure);
 			assert!(log_capture
-				.contains("xcm::pallet_xcm::send: XCM send failed with error error=Transport(\"Destination location full\")"));
+				.contains("xcm::pezpallet_xcm::send: XCM send failed with error error=Transport(\"Destination location full\")"));
 		});
 	});
 }
@@ -444,7 +444,7 @@ fn authorized_aliases_work() {
 				Box::new(alias.clone().into()),
 				None
 			),
-			Err(sp_runtime::DispatchError::Token(TokenError::FundsUnavailable))
+			Err(pezsp_runtime::DispatchError::Token(TokenError::FundsUnavailable))
 		);
 
 		// --- setting single alias works
@@ -750,14 +750,14 @@ fn incomplete_execute_reverts_side_effects() {
 
 		assert_eq!(
 			result,
-			Err(sp_runtime::DispatchErrorWithPostInfo {
-				post_info: frame_support::dispatch::PostDispatchInfo {
+			Err(pezsp_runtime::DispatchErrorWithPostInfo {
+				post_info: pezframe_support::dispatch::PostDispatchInfo {
 					actual_weight: Some(
 						<Pallet<Test> as ExecuteControllerWeightInfo>::execute() + weight
 					),
-					pays_fee: frame_support::dispatch::Pays::Yes,
+					pays_fee: pezframe_support::dispatch::Pays::Yes,
 				},
-				error: sp_runtime::DispatchError::from(
+				error: pezsp_runtime::DispatchError::from(
 					Error::<Test>::LocalExecutionIncompleteWithError {
 						index: 3,
 						error: XcmError::FailedToTransactAsset("").into()
@@ -1678,7 +1678,7 @@ fn record_xcm_works() {
 #[test]
 fn execute_initiate_transfer_and_check_sent_event() {
 	use crate::Event;
-	use sp_tracing::{
+	use pezsp_tracing::{
 		test_log_capture::init_log_capture,
 		tracing::{subscriber, Level},
 	};
@@ -1739,7 +1739,7 @@ fn execute_initiate_transfer_and_check_sent_event() {
 
 #[test]
 fn deliver_failure_with_expect_error() {
-	use sp_tracing::{
+	use pezsp_tracing::{
 		test_log_capture::init_log_capture,
 		tracing::{subscriber, Level},
 	};

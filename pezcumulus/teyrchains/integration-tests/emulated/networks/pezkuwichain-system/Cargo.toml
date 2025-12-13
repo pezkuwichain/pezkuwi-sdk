@@ -1,0 +1,32 @@
+[package]
+name = "pezkuwichain-system-emulated-network"
+version = "0.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Pezkuwichain System emulated network"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Pezcumulus
+asset-hub-pezkuwichain-emulated-chain = { workspace = true }
+bridge-hub-pezkuwichain-emulated-chain = { workspace = true }
+coretime-pezkuwichain-emulated-chain = { workspace = true }
+emulated-integration-tests-common = { workspace = true }
+penpal-emulated-chain = { workspace = true }
+people-pezkuwichain-emulated-chain = { workspace = true }
+pezkuwichain-emulated-chain = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-hub-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"bridge-hub-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"coretime-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"penpal-emulated-chain/runtime-benchmarks",
+	"people-pezkuwichain-emulated-chain/runtime-benchmarks",
+	"pezkuwichain-emulated-chain/runtime-benchmarks",
+]

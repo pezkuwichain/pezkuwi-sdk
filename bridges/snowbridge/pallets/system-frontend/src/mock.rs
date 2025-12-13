@@ -3,36 +3,36 @@
 use crate as snowbridge_system_frontend;
 #[cfg(feature = "runtime-benchmarks")]
 use crate::BenchmarkHelper;
-use frame_support::{
+use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::{AsEnsureOriginWithArg, Everything},
 };
 use snowbridge_core::ParaId;
 use snowbridge_test_utils::mock_swap_executor::SwapExecutor;
-pub use snowbridge_test_utils::{mock_origin::pallet_xcm_origin, mock_xcm::*};
-use sp_core::H256;
-use sp_runtime::{
+pub use snowbridge_test_utils::{mock_origin::pezpallet_xcm_origin, mock_xcm::*};
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{AccountIdConversion, BlakeTwo256, IdentityLookup},
 	AccountId32, BuildStorage,
 };
 use xcm::prelude::*;
 
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 pub type AccountId = AccountId32;
 
 // Configure a mock runtime to test the pallet.
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		XcmOrigin: pallet_xcm_origin::{Pallet, Origin},
+		System: pezframe_system,
+		XcmOrigin: pezpallet_xcm_origin::{Pallet, Origin},
 		EthereumSystemFrontend: snowbridge_system_frontend,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
-	type BaseCallFilter = frame_support::traits::Everything;
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
+	type BaseCallFilter = pezframe_support::traits::Everything;
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	type RuntimeTask = RuntimeTask;
@@ -42,19 +42,19 @@ impl frame_system::Config for Test {
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type RuntimeEvent = RuntimeEvent;
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<u128>;
+	type AccountData = pezpallet_balances::AccountData<u128>;
 	type Nonce = u64;
 	type Block = Block;
 }
 
-impl pallet_xcm_origin::Config for Test {
+impl pezpallet_xcm_origin::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 }
 
 #[cfg(feature = "runtime-benchmarks")]
 impl BenchmarkHelper<RuntimeOrigin, AccountId> for () {
 	fn make_xcm_origin(location: Location) -> RuntimeOrigin {
-		RuntimeOrigin::from(pallet_xcm_origin::Origin(location))
+		RuntimeOrigin::from(pezpallet_xcm_origin::Origin(location))
 	}
 
 	fn initialize_storage(_: Location, _: Location) {}
@@ -90,7 +90,7 @@ impl xcm_executor::traits::ConvertLocation<AccountId> for AccountIdConverter {
 
 impl crate::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type RegisterTokenOrigin = AsEnsureOriginWithArg<pallet_xcm_origin::EnsureXcm<Everything>>;
+	type RegisterTokenOrigin = AsEnsureOriginWithArg<pezpallet_xcm_origin::EnsureXcm<Everything>>;
 	type XcmSender = MockXcmSender;
 	type AssetTransactor = SuccessfulTransactor;
 	type EthereumLocation = Ether;
@@ -107,9 +107,9 @@ impl crate::Config for Test {
 }
 
 // Build genesis storage according to the mock runtime.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let storage = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	let mut ext: sp_io::TestExternalities = storage.into();
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let mut ext: pezsp_io::TestExternalities = storage.into();
 	ext.execute_with(|| {
 		System::set_block_number(1);
 	});
@@ -117,5 +117,5 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 }
 
 pub fn make_xcm_origin(location: Location) -> RuntimeOrigin {
-	pallet_xcm_origin::Origin(location).into()
+	pezpallet_xcm_origin::Origin(location).into()
 }

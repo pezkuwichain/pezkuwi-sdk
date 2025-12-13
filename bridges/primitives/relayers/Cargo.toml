@@ -20,12 +20,12 @@ bp-messages = { workspace = true }
 bp-runtime = { workspace = true }
 bp-teyrchains = { workspace = true }
 
-# Substrate Dependencies
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-pallet-utility = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+# Bizinikiwi Dependencies
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezpallet-utility = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 [dev-dependencies]
 hex-literal = { workspace = true, default-features = true }
@@ -38,20 +38,20 @@ std = [
 	"bp-runtime/std",
 	"bp-teyrchains/std",
 	"codec/std",
-	"frame-support/std",
-	"frame-system/std",
-	"pallet-utility/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-utility/std",
 	"scale-info/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
 	"bp-header-chain/runtime-benchmarks",
 	"bp-messages/runtime-benchmarks",
 	"bp-runtime/runtime-benchmarks",
 	"bp-teyrchains/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"pallet-utility/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

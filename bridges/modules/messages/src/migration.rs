@@ -17,7 +17,7 @@
 //! A module that is responsible for migration of storage.
 
 use crate::{Config, Pallet};
-use frame_support::{
+use pezframe_support::{
 	traits::{Get, StorageVersion},
 	weights::Weight,
 };
@@ -33,7 +33,7 @@ pub mod v0 {
 	use bp_messages::{MessageNonce, UnrewardedRelayer};
 	use bp_runtime::AccountIdOf;
 	use codec::{Decode, Encode};
-	use sp_std::collections::vec_deque::VecDeque;
+	use pezsp_std::collections::vec_deque::VecDeque;
 
 	#[derive(Encode, Decode, Clone, PartialEq, Eq)]
 	pub(crate) struct StoredInboundLaneData<T: Config<I>, I: 'static>(
@@ -60,8 +60,8 @@ pub mod v1 {
 		InboundLaneData, InboundLanes, OutboundLaneData, OutboundLanes, StoredInboundLaneData,
 	};
 	use bp_messages::LaneState;
-	use frame_support::traits::UncheckedOnRuntimeUpgrade;
-	use sp_std::marker::PhantomData;
+	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
+	use pezsp_std::marker::PhantomData;
 
 	/// Migrates the pallet storage to v1.
 	pub struct UncheckedMigrationV0ToV1<T, I>(PhantomData<(T, I)>);
@@ -98,7 +98,7 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<sp_std::vec::Vec<u8>, sp_runtime::DispatchError> {
+		fn pre_upgrade() -> Result<pezsp_std::vec::Vec<u8>, pezsp_runtime::DispatchError> {
 			use codec::Encode;
 
 			let number_of_inbound_to_migrate = InboundLanes::<T, I>::iter_keys().count();
@@ -107,7 +107,7 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: sp_std::vec::Vec<u8>) -> Result<(), sp_runtime::DispatchError> {
+		fn post_upgrade(state: pezsp_std::vec::Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
 			use codec::Decode;
 			const LOG_TARGET: &str = "runtime::bridge-messages-migration";
 
@@ -119,11 +119,11 @@ pub mod v1 {
 			tracing::info!(target: LOG_TARGET, %number_of_inbound_to_migrate, "post-upgrade expects inbound lanes to have been migrated.");
 			tracing::info!(target: LOG_TARGET, %number_of_outbound_to_migrate, "post-upgrade expects outbound lanes to have been migrated.");
 
-			frame_support::ensure!(
+			pezframe_support::ensure!(
 				number_of_inbound_to_migrate as usize == number_of_inbound,
 				"must migrate all `InboundLanes`."
 			);
-			frame_support::ensure!(
+			pezframe_support::ensure!(
 				number_of_outbound_to_migrate as usize == number_of_outbound,
 				"must migrate all `OutboundLanes`."
 			);
@@ -134,13 +134,13 @@ pub mod v1 {
 	}
 
 	/// [`UncheckedMigrationV0ToV1`] wrapped in a
-	/// [`VersionedMigration`](frame_support::migrations::VersionedMigration), ensuring the
+	/// [`VersionedMigration`](pezframe_support::migrations::VersionedMigration), ensuring the
 	/// migration is only performed when on-chain version is 0.
-	pub type MigrationToV1<T, I> = frame_support::migrations::VersionedMigration<
+	pub type MigrationToV1<T, I> = pezframe_support::migrations::VersionedMigration<
 		0,
 		1,
 		UncheckedMigrationV0ToV1<T, I>,
 		Pallet<T, I>,
-		<T as frame_system::Config>::DbWeight,
+		<T as pezframe_system::Config>::DbWeight,
 	>;
 }

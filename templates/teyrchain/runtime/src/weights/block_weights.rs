@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -18,7 +18,7 @@
 pub mod constants {
 	use pezkuwi_sdk::*;
 
-	use frame_support::{
+	use pezframe_support::{
 		parameter_types,
 		weights::{constants, Weight},
 	};
@@ -33,7 +33,7 @@ pub mod constants {
 	mod test_weights {
 		use pezkuwi_sdk::*;
 
-		use frame_support::weights::constants;
+		use pezframe_support::weights::constants;
 
 		/// Checks that the weight exists and is sane.
 		// NOTE: If this test fails but you are sure that the generated values are fine,

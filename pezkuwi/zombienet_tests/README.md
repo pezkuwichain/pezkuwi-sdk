@@ -22,14 +22,14 @@ are:
 - `malus` -> `pezkuwi/target/testnet/malus`
 - `pezkuwi` -> `pezkuwi/target/testnet/pezkuwi`, `pezkuwi/target/testnet/pezkuwi-prepare-worker`,
   `pezkuwi/target/testnet/pezkuwi-execute-worker`
-- `pezkuwi-collator` -> `cumulus/target/release/pezkuwi-teyrchain`
+- `pezkuwi-collator` -> `pezcumulus/target/release/pezkuwi-teyrchain`
 - `undying-collator` -> `pezkuwi/target/testnet/undying-collator`
 
 To build them use:
 - `adder-collator` -> `cargo build --profile testnet -p test-teyrchain-adder-collator`
 - `undying-collator` -> `cargo build --profile testnet -p test-teyrchain-undying-collator`
 - `malus` -> `cargo build --profile testnet -p pezkuwi-test-malus`
-- `pezkuwi` (in the PezkuwiChain repo) and `pezkuwi-collator` (in Cumulus repo) -> `cargo build --profile testnet`
+- `pezkuwi` (in the PezkuwiChain repo) and `pezkuwi-collator` (in Pezcumulus repo) -> `cargo build --profile testnet`
 
 One solution is to use the `.set_env` file (from this directory) and fill the `CUSTOM_PATHS` before _source_ it to patch
 the PATH of your system to find the binaries you just built.
@@ -42,7 +42,7 @@ $ cat .set_env
 CUSTOM_PATHS=(
   "~/pezkuwi/target/release"
   "~/pezkuwi/target/testnet"
-  "~/cumulus/target/release"
+  "~/pezcumulus/target/release"
 )
 (...)
 

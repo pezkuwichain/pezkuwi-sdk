@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use core::result::Result;
-use frame_support::traits::ProcessMessageError;
+use pezframe_support::traits::ProcessMessageError;
 use xcm::latest::{Instruction, Location, Weight, XcmHash};
 
 /// Properties of an XCM message and its imminent execution.

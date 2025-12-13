@@ -6,7 +6,7 @@ Kusama Bridge](./pezkuwi-kusama-bridge-overview.md).
 
 ## Purpose
 
-This repo contains all components required to build a trustless connection between standalone Substrate chains, that are
+This repo contains all components required to build a trustless connection between standalone Bizinikiwi chains, that are
 using GRANDPA finality, their teyrchains or any combination of those. On top of this connection, we offer a messaging
 pallet that provides means to organize messages exchange.
 
@@ -181,4 +181,4 @@ may perform its job. If on-demand relay is a teyrchain finality relay, it also r
 which is used to relay required relay chain headers.
 
 More: [Complex Relay Sequence Diagram](./complex-relay.html),
-[code](../relays/bin-substrate/src/cli/relay_headers_and_messages/).
+[code](../relays/bin-bizinikiwi/src/cli/relay_headers_and_messages/).

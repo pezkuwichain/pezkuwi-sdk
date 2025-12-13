@@ -26,9 +26,9 @@ use crate::{
 };
 
 use alloc::vec;
-use frame_benchmarking::v2::*;
-use frame_system::RawOrigin;
-use sp_runtime::traits::Bounded;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::RawOrigin;
+use pezsp_runtime::traits::Bounded;
 
 use pezkuwi_primitives::{
 	HeadData, Id as ParaId, SessionIndex, ValidationCode, ON_DEMAND_DEFAULT_QUEUE_MAX_SIZE,

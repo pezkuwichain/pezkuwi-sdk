@@ -30,10 +30,10 @@ use bp_test_utils::{
 	JustificationGeneratorParams, ALICE, BOB, CHARLIE, DAVE, EVE, FERDIE, TEST_GRANDPA_SET_ID,
 };
 use finality_grandpa::voter_set::VoterSet;
-use sp_consensus_grandpa::{AuthorityId, AuthorityWeight, SetId};
-use sp_runtime::traits::Header as HeaderT;
+use pezsp_consensus_grandpa::{AuthorityId, AuthorityWeight, SetId};
+use pezsp_runtime::traits::Header as HeaderT;
 
-type TestHeader = sp_runtime::testing::Header;
+type TestHeader = pezsp_runtime::testing::Header;
 type TestHash = <TestHeader as HeaderT>::Hash;
 type TestNumber = <TestHeader as HeaderT>::Number;
 

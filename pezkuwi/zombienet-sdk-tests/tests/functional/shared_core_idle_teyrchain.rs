@@ -50,7 +50,7 @@ async fn shared_core_idle_teyrchain_test() -> Result<(), anyhow::Error> {
 				// assign it to the para.
 				.onboard_as_teyrchain(false)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec![
 					("-lteyrchain=debug,aura=debug").into(),
 					"--authoring=slot-based".into(),

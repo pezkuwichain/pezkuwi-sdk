@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -18,7 +18,7 @@
 fn main() {
 	#[cfg(feature = "std")]
 	{
-		substrate_wasm_builder::WasmBuilder::new()
+		bizinikiwi_wasm_builder::WasmBuilder::new()
 			.with_current_project()
 			.export_heap_base()
 			.import_memory()

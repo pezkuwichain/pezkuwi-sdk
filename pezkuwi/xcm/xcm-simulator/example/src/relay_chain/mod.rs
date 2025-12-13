@@ -19,7 +19,7 @@
 mod xcm_config;
 pub use xcm_config::*;
 
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
 	traits::{
 		AsEnsureOriginWithArg, ConstU128, Disabled, Everything, Nothing, ProcessMessage,
@@ -28,9 +28,9 @@ use frame_support::{
 	weights::{Weight, WeightMeter},
 };
 
-use frame_system::EnsureRoot;
-use sp_core::ConstU32;
-use sp_runtime::{traits::IdentityLookup, AccountId32};
+use pezframe_system::EnsureRoot;
+use pezsp_core::ConstU32;
+use pezsp_runtime::{traits::IdentityLookup, AccountId32};
 
 use pezkuwi_runtime_teyrchains::{
 	configuration,
@@ -48,33 +48,33 @@ parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	type ExistentialDeposit = ConstU128<1>;
 	type AccountStore = System;
 }
 
-impl pallet_uniques::Config for Runtime {
+impl pezpallet_uniques::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type CollectionId = u32;
 	type ItemId = u32;
 	type Currency = Balances;
-	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
-	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
-	type CollectionDeposit = frame_support::traits::ConstU128<1_000>;
-	type ItemDeposit = frame_support::traits::ConstU128<1_000>;
-	type MetadataDepositBase = frame_support::traits::ConstU128<1_000>;
-	type AttributeDepositBase = frame_support::traits::ConstU128<1_000>;
-	type DepositPerByte = frame_support::traits::ConstU128<1>;
+	type CreateOrigin = AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
+	type ForceOrigin = pezframe_system::EnsureRoot<AccountId>;
+	type CollectionDeposit = pezframe_support::traits::ConstU128<1_000>;
+	type ItemDeposit = pezframe_support::traits::ConstU128<1_000>;
+	type MetadataDepositBase = pezframe_support::traits::ConstU128<1_000>;
+	type AttributeDepositBase = pezframe_support::traits::ConstU128<1_000>;
+	type DepositPerByte = pezframe_support::traits::ConstU128<1>;
 	type StringLimit = ConstU32<64>;
 	type KeyLimit = ConstU32<64>;
 	type ValueLimit = ConstU32<128>;
@@ -95,7 +95,7 @@ impl configuration::Config for Runtime {
 pub type LocalOriginToLocation =
 	SignedToAccountId32<RuntimeOrigin, AccountId, constants::RelayNetwork>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = xcm_builder::EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -110,7 +110,7 @@ impl pallet_xcm::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<constants::TokenLocation>;
 	type TrustedLockers = ();
@@ -118,14 +118,14 @@ impl pallet_xcm::Config for Runtime {
 	type MaxLockers = ConstU32<8>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type AuthorizedAliasConsideration = Disabled;
 }
 
 impl origin::Config for Runtime {}
 
-type Block = frame_system::mocking::MockBlock<Runtime>;
+type Block = pezframe_system::mocking::MockBlock<Runtime>;
 
 parameter_types! {
 	/// Amount of weight that can be spent per block to service messages.
@@ -156,7 +156,7 @@ impl ProcessMessage for MessageProcessor {
 	}
 }
 
-impl pallet_message_queue::Config for Runtime {
+impl pezpallet_message_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Size = u32;
 	type HeapSize = MessageQueueHeapSize;
@@ -172,11 +172,11 @@ impl pallet_message_queue::Config for Runtime {
 construct_runtime!(
 	pub enum Runtime
 	{
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		ParasOrigin: origin,
-		XcmPallet: pallet_xcm,
-		Uniques: pallet_uniques,
-		MessageQueue: pallet_message_queue,
+		XcmPallet: pezpallet_xcm,
+		Uniques: pezpallet_uniques,
+		MessageQueue: pezpallet_message_queue,
 	}
 );

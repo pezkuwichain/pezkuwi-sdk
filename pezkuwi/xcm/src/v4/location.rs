@@ -33,7 +33,7 @@ use scale_info::TypeInfo;
 /// - A layer-0 super-chain, e.g. the Pezkuwi Relay chain.
 /// - A layer-2 smart contract, e.g. an ERC-20 on Ethereum.
 /// - A logical functional component of a chain, e.g. a single instance of a pallet on a Frame-based
-///   Substrate chain.
+///   Bizinikiwi chain.
 /// - An account.
 ///
 /// A `Location` is a *relative identifier*, meaning that it can only be used to define the
@@ -139,7 +139,7 @@ impl Location {
 	/// To be used when pattern matching, for example:
 	///
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions::*, Junction::*, Location};
+	/// # use pezstaging_xcm::v4::{Junctions::*, Junction::*, Location};
 	/// fn get_teyrchain_id(loc: &Location) -> Option<u32> {
 	///     match loc.unpack() {
 	///         (0, [Teyrchain(id)]) => Some(*id),
@@ -274,7 +274,7 @@ impl Location {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions::*, Junction::*, Location};
+	/// # use pezstaging_xcm::v4::{Junctions::*, Junction::*, Location};
 	/// # fn main() {
 	/// let mut m = Location::new(1, [PalletInstance(3), OnlyChild]);
 	/// assert_eq!(
@@ -301,7 +301,7 @@ impl Location {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
+	/// # use pezstaging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
 	/// # fn main() {
 	/// let mut m: Location = (Parent, Teyrchain(21), 69u64).into();
 	/// assert_eq!(m.append_with((Parent, PalletInstance(3))), Ok(()));
@@ -322,7 +322,7 @@ impl Location {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
+	/// # use pezstaging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
 	/// # fn main() {
 	/// let mut m: Location = (Parent, Teyrchain(21), 69u64).into();
 	/// let r = m.appended_with((Parent, PalletInstance(3))).unwrap();
@@ -342,7 +342,7 @@ impl Location {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
+	/// # use pezstaging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
 	/// # fn main() {
 	/// let mut m: Location = (Parent, Parent, PalletInstance(3)).into();
 	/// assert_eq!(m.prepend_with((Parent, Teyrchain(21), OnlyChild)), Ok(()));
@@ -391,7 +391,7 @@ impl Location {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
+	/// # use pezstaging_xcm::v4::{Junctions::*, Junction::*, Location, Parent};
 	/// # fn main() {
 	/// let m: Location = (Parent, Parent, PalletInstance(3)).into();
 	/// let r = m.prepended_with((Parent, Teyrchain(21), OnlyChild)).unwrap();
@@ -448,7 +448,7 @@ impl Reanchorable for Location {
 	///
 	/// Does not modify `self` in case of overflow.
 	fn reanchor(&mut self, target: &Location, context: &InteriorLocation) -> Result<(), ()> {
-		// TODO: https://github.com/paritytech/polkadot/issues/4489 Optimize this.
+		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/149 Optimize this.
 
 		// 1. Use our `context` to figure out how the `target` would address us.
 		let inverted_target = context.invert_target(target)?;
@@ -549,8 +549,8 @@ impl From<[u8; 32]> for Location {
 	}
 }
 
-impl From<sp_runtime::AccountId32> for Location {
-	fn from(id: sp_runtime::AccountId32) -> Self {
+impl From<pezsp_runtime::AccountId32> for Location {
+	fn from(id: pezsp_runtime::AccountId32) -> Self {
 		Junction::AccountId32 { network: None, id: id.into() }.into()
 	}
 }

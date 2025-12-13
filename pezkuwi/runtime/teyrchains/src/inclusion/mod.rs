@@ -35,14 +35,14 @@ use alloc::{
 use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::fmt;
-use frame_support::{
+use pezframe_support::{
 	defensive,
-	pallet_prelude::*,
+	pezpallet_prelude::*,
 	traits::{EnqueueMessage, Footprint, QueueFootprint, QueueFootprintQuery},
 	BoundedSlice,
 };
-use frame_system::pallet_prelude::*;
-use pallet_message_queue::OnQueueChanged;
+use pezframe_system::pezpallet_prelude::*;
+use pezpallet_message_queue::OnQueueChanged;
 use pezkuwi_primitives::{
 	effective_minimum_backing_votes, skip_ump_signals, supermajority_threshold, well_known_keys,
 	BackedCandidate, CandidateCommitments, CandidateDescriptorV2 as CandidateDescriptor,
@@ -52,7 +52,7 @@ use pezkuwi_primitives::{
 	ValidatorIndex, ValidityAttestation,
 };
 use scale_info::TypeInfo;
-use sp_runtime::{traits::One, DispatchError, SaturatedConversion, Saturating};
+use pezsp_runtime::{traits::One, DispatchError, SaturatedConversion, Saturating};
 
 pub use pallet::*;
 
@@ -268,7 +268,7 @@ impl From<u32> for AggregateMessageOrigin {
 pub type MaxUmpMessageLenOf<T> =
 	<<T as Config>::MessageQueue as EnqueueMessage<AggregateMessageOrigin>>::MaxMessageLen;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -280,7 +280,7 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config:
-		frame_system::Config
+		pezframe_system::Config
 		+ shared::Config
 		+ paras::Config
 		+ dmp::Config
@@ -289,7 +289,7 @@ pub mod pallet {
 		+ scheduler::Config
 	{
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type DisputesHandler: disputes::DisputesHandler<BlockNumberFor<Self>>;
 		type RewardValidators: RewardValidators;
 
@@ -647,7 +647,7 @@ impl<T: Config> Pallet<T> {
 			return Ok(Default::default());
 		}
 
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let validators = shared::ActiveValidatorKeys::<T>::get();
 
 		// Collect candidate receipts with backers.
@@ -880,7 +880,7 @@ impl<T: Config> Pallet<T> {
 
 		if let Some(new_code) = commitments.new_validation_code {
 			// Block number of candidate's inclusion.
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 
 			paras::Pallet::<T>::schedule_code_upgrade(
 				receipt.descriptor.para_id(),
@@ -1235,7 +1235,7 @@ impl<T: Config> CandidateCheckContext<T> {
 	pub(crate) fn verify_backed_candidate(
 		&self,
 		allowed_relay_parents: &AllowedRelayParentsTracker<T::Hash, BlockNumberFor<T>>,
-		backed_candidate_receipt: &CommittedCandidateReceipt<<T as frame_system::Config>::Hash>,
+		backed_candidate_receipt: &CommittedCandidateReceipt<<T as pezframe_system::Config>::Hash>,
 		parent_head_data: HeadData,
 	) -> Result<BlockNumberFor<T>, Error<T>> {
 		let para_id = backed_candidate_receipt.descriptor.para_id();

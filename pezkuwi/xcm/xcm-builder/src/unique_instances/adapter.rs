@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use core::marker::PhantomData;
-use frame_support::traits::tokens::asset_ops::{
+use pezframe_support::traits::tokens::asset_ops::{
 	common_strategies::{
 		ChangeOwnerFrom, ConfigValue, DeriveAndReportId, IfOwnedBy, Owner, WithConfig,
 		WithConfigValue,

@@ -30,7 +30,7 @@ use pezkuwi_teyrchain_primitives::primitives::{
 };
 use procfs::process;
 use rusty_fork::rusty_fork_test;
-use sp_core::H256;
+use pezsp_core::H256;
 use std::{future::Future, sync::Arc, time::Duration};
 use test_teyrchain_adder::{hash_state, BlockData, HeadData};
 

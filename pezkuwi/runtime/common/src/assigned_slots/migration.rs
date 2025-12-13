@@ -15,25 +15,25 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::{Config, MaxPermanentSlots, MaxTemporarySlots, Pallet, LOG_TARGET};
-use frame_support::traits::{Get, GetStorageVersion, UncheckedOnRuntimeUpgrade};
+use pezframe_support::traits::{Get, GetStorageVersion, UncheckedOnRuntimeUpgrade};
 
 #[cfg(feature = "try-runtime")]
 use alloc::vec::Vec;
 #[cfg(feature = "try-runtime")]
-use frame_support::ensure;
+use pezframe_support::ensure;
 
 pub mod v1 {
 	use super::*;
 	pub struct VersionUncheckedMigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateToV1<T> {
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 			let on_chain_version = Pallet::<T>::on_chain_storage_version();
 			ensure!(on_chain_version < 1, "assigned_slots::MigrateToV1 migration can be deleted");
 			Ok(Default::default())
 		}
 
-		fn on_runtime_upgrade() -> frame_support::weights::Weight {
+		fn on_runtime_upgrade() -> pezframe_support::weights::Weight {
 			let on_chain_version = Pallet::<T>::on_chain_storage_version();
 			if on_chain_version < 1 {
 				const MAX_PERMANENT_SLOTS: u32 = 100;
@@ -50,7 +50,7 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(_state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+		fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			let on_chain_version = Pallet::<T>::on_chain_storage_version();
 			ensure!(on_chain_version == 1, "assigned_slots::MigrateToV1 needs to be run");
 			assert_eq!(MaxPermanentSlots::<T>::get(), 100);
@@ -60,13 +60,13 @@ pub mod v1 {
 	}
 
 	/// [`VersionUncheckedMigrateToV1`] wrapped in a
-	/// [`VersionedMigration`](frame_support::migrations::VersionedMigration), ensuring the
+	/// [`VersionedMigration`](pezframe_support::migrations::VersionedMigration), ensuring the
 	/// migration is only performed when on-chain version is 0.
-	pub type MigrateToV1<T> = frame_support::migrations::VersionedMigration<
+	pub type MigrateToV1<T> = pezframe_support::migrations::VersionedMigration<
 		0,
 		1,
 		VersionUncheckedMigrateToV1<T>,
 		Pallet<T>,
-		<T as frame_system::Config>::DbWeight,
+		<T as pezframe_system::Config>::DbWeight,
 	>;
 }

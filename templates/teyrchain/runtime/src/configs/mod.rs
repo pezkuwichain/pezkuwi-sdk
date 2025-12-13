@@ -25,14 +25,14 @@
 
 mod xcm_config;
 
-use pezkuwi_sdk::{staging_teyrchain_info as teyrchain_info, staging_xcm as xcm, *};
+use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, pezstaging_xcm as xcm, *};
 #[cfg(not(feature = "runtime-benchmarks"))]
-use pezkuwi_sdk::{staging_xcm_builder as xcm_builder, staging_xcm_executor as xcm_executor};
+use pezkuwi_sdk::{pezstaging_xcm_builder as xcm_builder, pezstaging_xcm_executor as xcm_executor};
 
-// Substrate and Pezkuwi dependencies
+// Bizinikiwi and Pezkuwi dependencies
 use cumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
-use frame_support::{
+use pezframe_support::{
 	derive_impl,
 	dispatch::DispatchClass,
 	parameter_types,
@@ -42,17 +42,17 @@ use frame_support::{
 	weights::{ConstantMultiplier, Weight},
 	PalletId,
 };
-use frame_system::{
+use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
 };
-use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_runtime_common::{
 	xcm_sender::ExponentialPrice, BlockHashCount, SlowAdjustingFeeUpdate,
 };
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use sp_runtime::Perbill;
-use sp_version::RuntimeVersion;
+use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
+use pezsp_runtime::Perbill;
+use pezsp_version::RuntimeVersion;
 use teyrchains_common::message_queue::{NarrowOriginToSibling, ParaIdToSibling};
 use xcm::latest::prelude::{AssetId, BodyId};
 
@@ -70,7 +70,7 @@ use xcm_config::{RelayLocation, XcmOriginToTransactDispatchOrigin};
 parameter_types! {
 	pub const Version: RuntimeVersion = VERSION;
 
-	// This part is copied from Substrate's `bin/node/runtime/src/lib.rs`.
+	// This part is copied from Bizinikiwi's `bin/node/runtime/src/lib.rs`.
 	//  The `RuntimeBlockLength` and `RuntimeBlockWeights` exist here because the
 	// `DeletionWeightLimit` and `DeletionQueueDepth` depend on those to parameterize
 	// the lazy contract deletion.
@@ -103,11 +103,11 @@ parameter_types! {
 #[allow(unused_parens)]
 type SingleBlockMigrations = ();
 
-/// The default types are being injected by [`derive_impl`](`frame_support::derive_impl`) from
-/// [`TeyrchainDefaultConfig`](`struct@frame_system::config_preludes::TeyrchainDefaultConfig`),
+/// The default types are being injected by [`derive_impl`](`pezframe_support::derive_impl`) from
+/// [`TeyrchainDefaultConfig`](`struct@pezframe_system::config_preludes::TeyrchainDefaultConfig`),
 /// but overridden as needed.
-#[derive_impl(frame_system::config_preludes::TeyrchainDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TeyrchainDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	/// The identifier used to distinguish between accounts.
 	type AccountId = AccountId;
 	/// The index type for storing how many extrinsics an account has signed.
@@ -121,18 +121,18 @@ impl frame_system::Config for Runtime {
 	/// Runtime version.
 	type Version = Version;
 	/// The data to be stored in an account.
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	/// The weight of database operations that the runtime can invoke.
 	type DbWeight = RocksDbWeight;
 	/// Block & extrinsics weights: base values and limits.
 	type BlockWeights = RuntimeBlockWeights;
 	/// The maximum length of a block (in bytes).
 	type BlockLength = RuntimeBlockLength;
-	/// This is used as an identifier of the chain. 42 is the generic substrate prefix.
+	/// This is used as an identifier of the chain. 42 is the generic bizinikiwi prefix.
 	type SS58Prefix = SS58Prefix;
 	/// The action to take on a Runtime Upgrade
 	type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = SingleBlockMigrations;
 }
 
@@ -141,7 +141,7 @@ impl cumulus_pallet_weight_reclaim::Config for Runtime {
 	type WeightInfo = ();
 }
 
-impl pallet_timestamp::Config for Runtime {
+impl pezpallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
 	type OnTimestampSet = Aura;
@@ -149,8 +149,8 @@ impl pallet_timestamp::Config for Runtime {
 	type WeightInfo = ();
 }
 
-impl pallet_authorship::Config for Runtime {
-	type FindAuthor = pallet_session::FindAccountFromAuthorIndex<Self, Aura>;
+impl pezpallet_authorship::Config for Runtime {
+	type FindAuthor = pezpallet_session::FindAccountFromAuthorIndex<Self, Aura>;
 	type EventHandler = (CollatorSelection,);
 }
 
@@ -158,7 +158,7 @@ parameter_types! {
 	pub const ExistentialDeposit: Balance = EXISTENTIAL_DEPOSIT;
 }
 
-impl pallet_balances::Config for Runtime {
+impl pezpallet_balances::Config for Runtime {
 	type MaxLocks = ConstU32<50>;
 	/// The type for recording an account's balance.
 	type Balance = Balance;
@@ -167,7 +167,7 @@ impl pallet_balances::Config for Runtime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
-	type WeightInfo = pallet_balances::weights::SubstrateWeight<Runtime>;
+	type WeightInfo = pezpallet_balances::weights::BizinikiwiWeight<Runtime>;
 	type MaxReserves = ConstU32<50>;
 	type ReserveIdentifier = [u8; 8];
 	type RuntimeHoldReason = RuntimeHoldReason;
@@ -182,9 +182,9 @@ parameter_types! {
 	pub const TransactionByteFee: Balance = 10 * MICRO_UNIT;
 }
 
-impl pallet_transaction_payment::Config for Runtime {
+impl pezpallet_transaction_payment::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type OnChargeTransaction = pallet_transaction_payment::FungibleAdapter<Balances, ()>;
+	type OnChargeTransaction = pezpallet_transaction_payment::FungibleAdapter<Balances, ()>;
 	type WeightToFee = WeightToFee;
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type FeeMultiplierUpdate = SlowAdjustingFeeUpdate<Self>;
@@ -192,7 +192,7 @@ impl pallet_transaction_payment::Config for Runtime {
 	type WeightInfo = ();
 }
 
-impl pallet_sudo::Config for Runtime {
+impl pezpallet_sudo::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
 	type WeightInfo = ();
@@ -210,7 +210,7 @@ impl cumulus_pallet_teyrchain_system::Config for Runtime {
 	type OnSystemEvent = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
 	type OutboundXcmpMessageSource = XcmpQueue;
-	type DmpQueue = frame_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
+	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type ReservedDmpWeight = ReservedDmpWeight;
 	type XcmpMessageHandler = XcmpQueue;
 	type ReservedXcmpWeight = ReservedXcmpWeight;
@@ -225,11 +225,11 @@ parameter_types! {
 	pub MessageQueueServiceWeight: Weight = Perbill::from_percent(35) * RuntimeBlockWeights::get().max_block;
 }
 
-impl pallet_message_queue::Config for Runtime {
+impl pezpallet_message_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	#[cfg(feature = "runtime-benchmarks")]
-	type MessageProcessor = pallet_message_queue::mock_helpers::NoopMessageProcessor<
+	type MessageProcessor = pezpallet_message_queue::mock_helpers::NoopMessageProcessor<
 		cumulus_primitives_core::AggregateMessageOrigin,
 	>;
 	#[cfg(not(feature = "runtime-benchmarks"))]
@@ -242,8 +242,8 @@ impl pallet_message_queue::Config for Runtime {
 	// The XCMP queue pallet is only ever able to handle the `Sibling(ParaId)` origin:
 	type QueueChangeHandler = NarrowOriginToSibling<XcmpQueue>;
 	type QueuePausedQuery = NarrowOriginToSibling<XcmpQueue>;
-	type HeapSize = sp_core::ConstU32<{ 103 * 1024 }>;
-	type MaxStale = sp_core::ConstU32<8>;
+	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
+	type MaxStale = pezsp_core::ConstU32<8>;
 	type ServiceWeight = MessageQueueServiceWeight;
 	type IdleMaxServiceWeight = ();
 }
@@ -272,7 +272,7 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type VersionWrapper = ();
 	// Enqueue XCMP messages from siblings for later processing.
 	type XcmpQueue = TransformOrigin<MessageQueue, AggregateMessageOrigin, ParaId, ParaIdToSibling>;
-	type MaxInboundSuspended = sp_core::ConstU32<1_000>;
+	type MaxInboundSuspended = pezsp_core::ConstU32<1_000>;
 	type MaxActiveOutboundChannels = ConstU32<128>;
 	type MaxPageSize = ConstU32<{ 1 << 16 }>;
 	type ControllerOrigin = EnsureRoot<AccountId>;
@@ -286,16 +286,16 @@ parameter_types! {
 	pub const Offset: u32 = 0;
 }
 
-impl pallet_session::Config for Runtime {
+impl pezpallet_session::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type ValidatorId = <Self as frame_system::Config>::AccountId;
+	type ValidatorId = <Self as pezframe_system::Config>::AccountId;
 	// we don't have stash and controller, thus we don't need the convert as well.
-	type ValidatorIdOf = pallet_collator_selection::IdentityCollator;
-	type ShouldEndSession = pallet_session::PeriodicSessions<Period, Offset>;
-	type NextSessionRotation = pallet_session::PeriodicSessions<Period, Offset>;
+	type ValidatorIdOf = pezpallet_collator_selection::IdentityCollator;
+	type ShouldEndSession = pezpallet_session::PeriodicSessions<Period, Offset>;
+	type NextSessionRotation = pezpallet_session::PeriodicSessions<Period, Offset>;
 	type SessionManager = CollatorSelection;
 	// Essentially just Aura, but let's be pedantic.
-	type SessionHandler = <SessionKeys as sp_runtime::traits::OpaqueKeys>::KeyTypeIdProviders;
+	type SessionHandler = <SessionKeys as pezsp_runtime::traits::OpaqueKeys>::KeyTypeIdProviders;
 	type Keys = SessionKeys;
 	type DisablingStrategy = ();
 	type WeightInfo = ();
@@ -304,7 +304,7 @@ impl pallet_session::Config for Runtime {
 }
 
 #[docify::export(aura_config)]
-impl pallet_aura::Config for Runtime {
+impl pezpallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
 	type DisabledValidators = ();
 	type MaxAuthorities = ConstU32<100_000>;
@@ -325,7 +325,7 @@ pub type CollatorSelectionUpdateOrigin = EitherOfDiverse<
 	EnsureXcm<IsVoiceOfBody<RelayLocation, StakingAdminBodyId>>,
 >;
 
-impl pallet_collator_selection::Config for Runtime {
+impl pezpallet_collator_selection::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type UpdateOrigin = CollatorSelectionUpdateOrigin;
@@ -335,14 +335,14 @@ impl pallet_collator_selection::Config for Runtime {
 	type MaxInvulnerables = ConstU32<20>;
 	// should be a multiple of session or things will get inconsistent
 	type KickThreshold = Period;
-	type ValidatorId = <Self as frame_system::Config>::AccountId;
-	type ValidatorIdOf = pallet_collator_selection::IdentityCollator;
+	type ValidatorId = <Self as pezframe_system::Config>::AccountId;
+	type ValidatorIdOf = pezpallet_collator_selection::IdentityCollator;
 	type ValidatorRegistration = Session;
 	type WeightInfo = ();
 }
 
 /// Configure the pallet template in pallets/template.
-impl pallet_teyrchain_template::Config for Runtime {
+impl pezpallet_teyrchain_template::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_teyrchain_template::weights::SubstrateWeight<Runtime>;
+	type WeightInfo = pezpallet_teyrchain_template::weights::BizinikiwiWeight<Runtime>;
 }

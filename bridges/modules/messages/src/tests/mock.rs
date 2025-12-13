@@ -43,14 +43,14 @@ use bp_runtime::{
 	messages::MessageDispatchResult, Chain, ChainId, Size, UnverifiedStorageProofParams,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::{
+use pezframe_support::{
 	derive_impl,
 	weights::{constants::RocksDbWeight, Weight},
 };
 use scale_info::TypeInfo;
-use sp_core::H256;
-use sp_runtime::{
-	testing::Header as SubstrateHeader,
+use pezsp_core::H256;
+use pezsp_runtime::{
+	testing::Header as BizinikiwiHeader,
 	traits::{BlakeTwo256, ConstU32},
 	BuildStorage, StateVersion,
 };
@@ -84,11 +84,11 @@ impl Chain for ThisChain {
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hasher = BlakeTwo256;
-	type Header = SubstrateHeader;
+	type Header = BizinikiwiHeader;
 	type AccountId = AccountId;
 	type Balance = Balance;
 	type Nonce = u64;
-	type Signature = sp_runtime::MultiSignature;
+	type Signature = pezsp_runtime::MultiSignature;
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
 	fn max_extrinsic_size() -> u32 {
@@ -109,7 +109,7 @@ impl ChainWithMessages for ThisChain {
 pub struct BridgedChain;
 
 pub type BridgedHeaderHash = H256;
-pub type BridgedChainHeader = SubstrateHeader;
+pub type BridgedChainHeader = BizinikiwiHeader;
 
 impl Chain for BridgedChain {
 	const ID: ChainId = *b"tbch";
@@ -121,7 +121,7 @@ impl Chain for BridgedChain {
 	type AccountId = TestRelayer;
 	type Balance = Balance;
 	type Nonce = u64;
-	type Signature = sp_runtime::MultiSignature;
+	type Signature = pezsp_runtime::MultiSignature;
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
 	fn max_extrinsic_size() -> u32 {
@@ -147,41 +147,41 @@ impl ChainWithMessages for BridgedChain {
 	const MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX: MessageNonce = 128;
 }
 
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Block = pezframe_system::mocking::MockBlock<TestRuntime>;
 
-use crate as pallet_bridge_messages;
+use crate as pezpallet_bridge_messages;
 
-frame_support::construct_runtime! {
+pezframe_support::construct_runtime! {
 	pub enum TestRuntime
 	{
-		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pallet_balances::{Pallet, Call, Event<T>},
-		BridgedChainGrandpa: pallet_bridge_grandpa::{Pallet, Call, Event<T>},
-		Messages: pallet_bridge_messages::{Pallet, Call, Event<T>},
+		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pallet, Call, Event<T>},
+		BridgedChainGrandpa: pezpallet_bridge_grandpa::{Pallet, Call, Event<T>},
+		Messages: pezpallet_bridge_messages::{Pallet, Call, Event<T>},
 	}
 }
 
 pub type DbWeight = RocksDbWeight;
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type DbWeight = DbWeight;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for TestRuntime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for TestRuntime {
 	type AccountStore = System;
 }
 
-impl pallet_bridge_grandpa::Config for TestRuntime {
+impl pezpallet_bridge_grandpa::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type BridgedChain = BridgedChain;
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<1_024>;
 	type HeadersToKeep = ConstU32<8>;
-	type WeightInfo = pallet_bridge_grandpa::weights::BridgeWeight<TestRuntime>;
+	type WeightInfo = pezpallet_bridge_grandpa::weights::BridgeWeight<TestRuntime>;
 }
 
 /// weights of messages pallet calls we use in tests.
@@ -288,7 +288,7 @@ impl TestDeliveryPayments {
 	/// cleared after the call.
 	pub fn is_reward_paid(relayer: AccountId) -> bool {
 		let key = (b":delivery-relayer-reward:", relayer).encode();
-		frame_support::storage::unhashed::take::<bool>(&key).is_some()
+		pezframe_support::storage::unhashed::take::<bool>(&key).is_some()
 	}
 }
 
@@ -302,7 +302,7 @@ impl DeliveryPayments<AccountId> for TestDeliveryPayments {
 		_actual_weight: Weight,
 	) {
 		let key = (b":delivery-relayer-reward:", relayer).encode();
-		frame_support::storage::unhashed::put(&key, &true);
+		pezframe_support::storage::unhashed::put(&key, &true);
 	}
 }
 
@@ -315,7 +315,7 @@ impl TestDeliveryConfirmationPayments {
 	/// cleared after the call.
 	pub fn is_reward_paid(relayer: AccountId, fee: TestMessageFee) -> bool {
 		let key = (b":relayer-reward:", relayer, fee).encode();
-		frame_support::storage::unhashed::take::<bool>(&key).is_some()
+		pezframe_support::storage::unhashed::take::<bool>(&key).is_some()
 	}
 }
 
@@ -332,7 +332,7 @@ impl DeliveryConfirmationPayments<AccountId, TestLaneIdType> for TestDeliveryCon
 		let rewarded_relayers = relayers_rewards.len();
 		for (relayer, reward) in &relayers_rewards {
 			let key = (b":relayer-reward:", relayer, reward).encode();
-			frame_support::storage::unhashed::put(&key, &true);
+			pezframe_support::storage::unhashed::put(&key, &true);
 		}
 
 		rewarded_relayers as _
@@ -354,8 +354,8 @@ impl TestMessageDispatch {
 
 	pub fn emulate_enqueued_message(lane: TestLaneIdType) {
 		let key = (b"dispatched", lane).encode();
-		let dispatched = frame_support::storage::unhashed::get_or_default::<MessageNonce>(&key[..]);
-		frame_support::storage::unhashed::put(&key[..], &(dispatched + 1));
+		let dispatched = pezframe_support::storage::unhashed::get_or_default::<MessageNonce>(&key[..]);
+		pezframe_support::storage::unhashed::put(&key[..], &(dispatched + 1));
 	}
 }
 
@@ -365,7 +365,7 @@ impl MessageDispatch for TestMessageDispatch {
 	type LaneId = TestLaneIdType;
 
 	fn is_active(lane: Self::LaneId) -> bool {
-		frame_support::storage::unhashed::get_or_default::<MessageNonce>(
+		pezframe_support::storage::unhashed::get_or_default::<MessageNonce>(
 			&(b"dispatched", lane).encode()[..],
 		) <= BridgedChain::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX
 	}
@@ -395,13 +395,13 @@ pub struct TestOnMessagesDelivered;
 
 impl TestOnMessagesDelivered {
 	pub fn call_arguments() -> Option<(TestLaneIdType, MessageNonce)> {
-		frame_support::storage::unhashed::get(b"TestOnMessagesDelivered.OnMessagesDelivered")
+		pezframe_support::storage::unhashed::get(b"TestOnMessagesDelivered.OnMessagesDelivered")
 	}
 }
 
 impl OnMessagesDelivered<TestLaneIdType> for TestOnMessagesDelivered {
 	fn on_messages_delivered(lane: TestLaneIdType, enqueued_messages: MessageNonce) {
-		frame_support::storage::unhashed::put(
+		pezframe_support::storage::unhashed::put(
 			b"TestOnMessagesDelivered.OnMessagesDelivered",
 			&(lane, enqueued_messages),
 		);
@@ -459,15 +459,15 @@ pub fn inbound_unrewarded_relayers_state(lane: TestLaneIdType) -> UnrewardedRela
 }
 
 /// Return test externalities to use in tests.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
-	pallet_balances::GenesisConfig::<TestRuntime> {
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	pezpallet_balances::GenesisConfig::<TestRuntime> {
 		balances: vec![(ENDOWED_ACCOUNT, 1_000_000)],
 		..Default::default()
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
-	sp_io::TestExternalities::new(t)
+	pezsp_io::TestExternalities::new(t)
 }
 
 /// Run pallet test.
@@ -515,7 +515,7 @@ pub fn prepare_messages_proof(
 
 	// let's now insert bridged chain header into the storage
 	let bridged_header_hash = Default::default();
-	pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
+	pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 		bridged_header_hash,
 		StoredHeaderData { number: 0, state_root: storage_root },
 	);
@@ -548,7 +548,7 @@ pub fn prepare_messages_delivery_proof(
 
 	// let's now insert bridged chain header into the storage
 	let bridged_header_hash = Default::default();
-	pallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
+	pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 		bridged_header_hash,
 		StoredHeaderData { number: 0, state_root: storage_root },
 	);

@@ -21,7 +21,7 @@
 //! [specification](https://github.com/polkadot-fellows/xcm-format) for more information.
 
 use codec::Encode;
-use frame_support::BoundedVec;
+use pezframe_support::BoundedVec;
 use xcm::{latest::AssetTransferFilter, prelude::*};
 
 use super::mock::*;

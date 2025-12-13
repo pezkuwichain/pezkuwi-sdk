@@ -24,13 +24,13 @@ extern crate alloc;
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	generic,
 	traits::{IdentifyAccount, Verify},
 	MultiSignature,
 };
 
-pub use sp_runtime::traits::{BlakeTwo256, Hash as HashT};
+pub use pezsp_runtime::traits::{BlakeTwo256, Hash as HashT};
 
 /// The block number type used by Pezkuwi.
 /// 32-bits will allow for 136 years of blocks assuming 1 block per second.
@@ -58,7 +58,7 @@ pub type AccountIndex = u32;
 pub type ChainId = u32;
 
 /// A hash of some data used by the relay chain.
-pub type Hash = sp_core::H256;
+pub type Hash = pezsp_core::H256;
 
 /// Unit type wrapper around [`type@Hash`] that represents a candidate hash.
 ///
@@ -122,7 +122,7 @@ pub type Block = generic::Block<Header, UncheckedExtrinsic>;
 pub type BlockId = generic::BlockId<Block>;
 
 /// Opaque, encoded, unchecked extrinsic.
-pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
+pub use pezsp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
 
 /// The information that goes alongside a `transfer_into_teyrchain` operation. Entirely opaque, it
 /// will generally be used for identifying the reason for the transfer. Typically it will hold the
@@ -139,7 +139,7 @@ pub type DownwardMessage = alloc::vec::Vec<u8>;
 /// A wrapped version of `DownwardMessage`. The difference is that it has attached the block number
 /// when the message was sent.
 #[derive(
-	Encode, Decode, DecodeWithMemTracking, Clone, sp_runtime::RuntimeDebug, PartialEq, TypeInfo,
+	Encode, Decode, DecodeWithMemTracking, Clone, pezsp_runtime::RuntimeDebug, PartialEq, TypeInfo,
 )]
 pub struct InboundDownwardMessage<BlockNumber = crate::BlockNumber> {
 	/// The block number at which these messages were put into the downward message queue.
@@ -150,7 +150,7 @@ pub struct InboundDownwardMessage<BlockNumber = crate::BlockNumber> {
 
 /// An HRMP message seen from the perspective of a recipient.
 #[derive(
-	Encode, Decode, DecodeWithMemTracking, Clone, sp_runtime::RuntimeDebug, PartialEq, TypeInfo,
+	Encode, Decode, DecodeWithMemTracking, Clone, pezsp_runtime::RuntimeDebug, PartialEq, TypeInfo,
 )]
 pub struct InboundHrmpMessage<BlockNumber = crate::BlockNumber> {
 	/// The block number at which this message was sent.
@@ -167,7 +167,7 @@ pub struct InboundHrmpMessage<BlockNumber = crate::BlockNumber> {
 	Decode,
 	DecodeWithMemTracking,
 	Clone,
-	sp_runtime::RuntimeDebug,
+	pezsp_runtime::RuntimeDebug,
 	PartialEq,
 	Eq,
 	Hash,

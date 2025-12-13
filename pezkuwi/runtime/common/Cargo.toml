@@ -21,36 +21,36 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc"], workspace = true }
 static_assertions = { workspace = true, default-features = true }
 
-sp-api = { workspace = true }
-sp-core = { features = ["serde"], workspace = true }
-sp-inherents = { workspace = true }
-sp-io = { workspace = true }
-sp-keyring = { workspace = true }
-sp-npos-elections = { features = ["serde"], workspace = true }
-sp-runtime = { features = ["serde"], workspace = true }
-sp-session = { workspace = true }
-sp-staking = { features = ["serde"], workspace = true }
+pezsp-api = { workspace = true }
+pezsp-core = { features = ["serde"], workspace = true }
+pezsp-inherents = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-keyring = { workspace = true }
+pezsp-npos-elections = { features = ["serde"], workspace = true }
+pezsp-runtime = { features = ["serde"], workspace = true }
+pezsp-session = { workspace = true }
+pezsp-staking = { features = ["serde"], workspace = true }
 
-frame-election-provider-support = { workspace = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-pallet-asset-rate = { optional = true, workspace = true }
-pallet-authorship = { workspace = true }
-pallet-balances = { workspace = true }
-pallet-broker = { workspace = true }
-pallet-election-provider-multi-phase = { workspace = true }
-pallet-fast-unstake = { workspace = true }
-pallet-identity = { workspace = true }
-pallet-session = { workspace = true }
-pallet-staking = { workspace = true }
-pallet-staking-reward-fn = { workspace = true }
-pallet-timestamp = { workspace = true }
-pallet-transaction-payment = { workspace = true }
-pallet-treasury = { workspace = true }
-pallet-vesting = { workspace = true }
+pezframe-election-provider-support = { workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezpallet-asset-rate = { optional = true, workspace = true }
+pezpallet-authorship = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-broker = { workspace = true }
+pezpallet-election-provider-multi-phase = { workspace = true }
+pezpallet-fast-unstake = { workspace = true }
+pezpallet-identity = { workspace = true }
+pezpallet-session = { workspace = true }
+pezpallet-staking = { workspace = true }
+pezpallet-staking-reward-fn = { workspace = true }
+pezpallet-timestamp = { workspace = true }
+pezpallet-transaction-payment = { workspace = true }
+pezpallet-treasury = { workspace = true }
+pezpallet-vesting = { workspace = true }
 
-frame-benchmarking = { optional = true, workspace = true }
-pallet-babe = { optional = true, workspace = true }
+pezframe-benchmarking = { optional = true, workspace = true }
+pezpallet-babe = { optional = true, workspace = true }
 
 libsecp256k1 = { workspace = true }
 pezkuwi-primitives = { workspace = true }
@@ -62,15 +62,15 @@ xcm-builder = { workspace = true }
 xcm-executor = { optional = true, workspace = true }
 
 [dev-dependencies]
-frame-support-test = { workspace = true }
+pezframe-support-test = { workspace = true }
 hex-literal = { workspace = true, default-features = true }
 libsecp256k1 = { workspace = true, default-features = true }
-pallet-babe = { workspace = true, default-features = true }
-pallet-treasury = { workspace = true, default-features = true }
+pezpallet-babe = { workspace = true, default-features = true }
+pezpallet-treasury = { workspace = true, default-features = true }
 pezkuwi-primitives-test-helpers = { workspace = true }
 serde_json = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
@@ -78,102 +78,102 @@ no_std = []
 std = [
 	"bitvec/std",
 	"codec/std",
-	"frame-benchmarking?/std",
-	"frame-election-provider-support/std",
-	"frame-support/std",
-	"frame-system/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-election-provider-support/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"libsecp256k1/std",
 	"log/std",
-	"pallet-asset-rate?/std",
-	"pallet-authorship/std",
-	"pallet-babe?/std",
-	"pallet-balances/std",
-	"pallet-broker/std",
-	"pallet-election-provider-multi-phase/std",
-	"pallet-fast-unstake/std",
-	"pallet-identity/std",
-	"pallet-session/std",
-	"pallet-staking-reward-fn/std",
-	"pallet-staking/std",
-	"pallet-timestamp/std",
-	"pallet-transaction-payment/std",
-	"pallet-treasury/std",
-	"pallet-vesting/std",
+	"pezpallet-asset-rate?/std",
+	"pezpallet-authorship/std",
+	"pezpallet-babe?/std",
+	"pezpallet-balances/std",
+	"pezpallet-broker/std",
+	"pezpallet-election-provider-multi-phase/std",
+	"pezpallet-fast-unstake/std",
+	"pezpallet-identity/std",
+	"pezpallet-session/std",
+	"pezpallet-staking-reward-fn/std",
+	"pezpallet-staking/std",
+	"pezpallet-timestamp/std",
+	"pezpallet-transaction-payment/std",
+	"pezpallet-treasury/std",
+	"pezpallet-vesting/std",
 	"pezkuwi-primitives/std",
 	"pezkuwi-runtime-teyrchains/std",
 	"rustc-hex/std",
 	"scale-info/std",
 	"serde/std",
 	"slot-range-helper/std",
-	"sp-api/std",
-	"sp-core/std",
-	"sp-inherents/std",
-	"sp-io/std",
-	"sp-npos-elections/std",
-	"sp-runtime/std",
-	"sp-session/std",
-	"sp-staking/std",
+	"pezsp-api/std",
+	"pezsp-core/std",
+	"pezsp-inherents/std",
+	"pezsp-io/std",
+	"pezsp-npos-elections/std",
+	"pezsp-runtime/std",
+	"pezsp-session/std",
+	"pezsp-staking/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-election-provider-support/runtime-benchmarks",
-	"frame-support-test/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-support-test/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"libsecp256k1/hmac",
 	"libsecp256k1/static-context",
-	"pallet-asset-rate/runtime-benchmarks",
-	"pallet-authorship/runtime-benchmarks",
-	"pallet-babe/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-broker/runtime-benchmarks",
-	"pallet-election-provider-multi-phase/runtime-benchmarks",
-	"pallet-fast-unstake/runtime-benchmarks",
-	"pallet-identity/runtime-benchmarks",
-	"pallet-session/runtime-benchmarks",
-	"pallet-staking/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
-	"pallet-transaction-payment/runtime-benchmarks",
-	"pallet-treasury/runtime-benchmarks",
-	"pallet-vesting/runtime-benchmarks",
+	"pezpallet-asset-rate/runtime-benchmarks",
+	"pezpallet-authorship/runtime-benchmarks",
+	"pezpallet-babe/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-broker/runtime-benchmarks",
+	"pezpallet-election-provider-multi-phase/runtime-benchmarks",
+	"pezpallet-fast-unstake/runtime-benchmarks",
+	"pezpallet-identity/runtime-benchmarks",
+	"pezpallet-session/runtime-benchmarks",
+	"pezpallet-staking/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezpallet-treasury/runtime-benchmarks",
+	"pezpallet-vesting/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
 	"slot-range-helper/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
-	"sp-inherents/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
-	"sp-npos-elections/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-session/runtime-benchmarks",
-	"sp-staking/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-npos-elections/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-session/runtime-benchmarks",
+	"pezsp-staking/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-election-provider-support/try-runtime",
-	"frame-support-test/try-runtime",
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"pallet-asset-rate/try-runtime",
-	"pallet-authorship/try-runtime",
-	"pallet-babe?/try-runtime",
-	"pallet-balances/try-runtime",
-	"pallet-broker/try-runtime",
-	"pallet-election-provider-multi-phase/try-runtime",
-	"pallet-fast-unstake/try-runtime",
-	"pallet-identity/try-runtime",
-	"pallet-session/try-runtime",
-	"pallet-staking/try-runtime",
-	"pallet-timestamp/try-runtime",
-	"pallet-transaction-payment/try-runtime",
-	"pallet-treasury/try-runtime",
-	"pallet-vesting/try-runtime",
+	"pezframe-election-provider-support/try-runtime",
+	"pezframe-support-test/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-asset-rate/try-runtime",
+	"pezpallet-authorship/try-runtime",
+	"pezpallet-babe?/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-broker/try-runtime",
+	"pezpallet-election-provider-multi-phase/try-runtime",
+	"pezpallet-fast-unstake/try-runtime",
+	"pezpallet-identity/try-runtime",
+	"pezpallet-session/try-runtime",
+	"pezpallet-staking/try-runtime",
+	"pezpallet-timestamp/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezpallet-treasury/try-runtime",
+	"pezpallet-vesting/try-runtime",
 	"pezkuwi-runtime-teyrchains/try-runtime",
-	"sp-runtime/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

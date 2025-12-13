@@ -28,11 +28,11 @@ use bp_runtime::{
 	Teyrchain,
 };
 use codec::{Decode, Encode, MaxEncodedLen};
-use frame_support::{weights::Weight, Blake2_128Concat, Twox64Concat};
+use pezframe_support::{weights::Weight, Blake2_128Concat, Twox64Concat};
 use scale_info::TypeInfo;
-use sp_core::storage::StorageKey;
-use sp_runtime::{traits::Header as HeaderT, RuntimeDebug};
-use sp_std::{marker::PhantomData, prelude::*};
+use pezsp_core::storage::StorageKey;
+use pezsp_runtime::{traits::Header as HeaderT, RuntimeDebug};
+use pezsp_std::{marker::PhantomData, prelude::*};
 
 /// Block hash of the bridged relay chain.
 pub type RelayBlockHash = bp_pezkuwi_core::Hash;
@@ -80,7 +80,7 @@ pub fn teyrchain_head_storage_key_at_source(
 
 /// Can be use to access the runtime storage key of the teyrchains info at the target chain.
 ///
-/// The info is stored by the `pallet-bridge-teyrchains` pallet in the `ParasInfo` map.
+/// The info is stored by the `pezpallet-bridge-teyrchains` pallet in the `ParasInfo` map.
 pub struct ParasInfoKeyProvider;
 impl StorageMapKeyProvider for ParasInfoKeyProvider {
 	const MAP_NAME: &'static str = "ParasInfo";
@@ -92,7 +92,7 @@ impl StorageMapKeyProvider for ParasInfoKeyProvider {
 
 /// Can be use to access the runtime storage key of the teyrchain head at the target chain.
 ///
-/// The head is stored by the `pallet-bridge-teyrchains` pallet in the `ImportedParaHeads` map.
+/// The head is stored by the `pezpallet-bridge-teyrchains` pallet in the `ImportedParaHeads` map.
 pub struct ImportedParaHeadsKeyProvider;
 impl StorageDoubleMapKeyProvider for ImportedParaHeadsKeyProvider {
 	const MAP_NAME: &'static str = "ImportedParaHeads";
@@ -165,7 +165,7 @@ impl ParaStoredHeaderDataBuilder for C {
 	fn max_free_head_size() -> u32 {
 		let mut result = 0_u32;
 		for_tuples!( #(
-			result = sp_std::cmp::max(
+			result = pezsp_std::cmp::max(
 				result,
 				SingleParaStoredHeaderDataBuilder::<C>::max_free_head_size(),
 			);

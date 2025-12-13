@@ -15,10 +15,10 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use frame_benchmarking::v2::*;
-use frame_system::RawOrigin;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::RawOrigin;
 use pezkuwi_primitives::ConsensusLog;
-use sp_runtime::DigestItem;
+use pezsp_runtime::DigestItem;
 
 // Random large number for the digest
 const DIGEST_MAX_LEN: u32 = 65536;
@@ -30,14 +30,14 @@ mod benchmarks {
 	#[benchmark]
 	fn force_approve(d: Linear<0, DIGEST_MAX_LEN>) -> Result<(), BenchmarkError> {
 		for _ in 0..d {
-			frame_system::Pallet::<T>::deposit_log(ConsensusLog::ForceApprove(d).into());
+			pezframe_system::Pallet::<T>::deposit_log(ConsensusLog::ForceApprove(d).into());
 		}
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, d + 1);
 
 		assert_eq!(
-			frame_system::Pallet::<T>::digest().logs.last().unwrap(),
+			pezframe_system::Pallet::<T>::digest().logs.last().unwrap(),
 			&DigestItem::from(ConsensusLog::ForceApprove(d + 1)),
 		);
 

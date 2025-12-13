@@ -17,9 +17,9 @@
 //! Code related to benchmarking a node.
 
 use pezkuwi_primitives::AccountId;
-use sc_client_api::UsageProvider;
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::OpaqueExtrinsic;
+use pezsc_client_api::UsageProvider;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::OpaqueExtrinsic;
 
 use crate::*;
 
@@ -102,7 +102,7 @@ impl TransferKeepAliveBuilder {
 	}
 }
 
-impl frame_benchmarking_cli::ExtrinsicBuilder for TransferKeepAliveBuilder {
+impl pezframe_benchmarking_cli::ExtrinsicBuilder for TransferKeepAliveBuilder {
 	fn pallet(&self) -> &str {
 		"balances"
 	}
@@ -142,28 +142,28 @@ fn zagros_sign_call(
 	nonce: u32,
 	current_block: u64,
 	period: u64,
-	genesis: sp_core::H256,
-	acc: sp_core::sr25519::Pair,
+	genesis: pezsp_core::H256,
+	acc: pezsp_core::sr25519::Pair,
 ) -> OpaqueExtrinsic {
 	use codec::Encode;
-	use sp_core::Pair;
+	use pezsp_core::Pair;
 	use zagros_runtime as runtime;
 
 	let tx_ext: runtime::TxExtension = (
-		frame_system::AuthorizeCall::<runtime::Runtime>::new(),
-		frame_system::CheckNonZeroSender::<runtime::Runtime>::new(),
-		frame_system::CheckSpecVersion::<runtime::Runtime>::new(),
-		frame_system::CheckTxVersion::<runtime::Runtime>::new(),
-		frame_system::CheckGenesis::<runtime::Runtime>::new(),
-		frame_system::CheckMortality::<runtime::Runtime>::from(sp_runtime::generic::Era::mortal(
+		pezframe_system::AuthorizeCall::<runtime::Runtime>::new(),
+		pezframe_system::CheckNonZeroSender::<runtime::Runtime>::new(),
+		pezframe_system::CheckSpecVersion::<runtime::Runtime>::new(),
+		pezframe_system::CheckTxVersion::<runtime::Runtime>::new(),
+		pezframe_system::CheckGenesis::<runtime::Runtime>::new(),
+		pezframe_system::CheckMortality::<runtime::Runtime>::from(pezsp_runtime::generic::Era::mortal(
 			period,
 			current_block,
 		)),
-		frame_system::CheckNonce::<runtime::Runtime>::from(nonce),
-		frame_system::CheckWeight::<runtime::Runtime>::new(),
-		pallet_transaction_payment::ChargeTransactionPayment::<runtime::Runtime>::from(0),
-		frame_metadata_hash_extension::CheckMetadataHash::<runtime::Runtime>::new(false),
-		frame_system::WeightReclaim::<runtime::Runtime>::new(),
+		pezframe_system::CheckNonce::<runtime::Runtime>::from(nonce),
+		pezframe_system::CheckWeight::<runtime::Runtime>::new(),
+		pezpallet_transaction_payment::ChargeTransactionPayment::<runtime::Runtime>::from(0),
+		pezframe_metadata_hash_extension::CheckMetadataHash::<runtime::Runtime>::new(false),
+		pezframe_system::WeightReclaim::<runtime::Runtime>::new(),
 	)
 		.into();
 
@@ -188,7 +188,7 @@ fn zagros_sign_call(
 	let signature = payload.using_encoded(|p| acc.sign(p));
 	runtime::UncheckedExtrinsic::new_signed(
 		call,
-		sp_runtime::AccountId32::from(acc.public()).into(),
+		pezsp_runtime::AccountId32::from(acc.public()).into(),
 		pezkuwi_core_primitives::Signature::Sr25519(signature),
 		tx_ext,
 	)
@@ -201,28 +201,28 @@ fn pezkuwichain_sign_call(
 	nonce: u32,
 	current_block: u64,
 	period: u64,
-	genesis: sp_core::H256,
-	acc: sp_core::sr25519::Pair,
+	genesis: pezsp_core::H256,
+	acc: pezsp_core::sr25519::Pair,
 ) -> OpaqueExtrinsic {
 	use codec::Encode;
 	use pezkuwichain_runtime as runtime;
-	use sp_core::Pair;
+	use pezsp_core::Pair;
 
 	let tx_ext: runtime::TxExtension = (
-		frame_system::AuthorizeCall::<runtime::Runtime>::new(),
-		frame_system::CheckNonZeroSender::<runtime::Runtime>::new(),
-		frame_system::CheckSpecVersion::<runtime::Runtime>::new(),
-		frame_system::CheckTxVersion::<runtime::Runtime>::new(),
-		frame_system::CheckGenesis::<runtime::Runtime>::new(),
-		frame_system::CheckMortality::<runtime::Runtime>::from(sp_runtime::generic::Era::mortal(
+		pezframe_system::AuthorizeCall::<runtime::Runtime>::new(),
+		pezframe_system::CheckNonZeroSender::<runtime::Runtime>::new(),
+		pezframe_system::CheckSpecVersion::<runtime::Runtime>::new(),
+		pezframe_system::CheckTxVersion::<runtime::Runtime>::new(),
+		pezframe_system::CheckGenesis::<runtime::Runtime>::new(),
+		pezframe_system::CheckMortality::<runtime::Runtime>::from(pezsp_runtime::generic::Era::mortal(
 			period,
 			current_block,
 		)),
-		frame_system::CheckNonce::<runtime::Runtime>::from(nonce),
-		frame_system::CheckWeight::<runtime::Runtime>::new(),
-		pallet_transaction_payment::ChargeTransactionPayment::<runtime::Runtime>::from(0),
-		frame_metadata_hash_extension::CheckMetadataHash::<runtime::Runtime>::new(false),
-		frame_system::WeightReclaim::<runtime::Runtime>::new(),
+		pezframe_system::CheckNonce::<runtime::Runtime>::from(nonce),
+		pezframe_system::CheckWeight::<runtime::Runtime>::new(),
+		pezpallet_transaction_payment::ChargeTransactionPayment::<runtime::Runtime>::from(0),
+		pezframe_metadata_hash_extension::CheckMetadataHash::<runtime::Runtime>::new(false),
+		pezframe_system::WeightReclaim::<runtime::Runtime>::new(),
 	)
 		.into();
 
@@ -247,7 +247,7 @@ fn pezkuwichain_sign_call(
 	let signature = payload.using_encoded(|p| acc.sign(p));
 	runtime::UncheckedExtrinsic::new_signed(
 		call,
-		sp_runtime::AccountId32::from(acc.public()).into(),
+		pezsp_runtime::AccountId32::from(acc.public()).into(),
 		pezkuwi_core_primitives::Signature::Sr25519(signature),
 		tx_ext,
 	)
@@ -259,13 +259,13 @@ fn pezkuwichain_sign_call(
 /// Not to be used outside of benchmarking since it returns mocked values.
 pub fn benchmark_inherent_data(
 	header: pezkuwi_core_primitives::Header,
-) -> std::result::Result<sp_inherents::InherentData, sp_inherents::Error> {
-	use sp_inherents::InherentDataProvider;
-	let mut inherent_data = sp_inherents::InherentData::new();
+) -> std::result::Result<pezsp_inherents::InherentData, pezsp_inherents::Error> {
+	use pezsp_inherents::InherentDataProvider;
+	let mut inherent_data = pezsp_inherents::InherentData::new();
 
 	// Assume that all runtimes have the `timestamp` pallet.
 	let d = std::time::Duration::from_millis(0);
-	let timestamp = sp_timestamp::InherentDataProvider::new(d.into());
+	let timestamp = pezsp_timestamp::InherentDataProvider::new(d.into());
 	futures::executor::block_on(timestamp.provide_inherent_data(&mut inherent_data))?;
 
 	let para_data = pezkuwi_primitives::InherentData {

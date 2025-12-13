@@ -4,19 +4,19 @@ use crate::{
 	cli::{Cli, Subcommand},
 	service,
 };
-use frame_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, SUBSTRATE_REFERENCE_HARDWARE};
-use sc_cli::SubstrateCli;
-use sc_service::PartialComponents;
+use pezframe_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, BIZINIKIWI_REFERENCE_HARDWARE};
+use pezsc_cli::BizinikiwiCli;
+use pezsc_service::PartialComponents;
 use solochain_template_runtime::{Block, EXISTENTIAL_DEPOSIT};
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
-impl SubstrateCli for Cli {
+impl BizinikiwiCli for Cli {
 	fn impl_name() -> String {
-		"Substrate Node".into()
+		"Bizinikiwi Node".into()
 	}
 
 	fn impl_version() -> String {
-		env!("SUBSTRATE_CLI_IMPL_VERSION").into()
+		env!("BIZINIKIWI_CLI_IMPL_VERSION").into()
 	}
 
 	fn description() -> String {
@@ -35,7 +35,7 @@ impl SubstrateCli for Cli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		Ok(match id {
 			"dev" => Box::new(chain_spec::development_chain_spec()?),
 			"" | "local" => Box::new(chain_spec::local_chain_spec()?),
@@ -46,7 +46,7 @@ impl SubstrateCli for Cli {
 }
 
 /// Parse and run command line arguments
-pub fn run() -> sc_cli::Result<()> {
+pub fn run() -> pezsc_cli::Result<()> {
 	let cli = Cli::from_args();
 
 	match &cli.subcommand {
@@ -100,7 +100,7 @@ pub fn run() -> sc_cli::Result<()> {
 				let PartialComponents { client, task_manager, backend, .. } =
 					service::new_partial(&config)?;
 				let aux_revert = Box::new(|client, _, blocks| {
-					sc_consensus_grandpa::revert(client, blocks)?;
+					pezsc_consensus_grandpa::revert(client, blocks)?;
 					Ok(())
 				});
 				Ok((cmd.run(client, backend, Some(aux_revert)), task_manager))
@@ -122,7 +122,7 @@ pub fn run() -> sc_cli::Result<()> {
 							);
 						}
 
-						cmd.run_with_spec::<sp_runtime::traits::HashingFor<Block>, ()>(Some(
+						cmd.run_with_spec::<pezsp_runtime::traits::HashingFor<Block>, ()>(Some(
 							config.chain_spec,
 						))
 					},
@@ -173,7 +173,7 @@ pub fn run() -> sc_cli::Result<()> {
 						cmd.run(client, inherent_benchmark_data()?, Vec::new(), &ext_factory)
 					},
 					BenchmarkCmd::Machine(cmd) =>
-						cmd.run(&config, SUBSTRATE_REFERENCE_HARDWARE.clone()),
+						cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone()),
 				}
 			})
 		},
@@ -185,16 +185,16 @@ pub fn run() -> sc_cli::Result<()> {
 			let runner = cli.create_runner(&cli.run)?;
 			runner.run_node_until_exit(|config| async move {
 				match config.network.network_backend {
-					sc_network::config::NetworkBackendType::Libp2p => service::new_full::<
-						sc_network::NetworkWorker<
+					pezsc_network::config::NetworkBackendType::Libp2p => service::new_full::<
+						pezsc_network::NetworkWorker<
 							solochain_template_runtime::opaque::Block,
-							<solochain_template_runtime::opaque::Block as sp_runtime::traits::Block>::Hash,
+							<solochain_template_runtime::opaque::Block as pezsp_runtime::traits::Block>::Hash,
 						>,
 					>(config)
-					.map_err(sc_cli::Error::Service),
-					sc_network::config::NetworkBackendType::Litep2p =>
-						service::new_full::<sc_network::Litep2pNetworkBackend>(config)
-							.map_err(sc_cli::Error::Service),
+					.map_err(pezsc_cli::Error::Service),
+					pezsc_network::config::NetworkBackendType::Litep2p =>
+						service::new_full::<pezsc_network::Litep2pNetworkBackend>(config)
+							.map_err(pezsc_cli::Error::Service),
 				}
 			})
 		},

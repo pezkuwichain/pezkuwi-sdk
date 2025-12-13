@@ -13,7 +13,7 @@ use crate::{
 	FinalizedBeaconState, LatestFinalizedBlockRoot, LatestSyncCommitteeUpdatePeriod,
 	NextSyncCommittee, SyncCommitteePrepared,
 };
-use frame_support::{assert_err, assert_noop, assert_ok, pallet_prelude::Pays};
+use pezframe_support::{assert_err, assert_noop, assert_ok, pezpallet_prelude::Pays};
 use hex_literal::hex;
 use snowbridge_beacon_primitives::{
 	merkle_proof::{generalized_index_length, subtree_index},
@@ -21,8 +21,8 @@ use snowbridge_beacon_primitives::{
 	Fork, ForkVersions, NextSyncCommitteeUpdate, VersionedExecutionPayloadHeader,
 };
 use snowbridge_verification_primitives::{VerificationError, Verifier};
-use sp_core::H256;
-use sp_runtime::DispatchError;
+use pezsp_core::H256;
+use pezsp_runtime::DispatchError;
 
 /// Arbitrary hash used for tests and invalid hashes.
 const TEST_HASH: [u8; 32] =

@@ -43,7 +43,7 @@ pub mod time {
 	pub const MILLISECS_PER_BLOCK: Moment = 6000;
 	pub const SLOT_DURATION: Moment = MILLISECS_PER_BLOCK;
 
-	frame_support::parameter_types! {
+	pezframe_support::parameter_types! {
 		pub EpochDurationInBlocks: BlockNumber =
 			prod_or_fast!(1 * HOURS, 1 * MINUTES, "PEZKUWICHAIN_EPOCH_DURATION");
 	}
@@ -64,12 +64,12 @@ pub mod time {
 /// Fee-related.
 pub mod fee {
 	use crate::weights::ExtrinsicBaseWeight;
-	use frame_support::weights::{
+	use pezframe_support::weights::{
 		WeightToFeeCoefficient, WeightToFeeCoefficients, WeightToFeePolynomial,
 	};
 	use pezkuwi_primitives::Balance;
 	use smallvec::smallvec;
-	pub use sp_runtime::Perbill;
+	pub use pezsp_runtime::Perbill;
 
 	/// The block saturation level. Fees will be updates based on this value.
 	pub const TARGET_BLOCK_FULLNESS: Perbill = Perbill::from_percent(25);
@@ -78,7 +78,7 @@ pub mod fee {
 	/// node's balance type.
 	///
 	/// This should typically create a mapping between the following ranges:
-	///   - [0, `frame_system::MaximumBlockWeight`]
+	///   - [0, `pezframe_system::MaximumBlockWeight`]
 	///   - [Balance::min, Balance::max]
 	///
 	/// Yet, it can be used for any other sort of change to weight-fee. Some examples being:
@@ -104,7 +104,7 @@ pub mod fee {
 
 /// System Teyrchains.
 pub mod system_teyrchain {
-	use frame_support::parameter_types;
+	use pezframe_support::parameter_types;
 	use pezkuwi_primitives::Id as ParaId;
 	use xcm_builder::IsChildSystemTeyrchain;
 
@@ -151,7 +151,7 @@ mod tests {
 		fee::WeightToFee,
 	};
 	use crate::weights::ExtrinsicBaseWeight;
-	use frame_support::weights::WeightToFee as WeightToFeeT;
+	use pezframe_support::weights::WeightToFee as WeightToFeeT;
 	use pezkuwi_runtime_common::MAXIMUM_BLOCK_WEIGHT;
 
 	#[test]

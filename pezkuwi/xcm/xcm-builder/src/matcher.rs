@@ -17,7 +17,7 @@
 //! XCM matcher API, used primarily for writing barrier conditions.
 
 use core::ops::ControlFlow;
-use frame_support::traits::ProcessMessageError;
+use pezframe_support::traits::ProcessMessageError;
 use xcm::latest::{Instruction, Location};
 
 /// Creates an instruction matcher from an XCM. Since XCM versions differ, we need to make a trait
@@ -48,9 +48,9 @@ impl<'a, Call> CreateMatcher for &'a mut [Instruction<Call>] {
 ///
 /// Example:
 /// ```rust
-/// use frame_support::traits::ProcessMessageError;
+/// use pezframe_support::traits::ProcessMessageError;
 /// use xcm::latest::Instruction;
-/// use staging_xcm_builder::{CreateMatcher, MatchXcm};
+/// use pezstaging_xcm_builder::{CreateMatcher, MatchXcm};
 ///
 /// let mut msg = [Instruction::<()>::ClearOrigin];
 /// let res = msg

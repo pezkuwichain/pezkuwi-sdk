@@ -165,7 +165,7 @@ mod tests {
 	use assert_matches::assert_matches;
 	use pezkuwi_node_subsystem_test_helpers::make_subsystem_context;
 	use pezkuwi_overseer::{AllMessages, SubsystemContext};
-	use sp_core::testing::TaskExecutor;
+	use pezsp_core::testing::TaskExecutor;
 	use std::collections::{HashMap, HashSet};
 
 	#[derive(Default)]

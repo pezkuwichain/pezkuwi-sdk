@@ -38,7 +38,7 @@ use pezkuwi_primitives::{
 	AuthorityDiscoveryId, BlakeTwo256, CandidateHash, ChunkIndex, GroupIndex, Hash, HashT,
 	OccupiedCore, SessionIndex,
 };
-use sc_network::ProtocolName;
+use pezsc_network::ProtocolName;
 
 use crate::{
 	error::{FatalError, Result},

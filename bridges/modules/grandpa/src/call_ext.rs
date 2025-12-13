@@ -23,18 +23,18 @@ use bp_header_chain::{
 	SubmitFinalityProofInfo,
 };
 use bp_runtime::{BlockNumberOf, Chain, OwnedBridgeModule};
-use frame_support::{
+use pezframe_support::{
 	dispatch::CallableCallFor,
 	traits::{Get, IsSubType},
 	weights::Weight,
 };
-use sp_consensus_grandpa::SetId;
-use sp_runtime::{
+use pezsp_consensus_grandpa::SetId;
+use pezsp_runtime::{
 	traits::{CheckedSub, Header, Zero},
 	transaction_validity::{InvalidTransaction, TransactionValidityError},
 	RuntimeDebug, SaturatedConversion,
 };
-use sp_std::fmt::Debug;
+use pezsp_std::fmt::Debug;
 
 /// Verified `SubmitFinalityProofInfo<N>`.
 #[derive(Copy, Clone, PartialEq, RuntimeDebug)]
@@ -48,7 +48,7 @@ pub struct VerifiedSubmitFinalityProofInfo<N: Debug> {
 
 /// Helper struct that provides methods for working with the `SubmitFinalityProof` call.
 pub struct SubmitFinalityProofHelper<T: Config<I>, I: 'static> {
-	_phantom_data: sp_std::marker::PhantomData<(T, I)>,
+	_phantom_data: pezsp_std::marker::PhantomData<(T, I)>,
 }
 
 impl<T: Config<I>, I: 'static> SubmitFinalityProofHelper<T, I> {
@@ -314,8 +314,8 @@ mod tests {
 		TEST_GRANDPA_SET_ID,
 	};
 	use codec::Encode;
-	use frame_support::weights::Weight;
-	use sp_runtime::{testing::DigestItem, traits::Header as _, SaturatedConversion};
+	use pezframe_support::weights::Weight;
+	use pezsp_runtime::{testing::DigestItem, traits::Header as _, SaturatedConversion};
 
 	fn validate_block_submit(num: TestNumber) -> bool {
 		let bridge_grandpa_call = crate::Call::<TestRuntime, ()>::submit_finality_proof_ex {
@@ -332,7 +332,7 @@ mod tests {
 	}
 
 	fn sync_to_header_10() {
-		let header10_hash = sp_core::H256::default();
+		let header10_hash = pezsp_core::H256::default();
 		BestFinalized::<TestRuntime, ()>::put(HeaderId(10, header10_hash));
 	}
 
@@ -489,7 +489,7 @@ mod tests {
 			// when `improved_by` is less than the free interval
 			BestFinalized::<TestRuntime, ()>::put(HeaderId(
 				100 - FreeHeadersInterval::get() as u64 + 1,
-				sp_core::H256::default(),
+				pezsp_core::H256::default(),
 			));
 			assert!(RuntimeCall::check_obsolete_submit_finality_proof(&RuntimeCall::Grandpa(
 				bridge_grandpa_call.clone(),
@@ -499,7 +499,7 @@ mod tests {
 			// when `improved_by` is equal to the free interval
 			BestFinalized::<TestRuntime, ()>::put(HeaderId(
 				100 - FreeHeadersInterval::get() as u64,
-				sp_core::H256::default(),
+				pezsp_core::H256::default(),
 			));
 			assert!(RuntimeCall::check_obsolete_submit_finality_proof(&RuntimeCall::Grandpa(
 				bridge_grandpa_call.clone(),
@@ -509,7 +509,7 @@ mod tests {
 			// when `improved_by` is larger than the free interval
 			BestFinalized::<TestRuntime, ()>::put(HeaderId(
 				100 - FreeHeadersInterval::get() as u64 - 1,
-				sp_core::H256::default(),
+				pezsp_core::H256::default(),
 			));
 			assert!(RuntimeCall::check_obsolete_submit_finality_proof(&RuntimeCall::Grandpa(
 				bridge_grandpa_call.clone(),
@@ -518,15 +518,15 @@ mod tests {
 
 			// when `improved_by` is less than the free interval BUT it is a mandatory header
 			let mut mandatory_header = test_header(100);
-			let consensus_log = sp_consensus_grandpa::ConsensusLog::<TestNumber>::ScheduledChange(
-				sp_consensus_grandpa::ScheduledChange {
+			let consensus_log = pezsp_consensus_grandpa::ConsensusLog::<TestNumber>::ScheduledChange(
+				pezsp_consensus_grandpa::ScheduledChange {
 					next_authorities: bp_test_utils::authority_list(),
 					delay: 0,
 				},
 			);
-			mandatory_header.digest = sp_runtime::Digest {
+			mandatory_header.digest = pezsp_runtime::Digest {
 				logs: vec![DigestItem::Consensus(
-					sp_consensus_grandpa::GRANDPA_ENGINE_ID,
+					pezsp_consensus_grandpa::GRANDPA_ENGINE_ID,
 					consensus_log.encode(),
 				)],
 			};
@@ -543,7 +543,7 @@ mod tests {
 			};
 			BestFinalized::<TestRuntime, ()>::put(HeaderId(
 				100 - FreeHeadersInterval::get() as u64 + 1,
-				sp_core::H256::default(),
+				pezsp_core::H256::default(),
 			));
 			assert!(RuntimeCall::check_obsolete_submit_finality_proof(&RuntimeCall::Grandpa(
 				bridge_grandpa_call.clone(),
@@ -712,7 +712,7 @@ mod tests {
 	fn check_obsolete_submit_finality_proof_ignores_other_calls() {
 		run_test(|| {
 			let call =
-				RuntimeCall::System(frame_system::Call::<TestRuntime>::remark { remark: vec![42] });
+				RuntimeCall::System(pezframe_system::Call::<TestRuntime>::remark { remark: vec![42] });
 
 			assert_eq!(RuntimeCall::check_obsolete_submit_finality_proof(&call), Ok(None));
 		})

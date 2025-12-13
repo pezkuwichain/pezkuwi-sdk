@@ -32,9 +32,9 @@ pezkuwi-node-subsystem-types = { workspace = true, default-features = true }
 pezkuwi-overseer = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 
-sp-application-crypto = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
+pezsp-application-crypto = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
 
 kvdb = { workspace = true }
 parity-db = { workspace = true }

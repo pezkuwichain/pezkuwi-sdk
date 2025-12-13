@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::{CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound};
+use pezframe_support::{CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound};
 use scale_info::TypeInfo;
-use sp_core::{H160, H256, U256};
-use sp_runtime::RuntimeDebug;
-use sp_std::{boxed::Box, iter::repeat, prelude::*};
+use pezsp_core::{H160, H256, U256};
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::{boxed::Box, iter::repeat, prelude::*};
 
 use crate::config::{PUBKEY_SIZE, SIGNATURE_SIZE};
 
@@ -624,12 +624,12 @@ pub enum Mode {
 
 pub mod deneb {
 	use codec::{Decode, DecodeWithMemTracking, Encode};
-	use frame_support::{CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound};
+	use pezframe_support::{CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound};
 	use scale_info::TypeInfo;
 	#[cfg(feature = "std")]
 	use serde::{Deserialize, Serialize};
-	use sp_core::{H160, H256, U256};
-	use sp_std::prelude::*;
+	use pezsp_core::{H160, H256, U256};
+	use pezsp_std::prelude::*;
 
 	/// ExecutionPayloadHeader
 	/// <https://github.com/ethereum/consensus-specs/blob/dev/specs/deneb/beacon-chain.md#executionpayloadheader>

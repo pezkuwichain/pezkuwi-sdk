@@ -38,7 +38,7 @@ mod test;
 
 use codec::{Decode, DecodeAll, Encode};
 use envelope::Envelope;
-use frame_support::{
+use pezframe_support::{
 	traits::{
 		fungible::{Inspect, Mutate},
 		tokens::{Fortitude, Preservation},
@@ -46,11 +46,11 @@ use frame_support::{
 	weights::WeightToFee,
 	PalletError,
 };
-use frame_system::ensure_signed;
+use pezframe_system::ensure_signed;
 use scale_info::TypeInfo;
-use sp_core::H160;
-use sp_runtime::traits::Zero;
-use sp_std::vec;
+use pezsp_core::H160;
+use pezsp_runtime::traits::Zero;
+use pezsp_std::vec;
 use xcm::prelude::{
 	send_xcm, Junction::*, Location, SendError as XcmpSendError, SendXcm, Xcm, XcmContext, XcmHash,
 };
@@ -65,24 +65,24 @@ use snowbridge_inbound_queue_primitives::{
 	EventProof, VerificationError, Verifier,
 };
 
-use sp_runtime::{traits::Saturating, SaturatedConversion, TokenError};
+use pezsp_runtime::{traits::Saturating, SaturatedConversion, TokenError};
 
 pub use weights::WeightInfo;
 
 type BalanceOf<T> =
-	<<T as pallet::Config>::Token as Inspect<<T as frame_system::Config>::AccountId>>::Balance;
+	<<T as pallet::Config>::Token as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 pub use pallet::*;
 
 pub const LOG_TARGET: &str = "snowbridge-inbound-queue";
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
-	use sp_core::H256;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
+	use pezsp_core::H256;
 
 	#[cfg(feature = "runtime-benchmarks")]
 	use snowbridge_inbound_queue_primitives::EventFixture;
@@ -96,9 +96,9 @@ pub mod pallet {
 	}
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The verifier for inbound messages from Ethereum
 		type Verifier: Verifier;

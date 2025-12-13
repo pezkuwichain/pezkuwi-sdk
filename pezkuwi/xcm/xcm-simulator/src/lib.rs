@@ -27,11 +27,11 @@ pub use paste;
 
 pub use alloc::collections::vec_deque::VecDeque;
 pub use core::{cell::RefCell, marker::PhantomData};
-pub use frame_support::{
+pub use pezframe_support::{
 	traits::{EnqueueMessage, Get, ProcessMessage, ProcessMessageError, ServiceQueues},
 	weights::{Weight, WeightMeter},
 };
-pub use sp_io::{hashing::blake2_256, TestExternalities};
+pub use pezsp_io::{hashing::blake2_256, TestExternalities};
 
 pub use pezkuwi_core_primitives::BlockNumber as RelayBlockNumber;
 pub use pezkuwi_runtime_teyrchains::{
@@ -48,7 +48,7 @@ pub use xcm_executor::XcmExecutor;
 
 pub trait TestExt {
 	/// Initialize the test environment.
-	fn new_ext() -> sp_io::TestExternalities;
+	fn new_ext() -> pezsp_io::TestExternalities;
 	/// Resets the state of the test environment.
 	fn reset_ext();
 	/// Execute code in the context of the test externalities, without automatic
@@ -149,7 +149,7 @@ macro_rules! decl_test_relay_chain {
 
 					match &event.event {
 						runtime_event::MessageQueue(
-								pallet_message_queue::Event::Processed {origin, ..}) => {
+								pezpallet_message_queue::Event::Processed {origin, ..}) => {
 							assert_eq!(origin, &AggregateMessageOrigin::Ump(UmpQueueId::Para(para)));
 						},
 						event => panic!("Unexpected event: {:#?}", event),
@@ -455,7 +455,7 @@ macro_rules! decl_test_network {
 
 pub mod helpers {
 	use super::*;
-	use sp_runtime::testing::H256;
+	use pezsp_runtime::testing::H256;
 	use std::collections::{HashMap, HashSet};
 
 	/// Derives a topic ID for an XCM in tests.
@@ -472,7 +472,7 @@ pub mod helpers {
 	/// # Examples
 	///
 	/// ```
-	/// use sp_runtime::testing::H256;
+	/// use pezsp_runtime::testing::H256;
 	/// use xcm_simulator::helpers::TopicIdTracker;
 	///
 	/// // Dummy topic IDs
@@ -612,7 +612,7 @@ pub mod helpers {
 	#[cfg(test)]
 	mod tests {
 		use super::*;
-		use sp_runtime::testing::H256;
+		use pezsp_runtime::testing::H256;
 
 		#[test]
 		#[should_panic(expected = "Expected exactly one topic ID")]

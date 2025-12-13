@@ -46,7 +46,7 @@ aware of this configuration:
 ///
 /// This differs from `CandidateCommitments` in two ways:
 ///
-/// - does not contain the erasure root; that's computed at the Pezkuwi level, not at Cumulus
+/// - does not contain the erasure root; that's computed at the Pezkuwi level, not at Pezcumulus
 /// - contains a proof of validity.
 pub struct Collation {
   /// Messages destined to be interpreted by the Relay chain itself.

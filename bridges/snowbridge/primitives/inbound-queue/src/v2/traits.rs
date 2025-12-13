@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2025 Snowfork <hello@snowfork.com>
 // SPDX-FileCopyrightText: 2021-2025 Parity Technologies (UK) Ltd.
 use super::Message;
-use sp_core::RuntimeDebug;
+use pezsp_core::RuntimeDebug;
 use xcm::latest::Xcm;
 
 /// Converts an inbound message from Ethereum to an XCM message that can be

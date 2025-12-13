@@ -25,14 +25,14 @@ use bp_runtime::{
 	StorageProofError, UnderlyingChainOf, UnderlyingChainProvider,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::PalletError;
-// Weight is reexported to avoid additional frame-support dependencies in related crates.
-pub use frame_support::weights::Weight;
+use pezframe_support::PalletError;
+// Weight is reexported to avoid additional pezframe-support dependencies in related crates.
+pub use pezframe_support::weights::Weight;
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
 use source_chain::RelayersRewards;
-use sp_core::RuntimeDebug;
-use sp_std::{collections::vec_deque::VecDeque, ops::RangeInclusive, prelude::*};
+use pezsp_core::RuntimeDebug;
+use pezsp_std::{collections::vec_deque::VecDeque, ops::RangeInclusive, prelude::*};
 
 pub use call_info::{
 	BaseMessagesProofInfo, BridgeMessagesCall, MessagesCallInfo, ReceiveMessagesDeliveryProofInfo,
@@ -49,7 +49,7 @@ pub mod target_chain;
 /// Hard limit on message size that can be sent over the bridge.
 pub const HARD_MESSAGE_SIZE_LIMIT: u32 = 64 * 1024;
 
-/// Substrate-based chain with messaging support.
+/// Bizinikiwi-based chain with messaging support.
 pub trait ChainWithMessages: Chain {
 	/// Name of the bridge messages pallet (used in `construct_runtime` macro call) that is
 	/// deployed at some other chain to bridge with this `ChainWithMessages`.
@@ -98,9 +98,9 @@ pub trait ChainWithMessages: Chain {
 
 /// Return maximal size of the message the chain with `max_extrinsic_size` is able to receive.
 pub fn maximal_incoming_message_size(max_extrinsic_size: u32) -> u32 {
-	// The maximal size of extrinsic at Substrate-based chain depends on the
-	// `frame_system::Config::MaximumBlockLength` and
-	// `frame_system::Config::AvailableBlockRatio` constants. This check is here to be sure that
+	// The maximal size of extrinsic at Bizinikiwi-based chain depends on the
+	// `pezframe_system::Config::MaximumBlockLength` and
+	// `pezframe_system::Config::AvailableBlockRatio` constants. This check is here to be sure that
 	// the lane won't stuck because message is too large to fit into delivery transaction.
 	//
 	// **IMPORTANT NOTE**: the delivery transaction contains storage proof of the message, not
@@ -115,7 +115,7 @@ pub fn maximal_incoming_message_size(max_extrinsic_size: u32) -> u32 {
 	// limit the **weight** (not the size) of the message will be higher than the
 	// `Self::maximal_incoming_message_dispatch_weight()`.
 
-	sp_std::cmp::min(max_extrinsic_size / 3 * 2, HARD_MESSAGE_SIZE_LIMIT)
+	pezsp_std::cmp::min(max_extrinsic_size / 3 * 2, HARD_MESSAGE_SIZE_LIMIT)
 }
 
 impl<T> ChainWithMessages for T
@@ -510,14 +510,14 @@ pub fn calc_relayers_rewards<AccountId>(
 	received_range: &RangeInclusive<MessageNonce>,
 ) -> RelayersRewards<AccountId>
 where
-	AccountId: sp_std::cmp::Ord,
+	AccountId: pezsp_std::cmp::Ord,
 {
 	// remember to reward relayers that have delivered messages
 	// this loop is bounded by `T::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX` on the bridged chain
 	let mut relayers_rewards = RelayersRewards::new();
 	for entry in messages_relayers {
-		let nonce_begin = sp_std::cmp::max(entry.messages.begin, *received_range.start());
-		let nonce_end = sp_std::cmp::min(entry.messages.end, *received_range.end());
+		let nonce_begin = pezsp_std::cmp::max(entry.messages.begin, *received_range.start());
+		let nonce_end = pezsp_std::cmp::min(entry.messages.end, *received_range.end());
 		if nonce_end >= nonce_begin {
 			*relayers_rewards.entry(entry.relayer).or_default() += nonce_end - nonce_begin + 1;
 		}

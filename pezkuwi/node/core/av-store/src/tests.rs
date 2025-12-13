@@ -35,7 +35,7 @@ use pezkuwi_primitives::{
 	HeadData, Header, PersistedValidationData, ValidatorId,
 };
 use pezkuwi_primitives_test_helpers::TestCandidateBuilder;
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
 mod columns {
 	pub const DATA: u32 = 0;
@@ -108,7 +108,7 @@ impl Default for TestState {
 
 struct NoSyncOracle;
 
-impl sp_consensus::SyncOracle for NoSyncOracle {
+impl pezsp_consensus::SyncOracle for NoSyncOracle {
 	fn is_major_syncing(&self) -> bool {
 		false
 	}
@@ -123,9 +123,9 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	store: Arc<dyn Database>,
 	test: impl FnOnce(VirtualOverseer) -> T,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
 

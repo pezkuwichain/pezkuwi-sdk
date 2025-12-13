@@ -5,20 +5,20 @@ use crate::{
 };
 
 use pezkuwi_sdk::{
-	staging_xcm as xcm, staging_xcm_builder as xcm_builder, staging_xcm_executor as xcm_executor, *,
+	pezstaging_xcm as xcm, pezstaging_xcm_builder as xcm_builder, pezstaging_xcm_executor as xcm_executor, *,
 };
 
-use frame_support::{
+use pezframe_support::{
 	parameter_types,
 	traits::{ConstU32, Contains, Everything, Nothing},
 	weights::Weight,
 };
-use frame_system::EnsureRoot;
-use pallet_xcm::XcmPassthrough;
+use pezframe_system::EnsureRoot;
+use pezpallet_xcm::XcmPassthrough;
 use pezkuwi_runtime_common::impls::ToAuthor;
 use pezkuwi_sdk::{
 	pezkuwi_sdk_frame::traits::Disabled,
-	staging_xcm_builder::{DenyRecursively, DenyThenTry},
+	pezstaging_xcm_builder::{DenyRecursively, DenyThenTry},
 };
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use xcm::latest::prelude::*;
@@ -169,7 +169,7 @@ pub type XcmRouter = WithUniqueTopic<(
 	XcmpQueue,
 )>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
@@ -187,13 +187,13 @@ impl pallet_xcm::Config for Runtime {
 
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
 	// ^ Override for AdvertisedXcmVersion default
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
 	type Currency = Balances;
 	type CurrencyMatcher = ();
 	type TrustedLockers = ();
 	type SovereignAccountOf = LocationToAccountId;
 	type MaxLockers = ConstU32<8>;
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	type AdminOrigin = EnsureRoot<AccountId>;
 	type MaxRemoteLockConsumers = ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();

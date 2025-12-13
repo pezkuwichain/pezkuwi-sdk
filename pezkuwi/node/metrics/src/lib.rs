@@ -38,13 +38,13 @@ pub use self::runtime::logger_hook;
 
 /// Export a dummy logger hook when the `runtime-metrics` feature is not enabled.
 #[cfg(not(feature = "runtime-metrics"))]
-pub fn logger_hook() -> impl FnOnce(&mut sc_cli::LoggerBuilder, &sc_service::Configuration) {
+pub fn logger_hook() -> impl FnOnce(&mut pezsc_cli::LoggerBuilder, &pezsc_service::Configuration) {
 	|_logger_builder, _config| {}
 }
 
 /// This module reexports Prometheus types and defines the [`Metrics`](metrics::Metrics) trait.
 pub mod metrics {
-	/// Reexport Substrate Prometheus types.
+	/// Reexport Bizinikiwi Prometheus types.
 	pub use prometheus_endpoint as prometheus;
 
 	/// Subsystem- or job-specific Prometheus metrics.

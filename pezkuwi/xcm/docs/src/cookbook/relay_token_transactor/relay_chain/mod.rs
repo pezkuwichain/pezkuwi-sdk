@@ -18,7 +18,7 @@
 //! Relay chain runtime mock.
 
 use frame::{
-	deps::{frame_support::weights::WeightMeter, sp_runtime::AccountId32},
+	deps::{pezframe_support::weights::WeightMeter, pezsp_runtime::AccountId32},
 	prelude::*,
 	runtime::prelude::*,
 	traits::{IdentityLookup, ProcessMessage, ProcessMessageError},
@@ -37,20 +37,20 @@ parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type AccountStore = System;
 }
 
-type Block = frame_system::mocking::MockBlock<Runtime>;
+type Block = pezframe_system::mocking::MockBlock<Runtime>;
 
 parameter_types! {
 	/// Amount of weight that can be spent per block to service messages.
@@ -81,7 +81,7 @@ impl ProcessMessage for MessageProcessor {
 	}
 }
 
-impl pallet_message_queue::Config for Runtime {
+impl pezpallet_message_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Size = u32;
 	type HeapSize = MessageQueueHeapSize;
@@ -96,9 +96,9 @@ impl pallet_message_queue::Config for Runtime {
 
 construct_runtime! {
 	pub struct Runtime {
-		System: frame_system,
-		Balances: pallet_balances,
-		MessageQueue: pallet_message_queue,
-		XcmPallet: pallet_xcm,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		MessageQueue: pezpallet_message_queue,
+		XcmPallet: pezpallet_xcm,
 	}
 }

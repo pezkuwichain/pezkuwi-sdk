@@ -24,7 +24,7 @@ use futures::{
 };
 
 use crate::approval::v1::DelayTranche;
-use sp_consensus_slots::Slot;
+use pezsp_consensus_slots::Slot;
 use std::{
 	collections::HashSet,
 	pin::Pin,

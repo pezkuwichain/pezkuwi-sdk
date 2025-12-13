@@ -105,7 +105,7 @@ impl MetricsParams {
 		relay_version: String,
 		relay_commit: String,
 	) -> Result<Self, PrometheusError> {
-		const BUILD_INFO_METRIC: &str = "substrate_relay_build_info";
+		const BUILD_INFO_METRIC: &str = "bizinikiwi_relay_build_info";
 
 		let registry = Registry::new();
 		register(

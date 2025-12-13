@@ -1,4 +1,4 @@
-//! Substrate Teyrchain Node Template CLI
+//! Bizinikiwi Teyrchain Node Template CLI
 
 #![warn(missing_docs)]
 
@@ -10,6 +10,6 @@ mod command;
 mod rpc;
 mod service;
 
-fn main() -> sc_cli::Result<()> {
+fn main() -> pezsc_cli::Result<()> {
 	command::run()
 }

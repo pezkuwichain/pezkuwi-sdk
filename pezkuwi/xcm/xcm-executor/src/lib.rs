@@ -21,14 +21,14 @@ extern crate alloc;
 use alloc::{vec, vec::Vec};
 use codec::{Decode, Encode};
 use core::{fmt::Debug, marker::PhantomData};
-use frame_support::{
+use pezframe_support::{
 	dispatch::GetDispatchInfo,
 	ensure,
 	traits::{Contains, ContainsPair, Defensive, Get, PalletsInfoAccess},
 };
-use sp_core::defer;
-use sp_io::hashing::blake2_128;
-use sp_weights::Weight;
+use pezsp_core::defer;
+use pezsp_io::hashing::blake2_128;
+use pezsp_weights::Weight;
 use xcm::latest::{prelude::*, AssetTransferFilter};
 
 pub mod traits;
@@ -346,7 +346,7 @@ pub struct ExecutorError {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-impl From<ExecutorError> for frame_benchmarking::BenchmarkError {
+impl From<ExecutorError> for pezframe_benchmarking::BenchmarkError {
 	fn from(error: ExecutorError) -> Self {
 		tracing::error!(
 			index = ?error.index,
@@ -1888,7 +1888,7 @@ impl<Config: config::Config> XcmExecutor<Config> {
 					if !matches!(
 						error,
 						XcmError::FailedToTransactAsset(string)
-							if *string == *<&'static str>::from(sp_runtime::TokenError::BelowMinimum)
+							if *string == *<&'static str>::from(pezsp_runtime::TokenError::BelowMinimum)
 					) {
 						return Err(error);
 					}

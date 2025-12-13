@@ -15,15 +15,15 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::*;
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_noop, assert_ok, assert_storage_noop, traits::UnfilteredDispatchable,
 };
 use pezkuwi_primitives::{BlockNumber, SchedulerParams, TEYRCHAIN_KEY_TYPE_ID};
 use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code, validator_pubkeys};
-use sc_keystore::LocalKeystore;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{Keystore, KeystorePtr};
-use sp_runtime::TokenError;
+use pezsc_keystore::LocalKeystore;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{Keystore, KeystorePtr};
+use pezsp_runtime::TokenError;
 use std::sync::Arc;
 
 use crate::{
@@ -140,8 +140,8 @@ fn check_code_is_not_stored(validation_code: &ValidationCode) {
 /// An utility for checking that certain events were deposited.
 struct EventValidator {
 	events: Vec<
-		frame_system::EventRecord<
-			<Test as frame_system::Config>::RuntimeEvent,
+		pezframe_system::EventRecord<
+			<Test as pezframe_system::Config>::RuntimeEvent,
 			pezkuwi_primitives::Hash,
 		>,
 	>,
@@ -153,8 +153,8 @@ impl EventValidator {
 	}
 
 	fn started(&mut self, code: &ValidationCode, id: ParaId) -> &mut Self {
-		self.events.push(frame_system::EventRecord {
-			phase: frame_system::Phase::Initialization,
+		self.events.push(pezframe_system::EventRecord {
+			phase: pezframe_system::Phase::Initialization,
 			event: Event::PvfCheckStarted(code.hash(), id).into(),
 			topics: vec![],
 		});
@@ -162,8 +162,8 @@ impl EventValidator {
 	}
 
 	fn rejected(&mut self, code: &ValidationCode, id: ParaId) -> &mut Self {
-		self.events.push(frame_system::EventRecord {
-			phase: frame_system::Phase::Initialization,
+		self.events.push(pezframe_system::EventRecord {
+			phase: pezframe_system::Phase::Initialization,
 			event: Event::PvfCheckRejected(code.hash(), id).into(),
 			topics: vec![],
 		});
@@ -171,8 +171,8 @@ impl EventValidator {
 	}
 
 	fn accepted(&mut self, code: &ValidationCode, id: ParaId) -> &mut Self {
-		self.events.push(frame_system::EventRecord {
-			phase: frame_system::Phase::Initialization,
+		self.events.push(pezframe_system::EventRecord {
+			phase: pezframe_system::Phase::Initialization,
 			event: Event::PvfCheckAccepted(code.hash(), id).into(),
 			topics: vec![],
 		});
@@ -180,7 +180,7 @@ impl EventValidator {
 	}
 
 	fn check(&self) {
-		assert_eq!(&frame_system::Pallet::<Test>::events(), &self.events);
+		assert_eq!(&pezframe_system::Pallet::<Test>::events(), &self.events);
 	}
 }
 
@@ -943,7 +943,7 @@ fn full_teyrchain_cleanup_storage() {
 		// For that run to block #7 and submit a new head.
 		assert_eq!(expected_at, 7);
 		run_to_block(7, None);
-		assert_eq!(frame_system::Pallet::<Test>::block_number(), 7);
+		assert_eq!(pezframe_system::Pallet::<Test>::block_number(), 7);
 		Paras::note_new_head(para_id, Default::default(), expected_at);
 		AuthorizedCodeHash::<Test>::insert(
 			&para_id,
@@ -1829,10 +1829,10 @@ fn verify_upgrade_go_ahead_signal_is_externally_accessible() {
 	let a = ParaId::from(2020);
 
 	new_test_ext(Default::default()).execute_with(|| {
-		assert!(sp_io::storage::get(&well_known_keys::upgrade_go_ahead_signal(a)).is_none());
+		assert!(pezsp_io::storage::get(&well_known_keys::upgrade_go_ahead_signal(a)).is_none());
 		UpgradeGoAheadSignal::<Test>::insert(&a, UpgradeGoAhead::GoAhead);
 		assert_eq!(
-			sp_io::storage::get(&well_known_keys::upgrade_go_ahead_signal(a)).unwrap(),
+			pezsp_io::storage::get(&well_known_keys::upgrade_go_ahead_signal(a)).unwrap(),
 			vec![1u8],
 		);
 	});
@@ -1845,10 +1845,10 @@ fn verify_upgrade_restriction_signal_is_externally_accessible() {
 	let a = ParaId::from(2020);
 
 	new_test_ext(Default::default()).execute_with(|| {
-		assert!(sp_io::storage::get(&well_known_keys::upgrade_restriction_signal(a)).is_none());
+		assert!(pezsp_io::storage::get(&well_known_keys::upgrade_restriction_signal(a)).is_none());
 		UpgradeRestrictionSignal::<Test>::insert(&a, UpgradeRestriction::Present);
 		assert_eq!(
-			sp_io::storage::get(&well_known_keys::upgrade_restriction_signal(a)).unwrap(),
+			pezsp_io::storage::get(&well_known_keys::upgrade_restriction_signal(a)).unwrap(),
 			vec![0],
 		);
 	});
@@ -1863,7 +1863,7 @@ fn verify_para_head_is_externally_accessible() {
 
 	new_test_ext(Default::default()).execute_with(|| {
 		Heads::<Test>::insert(&a, expected_head_data.clone());
-		let encoded = sp_io::storage::get(&well_known_keys::para_head(a)).unwrap();
+		let encoded = pezsp_io::storage::get(&well_known_keys::para_head(a)).unwrap();
 		let head_data = HeadData::decode(&mut encoded.as_ref());
 		assert_eq!(head_data, Ok(expected_head_data));
 	});
@@ -2308,7 +2308,7 @@ fn apply_authorized_force_set_current_code_works() {
 		);
 
 		// cannot apply obsolete authorization
-		frame_system::Pallet::<Test>::set_block_number(valid_period + 5 + 10);
+		pezframe_system::Pallet::<Test>::set_block_number(valid_period + 5 + 10);
 		assert_eq!(
 			apply_code(RuntimeOrigin::signed(1), para_a, code_1.clone(),),
 			(
@@ -2316,7 +2316,7 @@ fn apply_authorized_force_set_current_code_works() {
 				Err(Error::<Test>::InvalidBlockNumber.into())
 			),
 		);
-		frame_system::Pallet::<Test>::set_block_number(5);
+		pezframe_system::Pallet::<Test>::set_block_number(5);
 
 		// ok - can apply authorized code
 		let (validate_unsigned, dispatch_result) =

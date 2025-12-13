@@ -10,8 +10,8 @@ use snowbridge_beacon_primitives::{
 	SyncAggregate, SyncCommittee, VersionedExecutionPayloadHeader,
 };
 use snowbridge_verification_primitives::{EventFixture, EventProof, Log, Proof};
-use sp_core::U256;
-use sp_std::{boxed::Box, vec};
+use pezsp_core::U256;
+use pezsp_std::{boxed::Box, vec};
 
 const SC_SIZE: usize = 512;
 const SC_BITS_SIZE: usize = 64;

@@ -31,11 +31,11 @@ use bp_messages::{
 };
 use bp_runtime::{AccountIdOf, HashOf, UnverifiedStorageProofParams};
 use codec::Decode;
-use frame_benchmarking::{account, v2::*};
-use frame_support::weights::Weight;
-use frame_system::RawOrigin;
-use sp_runtime::{traits::TrailingZeroInput, BoundedVec};
-use sp_std::{ops::RangeInclusive, prelude::*};
+use pezframe_benchmarking::{account, v2::*};
+use pezframe_support::weights::Weight;
+use pezframe_system::RawOrigin;
+use pezsp_runtime::{traits::TrailingZeroInput, BoundedVec};
+use pezsp_std::{ops::RangeInclusive, prelude::*};
 
 const SEED: u32 = 0;
 
@@ -143,7 +143,7 @@ struct ReceiveMessagesProofSetup<T: Config<I>, I: 'static> {
 	relayer_id_on_src: AccountIdOf<BridgedChainOf<T, I>>,
 	relayer_id_on_tgt: T::AccountId,
 	msgs_count: u32,
-	_phantom_data: sp_std::marker::PhantomData<I>,
+	_phantom_data: pezsp_std::marker::PhantomData<I>,
 }
 
 impl<T: Config<I>, I: 'static> ReceiveMessagesProofSetup<T, I> {

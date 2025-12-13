@@ -26,7 +26,7 @@ async function run(_, networkInfo, nodeNames) {
     blockHashes.push(blockHash);
   }
 
-  // verify that height(finalized_head) is at least as high as the substrate_beefy_best_block test already verified
+  // verify that height(finalized_head) is at least as high as the bizinikiwi_beefy_best_block test already verified
   return finalizedHeads.every(({ finalizedHead, finalizedHeight }) =>
     finalizedHeight >= 21 && finalizedHead.toHex() === blockHashes[finalizedHeight].toHex()
   )

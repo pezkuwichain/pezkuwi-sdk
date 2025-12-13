@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! THIS FILE WAS AUTO-GENERATED USING THE SUBSTRATE BENCHMARK CLI VERSION 32.0.0
+//! THIS FILE WAS AUTO-GENERATED USING THE BIZINIKIWI BENCHMARK CLI VERSION 32.0.0
 //! DATE: 2024-02-29 (Y/M/D)
 //! HOSTNAME: `runner-bn-ce5rx-project-674-concurrent-0`, CPU: `Intel(R) Xeon(R) CPU @ 2.60GHz`
 //!
@@ -34,8 +34,8 @@
 //   --repeat=100
 //   --header=./pezkuwi/file_header.txt
 
-use sp_core::parameter_types;
-use sp_weights::{constants::WEIGHT_REF_TIME_PER_NANOS, Weight};
+use pezsp_core::parameter_types;
+use pezsp_weights::{constants::WEIGHT_REF_TIME_PER_NANOS, Weight};
 
 parameter_types! {
 	/// Time to execute a NO-OP extrinsic, for example `System::remark`.
@@ -57,7 +57,7 @@ parameter_types! {
 
 #[cfg(test)]
 mod test_weights {
-	use sp_weights::constants;
+	use pezsp_weights::constants;
 
 	/// Checks that the weight exists and is sane.
 	// NOTE: If this test fails but you are sure that the generated values are fine,

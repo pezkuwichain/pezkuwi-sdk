@@ -18,9 +18,9 @@
 //! Mock network
 
 use frame::deps::{
-	frame_system,
-	sp_io::TestExternalities,
-	sp_runtime::{AccountId32, BuildStorage},
+	pezframe_system,
+	pezsp_io::TestExternalities,
+	pezsp_runtime::{AccountId32, BuildStorage},
 };
 use xcm_simulator::{decl_test_network, decl_test_relay_chain, decl_test_teyrchain, TestExt};
 
@@ -65,8 +65,8 @@ decl_test_network! {
 pub fn para_ext() -> TestExternalities {
 	use teyrchain::{MessageQueue, Runtime, System};
 
-	let t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
-	let mut ext = frame::deps::sp_io::TestExternalities::new(t);
+	let t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	let mut ext = frame::deps::pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| {
 		System::set_block_number(1);
 		MessageQueue::set_para_id(2222.into());
@@ -77,9 +77,9 @@ pub fn para_ext() -> TestExternalities {
 pub fn relay_ext() -> TestExternalities {
 	use relay_chain::{Runtime, System};
 
-	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Runtime> {
+	pezpallet_balances::GenesisConfig::<Runtime> {
 		balances: vec![(ALICE, INITIAL_BALANCE)],
 		..Default::default()
 	}

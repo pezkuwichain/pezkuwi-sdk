@@ -23,7 +23,7 @@
 use crate::{Config, Error, Pallet};
 use alloc::vec::Vec;
 use hex_literal::hex;
-use sp_core::Get;
+use pezsp_core::Get;
 use xcm::prelude::*;
 use xcm_executor::traits::TransferType;
 
@@ -91,7 +91,7 @@ impl<T: Config> Pallet<T> {
 		for asset in assets {
 			if Self::is_network_native_asset(&asset.id) {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets",
+					target: "xcm::pezpallet_xcm::transfer_assets",
 					asset_id = ?asset.id, ?transfer_type,
 					"Network native asset reserve transfer blocked in preparation for the Asset Hub Migration. Use `transfer_assets_using_type_and_then` instead and explicitly mention the reserve."
 				);

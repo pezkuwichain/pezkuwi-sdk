@@ -30,7 +30,7 @@ use pezkuwi_primitives::{
 	BlockNumber, Hash, PvfCheckStatement, SessionIndex, ValidationCodeHash, ValidatorId,
 	ValidatorIndex,
 };
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 use std::collections::HashSet;
 
 const LOG_TARGET: &str = "teyrchain::pvf-checker";

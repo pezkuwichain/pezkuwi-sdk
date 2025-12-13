@@ -19,14 +19,14 @@
 use alloc::vec::Vec;
 use codec::{DecodeLimit, Encode};
 use core::marker::PhantomData;
-use frame_support::traits::Get;
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_support::traits::Get;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_runtime_teyrchains::{
 	configuration::{self, HostConfiguration},
 	dmp, FeeTracker,
 };
-use sp_runtime::FixedPointNumber;
+use pezsp_runtime::FixedPointNumber;
 use xcm::{prelude::*, MAX_XCM_DECODE_DEPTH};
 use xcm_builder::InspectMessageQueues;
 use SendError::*;
@@ -133,7 +133,7 @@ where
 	fn deliver(
 		(config, para, blob): (HostConfiguration<BlockNumberFor<T>>, ParaId, Vec<u8>),
 	) -> Result<XcmHash, SendError> {
-		let hash = sp_io::hashing::blake2_256(&blob[..]);
+		let hash = pezsp_io::hashing::blake2_256(&blob[..]);
 		dmp::Pallet::<T>::queue_downward_message(&config, para, blob)
 			.map(|()| hash)
 			.map_err(|error| {
@@ -283,9 +283,9 @@ mod tests {
 	use super::*;
 	use crate::integration_tests::new_test_ext;
 	use alloc::vec;
-	use frame_support::{assert_ok, parameter_types};
+	use pezframe_support::{assert_ok, parameter_types};
 	use pezkuwi_runtime_teyrchains::FeeTracker;
-	use sp_runtime::FixedU128;
+	use pezsp_runtime::FixedU128;
 	use xcm::MAX_XCM_DECODE_DEPTH;
 
 	parameter_types! {

@@ -20,10 +20,10 @@ use std::collections::HashSet;
 
 use crate::{xcm_config::LocationConverter, *};
 use approx::assert_relative_eq;
-use frame_support::traits::WhitelistedStorageKeys;
-use pallet_staking::EraPayout;
-use sp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
-use sp_keyring::Sr25519Keyring::Alice;
+use pezframe_support::traits::WhitelistedStorageKeys;
+use pezpallet_staking::EraPayout;
+use pezsp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
+use pezsp_keyring::Sr25519Keyring::Alice;
 use xcm_runtime_apis::conversions::LocationToAccountHelper;
 
 const MILLISECONDS_PER_HOUR: u64 = 60 * 60 * 1000;
@@ -41,7 +41,7 @@ fn sample_size_is_sensible() {
 	use pezkuwi_runtime_common::auctions::WeightInfo;
 	// Need to clean up all samples at the end of an auction.
 	let samples: BlockNumber = EndingPeriod::get() / SampleLength::get();
-	let max_weight: frame_support::weights::Weight =
+	let max_weight: pezframe_support::weights::Weight =
 		RocksDbWeight::get().reads_writes(samples.into(), samples.into());
 	// Max sample cleanup should be no more than half the total block weight.
 	assert!((max_weight * 2).all_lt(BlockWeights::get().max_block));
@@ -59,8 +59,8 @@ fn sanity_check_teleport_assets_weight() {
 	// This test sanity checks that at least 50 teleports can exist in a block.
 	// Usually when XCM runs into an issue, it will return a weight of `Weight::MAX`,
 	// so this test will certainly ensure that this problem does not occur.
-	use frame_support::dispatch::GetDispatchInfo;
-	let weight = pallet_xcm::Call::<Runtime>::limited_teleport_assets {
+	use pezframe_support::dispatch::GetDispatchInfo;
+	let weight = pezpallet_xcm::Call::<Runtime>::limited_teleport_assets {
 		dest: Box::new(Here.into()),
 		beneficiary: Box::new(Here.into()),
 		assets: Box::new((Here, 200_000).into()),
@@ -101,7 +101,7 @@ fn check_whitelist() {
 #[test]
 fn check_treasury_pallet_id() {
 	assert_eq!(
-		<Treasury as frame_support::traits::PalletInfoAccess>::index() as u8,
+		<Treasury as pezframe_support::traits::PalletInfoAccess>::index() as u8,
 		zagros_runtime_constants::TREASURY_PALLET_ID
 	);
 }
@@ -109,8 +109,8 @@ fn check_treasury_pallet_id() {
 #[cfg(all(test, feature = "try-runtime"))]
 mod remote_tests {
 	use super::*;
-	use frame_support::traits::{TryState, TryStateSelect::All};
-	use frame_try_runtime::{runtime_decl_for_try_runtime::TryRuntime, UpgradeCheckSelect};
+	use pezframe_support::traits::{TryState, TryStateSelect::All};
+	use pezframe_try_runtime::{runtime_decl_for_try_runtime::TryRuntime, UpgradeCheckSelect};
 	use remote_externalities::{
 		Builder, Mode, OfflineConfig, OnlineConfig, SnapshotConfig, Transport,
 	};
@@ -122,7 +122,7 @@ mod remote_tests {
 			return;
 		}
 
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		let transport: Transport =
 			var("WS").unwrap_or("wss://zagros-rpc.pezkuwichain.io:443".to_string()).into();
 		let maybe_state_snapshot: Option<SnapshotConfig> = var("SNAP").map(|s| s.into()).ok();
@@ -151,8 +151,8 @@ mod remote_tests {
 		if var("RUN_MIGRATION_TESTS").is_err() {
 			return;
 		}
-		use frame_support::assert_ok;
-		sp_tracing::try_init_simple();
+		use pezframe_support::assert_ok;
+		pezsp_tracing::try_init_simple();
 
 		let transport: Transport = var("WS").unwrap_or("ws://127.0.0.1:9900".to_string()).into();
 		let maybe_state_snapshot: Option<SnapshotConfig> = var("SNAP").map(|s| s.into()).ok();
@@ -184,15 +184,15 @@ mod remote_tests {
 		ext.execute_with(|| {
 			// create an account with some balance
 			let alice = AccountId::from([1u8; 32]);
-			use frame_support::traits::Currency;
+			use pezframe_support::traits::Currency;
 			let _ = Balances::deposit_creating(&alice, 100_000 * UNITS);
 
 			// iterate over all pools
-			pallet_nomination_pools::BondedPools::<Runtime>::iter_keys().for_each(|k| {
-				if pallet_nomination_pools::Pallet::<Runtime>::api_pool_needs_delegate_migration(k)
+			pezpallet_nomination_pools::BondedPools::<Runtime>::iter_keys().for_each(|k| {
+				if pezpallet_nomination_pools::Pallet::<Runtime>::api_pool_needs_delegate_migration(k)
 				{
 					assert_ok!(
-						pallet_nomination_pools::Pallet::<Runtime>::migrate_pool_to_delegate_stake(
+						pezpallet_nomination_pools::Pallet::<Runtime>::migrate_pool_to_delegate_stake(
 							RuntimeOrigin::signed(alice.clone()).into(),
 							k,
 						)
@@ -206,25 +206,25 @@ mod remote_tests {
 			let mut unexpected_errors = 0;
 
 			// iterate over all pool members
-			pallet_nomination_pools::PoolMembers::<Runtime>::iter_keys().for_each(|k| {
-				if pallet_nomination_pools::Pallet::<Runtime>::api_member_needs_delegate_migration(
+			pezpallet_nomination_pools::PoolMembers::<Runtime>::iter_keys().for_each(|k| {
+				if pezpallet_nomination_pools::Pallet::<Runtime>::api_member_needs_delegate_migration(
 					k.clone(),
 				) {
 					// reasons migrations can fail:
-					let is_direct_staker = pallet_staking::Bonded::<Runtime>::contains_key(&k);
+					let is_direct_staker = pezpallet_staking::Bonded::<Runtime>::contains_key(&k);
 
-					let migration = pallet_nomination_pools::Pallet::<Runtime>::migrate_delegation(
+					let migration = pezpallet_nomination_pools::Pallet::<Runtime>::migrate_delegation(
 						RuntimeOrigin::signed(alice.clone()).into(),
-						sp_runtime::MultiAddress::Id(k.clone()),
+						pezsp_runtime::MultiAddress::Id(k.clone()),
 					);
 
 					if is_direct_staker {
 						// if the member is a direct staker, the migration should fail until pool
-						// member unstakes all funds from pallet-staking.
+						// member unstakes all funds from pezpallet-staking.
 						direct_stakers += 1;
 						assert_eq!(
 							migration.unwrap_err(),
-							pallet_delegated_staking::Error::<Runtime>::AlreadyStaking.into()
+							pezpallet_delegated_staking::Error::<Runtime>::AlreadyStaking.into()
 						);
 					} else if migration.is_err() {
 						unexpected_errors += 1;
@@ -255,7 +255,7 @@ mod remote_tests {
 		if var("RUN_MIGRATION_TESTS").is_err() {
 			return;
 		}
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 
 		let transport: Transport = var("WS").unwrap_or("ws://127.0.0.1:9944".to_string()).into();
 		let maybe_state_snapshot: Option<SnapshotConfig> = var("SNAP").map(|s| s.into()).ok();
@@ -288,7 +288,7 @@ mod remote_tests {
 		ext.execute_with(|| {
 			// create an account with some balance
 			let alice = AccountId::from([1u8; 32]);
-			use frame_support::traits::Currency;
+			use pezframe_support::traits::Currency;
 			let _ = Balances::deposit_creating(&alice, 100_000 * UNITS);
 
 			let mut success = 0;
@@ -298,14 +298,14 @@ mod remote_tests {
 			let mut force_withdraw_count = 0;
 			let mut max_force_withdraw = 0;
 			// iterate over all stakers
-			pallet_staking::Ledger::<Runtime>::iter().for_each(|(ctrl, ledger)| {
-				match pallet_staking::Pallet::<Runtime>::migrate_currency(
+			pezpallet_staking::Ledger::<Runtime>::iter().for_each(|(ctrl, ledger)| {
+				match pezpallet_staking::Pallet::<Runtime>::migrate_currency(
 					RuntimeOrigin::signed(alice.clone()).into(),
 					ledger.stash.clone(),
 				) {
 					Ok(_) => {
 						let updated_ledger =
-							pallet_staking::Ledger::<Runtime>::get(&ctrl).expect("ledger exists");
+							pezpallet_staking::Ledger::<Runtime>::get(&ctrl).expect("ledger exists");
 						let force_withdraw = ledger.total - updated_ledger.total;
 						if force_withdraw > 0 {
 							force_withdraw_acc += force_withdraw;
@@ -316,7 +316,7 @@ mod remote_tests {
 						success += 1;
 					},
 					Err(e) => {
-						if e == pallet_staking::Error::<Runtime>::AlreadyMigrated.into() {
+						if e == pezpallet_staking::Error::<Runtime>::AlreadyMigrated.into() {
 							no_migration_needed += 1;
 						} else {
 							log::error!(target: "remote_test", "Error migrating {:?}: {:?}", ledger.stash, e);

@@ -17,7 +17,7 @@
 //! Errors for the XCM pallet.
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::PalletError;
+use pezframe_support::PalletError;
 use scale_info::TypeInfo;
 use xcm::latest::Error as XcmError;
 

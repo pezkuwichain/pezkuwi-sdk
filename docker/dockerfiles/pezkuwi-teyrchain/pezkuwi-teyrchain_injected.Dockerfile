@@ -8,7 +8,7 @@ ARG IMAGE_NAME
 LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
 	io.parity.image.title="${IMAGE_NAME}" \
-	io.parity.image.description="Cumulus, the Polkadot collator." \
+	io.parity.image.description="Pezcumulus, the Polkadot collator." \
 	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/polkadot-parachain/polkadot-parachain_injected.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \

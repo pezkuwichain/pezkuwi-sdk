@@ -22,11 +22,11 @@ use crate::{
 	paras::{Pallet as Paras, ParaKind, TeyrchainsCache},
 	shared::Pallet as Shared,
 };
-use frame_benchmarking::{v2::*, whitelisted_caller};
-use frame_support::{assert_ok, traits::Currency};
+use pezframe_benchmarking::{v2::*, whitelisted_caller};
+use pezframe_support::{assert_ok, traits::Currency};
 
 type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 fn register_teyrchain_with_balance<T: Config>(id: ParaId, balance: BalanceOf<T>) {
 	let mut teyrchains = TeyrchainsCache::new();
@@ -43,16 +43,16 @@ fn register_teyrchain_with_balance<T: Config>(id: ParaId, balance: BalanceOf<T>)
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = frame_system::Pallet::<T>::events();
-	let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+	let events = pezframe_system::Pallet::<T>::events();
+	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
-	let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 	assert_eq!(event, &system_event);
 }
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = frame_system::Pallet::<T>::events();
-	let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+	let events = pezframe_system::Pallet::<T>::events();
+	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 
 	assert!(events.iter().any(|record| record.event == system_event));
 }
@@ -76,7 +76,7 @@ fn establish_para_connection<T: Config>(
 	until: TeyrchainSetupStep,
 ) -> [(ParaId, crate::Origin); 2]
 where
-	<T as frame_system::Config>::RuntimeOrigin: From<crate::Origin>,
+	<T as pezframe_system::Config>::RuntimeOrigin: From<crate::Origin>,
 {
 	let config = configuration::ActiveConfig::<T>::get();
 	let ed = T::Currency::minimum_balance();
@@ -153,7 +153,7 @@ const _: () = {
 	assert!(HRMP_MAX_OUTBOUND_CHANNELS_BOUND < PREFIX_0);
 };
 
-#[benchmarks(where <T as frame_system::Config>::RuntimeOrigin: From<crate::Origin>)]
+#[benchmarks(where <T as pezframe_system::Config>::RuntimeOrigin: From<crate::Origin>)]
 mod benchmarks {
 	use super::*;
 
@@ -225,15 +225,15 @@ mod benchmarks {
 	) {
 		// first, update the configs to support this many open channels...
 		assert_ok!(Configuration::<T>::set_hrmp_max_teyrchain_outbound_channels(
-			frame_system::RawOrigin::Root.into(),
+			pezframe_system::RawOrigin::Root.into(),
 			e + 1
 		));
 		assert_ok!(Configuration::<T>::set_hrmp_max_teyrchain_inbound_channels(
-			frame_system::RawOrigin::Root.into(),
+			pezframe_system::RawOrigin::Root.into(),
 			i + 1
 		));
 		assert_ok!(Configuration::<T>::set_max_downward_message_size(
-			frame_system::RawOrigin::Root.into(),
+			pezframe_system::RawOrigin::Root.into(),
 			1024
 		));
 		// .. and enact it.
@@ -276,7 +276,7 @@ mod benchmarks {
 		assert_eq!(HrmpChannels::<T>::iter().count() as u32, i + e);
 
 		#[extrinsic_call]
-		_(frame_system::Origin::<T>::Root, para, i, e);
+		_(pezframe_system::Origin::<T>::Root, para, i, e);
 
 		// all in all, all of them must be gone by now.
 		assert_eq!(HrmpChannels::<T>::iter().count() as u32, 0);
@@ -301,7 +301,7 @@ mod benchmarks {
 		assert_eq!(HrmpOpenChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32, c);
 
 		#[extrinsic_call]
-		_(frame_system::Origin::<T>::Root, c);
+		_(pezframe_system::Origin::<T>::Root, c);
 
 		assert_eq!(HrmpOpenChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32, 0);
 	}
@@ -323,7 +323,7 @@ mod benchmarks {
 		assert_eq!(HrmpCloseChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32, c);
 
 		#[extrinsic_call]
-		_(frame_system::Origin::<T>::Root, c);
+		_(pezframe_system::Origin::<T>::Root, c);
 
 		assert_eq!(HrmpCloseChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32, 0);
 	}
@@ -429,7 +429,7 @@ mod benchmarks {
 		assert!(HrmpChannels::<T>::get(&channel_id).is_none());
 
 		#[extrinsic_call]
-		_(frame_system::Origin::<T>::Root, sender_id, recipient_id, capacity, message_size);
+		_(pezframe_system::Origin::<T>::Root, sender_id, recipient_id, capacity, message_size);
 
 		assert_last_event::<T>(
 			Event::<T>::HrmpChannelForceOpened {
@@ -458,7 +458,7 @@ mod benchmarks {
 		let message_size = config.hrmp_channel_max_message_size;
 
 		#[extrinsic_call]
-		_(frame_system::RawOrigin::Signed(caller), sender_id, recipient_id);
+		_(pezframe_system::RawOrigin::Signed(caller), sender_id, recipient_id);
 
 		assert_last_event::<T>(
 			Event::<T>::HrmpSystemChannelOpened {
@@ -506,7 +506,7 @@ mod benchmarks {
 		let _ = T::Currency::reserve(&recipient_id.into_account_truncating(), recipient_deposit);
 
 		#[extrinsic_call]
-		_(frame_system::RawOrigin::Signed(caller), sender_id, recipient_id);
+		_(pezframe_system::RawOrigin::Signed(caller), sender_id, recipient_id);
 
 		assert_last_event::<T>(
 			Event::<T>::OpenChannelDepositsUpdated { sender: sender_id, recipient: recipient_id }

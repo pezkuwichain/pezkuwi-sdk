@@ -29,10 +29,10 @@ use futures::{
 };
 use futures_timer::Delay;
 
-use sc_network as network;
-use sc_network::{config as netconfig, config::RequestResponseConfig, IfDisconnected};
-use sp_core::{testing::TaskExecutor, traits::SpawnNamed};
-use sp_keystore::KeystorePtr;
+use pezsc_network as network;
+use pezsc_network::{config as netconfig, config::RequestResponseConfig, IfDisconnected};
+use pezsp_core::{testing::TaskExecutor, traits::SpawnNamed};
+use pezsp_keystore::KeystorePtr;
 
 use pezkuwi_node_network_protocol::request_response::{
 	v1, v2, IncomingRequest, OutgoingRequest, Protocol, ReqProtocolNames, Requests,

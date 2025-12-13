@@ -23,13 +23,13 @@ pub const BEST_FINALIZED_VALUE_NAME: &str = "BestFinalized";
 /// Name of the `CurrentAuthoritySet` storage value.
 pub const CURRENT_AUTHORITY_SET_VALUE_NAME: &str = "CurrentAuthoritySet";
 
-use sp_core::storage::StorageKey;
+use pezsp_core::storage::StorageKey;
 
 /// Storage key of the `PalletOperatingMode` variable in the runtime storage.
-pub fn pallet_operating_mode_key(pallet_prefix: &str) -> StorageKey {
+pub fn pezpallet_operating_mode_key(pezpallet_prefix: &str) -> StorageKey {
 	StorageKey(
 		bp_runtime::storage_value_final_key(
-			pallet_prefix.as_bytes(),
+			pezpallet_prefix.as_bytes(),
 			PALLET_OPERATING_MODE_VALUE_NAME.as_bytes(),
 		)
 		.to_vec(),
@@ -37,10 +37,10 @@ pub fn pallet_operating_mode_key(pallet_prefix: &str) -> StorageKey {
 }
 
 /// Storage key of the `CurrentAuthoritySet` variable in the runtime storage.
-pub fn current_authority_set_key(pallet_prefix: &str) -> StorageKey {
+pub fn current_authority_set_key(pezpallet_prefix: &str) -> StorageKey {
 	StorageKey(
 		bp_runtime::storage_value_final_key(
-			pallet_prefix.as_bytes(),
+			pezpallet_prefix.as_bytes(),
 			CURRENT_AUTHORITY_SET_VALUE_NAME.as_bytes(),
 		)
 		.to_vec(),
@@ -48,10 +48,10 @@ pub fn current_authority_set_key(pallet_prefix: &str) -> StorageKey {
 }
 
 /// Storage key of the best finalized header number and hash value in the runtime storage.
-pub fn best_finalized_key(pallet_prefix: &str) -> StorageKey {
+pub fn best_finalized_key(pezpallet_prefix: &str) -> StorageKey {
 	StorageKey(
 		bp_runtime::storage_value_final_key(
-			pallet_prefix.as_bytes(),
+			pezpallet_prefix.as_bytes(),
 			BEST_FINALIZED_VALUE_NAME.as_bytes(),
 		)
 		.to_vec(),
@@ -64,10 +64,10 @@ mod tests {
 	use hex_literal::hex;
 
 	#[test]
-	fn pallet_operating_mode_key_computed_properly() {
+	fn pezpallet_operating_mode_key_computed_properly() {
 		// If this test fails, then something has been changed in module storage that is breaking
 		// compatibility with previous pallet.
-		let storage_key = pallet_operating_mode_key("BridgeGrandpa").0;
+		let storage_key = pezpallet_operating_mode_key("BridgeGrandpa").0;
 		assert_eq!(
 			storage_key,
 			hex!("0b06f475eddb98cf933a12262e0388de0f4cf0917788d791142ff6c1f216e7b3").to_vec(),

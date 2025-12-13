@@ -93,16 +93,16 @@ Traditional financial and administrative systems often present significant barri
 ---
 ## 4. The Solution: PezkuwiChain Architecture
 
-PezkuwiChain is architected as a comprehensive solution for digital sovereignty. It is built using the **Pezkuwi SDK**, a state-of-the-art, modular framework forged from the battle-tested open-source Substrate framework.
+PezkuwiChain is architected as a comprehensive solution for digital sovereignty. It is built using the **Pezkuwi SDK**, a state-of-the-art, modular framework forged from the battle-tested open-source Bizinikiwi framework.
 
 ### 4.1. Our Technological Foundation
-Our choice of a modular, open-source framework provides PezkuwiChain with a robust and future-proof foundation. The core of this architecture is **Substrate**, a framework that separates the blockchain's core logic (Runtime) from its client-side functions (Client), allowing for forkless, on-chain upgrades.
+Our choice of a modular, open-source framework provides PezkuwiChain with a robust and future-proof foundation. The core of this architecture is **Bizinikiwi**, a framework that separates the blockchain's core logic (Runtime) from its client-side functions (Client), allowing for forkless, on-chain upgrades.
 
 ![System Architecture](system_architecture.png)
 *Figure 1: PezkuwiChain System Architecture*
 
 ### 4.2. Consensus Innovation: Trust-enhanced Nominated Proof-of-Stake (TNPoS)
-PezkuwiChain introduces a groundbreaking enhancement to traditional NPoS consensus by directly integrating a **Trust System**. This novel approach, termed TNPoS, combines the economic security of NPoS with a social reputation layer provided by the custom `pallet-trust`.
+PezkuwiChain introduces a groundbreaking enhancement to traditional NPoS consensus by directly integrating a **Trust System**. This novel approach, termed TNPoS, combines the economic security of NPoS with a social reputation layer provided by the custom `pezpallet-trust`.
 
 ![TNPoS Flow](tnpos_consensus_flow.png)
 *Figure 2: TNPoS Consensus Flow*
@@ -130,9 +130,9 @@ PEZ is a fixed-supply token (5 billion units) for governance and trust-based rew
 
 The true power of PezkuwiChain lies in the **Pezkuwi SDK**, a collection of **14 custom pallets** that provide the tools for digital nation-building.
 
-- **Economic Pallets (on Asset Hub):** `pallet-pez-treasury`, `pallet-presale`, `pallet-token-wrapper`.
-- **Social & Identity Pallets (on People Chain):** `pallet-identity-kyc`, `pallet-trust`, `pallet-referral`, `pallet-perwerde`, `pallet-tiki`, `pallet-society`.
-- **Governance & Staking Pallets:** `pallet-welati`, `pallet-pez-rewards`, `pallet-staking-score`, `pallet-validator-pool`.
+- **Economic Pallets (on Asset Hub):** `pezpallet-pez-treasury`, `pezpallet-presale`, `pezpallet-token-wrapper`.
+- **Social & Identity Pallets (on People Chain):** `pezpallet-identity-kyc`, `pezpallet-trust`, `pezpallet-referral`, `pezpallet-perwerde`, `pezpallet-tiki`, `pezpallet-society`.
+- **Governance & Staking Pallets:** `pezpallet-welati`, `pezpallet-pez-rewards`, `pezpallet-staking-score`, `pezpallet-validator-pool`.
 
 ---
 
@@ -166,13 +166,13 @@ The project operates under the Kurdistan Talent Institute License. It is a utili
 3.  **GRANDPA: A Byzantine Finality Gadget** - Web3 Foundation Research.
 4.  **Nominated Proof-of-Stake (NPoS)** - Web3 Foundation Documentation.
 5.  **XCM: The Cross-Consensus Message Format** - Polkadot Wiki.
-6.  **Substrate: A Blockchain Framework for a Multichain Future** - Parity Technologies.
+6.  **Bizinikiwi: A Blockchain Framework for a Multichain Future** - Parity Technologies.
 
 ### Project Resources
 1.  **PezkuwiChain GitHub Repository** - `https://github.com/pezkuwichain/pezkuwi-sdk`
-2.  **pallet-pez-treasury Source Code** - `.../pezkuwi/pallets/pez-treasury`
-3.  **pallet-pez-rewards Source Code** - `.../pezkuwi/pallets/pez-rewards`
-4.  **pallet-trust Source Code** - `.../pezkuwi/pallets/trust`
+2.  **pezpallet-pez-treasury Source Code** - `.../pezkuwi/pallets/pez-treasury`
+3.  **pezpallet-pez-rewards Source Code** - `.../pezkuwi/pallets/pez-rewards`
+4.  **pezpallet-trust Source Code** - `.../pezkuwi/pallets/trust`
 
 ---
 ## 18. Contact & Resources
@@ -205,10 +205,10 @@ The project operates under the Kurdistan Talent Institute License. It is a utili
 - **FRAME:** The framework used for building blockchain runtimes with modular pallets.
 - **HEZ:** The native inflationary token of PezkuwiChain, used for staking, transaction fees, and network security.
 - **NPoS (Nominated Proof-of-Stake):** The consensus mechanism where nominators elect validators.
-- **Pallet:** A modular component in the Substrate runtime that provides specific functionality.
+- **Pallet:** A modular component in the Bizinikiwi runtime that provides specific functionality.
 - **PEZ:** The fixed-supply governance token of PezkuwiChain (5 billion total), used for governance and rewards.
 - **TNPoS (Trust-enhanced Nominated Proof-of-Stake):** PezkuwiChain's novel consensus mechanism that integrates trust scores.
-- **Trust Score:** A reputation metric calculated by `pallet-trust`.
+- **Trust Score:** A reputation metric calculated by `pezpallet-trust`.
 - **Wasm (WebAssembly):** The portable binary instruction format used for the PezkuwiChain runtime, enabling forkless upgrades.
 - **welati:** The governance pallet for PezkuwiChain. The name means "citizen" in Kurdish.
 - **perwerde:** The education and certification pallet. The name means "education" in Kurdish.

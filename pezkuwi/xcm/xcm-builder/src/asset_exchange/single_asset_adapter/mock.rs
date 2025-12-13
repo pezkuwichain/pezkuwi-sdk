@@ -17,7 +17,7 @@
 //! Mock to test [`SingleAssetExchangeAdapter`].
 
 use core::marker::PhantomData;
-use frame_support::{
+use pezframe_support::{
 	assert_ok, construct_runtime, derive_impl, ord_parameter_types, parameter_types,
 	traits::{
 		fungible::{self, NativeFromLeft, NativeOrWithId},
@@ -28,8 +28,8 @@ use frame_support::{
 	},
 	PalletId,
 };
-use sp_core::{ConstU128, ConstU32, Get};
-use sp_runtime::{
+use pezsp_core::{ConstU128, ConstU32, Get};
+use pezsp_runtime::{
 	traits::{AccountIdConversion, IdentityLookup, MaybeEquivalence, TryConvert, TryConvertInto},
 	BuildStorage, Permill,
 };
@@ -38,41 +38,41 @@ use xcm_executor::{traits::ConvertLocation, XcmExecutor};
 
 use crate::{FungibleAdapter, IsConcrete, MatchedConvertedConcreteId, StartsWith};
 
-pub type Block = frame_system::mocking::MockBlock<Runtime>;
+pub type Block = pezframe_system::mocking::MockBlock<Runtime>;
 pub type AccountId = u64;
 pub type Balance = u128;
 
 construct_runtime! {
 	pub struct Runtime {
-		System: frame_system,
-		Balances: pallet_balances,
-		AssetsPallet: pallet_assets::<Instance1>,
-		PoolAssets: pallet_assets::<Instance2>,
-		XcmPallet: pallet_xcm,
-		AssetConversion: pallet_asset_conversion,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		AssetsPallet: pezpallet_assets::<Instance1>,
+		PoolAssets: pezpallet_assets::<Instance2>,
+		XcmPallet: pezpallet_xcm,
+		AssetConversion: pezpallet_asset_conversion,
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Runtime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Runtime {
 	type Block = Block;
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<AccountId>;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Runtime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	type AccountStore = System;
 	type ExistentialDeposit = ConstU128<1>;
 }
 
-pub type TrustBackedAssetsInstance = pallet_assets::Instance1;
-pub type PoolAssetsInstance = pallet_assets::Instance2;
+pub type TrustBackedAssetsInstance = pezpallet_assets::Instance1;
+pub type PoolAssetsInstance = pezpallet_assets::Instance2;
 
-#[derive_impl(pallet_assets::config_preludes::TestDefaultConfig)]
-impl pallet_assets::Config<TrustBackedAssetsInstance> for Runtime {
+#[derive_impl(pezpallet_assets::config_preludes::TestDefaultConfig)]
+impl pezpallet_assets::Config<TrustBackedAssetsInstance> for Runtime {
 	type Currency = Balances;
 	type Balance = Balance;
 	type AssetDeposit = ConstU128<1>;
@@ -80,15 +80,15 @@ impl pallet_assets::Config<TrustBackedAssetsInstance> for Runtime {
 	type MetadataDepositBase = ConstU128<1>;
 	type MetadataDepositPerByte = ConstU128<1>;
 	type ApprovalDeposit = ConstU128<1>;
-	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
-	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type CreateOrigin = AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
+	type ForceOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type Freezer = ();
 	type Holder = ();
 	type CallbackHandle = ();
 }
 
-#[derive_impl(pallet_assets::config_preludes::TestDefaultConfig)]
-impl pallet_assets::Config<PoolAssetsInstance> for Runtime {
+#[derive_impl(pezpallet_assets::config_preludes::TestDefaultConfig)]
+impl pezpallet_assets::Config<PoolAssetsInstance> for Runtime {
 	type Currency = Balances;
 	type Balance = Balance;
 	type AssetDeposit = ConstU128<1>;
@@ -96,8 +96,8 @@ impl pallet_assets::Config<PoolAssetsInstance> for Runtime {
 	type MetadataDepositBase = ConstU128<1>;
 	type MetadataDepositPerByte = ConstU128<1>;
 	type ApprovalDeposit = ConstU128<1>;
-	type CreateOrigin = AsEnsureOriginWithArg<frame_system::EnsureSigned<AccountId>>;
-	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type CreateOrigin = AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
+	type ForceOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type Freezer = ();
 	type Holder = ();
 	type CallbackHandle = ();
@@ -118,19 +118,19 @@ ord_parameter_types! {
 		AccountIdConversion::<AccountId>::into_account_truncating(&AssetConversionPalletId::get());
 }
 
-pub type PoolIdToAccountId = pallet_asset_conversion::AccountIdConverter<
+pub type PoolIdToAccountId = pezpallet_asset_conversion::AccountIdConverter<
 	AssetConversionPalletId,
 	(NativeOrWithId<u32>, NativeOrWithId<u32>),
 >;
 
-impl pallet_asset_conversion::Config for Runtime {
+impl pezpallet_asset_conversion::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
-	type HigherPrecisionBalance = sp_core::U256;
+	type HigherPrecisionBalance = pezsp_core::U256;
 	type AssetKind = NativeOrWithId<u32>;
 	type Assets = NativeAndAssets;
 	type PoolId = (Self::AssetKind, Self::AssetKind);
-	type PoolLocator = pallet_asset_conversion::WithFirstAsset<
+	type PoolLocator = pezpallet_asset_conversion::WithFirstAsset<
 		Native,
 		AccountId,
 		Self::AssetKind,
@@ -184,10 +184,10 @@ pub type Weigher = crate::FixedWeightBounds<WeightPerInstruction, RuntimeCall, M
 pub struct LocationToAssetId;
 impl MaybeEquivalence<Location, NativeOrWithId<u32>> for LocationToAssetId {
 	fn convert(location: &Location) -> Option<NativeOrWithId<u32>> {
-		let pallet_instance = TrustBackedAssetsPalletIndex::get();
+		let pezpallet_instance = TrustBackedAssetsPalletIndex::get();
 		match location.unpack() {
 			(0, [PalletInstance(instance), GeneralIndex(index)])
-				if *instance == pallet_instance =>
+				if *instance == pezpallet_instance =>
 				Some(NativeOrWithId::WithId(*index as u32)),
 			(0, []) => Some(NativeOrWithId::Native),
 			_ => None,
@@ -195,10 +195,10 @@ impl MaybeEquivalence<Location, NativeOrWithId<u32>> for LocationToAssetId {
 	}
 
 	fn convert_back(asset_id: &NativeOrWithId<u32>) -> Option<Location> {
-		let pallet_instance = TrustBackedAssetsPalletIndex::get();
+		let pezpallet_instance = TrustBackedAssetsPalletIndex::get();
 		Some(match asset_id {
 			NativeOrWithId::WithId(id) =>
-				Location::new(0, [PalletInstance(pallet_instance), GeneralIndex((*id).into())]),
+				Location::new(0, [PalletInstance(pezpallet_instance), GeneralIndex((*id).into())]),
 			NativeOrWithId::Native => Location::new(0, []),
 		})
 	}
@@ -269,7 +269,7 @@ impl ConvertLocation<AccountId> for AccountIndex64Aliases {
 /// `Convert` implementation to convert from some a `Signed` (system) `Origin` into an
 /// `AccountIndex64`.
 ///
-/// Typically used when configuring `pallet-xcm` in tests to allow `u64` accounts to dispatch an XCM
+/// Typically used when configuring `pezpallet-xcm` in tests to allow `u64` accounts to dispatch an XCM
 /// from an `AccountIndex64` origin.
 pub struct SignedToAccountIndex64<RuntimeOrigin, AccountId, Network>(
 	PhantomData<(RuntimeOrigin, AccountId, Network)>,
@@ -277,12 +277,12 @@ pub struct SignedToAccountIndex64<RuntimeOrigin, AccountId, Network>(
 impl<RuntimeOrigin: OriginTrait + Clone, AccountId: Into<u64>, Network: Get<Option<NetworkId>>>
 	TryConvert<RuntimeOrigin, Location> for SignedToAccountIndex64<RuntimeOrigin, AccountId, Network>
 where
-	RuntimeOrigin::PalletsOrigin: From<frame_system::RawOrigin<AccountId>>
-		+ TryInto<frame_system::RawOrigin<AccountId>, Error = RuntimeOrigin::PalletsOrigin>,
+	RuntimeOrigin::PalletsOrigin: From<pezframe_system::RawOrigin<AccountId>>
+		+ TryInto<pezframe_system::RawOrigin<AccountId>, Error = RuntimeOrigin::PalletsOrigin>,
 {
 	fn try_convert(o: RuntimeOrigin) -> Result<Location, RuntimeOrigin> {
 		o.try_with_caller(|caller| match caller.try_into() {
-			Ok(frame_system::RawOrigin::Signed(who)) =>
+			Ok(pezframe_system::RawOrigin::Signed(who)) =>
 				Ok(Junction::AccountIndex64 { network: Network::get(), index: who.into() }.into()),
 			Ok(other) => Err(other.into()),
 			Err(other) => Err(other),
@@ -298,7 +298,7 @@ parameter_types! {
 /// sending/executing XCMs.
 pub type LocalOriginToLocation = SignedToAccountIndex64<RuntimeOrigin, AccountId, NoNetwork>;
 
-impl pallet_xcm::Config for Runtime {
+impl pezpallet_xcm::Config for Runtime {
 	// We turn off sending for these tests
 	type SendXcmOrigin = crate::EnsureXcmOrigin<RuntimeOrigin, ()>;
 	type XcmRouter = ();
@@ -318,12 +318,12 @@ impl pallet_xcm::Config for Runtime {
 	type UniversalLocation = UniversalLocation;
 	// No version discovery needed
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 0;
-	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
-	type AdminOrigin = frame_system::EnsureRoot<AccountId>;
+	type AdvertisedXcmVersion = pezpallet_xcm::CurrentXcmVersion;
+	type AdminOrigin = pezframe_system::EnsureRoot<AccountId>;
 	// No locking
 	type TrustedLockers = ();
-	type MaxLockers = frame_support::traits::ConstU32<0>;
-	type MaxRemoteLockConsumers = frame_support::traits::ConstU32<0>;
+	type MaxLockers = pezframe_support::traits::ConstU32<0>;
+	type MaxRemoteLockConsumers = pezframe_support::traits::ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
 	// How to turn locations into accounts
 	type SovereignAccountOf = LocationToAccountId;
@@ -331,7 +331,7 @@ impl pallet_xcm::Config for Runtime {
 	type Currency = Balances;
 	type CurrencyMatcher = crate::IsConcrete<HereLocation>;
 	// Pallet benchmarks, no need for this recipe
-	type WeightInfo = pallet_xcm::TestWeightInfo;
+	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	// Runtime types
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
@@ -342,10 +342,10 @@ impl pallet_xcm::Config for Runtime {
 
 pub const INITIAL_BALANCE: Balance = 1_000_000_000;
 
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Runtime> {
+	pezpallet_balances::GenesisConfig::<Runtime> {
 		balances: vec![(0, INITIAL_BALANCE), (1, INITIAL_BALANCE), (2, INITIAL_BALANCE)],
 		..Default::default()
 	}
@@ -354,7 +354,7 @@ pub fn new_test_ext() -> sp_io::TestExternalities {
 
 	let owner = 0;
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| {
 		System::set_block_number(1);
 		assert_ok!(AssetsPallet::force_create(RuntimeOrigin::root(), 1, owner, false, 1,));

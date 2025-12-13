@@ -17,23 +17,23 @@
 use bp_header_chain::ChainWithGrandpa;
 use bp_pezkuwi_core::teyrchains::ParaId;
 use bp_runtime::{Chain, ChainId, Teyrchain};
-use frame_support::{
+use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types, traits::ConstU32, weights::Weight,
 };
-use sp_runtime::{
+use pezsp_runtime::{
 	testing::H256,
 	traits::{BlakeTwo256, Header as HeaderT},
 	MultiSignature, StateVersion,
 };
 
-use crate as pallet_bridge_teyrchains;
+use crate as pezpallet_bridge_teyrchains;
 
 pub type AccountId = u64;
 
 pub type RelayBlockHeader =
-	sp_runtime::generic::Header<crate::RelayBlockNumber, crate::RelayBlockHasher>;
+	pezsp_runtime::generic::Header<crate::RelayBlockNumber, crate::RelayBlockHasher>;
 
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Block = pezframe_system::mocking::MockBlock<TestRuntime>;
 
 pub const PARAS_PALLET_NAME: &str = "Paras";
 pub const UNTRACKED_TEYRCHAIN_ID: u32 = 10;
@@ -42,9 +42,9 @@ pub const MAXIMAL_TEYRCHAIN_HEAD_DATA_SIZE: u32 = 1 + 8 + 32;
 // total teyrchains that we use in tests
 pub const TOTAL_TEYRCHAINS: u32 = 4;
 
-pub type RegularTeyrchainHeader = sp_runtime::testing::Header;
+pub type RegularTeyrchainHeader = pezsp_runtime::testing::Header;
 pub type RegularTeyrchainHasher = BlakeTwo256;
-pub type BigTeyrchainHeader = sp_runtime::generic::Header<u128, BlakeTwo256>;
+pub type BigTeyrchainHeader = pezsp_runtime::generic::Header<u128, BlakeTwo256>;
 
 pub struct Teyrchain1;
 
@@ -166,15 +166,15 @@ impl Teyrchain for BigTeyrchain {
 construct_runtime! {
 	pub enum TestRuntime
 	{
-		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Grandpa1: pallet_bridge_grandpa::<Instance1>::{Pallet, Event<T>},
-		Grandpa2: pallet_bridge_grandpa::<Instance2>::{Pallet, Event<T>},
-		Teyrchains: pallet_bridge_teyrchains::{Call, Pallet, Event<T>},
+		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
+		Grandpa1: pezpallet_bridge_grandpa::<Instance1>::{Pallet, Event<T>},
+		Grandpa2: pezpallet_bridge_grandpa::<Instance2>::{Pallet, Event<T>},
+		Teyrchains: pezpallet_bridge_teyrchains::{Call, Pallet, Event<T>},
 	}
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = Block;
 }
 
@@ -183,7 +183,7 @@ parameter_types! {
 	pub const FreeHeadersInterval: u32 = 15;
 }
 
-impl pallet_bridge_grandpa::Config<pallet_bridge_grandpa::Instance1> for TestRuntime {
+impl pezpallet_bridge_grandpa::Config<pezpallet_bridge_grandpa::Instance1> for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type BridgedChain = TestBridgedChain;
 	type MaxFreeHeadersPerBlock = ConstU32<2>;
@@ -192,7 +192,7 @@ impl pallet_bridge_grandpa::Config<pallet_bridge_grandpa::Instance1> for TestRun
 	type WeightInfo = ();
 }
 
-impl pallet_bridge_grandpa::Config<pallet_bridge_grandpa::Instance2> for TestRuntime {
+impl pezpallet_bridge_grandpa::Config<pezpallet_bridge_grandpa::Instance2> for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type BridgedChain = TestBridgedChain;
 	type MaxFreeHeadersPerBlock = ConstU32<2>;
@@ -207,10 +207,10 @@ parameter_types! {
 	pub GetTenFirstTeyrchains: Vec<ParaId> = (0..10).map(ParaId).collect();
 }
 
-impl pallet_bridge_teyrchains::Config for TestRuntime {
+impl pezpallet_bridge_teyrchains::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
-	type BridgesGrandpaPalletInstance = pallet_bridge_grandpa::Instance1;
+	type BridgesGrandpaPalletInstance = pezpallet_bridge_grandpa::Instance1;
 	type ParasPalletName = ParasPalletName;
 	type ParaStoredHeaderDataBuilder = (Teyrchain1, Teyrchain2, Teyrchain3, BigTeyrchain);
 	type HeadsToKeep = HeadsToKeep;
@@ -219,7 +219,7 @@ impl pallet_bridge_teyrchains::Config for TestRuntime {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-impl pallet_bridge_teyrchains::benchmarking::Config<()> for TestRuntime {
+impl pezpallet_bridge_teyrchains::benchmarking::Config<()> for TestRuntime {
 	fn teyrchains() -> Vec<ParaId> {
 		vec![
 			ParaId(Teyrchain1::TEYRCHAIN_ID),
@@ -263,7 +263,7 @@ impl Chain for TestBridgedChain {
 	type AccountId = AccountId;
 	type Balance = u32;
 	type Nonce = u32;
-	type Signature = sp_runtime::testing::TestSignature;
+	type Signature = pezsp_runtime::testing::TestSignature;
 
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
@@ -285,8 +285,8 @@ impl ChainWithGrandpa for TestBridgedChain {
 }
 
 /// Return test externalities to use in tests.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	sp_io::TestExternalities::new(Default::default())
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	pezsp_io::TestExternalities::new(Default::default())
 }
 
 /// Run pallet test.

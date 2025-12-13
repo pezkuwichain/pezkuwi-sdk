@@ -24,12 +24,12 @@ use bp_messages::{
 	UnrewardedRelayerOccupation,
 };
 use bp_runtime::{AccountIdOf, OwnedBridgeModule};
-use frame_support::{dispatch::CallableCallFor, traits::IsSubType};
-use sp_runtime::transaction_validity::TransactionValidity;
+use pezframe_support::{dispatch::CallableCallFor, traits::IsSubType};
+use pezsp_runtime::transaction_validity::TransactionValidity;
 
 /// Helper struct that provides methods for working with a call supported by `MessagesCallInfo`.
 pub struct CallHelper<T: Config<I>, I: 'static> {
-	_phantom_data: sp_std::marker::PhantomData<(T, I)>,
+	_phantom_data: pezsp_std::marker::PhantomData<(T, I)>,
 }
 
 impl<T: Config<I>, I: 'static> CallHelper<T, I> {
@@ -70,7 +70,7 @@ impl<T: Config<I>, I: 'static> CallHelper<T, I> {
 	}
 }
 
-/// Trait representing a call that is a sub type of `pallet_bridge_messages::Call`.
+/// Trait representing a call that is a sub type of `pezpallet_bridge_messages::Call`.
 pub trait CallSubType<T: Config<I, RuntimeCall = Self>, I: 'static>:
 	IsSubType<CallableCallFor<Pallet<T, I>, T>>
 {
@@ -112,7 +112,7 @@ pub trait CallSubType<T: Config<I, RuntimeCall = Self>, I: 'static>:
 
 impl<
 		Call: IsSubType<CallableCallFor<Pallet<T, I>, T>>,
-		T: frame_system::Config<RuntimeCall = Call> + Config<I>,
+		T: pezframe_system::Config<RuntimeCall = Call> + Config<I>,
 		I: 'static,
 	> CallSubType<T, I> for T::RuntimeCall
 {
@@ -195,7 +195,7 @@ impl<
 					"Rejecting messages transaction on halted pallet"
 				);
 
-				return sp_runtime::transaction_validity::InvalidTransaction::Call.into();
+				return pezsp_runtime::transaction_validity::InvalidTransaction::Call.into();
 			},
 			Some(MessagesCallInfo::ReceiveMessagesProof(proof_info))
 				if proof_info
@@ -207,7 +207,7 @@ impl<
 					"Rejecting obsolete messages delivery transaction"
 				);
 
-				return sp_runtime::transaction_validity::InvalidTransaction::Stale.into();
+				return pezsp_runtime::transaction_validity::InvalidTransaction::Stale.into();
 			},
 			Some(MessagesCallInfo::ReceiveMessagesDeliveryProof(proof_info))
 				if proof_info.is_obsolete() =>
@@ -218,12 +218,12 @@ impl<
 					"Rejecting obsolete messages confirmation transaction"
 				);
 
-				return sp_runtime::transaction_validity::InvalidTransaction::Stale.into();
+				return pezsp_runtime::transaction_validity::InvalidTransaction::Stale.into();
 			},
 			_ => {},
 		}
 
-		Ok(sp_runtime::transaction_validity::ValidTransaction::default())
+		Ok(pezsp_runtime::transaction_validity::ValidTransaction::default())
 	}
 }
 
@@ -253,7 +253,7 @@ mod tests {
 		target_chain::FromBridgedChainMessagesProof, DeliveredMessages, InboundLaneData, LaneState,
 		OutboundLaneData, UnrewardedRelayer, UnrewardedRelayersState,
 	};
-	use sp_std::ops::RangeInclusive;
+	use pezsp_std::ops::RangeInclusive;
 
 	fn fill_unrewarded_relayers() {
 		let mut inbound_lane_state = InboundLanes::<TestRuntime>::get(test_lane_id()).unwrap();
@@ -296,7 +296,7 @@ mod tests {
 		RuntimeCall::Messages(crate::Call::<TestRuntime, ()>::receive_messages_proof {
 			relayer_id_at_bridged_chain: 42,
 			messages_count: nonces_end.checked_sub(nonces_start).map(|x| x + 1).unwrap_or(0) as u32,
-			dispatch_weight: frame_support::weights::Weight::zero(),
+			dispatch_weight: pezframe_support::weights::Weight::zero(),
 			proof: Box::new(FromBridgedChainMessagesProof {
 				bridged_header_hash: Default::default(),
 				storage_proof: Default::default(),
@@ -310,7 +310,7 @@ mod tests {
 	}
 
 	fn run_test<T>(test: impl Fn() -> T) -> T {
-		sp_io::TestExternalities::new(Default::default()).execute_with(|| {
+		pezsp_io::TestExternalities::new(Default::default()).execute_with(|| {
 			InboundLanes::<TestRuntime>::insert(test_lane_id(), InboundLaneData::opened());
 			OutboundLanes::<TestRuntime>::insert(test_lane_id(), OutboundLaneData::opened());
 			test()

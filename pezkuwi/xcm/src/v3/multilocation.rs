@@ -33,7 +33,7 @@ use scale_info::TypeInfo;
 /// - A layer-0 super-chain, e.g. the Pezkuwi Relay chain.
 /// - A layer-2 smart contract, e.g. an ERC-20 on Ethereum.
 /// - A logical functional component of a chain, e.g. a single instance of a pallet on a Frame-based
-///   Substrate chain.
+///   Bizinikiwi chain.
 /// - An account.
 ///
 /// A `MultiLocation` is a *relative identifier*, meaning that it can only be used to define the
@@ -267,7 +267,7 @@ impl MultiLocation {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*, MultiLocation};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*, MultiLocation};
 	/// let mut m = MultiLocation::new(1, X2(PalletInstance(3), OnlyChild));
 	/// assert_eq!(
 	///     m.match_and_split(&MultiLocation::new(1, X1(PalletInstance(3)))),
@@ -292,7 +292,7 @@ impl MultiLocation {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
 	/// let mut m: MultiLocation = (Parent, Teyrchain(21), 69u64).into();
 	/// assert_eq!(m.append_with((Parent, PalletInstance(3))), Ok(()));
 	/// assert_eq!(m, MultiLocation::new(1, X2(Teyrchain(21), PalletInstance(3))));
@@ -311,7 +311,7 @@ impl MultiLocation {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
 	/// let mut m: MultiLocation = (Parent, Teyrchain(21), 69u64).into();
 	/// let r = m.appended_with((Parent, PalletInstance(3))).unwrap();
 	/// assert_eq!(r, MultiLocation::new(1, X2(Teyrchain(21), PalletInstance(3))));
@@ -329,7 +329,7 @@ impl MultiLocation {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
 	/// let mut m: MultiLocation = (Parent, Parent, PalletInstance(3)).into();
 	/// assert_eq!(m.prepend_with((Parent, Teyrchain(21), OnlyChild)), Ok(()));
 	/// assert_eq!(m, MultiLocation::new(1, X1(PalletInstance(3))));
@@ -376,7 +376,7 @@ impl MultiLocation {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*, MultiLocation, Parent};
 	/// let m: MultiLocation = (Parent, Parent, PalletInstance(3)).into();
 	/// let r = m.prepended_with((Parent, Teyrchain(21), OnlyChild)).unwrap();
 	/// assert_eq!(r, MultiLocation::new(1, X1(PalletInstance(3))));
@@ -397,7 +397,7 @@ impl MultiLocation {
 		target: &MultiLocation,
 		context: InteriorMultiLocation,
 	) -> Result<(), ()> {
-		// TODO: https://github.com/paritytech/polkadot/issues/4489 Optimize this.
+		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/149 Optimize this.
 
 		// 1. Use our `context` to figure out how the `target` would address us.
 		let inverted_target = context.invert_target(target)?;

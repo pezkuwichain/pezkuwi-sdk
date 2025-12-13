@@ -25,15 +25,15 @@ use alloc::{
 };
 use codec::{Decode, Encode};
 use core::{fmt, mem};
-use frame_support::{pallet_prelude::*, traits::ReservableCurrency, DefaultNoBound};
-use frame_system::pallet_prelude::*;
+use pezframe_support::{pezpallet_prelude::*, traits::ReservableCurrency, DefaultNoBound};
+use pezframe_system::pezpallet_prelude::*;
 use pezkuwi_primitives::{
 	Balance, Hash, HrmpChannelId, Id as ParaId, InboundHrmpMessage, OutboundHrmpMessage,
 	SessionIndex,
 };
 use pezkuwi_teyrchain_primitives::primitives::{HorizontalMessages, IsSystem};
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{AccountIdConversion, BlakeTwo256, Hash as HashT, UniqueSaturatedInto, Zero},
 	ArithmeticError,
 };
@@ -246,7 +246,7 @@ impl fmt::Debug for OutboundHrmpAcceptanceErr {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -256,18 +256,18 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config:
-		frame_system::Config + configuration::Config + paras::Config + dmp::Config
+		pezframe_system::Config + configuration::Config + paras::Config + dmp::Config
 	{
 		/// The outer event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type RuntimeOrigin: From<crate::Origin>
-			+ From<<Self as frame_system::Config>::RuntimeOrigin>
+			+ From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<Result<crate::Origin, <Self as Config>::RuntimeOrigin>>;
 
 		/// The origin that can perform "force" actions on channels.
-		type ChannelManager: EnsureOrigin<<Self as frame_system::Config>::RuntimeOrigin>;
+		type ChannelManager: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 
 		/// An interface for reserving deposits for opening channels.
 		///
@@ -284,7 +284,7 @@ pub mod pallet {
 		/// notifications to the channel-related teyrchains, while the `WrapVersion` implementation
 		/// attempts to wrap them into the most suitable XCM version for the destination teyrchain.
 		///
-		/// NOTE: For example, `pallet_xcm` provides an accurate implementation (recommended), or
+		/// NOTE: For example, `pezpallet_xcm` provides an accurate implementation (recommended), or
 		/// the default `()` implementation uses the latest XCM version for all teyrchains.
 		type VersionWrapper: xcm::WrapVersion;
 
@@ -1374,7 +1374,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Process the outbound HRMP messages by putting them into the appropriate recipient queues.
 	pub(crate) fn queue_outbound_hrmp(sender: ParaId, out_hrmp_msgs: HorizontalMessages) {
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 
 		for out_msg in out_hrmp_msgs {
 			let channel_id = HrmpChannelId { sender, recipient: out_msg.recipient };

@@ -74,7 +74,7 @@ use std::{
 use futures::{channel::oneshot, future::BoxFuture, select, Future, FutureExt, StreamExt};
 
 use pezkuwi_primitives::{Block, BlockNumber, Hash};
-use sc_client_api::{BlockImportNotification, BlockchainEvents, FinalityNotification};
+use pezsc_client_api::{BlockImportNotification, BlockchainEvents, FinalityNotification};
 
 use self::messages::{BitfieldSigningMessage, PvfCheckerMessage};
 use pezkuwi_node_subsystem_types::messages::{
@@ -119,9 +119,9 @@ mod memory_stats;
 #[cfg(test)]
 mod tests;
 
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
-/// Glue to connect `trait orchestra::Spawner` and `SpawnNamed` from `substrate`.
+/// Glue to connect `trait orchestra::Spawner` and `SpawnNamed` from `bizinikiwi`.
 pub struct SpawnGlue<S>(pub S);
 
 impl<S> AsRef<S> for SpawnGlue<S> {
@@ -289,7 +289,7 @@ impl From<FinalityNotification<Block>> for BlockInfo {
 }
 
 /// An event from outside the overseer scope, such
-/// as the substrate framework or user interaction.
+/// as the bizinikiwi framework or user interaction.
 #[derive(Debug)]
 pub enum Event {
 	/// A new block was imported.
@@ -452,7 +452,7 @@ pub async fn forward_events<P: BlockchainEvents<Block>>(client: Arc<P>, mut hand
 ///      async fn head_supports_teyrchains(&self, _head: &Hash) -> bool { true }
 /// }
 ///
-/// let spawner = sp_core::testing::TaskExecutor::new();
+/// let spawner = pezsp_core::testing::TaskExecutor::new();
 /// let (overseer, _handle) = dummy_overseer_builder(spawner, AlwaysSupportsTeyrchains, None)
 /// 		.unwrap()
 /// 		.replace_candidate_validation(|_| ValidationSubsystem)
@@ -624,7 +624,7 @@ pub struct Overseer<SupportsTeyrchains> {
 	approval_voting_parallel: ApprovalVotingParallel,
 	#[subsystem(GossipSupportMessage, sends: [
 		NetworkBridgeTxMessage,
-		NetworkBridgeRxMessage, // TODO <https://github.com/paritytech/polkadot/issues/5626>
+		NetworkBridgeRxMessage, // TODO <https://github.com/pezkuwichain/kurdistan-sdk/issues/160>
 		RuntimeApiMessage,
 		ChainSelectionMessage,
 		ChainApiMessage,

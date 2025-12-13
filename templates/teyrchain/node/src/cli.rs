@@ -11,25 +11,25 @@ pub enum Subcommand {
 	#[deprecated(
 		note = "build-spec command will be removed after 1/04/2026. Use export-chain-spec command instead"
 	)]
-	BuildSpec(sc_cli::BuildSpecCmd),
+	BuildSpec(pezsc_cli::BuildSpecCmd),
 
 	/// Export the chain specification.
-	ExportChainSpec(sc_cli::ExportChainSpecCmd),
+	ExportChainSpec(pezsc_cli::ExportChainSpecCmd),
 
 	/// Validate blocks.
-	CheckBlock(sc_cli::CheckBlockCmd),
+	CheckBlock(pezsc_cli::CheckBlockCmd),
 
 	/// Export blocks.
-	ExportBlocks(sc_cli::ExportBlocksCmd),
+	ExportBlocks(pezsc_cli::ExportBlocksCmd),
 
 	/// Export the state of a given block into a chain spec.
-	ExportState(sc_cli::ExportStateCmd),
+	ExportState(pezsc_cli::ExportStateCmd),
 
 	/// Import blocks.
-	ImportBlocks(sc_cli::ImportBlocksCmd),
+	ImportBlocks(pezsc_cli::ImportBlocksCmd),
 
 	/// Revert the chain to a previous state.
-	Revert(sc_cli::RevertCmd),
+	Revert(pezsc_cli::RevertCmd),
 
 	/// Remove the whole chain.
 	PurgeChain(cumulus_client_cli::PurgeChainCmd),
@@ -46,7 +46,7 @@ pub enum Subcommand {
 	/// Sub-commands concerned with benchmarking.
 	/// The pallet benchmarking moved to the `pallet` sub-command.
 	#[command(subcommand)]
-	Benchmark(frame_benchmarking_cli::BenchmarkCmd),
+	Benchmark(pezframe_benchmarking_cli::BenchmarkCmd),
 }
 
 const AFTER_HELP_EXAMPLE: &str = color_print::cstr!(
@@ -105,7 +105,7 @@ pub struct RelayChainCli {
 impl RelayChainCli {
 	/// Parse the relay chain CLI parameters using the para chain `Configuration`.
 	pub fn new<'a>(
-		para_config: &sc_service::Configuration,
+		para_config: &pezsc_service::Configuration,
 		relay_chain_args: impl Iterator<Item = &'a String>,
 	) -> Self {
 		let extension = crate::chain_spec::Extensions::try_get(&*para_config.chain_spec);

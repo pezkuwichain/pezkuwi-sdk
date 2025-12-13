@@ -16,11 +16,11 @@ exclude-from-umbrella = true
 
 [dependencies]
 codec = { workspace = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-pallet-xcm = { workspace = true }
-sp-arithmetic = { workspace = true }
-sp-std = { workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezpallet-xcm = { workspace = true }
+pezsp-arithmetic = { workspace = true }
+pezsp-std = { workspace = true }
 tracing = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
@@ -32,26 +32,26 @@ xcm-executor = { workspace = true }
 default = ["std"]
 std = [
 	"codec/std",
-	"frame-support/std",
-	"frame-system/std",
-	"pallet-xcm/std",
-	"sp-arithmetic/std",
-	"sp-std/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-xcm/std",
+	"pezsp-arithmetic/std",
+	"pezsp-std/std",
 	"tracing/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"pallet-xcm/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"pallet-xcm/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-xcm/try-runtime",
 ]

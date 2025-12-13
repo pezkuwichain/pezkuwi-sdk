@@ -31,8 +31,8 @@ use pezkuwi_primitives::{
 	DEFAULT_CLAIM_QUEUE_OFFSET,
 };
 use pezkuwi_service::{Handle, NewFull, TeyrchainHost};
-use sc_client_api::client::BlockchainEvents;
-use sp_core::Pair;
+use pezsc_client_api::client::BlockchainEvents;
+use pezsp_core::Pair;
 
 use std::{
 	collections::HashMap,
@@ -650,7 +650,7 @@ impl Collator {
 	}
 }
 
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 #[cfg(test)]
 mod tests {
@@ -661,7 +661,7 @@ mod tests {
 
 	#[test]
 	fn collator_works() {
-		let spawner = sp_core::testing::TaskExecutor::new();
+		let spawner = pezsp_core::testing::TaskExecutor::new();
 		let collator = Collator::new(1_000, 1, false);
 		let collation_function = collator.create_collation_function(spawner);
 

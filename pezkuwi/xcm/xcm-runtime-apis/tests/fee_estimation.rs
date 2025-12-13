@@ -16,9 +16,9 @@
 
 //! Tests for using both the XCM fee payment API and the dry-run API.
 
-use frame_support::sp_runtime::testing::H256;
-use frame_system::RawOrigin;
-use sp_api::ProvideRuntimeApi;
+use pezframe_support::pezsp_runtime::testing::H256;
+use pezframe_system::RawOrigin;
+use pezsp_api::ProvideRuntimeApi;
 use xcm::prelude::*;
 use xcm_runtime_apis::{
 	dry_run::{CallDryRunEffects, DryRunApi},
@@ -45,14 +45,14 @@ use xcm_simulator::fake_message_hash;
 // Teyrchain(2000) -------------------------------------------> Teyrchain(1000)
 #[test]
 fn fee_estimation_for_teleport() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	let who = 1; // AccountId = u64.
 	let balances = vec![(who, 100 + DeliveryFees::get() + ExistentialDeposit::get())];
 	let assets = vec![(1, who, 50)];
 	new_test_ext_with_balances_and_assets(balances, assets).execute_with(|| {
 		let client = TestClient;
 		let runtime_api = client.runtime_api();
-		let call = RuntimeCall::XcmPallet(pallet_xcm::Call::transfer_assets {
+		let call = RuntimeCall::XcmPallet(pezpallet_xcm::Call::transfer_assets {
 			dest: Box::new(VersionedLocation::from((Parent, Teyrchain(1000)))),
 			beneficiary: Box::new(VersionedLocation::from(AccountId32 {
 				id: [0u8; 32],
@@ -101,32 +101,32 @@ fn fee_estimation_for_teleport() {
 		assert_eq!(
 			dry_run_effects.emitted_events,
 			vec![
-				RuntimeEvent::System(frame_system::Event::NewAccount {
+				RuntimeEvent::System(pezframe_system::Event::NewAccount {
 					account: 8660274132218572653 // TODO: Why is this not `1`?
 				}),
-				RuntimeEvent::Balances(pallet_balances::Event::Endowed {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Endowed {
 					account: 8660274132218572653,
 					free_balance: 100
 				}),
-				RuntimeEvent::Balances(pallet_balances::Event::Minted {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Minted {
 					who: 8660274132218572653,
 					amount: 100
 				}),
-				RuntimeEvent::AssetsPallet(pallet_assets::Event::Burned {
+				RuntimeEvent::AssetsPallet(pezpallet_assets::Event::Burned {
 					asset_id: 1,
 					owner: 1,
 					balance: 20
 				}),
-				RuntimeEvent::Balances(pallet_balances::Event::Burned { who: 1, amount: 100 }),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::Attempted {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Burned { who: 1, amount: 100 }),
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Attempted {
 					outcome: Outcome::Complete { used: Weight::from_parts(400, 40) },
 				}),
-				RuntimeEvent::Balances(pallet_balances::Event::Burned { who: 1, amount: 20 }),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::FeesPaid {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Burned { who: 1, amount: 20 }),
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::FeesPaid {
 					paying: AccountIndex64 { index: 1, network: None }.into(),
 					fees: (Here, 20u128).into(),
 				}),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::Sent {
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent {
 					origin: AccountIndex64 { index: 1, network: None }.into(),
 					destination: (Parent, Teyrchain(1000)).into(),
 					message: send_message.clone(),
@@ -206,14 +206,14 @@ fn dry_run_reserve_asset_transfer_common(
 	expected_result_xcms_version: XcmVersion,
 	dry_run_call: impl FnOnce(&TestClient, OriginCaller, RuntimeCall) -> CallDryRunEffects<RuntimeEvent>,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	let who = 1; // AccountId = u64.
 			  // Native token used for fees.
 	let balances = vec![(who, DeliveryFees::get() + ExistentialDeposit::get())];
 	// Relay token is the one we want to transfer.
 	let assets = vec![(1, who, 100)]; // id, account_id, balance.
 	new_test_ext_with_balances_and_assets(balances, assets).execute_with(|| {
-		let call = RuntimeCall::XcmPallet(pallet_xcm::Call::transfer_assets {
+		let call = RuntimeCall::XcmPallet(pezpallet_xcm::Call::transfer_assets {
 			dest: Box::new(
 				VersionedLocation::from((Parent, Teyrchain(1000)))
 					.into_version(input_xcm_version)
@@ -273,20 +273,20 @@ fn dry_run_reserve_asset_transfer_common(
 		assert_eq!(
 			dry_run_effects.emitted_events,
 			vec![
-				RuntimeEvent::AssetsPallet(pallet_assets::Event::Burned {
+				RuntimeEvent::AssetsPallet(pezpallet_assets::Event::Burned {
 					asset_id: 1,
 					owner: 1,
 					balance: 100
 				}),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::Attempted {
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Attempted {
 					outcome: Outcome::Complete { used: Weight::from_parts(200, 20) }
 				}),
-				RuntimeEvent::Balances(pallet_balances::Event::Burned { who: 1, amount: 20 }),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::FeesPaid {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Burned { who: 1, amount: 20 }),
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::FeesPaid {
 					paying: AccountIndex64 { index: 1, network: None }.into(),
 					fees: (Here, 20u128).into()
 				}),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::Sent {
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent {
 					origin: AccountIndex64 { index: 1, network: None }.into(),
 					destination: send_destination.clone(),
 					message: send_message.clone(),
@@ -341,7 +341,7 @@ fn dry_run_before_api_v2_reserve_asset_transfer() {
 }
 
 fn dry_run_xcm_common(xcm_version: XcmVersion) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	let who = 1; // AccountId = u64.
 	let transfer_amount = 100u128;
 	// We need to build the XCM to weigh it and then build the real XCM that can pay for fees.
@@ -419,14 +419,14 @@ fn dry_run_xcm_common(xcm_version: XcmVersion) {
 		assert_eq!(
 			dry_run_effects.emitted_events,
 			vec![
-				RuntimeEvent::Balances(pallet_balances::Event::Burned { who: 1, amount: 540 }),
-				RuntimeEvent::System(frame_system::Event::NewAccount { account: 2100 }),
-				RuntimeEvent::Balances(pallet_balances::Event::Endowed {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Burned { who: 1, amount: 540 }),
+				RuntimeEvent::System(pezframe_system::Event::NewAccount { account: 2100 }),
+				RuntimeEvent::Balances(pezpallet_balances::Event::Endowed {
 					account: 2100,
 					free_balance: 520
 				}),
-				RuntimeEvent::Balances(pallet_balances::Event::Minted { who: 2100, amount: 520 }),
-				RuntimeEvent::XcmPallet(pallet_xcm::Event::Sent {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Minted { who: 2100, amount: 520 }),
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent {
 					origin: (who,).into(),
 					destination: (Parent, Teyrchain(2100)).into(),
 					message: Xcm::default(),
@@ -480,7 +480,7 @@ fn calling_payment_api_with_a_lower_version_works() {
 // Teyrchain(2000) -------------------------------------------> Teyrchain(1000)
 #[test]
 fn fee_estimation_for_usdt_reserve_transfer_in_usdt() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	let who = 1; // AccountId = u64.
 	let balances = vec![(who, DeliveryFees::get() + ExistentialDeposit::get())]; // Just enough for fees
 	let assets = vec![
@@ -505,7 +505,7 @@ fn fee_estimation_for_usdt_reserve_transfer_in_usdt() {
 			[PalletInstance(ASSET_HUB_ASSETS_PALLET_INSTANCE), GeneralIndex(USDT_ID.into())],
 		);
 
-		let call = RuntimeCall::XcmPallet(pallet_xcm::Call::transfer_assets {
+		let call = RuntimeCall::XcmPallet(pezpallet_xcm::Call::transfer_assets {
 			dest: Box::new(VersionedLocation::from((Parent, Teyrchain(1000)))),
 			beneficiary: Box::new(VersionedLocation::from(AccountId32 {
 				id: [0u8; 32],

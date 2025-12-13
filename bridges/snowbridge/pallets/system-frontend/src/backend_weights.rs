@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 //! XCM Execution weights for invoking the backend implementation
 
-use frame_support::weights::{constants::RocksDbWeight, Weight};
+use pezframe_support::weights::{constants::RocksDbWeight, Weight};
 
 /// XCM Execution weights for invoking the backend implementation
 pub trait BackendWeightInfo {

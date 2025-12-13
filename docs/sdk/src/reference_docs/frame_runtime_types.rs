@@ -5,7 +5,7 @@
 //!
 //! > As of now, many of these important types are generated within the internals of
 //! > [`construct_runtime`], and there is no easy way for you to visually know they exist.
-//! > [#pezkuwi-sdk#1378](https://github.com/paritytech/polkadot-sdk/pull/1378) is meant to
+//! > [#pezkuwi-sdk#1378](https://github.com/pezkuwichain/kurdistan-sdk/issues/105) is meant to
 //! > significantly improve this. Exploring the rust-docs of a runtime, such as [`runtime`] which is
 //! > defined in this module is as of now the best way to learn about these types.
 //!
@@ -29,24 +29,24 @@
 //!
 //! ### Example
 //!
-//! We provide the following two pallets: [`pallet_foo`] and [`pallet_bar`]. Each define a
+//! We provide the following two pallets: [`pezpallet_foo`] and [`pezpallet_bar`]. Each define a
 //! dispatchable, and `Foo` also defines a custom origin. Lastly, `Bar` defines an additional
 //! `GenesisConfig`.
-#![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pallet_foo)]
-#![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pallet_bar)]
+#![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pezpallet_foo)]
+#![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pezpallet_bar)]
 //!
 //! Let's explore how each of these affect the [`RuntimeCall`], [`RuntimeOrigin`] and
 //! [`RuntimeGenesisConfig`] generated in [`runtime`] respectively.
 //!
-//! As observed, [`RuntimeCall`] has 3 variants, one for each pallet and one for `frame_system`. If
+//! As observed, [`RuntimeCall`] has 3 variants, one for each pallet and one for `pezframe_system`. If
 //! you explore further, you will soon realize that each variant is merely a pointer to the `Call`
-//! type in each pallet, for example [`pallet_foo::Call`].
+//! type in each pallet, for example [`pezpallet_foo::Call`].
 //!
-//! [`RuntimeOrigin`]'s [`OriginCaller`] has two variants, one for system, and one for `pallet_foo`
-//! which utilized [`frame::pallet_macros::origin`].
+//! [`RuntimeOrigin`]'s [`OriginCaller`] has two variants, one for system, and one for `pezpallet_foo`
+//! which utilized [`frame::pezpallet_macros::origin`].
 //!
-//! Finally, [`RuntimeGenesisConfig`] is composed of `frame_system` and a variant for `pallet_bar`'s
-//! [`pallet_bar::GenesisConfig`].
+//! Finally, [`RuntimeGenesisConfig`] is composed of `pezframe_system` and a variant for `pezpallet_bar`'s
+//! [`pezpallet_bar::GenesisConfig`].
 //!
 //! You can find other composite enums by scanning [`runtime`] for other types who's name starts
 //! with `Runtime`. Some of the more noteworthy ones are:
@@ -61,16 +61,16 @@
 //! composite enums, but it wishes to further specify it by adding more trait bounds to it.
 //!
 //! Let's take the example of `RuntimeCall`. This is an associated type in
-//! [`frame_system::Config::RuntimeCall`], and all pallets have access to this type, because they
-//! have access to [`frame_system::Config`]. Finally, this type is meant to be set to outer call of
+//! [`pezframe_system::Config::RuntimeCall`], and all pallets have access to this type, because they
+//! have access to [`pezframe_system::Config`]. Finally, this type is meant to be set to outer call of
 //! the entire runtime.
 //!
 //! But, let's not forget that this is information that *we know*, and the Rust compiler does not.
 //! All that the rust compiler knows about this type is *ONLY* what the trait bounds of
-//! [`frame_system::Config::RuntimeCall`] are specifying:
-#![doc = docify::embed!("../../substrate/frame/system/src/lib.rs", system_runtime_call)]
+//! [`pezframe_system::Config::RuntimeCall`] are specifying:
+#![doc = docify::embed!("../../bizinikiwi/pezframe/system/src/lib.rs", system_runtime_call)]
 //!
-//! So, when at a given pallet, one accesses `<T as frame_system::Config>::RuntimeCall`, the type is
+//! So, when at a given pallet, one accesses `<T as pezframe_system::Config>::RuntimeCall`, the type is
 //! extremely opaque from the perspective of the Rust compiler.
 //!
 //! How can a pallet access the `RuntimeCall` type with further constraints? For example, each
@@ -85,16 +85,16 @@
 #![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", custom_runtime_call)]
 //!
 //! And indeed, at the runtime level, this associated type would be the same `RuntimeCall` that is
-//! passed to `frame_system`.
-#![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pallet_with_specific_runtime_call_impl)]
+//! passed to `pezframe_system`.
+#![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pezpallet_with_specific_runtime_call_impl)]
 //!
-//! > In other words, the degree of specificity that [`frame_system::Config::RuntimeCall`] has is
+//! > In other words, the degree of specificity that [`pezframe_system::Config::RuntimeCall`] has is
 //! > not enough for the pallet to work with. Therefore, the pallet has to define its own associated
 //! > type representing `RuntimeCall`.
 //!
 //! Another way to look at this is:
 //!
-//! `pallet_with_specific_runtime_call::Config::RuntimeCall` and `frame_system::Config::RuntimeCall`
+//! `pezpallet_with_specific_runtime_call::Config::RuntimeCall` and `pezframe_system::Config::RuntimeCall`
 //! are two different representations of the same concrete type that is only known when the runtime
 //! is being constructed.
 //!
@@ -109,7 +109,7 @@
 //! ### Asserting Equality of Multiple Runtime Composite Enums
 //!
 //! Recall that in the above example, `<T as Config>::RuntimeCall` and `<T as
-//! frame_system::Config>::RuntimeCall` are expected to be equal types, but at the compile-time we
+//! pezframe_system::Config>::RuntimeCall` are expected to be equal types, but at the compile-time we
 //! have to represent them with two different associated types with different bounds. Would it not
 //! be cool if we had a test to make sure they actually resolve to the same concrete type once the
 //! runtime is constructed? The following snippet exactly does that:
@@ -123,7 +123,7 @@
 //!
 //! A number of type aliases are generated by the `construct_runtime` which are also noteworthy:
 //!
-//! * [`runtime::PalletFoo`] is an alias to [`pallet_foo::Pallet`]. Same for `PalletBar`, and
+//! * [`runtime::PalletFoo`] is an alias to [`pezpallet_foo::Pallet`]. Same for `PalletBar`, and
 //!   `System`
 //! * [`runtime::AllPalletsWithSystem`] is an alias for a tuple of all of the above. This type is
 //!   important to FRAME internals such as `executive`, as it implements traits such as
@@ -143,11 +143,11 @@
 //! [`runtime::PalletFoo`]: crate::reference_docs::frame_runtime_types::runtime::PalletFoo
 //! [`runtime::AllPalletsWithSystem`]: crate::reference_docs::frame_runtime_types::runtime::AllPalletsWithSystem
 //! [`runtime`]: crate::reference_docs::frame_runtime_types::runtime
-//! [`pallet_foo`]: crate::reference_docs::frame_runtime_types::pallet_foo
-//! [`pallet_foo::Call`]: crate::reference_docs::frame_runtime_types::pallet_foo::Call
-//! [`pallet_foo::Pallet`]: crate::reference_docs::frame_runtime_types::pallet_foo::Pallet
-//! [`pallet_bar`]: crate::reference_docs::frame_runtime_types::pallet_bar
-//! [`pallet_bar::GenesisConfig`]: crate::reference_docs::frame_runtime_types::pallet_bar::GenesisConfig
+//! [`pezpallet_foo`]: crate::reference_docs::frame_runtime_types::pezpallet_foo
+//! [`pezpallet_foo::Call`]: crate::reference_docs::frame_runtime_types::pezpallet_foo::Call
+//! [`pezpallet_foo::Pallet`]: crate::reference_docs::frame_runtime_types::pezpallet_foo::Pallet
+//! [`pezpallet_bar`]: crate::reference_docs::frame_runtime_types::pezpallet_bar
+//! [`pezpallet_bar::GenesisConfig`]: crate::reference_docs::frame_runtime_types::pezpallet_bar::GenesisConfig
 //! [`RuntimeEvent`]: crate::reference_docs::frame_runtime_types::runtime::RuntimeEvent
 //! [`RuntimeGenesisConfig`]:
 //!     crate::reference_docs::frame_runtime_types::runtime::RuntimeGenesisConfig
@@ -161,11 +161,11 @@ use frame::prelude::*;
 
 #[docify::export]
 #[frame::pallet(dev_mode)]
-pub mod pallet_foo {
+pub mod pezpallet_foo {
 	use super::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::origin]
 	#[derive(
@@ -201,11 +201,11 @@ pub mod pallet_foo {
 
 #[docify::export]
 #[frame::pallet(dev_mode)]
-pub mod pallet_bar {
+pub mod pezpallet_bar {
 	use super::*;
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {}
+	pub trait Config: pezframe_system::Config {}
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -230,36 +230,36 @@ pub mod pallet_bar {
 }
 
 pub mod runtime {
-	use super::{pallet_bar, pallet_foo};
+	use super::{pezpallet_bar, pezpallet_foo};
 	use frame::{runtime::prelude::*, testing_prelude::*};
 
 	#[docify::export(runtime_exp)]
 	construct_runtime!(
 		pub struct Runtime {
-			System: frame_system,
-			PalletFoo: pallet_foo,
-			PalletBar: pallet_bar,
+			System: pezframe_system,
+			PalletFoo: pezpallet_foo,
+			PalletBar: pezpallet_bar,
 		}
 	);
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Runtime {
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Runtime {
 		type Block = MockBlock<Self>;
 	}
 
-	impl pallet_foo::Config for Runtime {}
-	impl pallet_bar::Config for Runtime {}
+	impl pezpallet_foo::Config for Runtime {}
+	impl pezpallet_bar::Config for Runtime {}
 }
 
 #[frame::pallet(dev_mode)]
-pub mod pallet_with_specific_runtime_call {
+pub mod pezpallet_with_specific_runtime_call {
 	use super::*;
 	use frame::traits::IsSubType;
 
 	#[docify::export(custom_runtime_call)]
 	/// A pallet that wants to further narrow down what `RuntimeCall` is.
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		type RuntimeCall: IsSubType<Call<Self>>;
 	}
 
@@ -290,30 +290,30 @@ pub mod pallet_with_specific_runtime_call {
 			use core::any::TypeId;
 			assert_eq!(
 				TypeId::of::<<T as Config>::RuntimeCall>(),
-				TypeId::of::<<T as frame_system::Config>::RuntimeCall>()
+				TypeId::of::<<T as pezframe_system::Config>::RuntimeCall>()
 			);
 		}
 	}
 }
 
 pub mod runtime_with_specific_runtime_call {
-	use super::pallet_with_specific_runtime_call;
+	use super::pezpallet_with_specific_runtime_call;
 	use frame::{runtime::prelude::*, testing_prelude::*};
 
 	construct_runtime!(
 		pub struct Runtime {
-			System: frame_system,
-			PalletWithSpecificRuntimeCall: pallet_with_specific_runtime_call,
+			System: pezframe_system,
+			PalletWithSpecificRuntimeCall: pezpallet_with_specific_runtime_call,
 		}
 	);
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Runtime {
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Runtime {
 		type Block = MockBlock<Self>;
 	}
 
-	#[docify::export(pallet_with_specific_runtime_call_impl)]
-	impl pallet_with_specific_runtime_call::Config for Runtime {
+	#[docify::export(pezpallet_with_specific_runtime_call_impl)]
+	impl pezpallet_with_specific_runtime_call::Config for Runtime {
 		// an implementation of `IsSubType` is provided by `construct_runtime`.
 		type RuntimeCall = RuntimeCall;
 	}

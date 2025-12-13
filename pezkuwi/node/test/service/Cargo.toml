@@ -27,41 +27,41 @@ pezkuwi-test-runtime = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 test-runtime-constants = { workspace = true, default-features = true }
 
-# Substrate dependencies
-frame-system = { workspace = true, default-features = true }
-pallet-balances = { workspace = true, default-features = true }
-pallet-staking = { workspace = true, default-features = true }
-pallet-transaction-payment = { workspace = true, default-features = true }
-sc-chain-spec = { workspace = true, default-features = true }
-sc-cli = { workspace = true, default-features = true }
-sc-client-api = { workspace = true, default-features = true }
-sc-consensus = { workspace = true, default-features = true }
-sc-consensus-grandpa = { workspace = true, default-features = true }
-sc-network = { workspace = true, default-features = true }
-sc-service = { workspace = true }
-sc-tracing = { workspace = true, default-features = true }
-sp-arithmetic = { workspace = true, default-features = true }
-sp-authority-discovery = { workspace = true, default-features = true }
-sp-blockchain = { workspace = true, default-features = true }
-sp-consensus = { workspace = true, default-features = true }
-sp-consensus-babe = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-runtime = { workspace = true, default-features = true }
-sp-state-machine = { workspace = true, default-features = true }
-substrate-test-client = { workspace = true }
+# Bizinikiwi dependencies
+pezframe-system = { workspace = true, default-features = true }
+pezpallet-balances = { workspace = true, default-features = true }
+pezpallet-staking = { workspace = true, default-features = true }
+pezpallet-transaction-payment = { workspace = true, default-features = true }
+pezsc-chain-spec = { workspace = true, default-features = true }
+pezsc-cli = { workspace = true, default-features = true }
+pezsc-client-api = { workspace = true, default-features = true }
+pezsc-consensus = { workspace = true, default-features = true }
+pezsc-consensus-grandpa = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsc-service = { workspace = true }
+pezsc-tracing = { workspace = true, default-features = true }
+pezsp-arithmetic = { workspace = true, default-features = true }
+pezsp-authority-discovery = { workspace = true, default-features = true }
+pezsp-blockchain = { workspace = true, default-features = true }
+pezsp-consensus = { workspace = true, default-features = true }
+pezsp-consensus-babe = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
+pezsp-state-machine = { workspace = true, default-features = true }
+bizinikiwi-test-client = { workspace = true }
 
 [dev-dependencies]
-pallet-balances = { workspace = true }
+pezpallet-balances = { workspace = true }
 tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
 runtime-metrics = ["pezkuwi-test-runtime/runtime-metrics"]
 runtime-benchmarks = [
-	"frame-system/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-staking/runtime-benchmarks",
-	"pallet-transaction-payment/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-staking/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
@@ -71,21 +71,21 @@ runtime-benchmarks = [
 	"pezkuwi-service/runtime-benchmarks",
 	"pezkuwi-test-runtime/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"sc-chain-spec/runtime-benchmarks",
-	"sc-cli/runtime-benchmarks",
-	"sc-client-api/runtime-benchmarks",
-	"sc-consensus-grandpa/runtime-benchmarks",
-	"sc-consensus/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
-	"sc-service/runtime-benchmarks",
-	"sc-tracing/runtime-benchmarks",
-	"sp-authority-discovery/runtime-benchmarks",
-	"sp-blockchain/runtime-benchmarks",
-	"sp-consensus-babe/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-state-machine/runtime-benchmarks",
-	"substrate-test-client/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-grandpa/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsc-tracing/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"bizinikiwi-test-client/runtime-benchmarks",
 	"test-runtime-constants/runtime-benchmarks",
 ]

@@ -52,11 +52,11 @@
 use std::{collections::HashMap, time::Duration, u64};
 
 use pezkuwi_primitives::MAX_CODE_SIZE;
-use sc_network::{NetworkBackend, MAX_RESPONSE_SIZE};
-use sp_runtime::traits::Block;
+use pezsc_network::{NetworkBackend, MAX_RESPONSE_SIZE};
+use pezsp_runtime::traits::Block;
 use strum::{EnumIter, IntoEnumIterator};
 
-pub use sc_network::{config as network, config::RequestResponseConfig, ProtocolName};
+pub use pezsc_network::{config as network, config::RequestResponseConfig, ProtocolName};
 
 /// Everything related to handling of incoming requests.
 pub mod incoming;
@@ -137,7 +137,7 @@ const POV_REQUEST_TIMEOUT_CONNECTED: Duration = Duration::from_millis(2000);
 /// We supply leniency because there are often large candidates and asynchronous
 /// backing allows them to be included over a longer window of time. Exponential back-off
 /// up to a maximum of 10 seconds would be ideal, but isn't supported by the
-/// infrastructure here yet: see https://github.com/paritytech/polkadot/issues/6009
+/// infrastructure here yet: see https://github.com/pezkuwichain/kurdistan-sdk/issues/164
 const ATTESTED_CANDIDATE_TIMEOUT: Duration = Duration::from_millis(2500);
 
 /// We don't want a slow peer to slow down all the others, at the same time we want to get out the
@@ -148,7 +148,7 @@ pub const MAX_PARALLEL_ATTESTED_CANDIDATE_REQUESTS: u32 = 5;
 
 /// Response size limit for responses of POV like data.
 ///
-/// Same as what we use in substrate networking.
+/// Same as what we use in bizinikiwi networking.
 const POV_RESPONSE_SIZE: u64 = MAX_RESPONSE_SIZE;
 
 /// Maximum response sizes for `AttestedCandidateV2`.

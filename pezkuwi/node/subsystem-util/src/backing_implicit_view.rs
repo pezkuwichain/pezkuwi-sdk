@@ -652,7 +652,7 @@ mod tests {
 	use pezkuwi_node_subsystem_test_helpers::{make_subsystem_context, TestSubsystemContextHandle};
 	use pezkuwi_overseer::SubsystemContext;
 	use pezkuwi_primitives::Header;
-	use sp_core::testing::TaskExecutor;
+	use pezsp_core::testing::TaskExecutor;
 	use std::time::Duration;
 
 	const PARA_A: ParaId = ParaId::new(0);

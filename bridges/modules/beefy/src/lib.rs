@@ -16,8 +16,8 @@
 
 //! BEEFY bridge pallet.
 //!
-//! This pallet is an on-chain BEEFY light client for Substrate-based chains that are using the
-//! following pallets bundle: `pallet-mmr`, `pallet-beefy` and `pallet-beefy-mmr`.
+//! This pallet is an on-chain BEEFY light client for Bizinikiwi-based chains that are using the
+//! following pallets bundle: `pezpallet-mmr`, `pezpallet-beefy` and `pezpallet-beefy-mmr`.
 //!
 //! The pallet is able to verify MMR leaf proofs and BEEFY commitments, so it has access
 //! to the following data of the bridged chain:
@@ -33,7 +33,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use bp_beefy::{ChainWithBeefy, InitializationData};
-use sp_std::{boxed::Box, prelude::*};
+use pezsp_std::{boxed::Box, prelude::*};
 
 // Re-export in crate namespace for `construct_runtime!`
 pub use pallet::*;
@@ -95,15 +95,15 @@ pub struct ImportedCommitmentsInfoData<BlockNumber> {
 	next_block_number_index: u32,
 }
 
-#[frame_support::pallet(dev_mode)]
+#[pezframe_support::pallet(dev_mode)]
 pub mod pallet {
 	use super::*;
 	use bp_runtime::{BasicOperatingMode, OwnedBridgeModule};
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The upper bound on the number of requests allowed by the pallet.
 		///
 		/// A request refers to an action which writes a header to storage.
@@ -131,7 +131,7 @@ pub mod pallet {
 
 	#[pallet::hooks]
 	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
-		fn on_initialize(_n: BlockNumberFor<T>) -> frame_support::weights::Weight {
+		fn on_initialize(_n: BlockNumberFor<T>) -> pezframe_support::weights::Weight {
 			<RequestCount<T, I>>::mutate(|count| *count = count.saturating_sub(1));
 
 			Weight::from_parts(0, 0)
@@ -328,7 +328,7 @@ pub mod pallet {
 		StorageValue<_, BasicOperatingMode, ValueQuery>;
 
 	#[pallet::genesis_config]
-	#[derive(frame_support::DefaultNoBound)]
+	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		/// Optional module owner account.
 		pub owner: Option<T::AccountId>,
@@ -417,17 +417,17 @@ mod tests {
 	use super::*;
 	use bp_runtime::{BasicOperatingMode, OwnedBridgeModuleError};
 	use bp_test_utils::generate_owned_bridge_module_tests;
-	use frame_support::{assert_noop, assert_ok, traits::Get};
+	use pezframe_support::{assert_noop, assert_ok, traits::Get};
 	use mock::*;
 	use mock_chain::*;
-	use sp_consensus_beefy::mmr::BeefyAuthoritySet;
-	use sp_runtime::DispatchError;
+	use pezsp_consensus_beefy::mmr::BeefyAuthoritySet;
+	use pezsp_runtime::DispatchError;
 
 	fn next_block() {
-		use frame_support::traits::OnInitialize;
+		use pezframe_support::traits::OnInitialize;
 
-		let current_number = frame_system::Pallet::<TestRuntime>::block_number();
-		frame_system::Pallet::<TestRuntime>::set_block_number(current_number + 1);
+		let current_number = pezframe_system::Pallet::<TestRuntime>::block_number();
+		pezframe_system::Pallet::<TestRuntime>::set_block_number(current_number + 1);
 		let _ = Pallet::<TestRuntime>::on_initialize(current_number);
 	}
 

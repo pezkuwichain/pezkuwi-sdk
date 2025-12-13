@@ -41,14 +41,14 @@ use alloc::{
 	collections::{btree_map::BTreeMap, btree_set::BTreeSet, vec_deque::VecDeque},
 	vec::Vec,
 };
-use frame_support::{pallet_prelude::*, traits::Defensive};
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_support::{pezpallet_prelude::*, traits::Defensive};
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 pub use pezkuwi_core_primitives::v2::BlockNumber;
 use pezkuwi_primitives::{
 	CoreIndex, GroupIndex, GroupRotationInfo, Id as ParaId, ScheduledCore, SchedulerParams,
 	ValidatorIndex,
 };
-use sp_runtime::traits::One;
+use pezsp_runtime::traits::One;
 
 pub mod common;
 
@@ -63,7 +63,7 @@ const LOG_TARGET: &str = "runtime::teyrchains::scheduler";
 
 pub mod migration;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -75,7 +75,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + configuration::Config + paras::Config {
+	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {
 		type AssignmentProvider: AssignmentProvider<BlockNumberFor<Self>>;
 	}
 
@@ -190,7 +190,7 @@ impl<T: Config> Pallet<T> {
 		Self::maybe_resize_claim_queue();
 		Self::populate_claim_queue_after_session_change();
 
-		let now = frame_system::Pallet::<T>::block_number() + One::one();
+		let now = pezframe_system::Pallet::<T>::block_number() + One::one();
 		SessionStartBlock::<T>::set(now);
 	}
 
@@ -250,7 +250,7 @@ impl<T: Config> Pallet<T> {
 	pub(crate) fn availability_timeout_predicate(
 	) -> impl Fn(BlockNumberFor<T>) -> AvailabilityTimeoutStatus<BlockNumberFor<T>> {
 		let config = configuration::ActiveConfig::<T>::get();
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let rotation_info = Self::group_rotation_info(now);
 
 		let next_rotation = rotation_info.next_rotation_at();
@@ -278,7 +278,7 @@ impl<T: Config> Pallet<T> {
 	/// this function returns false.
 	pub(crate) fn availability_timeout_check_required() -> bool {
 		let config = configuration::ActiveConfig::<T>::get();
-		let now = frame_system::Pallet::<T>::block_number() + One::one();
+		let now = pezframe_system::Pallet::<T>::block_number() + One::one();
 		let rotation_info = Self::group_rotation_info(now);
 
 		let current_window =

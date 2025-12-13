@@ -21,7 +21,7 @@ use mock::{
 	CENTS,
 };
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
-use sp_runtime::traits::AccountIdConversion;
+use pezsp_runtime::traits::AccountIdConversion;
 use xcm::latest::{prelude::*, Error::UntrustedTeleportLocation};
 use xcm_executor::XcmExecutor;
 use xcm_simulator::fake_message_hash;
@@ -96,7 +96,7 @@ fn transfer_asset_works() {
 			weight,
 		);
 		System::assert_last_event(
-			pallet_balances::Event::Transfer { from: ALICE, to: bob.clone(), amount }.into(),
+			pezpallet_balances::Event::Transfer { from: ALICE, to: bob.clone(), amount }.into(),
 		);
 		assert_eq!(r, Outcome::Complete { used: weight });
 		assert_eq!(Balances::free_balance(ALICE), INITIAL_BALANCE - amount);
@@ -332,8 +332,8 @@ fn reserve_based_transfer_works() {
 #[test]
 fn recursive_xcm_execution_fail() {
 	use crate::mock::*;
-	use frame_support::traits::{Everything, Nothing, ProcessMessageError};
-	use staging_xcm_builder::*;
+	use pezframe_support::traits::{Everything, Nothing, ProcessMessageError};
+	use pezstaging_xcm_builder::*;
 	use std::ops::ControlFlow;
 	use xcm::opaque::latest::prelude::*;
 	use xcm_executor::traits::{DenyExecution, Properties, ShouldExecute};

@@ -19,9 +19,9 @@
 use codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
 use scale_info::TypeInfo;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
-use sp_core::{RuntimeDebug, TypeId, H256};
-use sp_io::hashing::blake2_256;
-use sp_std::fmt::Debug;
+use pezsp_core::{RuntimeDebug, TypeId, H256};
+use pezsp_io::hashing::blake2_256;
+use pezsp_std::fmt::Debug;
 
 /// Trait representing a generic `LaneId` type.
 pub trait LaneIdType:

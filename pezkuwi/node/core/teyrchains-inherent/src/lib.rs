@@ -38,13 +38,13 @@ pub(crate) const LOG_TARGET: &str = "teyrchain::teyrchains-inherent";
 const PROVISIONER_TIMEOUT: time::Duration = core::time::Duration::from_millis(2500);
 
 /// Provides the teyrchains inherent data.
-pub struct TeyrchainsInherentDataProvider<C: sp_blockchain::HeaderBackend<Block>> {
+pub struct TeyrchainsInherentDataProvider<C: pezsp_blockchain::HeaderBackend<Block>> {
 	pub client: Arc<C>,
 	pub overseer: pezkuwi_overseer::Handle,
 	pub parent: Hash,
 }
 
-impl<C: sp_blockchain::HeaderBackend<Block>> TeyrchainsInherentDataProvider<C> {
+impl<C: pezsp_blockchain::HeaderBackend<Block>> TeyrchainsInherentDataProvider<C> {
 	/// Create a new [`Self`].
 	pub fn new(client: Arc<C>, overseer: pezkuwi_overseer::Handle, parent: Hash) -> Self {
 		TeyrchainsInherentDataProvider { client, overseer, parent }
@@ -125,20 +125,20 @@ impl<C: sp_blockchain::HeaderBackend<Block>> TeyrchainsInherentDataProvider<C> {
 }
 
 #[async_trait::async_trait]
-impl<C: sp_blockchain::HeaderBackend<Block>> sp_inherents::InherentDataProvider
+impl<C: pezsp_blockchain::HeaderBackend<Block>> pezsp_inherents::InherentDataProvider
 	for TeyrchainsInherentDataProvider<C>
 {
 	async fn provide_inherent_data(
 		&self,
-		dst_inherent_data: &mut sp_inherents::InherentData,
-	) -> Result<(), sp_inherents::Error> {
+		dst_inherent_data: &mut pezsp_inherents::InherentData,
+	) -> Result<(), pezsp_inherents::Error> {
 		let inherent_data = TeyrchainsInherentDataProvider::create(
 			self.client.clone(),
 			self.overseer.clone(),
 			self.parent,
 		)
 		.await
-		.map_err(|e| sp_inherents::Error::Application(Box::new(e)))?;
+		.map_err(|e| pezsp_inherents::Error::Application(Box::new(e)))?;
 
 		dst_inherent_data
 			.put_data(pezkuwi_primitives::TEYRCHAINS_INHERENT_IDENTIFIER, &inherent_data)
@@ -146,9 +146,9 @@ impl<C: sp_blockchain::HeaderBackend<Block>> sp_inherents::InherentDataProvider
 
 	async fn try_handle_error(
 		&self,
-		_identifier: &sp_inherents::InherentIdentifier,
+		_identifier: &pezsp_inherents::InherentIdentifier,
 		_error: &[u8],
-	) -> Option<Result<(), sp_inherents::Error>> {
+	) -> Option<Result<(), pezsp_inherents::Error>> {
 		// Inherent isn't checked and can not return any error
 		None
 	}
@@ -157,7 +157,7 @@ impl<C: sp_blockchain::HeaderBackend<Block>> sp_inherents::InherentDataProvider
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
 	#[error("Blockchain error")]
-	Blockchain(#[from] sp_blockchain::Error),
+	Blockchain(#[from] pezsp_blockchain::Error),
 	#[error("Timeout: provisioner did not return inherent data after {:?}", PROVISIONER_TIMEOUT)]
 	Timeout,
 	#[error("Could not find the parent header in the blockchain: {:?}", _0)]

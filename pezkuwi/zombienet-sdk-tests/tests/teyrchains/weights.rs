@@ -7,16 +7,16 @@
 mod ahw {}
 
 use ahw::runtime_types::{
-	pallet_revive::primitives::{Code, StorageDeposit},
-	sp_weights::weight_v2::Weight,
+	pezpallet_revive::primitives::{Code, StorageDeposit},
+	pezsp_weights::weight_v2::Weight,
 };
 use anyhow::anyhow;
 use asset_hub_zagros_runtime::Runtime as AHWRuntime;
 use ethabi::Token;
 use futures::{stream::FuturesUnordered, StreamExt};
-use pallet_revive::AddressMapper;
+use pezpallet_revive::AddressMapper;
 use rand::Rng;
-use sp_core::{H160, H256};
+use pezsp_core::{H160, H256};
 use std::str::FromStr;
 use zombienet_sdk::{
 	subxt::{
@@ -73,7 +73,7 @@ async fn weights_test() -> Result<(), anyhow::Error> {
 	log::info!("Contract instantiated: {:?}", contract_address);
 
 	log::info!("Minting...");
-	let mint_100 = sp_core::hex2array!(
+	let mint_100 = pezsp_core::hex2array!(
 		"a0712d680000000000000000000000000000000000000000000000000000000000000064"
 	)
 	.to_vec();
@@ -94,11 +94,11 @@ async fn weights_test() -> Result<(), anyhow::Error> {
 	let mut transfer_50_payload = keys
 		.iter()
 		.map(|key| {
-			let transfer_selector = sp_core::hex2array!("a9059cbb");
+			let transfer_selector = pezsp_core::hex2array!("a9059cbb");
 			let mut data = transfer_selector.to_vec();
 			let account_id = key.public_key().0.into();
 			let h160 =
-				<AHWRuntime as pallet_revive::Config>::AddressMapper::to_address(&account_id);
+				<AHWRuntime as pezpallet_revive::Config>::AddressMapper::to_address(&account_id);
 			data.extend(ethabi::encode(&[Token::Address(h160), Token::Uint(50.into())]));
 
 			data
@@ -137,21 +137,21 @@ async fn weights_test() -> Result<(), anyhow::Error> {
 
 async fn assert_block_proposing_time_no_greater_than_1s(collator: &NetworkNode) {
 	let num_blocks_under_1s = collator.reports(
-		"substrate_proposer_block_proposal_time_bucket{chain=\"asset-hub-zagros-local\",le=\"1\"}",
+		"bizinikiwi_proposer_block_proposal_time_bucket{chain=\"asset-hub-zagros-local\",le=\"1\"}",
 	).await.expect("Could not fetch report");
 
 	let num_total_proposed_blocks = collator
-		.reports("substrate_proposer_block_proposal_time_count{chain=\"asset-hub-zagros-local\"}")
+		.reports("bizinikiwi_proposer_block_proposal_time_count{chain=\"asset-hub-zagros-local\"}")
 		.await
 		.expect("Could not fetch report");
 
-	let num_blocks_hit_deadline = collator.reports("substrate_proposer_end_proposal_reason{reason=\"hit_deadline\",chain=\"asset-hub-zagros-local\"}").await.expect("Could not fetch report");
+	let num_blocks_hit_deadline = collator.reports("bizinikiwi_proposer_end_proposal_reason{reason=\"hit_deadline\",chain=\"asset-hub-zagros-local\"}").await.expect("Could not fetch report");
 	assert_eq!(num_blocks_under_1s, num_total_proposed_blocks);
 	assert_eq!(num_blocks_hit_deadline, 0.0, "There should be no blocks that hit the deadline");
 }
 
 async fn wait_warmup_finish(collator: &NetworkNode) -> Result<(), anyhow::Error> {
-	while collator.reports("substrate_tasks_ended_total{kind=\"blocking\",reason=\"finished\",task_group=\"default\",task_name=\"warm-up-trie-cache\",chain=\"asset-hub-zagros-local\"}").await? < 0.5 {
+	while collator.reports("bizinikiwi_tasks_ended_total{kind=\"blocking\",reason=\"finished\",task_group=\"default\",task_name=\"warm-up-trie-cache\",chain=\"asset-hub-zagros-local\"}").await? < 0.5 {
 		std::thread::sleep(std::time::Duration::from_secs(10));
 	}
 	Ok(())
@@ -272,7 +272,7 @@ async fn instantiate_contract(
 
 	// We need a nonce before instantiating the contract
 	let account_id = caller.public_key().0.into();
-	let caller_h160 = <AHWRuntime as pallet_revive::Config>::AddressMapper::to_address(&account_id);
+	let caller_h160 = <AHWRuntime as pezpallet_revive::Config>::AddressMapper::to_address(&account_id);
 	log::info!("H160 Account: {:?}", caller_h160);
 	let caller_revive_nonce = client
 		.runtime_api()
@@ -280,7 +280,7 @@ async fn instantiate_contract(
 		.await?
 		.call(ahw::apis().revive_api().nonce(caller_h160))
 		.await?;
-	let contract_address = pallet_revive::create1(&caller_h160, caller_revive_nonce.into());
+	let contract_address = pezpallet_revive::create1(&caller_h160, caller_revive_nonce.into());
 	let weight = Weight { ref_time, proof_size };
 	let call = &ahw::tx().revive().instantiate_with_code(0, weight, deposit, code, vec![], None);
 	client

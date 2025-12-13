@@ -20,7 +20,7 @@ use std::{
 	io::{BufRead, BufReader, Read},
 	time::Duration,
 };
-use substrate_rpc_client::{ws_client, ChainApi};
+use bizinikiwi_rpc_client::{ws_client, ChainApi};
 
 /// Run the given `future` and panic if the `timeout` is hit.
 pub async fn run_with_timeout(timeout: Duration, future: impl Future<Output = ()>) {
@@ -64,7 +64,7 @@ pub fn find_ws_url_from_output(read: impl Read + Send) -> (String, String) {
 
 			data.push_str(&line);
 
-			// does the line contain our port (we expect this specific output from substrate).
+			// does the line contain our port (we expect this specific output from bizinikiwi).
 			let sock_addr = match line.split_once("Running JSON-RPC server: addr=") {
 				None => return None,
 				Some((_, after)) => after.split_once(',').unwrap().0,

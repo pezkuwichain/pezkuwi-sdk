@@ -48,11 +48,11 @@ use crate::{
 };
 use alloc::vec::Vec;
 use core::fmt;
-use frame_support::pallet_prelude::*;
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_support::pezpallet_prelude::*;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{DownwardMessage, Hash, Id as ParaId, InboundDownwardMessage};
-use sp_core::MAX_POSSIBLE_ALLOCATION;
-use sp_runtime::{
+use pezsp_core::MAX_POSSIBLE_ALLOCATION;
+use pezsp_runtime::{
 	traits::{BlakeTwo256, Hash as HashT, SaturatedConversion},
 	FixedU128,
 };
@@ -108,7 +108,7 @@ impl fmt::Debug for ProcessedDownwardMessagesAcceptanceErr {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
@@ -117,7 +117,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + configuration::Config + paras::Config {}
+	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {}
 
 	/// The downward messages addressed for a certain para.
 	#[pallet::storage]
@@ -220,7 +220,7 @@ impl<T: Config> Pallet<T> {
 		Self::can_queue_downward_message(config, &para, &msg)?;
 
 		let inbound =
-			InboundDownwardMessage { msg, sent_at: frame_system::Pallet::<T>::block_number() };
+			InboundDownwardMessage { msg, sent_at: pezframe_system::Pallet::<T>::block_number() };
 
 		// obtain the new link in the MQC and update the head.
 		DownwardMessageQueueHeads::<T>::mutate(para, |head| {

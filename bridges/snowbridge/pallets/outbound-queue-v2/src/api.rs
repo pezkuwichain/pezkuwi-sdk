@@ -3,7 +3,7 @@
 //! Helpers for implementing runtime api
 
 use crate::{Config, MessageLeaves};
-use frame_support::storage::StorageStreamIter;
+use pezframe_support::storage::StorageStreamIter;
 use snowbridge_merkle_tree::{merkle_proof, MerkleProof};
 
 pub fn prove_message<T>(leaf_index: u64) -> Option<MerkleProof>

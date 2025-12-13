@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::validator_side_experimental::{peer_manager::Backend, Metrics, PeerManager};
-use sp_keystore::KeystorePtr;
+use pezsp_keystore::KeystorePtr;
 
 /// All state relevant for the validator side of the protocol lives here.
 pub struct State<B> {

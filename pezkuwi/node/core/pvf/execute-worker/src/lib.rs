@@ -218,7 +218,7 @@ pub fn worker_entrypoint(
 				let compiled_artifact_blob = Arc::new(compiled_artifact_blob);
 
 				let raw_block_data =
-					match sp_maybe_compressed_blob::decompress(&pov.block_data.0, POV_BOMB_LIMIT) {
+					match pezsp_maybe_compressed_blob::decompress(&pov.block_data.0, POV_BOMB_LIMIT) {
 						Ok(data) => data,
 						Err(_) => {
 							send_result::<WorkerResponse, WorkerError>(
@@ -519,7 +519,7 @@ fn handle_child_process(
 ///
 /// # Background
 ///
-/// Wasmtime powers the Substrate Executor. It compiles the wasm bytecode into native code.
+/// Wasmtime powers the Bizinikiwi Executor. It compiles the wasm bytecode into native code.
 /// That native code does not create any stacks and just reuses the stack of the thread that
 /// wasmtime was invoked from.
 ///

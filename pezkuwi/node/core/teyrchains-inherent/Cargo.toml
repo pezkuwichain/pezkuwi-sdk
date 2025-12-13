@@ -19,8 +19,8 @@ gum = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-overseer = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sp-blockchain = { workspace = true, default-features = true }
-sp-inherents = { workspace = true, default-features = true }
+pezsp-blockchain = { workspace = true, default-features = true }
+pezsp-inherents = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [features]
@@ -29,6 +29,6 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sp-blockchain/runtime-benchmarks",
-	"sp-inherents/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
 ]

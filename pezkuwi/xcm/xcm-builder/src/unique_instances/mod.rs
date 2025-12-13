@@ -16,9 +16,9 @@
 
 //! XCM utilities to work with NFT-like entities (unique instances).
 //! The adapters and other utility types use the
-//! [`asset_ops`](frame_support::traits::tokens::asset_ops) traits.
+//! [`asset_ops`](pezframe_support::traits::tokens::asset_ops) traits.
 
-use sp_runtime::{traits::Convert, DispatchError};
+use pezsp_runtime::{traits::Convert, DispatchError};
 use xcm::latest::prelude::*;
 
 pub mod adapter;

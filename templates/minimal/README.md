@@ -108,7 +108,7 @@ zombienet --provider native spawn zombienet-multi-node.toml
 ### Connect with the PezkuwiChain-JS Apps Front-End
 
 - 🌐 You can interact with your local node using the
-hosted version of the [PezkuwiChain/Substrate
+hosted version of the [PezkuwiChain/Bizinikiwi
 Portal](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9944).
 
 - 🪐 A hosted version is also
@@ -144,6 +144,6 @@ Previously minimal template's development chains:
 the Pezkuwi SDK documentation resources.
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/pezkuwichain/pezkuwi-sdk/issues) and
-[Substrate StackExchange](https://pezkuwichain.app/community/).
+[Bizinikiwi StackExchange](https://pezkuwichain.app/community/).
 - 👥You can also reach out on the [Official PezkuwiChain discord server](https://polkadot-discord.w3f.tools/)
-- 🧑Reach out on [Telegram](https://t.me/substratedevs) for more questions and discussions
+- 🧑Reach out on [Telegram](https://t.me/bizinikiwidevs) for more questions and discussions

@@ -37,7 +37,7 @@
 //! Let's see a quick example:
 //!
 //! ```nocompile
-//! sp_api::decl_runtime_apis! {
+//! pezsp_api::decl_runtime_apis! {
 //! 	#[api_version(2)]
 //! 	pub trait MyApi {
 //! 		fn fn1();
@@ -51,7 +51,7 @@
 //!
 //! struct Runtime {}
 //!
-//! sp_api::impl_runtime_apis! {
+//! pezsp_api::impl_runtime_apis! {
 //!     #[api_version(3)]
 //!     impl self::MyApi<Block> for Runtime {
 //!         fn fn1() {}
@@ -84,7 +84,7 @@
 //!
 //! Hopefully this should be all you need to know in order to use versioned methods in the node.
 //! For more details about how the API versioning works refer to `spi_api`
-//! documentation [here](https://docs.pezkuwichain.io/rustdocs/latest/sp_api/macro.decl_runtime_apis.html).
+//! documentation [here](https://docs.pezkuwichain.io/rustdocs/latest/pezsp_api/macro.decl_runtime_apis.html).
 //!
 //! # How versioned methods are used for `TeyrchainHost`
 //!
@@ -129,7 +129,7 @@ use alloc::{
 use pezkuwi_core_primitives as pcp;
 use pezkuwi_teyrchain_primitives::primitives as ppp;
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// The API for querying the state of teyrchains on-chain.
 	#[api_version(5)]
 	pub trait TeyrchainHost {

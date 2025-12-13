@@ -301,8 +301,8 @@ impl TryFrom<OldResponse> for Response {
 					.transpose()?,
 			),
 			Version(version) => Self::Version(version),
-			PalletsInfo(pallet_info) => {
-				let inner = pallet_info
+			PalletsInfo(pezpallet_info) => {
+				let inner = pezpallet_info
 					.into_iter()
 					.map(TryInto::try_into)
 					.collect::<result::Result<Vec<_>, _>>()?;
@@ -846,7 +846,7 @@ pub enum Instruction<Call> {
 	///
 	/// Sends a `QueryResponse` to Origin whose data field `PalletsInfo` containing the information
 	/// of all pallets on the local chain whose name is equal to `name`. This is empty in the case
-	/// that the local chain is not based on Substrate Frame.
+	/// that the local chain is not based on Bizinikiwi Frame.
 	///
 	/// Safety: No concerns.
 	///

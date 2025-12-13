@@ -17,7 +17,7 @@
 use crate::*;
 
 use codec::Encode;
-use frame_support::{assert_ok, weights::Weight};
+use pezframe_support::{assert_ok, weights::Weight};
 use xcm::latest::QueryResponseInfo;
 use xcm_simulator::{mock_message_queue::ReceivedDmp, TestExt};
 
@@ -30,8 +30,8 @@ fn buy_execution<C>(fees: impl Into<Asset>) -> Instruction<C> {
 ///
 /// Example usage:
 /// ```ignore
-/// assert!(system_contains_event!(teyrchain, System(frame_system::Event::Remarked { .. })));
-/// assert!(system_contains_event!(relay_chain, XcmPallet(pallet_xcm::Event::Attempted { .. })));
+/// assert!(system_contains_event!(teyrchain, System(pezframe_system::Event::Remarked { .. })));
+/// assert!(system_contains_event!(relay_chain, XcmPallet(pezpallet_xcm::Event::Attempted { .. })));
 /// ```
 macro_rules! system_contains_event {
     ($runtime:ident, $variant:ident($($pattern:tt)*)) => {
@@ -53,7 +53,7 @@ fn dmp() {
 	MockNet::reset();
 
 	let remark = teyrchain::RuntimeCall::System(
-		frame_system::Call::<teyrchain::Runtime>::remark_with_event { remark: vec![1, 2, 3] },
+		pezframe_system::Call::<teyrchain::Runtime>::remark_with_event { remark: vec![1, 2, 3] },
 	);
 	Relay::execute_with(|| {
 		assert_ok!(RelayChainPalletXcm::send_xcm(
@@ -68,7 +68,7 @@ fn dmp() {
 	});
 
 	ParaA::execute_with(|| {
-		assert!(system_contains_event!(teyrchain, System(frame_system::Event::Remarked { .. })));
+		assert!(system_contains_event!(teyrchain, System(pezframe_system::Event::Remarked { .. })));
 	});
 }
 
@@ -77,7 +77,7 @@ fn ump() {
 	MockNet::reset();
 
 	let remark = relay_chain::RuntimeCall::System(
-		frame_system::Call::<relay_chain::Runtime>::remark_with_event { remark: vec![1, 2, 3] },
+		pezframe_system::Call::<relay_chain::Runtime>::remark_with_event { remark: vec![1, 2, 3] },
 	);
 	ParaA::execute_with(|| {
 		assert_ok!(TeyrchainPalletXcm::send_xcm(
@@ -92,7 +92,7 @@ fn ump() {
 	});
 
 	Relay::execute_with(|| {
-		assert!(system_contains_event!(relay_chain, System(frame_system::Event::Remarked { .. })));
+		assert!(system_contains_event!(relay_chain, System(pezframe_system::Event::Remarked { .. })));
 	});
 }
 
@@ -101,7 +101,7 @@ fn xcmp() {
 	MockNet::reset();
 
 	let remark = teyrchain::RuntimeCall::System(
-		frame_system::Call::<teyrchain::Runtime>::remark_with_event { remark: vec![1, 2, 3] },
+		pezframe_system::Call::<teyrchain::Runtime>::remark_with_event { remark: vec![1, 2, 3] },
 	);
 	ParaA::execute_with(|| {
 		assert_ok!(TeyrchainPalletXcm::send_xcm(
@@ -116,7 +116,7 @@ fn xcmp() {
 	});
 
 	ParaB::execute_with(|| {
-		assert!(system_contains_event!(teyrchain, System(frame_system::Event::Remarked { .. })));
+		assert!(system_contains_event!(teyrchain, System(pezframe_system::Event::Remarked { .. })));
 	});
 }
 
@@ -141,9 +141,9 @@ fn reserve_transfer() {
 		);
 		// Ensure expected events were emitted
 		let attempted_emitted =
-			system_contains_event!(relay_chain, XcmPallet(pallet_xcm::Event::Attempted { .. }));
+			system_contains_event!(relay_chain, XcmPallet(pezpallet_xcm::Event::Attempted { .. }));
 		let sent_emitted =
-			system_contains_event!(relay_chain, XcmPallet(pallet_xcm::Event::Sent { .. }));
+			system_contains_event!(relay_chain, XcmPallet(pezpallet_xcm::Event::Sent { .. }));
 		assert!(attempted_emitted, "Expected XcmPallet::Attempted event emitted");
 		assert!(sent_emitted, "Expected XcmPallet::Sent event emitted");
 	});
@@ -151,7 +151,7 @@ fn reserve_transfer() {
 	ParaA::execute_with(|| {
 		// free execution, full amount received
 		assert_eq!(
-			pallet_balances::Pallet::<teyrchain::Runtime>::free_balance(&ALICE),
+			pezpallet_balances::Pallet::<teyrchain::Runtime>::free_balance(&ALICE),
 			INITIAL_BALANCE + withdraw_amount
 		);
 	});
@@ -159,7 +159,7 @@ fn reserve_transfer() {
 
 #[test]
 fn reserve_transfer_with_error() {
-	use sp_tracing::{
+	use pezsp_tracing::{
 		test_log_capture::init_log_capture,
 		tracing::{subscriber, Level},
 	};
@@ -191,7 +191,7 @@ fn reserve_transfer_with_error() {
 
 			// Verify that XcmPallet::Attempted was NOT emitted (rollback happened)
 			let xcm_attempted_emitted =
-				system_contains_event!(relay_chain, XcmPallet(pallet_xcm::Event::Attempted { .. }));
+				system_contains_event!(relay_chain, XcmPallet(pezpallet_xcm::Event::Attempted { .. }));
 			assert!(
 				!xcm_attempted_emitted,
 				"Expected no XcmPallet::Attempted event due to rollback, but it was emitted"
@@ -201,7 +201,7 @@ fn reserve_transfer_with_error() {
 		// Ensure no balance change due to the error
 		ParaA::execute_with(|| {
 			assert_eq!(
-				pallet_balances::Pallet::<teyrchain::Runtime>::free_balance(&ALICE),
+				pezpallet_balances::Pallet::<teyrchain::Runtime>::free_balance(&ALICE),
 				INITIAL_BALANCE
 			);
 		});
@@ -223,7 +223,7 @@ fn remote_locking_and_unlocking() {
 	});
 
 	Relay::execute_with(|| {
-		use pallet_balances::{BalanceLock, Reasons};
+		use pezpallet_balances::{BalanceLock, Reasons};
 		assert_eq!(
 			relay_chain::Balances::locks(&child_account_id(2)),
 			vec![BalanceLock { id: *b"py/xcmlk", amount: locked_amount, reasons: Reasons::All }]
@@ -250,7 +250,7 @@ fn remote_locking_and_unlocking() {
 	});
 
 	Relay::execute_with(|| {
-		use pallet_balances::{BalanceLock, Reasons};
+		use pezpallet_balances::{BalanceLock, Reasons};
 		// Lock is reduced
 		assert_eq!(
 			relay_chain::Balances::locks(&child_account_id(2)),
@@ -358,7 +358,7 @@ fn teleport_nft() {
 /// Asserts that the teyrchain accounts are updated as expected.
 #[test]
 fn reserve_asset_transfer_nft() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	MockNet::reset();
 
 	Relay::execute_with(|| {
@@ -445,7 +445,7 @@ fn reserve_asset_class_create_and_reserve_transfer() {
 		let message = Xcm(vec![Transact {
 			origin_kind: OriginKind::Xcm,
 			call: teyrchain::RuntimeCall::from(
-				pallet_uniques::Call::<teyrchain::Runtime>::create {
+				pezpallet_uniques::Call::<teyrchain::Runtime>::create {
 					collection: (Parent, 2u64).into(),
 					admin: parent_account_id(),
 				},
@@ -544,7 +544,7 @@ fn query_holding() {
 		// Send withdraw and deposit with query holding
 		assert_ok!(TeyrchainPalletXcm::send_xcm(Here, Parent, message.clone(),));
 
-		VersionedXcm::from(message).using_encoded(sp_core::blake2_256)
+		VersionedXcm::from(message).using_encoded(pezsp_core::blake2_256)
 	});
 
 	// Check that transfer was executed

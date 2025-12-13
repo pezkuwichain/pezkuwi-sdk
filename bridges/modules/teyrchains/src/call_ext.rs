@@ -18,12 +18,12 @@ use crate::{Config, GrandpaPalletOf, Pallet, RelayBlockNumber};
 use bp_header_chain::HeaderChain;
 use bp_runtime::{HeaderId, OwnedBridgeModule};
 use bp_teyrchains::{BestParaHeadHash, SubmitTeyrchainHeadsInfo};
-use frame_support::{
+use pezframe_support::{
 	dispatch::CallableCallFor,
 	traits::{Get, IsSubType},
 };
-use pallet_bridge_grandpa::SubmitFinalityProofHelper;
-use sp_runtime::{
+use pezpallet_bridge_grandpa::SubmitFinalityProofHelper;
+use pezsp_runtime::{
 	traits::Zero,
 	transaction_validity::{InvalidTransaction, TransactionValidityError},
 	RuntimeDebug,
@@ -41,7 +41,7 @@ pub struct VerifiedSubmitTeyrchainHeadsInfo {
 
 /// Helper struct that provides methods for working with the `SubmitTeyrchainHeads` call.
 pub struct SubmitTeyrchainHeadsHelper<T: Config<I>, I: 'static> {
-	_phantom_data: sp_std::marker::PhantomData<(T, I)>,
+	_phantom_data: pezsp_std::marker::PhantomData<(T, I)>,
 }
 
 impl<T: Config<I>, I: 'static> SubmitTeyrchainHeadsHelper<T, I> {
@@ -292,7 +292,7 @@ mod tests {
 	}
 
 	fn insert_relay_block(num: RelayBlockNumber) {
-		pallet_bridge_grandpa::ImportedHeaders::<TestRuntime, crate::Instance1>::insert(
+		pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime, crate::Instance1>::insert(
 			RelayBlockHash::from([num as u8; 32]),
 			StoredHeaderData { number: num, state_root: RelayBlockHash::from([10u8; 32]) },
 		);

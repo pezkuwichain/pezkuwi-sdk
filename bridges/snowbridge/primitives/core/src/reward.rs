@@ -6,14 +6,14 @@ extern crate alloc;
 use crate::reward::RewardPaymentError::{ChargeFeesFailure, XcmSendFailure};
 use bp_relayers::PaymentProcedure;
 use codec::DecodeWithMemTracking;
-use frame_support::{dispatch::GetDispatchInfo, PalletError};
+use pezframe_support::{dispatch::GetDispatchInfo, PalletError};
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	codec::{Decode, Encode},
 	traits::Get,
 	DispatchError,
 };
-use sp_std::{fmt::Debug, marker::PhantomData};
+use pezsp_std::{fmt::Debug, marker::PhantomData};
 use xcm::{
 	opaque::latest::prelude::Xcm,
 	prelude::{ExecuteXcm, Junction::*, Location, SendXcm, *},
@@ -111,7 +111,7 @@ where
 		+ Encode
 		+ Eq
 		+ TypeInfo
-		+ Into<sp_runtime::AccountId32>
+		+ Into<pezsp_runtime::AccountId32>
 		+ Into<Location>,
 	EthereumNetwork: Get<NetworkId>,
 	InboundQueueLocation: Get<InteriorLocation>,
@@ -154,8 +154,8 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::parameter_types;
-	use sp_runtime::AccountId32;
+	use pezframe_support::parameter_types;
+	use pezsp_runtime::AccountId32;
 
 	#[derive(Clone, Debug, Decode, Encode, Eq, PartialEq, TypeInfo)]
 	pub struct MockRelayer(pub AccountId32);
@@ -214,7 +214,7 @@ mod tests {
 	#[derive(Debug, Decode, Default)]
 	pub struct MockCall;
 	impl GetDispatchInfo for MockCall {
-		fn get_dispatch_info(&self) -> frame_support::dispatch::DispatchInfo {
+		fn get_dispatch_info(&self) -> pezframe_support::dispatch::DispatchInfo {
 			Default::default()
 		}
 	}
@@ -238,7 +238,7 @@ mod tests {
 		}
 
 		fn deliver(xcm: Self::Ticket) -> core::result::Result<XcmHash, SendError> {
-			let hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+			let hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 			Ok(hash)
 		}
 	}
@@ -279,7 +279,7 @@ mod tests {
 			}
 
 			fn deliver(xcm: Self::Ticket) -> core::result::Result<XcmHash, SendError> {
-				let hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+				let hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 				Ok(hash)
 			}
 		}

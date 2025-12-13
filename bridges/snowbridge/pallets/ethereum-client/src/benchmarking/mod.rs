@@ -4,8 +4,8 @@ use super::*;
 mod util;
 
 use crate::Pallet as EthereumBeaconClient;
-use frame_benchmarking::v2::*;
-use frame_system::RawOrigin;
+use pezframe_benchmarking::v2::*;
+use pezframe_system::RawOrigin;
 use hex_literal::hex;
 use snowbridge_beacon_primitives::{
 	fast_aggregate_verify,

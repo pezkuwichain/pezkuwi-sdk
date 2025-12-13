@@ -55,7 +55,7 @@ pub enum Junction {
 	/// A 32-byte identifier for an account of a specific network that is respected as a sovereign
 	/// endpoint within the context.
 	///
-	/// Generally used when the context is a Substrate-based chain.
+	/// Generally used when the context is a Bizinikiwi-based chain.
 	AccountId32 { network: Option<NetworkId>, id: [u8; 32] },
 	/// An 8-byte index for an account of a specific network that is respected as a sovereign
 	/// endpoint within the context.

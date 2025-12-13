@@ -4,7 +4,7 @@ pub use crate::config::{
 	SLOTS_PER_HISTORICAL_ROOT, SYNC_COMMITTEE_BITS_SIZE as SC_BITS_SIZE,
 	SYNC_COMMITTEE_SIZE as SC_SIZE,
 };
-use frame_support::storage::types::OptionQuery;
+use pezframe_support::storage::types::OptionQuery;
 use snowbridge_core::RingBufferMapImpl;
 
 // Specialize types based on configured sync committee size

@@ -5,7 +5,7 @@
 use snowbridge_core::AgentId;
 use xcm::VersionedLocation;
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	pub trait ControlV2Api
 	{
 		/// Provides the Agent ID on Ethereum for the specified location.

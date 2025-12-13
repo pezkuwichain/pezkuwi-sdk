@@ -1,6 +1,6 @@
 [package]
 name = "minimal-template-node"
-description = "A minimal Substrate-based Substrate node, ready for hacking."
+description = "A minimal Bizinikiwi-based Bizinikiwi node, ready for hacking."
 version = "0.0.0"
 license = "Unlicense"
 authors.workspace = true
@@ -27,7 +27,7 @@ minimal-template-runtime = { workspace = true }
 pezkuwi-sdk = { workspace = true, features = ["experimental", "node"] }
 
 [build-dependencies]
-pezkuwi-sdk = { workspace = true, features = ["substrate-build-script-utils"] }
+pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]

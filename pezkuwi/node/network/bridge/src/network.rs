@@ -24,7 +24,7 @@ use parking_lot::Mutex;
 
 use codec::Encode;
 
-use sc_network::{
+use pezsc_network::{
 	config::parse_addr, multiaddr::Multiaddr, service::traits::NetworkService, types::ProtocolName,
 	IfDisconnected, MessageSink, OutboundFailure, ReputationChange, RequestFailure,
 };
@@ -196,7 +196,7 @@ pub trait Network: Clone + Send + 'static {
 	fn disconnect_peer(&self, who: PeerId, protocol: ProtocolName);
 
 	/// Get peer role.
-	fn peer_role(&self, who: PeerId, handshake: Vec<u8>) -> Option<sc_network::ObservedRole>;
+	fn peer_role(&self, who: PeerId, handshake: Vec<u8>) -> Option<pezsc_network::ObservedRole>;
 }
 
 #[async_trait]
@@ -308,7 +308,7 @@ impl Network for Arc<dyn NetworkService> {
 		);
 	}
 
-	fn peer_role(&self, who: PeerId, handshake: Vec<u8>) -> Option<sc_network::ObservedRole> {
+	fn peer_role(&self, who: PeerId, handshake: Vec<u8>) -> Option<pezsc_network::ObservedRole> {
 		<dyn NetworkService>::peer_role(&**self, who, handshake)
 	}
 }

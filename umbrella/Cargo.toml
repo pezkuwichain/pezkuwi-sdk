@@ -22,155 +22,155 @@ std = [
 	"bridge-hub-common?/std",
 	"bridge-hub-test-utils?/std",
 	"bridge-runtime-common?/std",
-	"cumulus-pallet-aura-ext?/std",
-	"cumulus-pallet-dmp-queue?/std",
-	"cumulus-pallet-session-benchmarking?/std",
-	"cumulus-pallet-solo-to-para?/std",
-	"cumulus-pallet-teyrchain-system-proc-macro?/std",
-	"cumulus-pallet-teyrchain-system?/std",
-	"cumulus-pallet-weight-reclaim?/std",
-	"cumulus-pallet-xcm?/std",
-	"cumulus-pallet-xcmp-queue?/std",
-	"cumulus-ping?/std",
-	"cumulus-primitives-aura?/std",
-	"cumulus-primitives-core?/std",
-	"cumulus-primitives-proof-size-hostfunction?/std",
-	"cumulus-primitives-storage-weight-reclaim?/std",
-	"cumulus-primitives-teyrchain-inherent?/std",
-	"cumulus-primitives-timestamp?/std",
-	"cumulus-primitives-utility?/std",
-	"cumulus-test-relay-sproof-builder?/std",
-	"frame-benchmarking-pallet-pov?/std",
-	"frame-benchmarking?/std",
-	"frame-election-provider-support?/std",
-	"frame-executive?/std",
-	"frame-metadata-hash-extension?/std",
-	"frame-support-procedural?/std",
-	"frame-support?/std",
-	"frame-system-benchmarking?/std",
-	"frame-system-rpc-runtime-api?/std",
-	"frame-system?/std",
-	"frame-try-runtime?/std",
-	"pallet-alliance?/std",
-	"pallet-asset-conversion-ops?/std",
-	"pallet-asset-conversion-tx-payment?/std",
-	"pallet-asset-conversion?/std",
-	"pallet-asset-rate?/std",
-	"pallet-asset-rewards?/std",
-	"pallet-asset-tx-payment?/std",
-	"pallet-assets-freezer?/std",
-	"pallet-assets-holder?/std",
-	"pallet-assets-precompiles?/std",
-	"pallet-assets?/std",
-	"pallet-atomic-swap?/std",
-	"pallet-aura?/std",
-	"pallet-authority-discovery?/std",
-	"pallet-authorship?/std",
-	"pallet-babe?/std",
-	"pallet-bags-list?/std",
-	"pallet-balances?/std",
-	"pallet-beefy-mmr?/std",
-	"pallet-beefy?/std",
-	"pallet-bounties?/std",
-	"pallet-bridge-grandpa?/std",
-	"pallet-bridge-messages?/std",
-	"pallet-bridge-relayers?/std",
-	"pallet-bridge-teyrchains?/std",
-	"pallet-broker?/std",
-	"pallet-child-bounties?/std",
-	"pallet-collator-selection?/std",
-	"pallet-collective-content?/std",
-	"pallet-collective?/std",
-	"pallet-contracts-mock-network?/std",
-	"pallet-contracts?/std",
-	"pallet-conviction-voting?/std",
-	"pallet-core-fellowship?/std",
-	"pallet-delegated-staking?/std",
-	"pallet-democracy?/std",
-	"pallet-derivatives?/std",
-	"pallet-dev-mode?/std",
-	"pallet-dummy-dim?/std",
-	"pallet-election-provider-multi-block?/std",
-	"pallet-election-provider-multi-phase?/std",
-	"pallet-election-provider-support-benchmarking?/std",
-	"pallet-elections-phragmen?/std",
-	"pallet-fast-unstake?/std",
-	"pallet-glutton?/std",
-	"pallet-grandpa?/std",
-	"pallet-identity?/std",
-	"pallet-im-online?/std",
-	"pallet-indices?/std",
-	"pallet-insecure-randomness-collective-flip?/std",
-	"pallet-lottery?/std",
-	"pallet-membership?/std",
-	"pallet-message-queue?/std",
-	"pallet-meta-tx?/std",
-	"pallet-migrations?/std",
-	"pallet-mixnet?/std",
-	"pallet-mmr?/std",
-	"pallet-multi-asset-bounties?/std",
-	"pallet-multisig?/std",
-	"pallet-nft-fractionalization?/std",
-	"pallet-nfts-runtime-api?/std",
-	"pallet-nfts?/std",
-	"pallet-nis?/std",
-	"pallet-node-authorization?/std",
-	"pallet-nomination-pools-benchmarking?/std",
-	"pallet-nomination-pools-runtime-api?/std",
-	"pallet-nomination-pools?/std",
-	"pallet-offences-benchmarking?/std",
-	"pallet-offences?/std",
-	"pallet-oracle-runtime-api?/std",
-	"pallet-oracle?/std",
-	"pallet-origin-restriction?/std",
-	"pallet-paged-list?/std",
-	"pallet-parameters?/std",
-	"pallet-people?/std",
-	"pallet-preimage?/std",
-	"pallet-proxy?/std",
-	"pallet-ranked-collective?/std",
-	"pallet-recovery?/std",
-	"pallet-referenda?/std",
-	"pallet-remark?/std",
-	"pallet-revive?/std",
-	"pallet-root-offences?/std",
-	"pallet-root-testing?/std",
-	"pallet-safe-mode?/std",
-	"pallet-salary?/std",
-	"pallet-scheduler?/std",
-	"pallet-scored-pool?/std",
-	"pallet-session-benchmarking?/std",
-	"pallet-session?/std",
-	"pallet-skip-feeless-payment?/std",
-	"pallet-society?/std",
-	"pallet-staking-async-ah-client?/std",
-	"pallet-staking-async-rc-client?/std",
-	"pallet-staking-async-reward-fn?/std",
-	"pallet-staking-async-runtime-api?/std",
-	"pallet-staking-async?/std",
-	"pallet-staking-reward-fn?/std",
-	"pallet-staking-runtime-api?/std",
-	"pallet-staking?/std",
-	"pallet-state-trie-migration?/std",
-	"pallet-statement?/std",
-	"pallet-sudo?/std",
-	"pallet-timestamp?/std",
-	"pallet-tips?/std",
-	"pallet-transaction-payment-rpc-runtime-api?/std",
-	"pallet-transaction-payment?/std",
-	"pallet-transaction-storage?/std",
-	"pallet-treasury?/std",
-	"pallet-tx-pause?/std",
-	"pallet-uniques?/std",
-	"pallet-utility?/std",
-	"pallet-verify-signature?/std",
-	"pallet-vesting?/std",
-	"pallet-whitelist?/std",
-	"pallet-xcm-benchmarks?/std",
-	"pallet-xcm-bridge-hub-router?/std",
-	"pallet-xcm-bridge-hub?/std",
-	"pallet-xcm-precompiles?/std",
-	"pallet-xcm?/std",
+	"pezcumulus-pezpallet-aura-ext?/std",
+	"pezcumulus-pezpallet-dmp-queue?/std",
+	"pezcumulus-pezpallet-session-benchmarking?/std",
+	"pezcumulus-pezpallet-solo-to-para?/std",
+	"pezcumulus-pezpallet-teyrchain-system-proc-macro?/std",
+	"pezcumulus-pezpallet-teyrchain-system?/std",
+	"pezcumulus-pezpallet-weight-reclaim?/std",
+	"pezcumulus-pezpallet-xcm?/std",
+	"pezcumulus-pezpallet-xcmp-queue?/std",
+	"pezcumulus-ping?/std",
+	"pezcumulus-primitives-aura?/std",
+	"pezcumulus-primitives-core?/std",
+	"pezcumulus-primitives-proof-size-hostfunction?/std",
+	"pezcumulus-primitives-storage-weight-reclaim?/std",
+	"pezcumulus-primitives-teyrchain-inherent?/std",
+	"pezcumulus-primitives-timestamp?/std",
+	"pezcumulus-primitives-utility?/std",
+	"pezcumulus-test-relay-sproof-builder?/std",
+	"pezframe-benchmarking-pezpallet-pov?/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-election-provider-support?/std",
+	"pezframe-executive?/std",
+	"pezframe-metadata-hash-extension?/std",
+	"pezframe-support-procedural?/std",
+	"pezframe-support?/std",
+	"pezframe-system-benchmarking?/std",
+	"pezframe-system-rpc-runtime-api?/std",
+	"pezframe-system?/std",
+	"pezframe-try-runtime?/std",
+	"pezpallet-alliance?/std",
+	"pezpallet-asset-conversion-ops?/std",
+	"pezpallet-asset-conversion-tx-payment?/std",
+	"pezpallet-asset-conversion?/std",
+	"pezpallet-asset-rate?/std",
+	"pezpallet-asset-rewards?/std",
+	"pezpallet-asset-tx-payment?/std",
+	"pezpallet-assets-freezer?/std",
+	"pezpallet-assets-holder?/std",
+	"pezpallet-assets-precompiles?/std",
+	"pezpallet-assets?/std",
+	"pezpallet-atomic-swap?/std",
+	"pezpallet-aura?/std",
+	"pezpallet-authority-discovery?/std",
+	"pezpallet-authorship?/std",
+	"pezpallet-babe?/std",
+	"pezpallet-bags-list?/std",
+	"pezpallet-balances?/std",
+	"pezpallet-beefy-mmr?/std",
+	"pezpallet-beefy?/std",
+	"pezpallet-bounties?/std",
+	"pezpallet-bridge-grandpa?/std",
+	"pezpallet-bridge-messages?/std",
+	"pezpallet-bridge-relayers?/std",
+	"pezpallet-bridge-teyrchains?/std",
+	"pezpallet-broker?/std",
+	"pezpallet-child-bounties?/std",
+	"pezpallet-collator-selection?/std",
+	"pezpallet-collective-content?/std",
+	"pezpallet-collective?/std",
+	"pezpallet-contracts-mock-network?/std",
+	"pezpallet-contracts?/std",
+	"pezpallet-conviction-voting?/std",
+	"pezpallet-core-fellowship?/std",
+	"pezpallet-delegated-staking?/std",
+	"pezpallet-democracy?/std",
+	"pezpallet-derivatives?/std",
+	"pezpallet-dev-mode?/std",
+	"pezpallet-dummy-dim?/std",
+	"pezpallet-election-provider-multi-block?/std",
+	"pezpallet-election-provider-multi-phase?/std",
+	"pezpallet-election-provider-support-benchmarking?/std",
+	"pezpallet-elections-phragmen?/std",
+	"pezpallet-fast-unstake?/std",
+	"pezpallet-glutton?/std",
+	"pezpallet-grandpa?/std",
+	"pezpallet-identity?/std",
+	"pezpallet-im-online?/std",
+	"pezpallet-indices?/std",
+	"pezpallet-insecure-randomness-collective-flip?/std",
+	"pezpallet-lottery?/std",
+	"pezpallet-membership?/std",
+	"pezpallet-message-queue?/std",
+	"pezpallet-meta-tx?/std",
+	"pezpallet-migrations?/std",
+	"pezpallet-mixnet?/std",
+	"pezpallet-mmr?/std",
+	"pezpallet-multi-asset-bounties?/std",
+	"pezpallet-multisig?/std",
+	"pezpallet-nft-fractionalization?/std",
+	"pezpallet-nfts-runtime-api?/std",
+	"pezpallet-nfts?/std",
+	"pezpallet-nis?/std",
+	"pezpallet-node-authorization?/std",
+	"pezpallet-nomination-pools-benchmarking?/std",
+	"pezpallet-nomination-pools-runtime-api?/std",
+	"pezpallet-nomination-pools?/std",
+	"pezpallet-offences-benchmarking?/std",
+	"pezpallet-offences?/std",
+	"pezpallet-oracle-runtime-api?/std",
+	"pezpallet-oracle?/std",
+	"pezpallet-origin-restriction?/std",
+	"pezpallet-paged-list?/std",
+	"pezpallet-parameters?/std",
+	"pezpallet-people?/std",
+	"pezpallet-preimage?/std",
+	"pezpallet-proxy?/std",
+	"pezpallet-ranked-collective?/std",
+	"pezpallet-recovery?/std",
+	"pezpallet-referenda?/std",
+	"pezpallet-remark?/std",
+	"pezpallet-revive?/std",
+	"pezpallet-root-offences?/std",
+	"pezpallet-root-testing?/std",
+	"pezpallet-safe-mode?/std",
+	"pezpallet-salary?/std",
+	"pezpallet-scheduler?/std",
+	"pezpallet-scored-pool?/std",
+	"pezpallet-session-benchmarking?/std",
+	"pezpallet-session?/std",
+	"pezpallet-skip-feeless-payment?/std",
+	"pezpallet-society?/std",
+	"pezpallet-staking-async-ah-client?/std",
+	"pezpallet-staking-async-rc-client?/std",
+	"pezpallet-staking-async-reward-fn?/std",
+	"pezpallet-staking-async-runtime-api?/std",
+	"pezpallet-staking-async?/std",
+	"pezpallet-staking-reward-fn?/std",
+	"pezpallet-staking-runtime-api?/std",
+	"pezpallet-staking?/std",
+	"pezpallet-state-trie-migration?/std",
+	"pezpallet-statement?/std",
+	"pezpallet-sudo?/std",
+	"pezpallet-timestamp?/std",
+	"pezpallet-tips?/std",
+	"pezpallet-transaction-payment-rpc-runtime-api?/std",
+	"pezpallet-transaction-payment?/std",
+	"pezpallet-transaction-storage?/std",
+	"pezpallet-treasury?/std",
+	"pezpallet-tx-pause?/std",
+	"pezpallet-uniques?/std",
+	"pezpallet-utility?/std",
+	"pezpallet-verify-signature?/std",
+	"pezpallet-vesting?/std",
+	"pezpallet-whitelist?/std",
+	"pezpallet-xcm-benchmarks?/std",
+	"pezpallet-xcm-bridge-hub-router?/std",
+	"pezpallet-xcm-bridge-hub?/std",
+	"pezpallet-xcm-precompiles?/std",
+	"pezpallet-xcm?/std",
 	"pezkuwi-core-primitives?/std",
 	"pezkuwi-primitives?/std",
 	"pezkuwi-runtime-common?/std",
@@ -178,57 +178,57 @@ std = [
 	"pezkuwi-runtime-teyrchains?/std",
 	"pezkuwi-sdk-frame?/std",
 	"pezkuwi-teyrchain-primitives?/std",
-	"sc-executor?/std",
+	"pezsc-executor?/std",
 	"slot-range-helper?/std",
-	"sp-api-proc-macro?/std",
-	"sp-api?/std",
-	"sp-application-crypto?/std",
-	"sp-arithmetic?/std",
-	"sp-authority-discovery?/std",
-	"sp-block-builder?/std",
-	"sp-consensus-aura?/std",
-	"sp-consensus-babe?/std",
-	"sp-consensus-beefy?/std",
-	"sp-consensus-grandpa?/std",
-	"sp-consensus-pow?/std",
-	"sp-consensus-slots?/std",
-	"sp-core-hashing?/std",
-	"sp-core?/std",
-	"sp-crypto-ec-utils?/std",
-	"sp-crypto-hashing?/std",
-	"sp-debug-derive?/std",
-	"sp-externalities?/std",
-	"sp-genesis-builder?/std",
-	"sp-inherents?/std",
-	"sp-io?/std",
-	"sp-keyring?/std",
-	"sp-keystore?/std",
-	"sp-metadata-ir?/std",
-	"sp-mixnet?/std",
-	"sp-mmr-primitives?/std",
-	"sp-npos-elections?/std",
-	"sp-offchain?/std",
-	"sp-runtime-interface?/std",
-	"sp-runtime?/std",
-	"sp-session?/std",
-	"sp-staking?/std",
-	"sp-state-machine?/std",
-	"sp-statement-store?/std",
-	"sp-std?/std",
-	"sp-storage?/std",
-	"sp-timestamp?/std",
-	"sp-tracing?/std",
-	"sp-transaction-pool?/std",
-	"sp-transaction-storage-proof?/std",
-	"sp-trie?/std",
-	"sp-version?/std",
-	"sp-wasm-interface?/std",
-	"sp-weights?/std",
-	"staging-teyrchain-info?/std",
-	"staging-xcm-builder?/std",
-	"staging-xcm-executor?/std",
-	"staging-xcm?/std",
-	"substrate-bip39?/std",
+	"pezsp-api-proc-macro?/std",
+	"pezsp-api?/std",
+	"pezsp-application-crypto?/std",
+	"pezsp-arithmetic?/std",
+	"pezsp-authority-discovery?/std",
+	"pezsp-block-builder?/std",
+	"pezsp-consensus-aura?/std",
+	"pezsp-consensus-babe?/std",
+	"pezsp-consensus-beefy?/std",
+	"pezsp-consensus-grandpa?/std",
+	"pezsp-consensus-pow?/std",
+	"pezsp-consensus-slots?/std",
+	"pezsp-core-hashing?/std",
+	"pezsp-core?/std",
+	"pezsp-crypto-ec-utils?/std",
+	"pezsp-crypto-hashing?/std",
+	"pezsp-debug-derive?/std",
+	"pezsp-externalities?/std",
+	"pezsp-genesis-builder?/std",
+	"pezsp-inherents?/std",
+	"pezsp-io?/std",
+	"pezsp-keyring?/std",
+	"pezsp-keystore?/std",
+	"pezsp-metadata-ir?/std",
+	"pezsp-mixnet?/std",
+	"pezsp-mmr-primitives?/std",
+	"pezsp-npos-elections?/std",
+	"pezsp-offchain?/std",
+	"pezsp-runtime-interface?/std",
+	"pezsp-runtime?/std",
+	"pezsp-session?/std",
+	"pezsp-staking?/std",
+	"pezsp-state-machine?/std",
+	"pezsp-statement-store?/std",
+	"pezsp-std?/std",
+	"pezsp-storage?/std",
+	"pezsp-timestamp?/std",
+	"pezsp-tracing?/std",
+	"pezsp-transaction-pool?/std",
+	"pezsp-transaction-storage-proof?/std",
+	"pezsp-trie?/std",
+	"pezsp-version?/std",
+	"pezsp-wasm-interface?/std",
+	"pezsp-weights?/std",
+	"pezstaging-teyrchain-info?/std",
+	"pezstaging-xcm-builder?/std",
+	"pezstaging-xcm-executor?/std",
+	"pezstaging-xcm?/std",
+	"bizinikiwi-bip39?/std",
 	"testnet-teyrchains-constants?/std",
 	"teyrchains-common?/std",
 	"teyrchains-runtimes-test-utils?/std",
@@ -250,177 +250,177 @@ runtime-benchmarks = [
 	"bridge-hub-common?/runtime-benchmarks",
 	"bridge-hub-test-utils?/runtime-benchmarks",
 	"bridge-runtime-common?/runtime-benchmarks",
-	"cumulus-client-bootnodes?/runtime-benchmarks",
-	"cumulus-client-cli?/runtime-benchmarks",
-	"cumulus-client-collator?/runtime-benchmarks",
-	"cumulus-client-consensus-aura?/runtime-benchmarks",
-	"cumulus-client-consensus-common?/runtime-benchmarks",
-	"cumulus-client-consensus-proposer?/runtime-benchmarks",
-	"cumulus-client-consensus-relay-chain?/runtime-benchmarks",
-	"cumulus-client-network?/runtime-benchmarks",
-	"cumulus-client-pov-recovery?/runtime-benchmarks",
-	"cumulus-client-service?/runtime-benchmarks",
-	"cumulus-client-teyrchain-inherent?/runtime-benchmarks",
-	"cumulus-pallet-aura-ext?/runtime-benchmarks",
-	"cumulus-pallet-dmp-queue?/runtime-benchmarks",
-	"cumulus-pallet-session-benchmarking?/runtime-benchmarks",
-	"cumulus-pallet-solo-to-para?/runtime-benchmarks",
-	"cumulus-pallet-teyrchain-system?/runtime-benchmarks",
-	"cumulus-pallet-weight-reclaim?/runtime-benchmarks",
-	"cumulus-pallet-xcm?/runtime-benchmarks",
-	"cumulus-pallet-xcmp-queue?/runtime-benchmarks",
-	"cumulus-ping?/runtime-benchmarks",
-	"cumulus-primitives-aura?/runtime-benchmarks",
-	"cumulus-primitives-core?/runtime-benchmarks",
-	"cumulus-primitives-proof-size-hostfunction?/runtime-benchmarks",
-	"cumulus-primitives-storage-weight-reclaim?/runtime-benchmarks",
-	"cumulus-primitives-teyrchain-inherent?/runtime-benchmarks",
-	"cumulus-primitives-timestamp?/runtime-benchmarks",
-	"cumulus-primitives-utility?/runtime-benchmarks",
-	"cumulus-relay-chain-inprocess-interface?/runtime-benchmarks",
-	"cumulus-relay-chain-interface?/runtime-benchmarks",
-	"cumulus-relay-chain-minimal-node?/runtime-benchmarks",
-	"cumulus-relay-chain-rpc-interface?/runtime-benchmarks",
-	"cumulus-relay-chain-streams?/runtime-benchmarks",
-	"cumulus-test-relay-sproof-builder?/runtime-benchmarks",
+	"pezcumulus-client-bootnodes?/runtime-benchmarks",
+	"pezcumulus-client-cli?/runtime-benchmarks",
+	"pezcumulus-client-collator?/runtime-benchmarks",
+	"pezcumulus-client-consensus-aura?/runtime-benchmarks",
+	"pezcumulus-client-consensus-common?/runtime-benchmarks",
+	"pezcumulus-client-consensus-proposer?/runtime-benchmarks",
+	"pezcumulus-client-consensus-relay-chain?/runtime-benchmarks",
+	"pezcumulus-client-network?/runtime-benchmarks",
+	"pezcumulus-client-pov-recovery?/runtime-benchmarks",
+	"pezcumulus-client-service?/runtime-benchmarks",
+	"pezcumulus-client-teyrchain-inherent?/runtime-benchmarks",
+	"pezcumulus-pezpallet-aura-ext?/runtime-benchmarks",
+	"pezcumulus-pezpallet-dmp-queue?/runtime-benchmarks",
+	"pezcumulus-pezpallet-session-benchmarking?/runtime-benchmarks",
+	"pezcumulus-pezpallet-solo-to-para?/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system?/runtime-benchmarks",
+	"pezcumulus-pezpallet-weight-reclaim?/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcm?/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcmp-queue?/runtime-benchmarks",
+	"pezcumulus-ping?/runtime-benchmarks",
+	"pezcumulus-primitives-aura?/runtime-benchmarks",
+	"pezcumulus-primitives-core?/runtime-benchmarks",
+	"pezcumulus-primitives-proof-size-hostfunction?/runtime-benchmarks",
+	"pezcumulus-primitives-storage-weight-reclaim?/runtime-benchmarks",
+	"pezcumulus-primitives-teyrchain-inherent?/runtime-benchmarks",
+	"pezcumulus-primitives-timestamp?/runtime-benchmarks",
+	"pezcumulus-primitives-utility?/runtime-benchmarks",
+	"pezcumulus-relay-chain-inprocess-interface?/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface?/runtime-benchmarks",
+	"pezcumulus-relay-chain-minimal-node?/runtime-benchmarks",
+	"pezcumulus-relay-chain-rpc-interface?/runtime-benchmarks",
+	"pezcumulus-relay-chain-streams?/runtime-benchmarks",
+	"pezcumulus-test-relay-sproof-builder?/runtime-benchmarks",
 	"emulated-integration-tests-common?/runtime-benchmarks",
-	"frame-benchmarking-cli?/runtime-benchmarks",
-	"frame-benchmarking-pallet-pov?/runtime-benchmarks",
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-election-provider-solution-type?/runtime-benchmarks",
-	"frame-election-provider-support?/runtime-benchmarks",
-	"frame-executive?/runtime-benchmarks",
-	"frame-metadata-hash-extension?/runtime-benchmarks",
+	"pezframe-benchmarking-cli?/runtime-benchmarks",
+	"pezframe-benchmarking-pezpallet-pov?/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-election-provider-solution-type?/runtime-benchmarks",
+	"pezframe-election-provider-support?/runtime-benchmarks",
+	"pezframe-executive?/runtime-benchmarks",
+	"pezframe-metadata-hash-extension?/runtime-benchmarks",
 	"frame-remote-externalities?/runtime-benchmarks",
-	"frame-support-procedural?/runtime-benchmarks",
-	"frame-support?/runtime-benchmarks",
-	"frame-system-benchmarking?/runtime-benchmarks",
-	"frame-system-rpc-runtime-api?/runtime-benchmarks",
-	"frame-system?/runtime-benchmarks",
-	"frame-try-runtime?/runtime-benchmarks",
+	"pezframe-support-procedural?/runtime-benchmarks",
+	"pezframe-support?/runtime-benchmarks",
+	"pezframe-system-benchmarking?/runtime-benchmarks",
+	"pezframe-system-rpc-runtime-api?/runtime-benchmarks",
+	"pezframe-system?/runtime-benchmarks",
+	"pezframe-try-runtime?/runtime-benchmarks",
 	"generate-bags?/runtime-benchmarks",
 	"mmr-gadget?/runtime-benchmarks",
 	"mmr-rpc?/runtime-benchmarks",
-	"pallet-alliance?/runtime-benchmarks",
-	"pallet-asset-conversion-ops?/runtime-benchmarks",
-	"pallet-asset-conversion-tx-payment?/runtime-benchmarks",
-	"pallet-asset-conversion?/runtime-benchmarks",
-	"pallet-asset-rate?/runtime-benchmarks",
-	"pallet-asset-rewards?/runtime-benchmarks",
-	"pallet-asset-tx-payment?/runtime-benchmarks",
-	"pallet-assets-freezer?/runtime-benchmarks",
-	"pallet-assets-holder?/runtime-benchmarks",
-	"pallet-assets-precompiles?/runtime-benchmarks",
-	"pallet-assets?/runtime-benchmarks",
-	"pallet-atomic-swap?/runtime-benchmarks",
-	"pallet-aura?/runtime-benchmarks",
-	"pallet-authority-discovery?/runtime-benchmarks",
-	"pallet-authorship?/runtime-benchmarks",
-	"pallet-babe?/runtime-benchmarks",
-	"pallet-bags-list?/runtime-benchmarks",
-	"pallet-balances?/runtime-benchmarks",
-	"pallet-beefy-mmr?/runtime-benchmarks",
-	"pallet-beefy?/runtime-benchmarks",
-	"pallet-bounties?/runtime-benchmarks",
-	"pallet-bridge-grandpa?/runtime-benchmarks",
-	"pallet-bridge-messages?/runtime-benchmarks",
-	"pallet-bridge-relayers?/runtime-benchmarks",
-	"pallet-bridge-teyrchains?/runtime-benchmarks",
-	"pallet-broker?/runtime-benchmarks",
-	"pallet-child-bounties?/runtime-benchmarks",
-	"pallet-collator-selection?/runtime-benchmarks",
-	"pallet-collective-content?/runtime-benchmarks",
-	"pallet-collective?/runtime-benchmarks",
-	"pallet-contracts-mock-network?/runtime-benchmarks",
-	"pallet-contracts?/runtime-benchmarks",
-	"pallet-conviction-voting?/runtime-benchmarks",
-	"pallet-core-fellowship?/runtime-benchmarks",
-	"pallet-delegated-staking?/runtime-benchmarks",
-	"pallet-democracy?/runtime-benchmarks",
-	"pallet-derivatives?/runtime-benchmarks",
-	"pallet-dev-mode?/runtime-benchmarks",
-	"pallet-dummy-dim?/runtime-benchmarks",
-	"pallet-election-provider-multi-block?/runtime-benchmarks",
-	"pallet-election-provider-multi-phase?/runtime-benchmarks",
-	"pallet-election-provider-support-benchmarking?/runtime-benchmarks",
-	"pallet-elections-phragmen?/runtime-benchmarks",
-	"pallet-fast-unstake?/runtime-benchmarks",
-	"pallet-glutton?/runtime-benchmarks",
-	"pallet-grandpa?/runtime-benchmarks",
-	"pallet-identity?/runtime-benchmarks",
-	"pallet-im-online?/runtime-benchmarks",
-	"pallet-indices?/runtime-benchmarks",
-	"pallet-insecure-randomness-collective-flip?/runtime-benchmarks",
-	"pallet-lottery?/runtime-benchmarks",
-	"pallet-membership?/runtime-benchmarks",
-	"pallet-message-queue?/runtime-benchmarks",
-	"pallet-meta-tx?/runtime-benchmarks",
-	"pallet-migrations?/runtime-benchmarks",
-	"pallet-mixnet?/runtime-benchmarks",
-	"pallet-mmr?/runtime-benchmarks",
-	"pallet-multi-asset-bounties?/runtime-benchmarks",
-	"pallet-multisig?/runtime-benchmarks",
-	"pallet-nft-fractionalization?/runtime-benchmarks",
-	"pallet-nfts-runtime-api?/runtime-benchmarks",
-	"pallet-nfts?/runtime-benchmarks",
-	"pallet-nis?/runtime-benchmarks",
-	"pallet-node-authorization?/runtime-benchmarks",
-	"pallet-nomination-pools-benchmarking?/runtime-benchmarks",
-	"pallet-nomination-pools-runtime-api?/runtime-benchmarks",
-	"pallet-nomination-pools?/runtime-benchmarks",
-	"pallet-offences-benchmarking?/runtime-benchmarks",
-	"pallet-offences?/runtime-benchmarks",
-	"pallet-oracle-runtime-api?/runtime-benchmarks",
-	"pallet-oracle?/runtime-benchmarks",
-	"pallet-origin-restriction?/runtime-benchmarks",
-	"pallet-paged-list?/runtime-benchmarks",
-	"pallet-parameters?/runtime-benchmarks",
-	"pallet-people?/runtime-benchmarks",
-	"pallet-preimage?/runtime-benchmarks",
-	"pallet-proxy?/runtime-benchmarks",
-	"pallet-ranked-collective?/runtime-benchmarks",
-	"pallet-recovery?/runtime-benchmarks",
-	"pallet-referenda?/runtime-benchmarks",
-	"pallet-remark?/runtime-benchmarks",
-	"pallet-revive?/runtime-benchmarks",
-	"pallet-root-offences?/runtime-benchmarks",
-	"pallet-root-testing?/runtime-benchmarks",
-	"pallet-safe-mode?/runtime-benchmarks",
-	"pallet-salary?/runtime-benchmarks",
-	"pallet-scheduler?/runtime-benchmarks",
-	"pallet-scored-pool?/runtime-benchmarks",
-	"pallet-session-benchmarking?/runtime-benchmarks",
-	"pallet-session?/runtime-benchmarks",
-	"pallet-skip-feeless-payment?/runtime-benchmarks",
-	"pallet-society?/runtime-benchmarks",
-	"pallet-staking-async-ah-client?/runtime-benchmarks",
-	"pallet-staking-async-rc-client?/runtime-benchmarks",
-	"pallet-staking-async-runtime-api?/runtime-benchmarks",
-	"pallet-staking-async?/runtime-benchmarks",
-	"pallet-staking-reward-curve?/runtime-benchmarks",
-	"pallet-staking-runtime-api?/runtime-benchmarks",
-	"pallet-staking?/runtime-benchmarks",
-	"pallet-state-trie-migration?/runtime-benchmarks",
-	"pallet-statement?/runtime-benchmarks",
-	"pallet-sudo?/runtime-benchmarks",
-	"pallet-timestamp?/runtime-benchmarks",
-	"pallet-tips?/runtime-benchmarks",
-	"pallet-transaction-payment-rpc-runtime-api?/runtime-benchmarks",
-	"pallet-transaction-payment-rpc?/runtime-benchmarks",
-	"pallet-transaction-payment?/runtime-benchmarks",
-	"pallet-transaction-storage?/runtime-benchmarks",
-	"pallet-treasury?/runtime-benchmarks",
-	"pallet-tx-pause?/runtime-benchmarks",
-	"pallet-uniques?/runtime-benchmarks",
-	"pallet-utility?/runtime-benchmarks",
-	"pallet-verify-signature?/runtime-benchmarks",
-	"pallet-vesting?/runtime-benchmarks",
-	"pallet-whitelist?/runtime-benchmarks",
-	"pallet-xcm-benchmarks?/runtime-benchmarks",
-	"pallet-xcm-bridge-hub-router?/runtime-benchmarks",
-	"pallet-xcm-bridge-hub?/runtime-benchmarks",
-	"pallet-xcm-precompiles?/runtime-benchmarks",
-	"pallet-xcm?/runtime-benchmarks",
+	"pezpallet-alliance?/runtime-benchmarks",
+	"pezpallet-asset-conversion-ops?/runtime-benchmarks",
+	"pezpallet-asset-conversion-tx-payment?/runtime-benchmarks",
+	"pezpallet-asset-conversion?/runtime-benchmarks",
+	"pezpallet-asset-rate?/runtime-benchmarks",
+	"pezpallet-asset-rewards?/runtime-benchmarks",
+	"pezpallet-asset-tx-payment?/runtime-benchmarks",
+	"pezpallet-assets-freezer?/runtime-benchmarks",
+	"pezpallet-assets-holder?/runtime-benchmarks",
+	"pezpallet-assets-precompiles?/runtime-benchmarks",
+	"pezpallet-assets?/runtime-benchmarks",
+	"pezpallet-atomic-swap?/runtime-benchmarks",
+	"pezpallet-aura?/runtime-benchmarks",
+	"pezpallet-authority-discovery?/runtime-benchmarks",
+	"pezpallet-authorship?/runtime-benchmarks",
+	"pezpallet-babe?/runtime-benchmarks",
+	"pezpallet-bags-list?/runtime-benchmarks",
+	"pezpallet-balances?/runtime-benchmarks",
+	"pezpallet-beefy-mmr?/runtime-benchmarks",
+	"pezpallet-beefy?/runtime-benchmarks",
+	"pezpallet-bounties?/runtime-benchmarks",
+	"pezpallet-bridge-grandpa?/runtime-benchmarks",
+	"pezpallet-bridge-messages?/runtime-benchmarks",
+	"pezpallet-bridge-relayers?/runtime-benchmarks",
+	"pezpallet-bridge-teyrchains?/runtime-benchmarks",
+	"pezpallet-broker?/runtime-benchmarks",
+	"pezpallet-child-bounties?/runtime-benchmarks",
+	"pezpallet-collator-selection?/runtime-benchmarks",
+	"pezpallet-collective-content?/runtime-benchmarks",
+	"pezpallet-collective?/runtime-benchmarks",
+	"pezpallet-contracts-mock-network?/runtime-benchmarks",
+	"pezpallet-contracts?/runtime-benchmarks",
+	"pezpallet-conviction-voting?/runtime-benchmarks",
+	"pezpallet-core-fellowship?/runtime-benchmarks",
+	"pezpallet-delegated-staking?/runtime-benchmarks",
+	"pezpallet-democracy?/runtime-benchmarks",
+	"pezpallet-derivatives?/runtime-benchmarks",
+	"pezpallet-dev-mode?/runtime-benchmarks",
+	"pezpallet-dummy-dim?/runtime-benchmarks",
+	"pezpallet-election-provider-multi-block?/runtime-benchmarks",
+	"pezpallet-election-provider-multi-phase?/runtime-benchmarks",
+	"pezpallet-election-provider-support-benchmarking?/runtime-benchmarks",
+	"pezpallet-elections-phragmen?/runtime-benchmarks",
+	"pezpallet-fast-unstake?/runtime-benchmarks",
+	"pezpallet-glutton?/runtime-benchmarks",
+	"pezpallet-grandpa?/runtime-benchmarks",
+	"pezpallet-identity?/runtime-benchmarks",
+	"pezpallet-im-online?/runtime-benchmarks",
+	"pezpallet-indices?/runtime-benchmarks",
+	"pezpallet-insecure-randomness-collective-flip?/runtime-benchmarks",
+	"pezpallet-lottery?/runtime-benchmarks",
+	"pezpallet-membership?/runtime-benchmarks",
+	"pezpallet-message-queue?/runtime-benchmarks",
+	"pezpallet-meta-tx?/runtime-benchmarks",
+	"pezpallet-migrations?/runtime-benchmarks",
+	"pezpallet-mixnet?/runtime-benchmarks",
+	"pezpallet-mmr?/runtime-benchmarks",
+	"pezpallet-multi-asset-bounties?/runtime-benchmarks",
+	"pezpallet-multisig?/runtime-benchmarks",
+	"pezpallet-nft-fractionalization?/runtime-benchmarks",
+	"pezpallet-nfts-runtime-api?/runtime-benchmarks",
+	"pezpallet-nfts?/runtime-benchmarks",
+	"pezpallet-nis?/runtime-benchmarks",
+	"pezpallet-node-authorization?/runtime-benchmarks",
+	"pezpallet-nomination-pools-benchmarking?/runtime-benchmarks",
+	"pezpallet-nomination-pools-runtime-api?/runtime-benchmarks",
+	"pezpallet-nomination-pools?/runtime-benchmarks",
+	"pezpallet-offences-benchmarking?/runtime-benchmarks",
+	"pezpallet-offences?/runtime-benchmarks",
+	"pezpallet-oracle-runtime-api?/runtime-benchmarks",
+	"pezpallet-oracle?/runtime-benchmarks",
+	"pezpallet-origin-restriction?/runtime-benchmarks",
+	"pezpallet-paged-list?/runtime-benchmarks",
+	"pezpallet-parameters?/runtime-benchmarks",
+	"pezpallet-people?/runtime-benchmarks",
+	"pezpallet-preimage?/runtime-benchmarks",
+	"pezpallet-proxy?/runtime-benchmarks",
+	"pezpallet-ranked-collective?/runtime-benchmarks",
+	"pezpallet-recovery?/runtime-benchmarks",
+	"pezpallet-referenda?/runtime-benchmarks",
+	"pezpallet-remark?/runtime-benchmarks",
+	"pezpallet-revive?/runtime-benchmarks",
+	"pezpallet-root-offences?/runtime-benchmarks",
+	"pezpallet-root-testing?/runtime-benchmarks",
+	"pezpallet-safe-mode?/runtime-benchmarks",
+	"pezpallet-salary?/runtime-benchmarks",
+	"pezpallet-scheduler?/runtime-benchmarks",
+	"pezpallet-scored-pool?/runtime-benchmarks",
+	"pezpallet-session-benchmarking?/runtime-benchmarks",
+	"pezpallet-session?/runtime-benchmarks",
+	"pezpallet-skip-feeless-payment?/runtime-benchmarks",
+	"pezpallet-society?/runtime-benchmarks",
+	"pezpallet-staking-async-ah-client?/runtime-benchmarks",
+	"pezpallet-staking-async-rc-client?/runtime-benchmarks",
+	"pezpallet-staking-async-runtime-api?/runtime-benchmarks",
+	"pezpallet-staking-async?/runtime-benchmarks",
+	"pezpallet-staking-reward-curve?/runtime-benchmarks",
+	"pezpallet-staking-runtime-api?/runtime-benchmarks",
+	"pezpallet-staking?/runtime-benchmarks",
+	"pezpallet-state-trie-migration?/runtime-benchmarks",
+	"pezpallet-statement?/runtime-benchmarks",
+	"pezpallet-sudo?/runtime-benchmarks",
+	"pezpallet-timestamp?/runtime-benchmarks",
+	"pezpallet-tips?/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api?/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc?/runtime-benchmarks",
+	"pezpallet-transaction-payment?/runtime-benchmarks",
+	"pezpallet-transaction-storage?/runtime-benchmarks",
+	"pezpallet-treasury?/runtime-benchmarks",
+	"pezpallet-tx-pause?/runtime-benchmarks",
+	"pezpallet-uniques?/runtime-benchmarks",
+	"pezpallet-utility?/runtime-benchmarks",
+	"pezpallet-verify-signature?/runtime-benchmarks",
+	"pezpallet-vesting?/runtime-benchmarks",
+	"pezpallet-whitelist?/runtime-benchmarks",
+	"pezpallet-xcm-benchmarks?/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub-router?/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub?/runtime-benchmarks",
+	"pezpallet-xcm-precompiles?/runtime-benchmarks",
+	"pezpallet-xcm?/runtime-benchmarks",
 	"pezkuwi-approval-distribution?/runtime-benchmarks",
 	"pezkuwi-availability-bitfield-distribution?/runtime-benchmarks",
 	"pezkuwi-availability-distribution?/runtime-benchmarks",
@@ -470,93 +470,93 @@ runtime-benchmarks = [
 	"pezkuwi-statement-distribution?/runtime-benchmarks",
 	"pezkuwi-statement-table?/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives?/runtime-benchmarks",
-	"sc-authority-discovery?/runtime-benchmarks",
-	"sc-basic-authorship?/runtime-benchmarks",
-	"sc-block-builder?/runtime-benchmarks",
-	"sc-chain-spec?/runtime-benchmarks",
-	"sc-cli?/runtime-benchmarks",
-	"sc-client-api?/runtime-benchmarks",
-	"sc-client-db?/runtime-benchmarks",
-	"sc-consensus-aura?/runtime-benchmarks",
-	"sc-consensus-babe-rpc?/runtime-benchmarks",
-	"sc-consensus-babe?/runtime-benchmarks",
-	"sc-consensus-beefy-rpc?/runtime-benchmarks",
-	"sc-consensus-beefy?/runtime-benchmarks",
-	"sc-consensus-epochs?/runtime-benchmarks",
-	"sc-consensus-grandpa-rpc?/runtime-benchmarks",
-	"sc-consensus-grandpa?/runtime-benchmarks",
-	"sc-consensus-manual-seal?/runtime-benchmarks",
-	"sc-consensus-pow?/runtime-benchmarks",
-	"sc-consensus-slots?/runtime-benchmarks",
-	"sc-consensus?/runtime-benchmarks",
-	"sc-executor-wasmtime?/runtime-benchmarks",
-	"sc-executor?/runtime-benchmarks",
-	"sc-informant?/runtime-benchmarks",
-	"sc-mixnet?/runtime-benchmarks",
-	"sc-network-common?/runtime-benchmarks",
-	"sc-network-gossip?/runtime-benchmarks",
-	"sc-network-light?/runtime-benchmarks",
-	"sc-network-statement?/runtime-benchmarks",
-	"sc-network-sync?/runtime-benchmarks",
-	"sc-network-transactions?/runtime-benchmarks",
-	"sc-network?/runtime-benchmarks",
-	"sc-offchain?/runtime-benchmarks",
-	"sc-rpc-api?/runtime-benchmarks",
-	"sc-rpc-server?/runtime-benchmarks",
-	"sc-rpc-spec-v2?/runtime-benchmarks",
-	"sc-rpc?/runtime-benchmarks",
-	"sc-runtime-utilities?/runtime-benchmarks",
-	"sc-service?/runtime-benchmarks",
-	"sc-statement-store?/runtime-benchmarks",
-	"sc-sync-state-rpc?/runtime-benchmarks",
-	"sc-sysinfo?/runtime-benchmarks",
-	"sc-tracing?/runtime-benchmarks",
-	"sc-transaction-pool-api?/runtime-benchmarks",
-	"sc-transaction-pool?/runtime-benchmarks",
+	"pezsc-authority-discovery?/runtime-benchmarks",
+	"pezsc-basic-authorship?/runtime-benchmarks",
+	"pezsc-block-builder?/runtime-benchmarks",
+	"pezsc-chain-spec?/runtime-benchmarks",
+	"pezsc-cli?/runtime-benchmarks",
+	"pezsc-client-api?/runtime-benchmarks",
+	"pezsc-client-db?/runtime-benchmarks",
+	"pezsc-consensus-aura?/runtime-benchmarks",
+	"pezsc-consensus-babe-rpc?/runtime-benchmarks",
+	"pezsc-consensus-babe?/runtime-benchmarks",
+	"pezsc-consensus-beefy-rpc?/runtime-benchmarks",
+	"pezsc-consensus-beefy?/runtime-benchmarks",
+	"pezsc-consensus-epochs?/runtime-benchmarks",
+	"pezsc-consensus-grandpa-rpc?/runtime-benchmarks",
+	"pezsc-consensus-grandpa?/runtime-benchmarks",
+	"pezsc-consensus-manual-seal?/runtime-benchmarks",
+	"pezsc-consensus-pow?/runtime-benchmarks",
+	"pezsc-consensus-slots?/runtime-benchmarks",
+	"pezsc-consensus?/runtime-benchmarks",
+	"pezsc-executor-wasmtime?/runtime-benchmarks",
+	"pezsc-executor?/runtime-benchmarks",
+	"pezsc-informant?/runtime-benchmarks",
+	"pezsc-mixnet?/runtime-benchmarks",
+	"pezsc-network-common?/runtime-benchmarks",
+	"pezsc-network-gossip?/runtime-benchmarks",
+	"pezsc-network-light?/runtime-benchmarks",
+	"pezsc-network-statement?/runtime-benchmarks",
+	"pezsc-network-sync?/runtime-benchmarks",
+	"pezsc-network-transactions?/runtime-benchmarks",
+	"pezsc-network?/runtime-benchmarks",
+	"pezsc-offchain?/runtime-benchmarks",
+	"pezsc-rpc-api?/runtime-benchmarks",
+	"pezsc-rpc-server?/runtime-benchmarks",
+	"pezsc-rpc-spec-v2?/runtime-benchmarks",
+	"pezsc-rpc?/runtime-benchmarks",
+	"pezsc-runtime-utilities?/runtime-benchmarks",
+	"pezsc-service?/runtime-benchmarks",
+	"pezsc-statement-store?/runtime-benchmarks",
+	"pezsc-sync-state-rpc?/runtime-benchmarks",
+	"pezsc-sysinfo?/runtime-benchmarks",
+	"pezsc-tracing?/runtime-benchmarks",
+	"pezsc-transaction-pool-api?/runtime-benchmarks",
+	"pezsc-transaction-pool?/runtime-benchmarks",
 	"slot-range-helper?/runtime-benchmarks",
-	"sp-api?/runtime-benchmarks",
-	"sp-authority-discovery?/runtime-benchmarks",
-	"sp-block-builder?/runtime-benchmarks",
-	"sp-blockchain?/runtime-benchmarks",
-	"sp-consensus-aura?/runtime-benchmarks",
-	"sp-consensus-babe?/runtime-benchmarks",
-	"sp-consensus-beefy?/runtime-benchmarks",
-	"sp-consensus-grandpa?/runtime-benchmarks",
-	"sp-consensus-pow?/runtime-benchmarks",
-	"sp-consensus-slots?/runtime-benchmarks",
-	"sp-consensus?/runtime-benchmarks",
-	"sp-genesis-builder?/runtime-benchmarks",
-	"sp-inherents?/runtime-benchmarks",
-	"sp-io?/runtime-benchmarks",
-	"sp-keyring?/runtime-benchmarks",
-	"sp-mixnet?/runtime-benchmarks",
-	"sp-mmr-primitives?/runtime-benchmarks",
-	"sp-npos-elections?/runtime-benchmarks",
-	"sp-offchain?/runtime-benchmarks",
-	"sp-runtime-interface?/runtime-benchmarks",
-	"sp-runtime?/runtime-benchmarks",
-	"sp-session?/runtime-benchmarks",
-	"sp-staking?/runtime-benchmarks",
-	"sp-state-machine?/runtime-benchmarks",
-	"sp-statement-store?/runtime-benchmarks",
-	"sp-timestamp?/runtime-benchmarks",
-	"sp-transaction-pool?/runtime-benchmarks",
-	"sp-transaction-storage-proof?/runtime-benchmarks",
-	"sp-trie?/runtime-benchmarks",
-	"sp-version-proc-macro?/runtime-benchmarks",
-	"sp-version?/runtime-benchmarks",
-	"staging-chain-spec-builder?/runtime-benchmarks",
-	"staging-node-inspect?/runtime-benchmarks",
-	"staging-teyrchain-info?/runtime-benchmarks",
-	"staging-xcm-builder?/runtime-benchmarks",
-	"staging-xcm-executor?/runtime-benchmarks",
-	"staging-xcm?/runtime-benchmarks",
+	"pezsp-api?/runtime-benchmarks",
+	"pezsp-authority-discovery?/runtime-benchmarks",
+	"pezsp-block-builder?/runtime-benchmarks",
+	"pezsp-blockchain?/runtime-benchmarks",
+	"pezsp-consensus-aura?/runtime-benchmarks",
+	"pezsp-consensus-babe?/runtime-benchmarks",
+	"pezsp-consensus-beefy?/runtime-benchmarks",
+	"pezsp-consensus-grandpa?/runtime-benchmarks",
+	"pezsp-consensus-pow?/runtime-benchmarks",
+	"pezsp-consensus-slots?/runtime-benchmarks",
+	"pezsp-consensus?/runtime-benchmarks",
+	"pezsp-genesis-builder?/runtime-benchmarks",
+	"pezsp-inherents?/runtime-benchmarks",
+	"pezsp-io?/runtime-benchmarks",
+	"pezsp-keyring?/runtime-benchmarks",
+	"pezsp-mixnet?/runtime-benchmarks",
+	"pezsp-mmr-primitives?/runtime-benchmarks",
+	"pezsp-npos-elections?/runtime-benchmarks",
+	"pezsp-offchain?/runtime-benchmarks",
+	"pezsp-runtime-interface?/runtime-benchmarks",
+	"pezsp-runtime?/runtime-benchmarks",
+	"pezsp-session?/runtime-benchmarks",
+	"pezsp-staking?/runtime-benchmarks",
+	"pezsp-state-machine?/runtime-benchmarks",
+	"pezsp-statement-store?/runtime-benchmarks",
+	"pezsp-timestamp?/runtime-benchmarks",
+	"pezsp-transaction-pool?/runtime-benchmarks",
+	"pezsp-transaction-storage-proof?/runtime-benchmarks",
+	"pezsp-trie?/runtime-benchmarks",
+	"pezsp-version-proc-macro?/runtime-benchmarks",
+	"pezsp-version?/runtime-benchmarks",
+	"pezstaging-chain-spec-builder?/runtime-benchmarks",
+	"pezstaging-node-inspect?/runtime-benchmarks",
+	"pezstaging-teyrchain-info?/runtime-benchmarks",
+	"pezstaging-xcm-builder?/runtime-benchmarks",
+	"pezstaging-xcm-executor?/runtime-benchmarks",
+	"pezstaging-xcm?/runtime-benchmarks",
 	"subkey?/runtime-benchmarks",
-	"substrate-frame-rpc-support?/runtime-benchmarks",
-	"substrate-frame-rpc-system?/runtime-benchmarks",
-	"substrate-rpc-client?/runtime-benchmarks",
-	"substrate-state-trie-migration-rpc?/runtime-benchmarks",
-	"substrate-wasm-builder?/runtime-benchmarks",
+	"bizinikiwi-frame-rpc-support?/runtime-benchmarks",
+	"bizinikiwi-frame-rpc-system?/runtime-benchmarks",
+	"bizinikiwi-rpc-client?/runtime-benchmarks",
+	"bizinikiwi-state-trie-migration-rpc?/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"testnet-teyrchains-constants?/runtime-benchmarks",
 	"teyrchains-common?/runtime-benchmarks",
 	"teyrchains-runtimes-test-utils?/runtime-benchmarks",
@@ -569,185 +569,185 @@ runtime-benchmarks = [
 try-runtime = [
 	"asset-test-utils?/try-runtime",
 	"assets-common?/try-runtime",
-	"cumulus-pallet-aura-ext?/try-runtime",
-	"cumulus-pallet-dmp-queue?/try-runtime",
-	"cumulus-pallet-solo-to-para?/try-runtime",
-	"cumulus-pallet-teyrchain-system?/try-runtime",
-	"cumulus-pallet-weight-reclaim?/try-runtime",
-	"cumulus-pallet-xcm?/try-runtime",
-	"cumulus-pallet-xcmp-queue?/try-runtime",
-	"cumulus-ping?/try-runtime",
-	"frame-benchmarking-pallet-pov?/try-runtime",
-	"frame-election-provider-support?/try-runtime",
-	"frame-executive?/try-runtime",
-	"frame-support?/try-runtime",
-	"frame-system?/try-runtime",
-	"frame-try-runtime/try-runtime",
-	"pallet-alliance?/try-runtime",
-	"pallet-asset-conversion-ops?/try-runtime",
-	"pallet-asset-conversion-tx-payment?/try-runtime",
-	"pallet-asset-conversion?/try-runtime",
-	"pallet-asset-rate?/try-runtime",
-	"pallet-asset-rewards?/try-runtime",
-	"pallet-asset-tx-payment?/try-runtime",
-	"pallet-assets-freezer?/try-runtime",
-	"pallet-assets-holder?/try-runtime",
-	"pallet-assets-precompiles?/try-runtime",
-	"pallet-assets?/try-runtime",
-	"pallet-atomic-swap?/try-runtime",
-	"pallet-aura?/try-runtime",
-	"pallet-authority-discovery?/try-runtime",
-	"pallet-authorship?/try-runtime",
-	"pallet-babe?/try-runtime",
-	"pallet-bags-list?/try-runtime",
-	"pallet-balances?/try-runtime",
-	"pallet-beefy-mmr?/try-runtime",
-	"pallet-beefy?/try-runtime",
-	"pallet-bounties?/try-runtime",
-	"pallet-bridge-grandpa?/try-runtime",
-	"pallet-bridge-messages?/try-runtime",
-	"pallet-bridge-relayers?/try-runtime",
-	"pallet-bridge-teyrchains?/try-runtime",
-	"pallet-broker?/try-runtime",
-	"pallet-child-bounties?/try-runtime",
-	"pallet-collator-selection?/try-runtime",
-	"pallet-collective-content?/try-runtime",
-	"pallet-collective?/try-runtime",
-	"pallet-contracts?/try-runtime",
-	"pallet-conviction-voting?/try-runtime",
-	"pallet-core-fellowship?/try-runtime",
-	"pallet-delegated-staking?/try-runtime",
-	"pallet-democracy?/try-runtime",
-	"pallet-derivatives?/try-runtime",
-	"pallet-dev-mode?/try-runtime",
-	"pallet-dummy-dim?/try-runtime",
-	"pallet-election-provider-multi-block?/try-runtime",
-	"pallet-election-provider-multi-phase?/try-runtime",
-	"pallet-elections-phragmen?/try-runtime",
-	"pallet-fast-unstake?/try-runtime",
-	"pallet-glutton?/try-runtime",
-	"pallet-grandpa?/try-runtime",
-	"pallet-identity?/try-runtime",
-	"pallet-im-online?/try-runtime",
-	"pallet-indices?/try-runtime",
-	"pallet-insecure-randomness-collective-flip?/try-runtime",
-	"pallet-lottery?/try-runtime",
-	"pallet-membership?/try-runtime",
-	"pallet-message-queue?/try-runtime",
-	"pallet-meta-tx?/try-runtime",
-	"pallet-migrations?/try-runtime",
-	"pallet-mixnet?/try-runtime",
-	"pallet-mmr?/try-runtime",
-	"pallet-multi-asset-bounties?/try-runtime",
-	"pallet-multisig?/try-runtime",
-	"pallet-nft-fractionalization?/try-runtime",
-	"pallet-nfts?/try-runtime",
-	"pallet-nis?/try-runtime",
-	"pallet-node-authorization?/try-runtime",
-	"pallet-nomination-pools?/try-runtime",
-	"pallet-offences?/try-runtime",
-	"pallet-oracle?/try-runtime",
-	"pallet-origin-restriction?/try-runtime",
-	"pallet-paged-list?/try-runtime",
-	"pallet-parameters?/try-runtime",
-	"pallet-people?/try-runtime",
-	"pallet-preimage?/try-runtime",
-	"pallet-proxy?/try-runtime",
-	"pallet-ranked-collective?/try-runtime",
-	"pallet-recovery?/try-runtime",
-	"pallet-referenda?/try-runtime",
-	"pallet-remark?/try-runtime",
-	"pallet-revive?/try-runtime",
-	"pallet-root-offences?/try-runtime",
-	"pallet-root-testing?/try-runtime",
-	"pallet-safe-mode?/try-runtime",
-	"pallet-salary?/try-runtime",
-	"pallet-scheduler?/try-runtime",
-	"pallet-scored-pool?/try-runtime",
-	"pallet-session?/try-runtime",
-	"pallet-skip-feeless-payment?/try-runtime",
-	"pallet-society?/try-runtime",
-	"pallet-staking-async-ah-client?/try-runtime",
-	"pallet-staking-async-rc-client?/try-runtime",
-	"pallet-staking-async?/try-runtime",
-	"pallet-staking?/try-runtime",
-	"pallet-state-trie-migration?/try-runtime",
-	"pallet-statement?/try-runtime",
-	"pallet-sudo?/try-runtime",
-	"pallet-timestamp?/try-runtime",
-	"pallet-tips?/try-runtime",
-	"pallet-transaction-payment?/try-runtime",
-	"pallet-transaction-storage?/try-runtime",
-	"pallet-treasury?/try-runtime",
-	"pallet-tx-pause?/try-runtime",
-	"pallet-uniques?/try-runtime",
-	"pallet-utility?/try-runtime",
-	"pallet-verify-signature?/try-runtime",
-	"pallet-vesting?/try-runtime",
-	"pallet-whitelist?/try-runtime",
-	"pallet-xcm-bridge-hub-router?/try-runtime",
-	"pallet-xcm-bridge-hub?/try-runtime",
-	"pallet-xcm-precompiles?/try-runtime",
-	"pallet-xcm?/try-runtime",
+	"pezcumulus-pezpallet-aura-ext?/try-runtime",
+	"pezcumulus-pezpallet-dmp-queue?/try-runtime",
+	"pezcumulus-pezpallet-solo-to-para?/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system?/try-runtime",
+	"pezcumulus-pezpallet-weight-reclaim?/try-runtime",
+	"pezcumulus-pezpallet-xcm?/try-runtime",
+	"pezcumulus-pezpallet-xcmp-queue?/try-runtime",
+	"pezcumulus-ping?/try-runtime",
+	"pezframe-benchmarking-pezpallet-pov?/try-runtime",
+	"pezframe-election-provider-support?/try-runtime",
+	"pezframe-executive?/try-runtime",
+	"pezframe-support?/try-runtime",
+	"pezframe-system?/try-runtime",
+	"pezframe-try-runtime/try-runtime",
+	"pezpallet-alliance?/try-runtime",
+	"pezpallet-asset-conversion-ops?/try-runtime",
+	"pezpallet-asset-conversion-tx-payment?/try-runtime",
+	"pezpallet-asset-conversion?/try-runtime",
+	"pezpallet-asset-rate?/try-runtime",
+	"pezpallet-asset-rewards?/try-runtime",
+	"pezpallet-asset-tx-payment?/try-runtime",
+	"pezpallet-assets-freezer?/try-runtime",
+	"pezpallet-assets-holder?/try-runtime",
+	"pezpallet-assets-precompiles?/try-runtime",
+	"pezpallet-assets?/try-runtime",
+	"pezpallet-atomic-swap?/try-runtime",
+	"pezpallet-aura?/try-runtime",
+	"pezpallet-authority-discovery?/try-runtime",
+	"pezpallet-authorship?/try-runtime",
+	"pezpallet-babe?/try-runtime",
+	"pezpallet-bags-list?/try-runtime",
+	"pezpallet-balances?/try-runtime",
+	"pezpallet-beefy-mmr?/try-runtime",
+	"pezpallet-beefy?/try-runtime",
+	"pezpallet-bounties?/try-runtime",
+	"pezpallet-bridge-grandpa?/try-runtime",
+	"pezpallet-bridge-messages?/try-runtime",
+	"pezpallet-bridge-relayers?/try-runtime",
+	"pezpallet-bridge-teyrchains?/try-runtime",
+	"pezpallet-broker?/try-runtime",
+	"pezpallet-child-bounties?/try-runtime",
+	"pezpallet-collator-selection?/try-runtime",
+	"pezpallet-collective-content?/try-runtime",
+	"pezpallet-collective?/try-runtime",
+	"pezpallet-contracts?/try-runtime",
+	"pezpallet-conviction-voting?/try-runtime",
+	"pezpallet-core-fellowship?/try-runtime",
+	"pezpallet-delegated-staking?/try-runtime",
+	"pezpallet-democracy?/try-runtime",
+	"pezpallet-derivatives?/try-runtime",
+	"pezpallet-dev-mode?/try-runtime",
+	"pezpallet-dummy-dim?/try-runtime",
+	"pezpallet-election-provider-multi-block?/try-runtime",
+	"pezpallet-election-provider-multi-phase?/try-runtime",
+	"pezpallet-elections-phragmen?/try-runtime",
+	"pezpallet-fast-unstake?/try-runtime",
+	"pezpallet-glutton?/try-runtime",
+	"pezpallet-grandpa?/try-runtime",
+	"pezpallet-identity?/try-runtime",
+	"pezpallet-im-online?/try-runtime",
+	"pezpallet-indices?/try-runtime",
+	"pezpallet-insecure-randomness-collective-flip?/try-runtime",
+	"pezpallet-lottery?/try-runtime",
+	"pezpallet-membership?/try-runtime",
+	"pezpallet-message-queue?/try-runtime",
+	"pezpallet-meta-tx?/try-runtime",
+	"pezpallet-migrations?/try-runtime",
+	"pezpallet-mixnet?/try-runtime",
+	"pezpallet-mmr?/try-runtime",
+	"pezpallet-multi-asset-bounties?/try-runtime",
+	"pezpallet-multisig?/try-runtime",
+	"pezpallet-nft-fractionalization?/try-runtime",
+	"pezpallet-nfts?/try-runtime",
+	"pezpallet-nis?/try-runtime",
+	"pezpallet-node-authorization?/try-runtime",
+	"pezpallet-nomination-pools?/try-runtime",
+	"pezpallet-offences?/try-runtime",
+	"pezpallet-oracle?/try-runtime",
+	"pezpallet-origin-restriction?/try-runtime",
+	"pezpallet-paged-list?/try-runtime",
+	"pezpallet-parameters?/try-runtime",
+	"pezpallet-people?/try-runtime",
+	"pezpallet-preimage?/try-runtime",
+	"pezpallet-proxy?/try-runtime",
+	"pezpallet-ranked-collective?/try-runtime",
+	"pezpallet-recovery?/try-runtime",
+	"pezpallet-referenda?/try-runtime",
+	"pezpallet-remark?/try-runtime",
+	"pezpallet-revive?/try-runtime",
+	"pezpallet-root-offences?/try-runtime",
+	"pezpallet-root-testing?/try-runtime",
+	"pezpallet-safe-mode?/try-runtime",
+	"pezpallet-salary?/try-runtime",
+	"pezpallet-scheduler?/try-runtime",
+	"pezpallet-scored-pool?/try-runtime",
+	"pezpallet-session?/try-runtime",
+	"pezpallet-skip-feeless-payment?/try-runtime",
+	"pezpallet-society?/try-runtime",
+	"pezpallet-staking-async-ah-client?/try-runtime",
+	"pezpallet-staking-async-rc-client?/try-runtime",
+	"pezpallet-staking-async?/try-runtime",
+	"pezpallet-staking?/try-runtime",
+	"pezpallet-state-trie-migration?/try-runtime",
+	"pezpallet-statement?/try-runtime",
+	"pezpallet-sudo?/try-runtime",
+	"pezpallet-timestamp?/try-runtime",
+	"pezpallet-tips?/try-runtime",
+	"pezpallet-transaction-payment?/try-runtime",
+	"pezpallet-transaction-storage?/try-runtime",
+	"pezpallet-treasury?/try-runtime",
+	"pezpallet-tx-pause?/try-runtime",
+	"pezpallet-uniques?/try-runtime",
+	"pezpallet-utility?/try-runtime",
+	"pezpallet-verify-signature?/try-runtime",
+	"pezpallet-vesting?/try-runtime",
+	"pezpallet-whitelist?/try-runtime",
+	"pezpallet-xcm-bridge-hub-router?/try-runtime",
+	"pezpallet-xcm-bridge-hub?/try-runtime",
+	"pezpallet-xcm-precompiles?/try-runtime",
+	"pezpallet-xcm?/try-runtime",
 	"pezkuwi-cli?/try-runtime",
 	"pezkuwi-omni-node-lib?/try-runtime",
 	"pezkuwi-runtime-common?/try-runtime",
 	"pezkuwi-runtime-teyrchains?/try-runtime",
 	"pezkuwi-sdk-frame?/try-runtime",
 	"pezkuwi-service?/try-runtime",
-	"sp-runtime?/try-runtime",
-	"staging-teyrchain-info?/try-runtime",
+	"pezsp-runtime?/try-runtime",
+	"pezstaging-teyrchain-info?/try-runtime",
 	"teyrchains-common?/try-runtime",
 ]
 serde = [
 	"bp-pezkuwi-core?/serde",
-	"frame-benchmarking?/serde",
-	"pallet-asset-tx-payment?/serde",
-	"pallet-beefy-mmr?/serde",
-	"pallet-beefy?/serde",
-	"pallet-contracts?/serde",
-	"pallet-conviction-voting?/serde",
-	"pallet-democracy?/serde",
-	"pallet-message-queue?/serde",
-	"pallet-meta-tx?/serde",
-	"pallet-offences?/serde",
-	"pallet-parameters?/serde",
-	"pallet-referenda?/serde",
-	"pallet-remark?/serde",
-	"pallet-state-trie-migration?/serde",
-	"pallet-tips?/serde",
-	"pallet-transaction-payment?/serde",
-	"pallet-transaction-storage?/serde",
-	"pallet-treasury?/serde",
-	"pallet-xcm?/serde",
-	"sp-application-crypto?/serde",
-	"sp-arithmetic?/serde",
-	"sp-authority-discovery?/serde",
-	"sp-consensus-aura?/serde",
-	"sp-consensus-babe?/serde",
-	"sp-consensus-beefy?/serde",
-	"sp-consensus-grandpa?/serde",
-	"sp-consensus-slots?/serde",
-	"sp-core?/serde",
-	"sp-mmr-primitives?/serde",
-	"sp-npos-elections?/serde",
-	"sp-runtime?/serde",
-	"sp-staking?/serde",
-	"sp-statement-store?/serde",
-	"sp-storage?/serde",
-	"sp-version?/serde",
-	"sp-weights?/serde",
+	"pezframe-benchmarking?/serde",
+	"pezpallet-asset-tx-payment?/serde",
+	"pezpallet-beefy-mmr?/serde",
+	"pezpallet-beefy?/serde",
+	"pezpallet-contracts?/serde",
+	"pezpallet-conviction-voting?/serde",
+	"pezpallet-democracy?/serde",
+	"pezpallet-message-queue?/serde",
+	"pezpallet-meta-tx?/serde",
+	"pezpallet-offences?/serde",
+	"pezpallet-parameters?/serde",
+	"pezpallet-referenda?/serde",
+	"pezpallet-remark?/serde",
+	"pezpallet-state-trie-migration?/serde",
+	"pezpallet-tips?/serde",
+	"pezpallet-transaction-payment?/serde",
+	"pezpallet-transaction-storage?/serde",
+	"pezpallet-treasury?/serde",
+	"pezpallet-xcm?/serde",
+	"pezsp-application-crypto?/serde",
+	"pezsp-arithmetic?/serde",
+	"pezsp-authority-discovery?/serde",
+	"pezsp-consensus-aura?/serde",
+	"pezsp-consensus-babe?/serde",
+	"pezsp-consensus-beefy?/serde",
+	"pezsp-consensus-grandpa?/serde",
+	"pezsp-consensus-slots?/serde",
+	"pezsp-core?/serde",
+	"pezsp-mmr-primitives?/serde",
+	"pezsp-npos-elections?/serde",
+	"pezsp-runtime?/serde",
+	"pezsp-staking?/serde",
+	"pezsp-statement-store?/serde",
+	"pezsp-storage?/serde",
+	"pezsp-version?/serde",
+	"pezsp-weights?/serde",
 ]
 experimental = [
-	"frame-support-procedural?/experimental",
-	"frame-support?/experimental",
-	"frame-system?/experimental",
+	"pezframe-support-procedural?/experimental",
+	"pezframe-support?/experimental",
+	"pezframe-system?/experimental",
 	"pezkuwi-sdk-frame?/experimental",
 ]
 with-tracing = [
-	"frame-executive?/with-tracing",
-	"sp-io?/with-tracing",
-	"sp-tracing?/with-tracing",
+	"pezframe-executive?/with-tracing",
+	"pezsp-io?/with-tracing",
+	"pezsp-tracing?/with-tracing",
 ]
 runtime-full = [
 	"assets-common",
@@ -763,161 +763,161 @@ runtime-full = [
 	"bp-xcm-bridge-hub-router",
 	"bridge-hub-common",
 	"bridge-runtime-common",
-	"cumulus-pallet-aura-ext",
-	"cumulus-pallet-dmp-queue",
-	"cumulus-pallet-session-benchmarking",
-	"cumulus-pallet-solo-to-para",
-	"cumulus-pallet-teyrchain-system",
-	"cumulus-pallet-teyrchain-system-proc-macro",
-	"cumulus-pallet-weight-reclaim",
-	"cumulus-pallet-xcm",
-	"cumulus-pallet-xcmp-queue",
-	"cumulus-ping",
-	"cumulus-primitives-aura",
-	"cumulus-primitives-core",
-	"cumulus-primitives-proof-size-hostfunction",
-	"cumulus-primitives-storage-weight-reclaim",
-	"cumulus-primitives-teyrchain-inherent",
-	"cumulus-primitives-timestamp",
-	"cumulus-primitives-utility",
+	"pezcumulus-pezpallet-aura-ext",
+	"pezcumulus-pezpallet-dmp-queue",
+	"pezcumulus-pezpallet-session-benchmarking",
+	"pezcumulus-pezpallet-solo-to-para",
+	"pezcumulus-pezpallet-teyrchain-system",
+	"pezcumulus-pezpallet-teyrchain-system-proc-macro",
+	"pezcumulus-pezpallet-weight-reclaim",
+	"pezcumulus-pezpallet-xcm",
+	"pezcumulus-pezpallet-xcmp-queue",
+	"pezcumulus-ping",
+	"pezcumulus-primitives-aura",
+	"pezcumulus-primitives-core",
+	"pezcumulus-primitives-proof-size-hostfunction",
+	"pezcumulus-primitives-storage-weight-reclaim",
+	"pezcumulus-primitives-teyrchain-inherent",
+	"pezcumulus-primitives-timestamp",
+	"pezcumulus-primitives-utility",
 	"ethereum-standards",
-	"frame-benchmarking",
-	"frame-benchmarking-pallet-pov",
-	"frame-election-provider-solution-type",
-	"frame-election-provider-support",
-	"frame-executive",
-	"frame-metadata-hash-extension",
-	"frame-support",
-	"frame-support-procedural",
-	"frame-support-procedural-tools-derive",
-	"frame-system",
-	"frame-system-benchmarking",
-	"frame-system-rpc-runtime-api",
-	"frame-try-runtime",
-	"pallet-alliance",
-	"pallet-asset-conversion",
-	"pallet-asset-conversion-ops",
-	"pallet-asset-conversion-tx-payment",
-	"pallet-asset-rate",
-	"pallet-asset-rewards",
-	"pallet-asset-tx-payment",
-	"pallet-assets",
-	"pallet-assets-freezer",
-	"pallet-assets-holder",
-	"pallet-assets-precompiles",
-	"pallet-atomic-swap",
-	"pallet-aura",
-	"pallet-authority-discovery",
-	"pallet-authorship",
-	"pallet-babe",
-	"pallet-bags-list",
-	"pallet-balances",
-	"pallet-beefy",
-	"pallet-beefy-mmr",
-	"pallet-bounties",
-	"pallet-bridge-grandpa",
-	"pallet-bridge-messages",
-	"pallet-bridge-relayers",
-	"pallet-bridge-teyrchains",
-	"pallet-broker",
-	"pallet-child-bounties",
-	"pallet-collator-selection",
-	"pallet-collective",
-	"pallet-collective-content",
-	"pallet-contracts",
-	"pallet-contracts-proc-macro",
-	"pallet-contracts-uapi",
-	"pallet-conviction-voting",
-	"pallet-core-fellowship",
-	"pallet-delegated-staking",
-	"pallet-democracy",
-	"pallet-derivatives",
-	"pallet-dev-mode",
-	"pallet-dummy-dim",
-	"pallet-election-provider-multi-block",
-	"pallet-election-provider-multi-phase",
-	"pallet-election-provider-support-benchmarking",
-	"pallet-elections-phragmen",
-	"pallet-fast-unstake",
-	"pallet-glutton",
-	"pallet-grandpa",
-	"pallet-identity",
-	"pallet-im-online",
-	"pallet-indices",
-	"pallet-insecure-randomness-collective-flip",
-	"pallet-lottery",
-	"pallet-membership",
-	"pallet-message-queue",
-	"pallet-meta-tx",
-	"pallet-migrations",
-	"pallet-mixnet",
-	"pallet-mmr",
-	"pallet-multi-asset-bounties",
-	"pallet-multisig",
-	"pallet-nft-fractionalization",
-	"pallet-nfts",
-	"pallet-nfts-runtime-api",
-	"pallet-nis",
-	"pallet-node-authorization",
-	"pallet-nomination-pools",
-	"pallet-nomination-pools-benchmarking",
-	"pallet-nomination-pools-runtime-api",
-	"pallet-offences",
-	"pallet-offences-benchmarking",
-	"pallet-oracle",
-	"pallet-oracle-runtime-api",
-	"pallet-origin-restriction",
-	"pallet-paged-list",
-	"pallet-parameters",
-	"pallet-people",
-	"pallet-preimage",
-	"pallet-proxy",
-	"pallet-ranked-collective",
-	"pallet-recovery",
-	"pallet-referenda",
-	"pallet-remark",
-	"pallet-revive",
-	"pallet-revive-proc-macro",
-	"pallet-revive-uapi",
-	"pallet-root-offences",
-	"pallet-root-testing",
-	"pallet-safe-mode",
-	"pallet-salary",
-	"pallet-scheduler",
-	"pallet-scored-pool",
-	"pallet-session",
-	"pallet-session-benchmarking",
-	"pallet-skip-feeless-payment",
-	"pallet-society",
-	"pallet-staking",
-	"pallet-staking-async",
-	"pallet-staking-async-ah-client",
-	"pallet-staking-async-rc-client",
-	"pallet-staking-async-reward-fn",
-	"pallet-staking-async-runtime-api",
-	"pallet-staking-reward-curve",
-	"pallet-staking-reward-fn",
-	"pallet-staking-runtime-api",
-	"pallet-state-trie-migration",
-	"pallet-statement",
-	"pallet-sudo",
-	"pallet-timestamp",
-	"pallet-tips",
-	"pallet-transaction-payment",
-	"pallet-transaction-payment-rpc-runtime-api",
-	"pallet-transaction-storage",
-	"pallet-treasury",
-	"pallet-tx-pause",
-	"pallet-uniques",
-	"pallet-utility",
-	"pallet-verify-signature",
-	"pallet-vesting",
-	"pallet-whitelist",
-	"pallet-xcm",
-	"pallet-xcm-benchmarks",
-	"pallet-xcm-bridge-hub",
-	"pallet-xcm-bridge-hub-router",
-	"pallet-xcm-precompiles",
+	"pezframe-benchmarking",
+	"pezframe-benchmarking-pezpallet-pov",
+	"pezframe-election-provider-solution-type",
+	"pezframe-election-provider-support",
+	"pezframe-executive",
+	"pezframe-metadata-hash-extension",
+	"pezframe-support",
+	"pezframe-support-procedural",
+	"pezframe-support-procedural-tools-derive",
+	"pezframe-system",
+	"pezframe-system-benchmarking",
+	"pezframe-system-rpc-runtime-api",
+	"pezframe-try-runtime",
+	"pezpallet-alliance",
+	"pezpallet-asset-conversion",
+	"pezpallet-asset-conversion-ops",
+	"pezpallet-asset-conversion-tx-payment",
+	"pezpallet-asset-rate",
+	"pezpallet-asset-rewards",
+	"pezpallet-asset-tx-payment",
+	"pezpallet-assets",
+	"pezpallet-assets-freezer",
+	"pezpallet-assets-holder",
+	"pezpallet-assets-precompiles",
+	"pezpallet-atomic-swap",
+	"pezpallet-aura",
+	"pezpallet-authority-discovery",
+	"pezpallet-authorship",
+	"pezpallet-babe",
+	"pezpallet-bags-list",
+	"pezpallet-balances",
+	"pezpallet-beefy",
+	"pezpallet-beefy-mmr",
+	"pezpallet-bounties",
+	"pezpallet-bridge-grandpa",
+	"pezpallet-bridge-messages",
+	"pezpallet-bridge-relayers",
+	"pezpallet-bridge-teyrchains",
+	"pezpallet-broker",
+	"pezpallet-child-bounties",
+	"pezpallet-collator-selection",
+	"pezpallet-collective",
+	"pezpallet-collective-content",
+	"pezpallet-contracts",
+	"pezpallet-contracts-proc-macro",
+	"pezpallet-contracts-uapi",
+	"pezpallet-conviction-voting",
+	"pezpallet-core-fellowship",
+	"pezpallet-delegated-staking",
+	"pezpallet-democracy",
+	"pezpallet-derivatives",
+	"pezpallet-dev-mode",
+	"pezpallet-dummy-dim",
+	"pezpallet-election-provider-multi-block",
+	"pezpallet-election-provider-multi-phase",
+	"pezpallet-election-provider-support-benchmarking",
+	"pezpallet-elections-phragmen",
+	"pezpallet-fast-unstake",
+	"pezpallet-glutton",
+	"pezpallet-grandpa",
+	"pezpallet-identity",
+	"pezpallet-im-online",
+	"pezpallet-indices",
+	"pezpallet-insecure-randomness-collective-flip",
+	"pezpallet-lottery",
+	"pezpallet-membership",
+	"pezpallet-message-queue",
+	"pezpallet-meta-tx",
+	"pezpallet-migrations",
+	"pezpallet-mixnet",
+	"pezpallet-mmr",
+	"pezpallet-multi-asset-bounties",
+	"pezpallet-multisig",
+	"pezpallet-nft-fractionalization",
+	"pezpallet-nfts",
+	"pezpallet-nfts-runtime-api",
+	"pezpallet-nis",
+	"pezpallet-node-authorization",
+	"pezpallet-nomination-pools",
+	"pezpallet-nomination-pools-benchmarking",
+	"pezpallet-nomination-pools-runtime-api",
+	"pezpallet-offences",
+	"pezpallet-offences-benchmarking",
+	"pezpallet-oracle",
+	"pezpallet-oracle-runtime-api",
+	"pezpallet-origin-restriction",
+	"pezpallet-paged-list",
+	"pezpallet-parameters",
+	"pezpallet-people",
+	"pezpallet-preimage",
+	"pezpallet-proxy",
+	"pezpallet-ranked-collective",
+	"pezpallet-recovery",
+	"pezpallet-referenda",
+	"pezpallet-remark",
+	"pezpallet-revive",
+	"pezpallet-revive-proc-macro",
+	"pezpallet-revive-uapi",
+	"pezpallet-root-offences",
+	"pezpallet-root-testing",
+	"pezpallet-safe-mode",
+	"pezpallet-salary",
+	"pezpallet-scheduler",
+	"pezpallet-scored-pool",
+	"pezpallet-session",
+	"pezpallet-session-benchmarking",
+	"pezpallet-skip-feeless-payment",
+	"pezpallet-society",
+	"pezpallet-staking",
+	"pezpallet-staking-async",
+	"pezpallet-staking-async-ah-client",
+	"pezpallet-staking-async-rc-client",
+	"pezpallet-staking-async-reward-fn",
+	"pezpallet-staking-async-runtime-api",
+	"pezpallet-staking-reward-curve",
+	"pezpallet-staking-reward-fn",
+	"pezpallet-staking-runtime-api",
+	"pezpallet-state-trie-migration",
+	"pezpallet-statement",
+	"pezpallet-sudo",
+	"pezpallet-timestamp",
+	"pezpallet-tips",
+	"pezpallet-transaction-payment",
+	"pezpallet-transaction-payment-rpc-runtime-api",
+	"pezpallet-transaction-storage",
+	"pezpallet-treasury",
+	"pezpallet-tx-pause",
+	"pezpallet-uniques",
+	"pezpallet-utility",
+	"pezpallet-verify-signature",
+	"pezpallet-vesting",
+	"pezpallet-whitelist",
+	"pezpallet-xcm",
+	"pezpallet-xcm-benchmarks",
+	"pezpallet-xcm-bridge-hub",
+	"pezpallet-xcm-bridge-hub-router",
+	"pezpallet-xcm-precompiles",
 	"pezkuwi-core-primitives",
 	"pezkuwi-primitives",
 	"pezkuwi-runtime-common",
@@ -925,60 +925,60 @@ runtime-full = [
 	"pezkuwi-runtime-teyrchains",
 	"pezkuwi-sdk-frame",
 	"pezkuwi-teyrchain-primitives",
-	"sc-chain-spec-derive",
-	"sc-tracing-proc-macro",
+	"pezsc-chain-spec-derive",
+	"pezsc-tracing-proc-macro",
 	"slot-range-helper",
-	"sp-api",
-	"sp-api-proc-macro",
-	"sp-application-crypto",
-	"sp-arithmetic",
-	"sp-authority-discovery",
-	"sp-block-builder",
-	"sp-consensus-aura",
-	"sp-consensus-babe",
-	"sp-consensus-beefy",
-	"sp-consensus-grandpa",
-	"sp-consensus-pow",
-	"sp-consensus-slots",
-	"sp-core",
-	"sp-crypto-ec-utils",
-	"sp-crypto-hashing",
-	"sp-crypto-hashing-proc-macro",
-	"sp-debug-derive",
-	"sp-externalities",
-	"sp-genesis-builder",
-	"sp-inherents",
-	"sp-io",
-	"sp-keyring",
-	"sp-keystore",
-	"sp-metadata-ir",
-	"sp-mixnet",
-	"sp-mmr-primitives",
-	"sp-npos-elections",
-	"sp-offchain",
-	"sp-runtime",
-	"sp-runtime-interface",
-	"sp-runtime-interface-proc-macro",
-	"sp-session",
-	"sp-staking",
-	"sp-state-machine",
-	"sp-statement-store",
-	"sp-std",
-	"sp-storage",
-	"sp-timestamp",
-	"sp-tracing",
-	"sp-transaction-pool",
-	"sp-transaction-storage-proof",
-	"sp-trie",
-	"sp-version",
-	"sp-version-proc-macro",
-	"sp-wasm-interface",
-	"sp-weights",
-	"staging-teyrchain-info",
-	"staging-xcm",
-	"staging-xcm-builder",
-	"staging-xcm-executor",
-	"substrate-bip39",
+	"pezsp-api",
+	"pezsp-api-proc-macro",
+	"pezsp-application-crypto",
+	"pezsp-arithmetic",
+	"pezsp-authority-discovery",
+	"pezsp-block-builder",
+	"pezsp-consensus-aura",
+	"pezsp-consensus-babe",
+	"pezsp-consensus-beefy",
+	"pezsp-consensus-grandpa",
+	"pezsp-consensus-pow",
+	"pezsp-consensus-slots",
+	"pezsp-core",
+	"pezsp-crypto-ec-utils",
+	"pezsp-crypto-hashing",
+	"pezsp-crypto-hashing-proc-macro",
+	"pezsp-debug-derive",
+	"pezsp-externalities",
+	"pezsp-genesis-builder",
+	"pezsp-inherents",
+	"pezsp-io",
+	"pezsp-keyring",
+	"pezsp-keystore",
+	"pezsp-metadata-ir",
+	"pezsp-mixnet",
+	"pezsp-mmr-primitives",
+	"pezsp-npos-elections",
+	"pezsp-offchain",
+	"pezsp-runtime",
+	"pezsp-runtime-interface",
+	"pezsp-runtime-interface-proc-macro",
+	"pezsp-session",
+	"pezsp-staking",
+	"pezsp-state-machine",
+	"pezsp-statement-store",
+	"pezsp-std",
+	"pezsp-storage",
+	"pezsp-timestamp",
+	"pezsp-tracing",
+	"pezsp-transaction-pool",
+	"pezsp-transaction-storage-proof",
+	"pezsp-trie",
+	"pezsp-version",
+	"pezsp-version-proc-macro",
+	"pezsp-wasm-interface",
+	"pezsp-weights",
+	"pezstaging-teyrchain-info",
+	"pezstaging-xcm",
+	"pezstaging-xcm-builder",
+	"pezstaging-xcm-executor",
+	"bizinikiwi-bip39",
 	"testnet-teyrchains-constants",
 	"teyrchains-common",
 	"tracing-gum-proc-macro",
@@ -986,98 +986,98 @@ runtime-full = [
 	"xcm-runtime-apis",
 ]
 runtime = [
-	"frame-benchmarking",
-	"frame-benchmarking-pallet-pov",
-	"frame-election-provider-solution-type",
-	"frame-election-provider-support",
-	"frame-executive",
-	"frame-metadata-hash-extension",
-	"frame-support",
-	"frame-support-procedural",
-	"frame-support-procedural-tools-derive",
-	"frame-system",
-	"frame-system-benchmarking",
-	"frame-system-rpc-runtime-api",
-	"frame-try-runtime",
+	"pezframe-benchmarking",
+	"pezframe-benchmarking-pezpallet-pov",
+	"pezframe-election-provider-solution-type",
+	"pezframe-election-provider-support",
+	"pezframe-executive",
+	"pezframe-metadata-hash-extension",
+	"pezframe-support",
+	"pezframe-support-procedural",
+	"pezframe-support-procedural-tools-derive",
+	"pezframe-system",
+	"pezframe-system-benchmarking",
+	"pezframe-system-rpc-runtime-api",
+	"pezframe-try-runtime",
 	"pezkuwi-sdk-frame",
 	"pezkuwi-sdk-frame?/runtime",
-	"sp-api",
-	"sp-api-proc-macro",
-	"sp-application-crypto",
-	"sp-arithmetic",
-	"sp-authority-discovery",
-	"sp-block-builder",
-	"sp-consensus-aura",
-	"sp-consensus-babe",
-	"sp-consensus-beefy",
-	"sp-consensus-grandpa",
-	"sp-consensus-pow",
-	"sp-consensus-slots",
-	"sp-core",
-	"sp-crypto-ec-utils",
-	"sp-crypto-hashing",
-	"sp-crypto-hashing-proc-macro",
-	"sp-debug-derive",
-	"sp-externalities",
-	"sp-genesis-builder",
-	"sp-inherents",
-	"sp-io",
-	"sp-keyring",
-	"sp-keystore",
-	"sp-metadata-ir",
-	"sp-mixnet",
-	"sp-mmr-primitives",
-	"sp-npos-elections",
-	"sp-offchain",
-	"sp-runtime",
-	"sp-runtime-interface",
-	"sp-runtime-interface-proc-macro",
-	"sp-session",
-	"sp-staking",
-	"sp-state-machine",
-	"sp-statement-store",
-	"sp-std",
-	"sp-storage",
-	"sp-timestamp",
-	"sp-tracing",
-	"sp-transaction-pool",
-	"sp-transaction-storage-proof",
-	"sp-trie",
-	"sp-version",
-	"sp-version-proc-macro",
-	"sp-wasm-interface",
-	"sp-weights",
+	"pezsp-api",
+	"pezsp-api-proc-macro",
+	"pezsp-application-crypto",
+	"pezsp-arithmetic",
+	"pezsp-authority-discovery",
+	"pezsp-block-builder",
+	"pezsp-consensus-aura",
+	"pezsp-consensus-babe",
+	"pezsp-consensus-beefy",
+	"pezsp-consensus-grandpa",
+	"pezsp-consensus-pow",
+	"pezsp-consensus-slots",
+	"pezsp-core",
+	"pezsp-crypto-ec-utils",
+	"pezsp-crypto-hashing",
+	"pezsp-crypto-hashing-proc-macro",
+	"pezsp-debug-derive",
+	"pezsp-externalities",
+	"pezsp-genesis-builder",
+	"pezsp-inherents",
+	"pezsp-io",
+	"pezsp-keyring",
+	"pezsp-keystore",
+	"pezsp-metadata-ir",
+	"pezsp-mixnet",
+	"pezsp-mmr-primitives",
+	"pezsp-npos-elections",
+	"pezsp-offchain",
+	"pezsp-runtime",
+	"pezsp-runtime-interface",
+	"pezsp-runtime-interface-proc-macro",
+	"pezsp-session",
+	"pezsp-staking",
+	"pezsp-state-machine",
+	"pezsp-statement-store",
+	"pezsp-std",
+	"pezsp-storage",
+	"pezsp-timestamp",
+	"pezsp-tracing",
+	"pezsp-transaction-pool",
+	"pezsp-transaction-storage-proof",
+	"pezsp-trie",
+	"pezsp-version",
+	"pezsp-version-proc-macro",
+	"pezsp-wasm-interface",
+	"pezsp-weights",
 ]
 node = [
 	"asset-test-utils",
 	"bridge-hub-test-utils",
-	"cumulus-client-bootnodes",
-	"cumulus-client-cli",
-	"cumulus-client-collator",
-	"cumulus-client-consensus-aura",
-	"cumulus-client-consensus-common",
-	"cumulus-client-consensus-proposer",
-	"cumulus-client-consensus-relay-chain",
-	"cumulus-client-network",
-	"cumulus-client-pov-recovery",
-	"cumulus-client-service",
-	"cumulus-client-teyrchain-inherent",
-	"cumulus-relay-chain-inprocess-interface",
-	"cumulus-relay-chain-interface",
-	"cumulus-relay-chain-minimal-node",
-	"cumulus-relay-chain-rpc-interface",
-	"cumulus-relay-chain-streams",
-	"cumulus-test-relay-sproof-builder",
+	"pezcumulus-client-bootnodes",
+	"pezcumulus-client-cli",
+	"pezcumulus-client-collator",
+	"pezcumulus-client-consensus-aura",
+	"pezcumulus-client-consensus-common",
+	"pezcumulus-client-consensus-proposer",
+	"pezcumulus-client-consensus-relay-chain",
+	"pezcumulus-client-network",
+	"pezcumulus-client-pov-recovery",
+	"pezcumulus-client-service",
+	"pezcumulus-client-teyrchain-inherent",
+	"pezcumulus-relay-chain-inprocess-interface",
+	"pezcumulus-relay-chain-interface",
+	"pezcumulus-relay-chain-minimal-node",
+	"pezcumulus-relay-chain-rpc-interface",
+	"pezcumulus-relay-chain-streams",
+	"pezcumulus-test-relay-sproof-builder",
 	"emulated-integration-tests-common",
 	"fork-tree",
-	"frame-benchmarking-cli",
+	"pezframe-benchmarking-cli",
 	"frame-remote-externalities",
-	"frame-support-procedural-tools",
+	"pezframe-support-procedural-tools",
 	"generate-bags",
 	"mmr-gadget",
 	"mmr-rpc",
-	"pallet-contracts-mock-network",
-	"pallet-transaction-payment-rpc",
+	"pezpallet-contracts-mock-network",
+	"pezpallet-transaction-payment-rpc",
 	"pezkuwi-approval-distribution",
 	"pezkuwi-availability-bitfield-distribution",
 	"pezkuwi-availability-distribution",
@@ -1120,87 +1120,87 @@ node = [
 	"pezkuwi-service",
 	"pezkuwi-statement-distribution",
 	"pezkuwi-statement-table",
-	"sc-allocator",
-	"sc-authority-discovery",
-	"sc-basic-authorship",
-	"sc-block-builder",
-	"sc-chain-spec",
-	"sc-cli",
-	"sc-client-api",
-	"sc-client-db",
-	"sc-consensus",
-	"sc-consensus-aura",
-	"sc-consensus-babe",
-	"sc-consensus-babe-rpc",
-	"sc-consensus-beefy",
-	"sc-consensus-beefy-rpc",
-	"sc-consensus-epochs",
-	"sc-consensus-grandpa",
-	"sc-consensus-grandpa-rpc",
-	"sc-consensus-manual-seal",
-	"sc-consensus-pow",
-	"sc-consensus-slots",
-	"sc-executor",
-	"sc-executor-common",
-	"sc-executor-polkavm",
-	"sc-executor-wasmtime",
-	"sc-informant",
-	"sc-keystore",
-	"sc-mixnet",
-	"sc-network",
-	"sc-network-common",
-	"sc-network-gossip",
-	"sc-network-light",
-	"sc-network-statement",
-	"sc-network-sync",
-	"sc-network-transactions",
-	"sc-network-types",
-	"sc-offchain",
-	"sc-proposer-metrics",
-	"sc-rpc",
-	"sc-rpc-api",
-	"sc-rpc-server",
-	"sc-rpc-spec-v2",
-	"sc-runtime-utilities",
-	"sc-service",
-	"sc-state-db",
-	"sc-statement-store",
-	"sc-storage-monitor",
-	"sc-sync-state-rpc",
-	"sc-sysinfo",
-	"sc-telemetry",
-	"sc-tracing",
-	"sc-transaction-pool",
-	"sc-transaction-pool-api",
-	"sc-utils",
-	"sp-blockchain",
-	"sp-consensus",
-	"sp-core-hashing",
-	"sp-core-hashing-proc-macro",
-	"sp-database",
-	"sp-maybe-compressed-blob",
-	"sp-panic-handler",
-	"sp-rpc",
-	"staging-chain-spec-builder",
-	"staging-node-inspect",
-	"staging-tracking-allocator",
+	"pezsc-allocator",
+	"pezsc-authority-discovery",
+	"pezsc-basic-authorship",
+	"pezsc-block-builder",
+	"pezsc-chain-spec",
+	"pezsc-cli",
+	"pezsc-client-api",
+	"pezsc-client-db",
+	"pezsc-consensus",
+	"pezsc-consensus-aura",
+	"pezsc-consensus-babe",
+	"pezsc-consensus-babe-rpc",
+	"pezsc-consensus-beefy",
+	"pezsc-consensus-beefy-rpc",
+	"pezsc-consensus-epochs",
+	"pezsc-consensus-grandpa",
+	"pezsc-consensus-grandpa-rpc",
+	"pezsc-consensus-manual-seal",
+	"pezsc-consensus-pow",
+	"pezsc-consensus-slots",
+	"pezsc-executor",
+	"pezsc-executor-common",
+	"pezsc-executor-polkavm",
+	"pezsc-executor-wasmtime",
+	"pezsc-informant",
+	"pezsc-keystore",
+	"pezsc-mixnet",
+	"pezsc-network",
+	"pezsc-network-common",
+	"pezsc-network-gossip",
+	"pezsc-network-light",
+	"pezsc-network-statement",
+	"pezsc-network-sync",
+	"pezsc-network-transactions",
+	"pezsc-network-types",
+	"pezsc-offchain",
+	"pezsc-proposer-metrics",
+	"pezsc-rpc",
+	"pezsc-rpc-api",
+	"pezsc-rpc-server",
+	"pezsc-rpc-spec-v2",
+	"pezsc-runtime-utilities",
+	"pezsc-service",
+	"pezsc-state-db",
+	"pezsc-statement-store",
+	"pezsc-storage-monitor",
+	"pezsc-sync-state-rpc",
+	"pezsc-sysinfo",
+	"pezsc-telemetry",
+	"pezsc-tracing",
+	"pezsc-transaction-pool",
+	"pezsc-transaction-pool-api",
+	"pezsc-utils",
+	"pezsp-blockchain",
+	"pezsp-consensus",
+	"pezsp-core-hashing",
+	"pezsp-core-hashing-proc-macro",
+	"pezsp-database",
+	"pezsp-maybe-compressed-blob",
+	"pezsp-panic-handler",
+	"pezsp-rpc",
+	"pezstaging-chain-spec-builder",
+	"pezstaging-node-inspect",
+	"pezstaging-tracking-allocator",
 	"std",
 	"subkey",
-	"substrate-build-script-utils",
-	"substrate-frame-rpc-support",
-	"substrate-frame-rpc-system",
-	"substrate-prometheus-endpoint",
-	"substrate-rpc-client",
-	"substrate-state-trie-migration-rpc",
-	"substrate-wasm-builder",
+	"bizinikiwi-build-script-utils",
+	"bizinikiwi-frame-rpc-support",
+	"bizinikiwi-frame-rpc-system",
+	"bizinikiwi-prometheus-endpoint",
+	"bizinikiwi-rpc-client",
+	"bizinikiwi-state-trie-migration-rpc",
+	"bizinikiwi-wasm-builder",
 	"teyrchains-runtimes-test-utils",
 	"tracing-gum",
 	"xcm-emulator",
 	"xcm-simulator",
 ]
 tuples-96 = [
-	"frame-support-procedural?/tuples-96",
-	"frame-support?/tuples-96",
+	"pezframe-support-procedural?/tuples-96",
+	"pezframe-support?/tuples-96",
 ]
 
 [package.edition]
@@ -1218,12 +1218,12 @@ workspace = true
 [dependencies.assets-common]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/runtimes/assets/common"
+path = "../pezcumulus/teyrchains/runtimes/assets/common"
 
 [dependencies.binary-merkle-tree]
 default-features = false
 optional = true
-path = "../substrate/utils/binary-merkle-tree"
+path = "../bizinikiwi/utils/binary-merkle-tree"
 
 [dependencies.bp-header-chain]
 default-features = false
@@ -1273,787 +1273,787 @@ path = "../bridges/primitives/xcm-bridge-hub-router"
 [dependencies.bridge-hub-common]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/runtimes/bridge-hubs/common"
+path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/common"
 
 [dependencies.bridge-runtime-common]
 default-features = false
 optional = true
 path = "../bridges/bin/runtime-common"
 
-[dependencies.cumulus-pallet-aura-ext]
+[dependencies.pezcumulus-pezpallet-aura-ext]
 default-features = false
 optional = true
-path = "../cumulus/pallets/aura-ext"
+path = "../pezcumulus/pallets/aura-ext"
 
-[dependencies.cumulus-pallet-dmp-queue]
+[dependencies.pezcumulus-pezpallet-dmp-queue]
 default-features = false
 optional = true
-path = "../cumulus/pallets/dmp-queue"
+path = "../pezcumulus/pallets/dmp-queue"
 
-[dependencies.cumulus-pallet-session-benchmarking]
+[dependencies.pezcumulus-pezpallet-session-benchmarking]
 default-features = false
 optional = true
-path = "../cumulus/pallets/session-benchmarking"
+path = "../pezcumulus/pallets/session-benchmarking"
 
-[dependencies.cumulus-pallet-solo-to-para]
+[dependencies.pezcumulus-pezpallet-solo-to-para]
 default-features = false
 optional = true
-path = "../cumulus/pallets/solo-to-para"
+path = "../pezcumulus/pallets/solo-to-para"
 
-[dependencies.cumulus-pallet-teyrchain-system]
+[dependencies.pezcumulus-pezpallet-teyrchain-system]
 default-features = false
 optional = true
-path = "../cumulus/pallets/teyrchain-system"
+path = "../pezcumulus/pallets/teyrchain-system"
 
-[dependencies.cumulus-pallet-teyrchain-system-proc-macro]
+[dependencies.pezcumulus-pezpallet-teyrchain-system-proc-macro]
 default-features = false
 optional = true
-path = "../cumulus/pallets/teyrchain-system/proc-macro"
+path = "../pezcumulus/pallets/teyrchain-system/proc-macro"
 
-[dependencies.cumulus-pallet-weight-reclaim]
+[dependencies.pezcumulus-pezpallet-weight-reclaim]
 default-features = false
 optional = true
-path = "../cumulus/pallets/weight-reclaim"
+path = "../pezcumulus/pallets/weight-reclaim"
 
-[dependencies.cumulus-pallet-xcm]
+[dependencies.pezcumulus-pezpallet-xcm]
 default-features = false
 optional = true
-path = "../cumulus/pallets/xcm"
+path = "../pezcumulus/pallets/xcm"
 
-[dependencies.cumulus-pallet-xcmp-queue]
+[dependencies.pezcumulus-pezpallet-xcmp-queue]
 default-features = false
 optional = true
-path = "../cumulus/pallets/xcmp-queue"
+path = "../pezcumulus/pallets/xcmp-queue"
 
-[dependencies.cumulus-ping]
+[dependencies.pezcumulus-ping]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/pallets/ping"
+path = "../pezcumulus/teyrchains/pallets/ping"
 
-[dependencies.cumulus-primitives-aura]
+[dependencies.pezcumulus-primitives-aura]
 default-features = false
 optional = true
-path = "../cumulus/primitives/aura"
+path = "../pezcumulus/primitives/aura"
 
-[dependencies.cumulus-primitives-core]
+[dependencies.pezcumulus-primitives-core]
 default-features = false
 optional = true
-path = "../cumulus/primitives/core"
+path = "../pezcumulus/primitives/core"
 
-[dependencies.cumulus-primitives-proof-size-hostfunction]
+[dependencies.pezcumulus-primitives-proof-size-hostfunction]
 default-features = false
 optional = true
-path = "../cumulus/primitives/proof-size-hostfunction"
+path = "../pezcumulus/primitives/proof-size-hostfunction"
 
-[dependencies.cumulus-primitives-storage-weight-reclaim]
+[dependencies.pezcumulus-primitives-storage-weight-reclaim]
 default-features = false
 optional = true
-path = "../cumulus/primitives/storage-weight-reclaim"
+path = "../pezcumulus/primitives/storage-weight-reclaim"
 
-[dependencies.cumulus-primitives-teyrchain-inherent]
+[dependencies.pezcumulus-primitives-teyrchain-inherent]
 default-features = false
 optional = true
-path = "../cumulus/primitives/teyrchain-inherent"
+path = "../pezcumulus/primitives/teyrchain-inherent"
 
-[dependencies.cumulus-primitives-timestamp]
+[dependencies.pezcumulus-primitives-timestamp]
 default-features = false
 optional = true
-path = "../cumulus/primitives/timestamp"
+path = "../pezcumulus/primitives/timestamp"
 
-[dependencies.cumulus-primitives-utility]
+[dependencies.pezcumulus-primitives-utility]
 default-features = false
 optional = true
-path = "../cumulus/primitives/utility"
+path = "../pezcumulus/primitives/utility"
 
 [dependencies.ethereum-standards]
 default-features = false
 optional = true
-path = "../substrate/primitives/ethereum-standards"
+path = "../bizinikiwi/primitives/ethereum-standards"
 
-[dependencies.frame-benchmarking]
+[dependencies.pezframe-benchmarking]
 default-features = false
 optional = true
-path = "../substrate/frame/benchmarking"
+path = "../bizinikiwi/pezframe/benchmarking"
 
-[dependencies.frame-benchmarking-pallet-pov]
+[dependencies.pezframe-benchmarking-pezpallet-pov]
 default-features = false
 optional = true
-path = "../substrate/frame/benchmarking/pov"
+path = "../bizinikiwi/pezframe/benchmarking/pov"
 
-[dependencies.frame-election-provider-solution-type]
+[dependencies.pezframe-election-provider-solution-type]
 default-features = false
 optional = true
-path = "../substrate/frame/election-provider-support/solution-type"
+path = "../bizinikiwi/pezframe/election-provider-support/solution-type"
 
-[dependencies.frame-election-provider-support]
+[dependencies.pezframe-election-provider-support]
 default-features = false
 optional = true
-path = "../substrate/frame/election-provider-support"
+path = "../bizinikiwi/pezframe/election-provider-support"
 
-[dependencies.frame-executive]
+[dependencies.pezframe-executive]
 default-features = false
 optional = true
-path = "../substrate/frame/executive"
+path = "../bizinikiwi/pezframe/executive"
 
-[dependencies.frame-metadata-hash-extension]
+[dependencies.pezframe-metadata-hash-extension]
 default-features = false
 optional = true
-path = "../substrate/frame/metadata-hash-extension"
+path = "../bizinikiwi/pezframe/metadata-hash-extension"
 
-[dependencies.frame-support]
+[dependencies.pezframe-support]
 default-features = false
 optional = true
-path = "../substrate/frame/support"
+path = "../bizinikiwi/pezframe/support"
 
-[dependencies.frame-support-procedural]
+[dependencies.pezframe-support-procedural]
 default-features = false
 optional = true
-path = "../substrate/frame/support/procedural"
+path = "../bizinikiwi/pezframe/support/procedural"
 
-[dependencies.frame-support-procedural-tools-derive]
+[dependencies.pezframe-support-procedural-tools-derive]
 default-features = false
 optional = true
-path = "../substrate/frame/support/procedural/tools/derive"
+path = "../bizinikiwi/pezframe/support/procedural/tools/derive"
 
-[dependencies.frame-system]
+[dependencies.pezframe-system]
 default-features = false
 optional = true
-path = "../substrate/frame/system"
+path = "../bizinikiwi/pezframe/system"
 
-[dependencies.frame-system-benchmarking]
+[dependencies.pezframe-system-benchmarking]
 default-features = false
 optional = true
-path = "../substrate/frame/system/benchmarking"
+path = "../bizinikiwi/pezframe/system/benchmarking"
 
-[dependencies.frame-system-rpc-runtime-api]
+[dependencies.pezframe-system-rpc-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/system/rpc/runtime-api"
+path = "../bizinikiwi/pezframe/system/rpc/runtime-api"
 
-[dependencies.frame-try-runtime]
+[dependencies.pezframe-try-runtime]
 default-features = false
 optional = true
-path = "../substrate/frame/try-runtime"
+path = "../bizinikiwi/pezframe/try-runtime"
 
-[dependencies.pallet-alliance]
+[dependencies.pezpallet-alliance]
 default-features = false
 optional = true
-path = "../substrate/frame/alliance"
+path = "../bizinikiwi/pezframe/alliance"
 
-[dependencies.pallet-asset-conversion]
+[dependencies.pezpallet-asset-conversion]
 default-features = false
 optional = true
-path = "../substrate/frame/asset-conversion"
+path = "../bizinikiwi/pezframe/asset-conversion"
 
-[dependencies.pallet-asset-conversion-ops]
+[dependencies.pezpallet-asset-conversion-ops]
 default-features = false
 optional = true
-path = "../substrate/frame/asset-conversion/ops"
+path = "../bizinikiwi/pezframe/asset-conversion/ops"
 
-[dependencies.pallet-asset-conversion-tx-payment]
+[dependencies.pezpallet-asset-conversion-tx-payment]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-payment/asset-conversion-tx-payment"
+path = "../bizinikiwi/pezframe/transaction-payment/asset-conversion-tx-payment"
 
-[dependencies.pallet-asset-rate]
+[dependencies.pezpallet-asset-rate]
 default-features = false
 optional = true
-path = "../substrate/frame/asset-rate"
+path = "../bizinikiwi/pezframe/asset-rate"
 
-[dependencies.pallet-asset-rewards]
+[dependencies.pezpallet-asset-rewards]
 default-features = false
 optional = true
-path = "../substrate/frame/asset-rewards"
+path = "../bizinikiwi/pezframe/asset-rewards"
 
-[dependencies.pallet-asset-tx-payment]
+[dependencies.pezpallet-asset-tx-payment]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-payment/asset-tx-payment"
+path = "../bizinikiwi/pezframe/transaction-payment/asset-tx-payment"
 
-[dependencies.pallet-assets]
+[dependencies.pezpallet-assets]
 default-features = false
 optional = true
-path = "../substrate/frame/assets"
+path = "../bizinikiwi/pezframe/assets"
 
-[dependencies.pallet-assets-freezer]
+[dependencies.pezpallet-assets-freezer]
 default-features = false
 optional = true
-path = "../substrate/frame/assets-freezer"
+path = "../bizinikiwi/pezframe/assets-freezer"
 
-[dependencies.pallet-assets-holder]
+[dependencies.pezpallet-assets-holder]
 default-features = false
 optional = true
-path = "../substrate/frame/assets-holder"
+path = "../bizinikiwi/pezframe/assets-holder"
 
-[dependencies.pallet-assets-precompiles]
+[dependencies.pezpallet-assets-precompiles]
 default-features = false
 optional = true
-path = "../substrate/frame/assets/precompiles"
+path = "../bizinikiwi/pezframe/assets/precompiles"
 
-[dependencies.pallet-atomic-swap]
+[dependencies.pezpallet-atomic-swap]
 default-features = false
 optional = true
-path = "../substrate/frame/atomic-swap"
+path = "../bizinikiwi/pezframe/atomic-swap"
 
-[dependencies.pallet-aura]
+[dependencies.pezpallet-aura]
 default-features = false
 optional = true
-path = "../substrate/frame/aura"
+path = "../bizinikiwi/pezframe/aura"
 
-[dependencies.pallet-authority-discovery]
+[dependencies.pezpallet-authority-discovery]
 default-features = false
 optional = true
-path = "../substrate/frame/authority-discovery"
+path = "../bizinikiwi/pezframe/authority-discovery"
 
-[dependencies.pallet-authorship]
+[dependencies.pezpallet-authorship]
 default-features = false
 optional = true
-path = "../substrate/frame/authorship"
+path = "../bizinikiwi/pezframe/authorship"
 
-[dependencies.pallet-babe]
+[dependencies.pezpallet-babe]
 default-features = false
 optional = true
-path = "../substrate/frame/babe"
+path = "../bizinikiwi/pezframe/babe"
 
-[dependencies.pallet-bags-list]
+[dependencies.pezpallet-bags-list]
 default-features = false
 optional = true
-path = "../substrate/frame/bags-list"
+path = "../bizinikiwi/pezframe/bags-list"
 
-[dependencies.pallet-balances]
+[dependencies.pezpallet-balances]
 default-features = false
 optional = true
-path = "../substrate/frame/balances"
+path = "../bizinikiwi/pezframe/balances"
 
-[dependencies.pallet-beefy]
+[dependencies.pezpallet-beefy]
 default-features = false
 optional = true
-path = "../substrate/frame/beefy"
+path = "../bizinikiwi/pezframe/beefy"
 
-[dependencies.pallet-beefy-mmr]
+[dependencies.pezpallet-beefy-mmr]
 default-features = false
 optional = true
-path = "../substrate/frame/beefy-mmr"
+path = "../bizinikiwi/pezframe/beefy-mmr"
 
-[dependencies.pallet-bounties]
+[dependencies.pezpallet-bounties]
 default-features = false
 optional = true
-path = "../substrate/frame/bounties"
+path = "../bizinikiwi/pezframe/bounties"
 
-[dependencies.pallet-bridge-grandpa]
+[dependencies.pezpallet-bridge-grandpa]
 default-features = false
 optional = true
 path = "../bridges/modules/grandpa"
 
-[dependencies.pallet-bridge-messages]
+[dependencies.pezpallet-bridge-messages]
 default-features = false
 optional = true
 path = "../bridges/modules/messages"
 
-[dependencies.pallet-bridge-relayers]
+[dependencies.pezpallet-bridge-relayers]
 default-features = false
 optional = true
 path = "../bridges/modules/relayers"
 
-[dependencies.pallet-bridge-teyrchains]
+[dependencies.pezpallet-bridge-teyrchains]
 default-features = false
 optional = true
 path = "../bridges/modules/teyrchains"
 
-[dependencies.pallet-broker]
+[dependencies.pezpallet-broker]
 default-features = false
 optional = true
-path = "../substrate/frame/broker"
+path = "../bizinikiwi/pezframe/broker"
 
-[dependencies.pallet-child-bounties]
+[dependencies.pezpallet-child-bounties]
 default-features = false
 optional = true
-path = "../substrate/frame/child-bounties"
+path = "../bizinikiwi/pezframe/child-bounties"
 
-[dependencies.pallet-collator-selection]
+[dependencies.pezpallet-collator-selection]
 default-features = false
 optional = true
-path = "../cumulus/pallets/collator-selection"
+path = "../pezcumulus/pallets/collator-selection"
 
-[dependencies.pallet-collective]
+[dependencies.pezpallet-collective]
 default-features = false
 optional = true
-path = "../substrate/frame/collective"
+path = "../bizinikiwi/pezframe/collective"
 
-[dependencies.pallet-collective-content]
+[dependencies.pezpallet-collective-content]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/pallets/collective-content"
+path = "../pezcumulus/teyrchains/pallets/collective-content"
 
-[dependencies.pallet-contracts]
+[dependencies.pezpallet-contracts]
 default-features = false
 optional = true
-path = "../substrate/frame/contracts"
+path = "../bizinikiwi/pezframe/contracts"
 
-[dependencies.pallet-contracts-proc-macro]
+[dependencies.pezpallet-contracts-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/frame/contracts/proc-macro"
+path = "../bizinikiwi/pezframe/contracts/proc-macro"
 
-[dependencies.pallet-contracts-uapi]
+[dependencies.pezpallet-contracts-uapi]
 default-features = false
 optional = true
-path = "../substrate/frame/contracts/uapi"
+path = "../bizinikiwi/pezframe/contracts/uapi"
 
-[dependencies.pallet-conviction-voting]
+[dependencies.pezpallet-conviction-voting]
 default-features = false
 optional = true
-path = "../substrate/frame/conviction-voting"
+path = "../bizinikiwi/pezframe/conviction-voting"
 
-[dependencies.pallet-core-fellowship]
+[dependencies.pezpallet-core-fellowship]
 default-features = false
 optional = true
-path = "../substrate/frame/core-fellowship"
+path = "../bizinikiwi/pezframe/core-fellowship"
 
-[dependencies.pallet-delegated-staking]
+[dependencies.pezpallet-delegated-staking]
 default-features = false
 optional = true
-path = "../substrate/frame/delegated-staking"
+path = "../bizinikiwi/pezframe/delegated-staking"
 
-[dependencies.pallet-democracy]
+[dependencies.pezpallet-democracy]
 default-features = false
 optional = true
-path = "../substrate/frame/democracy"
+path = "../bizinikiwi/pezframe/democracy"
 
-[dependencies.pallet-derivatives]
+[dependencies.pezpallet-derivatives]
 default-features = false
 optional = true
-path = "../substrate/frame/derivatives"
+path = "../bizinikiwi/pezframe/derivatives"
 
-[dependencies.pallet-dev-mode]
+[dependencies.pezpallet-dev-mode]
 default-features = false
 optional = true
-path = "../substrate/frame/examples/dev-mode"
+path = "../bizinikiwi/pezframe/examples/dev-mode"
 
-[dependencies.pallet-dummy-dim]
+[dependencies.pezpallet-dummy-dim]
 default-features = false
 optional = true
-path = "../substrate/frame/dummy-dim"
+path = "../bizinikiwi/pezframe/dummy-dim"
 
-[dependencies.pallet-election-provider-multi-block]
+[dependencies.pezpallet-election-provider-multi-block]
 default-features = false
 optional = true
-path = "../substrate/frame/election-provider-multi-block"
+path = "../bizinikiwi/pezframe/election-provider-multi-block"
 
-[dependencies.pallet-election-provider-multi-phase]
+[dependencies.pezpallet-election-provider-multi-phase]
 default-features = false
 optional = true
-path = "../substrate/frame/election-provider-multi-phase"
+path = "../bizinikiwi/pezframe/election-provider-multi-phase"
 
-[dependencies.pallet-election-provider-support-benchmarking]
+[dependencies.pezpallet-election-provider-support-benchmarking]
 default-features = false
 optional = true
-path = "../substrate/frame/election-provider-support/benchmarking"
+path = "../bizinikiwi/pezframe/election-provider-support/benchmarking"
 
-[dependencies.pallet-elections-phragmen]
+[dependencies.pezpallet-elections-phragmen]
 default-features = false
 optional = true
-path = "../substrate/frame/elections-phragmen"
+path = "../bizinikiwi/pezframe/elections-phragmen"
 
-[dependencies.pallet-fast-unstake]
+[dependencies.pezpallet-fast-unstake]
 default-features = false
 optional = true
-path = "../substrate/frame/fast-unstake"
+path = "../bizinikiwi/pezframe/fast-unstake"
 
-[dependencies.pallet-glutton]
+[dependencies.pezpallet-glutton]
 default-features = false
 optional = true
-path = "../substrate/frame/glutton"
+path = "../bizinikiwi/pezframe/glutton"
 
-[dependencies.pallet-grandpa]
+[dependencies.pezpallet-grandpa]
 default-features = false
 optional = true
-path = "../substrate/frame/grandpa"
+path = "../bizinikiwi/pezframe/grandpa"
 
-[dependencies.pallet-identity]
+[dependencies.pezpallet-identity]
 default-features = false
 optional = true
-path = "../substrate/frame/identity"
+path = "../bizinikiwi/pezframe/identity"
 
-[dependencies.pallet-im-online]
+[dependencies.pezpallet-im-online]
 default-features = false
 optional = true
-path = "../substrate/frame/im-online"
+path = "../bizinikiwi/pezframe/im-online"
 
-[dependencies.pallet-indices]
+[dependencies.pezpallet-indices]
 default-features = false
 optional = true
-path = "../substrate/frame/indices"
+path = "../bizinikiwi/pezframe/indices"
 
-[dependencies.pallet-insecure-randomness-collective-flip]
+[dependencies.pezpallet-insecure-randomness-collective-flip]
 default-features = false
 optional = true
-path = "../substrate/frame/insecure-randomness-collective-flip"
+path = "../bizinikiwi/pezframe/insecure-randomness-collective-flip"
 
-[dependencies.pallet-lottery]
+[dependencies.pezpallet-lottery]
 default-features = false
 optional = true
-path = "../substrate/frame/lottery"
+path = "../bizinikiwi/pezframe/lottery"
 
-[dependencies.pallet-membership]
+[dependencies.pezpallet-membership]
 default-features = false
 optional = true
-path = "../substrate/frame/membership"
+path = "../bizinikiwi/pezframe/membership"
 
-[dependencies.pallet-message-queue]
+[dependencies.pezpallet-message-queue]
 default-features = false
 optional = true
-path = "../substrate/frame/message-queue"
+path = "../bizinikiwi/pezframe/message-queue"
 
-[dependencies.pallet-meta-tx]
+[dependencies.pezpallet-meta-tx]
 default-features = false
 optional = true
-path = "../substrate/frame/meta-tx"
+path = "../bizinikiwi/pezframe/meta-tx"
 
-[dependencies.pallet-migrations]
+[dependencies.pezpallet-migrations]
 default-features = false
 optional = true
-path = "../substrate/frame/migrations"
+path = "../bizinikiwi/pezframe/migrations"
 
-[dependencies.pallet-mixnet]
+[dependencies.pezpallet-mixnet]
 default-features = false
 optional = true
-path = "../substrate/frame/mixnet"
+path = "../bizinikiwi/pezframe/mixnet"
 
-[dependencies.pallet-mmr]
+[dependencies.pezpallet-mmr]
 default-features = false
 optional = true
-path = "../substrate/frame/merkle-mountain-range"
+path = "../bizinikiwi/pezframe/merkle-mountain-range"
 
-[dependencies.pallet-multi-asset-bounties]
+[dependencies.pezpallet-multi-asset-bounties]
 default-features = false
 optional = true
-path = "../substrate/frame/multi-asset-bounties"
+path = "../bizinikiwi/pezframe/multi-asset-bounties"
 
-[dependencies.pallet-multisig]
+[dependencies.pezpallet-multisig]
 default-features = false
 optional = true
-path = "../substrate/frame/multisig"
+path = "../bizinikiwi/pezframe/multisig"
 
-[dependencies.pallet-nft-fractionalization]
+[dependencies.pezpallet-nft-fractionalization]
 default-features = false
 optional = true
-path = "../substrate/frame/nft-fractionalization"
+path = "../bizinikiwi/pezframe/nft-fractionalization"
 
-[dependencies.pallet-nfts]
+[dependencies.pezpallet-nfts]
 default-features = false
 optional = true
-path = "../substrate/frame/nfts"
+path = "../bizinikiwi/pezframe/nfts"
 
-[dependencies.pallet-nfts-runtime-api]
+[dependencies.pezpallet-nfts-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/nfts/runtime-api"
+path = "../bizinikiwi/pezframe/nfts/runtime-api"
 
-[dependencies.pallet-nis]
+[dependencies.pezpallet-nis]
 default-features = false
 optional = true
-path = "../substrate/frame/nis"
+path = "../bizinikiwi/pezframe/nis"
 
-[dependencies.pallet-node-authorization]
+[dependencies.pezpallet-node-authorization]
 default-features = false
 optional = true
-path = "../substrate/frame/node-authorization"
+path = "../bizinikiwi/pezframe/node-authorization"
 
-[dependencies.pallet-nomination-pools]
+[dependencies.pezpallet-nomination-pools]
 default-features = false
 optional = true
-path = "../substrate/frame/nomination-pools"
+path = "../bizinikiwi/pezframe/nomination-pools"
 
-[dependencies.pallet-nomination-pools-benchmarking]
+[dependencies.pezpallet-nomination-pools-benchmarking]
 default-features = false
 optional = true
-path = "../substrate/frame/nomination-pools/benchmarking"
+path = "../bizinikiwi/pezframe/nomination-pools/benchmarking"
 
-[dependencies.pallet-nomination-pools-runtime-api]
+[dependencies.pezpallet-nomination-pools-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/nomination-pools/runtime-api"
+path = "../bizinikiwi/pezframe/nomination-pools/runtime-api"
 
-[dependencies.pallet-offences]
+[dependencies.pezpallet-offences]
 default-features = false
 optional = true
-path = "../substrate/frame/offences"
+path = "../bizinikiwi/pezframe/offences"
 
-[dependencies.pallet-offences-benchmarking]
+[dependencies.pezpallet-offences-benchmarking]
 default-features = false
 optional = true
-path = "../substrate/frame/offences/benchmarking"
+path = "../bizinikiwi/pezframe/offences/benchmarking"
 
-[dependencies.pallet-oracle]
+[dependencies.pezpallet-oracle]
 default-features = false
 optional = true
-path = "../substrate/frame/honzon/oracle"
+path = "../bizinikiwi/pezframe/honzon/oracle"
 
-[dependencies.pallet-oracle-runtime-api]
+[dependencies.pezpallet-oracle-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/honzon/oracle/runtime-api"
+path = "../bizinikiwi/pezframe/honzon/oracle/runtime-api"
 
-[dependencies.pallet-origin-restriction]
+[dependencies.pezpallet-origin-restriction]
 default-features = false
 optional = true
-path = "../substrate/frame/origin-restriction"
+path = "../bizinikiwi/pezframe/origin-restriction"
 
-[dependencies.pallet-paged-list]
+[dependencies.pezpallet-paged-list]
 default-features = false
 optional = true
-path = "../substrate/frame/paged-list"
+path = "../bizinikiwi/pezframe/paged-list"
 
-[dependencies.pallet-parameters]
+[dependencies.pezpallet-parameters]
 default-features = false
 optional = true
-path = "../substrate/frame/parameters"
+path = "../bizinikiwi/pezframe/parameters"
 
-[dependencies.pallet-people]
+[dependencies.pezpallet-people]
 default-features = false
 optional = true
-path = "../substrate/frame/people"
+path = "../bizinikiwi/pezframe/people"
 
-[dependencies.pallet-preimage]
+[dependencies.pezpallet-preimage]
 default-features = false
 optional = true
-path = "../substrate/frame/preimage"
+path = "../bizinikiwi/pezframe/preimage"
 
-[dependencies.pallet-proxy]
+[dependencies.pezpallet-proxy]
 default-features = false
 optional = true
-path = "../substrate/frame/proxy"
+path = "../bizinikiwi/pezframe/proxy"
 
-[dependencies.pallet-ranked-collective]
+[dependencies.pezpallet-ranked-collective]
 default-features = false
 optional = true
-path = "../substrate/frame/ranked-collective"
+path = "../bizinikiwi/pezframe/ranked-collective"
 
-[dependencies.pallet-recovery]
+[dependencies.pezpallet-recovery]
 default-features = false
 optional = true
-path = "../substrate/frame/recovery"
+path = "../bizinikiwi/pezframe/recovery"
 
-[dependencies.pallet-referenda]
+[dependencies.pezpallet-referenda]
 default-features = false
 optional = true
-path = "../substrate/frame/referenda"
+path = "../bizinikiwi/pezframe/referenda"
 
-[dependencies.pallet-remark]
+[dependencies.pezpallet-remark]
 default-features = false
 optional = true
-path = "../substrate/frame/remark"
+path = "../bizinikiwi/pezframe/remark"
 
-[dependencies.pallet-revive]
+[dependencies.pezpallet-revive]
 default-features = false
 optional = true
-path = "../substrate/frame/revive"
+path = "../bizinikiwi/pezframe/revive"
 
-[dependencies.pallet-revive-proc-macro]
+[dependencies.pezpallet-revive-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/frame/revive/proc-macro"
+path = "../bizinikiwi/pezframe/revive/proc-macro"
 
-[dependencies.pallet-revive-uapi]
+[dependencies.pezpallet-revive-uapi]
 default-features = false
 optional = true
-path = "../substrate/frame/revive/uapi"
+path = "../bizinikiwi/pezframe/revive/uapi"
 
-[dependencies.pallet-root-offences]
+[dependencies.pezpallet-root-offences]
 default-features = false
 optional = true
-path = "../substrate/frame/root-offences"
+path = "../bizinikiwi/pezframe/root-offences"
 
-[dependencies.pallet-root-testing]
+[dependencies.pezpallet-root-testing]
 default-features = false
 optional = true
-path = "../substrate/frame/root-testing"
+path = "../bizinikiwi/pezframe/root-testing"
 
-[dependencies.pallet-safe-mode]
+[dependencies.pezpallet-safe-mode]
 default-features = false
 optional = true
-path = "../substrate/frame/safe-mode"
+path = "../bizinikiwi/pezframe/safe-mode"
 
-[dependencies.pallet-salary]
+[dependencies.pezpallet-salary]
 default-features = false
 optional = true
-path = "../substrate/frame/salary"
+path = "../bizinikiwi/pezframe/salary"
 
-[dependencies.pallet-scheduler]
+[dependencies.pezpallet-scheduler]
 default-features = false
 optional = true
-path = "../substrate/frame/scheduler"
+path = "../bizinikiwi/pezframe/scheduler"
 
-[dependencies.pallet-scored-pool]
+[dependencies.pezpallet-scored-pool]
 default-features = false
 optional = true
-path = "../substrate/frame/scored-pool"
+path = "../bizinikiwi/pezframe/scored-pool"
 
-[dependencies.pallet-session]
+[dependencies.pezpallet-session]
 default-features = false
 optional = true
-path = "../substrate/frame/session"
+path = "../bizinikiwi/pezframe/session"
 
-[dependencies.pallet-session-benchmarking]
+[dependencies.pezpallet-session-benchmarking]
 default-features = false
 optional = true
-path = "../substrate/frame/session/benchmarking"
+path = "../bizinikiwi/pezframe/session/benchmarking"
 
-[dependencies.pallet-skip-feeless-payment]
+[dependencies.pezpallet-skip-feeless-payment]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-payment/skip-feeless-payment"
+path = "../bizinikiwi/pezframe/transaction-payment/skip-feeless-payment"
 
-[dependencies.pallet-society]
+[dependencies.pezpallet-society]
 default-features = false
 optional = true
-path = "../substrate/frame/society"
+path = "../bizinikiwi/pezframe/society"
 
-[dependencies.pallet-staking]
+[dependencies.pezpallet-staking]
 default-features = false
 optional = true
-path = "../substrate/frame/staking"
+path = "../bizinikiwi/pezframe/staking"
 
-[dependencies.pallet-staking-async]
+[dependencies.pezpallet-staking-async]
 default-features = false
 optional = true
-path = "../substrate/frame/staking-async"
+path = "../bizinikiwi/pezframe/staking-async"
 
-[dependencies.pallet-staking-async-ah-client]
+[dependencies.pezpallet-staking-async-ah-client]
 default-features = false
 optional = true
-path = "../substrate/frame/staking-async/ah-client"
+path = "../bizinikiwi/pezframe/staking-async/ah-client"
 
-[dependencies.pallet-staking-async-rc-client]
+[dependencies.pezpallet-staking-async-rc-client]
 default-features = false
 optional = true
-path = "../substrate/frame/staking-async/rc-client"
+path = "../bizinikiwi/pezframe/staking-async/rc-client"
 
-[dependencies.pallet-staking-async-reward-fn]
+[dependencies.pezpallet-staking-async-reward-fn]
 default-features = false
 optional = true
-path = "../substrate/frame/staking-async/reward-fn"
+path = "../bizinikiwi/pezframe/staking-async/reward-fn"
 
-[dependencies.pallet-staking-async-runtime-api]
+[dependencies.pezpallet-staking-async-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/staking-async/runtime-api"
+path = "../bizinikiwi/pezframe/staking-async/runtime-api"
 
-[dependencies.pallet-staking-reward-curve]
+[dependencies.pezpallet-staking-reward-curve]
 default-features = false
 optional = true
-path = "../substrate/frame/staking/reward-curve"
+path = "../bizinikiwi/pezframe/staking/reward-curve"
 
-[dependencies.pallet-staking-reward-fn]
+[dependencies.pezpallet-staking-reward-fn]
 default-features = false
 optional = true
-path = "../substrate/frame/staking/reward-fn"
+path = "../bizinikiwi/pezframe/staking/reward-fn"
 
-[dependencies.pallet-staking-runtime-api]
+[dependencies.pezpallet-staking-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/staking/runtime-api"
+path = "../bizinikiwi/pezframe/staking/runtime-api"
 
-[dependencies.pallet-state-trie-migration]
+[dependencies.pezpallet-state-trie-migration]
 default-features = false
 optional = true
-path = "../substrate/frame/state-trie-migration"
+path = "../bizinikiwi/pezframe/state-trie-migration"
 
-[dependencies.pallet-statement]
+[dependencies.pezpallet-statement]
 default-features = false
 optional = true
-path = "../substrate/frame/statement"
+path = "../bizinikiwi/pezframe/statement"
 
-[dependencies.pallet-sudo]
+[dependencies.pezpallet-sudo]
 default-features = false
 optional = true
-path = "../substrate/frame/sudo"
+path = "../bizinikiwi/pezframe/sudo"
 
-[dependencies.pallet-timestamp]
+[dependencies.pezpallet-timestamp]
 default-features = false
 optional = true
-path = "../substrate/frame/timestamp"
+path = "../bizinikiwi/pezframe/timestamp"
 
-[dependencies.pallet-tips]
+[dependencies.pezpallet-tips]
 default-features = false
 optional = true
-path = "../substrate/frame/tips"
+path = "../bizinikiwi/pezframe/tips"
 
-[dependencies.pallet-transaction-payment]
+[dependencies.pezpallet-transaction-payment]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-payment"
+path = "../bizinikiwi/pezframe/transaction-payment"
 
-[dependencies.pallet-transaction-payment-rpc-runtime-api]
+[dependencies.pezpallet-transaction-payment-rpc-runtime-api]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-payment/rpc/runtime-api"
+path = "../bizinikiwi/pezframe/transaction-payment/rpc/runtime-api"
 
-[dependencies.pallet-transaction-storage]
+[dependencies.pezpallet-transaction-storage]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-storage"
+path = "../bizinikiwi/pezframe/transaction-storage"
 
-[dependencies.pallet-treasury]
+[dependencies.pezpallet-treasury]
 default-features = false
 optional = true
-path = "../substrate/frame/treasury"
+path = "../bizinikiwi/pezframe/treasury"
 
-[dependencies.pallet-tx-pause]
+[dependencies.pezpallet-tx-pause]
 default-features = false
 optional = true
-path = "../substrate/frame/tx-pause"
+path = "../bizinikiwi/pezframe/tx-pause"
 
-[dependencies.pallet-uniques]
+[dependencies.pezpallet-uniques]
 default-features = false
 optional = true
-path = "../substrate/frame/uniques"
+path = "../bizinikiwi/pezframe/uniques"
 
-[dependencies.pallet-utility]
+[dependencies.pezpallet-utility]
 default-features = false
 optional = true
-path = "../substrate/frame/utility"
+path = "../bizinikiwi/pezframe/utility"
 
-[dependencies.pallet-verify-signature]
+[dependencies.pezpallet-verify-signature]
 default-features = false
 optional = true
-path = "../substrate/frame/verify-signature"
+path = "../bizinikiwi/pezframe/verify-signature"
 
-[dependencies.pallet-vesting]
+[dependencies.pezpallet-vesting]
 default-features = false
 optional = true
-path = "../substrate/frame/vesting"
+path = "../bizinikiwi/pezframe/vesting"
 
-[dependencies.pallet-whitelist]
+[dependencies.pezpallet-whitelist]
 default-features = false
 optional = true
-path = "../substrate/frame/whitelist"
+path = "../bizinikiwi/pezframe/whitelist"
 
-[dependencies.pallet-xcm]
+[dependencies.pezpallet-xcm]
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/pallet-xcm"
+path = "../pezkuwi/xcm/pezpallet-xcm"
 
-[dependencies.pallet-xcm-benchmarks]
+[dependencies.pezpallet-xcm-benchmarks]
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/pallet-xcm-benchmarks"
+path = "../pezkuwi/xcm/pezpallet-xcm-benchmarks"
 
-[dependencies.pallet-xcm-bridge-hub]
+[dependencies.pezpallet-xcm-bridge-hub]
 default-features = false
 optional = true
 path = "../bridges/modules/xcm-bridge-hub"
 
-[dependencies.pallet-xcm-bridge-hub-router]
+[dependencies.pezpallet-xcm-bridge-hub-router]
 default-features = false
 optional = true
 path = "../bridges/modules/xcm-bridge-hub-router"
 
-[dependencies.pallet-xcm-precompiles]
+[dependencies.pezpallet-xcm-precompiles]
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/pallet-xcm/precompiles"
+path = "../pezkuwi/xcm/pezpallet-xcm/precompiles"
 
 [dependencies.pezkuwi-core-primitives]
 default-features = false
@@ -2083,292 +2083,292 @@ path = "../pezkuwi/runtime/teyrchains"
 [dependencies.pezkuwi-sdk-frame]
 default-features = false
 optional = true
-path = "../substrate/frame"
+path = "../bizinikiwi/frame"
 
 [dependencies.pezkuwi-teyrchain-primitives]
 default-features = false
 optional = true
 path = "../pezkuwi/teyrchain"
 
-[dependencies.sc-chain-spec-derive]
+[dependencies.pezsc-chain-spec-derive]
 default-features = false
 optional = true
-path = "../substrate/client/chain-spec/derive"
+path = "../bizinikiwi/client/chain-spec/derive"
 
-[dependencies.sc-tracing-proc-macro]
+[dependencies.pezsc-tracing-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/client/tracing/proc-macro"
+path = "../bizinikiwi/client/tracing/proc-macro"
 
 [dependencies.slot-range-helper]
 default-features = false
 optional = true
 path = "../pezkuwi/runtime/common/slot_range_helper"
 
-[dependencies.sp-api]
+[dependencies.pezsp-api]
 default-features = false
 optional = true
-path = "../substrate/primitives/api"
+path = "../bizinikiwi/primitives/api"
 
-[dependencies.sp-api-proc-macro]
+[dependencies.pezsp-api-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/primitives/api/proc-macro"
+path = "../bizinikiwi/primitives/api/proc-macro"
 
-[dependencies.sp-application-crypto]
+[dependencies.pezsp-application-crypto]
 default-features = false
 optional = true
-path = "../substrate/primitives/application-crypto"
+path = "../bizinikiwi/primitives/application-crypto"
 
-[dependencies.sp-arithmetic]
+[dependencies.pezsp-arithmetic]
 default-features = false
 optional = true
-path = "../substrate/primitives/arithmetic"
+path = "../bizinikiwi/primitives/arithmetic"
 
-[dependencies.sp-authority-discovery]
+[dependencies.pezsp-authority-discovery]
 default-features = false
 optional = true
-path = "../substrate/primitives/authority-discovery"
+path = "../bizinikiwi/primitives/authority-discovery"
 
-[dependencies.sp-block-builder]
+[dependencies.pezsp-block-builder]
 default-features = false
 optional = true
-path = "../substrate/primitives/block-builder"
+path = "../bizinikiwi/primitives/block-builder"
 
-[dependencies.sp-consensus-aura]
+[dependencies.pezsp-consensus-aura]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/aura"
+path = "../bizinikiwi/primitives/consensus/aura"
 
-[dependencies.sp-consensus-babe]
+[dependencies.pezsp-consensus-babe]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/babe"
+path = "../bizinikiwi/primitives/consensus/babe"
 
-[dependencies.sp-consensus-beefy]
+[dependencies.pezsp-consensus-beefy]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/beefy"
+path = "../bizinikiwi/primitives/consensus/beefy"
 
-[dependencies.sp-consensus-grandpa]
+[dependencies.pezsp-consensus-grandpa]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/grandpa"
+path = "../bizinikiwi/primitives/consensus/grandpa"
 
-[dependencies.sp-consensus-pow]
+[dependencies.pezsp-consensus-pow]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/pow"
+path = "../bizinikiwi/primitives/consensus/pow"
 
-[dependencies.sp-consensus-slots]
+[dependencies.pezsp-consensus-slots]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/slots"
+path = "../bizinikiwi/primitives/consensus/slots"
 
-[dependencies.sp-core]
+[dependencies.pezsp-core]
 default-features = false
 optional = true
-path = "../substrate/primitives/core"
+path = "../bizinikiwi/primitives/core"
 
-[dependencies.sp-crypto-ec-utils]
+[dependencies.pezsp-crypto-ec-utils]
 default-features = false
 optional = true
-path = "../substrate/primitives/crypto/ec-utils"
+path = "../bizinikiwi/primitives/crypto/ec-utils"
 
-[dependencies.sp-crypto-hashing]
+[dependencies.pezsp-crypto-hashing]
 default-features = false
 optional = true
-path = "../substrate/primitives/crypto/hashing"
+path = "../bizinikiwi/primitives/crypto/hashing"
 
-[dependencies.sp-crypto-hashing-proc-macro]
+[dependencies.pezsp-crypto-hashing-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/primitives/crypto/hashing/proc-macro"
+path = "../bizinikiwi/primitives/crypto/hashing/proc-macro"
 
-[dependencies.sp-debug-derive]
+[dependencies.pezsp-debug-derive]
 default-features = false
 optional = true
-path = "../substrate/primitives/debug-derive"
+path = "../bizinikiwi/primitives/debug-derive"
 
-[dependencies.sp-externalities]
+[dependencies.pezsp-externalities]
 default-features = false
 optional = true
-path = "../substrate/primitives/externalities"
+path = "../bizinikiwi/primitives/externalities"
 
-[dependencies.sp-genesis-builder]
+[dependencies.pezsp-genesis-builder]
 default-features = false
 optional = true
-path = "../substrate/primitives/genesis-builder"
+path = "../bizinikiwi/primitives/genesis-builder"
 
-[dependencies.sp-inherents]
+[dependencies.pezsp-inherents]
 default-features = false
 optional = true
-path = "../substrate/primitives/inherents"
+path = "../bizinikiwi/primitives/inherents"
 
-[dependencies.sp-io]
+[dependencies.pezsp-io]
 default-features = false
 optional = true
-path = "../substrate/primitives/io"
+path = "../bizinikiwi/primitives/io"
 
-[dependencies.sp-keyring]
+[dependencies.pezsp-keyring]
 default-features = false
 optional = true
-path = "../substrate/primitives/keyring"
+path = "../bizinikiwi/primitives/keyring"
 
-[dependencies.sp-keystore]
+[dependencies.pezsp-keystore]
 default-features = false
 optional = true
-path = "../substrate/primitives/keystore"
+path = "../bizinikiwi/primitives/keystore"
 
-[dependencies.sp-metadata-ir]
+[dependencies.pezsp-metadata-ir]
 default-features = false
 optional = true
-path = "../substrate/primitives/metadata-ir"
+path = "../bizinikiwi/primitives/metadata-ir"
 
-[dependencies.sp-mixnet]
+[dependencies.pezsp-mixnet]
 default-features = false
 optional = true
-path = "../substrate/primitives/mixnet"
+path = "../bizinikiwi/primitives/mixnet"
 
-[dependencies.sp-mmr-primitives]
+[dependencies.pezsp-mmr-primitives]
 default-features = false
 optional = true
-path = "../substrate/primitives/merkle-mountain-range"
+path = "../bizinikiwi/primitives/merkle-mountain-range"
 
-[dependencies.sp-npos-elections]
+[dependencies.pezsp-npos-elections]
 default-features = false
 optional = true
-path = "../substrate/primitives/npos-elections"
+path = "../bizinikiwi/primitives/npos-elections"
 
-[dependencies.sp-offchain]
+[dependencies.pezsp-offchain]
 default-features = false
 optional = true
-path = "../substrate/primitives/offchain"
+path = "../bizinikiwi/primitives/offchain"
 
-[dependencies.sp-runtime]
+[dependencies.pezsp-runtime]
 default-features = false
 optional = true
-path = "../substrate/primitives/runtime"
+path = "../bizinikiwi/primitives/runtime"
 
-[dependencies.sp-runtime-interface]
+[dependencies.pezsp-runtime-interface]
 default-features = false
 optional = true
-path = "../substrate/primitives/runtime-interface"
+path = "../bizinikiwi/primitives/runtime-interface"
 
-[dependencies.sp-runtime-interface-proc-macro]
+[dependencies.pezsp-runtime-interface-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/primitives/runtime-interface/proc-macro"
+path = "../bizinikiwi/primitives/runtime-interface/proc-macro"
 
-[dependencies.sp-session]
+[dependencies.pezsp-session]
 default-features = false
 optional = true
-path = "../substrate/primitives/session"
+path = "../bizinikiwi/primitives/session"
 
-[dependencies.sp-staking]
+[dependencies.pezsp-staking]
 default-features = false
 optional = true
-path = "../substrate/primitives/staking"
+path = "../bizinikiwi/primitives/staking"
 
-[dependencies.sp-state-machine]
+[dependencies.pezsp-state-machine]
 default-features = false
 optional = true
-path = "../substrate/primitives/state-machine"
+path = "../bizinikiwi/primitives/state-machine"
 
-[dependencies.sp-statement-store]
+[dependencies.pezsp-statement-store]
 default-features = false
 optional = true
-path = "../substrate/primitives/statement-store"
+path = "../bizinikiwi/primitives/statement-store"
 
-[dependencies.sp-std]
+[dependencies.pezsp-std]
 default-features = false
 optional = true
-path = "../substrate/primitives/std"
+path = "../bizinikiwi/primitives/std"
 
-[dependencies.sp-storage]
+[dependencies.pezsp-storage]
 default-features = false
 optional = true
-path = "../substrate/primitives/storage"
+path = "../bizinikiwi/primitives/storage"
 
-[dependencies.sp-timestamp]
+[dependencies.pezsp-timestamp]
 default-features = false
 optional = true
-path = "../substrate/primitives/timestamp"
+path = "../bizinikiwi/primitives/timestamp"
 
-[dependencies.sp-tracing]
+[dependencies.pezsp-tracing]
 default-features = false
 optional = true
-path = "../substrate/primitives/tracing"
+path = "../bizinikiwi/primitives/tracing"
 
-[dependencies.sp-transaction-pool]
+[dependencies.pezsp-transaction-pool]
 default-features = false
 optional = true
-path = "../substrate/primitives/transaction-pool"
+path = "../bizinikiwi/primitives/transaction-pool"
 
-[dependencies.sp-transaction-storage-proof]
+[dependencies.pezsp-transaction-storage-proof]
 default-features = false
 optional = true
-path = "../substrate/primitives/transaction-storage-proof"
+path = "../bizinikiwi/primitives/transaction-storage-proof"
 
-[dependencies.sp-trie]
+[dependencies.pezsp-trie]
 default-features = false
 optional = true
-path = "../substrate/primitives/trie"
+path = "../bizinikiwi/primitives/trie"
 
-[dependencies.sp-version]
+[dependencies.pezsp-version]
 default-features = false
 optional = true
-path = "../substrate/primitives/version"
+path = "../bizinikiwi/primitives/version"
 
-[dependencies.sp-version-proc-macro]
+[dependencies.pezsp-version-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/primitives/version/proc-macro"
+path = "../bizinikiwi/primitives/version/proc-macro"
 
-[dependencies.sp-wasm-interface]
+[dependencies.pezsp-wasm-interface]
 default-features = false
 optional = true
-path = "../substrate/primitives/wasm-interface"
+path = "../bizinikiwi/primitives/wasm-interface"
 
-[dependencies.sp-weights]
+[dependencies.pezsp-weights]
 default-features = false
 optional = true
-path = "../substrate/primitives/weights"
+path = "../bizinikiwi/primitives/weights"
 
-[dependencies.staging-teyrchain-info]
+[dependencies.pezstaging-teyrchain-info]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/pallets/teyrchain-info"
+path = "../pezcumulus/teyrchains/pallets/teyrchain-info"
 
-[dependencies.staging-xcm]
+[dependencies.pezstaging-xcm]
 default-features = false
 optional = true
 path = "../pezkuwi/xcm"
 
-[dependencies.staging-xcm-builder]
+[dependencies.pezstaging-xcm-builder]
 default-features = false
 optional = true
 path = "../pezkuwi/xcm/xcm-builder"
 
-[dependencies.staging-xcm-executor]
+[dependencies.pezstaging-xcm-executor]
 default-features = false
 optional = true
 path = "../pezkuwi/xcm/xcm-executor"
 
-[dependencies.substrate-bip39]
+[dependencies.bizinikiwi-bip39]
 default-features = false
 optional = true
-path = "../substrate/utils/substrate-bip39"
+path = "../bizinikiwi/utils/bizinikiwi-bip39"
 
 [dependencies.testnet-teyrchains-constants]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/runtimes/constants"
+path = "../pezcumulus/teyrchains/runtimes/constants"
 
 [dependencies.teyrchains-common]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/common"
+path = "../pezcumulus/teyrchains/common"
 
 [dependencies.tracing-gum-proc-macro]
 default-features = false
@@ -2388,147 +2388,147 @@ path = "../pezkuwi/xcm/xcm-runtime-apis"
 [dependencies.asset-test-utils]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/runtimes/assets/test-utils"
+path = "../pezcumulus/teyrchains/runtimes/assets/test-utils"
 
 [dependencies.bridge-hub-test-utils]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/runtimes/bridge-hubs/test-utils"
+path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils"
 
-[dependencies.cumulus-client-bootnodes]
+[dependencies.pezcumulus-client-bootnodes]
 default-features = false
 optional = true
-path = "../cumulus/client/bootnodes"
+path = "../pezcumulus/client/bootnodes"
 
-[dependencies.cumulus-client-cli]
+[dependencies.pezcumulus-client-cli]
 default-features = false
 optional = true
-path = "../cumulus/client/cli"
+path = "../pezcumulus/client/cli"
 
-[dependencies.cumulus-client-collator]
+[dependencies.pezcumulus-client-collator]
 default-features = false
 optional = true
-path = "../cumulus/client/collator"
+path = "../pezcumulus/client/collator"
 
-[dependencies.cumulus-client-consensus-aura]
+[dependencies.pezcumulus-client-consensus-aura]
 default-features = false
 optional = true
-path = "../cumulus/client/consensus/aura"
+path = "../pezcumulus/client/consensus/aura"
 
-[dependencies.cumulus-client-consensus-common]
+[dependencies.pezcumulus-client-consensus-common]
 default-features = false
 optional = true
-path = "../cumulus/client/consensus/common"
+path = "../pezcumulus/client/consensus/common"
 
-[dependencies.cumulus-client-consensus-proposer]
+[dependencies.pezcumulus-client-consensus-proposer]
 default-features = false
 optional = true
-path = "../cumulus/client/consensus/proposer"
+path = "../pezcumulus/client/consensus/proposer"
 
-[dependencies.cumulus-client-consensus-relay-chain]
+[dependencies.pezcumulus-client-consensus-relay-chain]
 default-features = false
 optional = true
-path = "../cumulus/client/consensus/relay-chain"
+path = "../pezcumulus/client/consensus/relay-chain"
 
-[dependencies.cumulus-client-network]
+[dependencies.pezcumulus-client-network]
 default-features = false
 optional = true
-path = "../cumulus/client/network"
+path = "../pezcumulus/client/network"
 
-[dependencies.cumulus-client-pov-recovery]
+[dependencies.pezcumulus-client-pov-recovery]
 default-features = false
 optional = true
-path = "../cumulus/client/pov-recovery"
+path = "../pezcumulus/client/pov-recovery"
 
-[dependencies.cumulus-client-service]
+[dependencies.pezcumulus-client-service]
 default-features = false
 optional = true
-path = "../cumulus/client/service"
+path = "../pezcumulus/client/service"
 
-[dependencies.cumulus-client-teyrchain-inherent]
+[dependencies.pezcumulus-client-teyrchain-inherent]
 default-features = false
 optional = true
-path = "../cumulus/client/teyrchain-inherent"
+path = "../pezcumulus/client/teyrchain-inherent"
 
-[dependencies.cumulus-relay-chain-inprocess-interface]
+[dependencies.pezcumulus-relay-chain-inprocess-interface]
 default-features = false
 optional = true
-path = "../cumulus/client/relay-chain-inprocess-interface"
+path = "../pezcumulus/client/relay-chain-inprocess-interface"
 
-[dependencies.cumulus-relay-chain-interface]
+[dependencies.pezcumulus-relay-chain-interface]
 default-features = false
 optional = true
-path = "../cumulus/client/relay-chain-interface"
+path = "../pezcumulus/client/relay-chain-interface"
 
-[dependencies.cumulus-relay-chain-minimal-node]
+[dependencies.pezcumulus-relay-chain-minimal-node]
 default-features = false
 optional = true
-path = "../cumulus/client/relay-chain-minimal-node"
+path = "../pezcumulus/client/relay-chain-minimal-node"
 
-[dependencies.cumulus-relay-chain-rpc-interface]
+[dependencies.pezcumulus-relay-chain-rpc-interface]
 default-features = false
 optional = true
-path = "../cumulus/client/relay-chain-rpc-interface"
+path = "../pezcumulus/client/relay-chain-rpc-interface"
 
-[dependencies.cumulus-relay-chain-streams]
+[dependencies.pezcumulus-relay-chain-streams]
 default-features = false
 optional = true
-path = "../cumulus/client/relay-chain-streams"
+path = "../pezcumulus/client/relay-chain-streams"
 
-[dependencies.cumulus-test-relay-sproof-builder]
+[dependencies.pezcumulus-test-relay-sproof-builder]
 default-features = false
 optional = true
-path = "../cumulus/test/relay-sproof-builder"
+path = "../pezcumulus/test/relay-sproof-builder"
 
 [dependencies.emulated-integration-tests-common]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/integration-tests/emulated/common"
+path = "../pezcumulus/teyrchains/integration-tests/emulated/common"
 
 [dependencies.fork-tree]
 default-features = false
 optional = true
-path = "../substrate/utils/fork-tree"
+path = "../bizinikiwi/utils/fork-tree"
 
-[dependencies.frame-benchmarking-cli]
+[dependencies.pezframe-benchmarking-cli]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/benchmarking-cli"
+path = "../bizinikiwi/utils/pezframe/benchmarking-cli"
 
 [dependencies.frame-remote-externalities]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/remote-externalities"
+path = "../bizinikiwi/utils/pezframe/remote-externalities"
 
-[dependencies.frame-support-procedural-tools]
+[dependencies.pezframe-support-procedural-tools]
 default-features = false
 optional = true
-path = "../substrate/frame/support/procedural/tools"
+path = "../bizinikiwi/pezframe/support/procedural/tools"
 
 [dependencies.generate-bags]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/generate-bags"
+path = "../bizinikiwi/utils/pezframe/generate-bags"
 
 [dependencies.mmr-gadget]
 default-features = false
 optional = true
-path = "../substrate/client/merkle-mountain-range"
+path = "../bizinikiwi/client/merkle-mountain-range"
 
 [dependencies.mmr-rpc]
 default-features = false
 optional = true
-path = "../substrate/client/merkle-mountain-range/rpc"
+path = "../bizinikiwi/client/merkle-mountain-range/rpc"
 
-[dependencies.pallet-contracts-mock-network]
+[dependencies.pezpallet-contracts-mock-network]
 default-features = false
 optional = true
-path = "../substrate/frame/contracts/mock-network"
+path = "../bizinikiwi/pezframe/contracts/mock-network"
 
-[dependencies.pallet-transaction-payment-rpc]
+[dependencies.pezpallet-transaction-payment-rpc]
 default-features = false
 optional = true
-path = "../substrate/frame/transaction-payment/rpc"
+path = "../bizinikiwi/pezframe/transaction-payment/rpc"
 
 [dependencies.pezkuwi-approval-distribution]
 default-features = false
@@ -2708,7 +2708,7 @@ path = "../pezkuwi/node/subsystem-util"
 [dependencies.pezkuwi-omni-node-lib]
 default-features = false
 optional = true
-path = "../cumulus/pezkuwi-omni-node/lib"
+path = "../pezcumulus/pezkuwi-omni-node/lib"
 
 [dependencies.pezkuwi-overseer]
 default-features = false
@@ -2740,322 +2740,322 @@ default-features = false
 optional = true
 path = "../pezkuwi/statement-table"
 
-[dependencies.sc-allocator]
+[dependencies.pezsc-allocator]
 default-features = false
 optional = true
-path = "../substrate/client/allocator"
+path = "../bizinikiwi/client/allocator"
 
-[dependencies.sc-authority-discovery]
+[dependencies.pezsc-authority-discovery]
 default-features = false
 optional = true
-path = "../substrate/client/authority-discovery"
+path = "../bizinikiwi/client/authority-discovery"
 
-[dependencies.sc-basic-authorship]
+[dependencies.pezsc-basic-authorship]
 default-features = false
 optional = true
-path = "../substrate/client/basic-authorship"
+path = "../bizinikiwi/client/basic-authorship"
 
-[dependencies.sc-block-builder]
+[dependencies.pezsc-block-builder]
 default-features = false
 optional = true
-path = "../substrate/client/block-builder"
+path = "../bizinikiwi/client/block-builder"
 
-[dependencies.sc-chain-spec]
+[dependencies.pezsc-chain-spec]
 default-features = false
 optional = true
-path = "../substrate/client/chain-spec"
+path = "../bizinikiwi/client/chain-spec"
 
-[dependencies.sc-cli]
+[dependencies.pezsc-cli]
 default-features = false
 optional = true
-path = "../substrate/client/cli"
+path = "../bizinikiwi/client/cli"
 
-[dependencies.sc-client-api]
+[dependencies.pezsc-client-api]
 default-features = false
 optional = true
-path = "../substrate/client/api"
+path = "../bizinikiwi/client/api"
 
-[dependencies.sc-client-db]
+[dependencies.pezsc-client-db]
 default-features = false
 optional = true
-path = "../substrate/client/db"
+path = "../bizinikiwi/client/db"
 
-[dependencies.sc-consensus]
+[dependencies.pezsc-consensus]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/common"
+path = "../bizinikiwi/client/consensus/common"
 
-[dependencies.sc-consensus-aura]
+[dependencies.pezsc-consensus-aura]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/aura"
+path = "../bizinikiwi/client/consensus/aura"
 
-[dependencies.sc-consensus-babe]
+[dependencies.pezsc-consensus-babe]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/babe"
+path = "../bizinikiwi/client/consensus/babe"
 
-[dependencies.sc-consensus-babe-rpc]
+[dependencies.pezsc-consensus-babe-rpc]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/babe/rpc"
+path = "../bizinikiwi/client/consensus/babe/rpc"
 
-[dependencies.sc-consensus-beefy]
+[dependencies.pezsc-consensus-beefy]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/beefy"
+path = "../bizinikiwi/client/consensus/beefy"
 
-[dependencies.sc-consensus-beefy-rpc]
+[dependencies.pezsc-consensus-beefy-rpc]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/beefy/rpc"
+path = "../bizinikiwi/client/consensus/beefy/rpc"
 
-[dependencies.sc-consensus-epochs]
+[dependencies.pezsc-consensus-epochs]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/epochs"
+path = "../bizinikiwi/client/consensus/epochs"
 
-[dependencies.sc-consensus-grandpa]
+[dependencies.pezsc-consensus-grandpa]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/grandpa"
+path = "../bizinikiwi/client/consensus/grandpa"
 
-[dependencies.sc-consensus-grandpa-rpc]
+[dependencies.pezsc-consensus-grandpa-rpc]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/grandpa/rpc"
+path = "../bizinikiwi/client/consensus/grandpa/rpc"
 
-[dependencies.sc-consensus-manual-seal]
+[dependencies.pezsc-consensus-manual-seal]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/manual-seal"
+path = "../bizinikiwi/client/consensus/manual-seal"
 
-[dependencies.sc-consensus-pow]
+[dependencies.pezsc-consensus-pow]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/pow"
+path = "../bizinikiwi/client/consensus/pow"
 
-[dependencies.sc-consensus-slots]
+[dependencies.pezsc-consensus-slots]
 default-features = false
 optional = true
-path = "../substrate/client/consensus/slots"
+path = "../bizinikiwi/client/consensus/slots"
 
-[dependencies.sc-executor]
+[dependencies.pezsc-executor]
 default-features = false
 optional = true
-path = "../substrate/client/executor"
+path = "../bizinikiwi/client/executor"
 
-[dependencies.sc-executor-common]
+[dependencies.pezsc-executor-common]
 default-features = false
 optional = true
-path = "../substrate/client/executor/common"
+path = "../bizinikiwi/client/executor/common"
 
-[dependencies.sc-executor-polkavm]
+[dependencies.pezsc-executor-polkavm]
 default-features = false
 optional = true
-path = "../substrate/client/executor/polkavm"
+path = "../bizinikiwi/client/executor/polkavm"
 
-[dependencies.sc-executor-wasmtime]
+[dependencies.pezsc-executor-wasmtime]
 default-features = false
 optional = true
-path = "../substrate/client/executor/wasmtime"
+path = "../bizinikiwi/client/executor/wasmtime"
 
-[dependencies.sc-informant]
+[dependencies.pezsc-informant]
 default-features = false
 optional = true
-path = "../substrate/client/informant"
+path = "../bizinikiwi/client/informant"
 
-[dependencies.sc-keystore]
+[dependencies.pezsc-keystore]
 default-features = false
 optional = true
-path = "../substrate/client/keystore"
+path = "../bizinikiwi/client/keystore"
 
-[dependencies.sc-mixnet]
+[dependencies.pezsc-mixnet]
 default-features = false
 optional = true
-path = "../substrate/client/mixnet"
+path = "../bizinikiwi/client/mixnet"
 
-[dependencies.sc-network]
+[dependencies.pezsc-network]
 default-features = false
 optional = true
-path = "../substrate/client/network"
+path = "../bizinikiwi/client/network"
 
-[dependencies.sc-network-common]
+[dependencies.pezsc-network-common]
 default-features = false
 optional = true
-path = "../substrate/client/network/common"
+path = "../bizinikiwi/client/network/common"
 
-[dependencies.sc-network-gossip]
+[dependencies.pezsc-network-gossip]
 default-features = false
 optional = true
-path = "../substrate/client/network-gossip"
+path = "../bizinikiwi/client/network-gossip"
 
-[dependencies.sc-network-light]
+[dependencies.pezsc-network-light]
 default-features = false
 optional = true
-path = "../substrate/client/network/light"
+path = "../bizinikiwi/client/network/light"
 
-[dependencies.sc-network-statement]
+[dependencies.pezsc-network-statement]
 default-features = false
 optional = true
-path = "../substrate/client/network/statement"
+path = "../bizinikiwi/client/network/statement"
 
-[dependencies.sc-network-sync]
+[dependencies.pezsc-network-sync]
 default-features = false
 optional = true
-path = "../substrate/client/network/sync"
+path = "../bizinikiwi/client/network/sync"
 
-[dependencies.sc-network-transactions]
+[dependencies.pezsc-network-transactions]
 default-features = false
 optional = true
-path = "../substrate/client/network/transactions"
+path = "../bizinikiwi/client/network/transactions"
 
-[dependencies.sc-network-types]
+[dependencies.pezsc-network-types]
 default-features = false
 optional = true
-path = "../substrate/client/network/types"
+path = "../bizinikiwi/client/network/types"
 
-[dependencies.sc-offchain]
+[dependencies.pezsc-offchain]
 default-features = false
 optional = true
-path = "../substrate/client/offchain"
+path = "../bizinikiwi/client/offchain"
 
-[dependencies.sc-proposer-metrics]
+[dependencies.pezsc-proposer-metrics]
 default-features = false
 optional = true
-path = "../substrate/client/proposer-metrics"
+path = "../bizinikiwi/client/proposer-metrics"
 
-[dependencies.sc-rpc]
+[dependencies.pezsc-rpc]
 default-features = false
 optional = true
-path = "../substrate/client/rpc"
+path = "../bizinikiwi/client/rpc"
 
-[dependencies.sc-rpc-api]
+[dependencies.pezsc-rpc-api]
 default-features = false
 optional = true
-path = "../substrate/client/rpc-api"
+path = "../bizinikiwi/client/rpc-api"
 
-[dependencies.sc-rpc-server]
+[dependencies.pezsc-rpc-server]
 default-features = false
 optional = true
-path = "../substrate/client/rpc-servers"
+path = "../bizinikiwi/client/rpc-servers"
 
-[dependencies.sc-rpc-spec-v2]
+[dependencies.pezsc-rpc-spec-v2]
 default-features = false
 optional = true
-path = "../substrate/client/rpc-spec-v2"
+path = "../bizinikiwi/client/rpc-spec-v2"
 
-[dependencies.sc-runtime-utilities]
+[dependencies.pezsc-runtime-utilities]
 default-features = false
 optional = true
-path = "../substrate/client/runtime-utilities"
+path = "../bizinikiwi/client/runtime-utilities"
 
-[dependencies.sc-service]
+[dependencies.pezsc-service]
 default-features = false
 optional = true
-path = "../substrate/client/service"
+path = "../bizinikiwi/client/service"
 
-[dependencies.sc-state-db]
+[dependencies.pezsc-state-db]
 default-features = false
 optional = true
-path = "../substrate/client/state-db"
+path = "../bizinikiwi/client/state-db"
 
-[dependencies.sc-statement-store]
+[dependencies.pezsc-statement-store]
 default-features = false
 optional = true
-path = "../substrate/client/statement-store"
+path = "../bizinikiwi/client/statement-store"
 
-[dependencies.sc-storage-monitor]
+[dependencies.pezsc-storage-monitor]
 default-features = false
 optional = true
-path = "../substrate/client/storage-monitor"
+path = "../bizinikiwi/client/storage-monitor"
 
-[dependencies.sc-sync-state-rpc]
+[dependencies.pezsc-sync-state-rpc]
 default-features = false
 optional = true
-path = "../substrate/client/sync-state-rpc"
+path = "../bizinikiwi/client/sync-state-rpc"
 
-[dependencies.sc-sysinfo]
+[dependencies.pezsc-sysinfo]
 default-features = false
 optional = true
-path = "../substrate/client/sysinfo"
+path = "../bizinikiwi/client/sysinfo"
 
-[dependencies.sc-telemetry]
+[dependencies.pezsc-telemetry]
 default-features = false
 optional = true
-path = "../substrate/client/telemetry"
+path = "../bizinikiwi/client/telemetry"
 
-[dependencies.sc-tracing]
+[dependencies.pezsc-tracing]
 default-features = false
 optional = true
-path = "../substrate/client/tracing"
+path = "../bizinikiwi/client/tracing"
 
-[dependencies.sc-transaction-pool]
+[dependencies.pezsc-transaction-pool]
 default-features = false
 optional = true
-path = "../substrate/client/transaction-pool"
+path = "../bizinikiwi/client/transaction-pool"
 
-[dependencies.sc-transaction-pool-api]
+[dependencies.pezsc-transaction-pool-api]
 default-features = false
 optional = true
-path = "../substrate/client/transaction-pool/api"
+path = "../bizinikiwi/client/transaction-pool/api"
 
-[dependencies.sc-utils]
+[dependencies.pezsc-utils]
 default-features = false
 optional = true
-path = "../substrate/client/utils"
+path = "../bizinikiwi/client/utils"
 
-[dependencies.sp-blockchain]
+[dependencies.pezsp-blockchain]
 default-features = false
 optional = true
-path = "../substrate/primitives/blockchain"
+path = "../bizinikiwi/primitives/blockchain"
 
-[dependencies.sp-consensus]
+[dependencies.pezsp-consensus]
 default-features = false
 optional = true
-path = "../substrate/primitives/consensus/common"
+path = "../bizinikiwi/primitives/consensus/common"
 
-[dependencies.sp-core-hashing]
+[dependencies.pezsp-core-hashing]
 default-features = false
 optional = true
-path = "../substrate/deprecated/hashing"
+path = "../bizinikiwi/deprecated/hashing"
 
-[dependencies.sp-core-hashing-proc-macro]
+[dependencies.pezsp-core-hashing-proc-macro]
 default-features = false
 optional = true
-path = "../substrate/deprecated/hashing/proc-macro"
+path = "../bizinikiwi/deprecated/hashing/proc-macro"
 
-[dependencies.sp-database]
+[dependencies.pezsp-database]
 default-features = false
 optional = true
-path = "../substrate/primitives/database"
+path = "../bizinikiwi/primitives/database"
 
-[dependencies.sp-maybe-compressed-blob]
+[dependencies.pezsp-maybe-compressed-blob]
 default-features = false
 optional = true
-path = "../substrate/primitives/maybe-compressed-blob"
+path = "../bizinikiwi/primitives/maybe-compressed-blob"
 
-[dependencies.sp-panic-handler]
+[dependencies.pezsp-panic-handler]
 default-features = false
 optional = true
-path = "../substrate/primitives/panic-handler"
+path = "../bizinikiwi/primitives/panic-handler"
 
-[dependencies.sp-rpc]
+[dependencies.pezsp-rpc]
 default-features = false
 optional = true
-path = "../substrate/primitives/rpc"
+path = "../bizinikiwi/primitives/rpc"
 
-[dependencies.staging-chain-spec-builder]
+[dependencies.pezstaging-chain-spec-builder]
 default-features = false
 optional = true
-path = "../substrate/bin/utils/chain-spec-builder"
+path = "../bizinikiwi/bin/utils/chain-spec-builder"
 
-[dependencies.staging-node-inspect]
+[dependencies.pezstaging-node-inspect]
 default-features = false
 optional = true
-path = "../substrate/bin/node/inspect"
+path = "../bizinikiwi/bin/node/inspect"
 
-[dependencies.staging-tracking-allocator]
+[dependencies.pezstaging-tracking-allocator]
 default-features = false
 optional = true
 path = "../pezkuwi/node/tracking-allocator"
@@ -3063,47 +3063,47 @@ path = "../pezkuwi/node/tracking-allocator"
 [dependencies.subkey]
 default-features = false
 optional = true
-path = "../substrate/bin/utils/subkey"
+path = "../bizinikiwi/bin/utils/subkey"
 
-[dependencies.substrate-build-script-utils]
+[dependencies.bizinikiwi-build-script-utils]
 default-features = false
 optional = true
-path = "../substrate/utils/build-script-utils"
+path = "../bizinikiwi/utils/build-script-utils"
 
-[dependencies.substrate-frame-rpc-support]
+[dependencies.bizinikiwi-frame-rpc-support]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/rpc/support"
+path = "../bizinikiwi/utils/pezframe/rpc/support"
 
-[dependencies.substrate-frame-rpc-system]
+[dependencies.bizinikiwi-frame-rpc-system]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/rpc/system"
+path = "../bizinikiwi/utils/pezframe/rpc/system"
 
-[dependencies.substrate-prometheus-endpoint]
+[dependencies.bizinikiwi-prometheus-endpoint]
 default-features = false
 optional = true
-path = "../substrate/utils/prometheus"
+path = "../bizinikiwi/utils/prometheus"
 
-[dependencies.substrate-rpc-client]
+[dependencies.bizinikiwi-rpc-client]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/rpc/client"
+path = "../bizinikiwi/utils/pezframe/rpc/client"
 
-[dependencies.substrate-state-trie-migration-rpc]
+[dependencies.bizinikiwi-state-trie-migration-rpc]
 default-features = false
 optional = true
-path = "../substrate/utils/frame/rpc/state-trie-migration-rpc"
+path = "../bizinikiwi/utils/pezframe/rpc/state-trie-migration-rpc"
 
-[dependencies.substrate-wasm-builder]
+[dependencies.bizinikiwi-wasm-builder]
 default-features = false
 optional = true
-path = "../substrate/utils/wasm-builder"
+path = "../bizinikiwi/utils/wasm-builder"
 
 [dependencies.teyrchains-runtimes-test-utils]
 default-features = false
 optional = true
-path = "../cumulus/teyrchains/runtimes/test-utils"
+path = "../pezcumulus/teyrchains/runtimes/test-utils"
 
 [dependencies.tracing-gum]
 default-features = false
@@ -3113,7 +3113,7 @@ path = "../pezkuwi/node/gum"
 [dependencies.xcm-emulator]
 default-features = false
 optional = true
-path = "../cumulus/xcm/xcm-emulator"
+path = "../pezcumulus/xcm/xcm-emulator"
 
 [dependencies.xcm-simulator]
 default-features = false

@@ -7,9 +7,9 @@ use codec::{Decode, DecodeWithMemTracking, Encode};
 use ethabi::Token;
 use scale_info::TypeInfo;
 use snowbridge_core::{pricing::UD60x18, ChannelId};
-use sp_arithmetic::traits::{BaseArithmetic, Unsigned};
-use sp_core::{RuntimeDebug, H160, H256, U256};
-use sp_std::{borrow::ToOwned, vec, vec::Vec};
+use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned};
+use pezsp_core::{RuntimeDebug, H160, H256, U256};
+use pezsp_std::{borrow::ToOwned, vec, vec::Vec};
 
 /// Enqueued outbound messages need to be versioned to prevent data corruption
 /// or loss after forkless runtime upgrades

@@ -17,7 +17,7 @@
 use std::collections::{btree_map::BTreeMap, VecDeque};
 
 use schnellru::{ByLength, LruMap};
-use sp_consensus_babe::Epoch;
+use pezsp_consensus_babe::Epoch;
 
 use pezkuwi_primitives::{
 	async_backing::{self, Constraints},

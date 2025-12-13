@@ -35,22 +35,22 @@ extern crate alloc;
 use alloc::{boxed::Box, vec, vec::Vec};
 use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
 use core::{marker::PhantomData, result::Result};
-use frame_support::{
+use pezframe_support::{
 	dispatch::{
 		DispatchErrorWithPostInfo, GetDispatchInfo, PostDispatchInfo, WithPostDispatchInfo,
 	},
-	pallet_prelude::*,
+	pezpallet_prelude::*,
 	traits::{
 		Consideration, Contains, ContainsPair, Currency, Defensive, EnsureOrigin, Footprint, Get,
 		LockableCurrency, OriginTrait, WithdrawReasons,
 	},
 	PalletId,
 };
-use frame_system::pallet_prelude::{BlockNumberFor, *};
+use pezframe_system::pezpallet_prelude::{BlockNumberFor, *};
 pub use pallet::*;
 use scale_info::TypeInfo;
-use sp_core::H256;
-use sp_runtime::{
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{
 		AccountIdConversion, BadOrigin, BlakeTwo256, BlockNumberProvider, Dispatchable, Hash,
 		Saturating, Zero,
@@ -83,7 +83,7 @@ mod errors;
 pub use errors::ExecutionError;
 
 #[cfg(any(feature = "try-runtime", test))]
-use sp_runtime::TryRuntimeError;
+use pezsp_runtime::TryRuntimeError;
 
 pub trait WeightInfo {
 	fn send() -> Weight;
@@ -218,15 +218,15 @@ pub fn aliasers_footprint(aliasers_count: usize) -> Footprint {
 	Footprint::from_parts(aliasers_count, OriginAliaser::max_encoded_len())
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::{
+	use pezframe_support::{
 		dispatch::{GetDispatchInfo, PostDispatchInfo},
 		parameter_types,
 	};
-	use frame_system::Config as SysConfig;
-	use sp_runtime::traits::Dispatchable;
+	use pezframe_system::Config as SysConfig;
+	use pezsp_runtime::traits::Dispatchable;
 	use xcm_executor::traits::{MatchesFungible, WeightBounds};
 
 	parameter_types! {
@@ -247,15 +247,15 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	pub type BalanceOf<T> =
-		<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+		<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 	pub type TicketOf<T> = <T as Config>::AuthorizedAliasConsideration;
 
 	#[pallet::config]
 	/// The module configuration trait.
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A lockable currency.
 		// TODO: We should really use a trait which can handle multiple currencies.
@@ -313,7 +313,7 @@ pub mod pallet {
 		const VERSION_DISCOVERY_QUEUE_SIZE: u32;
 
 		/// The latest supported version that we advertise. Generally just set it to
-		/// `pallet_xcm::CurrentXcmVersion`.
+		/// `pezpallet_xcm::CurrentXcmVersion`.
 		#[pallet::constant]
 		type AdvertisedXcmVersion: Get<XcmVersion>;
 
@@ -355,13 +355,13 @@ pub mod pallet {
 			message: Box<VersionedXcm<<T as Config>::RuntimeCall>>,
 			max_weight: Weight,
 		) -> Result<Weight, DispatchErrorWithPostInfo> {
-			tracing::trace!(target: "xcm::pallet_xcm::execute", ?message, ?max_weight);
+			tracing::trace!(target: "xcm::pezpallet_xcm::execute", ?message, ?max_weight);
 			let outcome = (|| {
 				let origin_location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
-				let mut hash = message.using_encoded(sp_io::hashing::blake2_256);
+				let mut hash = message.using_encoded(pezsp_io::hashing::blake2_256);
 				let message = (*message).try_into().map_err(|()| {
 					tracing::debug!(
-						target: "xcm::pallet_xcm::execute", id=?hash,
+						target: "xcm::pezpallet_xcm::execute", id=?hash,
 						"Failed to convert VersionedXcm to Xcm",
 					);
 					Error::<T>::BadVersion
@@ -379,7 +379,7 @@ pub mod pallet {
 			})()
 			.map_err(|e: DispatchError| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::execute", error=?e,
+					target: "xcm::pezpallet_xcm::execute", error=?e,
 					"Failed XCM pre-execution validation or filter",
 				);
 				e.with_weight(<Self::WeightInfo as ExecuteControllerWeightInfo>::execute())
@@ -388,7 +388,7 @@ pub mod pallet {
 			Self::deposit_event(Event::Attempted { outcome: outcome.clone() });
 			let weight_used = outcome.weight_used();
 			outcome.ensure_complete().map_err(|error| {
-				tracing::error!(target: "xcm::pallet_xcm::execute", ?error, "XCM execution failed with error");
+				tracing::error!(target: "xcm::pezpallet_xcm::execute", ?error, "XCM execution failed with error");
 				Error::<T>::LocalExecutionIncompleteWithError {
 					index: error.index,
 					error: error.error.into(),
@@ -419,21 +419,21 @@ pub mod pallet {
 			let origin_location = T::SendXcmOrigin::ensure_origin(origin)?;
 			let interior: Junctions = origin_location.clone().try_into().map_err(|_| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::send",
+					target: "xcm::pezpallet_xcm::send",
 					"Failed to convert origin_location to interior Junctions",
 				);
 				Error::<T>::InvalidOrigin
 			})?;
 			let dest = Location::try_from(*dest).map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::send",
+					target: "xcm::pezpallet_xcm::send",
 					"Failed to convert destination VersionedLocation to Location",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let message: Xcm<()> = (*message).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::send",
+					target: "xcm::pezpallet_xcm::send",
 					"Failed to convert VersionedXcm message to Xcm",
 				);
 				Error::<T>::BadVersion
@@ -441,7 +441,7 @@ pub mod pallet {
 
 			let message_id = Self::send_xcm(interior, dest.clone(), message.clone())
 				.map_err(|error| {
-					tracing::error!(target: "xcm::pallet_xcm::send", ?error, ?dest, ?message, "XCM send failed with error");
+					tracing::error!(target: "xcm::pezpallet_xcm::send", ?error, ?dest, ?message, "XCM send failed with error");
 					Error::<T>::from(error)
 				})?;
 			let e = Event::Sent { origin: origin_location, destination: dest, message, message_id };
@@ -473,7 +473,7 @@ pub mod pallet {
 				timeout,
 				Location::try_from(match_querier).map_err(|_| {
 					tracing::debug!(
-						target: "xcm::pallet_xcm::query",
+						target: "xcm::pezpallet_xcm::query",
 						"Failed to convert VersionedLocation for match_querier",
 					);
 					Into::<DispatchError>::into(Error::<T>::BadVersion)
@@ -538,24 +538,24 @@ pub mod pallet {
 		ResponseReady { query_id: QueryId, response: Response },
 		/// Query response has been received and query is removed. The registered notification has
 		/// been dispatched and executed successfully.
-		Notified { query_id: QueryId, pallet_index: u8, call_index: u8 },
+		Notified { query_id: QueryId, pezpallet_index: u8, call_index: u8 },
 		/// Query response has been received and query is removed. The registered notification
 		/// could not be dispatched because the dispatch weight is greater than the maximum weight
 		/// originally budgeted by this runtime for the query result.
 		NotifyOverweight {
 			query_id: QueryId,
-			pallet_index: u8,
+			pezpallet_index: u8,
 			call_index: u8,
 			actual_weight: Weight,
 			max_budgeted_weight: Weight,
 		},
 		/// Query response has been received and query is removed. There was a general error with
 		/// dispatching the notification call.
-		NotifyDispatchError { query_id: QueryId, pallet_index: u8, call_index: u8 },
+		NotifyDispatchError { query_id: QueryId, pezpallet_index: u8, call_index: u8 },
 		/// Query response has been received and query is removed. The dispatch was unable to be
 		/// decoded into a `Call`; this might be due to dispatch function having a signature which
 		/// is not `(origin, QueryId, Response)`.
-		NotifyDecodeFailed { query_id: QueryId, pallet_index: u8, call_index: u8 },
+		NotifyDecodeFailed { query_id: QueryId, pezpallet_index: u8, call_index: u8 },
 		/// Expected query response has been received but the origin location of the response does
 		/// not match that expected. The query remains registered for a later, valid, response to
 		/// be received and acted upon.
@@ -1046,7 +1046,7 @@ pub mod pallet {
 
 	pub mod migrations {
 		use super::*;
-		use frame_support::traits::{PalletInfoAccess, StorageVersion};
+		use pezframe_support::traits::{PalletInfoAccess, StorageVersion};
 
 		#[derive(Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug, TypeInfo)]
 		enum QueryStatusV0<BlockNumber> {
@@ -1082,7 +1082,7 @@ pub mod pallet {
 		}
 
 		pub fn migrate_to_v1<T: Config, P: GetStorageVersion + PalletInfoAccess>(
-		) -> frame_support::weights::Weight {
+		) -> pezframe_support::weights::Weight {
 			let on_chain_storage_version = <P as GetStorageVersion>::on_chain_storage_version();
 			tracing::info!(
 				target: "runtime::xcm",
@@ -1276,14 +1276,14 @@ pub mod pallet {
 			T::AdminOrigin::ensure_origin(origin)?;
 			let location: Location = (*location).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::force_subscribe_version_notify",
+					target: "xcm::pezpallet_xcm::force_subscribe_version_notify",
 					"Failed to convert VersionedLocation for subscription target"
 				);
 				Error::<T>::BadLocation
 			})?;
 			Self::request_version_notify(location).map_err(|e| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::force_subscribe_version_notify", error=?e,
+					target: "xcm::pezpallet_xcm::force_subscribe_version_notify", error=?e,
 					"Failed to subscribe for version notifications for location"
 				);
 				match e {
@@ -1308,14 +1308,14 @@ pub mod pallet {
 			T::AdminOrigin::ensure_origin(origin)?;
 			let location: Location = (*location).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::force_unsubscribe_version_notify",
+					target: "xcm::pezpallet_xcm::force_unsubscribe_version_notify",
 					"Failed to convert VersionedLocation for unsubscription target"
 				);
 				Error::<T>::BadLocation
 			})?;
 			Self::unrequest_version_notify(location).map_err(|e| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::force_unsubscribe_version_notify", error=?e,
+					target: "xcm::pezpallet_xcm::force_unsubscribe_version_notify", error=?e,
 					"Failed to unsubscribe from version notifications for location"
 				);
 				match e {
@@ -1460,34 +1460,34 @@ pub mod pallet {
 			let origin = T::ExecuteXcmOrigin::ensure_origin(origin)?;
 			let dest = (*dest).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets",
+					target: "xcm::pezpallet_xcm::transfer_assets",
 					"Failed to convert destination VersionedLocation",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let beneficiary: Location = (*beneficiary).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets",
+					target: "xcm::pezpallet_xcm::transfer_assets",
 					"Failed to convert beneficiary VersionedLocation",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let assets: Assets = (*assets).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets",
+					target: "xcm::pezpallet_xcm::transfer_assets",
 					"Failed to convert VersionedAssets",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let fee_asset_id: AssetId = (*fee_asset_id).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets",
+					target: "xcm::pezpallet_xcm::transfer_assets",
 					"Failed to convert VersionedAssetId",
 				);
 				Error::<T>::BadVersion
 			})?;
 			tracing::debug!(
-				target: "xcm::pallet_xcm::transfer_assets",
+				target: "xcm::pezpallet_xcm::transfer_assets",
 				?origin, ?dest, ?beneficiary, ?assets, ?fee_asset_id, ?weight_limit,
 			);
 
@@ -1532,12 +1532,12 @@ pub mod pallet {
 			beneficiary: Box<VersionedLocation>,
 		) -> DispatchResult {
 			let origin_location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
-			tracing::debug!(target: "xcm::pallet_xcm::claim_assets", ?origin_location, ?assets, ?beneficiary);
+			tracing::debug!(target: "xcm::pezpallet_xcm::claim_assets", ?origin_location, ?assets, ?beneficiary);
 			// Extract version from `assets`.
 			let assets_version = assets.identify_version();
 			let assets: Assets = (*assets).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::claim_assets",
+					target: "xcm::pezpallet_xcm::claim_assets",
 					"Failed to convert input VersionedAssets",
 				);
 				Error::<T>::BadVersion
@@ -1545,7 +1545,7 @@ pub mod pallet {
 			let number_of_assets = assets.len() as u32;
 			let beneficiary: Location = (*beneficiary).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::claim_assets",
+					target: "xcm::pezpallet_xcm::claim_assets",
 					"Failed to convert beneficiary VersionedLocation",
 				);
 				Error::<T>::BadVersion
@@ -1556,10 +1556,10 @@ pub mod pallet {
 				DepositAsset { assets: AllCounted(number_of_assets).into(), beneficiary },
 			]);
 			let weight = T::Weigher::weight(&mut message, Weight::MAX).map_err(|error| {
-				tracing::debug!(target: "xcm::pallet_xcm::claim_assets", ?error, "Failed to calculate weight");
+				tracing::debug!(target: "xcm::pezpallet_xcm::claim_assets", ?error, "Failed to calculate weight");
 				Error::<T>::UnweighableMessage
 			})?;
-			let mut hash = message.using_encoded(sp_io::hashing::blake2_256);
+			let mut hash = message.using_encoded(pezsp_io::hashing::blake2_256);
 			let outcome = T::XcmExecutor::prepare_and_execute(
 				origin_location,
 				message,
@@ -1568,7 +1568,7 @@ pub mod pallet {
 				weight,
 			);
 			outcome.ensure_complete().map_err(|error| {
-				tracing::error!(target: "xcm::pallet_xcm::claim_assets", ?error, "XCM execution failed with error");
+				tracing::error!(target: "xcm::pezpallet_xcm::claim_assets", ?error, "XCM execution failed with error");
 				Error::<T>::LocalExecutionIncompleteWithError { index: error.index, error: error.error.into()}
 			})?;
 			Ok(())
@@ -1637,34 +1637,34 @@ pub mod pallet {
 			let origin_location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
 			let dest: Location = (*dest).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets_using_type_and_then",
+					target: "xcm::pezpallet_xcm::transfer_assets_using_type_and_then",
 					"Failed to convert destination VersionedLocation",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let assets: Assets = (*assets).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets_using_type_and_then",
+					target: "xcm::pezpallet_xcm::transfer_assets_using_type_and_then",
 					"Failed to convert VersionedAssets",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let fees_id: AssetId = (*remote_fees_id).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets_using_type_and_then",
+					target: "xcm::pezpallet_xcm::transfer_assets_using_type_and_then",
 					"Failed to convert remote_fees_id VersionedAssetId",
 				);
 				Error::<T>::BadVersion
 			})?;
 			let remote_xcm: Xcm<()> = (*custom_xcm_on_dest).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::transfer_assets_using_type_and_then",
+					target: "xcm::pezpallet_xcm::transfer_assets_using_type_and_then",
 					"Failed to convert custom_xcm_on_dest VersionedXcm",
 				);
 				Error::<T>::BadVersion
 			})?;
 			tracing::debug!(
-				target: "xcm::pallet_xcm::transfer_assets_using_type_and_then",
+				target: "xcm::pezpallet_xcm::transfer_assets_using_type_and_then",
 				?origin_location, ?dest, ?assets, ?assets_transfer_type, ?fees_id, ?fees_transfer_type,
 				?remote_xcm, ?weight_limit,
 			);
@@ -1705,7 +1705,7 @@ pub mod pallet {
 			let origin_location: Location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
 			let new_aliaser: Location = (*aliaser).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::add_authorized_alias",
+					target: "xcm::pezpallet_xcm::add_authorized_alias",
 					"Failed to convert aliaser VersionedLocation",
 				);
 				Error::<T>::BadVersion
@@ -1717,12 +1717,12 @@ pub mod pallet {
 					Location::new(0, [AccountId32 { network: None, id: *id }]),
 				_ => return Err(Error::<T>::InvalidOrigin.into()),
 			};
-			tracing::debug!(target: "xcm::pallet_xcm::add_authorized_alias", ?origin_location, ?new_aliaser, ?expires);
+			tracing::debug!(target: "xcm::pezpallet_xcm::add_authorized_alias", ?origin_location, ?new_aliaser, ?expires);
 			ensure!(origin_location != new_aliaser, Error::<T>::BadLocation);
 			if let Some(expiry) = expires {
 				ensure!(
 					expiry >
-						frame_system::Pallet::<T>::current_block_number().saturated_into::<u64>(),
+						pezframe_system::Pallet::<T>::current_block_number().saturated_into::<u64>(),
 					Error::<T>::ExpiresInPast
 				);
 			}
@@ -1742,7 +1742,7 @@ pub mod pallet {
 						OriginAliaser { location: versioned_aliaser.clone(), expiry: expires };
 					aliasers.try_push(aliaser).map_err(|_| {
 						tracing::debug!(
-							target: "xcm::pallet_xcm::add_authorized_alias",
+							target: "xcm::pezpallet_xcm::add_authorized_alias",
 							"Failed to add new aliaser to existing entry",
 						);
 						Error::<T>::TooManyAuthorizedAliases
@@ -1759,7 +1759,7 @@ pub mod pallet {
 				let mut aliasers = BoundedVec::<OriginAliaser, MaxAuthorizedAliases>::new();
 				aliasers.try_push(aliaser).map_err(|error| {
 					tracing::debug!(
-						target: "xcm::pallet_xcm::add_authorized_alias", ?error,
+						target: "xcm::pezpallet_xcm::add_authorized_alias", ?error,
 						"Failed to add first aliaser to new entry",
 					);
 					Error::<T>::TooManyAuthorizedAliases
@@ -1787,7 +1787,7 @@ pub mod pallet {
 			let origin_location: Location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
 			let to_remove: Location = (*aliaser).try_into().map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::remove_authorized_alias",
+					target: "xcm::pezpallet_xcm::remove_authorized_alias",
 					"Failed to convert aliaser VersionedLocation",
 				);
 				Error::<T>::BadVersion
@@ -1799,7 +1799,7 @@ pub mod pallet {
 					Location::new(0, [AccountId32 { network: None, id: *id }]),
 				_ => return Err(Error::<T>::InvalidOrigin.into()),
 			};
-			tracing::debug!(target: "xcm::pallet_xcm::remove_authorized_alias", ?origin_location, ?to_remove);
+			tracing::debug!(target: "xcm::pezpallet_xcm::remove_authorized_alias", ?origin_location, ?to_remove);
 			ensure!(origin_location != to_remove, Error::<T>::BadLocation);
 			// convert to latest versioned
 			let versioned_origin = VersionedLocation::from(origin_location.clone());
@@ -1849,7 +1849,7 @@ pub mod pallet {
 					Location::new(0, [AccountId32 { network: None, id: *id }]),
 				_ => return Err(Error::<T>::InvalidOrigin.into()),
 			};
-			tracing::debug!(target: "xcm::pallet_xcm::remove_all_authorized_aliases", ?origin_location);
+			tracing::debug!(target: "xcm::pezpallet_xcm::remove_all_authorized_aliases", ?origin_location);
 			// convert to latest versioned
 			let versioned_origin = VersionedLocation::from(origin_location.clone());
 			if let Some(entry) = AuthorizedAliases::<T>::get(&versioned_origin) {
@@ -1861,7 +1861,7 @@ pub mod pallet {
 				});
 				Ok(())
 			} else {
-				tracing::debug!(target: "xcm::pallet_xcm::remove_all_authorized_aliases", "No authorized alias entry found for the origin");
+				tracing::debug!(target: "xcm::pezpallet_xcm::remove_all_authorized_aliases", "No authorized alias entry found for the origin");
 				Err(Error::<T>::AliasNotFound.into())
 			}
 		}
@@ -1918,7 +1918,7 @@ impl<T: Config> QueryHandler for Pallet<T> {
 		let destination =
 			Self::UniversalLocation::get().invert_target(&responder).map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::report_outcome",
+					target: "xcm::pezpallet_xcm::report_outcome",
 					"Failed to invert responder Location",
 				);
 				XcmError::LocationNotInvertible
@@ -1941,7 +1941,7 @@ impl<T: Config> QueryHandler for Pallet<T> {
 				},
 				Err(_) => {
 					tracing::debug!(
-						target: "xcm::pallet_xcm::take_response", ?query_id,
+						target: "xcm::pezpallet_xcm::take_response", ?query_id,
 						"Failed to convert VersionedResponse to Response for query",
 					);
 					QueryResponseStatus::UnexpectedVersion
@@ -1950,14 +1950,14 @@ impl<T: Config> QueryHandler for Pallet<T> {
 			Some(QueryStatus::Pending { timeout, .. }) => QueryResponseStatus::Pending { timeout },
 			Some(_) => {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::take_response", ?query_id,
+					target: "xcm::pezpallet_xcm::take_response", ?query_id,
 					"Unexpected QueryStatus variant for query",
 				);
 				QueryResponseStatus::UnexpectedVersion
 			},
 			None => {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::take_response", ?query_id,
+					target: "xcm::pezpallet_xcm::take_response", ?query_id,
 					"Query ID not found`",
 				);
 				QueryResponseStatus::NotFound
@@ -1970,7 +1970,7 @@ impl<T: Config> QueryHandler for Pallet<T> {
 		let response = response.into();
 		Queries::<T>::insert(
 			id,
-			QueryStatus::Ready { response, at: frame_system::Pallet::<T>::current_block_number() },
+			QueryStatus::Ready { response, at: pezframe_system::Pallet::<T>::current_block_number() },
 		);
 	}
 }
@@ -2042,34 +2042,34 @@ impl<T: Config> Pallet<T> {
 		let origin_location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
 		let dest = (*dest).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_reserve_transfer_assets",
+				target: "xcm::pezpallet_xcm::do_reserve_transfer_assets",
 				"Failed to convert destination VersionedLocation",
 			);
 			Error::<T>::BadVersion
 		})?;
 		let beneficiary: Location = (*beneficiary).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_reserve_transfer_assets",
+				target: "xcm::pezpallet_xcm::do_reserve_transfer_assets",
 				"Failed to convert beneficiary VersionedLocation",
 			);
 			Error::<T>::BadVersion
 		})?;
 		let assets: Assets = (*assets).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_reserve_transfer_assets",
+				target: "xcm::pezpallet_xcm::do_reserve_transfer_assets",
 				"Failed to convert VersionedAssets",
 			);
 			Error::<T>::BadVersion
 		})?;
 		let fee_asset_id: AssetId = (*fee_asset_id).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_reserve_transfer_assets",
+				target: "xcm::pezpallet_xcm::do_reserve_transfer_assets",
 				"Failed to convert VersionedAssetId",
 			);
 			Error::<T>::BadVersion
 		})?;
 		tracing::debug!(
-			target: "xcm::pallet_xcm::do_reserve_transfer_assets",
+			target: "xcm::pezpallet_xcm::do_reserve_transfer_assets",
 			?origin_location, ?dest, ?beneficiary, ?assets, ?fee_asset_id,
 		);
 
@@ -2121,35 +2121,35 @@ impl<T: Config> Pallet<T> {
 		let origin_location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
 		let dest = (*dest).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_teleport_assets",
+				target: "xcm::pezpallet_xcm::do_teleport_assets",
 				"Failed to convert destination VersionedLocation",
 			);
 			Error::<T>::BadVersion
 		})?;
 		let beneficiary: Location = (*beneficiary).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_teleport_assets",
+				target: "xcm::pezpallet_xcm::do_teleport_assets",
 				"Failed to convert beneficiary VersionedLocation",
 			);
 			Error::<T>::BadVersion
 		})?;
 		let assets: Assets = (*assets).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_teleport_assets",
+				target: "xcm::pezpallet_xcm::do_teleport_assets",
 				"Failed to convert VersionedAssets",
 			);
 			Error::<T>::BadVersion
 		})?;
 		let fee_asset_id: AssetId = (*fee_asset_id).try_into().map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::do_teleport_assets",
+				target: "xcm::pezpallet_xcm::do_teleport_assets",
 				"Failed to convert VersionedAssetId",
 			);
 			Error::<T>::BadVersion
 		})?;
 
 		tracing::debug!(
-			target: "xcm::pallet_xcm::do_teleport_assets",
+			target: "xcm::pezpallet_xcm::do_teleport_assets",
 			?origin_location, ?dest, ?beneficiary, ?assets, ?fee_asset_id, ?weight_limit,
 		);
 
@@ -2259,7 +2259,7 @@ impl<T: Config> Pallet<T> {
 		weight_limit: WeightLimit,
 	) -> Result<(Xcm<<T as Config>::RuntimeCall>, Option<Xcm<()>>), Error<T>> {
 		tracing::debug!(
-			target: "xcm::pallet_xcm::build_xcm_transfer_type",
+			target: "xcm::pezpallet_xcm::build_xcm_transfer_type",
 			?origin, ?dest, ?beneficiary, ?assets, ?transfer_type, ?fees, ?weight_limit,
 		);
 		match transfer_type {
@@ -2290,7 +2290,7 @@ impl<T: Config> Pallet<T> {
 					origin.clone(),
 					reserve.try_into().map_err(|()| {
 						tracing::debug!(
-							target: "xcm::pallet_xcm::build_xcm_transfer_type",
+							target: "xcm::pezpallet_xcm::build_xcm_transfer_type",
 							"Failed to convert remote reserve location",
 						);
 						Error::<T>::BadVersion
@@ -2322,16 +2322,16 @@ impl<T: Config> Pallet<T> {
 		remote_xcm: Option<Xcm<()>>,
 	) -> DispatchResult {
 		tracing::debug!(
-			target: "xcm::pallet_xcm::execute_xcm_transfer",
+			target: "xcm::pezpallet_xcm::execute_xcm_transfer",
 			?origin, ?dest, ?local_xcm, ?remote_xcm,
 		);
 
 		let weight =
 			T::Weigher::weight(&mut local_xcm, Weight::MAX).map_err(|error| {
-				tracing::debug!(target: "xcm::pallet_xcm::execute_xcm_transfer", ?error, "Failed to calculate weight");
+				tracing::debug!(target: "xcm::pezpallet_xcm::execute_xcm_transfer", ?error, "Failed to calculate weight");
 				Error::<T>::UnweighableMessage
 			})?;
-		let mut hash = local_xcm.using_encoded(sp_io::hashing::blake2_256);
+		let mut hash = local_xcm.using_encoded(pezsp_io::hashing::blake2_256);
 		let outcome = T::XcmExecutor::prepare_and_execute(
 			origin.clone(),
 			local_xcm,
@@ -2342,7 +2342,7 @@ impl<T: Config> Pallet<T> {
 		Self::deposit_event(Event::Attempted { outcome: outcome.clone() });
 		outcome.clone().ensure_complete().map_err(|error| {
 			tracing::error!(
-				target: "xcm::pallet_xcm::execute_xcm_transfer",
+				target: "xcm::pezpallet_xcm::execute_xcm_transfer",
 				?error, "XCM execution failed with error with outcome: {:?}", outcome
 			);
 			Error::<T>::LocalExecutionIncompleteWithError {
@@ -2354,13 +2354,13 @@ impl<T: Config> Pallet<T> {
 		if let Some(remote_xcm) = remote_xcm {
 			let (ticket, price) = validate_send::<T::XcmRouter>(dest.clone(), remote_xcm.clone())
 				.map_err(|error| {
-					tracing::error!(target: "xcm::pallet_xcm::execute_xcm_transfer", ?error, ?dest, ?remote_xcm, "XCM validate_send failed with error");
+					tracing::error!(target: "xcm::pezpallet_xcm::execute_xcm_transfer", ?error, ?dest, ?remote_xcm, "XCM validate_send failed with error");
 					Error::<T>::from(error)
 				})?;
 			if origin != Here.into_location() {
 				Self::charge_fees(origin.clone(), price.clone()).map_err(|error| {
 					tracing::error!(
-						target: "xcm::pallet_xcm::execute_xcm_transfer",
+						target: "xcm::pezpallet_xcm::execute_xcm_transfer",
 						?error, ?price, ?origin, "Unable to charge fee",
 					);
 					Error::<T>::FeesNotMet
@@ -2368,7 +2368,7 @@ impl<T: Config> Pallet<T> {
 			}
 			let message_id = T::XcmRouter::deliver(ticket)
 				.map_err(|error| {
-					tracing::error!(target: "xcm::pallet_xcm::execute_xcm_transfer", ?error, ?dest, ?remote_xcm, "XCM deliver failed with error");
+					tracing::error!(target: "xcm::pezpallet_xcm::execute_xcm_transfer", ?error, ?dest, ?remote_xcm, "XCM deliver failed with error");
 					Error::<T>::from(error)
 				})?;
 
@@ -2392,7 +2392,7 @@ impl<T: Config> Pallet<T> {
 				// BuyExecution happens after receiving all `assets`
 				let reanchored_fees =
 					fees.reanchored(&dest, &context).map_err(|e| {
-						tracing::error!(target: "xcm::pallet_xcm::add_fees_to_xcm", ?e, ?dest, ?context, "Failed to re-anchor fees");
+						tracing::error!(target: "xcm::pezpallet_xcm::add_fees_to_xcm", ?e, ?dest, ?context, "Failed to re-anchor fees");
 						Error::<T>::CannotReanchor
 					})?;
 				// buy execution using `fees` batched together with above `reanchored_assets`
@@ -2423,7 +2423,7 @@ impl<T: Config> Pallet<T> {
 		let context = T::UniversalLocation::get();
 		let reanchored_fees = fees.clone().reanchored(&dest, &context).map_err(|_| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::local_reserve_fees_instructions",
+				target: "xcm::pezpallet_xcm::local_reserve_fees_instructions",
 				"Failed to re-anchor fees",
 			);
 			Error::<T>::CannotReanchor
@@ -2463,7 +2463,7 @@ impl<T: Config> Pallet<T> {
 		reanchored_assets
 			.reanchor(&dest, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::local_reserve_transfer_programs", ?e, ?dest, ?context, "Failed to re-anchor assets");
+				tracing::error!(target: "xcm::pezpallet_xcm::local_reserve_transfer_programs", ?e, ?dest, ?context, "Failed to re-anchor assets");
 				Error::<T>::CannotReanchor
 			})?;
 
@@ -2513,7 +2513,7 @@ impl<T: Config> Pallet<T> {
 			.clone()
 			.reanchored(&dest, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::destination_reserve_fees_instructions", ?e, ?dest,?context, "Failed to re-anchor fees");
+				tracing::error!(target: "xcm::pezpallet_xcm::destination_reserve_fees_instructions", ?e, ?dest,?context, "Failed to re-anchor fees");
 				Error::<T>::CannotReanchor
 			})?;
 		let fees: Assets = fees.into();
@@ -2560,7 +2560,7 @@ impl<T: Config> Pallet<T> {
 		reanchored_assets
 			.reanchor(&dest, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::destination_reserve_transfer_programs", ?e, ?dest, ?context, "Failed to re-anchor assets");
+				tracing::error!(target: "xcm::pezpallet_xcm::destination_reserve_transfer_programs", ?e, ?dest, ?context, "Failed to re-anchor assets");
 				Error::<T>::CannotReanchor
 			})?;
 
@@ -2617,19 +2617,19 @@ impl<T: Config> Pallet<T> {
 		let reserve_fees = fees_half_1
 			.reanchored(&reserve, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::remote_reserve_transfer_program", ?e, ?reserve, ?context, "Failed to re-anchor reserve_fees");
+				tracing::error!(target: "xcm::pezpallet_xcm::remote_reserve_transfer_program", ?e, ?reserve, ?context, "Failed to re-anchor reserve_fees");
 				Error::<T>::CannotReanchor
 			})?;
 		// identifies fee item as seen by `dest` - to be used at destination chain
 		let dest_fees = fees_half_2
 			.reanchored(&dest, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::remote_reserve_transfer_program", ?e, ?dest, ?context, "Failed to re-anchor dest_fees");
+				tracing::error!(target: "xcm::pezpallet_xcm::remote_reserve_transfer_program", ?e, ?dest, ?context, "Failed to re-anchor dest_fees");
 				Error::<T>::CannotReanchor
 			})?;
 		// identifies `dest` as seen by `reserve`
 		let dest = dest.reanchored(&reserve, &context).map_err(|e| {
-			tracing::error!(target: "xcm::pallet_xcm::remote_reserve_transfer_program", ?e, ?reserve, ?context, "Failed to re-anchor dest");
+			tracing::error!(target: "xcm::pezpallet_xcm::remote_reserve_transfer_program", ?e, ?reserve, ?context, "Failed to re-anchor dest");
 			Error::<T>::CannotReanchor
 		})?;
 		// xcm to be executed at dest
@@ -2678,7 +2678,7 @@ impl<T: Config> Pallet<T> {
 			.clone()
 			.reanchored(&dest, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::teleport_fees_instructions", ?e, ?dest, ?context, "Failed to re-anchor fees");
+				tracing::error!(target: "xcm::pezpallet_xcm::teleport_fees_instructions", ?e, ?dest, ?context, "Failed to re-anchor fees");
 				Error::<T>::CannotReanchor
 			})?;
 
@@ -2695,7 +2695,7 @@ impl<T: Config> Pallet<T> {
 			&dummy_context,
 		)
 		.map_err(|e| {
-			tracing::error!(target: "xcm::pallet_xcm::teleport_fees_instructions", ?e, ?fees, ?dest, "Failed can_check_out");
+			tracing::error!(target: "xcm::pezpallet_xcm::teleport_fees_instructions", ?e, ?fees, ?dest, "Failed can_check_out");
 			Error::<T>::CannotCheckOutTeleport
 		})?;
 		// safe to do this here, we're in a transactional call that will be reverted on any
@@ -2749,7 +2749,7 @@ impl<T: Config> Pallet<T> {
 		reanchored_assets
 			.reanchor(&dest, &context)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::teleport_assets_program", ?e, ?dest, ?context, "Failed to re-anchor asset");
+				tracing::error!(target: "xcm::pezpallet_xcm::teleport_assets_program", ?e, ?dest, ?context, "Failed to re-anchor asset");
 				Error::<T>::CannotReanchor
 			})?;
 
@@ -2767,7 +2767,7 @@ impl<T: Config> Pallet<T> {
 				&dummy_context,
 			)
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::teleport_assets_program", ?e, ?asset, ?dest, "Failed can_check_out asset");
+				tracing::error!(target: "xcm::pezpallet_xcm::teleport_assets_program", ?e, ?asset, ?dest, "Failed can_check_out asset");
 				Error::<T>::CannotCheckOutTeleport
 			})?;
 		}
@@ -3044,7 +3044,7 @@ impl<T: Config> Pallet<T> {
 		if !is_waived {
 			Self::charge_fees(local_origin, price).map_err(|e| {
 				tracing::error!(
-					target: "xcm::pallet_xcm::send_xcm",
+					target: "xcm::pezpallet_xcm::send_xcm",
 					?e,
 					"Charging fees failed with error",
 				);
@@ -3068,7 +3068,7 @@ impl<T: Config> Pallet<T> {
 		origin: OriginCaller,
 		call: RuntimeCall,
 		result_xcms_version: XcmVersion,
-	) -> Result<CallDryRunEffects<<Runtime as frame_system::Config>::RuntimeEvent>, XcmDryRunApiError>
+	) -> Result<CallDryRunEffects<<Runtime as pezframe_system::Config>::RuntimeEvent>, XcmDryRunApiError>
 	where
 		Runtime: crate::Config,
 		Router: InspectMessageQueues,
@@ -3079,7 +3079,7 @@ impl<T: Config> Pallet<T> {
 		// Clear other messages in queues...
 		Router::clear_messages();
 		// ...and reset events to make sure we only record events from current call.
-		frame_system::Pallet::<Runtime>::reset_events();
+		pezframe_system::Pallet::<Runtime>::reset_events();
 		let result = call.dispatch(origin.into());
 		crate::Pallet::<Runtime>::set_record_xcm(false);
 		let local_xcm = crate::Pallet::<Runtime>::recorded_xcm()
@@ -3104,8 +3104,8 @@ impl<T: Config> Pallet<T> {
 					);
 				},
 			)?;
-		let events: Vec<<Runtime as frame_system::Config>::RuntimeEvent> =
-			frame_system::Pallet::<Runtime>::read_events_no_consensus()
+		let events: Vec<<Runtime as pezframe_system::Config>::RuntimeEvent> =
+			pezframe_system::Pallet::<Runtime>::read_events_no_consensus()
 				.map(|record| record.event.clone())
 				.collect();
 		Ok(CallDryRunEffects {
@@ -3123,7 +3123,7 @@ impl<T: Config> Pallet<T> {
 	pub fn dry_run_xcm<Router>(
 		origin_location: VersionedLocation,
 		xcm: VersionedXcm<<T as Config>::RuntimeCall>,
-	) -> Result<XcmDryRunEffects<<T as frame_system::Config>::RuntimeEvent>, XcmDryRunApiError>
+	) -> Result<XcmDryRunEffects<<T as pezframe_system::Config>::RuntimeEvent>, XcmDryRunApiError>
 	where
 		Router: InspectMessageQueues,
 	{
@@ -3142,11 +3142,11 @@ impl<T: Config> Pallet<T> {
 			);
 			XcmDryRunApiError::VersionedConversionFailed
 		})?;
-		let mut hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+		let mut hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 
 		// To make sure we only record events from current call.
 		Router::clear_messages();
-		frame_system::Pallet::<T>::reset_events();
+		pezframe_system::Pallet::<T>::reset_events();
 
 		let result = <T as Config>::XcmExecutor::prepare_and_execute(
 			origin_location,
@@ -3162,8 +3162,8 @@ impl<T: Config> Pallet<T> {
 					?error, "Forwarded xcms version conversion failed with error"
 				);
 			})?;
-		let events: Vec<<T as frame_system::Config>::RuntimeEvent> =
-			frame_system::Pallet::<T>::read_events_no_consensus()
+		let events: Vec<<T as pezframe_system::Config>::RuntimeEvent> =
+			pezframe_system::Pallet::<T>::read_events_no_consensus()
 				.map(|record| record.event.clone())
 				.collect();
 		Ok(XcmDryRunEffects { forwarded_xcms, emitted_events: events, execution_result: result })
@@ -3193,7 +3193,7 @@ impl<T: Config> Pallet<T> {
 			.collect::<Result<Vec<_>, ()>>()
 			.map_err(|()| {
 				tracing::debug!(
-					target: "xcm::pallet_xcm::convert_forwarded_xcms",
+					target: "xcm::pezpallet_xcm::convert_forwarded_xcms",
 					"Failed to convert VersionedLocation to requested version",
 				);
 				XcmDryRunApiError::VersionedConversionFailed
@@ -3218,12 +3218,12 @@ impl<T: Config> Pallet<T> {
 	pub fn query_xcm_weight(message: VersionedXcm<()>) -> Result<Weight, XcmPaymentApiError> {
 		let message = Xcm::<()>::try_from(message.clone())
 			.map_err(|e| {
-				tracing::debug!(target: "xcm::pallet_xcm::query_xcm_weight", ?e, ?message, "Failed to convert versioned message");
+				tracing::debug!(target: "xcm::pezpallet_xcm::query_xcm_weight", ?e, ?message, "Failed to convert versioned message");
 				XcmPaymentApiError::VersionedConversionFailed
 			})?;
 
 		T::Weigher::weight(&mut message.clone().into(), Weight::MAX).map_err(|error| {
-			tracing::debug!(target: "xcm::pallet_xcm::query_xcm_weight", ?error, ?message, "Error when querying XCM weight");
+			tracing::debug!(target: "xcm::pezpallet_xcm::query_xcm_weight", ?error, ?message, "Error when querying XCM weight");
 			XcmPaymentApiError::WeightNotComputable
 		})
 	}
@@ -3302,18 +3302,18 @@ impl<T: Config> Pallet<T> {
 			.clone()
 			.try_into()
 			.map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::query_delivery_fees", ?e, ?destination, "Failed to convert versioned destination");
+				tracing::error!(target: "xcm::pezpallet_xcm::query_delivery_fees", ?e, ?destination, "Failed to convert versioned destination");
 				XcmPaymentApiError::VersionedConversionFailed
 			})?;
 
 		let message: Xcm<()> =
 			message.clone().try_into().map_err(|e| {
-				tracing::error!(target: "xcm::pallet_xcm::query_delivery_fees", ?e, ?message, "Failed to convert versioned message");
+				tracing::error!(target: "xcm::pezpallet_xcm::query_delivery_fees", ?e, ?message, "Failed to convert versioned message");
 				XcmPaymentApiError::VersionedConversionFailed
 			})?;
 
 		let (_, fees) = validate_send::<T::XcmRouter>(destination.clone(), message.clone()).map_err(|error| {
-			tracing::error!(target: "xcm::pallet_xcm::query_delivery_fees", ?error, ?destination, ?message, "Failed to validate send to destination");
+			tracing::error!(target: "xcm::pezpallet_xcm::query_delivery_fees", ?error, ?destination, ?message, "Failed to validate send to destination");
 			XcmPaymentApiError::Unroutable
 		})?;
 
@@ -3347,7 +3347,7 @@ impl<T: Config> Pallet<T> {
 
 		VersionedAssets::from(assets_to_pay).into_version(result_version).map_err(|e| {
 			tracing::trace!(
-				target: "xcm::pallet_xcm::query_delivery_fees",
+				target: "xcm::pezpallet_xcm::query_delivery_fees",
 				?e,
 				?result_version,
 				"Failed to convert fees into desired version"
@@ -3364,7 +3364,7 @@ impl<T: Config> Pallet<T> {
 	) -> Result<bool, TrustedQueryApiError> {
 		let location: Location = location.try_into().map_err(|e| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::is_trusted_reserve",
+				target: "xcm::pezpallet_xcm::is_trusted_reserve",
 				?e, "Failed to convert versioned location",
 			);
 			TrustedQueryApiError::VersionedLocationConversionFailed
@@ -3372,7 +3372,7 @@ impl<T: Config> Pallet<T> {
 
 		let a: Asset = asset.try_into().map_err(|e| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::is_trusted_reserve",
+				target: "xcm::pezpallet_xcm::is_trusted_reserve",
 				 ?e, "Failed to convert versioned asset",
 			);
 			TrustedQueryApiError::VersionedAssetConversionFailed
@@ -3388,14 +3388,14 @@ impl<T: Config> Pallet<T> {
 	) -> Result<bool, TrustedQueryApiError> {
 		let location: Location = location.try_into().map_err(|e| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::is_trusted_teleporter",
+				target: "xcm::pezpallet_xcm::is_trusted_teleporter",
 				?e, "Failed to convert versioned location",
 			);
 			TrustedQueryApiError::VersionedLocationConversionFailed
 		})?;
 		let a: Asset = asset.try_into().map_err(|e| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::is_trusted_teleporter",
+				target: "xcm::pezpallet_xcm::is_trusted_teleporter",
 				 ?e, "Failed to convert versioned asset",
 			);
 			TrustedQueryApiError::VersionedAssetConversionFailed
@@ -3411,7 +3411,7 @@ impl<T: Config> Pallet<T> {
 		// storage entries are always latest version
 		let target: VersionedLocation = target.into_version(XCM_VERSION).map_err(|e| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::authorized_aliasers",
+				target: "xcm::pezpallet_xcm::authorized_aliasers",
 				?e, "Failed to convert versioned location",
 			);
 			AuthorizedAliasersApiError::LocationVersionConversionFailed
@@ -3444,7 +3444,7 @@ impl<T: Config> Pallet<T> {
 		let desired_version = target.identify_version();
 		let origin = origin.into_version(desired_version).map_err(|e| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::is_authorized_alias",
+				target: "xcm::pezpallet_xcm::is_authorized_alias",
 				?e, "mismatching origin and target versions",
 			);
 			AuthorizedAliasersApiError::LocationVersionConversionFailed
@@ -3456,7 +3456,7 @@ impl<T: Config> Pallet<T> {
 				aliaser
 					.expiry
 					.map(|expiry| {
-						frame_system::Pallet::<T>::current_block_number().saturated_into::<u64>() <
+						pezframe_system::Pallet::<T>::current_block_number().saturated_into::<u64>() <
 							expiry
 					})
 					.unwrap_or(true)
@@ -3517,7 +3517,7 @@ impl<T: Config> Pallet<T> {
 		let responder = responder.into();
 		let destination = T::UniversalLocation::get().invert_target(&responder).map_err(|()| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::report_outcome_notify",
+				target: "xcm::pezpallet_xcm::report_outcome_notify",
 				"Failed to invert responder location to universal location",
 			);
 			XcmError::LocationNotInvertible
@@ -3549,7 +3549,7 @@ impl<T: Config> Pallet<T> {
 	/// and queue it for version discovery.
 	fn note_unknown_version(dest: &Location) {
 		tracing::trace!(
-			target: "xcm::pallet_xcm::note_unknown_version",
+			target: "xcm::pezpallet_xcm::note_unknown_version",
 			?dest, "XCM version is unknown for destination"
 		);
 		let versioned_dest = VersionedLocation::from(dest.clone());
@@ -3571,7 +3571,7 @@ impl<T: Config> Pallet<T> {
 	fn charge_fees(location: Location, assets: Assets) -> DispatchResult {
 		T::XcmExecutor::charge_fees(location.clone(), assets.clone()).map_err(|error| {
 			tracing::debug!(
-				target: "xcm::pallet_xcm::charge_fees", ?error,
+				target: "xcm::pezpallet_xcm::charge_fees", ?error,
 				"Failed to charge fees for location with assets",
 			);
 			Error::<T>::FeesNotMet
@@ -3682,7 +3682,7 @@ impl<T: Config> xcm_executor::traits::Enact for LockTicket<T> {
 				locks.try_push((self.amount, self.unlocker.into())).map_err(
 					|(balance, location)| {
 						tracing::debug!(
-							target: "xcm::pallet_xcm::enact", ?balance, ?location,
+							target: "xcm::pezpallet_xcm::enact", ?balance, ?location,
 							"Failed to lock fungibles",
 						);
 						UnexpectedState
@@ -3867,7 +3867,7 @@ impl<T: Config> WrapVersion for Pallet<T> {
 			})
 			.ok_or_else(|| {
 				tracing::trace!(
-					target: "xcm::pallet_xcm::wrap_version",
+					target: "xcm::pezpallet_xcm::wrap_version",
 					?dest, "Could not determine a version to wrap XCM for destination",
 				);
 				()
@@ -4096,11 +4096,11 @@ impl<T: Config> OnResponse for Pallet<T> {
 					return Weight::zero();
 				}
 				match maybe_notify {
-					Some((pallet_index, call_index)) => {
+					Some((pezpallet_index, call_index)) => {
 						// This is a bit horrible, but we happen to know that the `Call` will
-						// be built by `(pallet_index: u8, call_index: u8, QueryId, Response)`.
+						// be built by `(pezpallet_index: u8, call_index: u8, QueryId, Response)`.
 						// So we just encode that and then re-encode to a real Call.
-						let bare = (pallet_index, call_index, query_id, response);
+						let bare = (pezpallet_index, call_index, query_id, response);
 						if let Ok(call) = bare.using_encoded(|mut bytes| {
 							<T as Config>::RuntimeCall::decode(&mut bytes)
 						}) {
@@ -4109,7 +4109,7 @@ impl<T: Config> OnResponse for Pallet<T> {
 							if weight.any_gt(max_weight) {
 								let e = Event::NotifyOverweight {
 									query_id,
-									pallet_index,
+									pezpallet_index,
 									call_index,
 									actual_weight: weight,
 									max_budgeted_weight: max_weight,
@@ -4120,14 +4120,14 @@ impl<T: Config> OnResponse for Pallet<T> {
 							let dispatch_origin = Origin::Response(origin.clone()).into();
 							match call.dispatch(dispatch_origin) {
 								Ok(post_info) => {
-									let e = Event::Notified { query_id, pallet_index, call_index };
+									let e = Event::Notified { query_id, pezpallet_index, call_index };
 									Self::deposit_event(e);
 									post_info.actual_weight
 								},
 								Err(error_and_info) => {
 									let e = Event::NotifyDispatchError {
 										query_id,
-										pallet_index,
+										pezpallet_index,
 										call_index,
 									};
 									Self::deposit_event(e);
@@ -4139,7 +4139,7 @@ impl<T: Config> OnResponse for Pallet<T> {
 							.unwrap_or(weight)
 						} else {
 							let e =
-								Event::NotifyDecodeFailed { query_id, pallet_index, call_index };
+								Event::NotifyDecodeFailed { query_id, pezpallet_index, call_index };
 							Self::deposit_event(e);
 							Weight::zero()
 						}
@@ -4147,7 +4147,7 @@ impl<T: Config> OnResponse for Pallet<T> {
 					None => {
 						let e = Event::ResponseReady { query_id, response: response.clone() };
 						Self::deposit_event(e);
-						let at = frame_system::Pallet::<T>::current_block_number();
+						let at = pezframe_system::Pallet::<T>::current_block_number();
 						let response = response.into();
 						Queries::<T>::insert(query_id, QueryStatus::Ready { response, at });
 						Weight::zero()
@@ -4222,13 +4222,13 @@ where
 /// authorized `origin` to alias it.
 ///
 /// Note: users can authorize other locations to alias them by using
-/// `pallet_xcm::add_authorized_alias()`.
+/// `pezpallet_xcm::add_authorized_alias()`.
 pub struct AuthorizedAliasers<T>(PhantomData<T>);
 impl<L: Into<VersionedLocation> + Clone, T: Config> ContainsPair<L, L> for AuthorizedAliasers<T> {
 	fn contains(origin: &L, target: &L) -> bool {
 		let origin: VersionedLocation = origin.clone().into();
 		let target: VersionedLocation = target.clone().into();
-		tracing::trace!(target: "xcm::pallet_xcm::AuthorizedAliasers::contains", ?origin, ?target);
+		tracing::trace!(target: "xcm::pezpallet_xcm::AuthorizedAliasers::contains", ?origin, ?target);
 		// return true if the `origin` has been explicitly authorized by `target` as aliaser, and
 		// the authorization has not expired
 		Pallet::<T>::is_authorized_alias(origin, target).unwrap_or(false)

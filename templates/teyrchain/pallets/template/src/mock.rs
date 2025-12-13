@@ -1,5 +1,5 @@
 use frame::{
-	deps::{frame_support::weights::constants::RocksDbWeight, frame_system::GenesisConfig},
+	deps::{pezframe_support::weights::constants::RocksDbWeight, pezframe_system::GenesisConfig},
 	prelude::*,
 	runtime::prelude::*,
 	testing_prelude::*,
@@ -23,14 +23,14 @@ mod test_runtime {
 	)]
 	pub struct Test;
 
-	#[runtime::pallet_index(0)]
-	pub type System = frame_system;
-	#[runtime::pallet_index(1)]
+	#[runtime::pezpallet_index(0)]
+	pub type System = pezframe_system;
+	#[runtime::pezpallet_index(1)]
 	pub type Template = crate;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type Nonce = u64;
 	type Block = MockBlock<Test>;
 	type BlockHashCount = ConstU64<250>;

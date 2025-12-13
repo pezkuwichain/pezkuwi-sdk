@@ -3,7 +3,7 @@
 The bridge GRANDPA pallet is a light client for the GRANDPA finality gadget, running at the bridged chain.
 It may import headers and their GRANDPA finality proofs (justifications) of the bridged chain. Imported
 headers then may be used to verify storage proofs by other pallets. This makes the bridge GRANDPA pallet
-a basic pallet of all bridges with Substrate-based chains. It is used by all bridge types (bridge between
+a basic pallet of all bridges with Bizinikiwi-based chains. It is used by all bridge types (bridge between
 standalone chains, between teyrchains and any combination of those) and is used by other bridge pallets.
 It is used by the teyrchains light client (bridge teyrchains pallet) and by messages pallet.
 
@@ -12,10 +12,10 @@ It is used by the teyrchains light client (bridge teyrchains pallet) and by mess
 You can find detailed information on GRANDPA, by exploring its [repository](https://github.com/paritytech/finality-grandpa).
 Here is the minimal required GRANDPA information to understand how pallet works.
 
-Any Substrate chain may use different block authorship algorithms (like BABE or Aura) to determine block producers and
+Any Bizinikiwi chain may use different block authorship algorithms (like BABE or Aura) to determine block producers and
 generate blocks. This has nothing common with finality, though - the task of block authorship is to coordinate
 blocks generation. Any block may be reverted (if there's a fork) if it is not finalized. The finality solution
-for (standalone) Substrate-based chains is the GRANDPA finality gadget. If some block is finalized by the gadget, it
+for (standalone) Bizinikiwi-based chains is the GRANDPA finality gadget. If some block is finalized by the gadget, it
 can't be reverted.
 
 In GRANDPA, there are validators, identified by their public keys. They select some generated block and produce

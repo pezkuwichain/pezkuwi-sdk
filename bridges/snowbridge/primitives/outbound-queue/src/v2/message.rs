@@ -3,10 +3,10 @@
 //! # Outbound V2 primitives
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::{pallet_prelude::ConstU32, BoundedVec};
+use pezframe_support::{pezpallet_prelude::ConstU32, BoundedVec};
 use scale_info::TypeInfo;
-use sp_core::{RuntimeDebug, H160, H256};
-use sp_std::vec::Vec;
+use pezsp_core::{RuntimeDebug, H160, H256};
+use pezsp_std::vec::Vec;
 
 use crate::{OperatingMode, SendError};
 use abi::{

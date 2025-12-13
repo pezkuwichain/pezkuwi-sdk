@@ -26,15 +26,15 @@ use crate::{
 };
 use alloc::sync::Arc;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	assert_noop, assert_ok, derive_impl, parameter_types,
 	traits::{ConstU32, Currency},
 	weights::Weight,
 	PalletId,
 };
-use frame_support_test::TestRandomness;
-use frame_system::EnsureRoot;
-use pallet_identity::{self, legacy::IdentityInfo};
+use pezframe_support_test::TestRandomness;
+use pezframe_system::EnsureRoot;
+use pezpallet_identity::{self, legacy::IdentityInfo};
 use pezkuwi_primitives::{
 	BlockNumber, HeadData, Id as ParaId, SessionIndex, ValidationCode, LOWEST_PUBLIC_ID,
 	MAX_CODE_SIZE,
@@ -42,18 +42,18 @@ use pezkuwi_primitives::{
 use pezkuwi_runtime_teyrchains::{
 	configuration, dmp, origin, paras, shared, Origin as ParaOrigin, ParaLifecycle,
 };
-use sp_core::{ConstUint, H256};
-use sp_io::TestExternalities;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{testing::MemoryKeystore, KeystoreExt};
-use sp_runtime::{
+use pezsp_core::{ConstUint, H256};
+use pezsp_io::TestExternalities;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{testing::MemoryKeystore, KeystoreExt};
+use pezsp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup, One, Verify},
 	transaction_validity::TransactionPriority,
 	AccountId32, BuildStorage, MultiSignature,
 };
 
-type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
-type Block = frame_system::mocking::MockBlockU32<Test>;
+type UncheckedExtrinsic = pezframe_system::mocking::MockUncheckedExtrinsic<Test>;
+type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
 type AccountId = AccountId32;
 type Balance = u32;
@@ -71,13 +71,13 @@ fn signed(i: u32) -> RuntimeOrigin {
 	RuntimeOrigin::signed(account_id)
 }
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
 		// System Stuff
-		System: frame_system,
-		Balances: pallet_balances,
-		Babe: pallet_babe,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		Babe: pezpallet_babe,
 
 		// Teyrchains Runtime
 		Configuration: configuration,
@@ -93,12 +93,12 @@ frame_support::construct_runtime!(
 		Slots: slots,
 
 		// Migrators
-		Identity: pallet_identity,
+		Identity: pezpallet_identity,
 		IdentityMigrator: identity_migrator,
 	}
 );
 
-impl<C> frame_system::offchain::CreateTransactionBase<C> for Test
+impl<C> pezframe_system::offchain::CreateTransactionBase<C> for Test
 where
 	RuntimeCall: From<C>,
 {
@@ -106,7 +106,7 @@ where
 	type RuntimeCall = RuntimeCall;
 }
 
-impl<C> frame_system::offchain::CreateBare<C> for Test
+impl<C> pezframe_system::offchain::CreateBare<C> for Test
 where
 	RuntimeCall: From<C>,
 {
@@ -118,15 +118,15 @@ where
 use crate::{auctions::Error as AuctionsError, crowdloan::Error as CrowdloanError};
 
 parameter_types! {
-	pub BlockWeights: frame_system::limits::BlockWeights =
-		frame_system::limits::BlockWeights::simple_max(
+	pub BlockWeights: pezframe_system::limits::BlockWeights =
+		pezframe_system::limits::BlockWeights::simple_max(
 			Weight::from_parts(4 * 1024 * 1024, u64::MAX),
 		);
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
-	type BaseCallFilter = frame_support::traits::Everything;
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
+	type BaseCallFilter = pezframe_support::traits::Everything;
 	type BlockWeights = BlockWeights;
 	type BlockLength = ();
 	type DbWeight = ();
@@ -141,13 +141,13 @@ impl frame_system::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = ();
 	type OnSetCode = ();
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
 parameter_types! {
@@ -157,15 +157,15 @@ parameter_types! {
 	pub const MaxAuthorities: u32 = 100_000;
 }
 
-impl pallet_babe::Config for Test {
+impl pezpallet_babe::Config for Test {
 	type EpochDuration = EpochDuration;
 	type ExpectedBlockTime = ExpectedBlockTime;
-	type EpochChangeTrigger = pallet_babe::ExternalTrigger;
+	type EpochChangeTrigger = pezpallet_babe::ExternalTrigger;
 	type DisabledValidators = ();
 	type WeightInfo = ();
 	type MaxAuthorities = MaxAuthorities;
 	type MaxNominators = ConstU32<0>;
-	type KeyOwnerProof = sp_core::Void;
+	type KeyOwnerProof = pezsp_core::Void;
 	type EquivocationReportSystem = ();
 }
 
@@ -173,7 +173,7 @@ parameter_types! {
 	pub const MinimumPeriod: Moment = 6_000 / 2;
 }
 
-impl pallet_timestamp::Config for Test {
+impl pezpallet_timestamp::Config for Test {
 	type Moment = Moment;
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
@@ -183,8 +183,8 @@ impl pallet_timestamp::Config for Test {
 parameter_types! {
 	pub static ExistentialDeposit: Balance = 1;
 }
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -285,7 +285,7 @@ impl crowdloan::Config for Test {
 	type WeightInfo = crate::crowdloan::TestWeightInfo;
 }
 
-impl pallet_identity::Config for Test {
+impl pezpallet_identity::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type Slashed = ();
@@ -319,7 +319,7 @@ impl identity_migrator::Config for Test {
 
 /// Create a new set of test externalities.
 pub fn new_test_ext() -> TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 	configuration::GenesisConfig::<Test> {
 		config: configuration::HostConfiguration {
 			max_code_size: MAX_CODE_SIZE,
@@ -330,7 +330,7 @@ pub fn new_test_ext() -> TestExternalities {
 	.assimilate_storage(&mut t)
 	.unwrap();
 	let keystore = MemoryKeystore::new();
-	let mut ext: sp_io::TestExternalities = t.into();
+	let mut ext: pezsp_io::TestExternalities = t.into();
 	ext.register_extension(KeystoreExt(Arc::new(keystore)));
 	ext.execute_with(|| System::set_block_number(1));
 	ext
@@ -384,7 +384,7 @@ fn add_blocks(n: u32) {
 fn run_to_block(n: u32) {
 	System::run_to_block_with::<AllPalletsWithSystem>(
 		n,
-		frame_system::RunToBlockHooks::default().before_initialize(|bn| {
+		pezframe_system::RunToBlockHooks::default().before_initialize(|bn| {
 			maybe_new_session(bn);
 		}),
 	);

@@ -260,7 +260,7 @@
             "uid": "$data_source"
           },
           "editorMode": "code",
-          "expr": "sum(rate(substrate_tasks_polling_duration_sum{}[2s])) by ($cpu_group_by)",
+          "expr": "sum(rate(bizinikiwi_tasks_polling_duration_sum{}[2s])) by ($cpu_group_by)",
           "interval": "",
           "legendFormat": "{{task_group}}",
           "range": true,
@@ -363,7 +363,7 @@
             "uid": "$data_source"
           },
           "editorMode": "code",
-          "expr": "increase(substrate_tasks_polling_duration_sum{task_group=\"availability-recovery\"}[6s])",
+          "expr": "increase(bizinikiwi_tasks_polling_duration_sum{task_group=\"availability-recovery\"}[6s])",
           "interval": "",
           "legendFormat": "{{task_name}}",
           "range": true,
@@ -461,7 +461,7 @@
             "uid": "$data_source"
           },
           "editorMode": "code",
-          "expr": "sum(substrate_tasks_polling_duration_sum{}) by ($cpu_group_by)",
+          "expr": "sum(bizinikiwi_tasks_polling_duration_sum{}) by ($cpu_group_by)",
           "interval": "",
           "legendFormat": "{{task_name}}",
           "range": true,

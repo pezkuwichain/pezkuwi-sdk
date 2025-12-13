@@ -21,8 +21,8 @@
 use crate::shared;
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use frame_support::{pallet_prelude::*, DefaultNoBound};
-use frame_system::pallet_prelude::*;
+use pezframe_support::{pezpallet_prelude::*, DefaultNoBound};
+use pezframe_system::pezpallet_prelude::*;
 use pezkuwi_primitives::{
 	ApprovalVotingParams, AsyncBackingParams, Balance, ExecutorParamError, ExecutorParams,
 	NodeFeatures, SessionIndex, LEGACY_MIN_BACKING_VOTES, MAX_CODE_SIZE, MAX_HEAD_DATA_SIZE,
@@ -31,7 +31,7 @@ use pezkuwi_primitives::{
 use pezkuwi_teyrchain_primitives::primitives::{
 	MAX_HORIZONTAL_MESSAGE_NUM, MAX_UPWARD_MESSAGE_NUM,
 };
-use sp_runtime::{traits::Zero, Perbill, Percent};
+use pezsp_runtime::{traits::Zero, Perbill, Percent};
 
 #[cfg(test)]
 mod tests;
@@ -46,7 +46,7 @@ use pezkuwi_primitives::SchedulerParams;
 
 const LOG_TARGET: &str = "runtime::configuration";
 
-// This value is derived from network layer limits. See `sc_network::MAX_RESPONSE_SIZE` and
+// This value is derived from network layer limits. See `pezsc_network::MAX_RESPONSE_SIZE` and
 // `pezkuwi_node_network_protocol::POV_RESPONSE_SIZE`.
 const POV_SIZE_HARD_LIMIT: u32 = 16 * 1024 * 1024;
 
@@ -59,7 +59,7 @@ pub(crate) const MAX_VALIDATION_CODE_COMPRESSION_RATIO: u32 = 10;
 	Encode,
 	Decode,
 	PartialEq,
-	sp_core::RuntimeDebug,
+	pezsp_core::RuntimeDebug,
 	scale_info::TypeInfo,
 	serde::Serialize,
 	serde::Deserialize,
@@ -135,7 +135,7 @@ pub struct HostConfiguration<BlockNumber> {
 	/// revert [`validation_upgrade_delay`](Self::validation_upgrade_delay) many blocks back and
 	/// still find the new code in the storage by hash.
 	///
-	/// [#4601]: https://github.com/paritytech/polkadot/issues/4601
+	/// [#4601]: https://github.com/pezkuwichain/kurdistan-sdk/issues/151
 	pub validation_upgrade_delay: BlockNumber,
 	/// Asynchronous backing parameters.
 	pub async_backing_params: AsyncBackingParams,
@@ -507,26 +507,26 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 
 	/// The in-code storage version.
 	///
-	/// v0-v1:  <https://github.com/paritytech/polkadot/pull/3575>
-	/// v1-v2:  <https://github.com/paritytech/polkadot/pull/4420>
-	/// v2-v3:  <https://github.com/paritytech/polkadot/pull/6091>
-	/// v3-v4:  <https://github.com/paritytech/polkadot/pull/6345>
-	/// v4-v5:  <https://github.com/paritytech/polkadot/pull/6937>
-	///       + <https://github.com/paritytech/polkadot/pull/6961>
-	///       + <https://github.com/paritytech/polkadot/pull/6934>
-	/// v5-v6:  <https://github.com/paritytech/polkadot/pull/6271> (remove UMP dispatch queue)
-	/// v6-v7:  <https://github.com/paritytech/polkadot/pull/7396>
-	/// v7-v8:  <https://github.com/paritytech/polkadot/pull/6969>
-	/// v8-v9:  <https://github.com/paritytech/polkadot/pull/7577>
-	/// v9-v10: <https://github.com/paritytech/polkadot-sdk/pull/2177>
-	/// v10-11: <https://github.com/paritytech/polkadot-sdk/pull/1191>
-	/// v11-12: <https://github.com/paritytech/polkadot-sdk/pull/3181>
+	/// v0-v1:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/174>
+	/// v1-v2:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/175>
+	/// v2-v3:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/178>
+	/// v3-v4:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/180>
+	/// v4-v5:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/182>
+	///       + <https://github.com/pezkuwichain/kurdistan-sdk/issues/183>
+	///       + <https://github.com/pezkuwichain/kurdistan-sdk/issues/181>
+	/// v5-v6:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/179> (remove UMP dispatch queue)
+	/// v6-v7:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/185>
+	/// v7-v8:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/184>
+	/// v8-v9:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/186>
+	/// v9-v10: <https://github.com/pezkuwichain/kurdistan-sdk/issues/110>
+	/// v10-11: <https://github.com/pezkuwichain/kurdistan-sdk/issues/100>
+	/// v11-12: <https://github.com/pezkuwichain/kurdistan-sdk/issues/112>
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(12);
 
 	#[pallet::pallet]
@@ -535,7 +535,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config + shared::Config {
+	pub trait Config: pezframe_system::Config + shared::Config {
 		/// Weight information for extrinsics in this pallet.
 		type WeightInfo: WeightInfo;
 	}

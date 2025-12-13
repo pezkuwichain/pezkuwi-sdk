@@ -68,7 +68,7 @@ by lurking in the code.
 We also have the WiP prototype of relayers coordination protocol, where relayers will get some guarantee
 that their transactions will be prioritized over other relayers transactions at their assigned slots.
 That is planned for the future version of bridge and the progress is
-[tracked here](https://github.com/paritytech/parity-bridges-common/issues/2486).
+[tracked here](https://github.com/pezkuwichain/kurdistan-sdk/issues/85).
 
 </details>
 
@@ -256,7 +256,7 @@ image reference and source files, required to build relayer manually.
 
 Once you have the docker image, update variables and run the following script:
 ```sh
-export DOCKER_IMAGE=<image-of-substrate-relay>
+export DOCKER_IMAGE=<image-of-bizinikiwi-relay>
 
 export PEZKUWICHAIN_HOST=<pezkuwichain-ws-rpc-host-here>
 export PEZKUWICHAIN_PORT=<pezkuwichain-ws-rpc-port-here>
@@ -326,7 +326,7 @@ docker run \
     ..
     $DOCKER_IMAGE \
     relay-headers-and-messages bridge-hub-pezkuwichain-bridge-hub-zagros \
-    --prometheus-host 0.0.0.0 \ # tell `substrate-relay` binary to accept Prometheus endpoint
+    --prometheus-host 0.0.0.0 \ # tell `bizinikiwi-relay` binary to accept Prometheus endpoint
                                 # connections from everywhere
     ..
 ```

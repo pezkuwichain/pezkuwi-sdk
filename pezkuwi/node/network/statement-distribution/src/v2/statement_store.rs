@@ -293,7 +293,7 @@ mod tests {
 	use super::*;
 
 	use pezkuwi_primitives::{Hash, SigningContext, ValidatorPair};
-	use sp_application_crypto::Pair as PairT;
+	use pezsp_application_crypto::Pair as PairT;
 
 	#[test]
 	fn always_provides_fresh_statements_in_order() {

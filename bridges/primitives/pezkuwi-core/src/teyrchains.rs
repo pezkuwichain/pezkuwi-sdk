@@ -18,16 +18,16 @@
 //!
 //! Even though this (bridges) repository references pezkuwi repository, we can't
 //! reference pezkuwi crates from pallets. That's because bridges repository is
-//! included in the Cumulus repository and included pallets are used by Cumulus
+//! included in the Pezcumulus repository and included pallets are used by Pezcumulus
 //! teyrchains. Having pallets that are referencing pezkuwi, would mean that there may
 //! be two versions of pezkuwi crates included in the runtime. Which is bad.
 
 use bp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
 use codec::{CompactAs, Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
-use sp_core::Hasher;
-use sp_runtime::RuntimeDebug;
-use sp_std::vec::Vec;
+use pezsp_core::Hasher;
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::vec::Vec;
 
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
@@ -65,7 +65,7 @@ impl From<u32> for ParaId {
 ///
 /// This is an equivalent of the `pezkuwi_teyrchain_primitives::HeadData`.
 ///
-/// The teyrchain head means (at least in Cumulus) a SCALE-encoded teyrchain header.
+/// The teyrchain head means (at least in Pezcumulus) a SCALE-encoded teyrchain header.
 #[derive(
 	PartialEq,
 	Eq,
@@ -85,7 +85,7 @@ pub struct ParaHead(pub Vec<u8>);
 impl ParaHead {
 	/// Returns the hash of this head data.
 	pub fn hash(&self) -> crate::Hash {
-		sp_runtime::traits::BlakeTwo256::hash(&self.0)
+		pezsp_runtime::traits::BlakeTwo256::hash(&self.0)
 	}
 }
 
@@ -104,7 +104,7 @@ pub struct ParaHeadsProof {
 
 impl Size for ParaHeadsProof {
 	fn size(&self) -> u32 {
-		use frame_support::sp_runtime::SaturatedConversion;
+		use pezframe_support::pezsp_runtime::SaturatedConversion;
 		raw_storage_proof_size(&self.storage_proof).saturated_into()
 	}
 }

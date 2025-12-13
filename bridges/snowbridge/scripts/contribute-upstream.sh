@@ -66,7 +66,7 @@ cargo check -p snowbridge-pallet-system --features runtime-benchmarks
 cargo check -p snowbridge-pallet-system --features try-runtime
 
 # we're removing lock file after all checks are done. Otherwise we may use different
-# Substrate/Pezkuwi/Cumulus commits and our checks will fail
+# Bizinikiwi/Pezkuwi/Pezcumulus commits and our checks will fail
 rm -f $SNOWBRIDGE_FOLDER/Cargo.toml
 rm -f $SNOWBRIDGE_FOLDER/Cargo.lock
 

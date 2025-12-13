@@ -43,24 +43,24 @@ mod mock;
 
 extern crate alloc;
 
-use frame_support::{
+use pezframe_support::{
 	parameter_types,
 	traits::{ConstU32, Currency, OneSessionHandler},
 	weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 };
-use frame_system::limits;
+use pezframe_system::limits;
 use pezkuwi_primitives::{AssignmentId, Balance, BlockNumber, ValidatorId};
-use sp_runtime::{FixedPointNumber, Perbill, Perquintill};
+use pezsp_runtime::{FixedPointNumber, Perbill, Perquintill};
 use static_assertions::const_assert;
 
-pub use pallet_balances::Call as BalancesCall;
+pub use pezpallet_balances::Call as BalancesCall;
 #[cfg(feature = "std")]
-pub use pallet_staking::StakerStatus;
-pub use pallet_timestamp::Call as TimestampCall;
-use pallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
-pub use sp_runtime::traits::Bounded;
+pub use pezpallet_staking::StakerStatus;
+pub use pezpallet_timestamp::Call as TimestampCall;
+use pezpallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
+pub use pezsp_runtime::traits::Bounded;
 #[cfg(any(feature = "std", test))]
-pub use sp_runtime::BuildStorage;
+pub use pezsp_runtime::BuildStorage;
 
 /// Implementations of some helper traits passed into runtime modules as associated types.
 pub use impls::ToAuthor;
@@ -68,8 +68,8 @@ pub use impls::ToAuthor;
 #[deprecated(
 	note = "Please use fungible::Credit instead. This type will be removed some time after March 2024."
 )]
-pub type NegativeImbalance<T> = <pallet_balances::Pallet<T> as Currency<
-	<T as frame_system::Config>::AccountId,
+pub type NegativeImbalance<T> = <pezpallet_balances::Pallet<T> as Currency<
+	<T as pezframe_system::Config>::AccountId,
 >>::NegativeImbalance;
 
 /// We assume that an on-initialize consumes 1% of the weight on average, hence a single extrinsic
@@ -122,14 +122,14 @@ pub type SlowAdjustingFeeUpdate<R> = TargetedFeeAdjustment<
 #[macro_export]
 macro_rules! impl_runtime_weights {
 	($runtime:ident) => {
-		use frame_support::{dispatch::DispatchClass, weights::Weight};
-		use frame_system::limits;
-		use pallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
+		use pezframe_support::{dispatch::DispatchClass, weights::Weight};
+		use pezframe_system::limits;
+		use pezpallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
 		pub use pezkuwi_runtime_common::{
 			impl_elections_weights, AVERAGE_ON_INITIALIZE_RATIO, MAXIMUM_BLOCK_WEIGHT,
 			NORMAL_DISPATCH_RATIO,
 		};
-		use sp_runtime::{FixedPointNumber, Perquintill};
+		use pezsp_runtime::{FixedPointNumber, Perquintill};
 
 		// Implement the weight types of the elections module.
 		impl_elections_weights!($runtime);
@@ -166,17 +166,17 @@ macro_rules! impl_runtime_weights {
 /// The type used for currency conversion.
 ///
 /// This must only be used as long as the balance type is `u128`.
-pub type CurrencyToVote = sp_staking::currency_to_vote::U128CurrencyToVote;
+pub type CurrencyToVote = pezsp_staking::currency_to_vote::U128CurrencyToVote;
 static_assertions::assert_eq_size!(pezkuwi_primitives::Balance, u128);
 
 /// A placeholder since there is currently no provided session key handler for teyrchain validator
 /// keys.
 pub struct TeyrchainSessionKeyPlaceholder<T>(core::marker::PhantomData<T>);
-impl<T> sp_runtime::BoundToRuntimeAppPublic for TeyrchainSessionKeyPlaceholder<T> {
+impl<T> pezsp_runtime::BoundToRuntimeAppPublic for TeyrchainSessionKeyPlaceholder<T> {
 	type Public = ValidatorId;
 }
 
-impl<T: pallet_session::Config> OneSessionHandler<T::AccountId>
+impl<T: pezpallet_session::Config> OneSessionHandler<T::AccountId>
 	for TeyrchainSessionKeyPlaceholder<T>
 {
 	type Key = ValidatorId;
@@ -201,11 +201,11 @@ impl<T: pallet_session::Config> OneSessionHandler<T::AccountId>
 /// A placeholder since there is currently no provided session key handler for teyrchain validator
 /// keys.
 pub struct AssignmentSessionKeyPlaceholder<T>(core::marker::PhantomData<T>);
-impl<T> sp_runtime::BoundToRuntimeAppPublic for AssignmentSessionKeyPlaceholder<T> {
+impl<T> pezsp_runtime::BoundToRuntimeAppPublic for AssignmentSessionKeyPlaceholder<T> {
 	type Public = AssignmentId;
 }
 
-impl<T: pallet_session::Config> OneSessionHandler<T::AccountId>
+impl<T: pezpallet_session::Config> OneSessionHandler<T::AccountId>
 	for AssignmentSessionKeyPlaceholder<T>
 {
 	type Key = AssignmentId;
@@ -229,24 +229,24 @@ impl<T: pallet_session::Config> OneSessionHandler<T::AccountId>
 
 /// A reasonable benchmarking config for staking pallet.
 pub struct StakingBenchmarkingConfig;
-impl pallet_staking::BenchmarkingConfig for StakingBenchmarkingConfig {
+impl pezpallet_staking::BenchmarkingConfig for StakingBenchmarkingConfig {
 	type MaxValidators = ConstU32<1000>;
 	type MaxNominators = ConstU32<1000>;
 }
 
 /// Convert a balance to an unsigned 256-bit number, use in nomination pools.
 pub struct BalanceToU256;
-impl sp_runtime::traits::Convert<Balance, sp_core::U256> for BalanceToU256 {
-	fn convert(n: Balance) -> sp_core::U256 {
+impl pezsp_runtime::traits::Convert<Balance, pezsp_core::U256> for BalanceToU256 {
+	fn convert(n: Balance) -> pezsp_core::U256 {
 		n.into()
 	}
 }
 
 /// Convert an unsigned 256-bit number to balance, use in nomination pools.
 pub struct U256ToBalance;
-impl sp_runtime::traits::Convert<sp_core::U256, Balance> for U256ToBalance {
-	fn convert(n: sp_core::U256) -> Balance {
-		use frame_support::traits::Defensive;
+impl pezsp_runtime::traits::Convert<pezsp_core::U256, Balance> for U256ToBalance {
+	fn convert(n: pezsp_core::U256) -> Balance {
+		use pezframe_support::traits::Defensive;
 		n.try_into().defensive_unwrap_or(Balance::MAX)
 	}
 }

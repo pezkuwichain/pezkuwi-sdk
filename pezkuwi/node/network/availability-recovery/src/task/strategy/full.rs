@@ -25,7 +25,7 @@ use pezkuwi_node_network_protocol::request_response::{
 use pezkuwi_node_primitives::AvailableData;
 use pezkuwi_node_subsystem::{messages::NetworkBridgeTxMessage, overseer, RecoveryError};
 use pezkuwi_primitives::ValidatorIndex;
-use sc_network::{IfDisconnected, OutboundFailure, RequestFailure};
+use pezsc_network::{IfDisconnected, OutboundFailure, RequestFailure};
 
 use futures::{channel::oneshot, SinkExt};
 use rand::seq::SliceRandom;

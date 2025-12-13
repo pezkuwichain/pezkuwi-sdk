@@ -57,9 +57,9 @@ use crate::{
 };
 use alloc::{vec, vec::Vec};
 use codec::{Decode, Encode};
-use frame_support::{
+use pezframe_support::{
 	ensure,
-	pallet_prelude::{DispatchResult, Weight},
+	pezpallet_prelude::{DispatchResult, Weight},
 	storage::{child, ChildTriePrefixIterator},
 	traits::{
 		Currency, Defensive,
@@ -68,11 +68,11 @@ use frame_support::{
 	},
 	Identity, PalletId,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 pub use pallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{
 		AccountIdConversion, CheckedAdd, Hash, IdentifyAccount, One, Saturating, Verify, Zero,
 	},
@@ -81,7 +81,7 @@ use sp_runtime::{
 
 type CurrencyOf<T> = <<T as Config>::Auctioneer as Auctioneer<BlockNumberFor<T>>>::Currency;
 type LeasePeriodOf<T> = <<T as Config>::Auctioneer as Auctioneer<BlockNumberFor<T>>>::LeasePeriod;
-type BalanceOf<T> = <CurrencyOf<T> as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> = <CurrencyOf<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 type FundIndex = u32;
 
@@ -170,11 +170,11 @@ pub struct FundInfo<AccountId, Balance, BlockNumber, LeasePeriod> {
 	pub fund_index: FundIndex,
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::{ensure_root, ensure_signed, pallet_prelude::*};
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::{ensure_root, ensure_signed, pezpallet_prelude::*};
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
@@ -185,9 +185,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// `PalletId` for the crowdloan pallet. An appropriate value could be
 		/// `PalletId(*b"py/cfund")`
@@ -325,7 +325,7 @@ pub mod pallet {
 
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
-		fn on_initialize(num: BlockNumberFor<T>) -> frame_support::weights::Weight {
+		fn on_initialize(num: BlockNumberFor<T>) -> pezframe_support::weights::Weight {
 			if let Some((sample, sub_sample)) = T::Auctioneer::auction_status(num).is_ending() {
 				// This is the very first block in the ending period
 				if sample.is_zero() && sub_sample.is_zero() {
@@ -376,7 +376,7 @@ pub mod pallet {
 			verifier: Option<MultiSigner>,
 		) -> DispatchResult {
 			let depositor = ensure_signed(origin)?;
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 
 			ensure!(first_period <= last_period, Error::<T>::LastPeriodBeforeFirstPeriod);
 			let last_period_limit = first_period
@@ -414,7 +414,7 @@ pub mod pallet {
 
 			let deposit = T::SubmissionDeposit::get();
 
-			frame_system::Pallet::<T>::inc_providers(&Self::fund_account_id(fund_index));
+			pezframe_system::Pallet::<T>::inc_providers(&Self::fund_account_id(fund_index));
 			CurrencyOf::<T>::reserve(&depositor, deposit)?;
 
 			Funds::<T>::insert(
@@ -480,7 +480,7 @@ pub mod pallet {
 			ensure_signed(origin)?;
 
 			let mut fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 			let fund_account = Self::fund_account_id(fund.fund_index);
 			Self::ensure_crowdloan_ended(now, &fund_account, &fund)?;
 
@@ -513,7 +513,7 @@ pub mod pallet {
 			ensure_signed(origin)?;
 
 			let mut fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 			let fund_account = Self::fund_account_id(fund.fund_index);
 			Self::ensure_crowdloan_ended(now, &fund_account, &fund)?;
 
@@ -557,7 +557,7 @@ pub mod pallet {
 
 			let fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
 			let pot = Self::fund_account_id(fund.fund_index);
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 
 			// Only allow dissolution when the raised funds goes to zero,
 			// and the caller is the fund creator or we are past the end date.
@@ -572,7 +572,7 @@ pub mod pallet {
 
 			// Crowdloan over, burn all funds.
 			let _imba = CurrencyOf::<T>::make_free_balance_be(&pot, Zero::zero());
-			let _ = frame_system::Pallet::<T>::dec_providers(&pot).defensive();
+			let _ = pezframe_system::Pallet::<T>::dec_providers(&pot).defensive();
 
 			CurrencyOf::<T>::unreserve(&fund.depositor, fund.deposit);
 			Funds::<T>::remove(index);
@@ -726,7 +726,7 @@ impl<T: Config> Pallet<T> {
 		now: BlockNumberFor<T>,
 		fund_account: &T::AccountId,
 		fund: &FundInfo<T::AccountId, BalanceOf<T>, BlockNumberFor<T>, LeasePeriodOf<T>>,
-	) -> sp_runtime::DispatchResult {
+	) -> pezsp_runtime::DispatchResult {
 		// `fund.end` can represent the end of a failed crowdloan or the beginning of retirement
 		// If the current lease period is past the first period they are trying to bid for, then
 		// it is already too late to win the bid.
@@ -759,11 +759,11 @@ impl<T: Config> Pallet<T> {
 		ensure!(fund.raised <= fund.cap, Error::<T>::CapExceeded);
 
 		// Make sure crowdloan has not ended
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		ensure!(now < fund.end, Error::<T>::ContributionPeriodOver);
 
 		// Make sure crowdloan is in a valid lease period
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let (current_lease_period, _) =
 			T::Auctioneer::lease_period_index(now).ok_or(Error::<T>::NoLeasePeriod)?;
 		ensure!(current_lease_period <= fund.first_period, Error::<T>::ContributionPeriodOver);
@@ -840,9 +840,9 @@ impl<T: Config> crate::traits::OnSwap for Pallet<T> {
 #[cfg(any(feature = "runtime-benchmarks", test))]
 mod crypto {
 	use alloc::vec::Vec;
-	use sp_core::ed25519;
-	use sp_io::crypto::{ed25519_generate, ed25519_sign};
-	use sp_runtime::{MultiSignature, MultiSigner};
+	use pezsp_core::ed25519;
+	use pezsp_io::crypto::{ed25519_generate, ed25519_sign};
+	use pezsp_runtime::{MultiSignature, MultiSigner};
 
 	pub fn create_ed25519_pubkey(seed: Vec<u8>) -> MultiSigner {
 		ed25519_generate(0.into(), Some(seed)).into()
@@ -859,9 +859,9 @@ mod crypto {
 mod tests {
 	use super::*;
 
-	use frame_support::{assert_noop, assert_ok, derive_impl, parameter_types};
+	use pezframe_support::{assert_noop, assert_ok, derive_impl, parameter_types};
 	use pezkuwi_primitives::Id as ParaId;
-	use sp_core::H256;
+	use pezsp_core::H256;
 	use std::{cell::RefCell, collections::BTreeMap, sync::Arc};
 	// The testing primitives are very useful for avoiding having to work with signatures
 	// or public keys. `u64` is used as the `AccountId` and no `Signature`s are required.
@@ -871,28 +871,28 @@ mod tests {
 		traits::{AuctionStatus, OnSwap},
 	};
 	use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
-	use sp_keystore::{testing::MemoryKeystore, KeystoreExt};
-	use sp_runtime::{
+	use pezsp_keystore::{testing::MemoryKeystore, KeystoreExt};
+	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup, TrailingZeroInput},
 		BuildStorage, DispatchResult,
 	};
 
-	type Block = frame_system::mocking::MockBlock<Test>;
+	type Block = pezframe_system::mocking::MockBlock<Test>;
 
-	frame_support::construct_runtime!(
+	pezframe_support::construct_runtime!(
 		pub enum Test
 		{
-			System: frame_system,
-			Balances: pallet_balances,
+			System: pezframe_system,
+			Balances: pezpallet_balances,
 			Crowdloan: crowdloan,
 		}
 	);
 
 	type BlockNumber = u64;
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Test {
-		type BaseCallFilter = frame_support::traits::Everything;
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Test {
+		type BaseCallFilter = pezframe_support::traits::Everything;
 		type BlockWeights = ();
 		type BlockLength = ();
 		type DbWeight = ();
@@ -907,17 +907,17 @@ mod tests {
 		type RuntimeEvent = RuntimeEvent;
 		type Version = ();
 		type PalletInfo = PalletInfo;
-		type AccountData = pallet_balances::AccountData<u64>;
+		type AccountData = pezpallet_balances::AccountData<u64>;
 		type OnNewAccount = ();
 		type OnKilledAccount = ();
 		type SystemWeightInfo = ();
 		type SS58Prefix = ();
 		type OnSetCode = ();
-		type MaxConsumers = frame_support::traits::ConstU32<16>;
+		type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	}
 
-	#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-	impl pallet_balances::Config for Test {
+	#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+	impl pezpallet_balances::Config for Test {
 		type AccountStore = System;
 	}
 
@@ -963,7 +963,7 @@ mod tests {
 		let fund = Funds::<Test>::get(para).unwrap();
 		let account_id = Crowdloan::fund_account_id(fund.fund_index);
 		if winner {
-			let ed: u64 = <Test as pallet_balances::Config>::ExistentialDeposit::get();
+			let ed: u64 = <Test as pezpallet_balances::Config>::ExistentialDeposit::get();
 			let free_balance = Balances::free_balance(&account_id);
 			Balances::reserve(&account_id, free_balance - ed)
 				.expect("should be able to reserve free balance minus ED");
@@ -1075,20 +1075,20 @@ mod tests {
 		type WeightInfo = crate::crowdloan::TestWeightInfo;
 	}
 
-	use pallet_balances::Error as BalancesError;
+	use pezpallet_balances::Error as BalancesError;
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mockup.
-	pub fn new_test_ext() -> sp_io::TestExternalities {
-		let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-		pallet_balances::GenesisConfig::<Test> {
+	pub fn new_test_ext() -> pezsp_io::TestExternalities {
+		let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		pezpallet_balances::GenesisConfig::<Test> {
 			balances: vec![(1, 1000), (2, 2000), (3, 3000), (4, 4000)],
 			..Default::default()
 		}
 		.assimilate_storage(&mut t)
 		.unwrap();
 		let keystore = MemoryKeystore::new();
-		let mut t: sp_io::TestExternalities = t.into();
+		let mut t: pezsp_io::TestExternalities = t.into();
 		t.register_extension(KeystoreExt(Arc::new(keystore)));
 		t
 	}
@@ -1787,7 +1787,7 @@ mod tests {
 	#[test]
 	fn withdraw_from_finished_works() {
 		new_test_ext().execute_with(|| {
-			let ed: u64 = <Test as pallet_balances::Config>::ExistentialDeposit::get();
+			let ed: u64 = <Test as pezpallet_balances::Config>::ExistentialDeposit::get();
 			assert_eq!(ed, 1);
 			let para = new_para();
 			let index = NextFundIndex::<Test>::get();
@@ -1950,19 +1950,19 @@ mod tests {
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking {
 	use super::{Pallet as Crowdloan, *};
-	use frame_support::{assert_ok, traits::OnInitialize};
-	use frame_system::RawOrigin;
+	use pezframe_support::{assert_ok, traits::OnInitialize};
+	use pezframe_system::RawOrigin;
 	use pezkuwi_runtime_teyrchains::paras;
-	use sp_core::crypto::UncheckedFrom;
-	use sp_runtime::traits::{Bounded, CheckedSub};
+	use pezsp_core::crypto::UncheckedFrom;
+	use pezsp_runtime::traits::{Bounded, CheckedSub};
 
-	use frame_benchmarking::v2::*;
+	use pezframe_benchmarking::v2::*;
 
 	fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-		let events = frame_system::Pallet::<T>::events();
-		let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+		let events = pezframe_system::Pallet::<T>::events();
+		let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 		// compare to the last event record
-		let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 		assert_eq!(event, &system_event);
 	}
 
@@ -1970,8 +1970,8 @@ mod benchmarking {
 		let cap = BalanceOf::<T>::max_value();
 		let (_, offset) = T::Auctioneer::lease_period_length();
 		// Set to the very beginning of lease period index 0.
-		frame_system::Pallet::<T>::set_block_number(offset);
-		let now = frame_system::Pallet::<T>::block_number();
+		pezframe_system::Pallet::<T>::set_block_number(offset);
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let (lease_period_index, _) = T::Auctioneer::lease_period_index(now).unwrap_or_default();
 		let first_period = lease_period_index;
 		let last_period =
@@ -1993,7 +1993,7 @@ mod benchmarking {
 			validation_code.clone()
 		));
 		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-			frame_system::Origin::<T>::Root.into(),
+			pezframe_system::Origin::<T>::Root.into(),
 			validation_code,
 		));
 		T::Registrar::execute_pending_transitions();
@@ -2051,7 +2051,7 @@ mod benchmarking {
 			CurrencyOf::<T>::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 			T::Registrar::register(caller.clone(), para_id, head_data, validation_code.clone())?;
 			assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-				frame_system::Origin::<T>::Root.into(),
+				pezframe_system::Origin::<T>::Root.into(),
 				validation_code,
 			));
 
@@ -2107,7 +2107,7 @@ mod benchmarking {
 			let caller: T::AccountId = whitelisted_caller();
 			let contributor = account("contributor", 0, 0);
 			contribute_fund::<T>(&contributor, fund_index);
-			frame_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
+			pezframe_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
 			#[extrinsic_call]
 			_(RawOrigin::Signed(caller), contributor.clone(), fund_index);
 
@@ -2136,7 +2136,7 @@ mod benchmarking {
 			}
 
 			let caller: T::AccountId = whitelisted_caller();
-			frame_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
+			pezframe_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
 			#[extrinsic_call]
 			_(RawOrigin::Signed(caller), fund_index);
 
@@ -2150,7 +2150,7 @@ mod benchmarking {
 			let end = lpl + offset;
 			let fund_index = create_fund::<T>(1337, end);
 			let caller: T::AccountId = whitelisted_caller();
-			frame_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
+			pezframe_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
 			#[extrinsic_call]
 			_(RawOrigin::Signed(caller.clone()), fund_index);
 
@@ -2176,7 +2176,7 @@ mod benchmarking {
 			CurrencyOf::<T>::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 			T::Registrar::register(caller.clone(), para_id, head_data, validation_code.clone())?;
 			assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
-				frame_system::Origin::<T>::Root.into(),
+				pezframe_system::Origin::<T>::Root.into(),
 				validation_code,
 			));
 
@@ -2262,11 +2262,11 @@ mod benchmarking {
 				)?;
 			}
 
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 			let (lease_period_index, _) =
 				T::Auctioneer::lease_period_index(now).unwrap_or_default();
 			let duration = end_block
-				.checked_sub(&frame_system::Pallet::<T>::block_number())
+				.checked_sub(&pezframe_system::Pallet::<T>::block_number())
 				.ok_or("duration of auction less than zero")?;
 			T::Auctioneer::new_auction(duration, lease_period_index)?;
 

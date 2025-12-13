@@ -22,12 +22,12 @@ use pezkuwi_node_subsystem::messages::{AllMessages, BlockDescription};
 use pezkuwi_node_subsystem_util::TimeoutExt;
 use pezkuwi_overseer::{HighPriority, PriorityLevel};
 use pezkuwi_test_client::Sr25519Keyring;
-use sp_consensus_babe::{
+use pezsp_consensus_babe::{
 	digests::{CompatibleDigestItem, PreDigest, SecondaryVRFPreDigest},
 	VrfTranscript,
 };
-use sp_core::{crypto::VrfSecret, testing::TaskExecutor};
-use sp_runtime::{testing::*, DigestItem};
+use pezsp_core::{crypto::VrfSecret, testing::TaskExecutor};
+use pezsp_runtime::{testing::*, DigestItem};
 use std::{
 	collections::{BTreeMap, HashMap, HashSet},
 	iter::IntoIterator,
@@ -88,7 +88,7 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	case_vars: CaseVars,
 	test: impl FnOnce(TestHarness) -> T,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let pool = TaskExecutor::new();
 	let (mut context, virtual_overseer) =
@@ -228,10 +228,10 @@ impl TestChainStorage {
 }
 
 impl HeaderProvider<Block> for TestChainStorage {
-	fn header(&self, hash: Hash) -> sp_blockchain::Result<Option<Header>> {
+	fn header(&self, hash: Hash) -> pezsp_blockchain::Result<Option<Header>> {
 		Ok(self.blocks_by_hash.get(&hash).cloned())
 	}
-	fn number(&self, hash: Hash) -> sp_blockchain::Result<Option<BlockNumber>> {
+	fn number(&self, hash: Hash) -> pezsp_blockchain::Result<Option<BlockNumber>> {
 		self.header(hash).map(|opt| opt.map(|h| h.number))
 	}
 }

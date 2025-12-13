@@ -7,11 +7,11 @@
 pub use pezkuwi_teyrchain_primitives::primitives::{
 	Id as ParaId, IsSystem, Sibling as SiblingParaId,
 };
-pub use sp_core::U256;
+pub use pezsp_core::U256;
 
 use codec::Encode;
-use sp_core::H256;
-use sp_std::prelude::*;
+use pezsp_core::H256;
+use pezsp_std::prelude::*;
 use xcm::prelude::{
 	AccountId32, AccountKey20, GeneralIndex, GeneralKey, GlobalConsensus, Location, PalletInstance,
 };
@@ -56,7 +56,7 @@ impl DescribeLocation for DescribeHere {
 		}
 	}
 }
-pub struct DescribeGlobalPrefix<DescribeInterior>(sp_std::marker::PhantomData<DescribeInterior>);
+pub struct DescribeGlobalPrefix<DescribeInterior>(pezsp_std::marker::PhantomData<DescribeInterior>);
 impl<Suffix: DescribeLocation> DescribeLocation for DescribeGlobalPrefix<Suffix> {
 	fn describe_location(l: &Location) -> Option<Vec<u8>> {
 		match (l.parent_count(), l.first_interior()) {

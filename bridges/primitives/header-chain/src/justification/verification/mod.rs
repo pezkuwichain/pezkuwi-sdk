@@ -24,9 +24,9 @@ use crate::{justification::GrandpaJustification, AuthoritySet};
 
 use bp_runtime::HeaderId;
 use finality_grandpa::voter_set::VoterSet;
-use sp_consensus_grandpa::{AuthorityId, AuthoritySignature, SetId};
-use sp_runtime::{traits::Header as HeaderT, RuntimeDebug};
-use sp_std::{
+use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature, SetId};
+use pezsp_runtime::{traits::Header as HeaderT, RuntimeDebug};
+use pezsp_std::{
 	collections::{
 		btree_map::{
 			BTreeMap,
@@ -299,7 +299,7 @@ trait JustificationVerifier<Header: HeaderT> {
 			}
 
 			// verify authority signature
-			if !sp_consensus_grandpa::check_message_signature_with_buffer(
+			if !pezsp_consensus_grandpa::check_message_signature_with_buffer(
 				&finality_grandpa::Message::Precommit(signed.precommit.clone()),
 				&signed.id,
 				&signed.signature,

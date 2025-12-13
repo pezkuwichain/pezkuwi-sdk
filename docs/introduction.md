@@ -1,6 +1,6 @@
 # Introduction to Pezkuwi Network
 
-Welcome to Pezkuwi Network - a next-generation blockchain ecosystem built on Substrate, designed to empower communities with decentralized governance, identity management, and economic sovereignty.
+Welcome to Pezkuwi Network - a next-generation blockchain ecosystem built on Bizinikiwi, designed to empower communities with decentralized governance, identity management, and economic sovereignty.
 
 **Last Updated:** 2025-12-10
 **Version:** 3.0.0
@@ -146,7 +146,7 @@ Pezkuwi Network aims to provide a secure, consistent, and scalable blockchain in
 ### 2.4. Synthetic Halving Mechanism
 
 ```rust
-// pallet-pez-treasury: lib.rs
+// pezpallet-pez-treasury: lib.rs
 const HALVING_PERIOD_MONTHS: u32 = 48;
 const INITIAL_EPOCH_REWARD: u128 = 79_166_666 * PEZ; // ~79M PEZ per month
 
@@ -199,18 +199,18 @@ Pezkuwi Network includes 12 custom pallets:
 
 | # | Pallet | Purpose | Benchmarks |
 | --- | --- | --- | --- |
-| 1 | pallet-presale | Token launch platform | ✅ Complete |
-| 2 | pallet-identity-kyc | KYC verification (6 extrinsics) | ✅ Complete |
-| 3 | pallet-welati | Democratic governance | ✅ Complete |
-| 4 | pallet-perwerde | Education platform (4 extrinsics) | ✅ Complete |
-| 5 | pallet-pez-treasury | Community treasury | ✅ Complete |
-| 6 | pallet-pez-rewards | Staking rewards (6 extrinsics) | ✅ Complete |
-| 7 | pallet-validator-pool | Validator management | ✅ Complete |
-| 8 | pallet-staking-score | Reputation metrics (1 extrinsic) | ✅ Complete |
-| 9 | pallet-trust | P2P trust system (3 extrinsics) | ✅ Complete |
-| 10 | pallet-referral | Referral incentives | ✅ Complete |
-| 11 | pallet-tiki | NFT citizenship (4-tier) | ✅ Complete |
-| 12 | pallet-token-wrapper | Cross-chain wrapping | ✅ Complete |
+| 1 | pezpallet-presale | Token launch platform | ✅ Complete |
+| 2 | pezpallet-identity-kyc | KYC verification (6 extrinsics) | ✅ Complete |
+| 3 | pezpallet-welati | Democratic governance | ✅ Complete |
+| 4 | pezpallet-perwerde | Education platform (4 extrinsics) | ✅ Complete |
+| 5 | pezpallet-pez-treasury | Community treasury | ✅ Complete |
+| 6 | pezpallet-pez-rewards | Staking rewards (6 extrinsics) | ✅ Complete |
+| 7 | pezpallet-validator-pool | Validator management | ✅ Complete |
+| 8 | pezpallet-staking-score | Reputation metrics (1 extrinsic) | ✅ Complete |
+| 9 | pezpallet-trust | P2P trust system (3 extrinsics) | ✅ Complete |
+| 10 | pezpallet-referral | Referral incentives | ✅ Complete |
+| 11 | pezpallet-tiki | NFT citizenship (4-tier) | ✅ Complete |
+| 12 | pezpallet-token-wrapper | Cross-chain wrapping | ✅ Complete |
 
 ### 4.2. Asset Hub Genesis Configuration
 

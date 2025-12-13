@@ -1,14 +1,14 @@
 # this image is built on top of existing Zombienet image
 ARG ZOMBIENET_IMAGE
-# this image uses substrate-relay image built elsewhere
-ARG SUBSTRATE_RELAY_IMAGE=docker.io/paritytech/substrate-relay:v1.8.0
+# this image uses bizinikiwi-relay image built elsewhere
+ARG SUBSTRATE_RELAY_IMAGE=docker.io/paritytech/bizinikiwi-relay:v1.8.0
 
 # metadata
 ARG VCS_REF
 ARG BUILD_DATE
 ARG IMAGE_NAME
 
-# we need `substrate-relay` binary, built elsewhere
+# we need `bizinikiwi-relay` binary, built elsewhere
 FROM ${SUBSTRATE_RELAY_IMAGE} as relay-builder
 
 # the base image is the zombienet image - we are planning to run zombienet tests using native
@@ -38,8 +38,8 @@ COPY ./artifacts/polkadot-execute-worker /usr/local/bin/
 COPY ./artifacts/polkadot-prepare-worker /usr/local/bin/
 # add polkadot-parachain binary to the docker image
 COPY ./artifacts/polkadot-parachain /usr/local/bin
-# copy substrate-relay to the docker image
-COPY --from=relay-builder /home/user/substrate-relay /usr/local/bin/
+# copy bizinikiwi-relay to the docker image
+COPY --from=relay-builder /home/user/bizinikiwi-relay /usr/local/bin/
 # we need bridges zombienet runner and tests
 RUN	mkdir -p /home/nonroot/bridges-polkadot-sdk
 COPY ./artifacts/bridges-polkadot-sdk /home/nonroot/bridges-polkadot-sdk
@@ -53,7 +53,7 @@ USER node
 # check if executable works in this container
 RUN /usr/local/bin/polkadot --version
 RUN /usr/local/bin/polkadot-parachain --version
-RUN /usr/local/bin/substrate-relay --version
+RUN /usr/local/bin/bizinikiwi-relay --version
 
 # https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:{PORT}#/explorer
 EXPOSE 9942 9910 8943 9945 9010 8945

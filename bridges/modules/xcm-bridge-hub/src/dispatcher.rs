@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! The code that allows to use the pallet (`pallet-xcm-bridge-hub`) as inbound
+//! The code that allows to use the pallet (`pezpallet-xcm-bridge-hub`) as inbound
 //! bridge messages dispatcher. Internally, it just forwards inbound blob to the
 //! XCM-level blob dispatcher, which pushes message to some other queue (e.g.
 //! to HRMP queue with the sibling target chain).
@@ -27,10 +27,10 @@ use bp_messages::target_chain::{DispatchMessage, MessageDispatch};
 use bp_runtime::messages::MessageDispatchResult;
 use bp_xcm_bridge_hub::{LocalXcmChannelManager, XcmAsPlainPayload};
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use frame_support::{weights::Weight, CloneNoBound, EqNoBound, PartialEqNoBound};
-use pallet_bridge_messages::{Config as BridgeMessagesConfig, WeightInfoExt};
+use pezframe_support::{weights::Weight, CloneNoBound, EqNoBound, PartialEqNoBound};
+use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, WeightInfoExt};
 use scale_info::TypeInfo;
-use sp_runtime::SaturatedConversion;
+use pezsp_runtime::SaturatedConversion;
 use xcm::prelude::*;
 use xcm_builder::{DispatchBlob, DispatchBlobError};
 
@@ -136,8 +136,8 @@ mod tests {
 
 	use bp_messages::{target_chain::DispatchMessageData, LaneIdType, MessageKey};
 	use bp_xcm_bridge_hub::{Bridge, BridgeLocations, BridgeState};
-	use frame_support::assert_ok;
-	use pallet_bridge_messages::InboundLaneStorage;
+	use pezframe_support::assert_ok;
+	use pezpallet_bridge_messages::InboundLaneStorage;
 	use xcm_executor::traits::ConvertLocation;
 
 	fn bridge() -> (Box<BridgeLocations>, TestLaneIdType) {

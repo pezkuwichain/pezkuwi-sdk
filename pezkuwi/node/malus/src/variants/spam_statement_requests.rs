@@ -34,7 +34,7 @@ use pezkuwi_cli::{
 use pezkuwi_node_network_protocol::request_response::{outgoing::Requests, OutgoingRequest};
 use pezkuwi_node_subsystem::{messages::NetworkBridgeTxMessage, SpawnGlue};
 use pezkuwi_node_subsystem_types::{ChainApiBackend, RuntimeApiSubsystemClient};
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 // Filter wrapping related types.
 use crate::{interceptor::*, shared::MALUS};

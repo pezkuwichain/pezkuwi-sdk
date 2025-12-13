@@ -20,9 +20,9 @@ use pezkuwi_node_primitives::MAX_FINALITY_LAG;
 use schnellru::{ByLength, LruMap};
 
 use codec::Encode;
-use sp_application_crypto::AppCrypto;
-use sp_core::crypto::ByteArray;
-use sp_keystore::{Keystore, KeystorePtr};
+use pezsp_application_crypto::AppCrypto;
+use pezsp_core::crypto::ByteArray;
+use pezsp_keystore::{Keystore, KeystorePtr};
 
 use pezkuwi_node_subsystem::{
 	errors::RuntimeApiError,

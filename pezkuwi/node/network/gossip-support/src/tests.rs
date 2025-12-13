@@ -25,11 +25,11 @@ use quickcheck::quickcheck;
 use rand::seq::SliceRandom as _;
 
 use parking_lot::Mutex;
-use sc_network::multiaddr::Protocol;
-use sp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
-use sp_consensus_babe::{AllowedSlots, BabeEpochConfiguration, Epoch as BabeEpoch};
-use sp_core::crypto::Pair as PairT;
-use sp_keyring::Sr25519Keyring;
+use pezsc_network::multiaddr::Protocol;
+use pezsp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
+use pezsp_consensus_babe::{AllowedSlots, BabeEpochConfiguration, Epoch as BabeEpoch};
+use pezsp_core::crypto::Pair as PairT;
+use pezsp_keyring::Sr25519Keyring;
 use std::sync::Arc;
 
 use pezkuwi_node_network_protocol::{
@@ -147,7 +147,7 @@ impl AuthorityDiscovery for MockAuthorityDiscovery {
 	async fn get_addresses_by_authority_id(
 		&mut self,
 		authority: pezkuwi_primitives::AuthorityDiscoveryId,
-	) -> Option<HashSet<sc_network::Multiaddr>> {
+	) -> Option<HashSet<pezsc_network::Multiaddr>> {
 		self.addrs.lock().get(&authority).cloned()
 	}
 
@@ -197,7 +197,7 @@ fn test_harness<T: Future<Output = VirtualOverseer>, AD: AuthorityDiscovery>(
 	subsystem: GossipSupport<AD>,
 	test_fn: impl FnOnce(VirtualOverseer) -> T,
 ) -> GossipSupport<AD> {
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
 
@@ -1151,7 +1151,7 @@ fn test_quickly_connect_to_authorities_that_changed_address() {
 
 #[test]
 fn disconnect_when_not_in_past_present_future() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let mock_authority_discovery =
 		MockAuthorityDiscovery::new(PAST_PRESENT_FUTURE_AUTHORITIES.clone());
 	let hash = Hash::repeat_byte(0xAA);
@@ -1215,7 +1215,7 @@ fn disconnect_when_not_in_past_present_future() {
 
 #[test]
 fn test_log_output() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let alice: AuthorityDiscoveryId = Sr25519Keyring::Alice.public().into();
 	let bob = Sr25519Keyring::Bob.public().into();
 	let unconnected_authorities = {

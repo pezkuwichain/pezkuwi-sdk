@@ -25,13 +25,13 @@ mod relay_chain;
 #[cfg(test)]
 mod tests;
 
-use sp_runtime::BuildStorage;
-use sp_tracing;
+use pezsp_runtime::BuildStorage;
+use pezsp_tracing;
 use xcm::prelude::*;
 use xcm_executor::traits::ConvertLocation;
 use xcm_simulator::{decl_test_network, decl_test_relay_chain, decl_test_teyrchain, TestExt};
 
-pub const ALICE: sp_runtime::AccountId32 = sp_runtime::AccountId32::new([1u8; 32]);
+pub const ALICE: pezsp_runtime::AccountId32 = pezsp_runtime::AccountId32::new([1u8; 32]);
 pub const INITIAL_BALANCE: u128 = 1_000_000_000;
 
 decl_test_teyrchain! {
@@ -84,48 +84,48 @@ pub fn child_account_id(para: u32) -> relay_chain::AccountId {
 	relay_chain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }
 
-pub fn child_account_account_id(para: u32, who: sp_runtime::AccountId32) -> relay_chain::AccountId {
+pub fn child_account_account_id(para: u32, who: pezsp_runtime::AccountId32) -> relay_chain::AccountId {
 	let location = (Teyrchain(para), AccountId32 { network: None, id: who.into() });
 	relay_chain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }
 
-pub fn sibling_account_account_id(para: u32, who: sp_runtime::AccountId32) -> teyrchain::AccountId {
+pub fn sibling_account_account_id(para: u32, who: pezsp_runtime::AccountId32) -> teyrchain::AccountId {
 	let location = (Parent, Teyrchain(para), AccountId32 { network: None, id: who.into() });
 	teyrchain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }
 
-pub fn parent_account_account_id(who: sp_runtime::AccountId32) -> teyrchain::AccountId {
+pub fn parent_account_account_id(who: pezsp_runtime::AccountId32) -> teyrchain::AccountId {
 	let location = (Parent, AccountId32 { network: None, id: who.into() });
 	teyrchain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }
 
-pub fn para_ext(para_id: u32) -> sp_io::TestExternalities {
+pub fn para_ext(para_id: u32) -> pezsp_io::TestExternalities {
 	use teyrchain::{MsgQueue, Runtime, System};
 
-	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Runtime> {
+	pezpallet_balances::GenesisConfig::<Runtime> {
 		balances: vec![(ALICE, INITIAL_BALANCE), (parent_account_id(), INITIAL_BALANCE)],
 		..Default::default()
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| {
-		sp_tracing::try_init_simple();
+		pezsp_tracing::try_init_simple();
 		System::set_block_number(1);
 		MsgQueue::set_para_id(para_id.into());
 	});
 	ext
 }
 
-pub fn relay_ext() -> sp_io::TestExternalities {
+pub fn relay_ext() -> pezsp_io::TestExternalities {
 	use relay_chain::{Runtime, RuntimeOrigin, System, Uniques};
 
-	let mut t = frame_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
-	pallet_balances::GenesisConfig::<Runtime> {
+	pezpallet_balances::GenesisConfig::<Runtime> {
 		balances: vec![
 			(ALICE, INITIAL_BALANCE),
 			(child_account_id(1), INITIAL_BALANCE),
@@ -136,7 +136,7 @@ pub fn relay_ext() -> sp_io::TestExternalities {
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(t);
+	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| {
 		System::set_block_number(1);
 		assert_eq!(Uniques::force_create(RuntimeOrigin::root(), 1, ALICE, true), Ok(()));
@@ -145,5 +145,5 @@ pub fn relay_ext() -> sp_io::TestExternalities {
 	ext
 }
 
-pub type RelayChainPalletXcm = pallet_xcm::Pallet<relay_chain::Runtime>;
-pub type TeyrchainPalletXcm = pallet_xcm::Pallet<teyrchain::Runtime>;
+pub type RelayChainPalletXcm = pezpallet_xcm::Pallet<relay_chain::Runtime>;
+pub type TeyrchainPalletXcm = pezpallet_xcm::Pallet<teyrchain::Runtime>;

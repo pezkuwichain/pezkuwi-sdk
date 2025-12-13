@@ -20,27 +20,27 @@
 use super::*;
 use crate::paras_registrar;
 use alloc::collections::btree_map::BTreeMap;
-use frame_support::{derive_impl, parameter_types};
-use frame_system::limits;
+use pezframe_support::{derive_impl, parameter_types};
+use pezframe_system::limits;
 use pezkuwi_primitives::{Balance, BlockNumber, MAX_CODE_SIZE};
 use pezkuwi_runtime_teyrchains::{configuration, origin, shared};
-use sp_core::{ConstUint, H256};
-use sp_io::TestExternalities;
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::{
+use pezsp_core::{ConstUint, H256};
+use pezsp_io::TestExternalities;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	transaction_validity::TransactionPriority,
 	BuildStorage, Perbill,
 };
 
-type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
-type Block = frame_system::mocking::MockBlockU32<Test>;
+type UncheckedExtrinsic = pezframe_system::mocking::MockUncheckedExtrinsic<Test>;
+type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		Configuration: configuration,
 		Teyrchains: paras,
 		ParasShared: shared,
@@ -49,7 +49,7 @@ frame_support::construct_runtime!(
 	}
 );
 
-impl<C> frame_system::offchain::CreateTransactionBase<C> for Test
+impl<C> pezframe_system::offchain::CreateTransactionBase<C> for Test
 where
 	RuntimeCall: From<C>,
 {
@@ -57,7 +57,7 @@ where
 	type RuntimeCall = RuntimeCall;
 }
 
-impl<C> frame_system::offchain::CreateBare<C> for Test
+impl<C> pezframe_system::offchain::CreateBare<C> for Test
 where
 	RuntimeCall: From<C>,
 {
@@ -69,14 +69,14 @@ where
 const NORMAL_RATIO: Perbill = Perbill::from_percent(75);
 parameter_types! {
 	pub BlockWeights: limits::BlockWeights =
-		frame_system::limits::BlockWeights::simple_max(Weight::from_parts(1024, u64::MAX));
+		pezframe_system::limits::BlockWeights::simple_max(Weight::from_parts(1024, u64::MAX));
 	pub BlockLength: limits::BlockLength =
 		limits::BlockLength::max_with_normal_ratio(4 * 1024 * 1024, NORMAL_RATIO);
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
-	type BaseCallFilter = frame_support::traits::Everything;
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
+	type BaseCallFilter = pezframe_support::traits::Everything;
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	type Nonce = u64;
@@ -91,21 +91,21 @@ impl frame_system::Config for Test {
 	type BlockLength = BlockLength;
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<u128>;
+	type AccountData = pezpallet_balances::AccountData<u128>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = ();
 	type OnSetCode = ();
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
 parameter_types! {
 	pub const ExistentialDeposit: Balance = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -131,7 +131,7 @@ impl paras::Config for Test {
 	type AssignCoretime = ();
 	type Fungible = Balances;
 	type CooldownRemovalMultiplier = ConstUint<1>;
-	type AuthorizeCurrentCodeOrigin = frame_system::EnsureRoot<u64>;
+	type AuthorizeCurrentCodeOrigin = pezframe_system::EnsureRoot<u64>;
 }
 
 impl configuration::Config for Test {
@@ -155,7 +155,7 @@ impl Config for Test {
 }
 
 pub fn new_test_ext() -> TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
 	configuration::GenesisConfig::<Test> {
 		config: configuration::HostConfiguration {
@@ -167,7 +167,7 @@ pub fn new_test_ext() -> TestExternalities {
 	.assimilate_storage(&mut t)
 	.unwrap();
 
-	pallet_balances::GenesisConfig::<Test> {
+	pezpallet_balances::GenesisConfig::<Test> {
 		balances: vec![(1, 10_000_000), (2, 10_000_000), (3, 10_000_000)],
 		..Default::default()
 	}
@@ -208,7 +208,7 @@ pub fn run_to_block(n: BlockNumber) {
 	// require adding it here.
 	System::run_to_block_with::<AllPalletsWithSystem>(
 		n,
-		frame_system::RunToBlockHooks::default().before_finalize(|bn| {
+		pezframe_system::RunToBlockHooks::default().before_finalize(|bn| {
 			// Session change every 3 blocks.
 			if (bn + 1) % BLOCKS_PER_SESSION == 0 {
 				let session_index = shared::CurrentSessionIndex::<Test>::get() + 1;

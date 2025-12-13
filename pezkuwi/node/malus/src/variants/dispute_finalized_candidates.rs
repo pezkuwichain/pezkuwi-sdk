@@ -43,7 +43,7 @@ use pezkuwi_node_subsystem::SpawnGlue;
 use pezkuwi_node_subsystem_types::{ChainApiBackend, OverseerSignal, RuntimeApiSubsystemClient};
 use pezkuwi_node_subsystem_util::request_candidate_events;
 use pezkuwi_primitives::CandidateEvent;
-use sp_core::traits::SpawnNamed;
+use pezsp_core::traits::SpawnNamed;
 
 // Filter wrapping related types.
 use crate::{interceptor::*, shared::MALUS};

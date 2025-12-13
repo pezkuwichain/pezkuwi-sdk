@@ -19,9 +19,9 @@
 use bp_header_chain::justification::verify_and_optimize_justification;
 use bp_test_utils::*;
 use finality_grandpa::SignedPrecommit;
-use sp_consensus_grandpa::AuthoritySignature;
+use pezsp_consensus_grandpa::AuthoritySignature;
 
-type TestHeader = sp_runtime::testing::Header;
+type TestHeader = pezsp_runtime::testing::Header;
 
 #[test]
 fn optimizer_does_noting_with_minimal_justification() {

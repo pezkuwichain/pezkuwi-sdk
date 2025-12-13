@@ -49,8 +49,8 @@ use pezkuwi_primitives::{
 	CandidateReceiptV2 as CandidateReceipt, ConsensusLog, CoreIndex, GroupIndex, Hash, Header,
 	SessionIndex,
 };
-use sc_keystore::LocalKeystore;
-use sp_consensus_slots::Slot;
+use pezsc_keystore::LocalKeystore;
+use pezsp_consensus_slots::Slot;
 
 use bitvec::order::Lsb0 as BitOrderLsb0;
 use futures::{channel::oneshot, prelude::*};
@@ -190,7 +190,7 @@ async fn imported_block_info<Sender: SubsystemSender<RuntimeApiMessage>>(
 		// want to use the block hash itself, and here's why:
 		//
 		// First off, 'epoch' in BABE means 'session' in other places. 'epoch' is the terminology
-		// from the paper, which we fulfill using 'session's, which are a Substrate consensus
+		// from the paper, which we fulfill using 'session's, which are a Bizinikiwi consensus
 		// concept.
 		//
 		// In BABE, the on-chain and off-chain view of the current epoch can differ at epoch
@@ -471,7 +471,7 @@ pub(crate) async fn handle_new_head<
 		let validator_group_lens: Vec<usize> =
 			session_info.validator_groups.iter().map(|v| v.len()).collect();
 		// insta-approve candidates on low-node testnets:
-		// cf. https://github.com/paritytech/polkadot/issues/2411
+		// cf. https://github.com/pezkuwichain/kurdistan-sdk/issues/134
 		let num_candidates = included_candidates.len();
 		let approved_bitfield = {
 			if needed_approvals == 0 {
@@ -628,13 +628,13 @@ pub(crate) mod tests {
 	};
 	use pezkuwi_primitives_test_helpers::{dummy_candidate_receipt_v2, dummy_hash};
 	use schnellru::{ByLength, LruMap};
-	pub(crate) use sp_consensus_babe::{
+	pub(crate) use pezsp_consensus_babe::{
 		digests::{CompatibleDigestItem, PreDigest, SecondaryVRFPreDigest},
 		AllowedSlots, BabeEpochConfiguration, Epoch as BabeEpoch,
 	};
-	use sp_core::{crypto::VrfSecret, testing::TaskExecutor};
-	use sp_keyring::sr25519::Keyring as Sr25519Keyring;
-	pub(crate) use sp_runtime::{Digest, DigestItem};
+	use pezsp_core::{crypto::VrfSecret, testing::TaskExecutor};
+	use pezsp_keyring::sr25519::Keyring as Sr25519Keyring;
+	pub(crate) use pezsp_runtime::{Digest, DigestItem};
 	use std::{pin::Pin, sync::Arc};
 
 	use crate::{approval_db::common::Config as DatabaseConfig, criteria, BlockEntry};

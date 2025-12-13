@@ -17,10 +17,10 @@
 //! Various implementations for `ConvertOrigin`.
 
 use core::marker::PhantomData;
-use frame_support::traits::{Contains, EnsureOrigin, Get, GetBacking, OriginTrait};
-use frame_system::RawOrigin as SystemRawOrigin;
+use pezframe_support::traits::{Contains, EnsureOrigin, Get, GetBacking, OriginTrait};
+use pezframe_system::RawOrigin as SystemRawOrigin;
 use pezkuwi_teyrchain_primitives::primitives::IsSystem;
-use sp_runtime::traits::TryConvert;
+use pezsp_runtime::traits::TryConvert;
 use xcm::latest::{BodyId, BodyPart, Junction, Junctions::*, Location, NetworkId, OriginKind};
 use xcm_executor::traits::{ConvertLocation, ConvertOrigin};
 
@@ -263,7 +263,7 @@ where
 /// `Convert` implementation to convert from some a `Signed` (system) `Origin` into an
 /// `AccountId32`.
 ///
-/// Typically used when configuring `pallet-xcm` for allowing normal accounts to dispatch an XCM
+/// Typically used when configuring `pezpallet-xcm` for allowing normal accounts to dispatch an XCM
 /// from an `AccountId32` origin.
 pub struct SignedToAccountId32<RuntimeOrigin, AccountId, Network>(
 	PhantomData<(RuntimeOrigin, AccountId, Network)>,
@@ -290,7 +290,7 @@ where
 /// `Convert` implementation to convert from some an origin which implements `Backing` into a
 /// corresponding `Plurality` `Location`.
 ///
-/// Typically used when configuring `pallet-xcm` for allowing a collective's Origin to dispatch an
+/// Typically used when configuring `pezpallet-xcm` for allowing a collective's Origin to dispatch an
 /// XCM from a `Plurality` origin.
 pub struct BackingToPlurality<RuntimeOrigin, COrigin, Body>(
 	PhantomData<(RuntimeOrigin, COrigin, Body)>,
@@ -363,20 +363,20 @@ impl<WhitelistedSuperuserLocations: Contains<Location>, RuntimeOrigin: OriginTra
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::{construct_runtime, derive_impl, parameter_types, traits::Equals};
+	use pezframe_support::{construct_runtime, derive_impl, parameter_types, traits::Equals};
 	use xcm::latest::{Junction::*, OriginKind};
 
-	type Block = frame_system::mocking::MockBlock<Test>;
+	type Block = pezframe_system::mocking::MockBlock<Test>;
 
 	construct_runtime!(
 		pub enum Test
 		{
-			System: frame_system,
+			System: pezframe_system,
 		}
 	);
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Test {
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Test {
 		type Block = Block;
 	}
 

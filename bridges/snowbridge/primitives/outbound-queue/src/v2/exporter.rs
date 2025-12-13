@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use core::marker::PhantomData;
 use snowbridge_core::operating_mode::ExportPausedQuery;
-use sp_std::vec::Vec;
+use pezsp_std::vec::Vec;
 use xcm::{
 	prelude::{Location, SendError, SendResult, SendXcm, Xcm, XcmHash},
 	VersionedLocation, VersionedXcm,

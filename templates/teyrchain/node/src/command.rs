@@ -1,13 +1,13 @@
 use pezkuwi_sdk::*;
 
 use cumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
-use frame_benchmarking_cli::{BenchmarkCmd, SUBSTRATE_REFERENCE_HARDWARE};
+use pezframe_benchmarking_cli::{BenchmarkCmd, BIZINIKIWI_REFERENCE_HARDWARE};
 use log::info;
-use sc_cli::{
+use pezsc_cli::{
 	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
-	NetworkParams, Result, RpcEndpoint, SharedParams, SubstrateCli,
+	NetworkParams, Result, RpcEndpoint, SharedParams, BizinikiwiCli,
 };
-use sc_service::config::{BasePath, PrometheusConfig};
+use pezsc_service::config::{BasePath, PrometheusConfig};
 use teyrchain_template_runtime::Block;
 
 use crate::{
@@ -25,13 +25,13 @@ fn load_spec(id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
 	})
 }
 
-impl SubstrateCli for Cli {
+impl BizinikiwiCli for Cli {
 	fn impl_name() -> String {
 		"Teyrchain Collator Template".into()
 	}
 
 	fn impl_version() -> String {
-		env!("SUBSTRATE_CLI_IMPL_VERSION").into()
+		env!("BIZINIKIWI_CLI_IMPL_VERSION").into()
 	}
 
 	fn description() -> String {
@@ -56,18 +56,18 @@ impl SubstrateCli for Cli {
 		2020
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		load_spec(id)
 	}
 }
 
-impl SubstrateCli for RelayChainCli {
+impl BizinikiwiCli for RelayChainCli {
 	fn impl_name() -> String {
 		"Teyrchain Collator Template".into()
 	}
 
 	fn impl_version() -> String {
-		env!("SUBSTRATE_CLI_IMPL_VERSION").into()
+		env!("BIZINIKIWI_CLI_IMPL_VERSION").into()
 	}
 
 	fn description() -> String {
@@ -92,7 +92,7 @@ impl SubstrateCli for RelayChainCli {
 		2020
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		pezkuwi_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
 	}
 }
@@ -156,7 +156,7 @@ pub fn run() -> Result<()> {
 					[RelayChainCli::executable_name()].iter().chain(cli.relay_chain_args.iter()),
 				);
 
-				let pezkuwi_config = SubstrateCli::create_configuration(
+				let pezkuwi_config = BizinikiwiCli::create_configuration(
 					&pezkuwi_cli,
 					&pezkuwi_cli,
 					config.tokio_handle.clone(),
@@ -187,7 +187,7 @@ pub fn run() -> Result<()> {
 			match cmd {
 				BenchmarkCmd::Pallet(cmd) =>
 					if cfg!(feature = "runtime-benchmarks") {
-						runner.sync_run(|config| cmd.run_with_spec::<sp_runtime::traits::HashingFor<Block>, ReclaimHostFunctions>(Some(config.chain_spec)))
+						runner.sync_run(|config| cmd.run_with_spec::<pezsp_runtime::traits::HashingFor<Block>, ReclaimHostFunctions>(Some(config.chain_spec)))
 					} else {
 						Err("Benchmarking wasn't enabled when building the node. \
 					You can enable it with `--features runtime-benchmarks`."
@@ -198,7 +198,7 @@ pub fn run() -> Result<()> {
 					cmd.run(partials.client)
 				}),
 				#[cfg(not(feature = "runtime-benchmarks"))]
-				BenchmarkCmd::Storage(_) => Err(sc_cli::Error::Input(
+				BenchmarkCmd::Storage(_) => Err(pezsc_cli::Error::Input(
 					"Compile with --features=runtime-benchmarks \
 						to enable storage benchmarks."
 						.into(),
@@ -213,7 +213,7 @@ pub fn run() -> Result<()> {
 					cmd.run(config, partials.client.clone(), db, storage, shared_cache)
 				}),
 				BenchmarkCmd::Machine(cmd) =>
-					runner.sync_run(|config| cmd.run(&config, SUBSTRATE_REFERENCE_HARDWARE.clone())),
+					runner.sync_run(|config| cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone())),
 				// NOTE: this allows the Client to leniently implement
 				// new benchmark commands without requiring a companion MR.
 				#[allow(unreachable_patterns)]
@@ -229,9 +229,9 @@ pub fn run() -> Result<()> {
 					.then(|| {
 						config.database.path().map(|database_path| {
 							let _ = std::fs::create_dir_all(database_path);
-							sc_sysinfo::gather_hwbench(
+							pezsc_sysinfo::gather_hwbench(
 								Some(database_path),
-								&SUBSTRATE_REFERENCE_HARDWARE,
+								&BIZINIKIWI_REFERENCE_HARDWARE,
 							)
 						})
 					})
@@ -244,7 +244,7 @@ pub fn run() -> Result<()> {
 
 				let tokio_handle = config.tokio_handle.clone();
 				let pezkuwi_config =
-					SubstrateCli::create_configuration(&pezkuwi_cli, &pezkuwi_cli, tokio_handle)
+					BizinikiwiCli::create_configuration(&pezkuwi_cli, &pezkuwi_cli, tokio_handle)
 						.map_err(|err| format!("Relay chain argument error: {err}"))?;
 
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
@@ -315,7 +315,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 
 	fn init<F>(&self, _support_url: &String, _impl_version: &String, _logger_hook: F) -> Result<()>
 	where
-		F: FnOnce(&mut sc_cli::LoggerBuilder),
+		F: FnOnce(&mut pezsc_cli::LoggerBuilder),
 	{
 		unreachable!("PezkuwiCli is never initialized; qed");
 	}
@@ -326,11 +326,11 @@ impl CliConfiguration<Self> for RelayChainCli {
 		Ok(if chain_id.is_empty() { self.chain_id.clone().unwrap_or_default() } else { chain_id })
 	}
 
-	fn role(&self, is_dev: bool) -> Result<sc_service::Role> {
+	fn role(&self, is_dev: bool) -> Result<pezsc_service::Role> {
 		self.base.base.role(is_dev)
 	}
 
-	fn transaction_pool(&self, is_dev: bool) -> Result<sc_service::config::TransactionPoolOptions> {
+	fn transaction_pool(&self, is_dev: bool) -> Result<pezsc_service::config::TransactionPoolOptions> {
 		self.base.base.transaction_pool(is_dev)
 	}
 
@@ -338,7 +338,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 		self.base.base.trie_cache_maximum_size()
 	}
 
-	fn rpc_methods(&self) -> Result<sc_service::config::RpcMethods> {
+	fn rpc_methods(&self) -> Result<pezsc_service::config::RpcMethods> {
 		self.base.base.rpc_methods()
 	}
 
@@ -373,7 +373,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 	fn telemetry_endpoints(
 		&self,
 		chain_spec: &Box<dyn ChainSpec>,
-	) -> Result<Option<sc_telemetry::TelemetryEndpoints>> {
+	) -> Result<Option<pezsc_telemetry::TelemetryEndpoints>> {
 		self.base.base.telemetry_endpoints(chain_spec)
 	}
 

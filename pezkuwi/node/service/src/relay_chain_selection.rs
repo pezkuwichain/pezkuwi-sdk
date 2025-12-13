@@ -45,10 +45,10 @@ use pezkuwi_node_subsystem::messages::{
 use pezkuwi_node_subsystem_util::metrics::{self, prometheus};
 use pezkuwi_overseer::{AllMessages, Handle, PriorityLevel};
 use pezkuwi_primitives::{Block as PezkuwiBlock, BlockNumber, Hash, Header as PezkuwiHeader};
-use sp_consensus::{Error as ConsensusError, SelectChain};
+use pezsp_consensus::{Error as ConsensusError, SelectChain};
 use std::sync::Arc;
 
-pub use sc_service::SpawnTaskHandle;
+pub use pezsc_service::SpawnTaskHandle;
 
 /// The maximum amount of unfinalized blocks we are willing to allow due to approval checking
 /// or disputes.
@@ -114,14 +114,14 @@ impl Metrics {
 /// Determines whether the chain is a relay chain
 /// and hence has to take approval votes and disputes
 /// into account.
-enum IsDisputesAwareWithOverseer<B: sc_client_api::Backend<PezkuwiBlock>> {
+enum IsDisputesAwareWithOverseer<B: pezsc_client_api::Backend<PezkuwiBlock>> {
 	Yes(SelectRelayChainInner<B, Handle>),
 	No,
 }
 
 impl<B> Clone for IsDisputesAwareWithOverseer<B>
 where
-	B: sc_client_api::Backend<PezkuwiBlock>,
+	B: pezsc_client_api::Backend<PezkuwiBlock>,
 	SelectRelayChainInner<B, Handle>: Clone,
 {
 	fn clone(&self) -> Self {
@@ -133,14 +133,14 @@ where
 }
 
 /// A chain-selection implementation which provides safety for relay chains.
-pub struct SelectRelayChain<B: sc_client_api::Backend<PezkuwiBlock>> {
-	longest_chain: sc_consensus::LongestChain<B, PezkuwiBlock>,
+pub struct SelectRelayChain<B: pezsc_client_api::Backend<PezkuwiBlock>> {
+	longest_chain: pezsc_consensus::LongestChain<B, PezkuwiBlock>,
 	selection: IsDisputesAwareWithOverseer<B>,
 }
 
 impl<B> Clone for SelectRelayChain<B>
 where
-	B: sc_client_api::Backend<PezkuwiBlock>,
+	B: pezsc_client_api::Backend<PezkuwiBlock>,
 	SelectRelayChainInner<B, Handle>: Clone,
 {
 	fn clone(&self) -> Self {
@@ -150,14 +150,14 @@ where
 
 impl<B> SelectRelayChain<B>
 where
-	B: sc_client_api::Backend<PezkuwiBlock> + 'static,
+	B: pezsc_client_api::Backend<PezkuwiBlock> + 'static,
 {
 	/// Use the plain longest chain algorithm exclusively.
 	pub fn new_longest_chain(backend: Arc<B>) -> Self {
 		gum::debug!(target: LOG_TARGET, "Using {} chain selection algorithm", "longest");
 
 		Self {
-			longest_chain: sc_consensus::LongestChain::new(backend.clone()),
+			longest_chain: pezsc_consensus::LongestChain::new(backend.clone()),
 			selection: IsDisputesAwareWithOverseer::No,
 		}
 	}
@@ -173,7 +173,7 @@ where
 		gum::debug!(target: LOG_TARGET, "Using dispute aware relay-chain selection algorithm",);
 
 		SelectRelayChain {
-			longest_chain: sc_consensus::LongestChain::new(backend.clone()),
+			longest_chain: pezsc_consensus::LongestChain::new(backend.clone()),
 			selection: IsDisputesAwareWithOverseer::Yes(SelectRelayChainInner::new(
 				backend,
 				overseer,
@@ -184,7 +184,7 @@ where
 	}
 
 	/// Allow access to the inner chain, for usage during the node setup.
-	pub fn as_longest_chain(&self) -> &sc_consensus::LongestChain<B, PezkuwiBlock> {
+	pub fn as_longest_chain(&self) -> &pezsc_consensus::LongestChain<B, PezkuwiBlock> {
 		&self.longest_chain
 	}
 }
@@ -192,7 +192,7 @@ where
 #[async_trait::async_trait]
 impl<B> SelectChain<PezkuwiBlock> for SelectRelayChain<B>
 where
-	B: sc_client_api::Backend<PezkuwiBlock> + 'static,
+	B: pezsc_client_api::Backend<PezkuwiBlock> + 'static,
 {
 	async fn leaves(&self) -> Result<Vec<Hash>, ConsensusError> {
 		match self.selection {

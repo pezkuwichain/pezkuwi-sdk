@@ -3,10 +3,10 @@ use crate::{
 	v1::{Command::UnlockNativeToken, Fee},
 	SendError, SendMessageFeeProvider,
 };
-use frame_support::parameter_types;
+use pezframe_support::parameter_types;
 use hex_literal::hex;
 use snowbridge_core::AgentIdOf;
-use sp_std::default::Default;
+use pezsp_std::default::Default;
 use xcm::{
 	latest::{PEZKUWICHAIN_GENESIS_HASH, ZAGROS_GENESIS_HASH},
 	prelude::SendError as XcmSendError,

@@ -29,7 +29,7 @@ use pezkuwi_node_subsystem::{
 };
 
 use pezkuwi_node_network_protocol::request_response::Requests;
-use sc_network::{MessageSink, ReputationChange};
+use pezsc_network::{MessageSink, ReputationChange};
 
 use crate::validator_discovery;
 

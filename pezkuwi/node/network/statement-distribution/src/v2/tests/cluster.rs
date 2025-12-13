@@ -1231,7 +1231,7 @@ fn delayed_reputation_changes() {
 	let req_protocol_names = ReqProtocolNames::new(&GENESIS_HASH, None);
 	let (candidate_req_receiver, req_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let mut rng = rand_chacha::ChaCha8Rng::seed_from_u64(0);
 
@@ -1240,7 +1240,7 @@ fn delayed_reputation_changes() {
 	// We can't use the test harness as we need to spawn our own subsystem with custom config.
 	let (context, mut virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(
-			sp_core::testing::TaskExecutor::new(),
+			pezsp_core::testing::TaskExecutor::new(),
 		);
 	let subsystem = async move {
 		let subsystem = crate::StatementDistributionSubsystem {

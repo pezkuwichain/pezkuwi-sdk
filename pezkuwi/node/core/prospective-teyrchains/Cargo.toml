@@ -28,8 +28,8 @@ pezkuwi-primitives = { workspace = true, features = ["test"] }
 pezkuwi-primitives-test-helpers = { workspace = true }
 rand = { workspace = true }
 rstest = { workspace = true }
-sp-core = { workspace = true, default-features = true }
-sp-tracing = { workspace = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true }
 
 [features]
 runtime-benchmarks = [

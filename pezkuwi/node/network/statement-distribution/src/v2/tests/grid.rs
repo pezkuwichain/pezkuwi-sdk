@@ -2040,7 +2040,7 @@ fn elastic_scaling_grid_statements_imported_to_backing() {
 
 #[test]
 fn advertisements_rejected_from_incorrect_peers() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let validator_count = 6;
 	let group_size = 3;
 	let config = TestConfig {

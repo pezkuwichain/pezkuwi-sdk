@@ -25,9 +25,9 @@ pub use bp_relayers::RewardLedger;
 use bp_relayers::{PaymentProcedure, Registration, RelayerRewardsKeyProvider, StakeAndSlash};
 use bp_runtime::StorageDoubleMapKeyProvider;
 use core::marker::PhantomData;
-use frame_support::{fail, traits::tokens::Balance};
-use sp_arithmetic::traits::{AtLeast32BitUnsigned, Zero};
-use sp_runtime::{
+use pezframe_support::{fail, traits::tokens::Balance};
+use pezsp_arithmetic::traits::{AtLeast32BitUnsigned, Zero};
+use pezsp_runtime::{
 	traits::{CheckedSub, IdentifyAccount},
 	Saturating,
 };
@@ -51,32 +51,32 @@ pub mod weights;
 /// The target that will be used when publishing logs related to this pallet.
 pub const LOG_TARGET: &str = "runtime::bridge-relayers";
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	/// `RelayerRewardsKeyProvider` for given configuration.
 	type RelayerRewardsKeyProviderOf<T, I> = RelayerRewardsKeyProvider<
-		<T as frame_system::Config>::AccountId,
+		<T as pezframe_system::Config>::AccountId,
 		<T as Config<I>>::Reward,
 		<T as Config<I>>::RewardBalance,
 	>;
 
 	/// Shortcut to alternative beneficiary type for `Config::PaymentProcedure`.
 	pub type BeneficiaryOf<T, I> = <<T as Config<I>>::PaymentProcedure as PaymentProcedure<
-		<T as frame_system::Config>::AccountId,
+		<T as pezframe_system::Config>::AccountId,
 		<T as Config<I>>::Reward,
 		<T as Config<I>>::RewardBalance,
 	>>::Beneficiary;
 
 	#[pallet::config]
-	pub trait Config<I: 'static = ()>: frame_system::Config {
+	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
-			+ IsType<<Self as frame_system::Config>::RuntimeEvent>;
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Type of relayer reward balance.
 		type RewardBalance: AtLeast32BitUnsigned + Copy + Member + Parameter + MaxEncodedLen;
@@ -107,7 +107,7 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config<I>, I: 'static> Pallet<T, I>
 	where
-		BeneficiaryOf<T, I>: From<<T as frame_system::Config>::AccountId>,
+		BeneficiaryOf<T, I>: From<<T as pezframe_system::Config>::AccountId>,
 	{
 		/// Claim accumulated rewards.
 		#[pallet::call_index(0)]
@@ -128,7 +128,7 @@ pub mod pallet {
 
 			// valid till must be larger than the current block number and the lease must be larger
 			// than the `RequiredRegistrationLease`
-			let lease = valid_till.saturating_sub(frame_system::Pallet::<T>::block_number());
+			let lease = valid_till.saturating_sub(pezframe_system::Pallet::<T>::block_number());
 			ensure!(
 				lease > Self::required_registration_lease(),
 				Error::<T, I>::InvalidRegistrationLease
@@ -202,7 +202,7 @@ pub mod pallet {
 
 					// we can't deregister until `valid_till + 1`
 					ensure!(
-						registration.valid_till < frame_system::Pallet::<T>::block_number(),
+						registration.valid_till < pezframe_system::Pallet::<T>::block_number(),
 						Error::<T, I>::RegistrationIsStillActive,
 					);
 
@@ -320,7 +320,7 @@ pub mod pallet {
 			// registration is inactive if it ends soon
 			let remaining_lease = registration
 				.valid_till
-				.saturating_sub(frame_system::Pallet::<T>::block_number());
+				.saturating_sub(pezframe_system::Pallet::<T>::block_number());
 			if remaining_lease <= Self::required_registration_lease() {
 				return false;
 			}
@@ -580,9 +580,9 @@ mod tests {
 
 	use bp_messages::{HashedLaneId, LaneIdType};
 	use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
-	use frame_support::{assert_noop, assert_ok, traits::fungible::Mutate};
-	use frame_system::{EventRecord, Pallet as System, Phase};
-	use sp_runtime::DispatchError;
+	use pezframe_support::{assert_noop, assert_ok, traits::fungible::Mutate};
+	use pezframe_system::{EventRecord, Pallet as System, Phase};
+	use pezsp_runtime::DispatchError;
 
 	fn get_ready_for_events() {
 		System::<TestRuntime>::set_block_number(1);

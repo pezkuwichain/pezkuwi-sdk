@@ -5,7 +5,7 @@
 //! # Overview
 //!
 //! Messages come either from sibling teyrchains via XCM, or BridgeHub itself
-//! via the `snowbridge-pallet-system`:
+//! via the `snowbridge-pezpallet-system`:
 //!
 //! 1. `snowbridge_outbound_queue_primitives::v1::EthereumBlobExporter::deliver`
 //! 2. `snowbridge_pallet_system::Pallet::send`
@@ -17,7 +17,7 @@
 //!    [`snowbridge_outbound_queue_primitives::v1::SendMessage::deliver`]
 //! 3. The underlying message queue is implemented by [`Config::MessageQueue`]
 //! 4. The message queue delivers messages back to this pallet via the implementation for
-//!    [`frame_support::traits::ProcessMessage::process_message`]
+//!    [`pezframe_support::traits::ProcessMessage::process_message`]
 //! 5. The message is processed in `Pallet::do_process_message`: a. Assigned a nonce b. ABI-encoded,
 //!    hashed, and stored in the `MessageLeaves` vector
 //! 6. At the end of the block, a merkle root is constructed from all the leaves in `MessageLeaves`.
@@ -105,7 +105,7 @@ mod test;
 
 use bridge_hub_common::AggregateMessageOrigin;
 use codec::Decode;
-use frame_support::{
+use pezframe_support::{
 	storage::StorageStreamIter,
 	traits::{tokens::Balance, Contains, Defensive, EnqueueMessage, Get, ProcessMessageError},
 	weights::{Weight, WeightToFee},
@@ -115,32 +115,32 @@ use snowbridge_merkle_tree::merkle_root;
 use snowbridge_outbound_queue_primitives::v1::{
 	Fee, GasMeter, QueuedMessage, VersionedQueuedMessage, ETHER_DECIMALS,
 };
-use sp_core::{H256, U256};
-use sp_runtime::{
+use pezsp_core::{H256, U256};
+use pezsp_runtime::{
 	traits::{CheckedDiv, Hash},
 	DigestItem, Saturating,
 };
-use sp_std::prelude::*;
+use pezsp_std::prelude::*;
 pub use types::{CommittedMessage, ProcessMessageOriginOf};
 pub use weights::WeightInfo;
 
 pub use pallet::*;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 	use snowbridge_core::PricingParameters;
-	use sp_arithmetic::FixedU128;
+	use pezsp_arithmetic::FixedU128;
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type Hashing: Hash<Output = H256>;
 
@@ -217,7 +217,7 @@ pub mod pallet {
 	///
 	/// Is never read in the runtime, only by offchain message relayers.
 	///
-	/// Inspired by the `frame_system::Pallet::Events` storage value
+	/// Inspired by the `pezframe_system::Pallet::Events` storage value
 	#[pallet::storage]
 	#[pallet::unbounded]
 	pub(super) type Messages<T: Config> = StorageValue<_, Vec<CommittedMessage>, ValueQuery>;
@@ -292,7 +292,7 @@ pub mod pallet {
 			let digest_item: DigestItem = SnowbridgeDigestItem::Snowbridge(root).into();
 
 			// Insert merkle root into the header digest
-			<frame_system::Pallet<T>>::deposit_log(digest_item);
+			<pezframe_system::Pallet<T>>::deposit_log(digest_item);
 
 			Self::deposit_event(Event::MessagesCommitted { root, count });
 		}

@@ -23,7 +23,7 @@ use pezkuwi_node_subsystem::{
 };
 use pezkuwi_node_subsystem_types::OverseerSignal;
 use pezkuwi_primitives::Header;
-use sp_core::H256;
+use pezsp_core::H256;
 use std::collections::HashMap;
 
 const LOG_TARGET: &str = "subsystem-bench::chain-api-mock";

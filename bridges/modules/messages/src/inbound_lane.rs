@@ -26,8 +26,8 @@ use bp_messages::{
 use bp_runtime::AccountIdOf;
 use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
 use scale_info::{Type, TypeInfo};
-use sp_runtime::RuntimeDebug;
-use sp_std::prelude::PartialEq;
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::prelude::PartialEq;
 
 /// Inbound lane storage.
 pub trait InboundLaneStorage {
@@ -63,7 +63,7 @@ pub struct StoredInboundLaneData<T: Config<I>, I: 'static>(
 	pub InboundLaneData<AccountIdOf<BridgedChainOf<T, I>>>,
 );
 
-impl<T: Config<I>, I: 'static> sp_std::ops::Deref for StoredInboundLaneData<T, I> {
+impl<T: Config<I>, I: 'static> pezsp_std::ops::Deref for StoredInboundLaneData<T, I> {
 	type Target = InboundLaneData<AccountIdOf<BridgedChainOf<T, I>>>;
 
 	fn deref(&self) -> &Self::Target {
@@ -71,7 +71,7 @@ impl<T: Config<I>, I: 'static> sp_std::ops::Deref for StoredInboundLaneData<T, I
 	}
 }
 
-impl<T: Config<I>, I: 'static> sp_std::ops::DerefMut for StoredInboundLaneData<T, I> {
+impl<T: Config<I>, I: 'static> pezsp_std::ops::DerefMut for StoredInboundLaneData<T, I> {
 	fn deref_mut(&mut self) -> &mut Self::Target {
 		&mut self.0
 	}

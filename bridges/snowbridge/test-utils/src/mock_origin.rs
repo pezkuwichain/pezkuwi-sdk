@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 
-// A stripped-down version of pallet-xcm that only inserts an XCM origin into the runtime
-#[frame_support::pallet]
-pub mod pallet_xcm_origin {
+// A stripped-down version of pezpallet-xcm that only inserts an XCM origin into the runtime
+#[pezframe_support::pallet]
+pub mod pezpallet_xcm_origin {
 	use codec::DecodeWithMemTracking;
-	use frame_support::{
-		pallet_prelude::*,
+	use pezframe_support::{
+		pezpallet_prelude::*,
 		traits::{Contains, OriginTrait},
 	};
 	use xcm::latest::prelude::*;
@@ -15,8 +15,8 @@ pub mod pallet_xcm_origin {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
-		type RuntimeOrigin: From<Origin> + From<<Self as frame_system::Config>::RuntimeOrigin>;
+	pub trait Config: pezframe_system::Config {
+		type RuntimeOrigin: From<Origin> + From<<Self as pezframe_system::Config>::RuntimeOrigin>;
 	}
 
 	// Insert this custom Origin into the aggregate RuntimeOrigin

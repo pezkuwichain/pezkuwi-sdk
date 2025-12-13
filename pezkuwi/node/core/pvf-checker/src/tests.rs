@@ -30,11 +30,11 @@ use pezkuwi_primitives::{
 	ValidatorId,
 };
 use pezkuwi_primitives_test_helpers::{dummy_digest, dummy_hash, validator_pubkeys};
-use sp_application_crypto::AppCrypto;
-use sp_core::testing::TaskExecutor;
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::Keystore;
-use sp_runtime::traits::AppVerify;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_core::testing::TaskExecutor;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::Keystore;
+use pezsp_runtime::traits::AppVerify;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
 type VirtualOverseer = TestSubsystemContextHandle<PvfCheckerMessage>;
@@ -353,7 +353,7 @@ impl ExpectSubmitVote {
 fn test_harness(test: impl FnOnce(TestState, VirtualOverseer) -> BoxFuture<'static, ()>) {
 	let pool = TaskExecutor::new();
 	let (ctx, handle) = make_subsystem_context::<PvfCheckerMessage, _>(pool.clone());
-	let keystore = Arc::new(sc_keystore::LocalKeystore::in_memory());
+	let keystore = Arc::new(pezsc_keystore::LocalKeystore::in_memory());
 
 	// Add OUR_VALIDATOR (which is Alice) to the keystore.
 	Keystore::sr25519_generate_new(&*keystore, ValidatorId::ID, Some(&OUR_VALIDATOR.to_seed()))

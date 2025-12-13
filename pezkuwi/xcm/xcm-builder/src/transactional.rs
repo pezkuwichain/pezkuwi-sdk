@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-use frame_support::storage::{with_transaction, TransactionOutcome};
-use sp_runtime::DispatchError;
+use pezframe_support::storage::{with_transaction, TransactionOutcome};
+use pezsp_runtime::DispatchError;
 use xcm::latest::prelude::*;
 use xcm_executor::traits::ProcessTransaction;
 

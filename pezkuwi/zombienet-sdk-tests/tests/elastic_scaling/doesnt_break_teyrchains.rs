@@ -54,7 +54,7 @@ async fn doesnt_break_teyrchains_test() -> Result<(), anyhow::Error> {
 			// slot-based collator.
 			p.with_id(2000)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.cumulus.as_str())
+				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec![("-lteyrchain=debug,aura=debug").into()])
 				.with_collator(|n| n.with_name("collator-2000"))
 		})

@@ -17,17 +17,17 @@
 //! A pallet for managing validators on Pezkuwichain.
 
 use alloc::vec::Vec;
-use sp_staking::SessionIndex;
+use pezsp_staking::SessionIndex;
 
 pub use pallet::*;
 
-type Session<T> = pallet_session::Pallet<T>;
+type Session<T> = pezpallet_session::Pallet<T>;
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::{dispatch::DispatchResult, pallet_prelude::*, traits::EnsureOrigin};
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::{dispatch::DispatchResult, pezpallet_prelude::*, traits::EnsureOrigin};
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::pallet]
 	#[pallet::without_storage_info]
@@ -35,13 +35,13 @@ pub mod pallet {
 
 	/// Configuration for the teyrchain proposer.
 	#[pallet::config]
-	pub trait Config: frame_system::Config + pallet_session::Config {
+	pub trait Config: pezframe_system::Config + pezpallet_session::Config {
 		/// The overreaching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Privileged origin that can add or remove validators.
-		type PrivilegedOrigin: EnsureOrigin<<Self as frame_system::Config>::RuntimeOrigin>;
+		type PrivilegedOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 	}
 
 	#[pallet::event]
@@ -100,7 +100,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> pallet_session::SessionManager<T::ValidatorId> for Pallet<T> {
+impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pallet<T> {
 	fn new_session(new_index: SessionIndex) -> Option<Vec<T::ValidatorId>> {
 		if new_index <= 1 {
 			return None;
@@ -128,17 +128,17 @@ impl<T: Config> pallet_session::SessionManager<T::ValidatorId> for Pallet<T> {
 	fn start_session(_start_index: SessionIndex) {}
 }
 
-impl<T: Config> pallet_session::historical::SessionManager<T::ValidatorId, ()> for Pallet<T> {
+impl<T: Config> pezpallet_session::historical::SessionManager<T::ValidatorId, ()> for Pallet<T> {
 	fn new_session(new_index: SessionIndex) -> Option<Vec<(T::ValidatorId, ())>> {
-		<Self as pallet_session::SessionManager<_>>::new_session(new_index)
+		<Self as pezpallet_session::SessionManager<_>>::new_session(new_index)
 			.map(|r| r.into_iter().map(|v| (v, Default::default())).collect())
 	}
 
 	fn start_session(start_index: SessionIndex) {
-		<Self as pallet_session::SessionManager<_>>::start_session(start_index)
+		<Self as pezpallet_session::SessionManager<_>>::start_session(start_index)
 	}
 
 	fn end_session(end_index: SessionIndex) {
-		<Self as pallet_session::SessionManager<_>>::end_session(end_index)
+		<Self as pezpallet_session::SessionManager<_>>::end_session(end_index)
 	}
 }

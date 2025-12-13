@@ -18,15 +18,15 @@
 
 use crate::{transfer::TransferOverXcmHelperT, TransferOverXcmHelper};
 use core::marker::PhantomData;
-use frame_support::traits::{
+use pezframe_support::traits::{
 	tokens::{Pay, PaymentStatus},
 	Get,
 };
-use sp_runtime::traits::TryConvert;
+use pezsp_runtime::traits::TryConvert;
 use xcm::prelude::*;
 use xcm_executor::traits::WaiveDeliveryFees;
 
-/// Implementation of the `frame_support::traits::tokens::Pay` trait, to allow
+/// Implementation of the `pezframe_support::traits::tokens::Pay` trait, to allow
 /// for XCM-based payments of a given `Balance` of some asset ID existing on some chain under
 /// ownership of some `Interior` location of the local chain to a particular `Beneficiary`. The
 /// `AssetKind` value is not itself bounded (to avoid the issue of needing to wrap some preexisting
@@ -129,7 +129,7 @@ where
 /// Specialization of the [`PayOverXcm`] trait to allow `[u8; 32]`-based `AccountId` values to be
 /// paid on a remote chain.
 ///
-/// Implementation of the [`frame_support::traits::tokens::Pay`] trait, to allow
+/// Implementation of the [`pezframe_support::traits::tokens::Pay`] trait, to allow
 /// for XCM payments of a given `Balance` of `AssetKind` existing on a `DestinationChain` under
 /// ownership of some `Interior` location of the local chain to a particular `Beneficiary`.
 ///

@@ -17,7 +17,7 @@
 //! Relayer initialization functions.
 
 use parking_lot::Mutex;
-use sp_tracing::{
+use pezsp_tracing::{
 	tracing::Level,
 	tracing_subscriber::{
 		fmt::{time::OffsetTime, SubscriberBuilder},

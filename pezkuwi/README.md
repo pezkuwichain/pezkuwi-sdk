@@ -1,6 +1,6 @@
 # Pezkuwi
 
-Implementation of a <https://pezkuwichain.app> node in Rust based on the Substrate framework.
+Implementation of a <https://pezkuwichain.app> node in Rust based on the Bizinikiwi framework.
 
 The README provides information about installing the `pezkuwi` binary and developing on the codebase. For more specific
 guides, like how to run a validator node, see the [Pezkuwi SDK docs website](https://docs.pezkuwichain.io/).
@@ -59,8 +59,8 @@ run the node directly from the command-line.
 
 ## Building
 
-Since the Pezkuwi node is based on Substrate, first set up your build environment according to the
-[Substrate installation instructions](https://docs.pezkuwichain.io/install/).
+Since the Pezkuwi node is based on Bizinikiwi, first set up your build environment according to the
+[Bizinikiwi installation instructions](https://docs.pezkuwichain.io/install/).
 
 ### Install via Cargo
 

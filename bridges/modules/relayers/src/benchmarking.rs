@@ -20,10 +20,10 @@
 
 use crate::*;
 
-use frame_benchmarking::v2::*;
-use frame_support::{assert_ok, weights::Weight};
-use frame_system::RawOrigin;
-use sp_runtime::traits::One;
+use pezframe_benchmarking::v2::*;
+use pezframe_support::{assert_ok, weights::Weight};
+use pezframe_system::RawOrigin;
+use pezsp_runtime::traits::One;
 
 /// Reward amount that is (hopefully) is larger than existential deposit across all chains.
 const REWARD_AMOUNT: u32 = u32::MAX;
@@ -47,12 +47,12 @@ pub trait Config<I: 'static = ()>: crate::Config<I> {
 fn assert_last_event<T: Config<I>, I: 'static>(
 	generic_event: <T as pallet::Config<I>>::RuntimeEvent,
 ) {
-	frame_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
 }
 
 #[instance_benchmarks(
 	where
-		BeneficiaryOf<T, I>: From<<T as frame_system::Config>::AccountId>,
+		BeneficiaryOf<T, I>: From<<T as pezframe_system::Config>::AccountId>,
 )]
 mod benchmarks {
 	use super::*;
@@ -116,7 +116,7 @@ mod benchmarks {
 	#[benchmark]
 	fn register() {
 		let relayer: T::AccountId = whitelisted_caller();
-		let valid_till = frame_system::Pallet::<T>::block_number()
+		let valid_till = pezframe_system::Pallet::<T>::block_number()
 			.saturating_add(crate::Pallet::<T, I>::required_registration_lease())
 			.saturating_add(One::one())
 			.saturating_add(One::one());
@@ -131,14 +131,14 @@ mod benchmarks {
 	#[benchmark]
 	fn deregister() {
 		let relayer: T::AccountId = whitelisted_caller();
-		let valid_till = frame_system::Pallet::<T>::block_number()
+		let valid_till = pezframe_system::Pallet::<T>::block_number()
 			.saturating_add(crate::Pallet::<T, I>::required_registration_lease())
 			.saturating_add(One::one())
 			.saturating_add(One::one());
 		T::deposit_account(relayer.clone(), crate::Pallet::<T, I>::required_stake());
 		crate::Pallet::<T, I>::register(RawOrigin::Signed(relayer.clone()).into(), valid_till)
 			.unwrap();
-		frame_system::Pallet::<T>::set_block_number(valid_till.saturating_add(One::one()));
+		pezframe_system::Pallet::<T>::set_block_number(valid_till.saturating_add(One::one()));
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(relayer.clone()));
@@ -153,7 +153,7 @@ mod benchmarks {
 	fn slash_and_deregister() {
 		// prepare and register relayer account
 		let relayer: T::AccountId = whitelisted_caller();
-		let valid_till = frame_system::Pallet::<T>::block_number()
+		let valid_till = pezframe_system::Pallet::<T>::block_number()
 			.saturating_add(crate::Pallet::<T, I>::required_registration_lease())
 			.saturating_add(One::one())
 			.saturating_add(One::one());

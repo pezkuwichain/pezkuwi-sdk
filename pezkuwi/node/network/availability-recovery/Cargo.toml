@@ -34,16 +34,16 @@ pezkuwi-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sc-network = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
 futures-timer = { workspace = true }
 rstest = { workspace = true }
 
-sp-core = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-tracing = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
 
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives-test-helpers = { workspace = true }
@@ -62,6 +62,6 @@ runtime-benchmarks = [
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-subsystem-bench/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

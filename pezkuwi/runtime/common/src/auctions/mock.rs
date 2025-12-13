@@ -19,34 +19,34 @@
 #[cfg(test)]
 use super::*;
 use crate::{auctions, mock::TestRegistrar};
-use frame_support::{
+use pezframe_support::{
 	assert_ok, derive_impl, ord_parameter_types, parameter_types, traits::EitherOfDiverse,
 };
-use frame_system::{EnsureRoot, EnsureSignedBy};
-use pallet_balances;
+use pezframe_system::{EnsureRoot, EnsureSignedBy};
+use pezpallet_balances;
 use pezkuwi_primitives::{BlockNumber, Id as ParaId};
 use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
-use sp_core::H256;
-use sp_runtime::{
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	BuildStorage,
 };
 use std::{cell::RefCell, collections::BTreeMap};
 
-type Block = frame_system::mocking::MockBlockU32<Test>;
+type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system,
-		Balances: pallet_balances,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
 		Auctions: auctions,
 	}
 );
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
-	type BaseCallFilter = frame_support::traits::Everything;
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
+	type BaseCallFilter = pezframe_support::traits::Everything;
 	type BlockWeights = ();
 	type BlockLength = ();
 	type DbWeight = ();
@@ -61,17 +61,17 @@ impl frame_system::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<u64>;
+	type AccountData = pezpallet_balances::AccountData<u64>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = ();
 	type OnSetCode = ();
-	type MaxConsumers = frame_support::traits::ConstU32<16>;
+	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type AccountStore = System;
 }
 
@@ -182,7 +182,7 @@ impl Randomness<H256, BlockNumber> for TestPastRandomness {
 			if let Some((output, known_since)) = &*p.borrow() {
 				(*output, *known_since)
 			} else {
-				(H256::zero(), frame_system::Pallet::<Test>::block_number())
+				(H256::zero(), pezframe_system::Pallet::<Test>::block_number())
 			}
 		})
 	}
@@ -206,15 +206,15 @@ impl Config for Test {
 
 // This function basically just builds a genesis storage key/value store according to
 // our desired mock up.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	pallet_balances::GenesisConfig::<Test> {
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	pezpallet_balances::GenesisConfig::<Test> {
 		balances: vec![(1, 10), (2, 20), (3, 30), (4, 40), (5, 50), (6, 60)],
 		..Default::default()
 	}
 	.assimilate_storage(&mut t)
 	.unwrap();
-	let mut ext: sp_io::TestExternalities = t.into();
+	let mut ext: pezsp_io::TestExternalities = t.into();
 	ext.execute_with(|| {
 		// Register para 0, 1, 2, and 3 for tests
 		assert_ok!(TestRegistrar::<Test>::register(

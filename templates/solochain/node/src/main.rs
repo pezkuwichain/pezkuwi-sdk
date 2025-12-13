@@ -1,4 +1,4 @@
-//! Substrate Node Template CLI library.
+//! Bizinikiwi Node Template CLI library.
 #![warn(missing_docs)]
 
 mod benchmarking;
@@ -8,6 +8,6 @@ mod command;
 mod rpc;
 mod service;
 
-fn main() -> sc_cli::Result<()> {
+fn main() -> pezsc_cli::Result<()> {
 	command::run()
 }

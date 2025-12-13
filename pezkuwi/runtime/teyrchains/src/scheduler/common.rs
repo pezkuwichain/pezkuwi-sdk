@@ -17,7 +17,7 @@
 //! Common traits and types used by the scheduler and assignment providers.
 
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	codec::{Decode, Encode},
 	RuntimeDebug,
 };

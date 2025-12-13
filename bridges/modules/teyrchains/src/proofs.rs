@@ -22,7 +22,7 @@ use bp_pezkuwi_core::teyrchains::{ParaHead, ParaId};
 use bp_runtime::{RawStorageProof, StorageProofChecker, StorageProofError};
 use bp_teyrchains::teyrchain_head_storage_key_at_source;
 use codec::Decode;
-use frame_support::traits::Get;
+use pezframe_support::traits::Get;
 
 /// Abstraction over storage proof manipulation, hiding implementation details of actual storage
 /// proofs.
@@ -53,7 +53,7 @@ pub type TeyrchainsStorageProofAdapter<T, I> = RawStorageProofAdapter<T, I>;
 /// A `StorageProofAdapter` implementation for raw storage proofs.
 pub struct RawStorageProofAdapter<T: Config<I>, I: 'static> {
 	storage: StorageProofChecker<RelayBlockHasher>,
-	_dummy: sp_std::marker::PhantomData<(T, I)>,
+	_dummy: pezsp_std::marker::PhantomData<(T, I)>,
 }
 
 impl<T: Config<I>, I: 'static> RawStorageProofAdapter<T, I> {

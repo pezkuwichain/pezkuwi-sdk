@@ -103,8 +103,8 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 | Dosya | Amaç | Rebranding Durumu | Öncelik |
 | --- | --- | --- | --- |
 | `zombienet_pezkuwi.yml` | Pezkuwi zombienet testleri | 0 referans | TAMAM |
-| `zombienet_cumulus.yml` | Cumulus zombienet testleri | 0 referans | TAMAM |
-| `zombienet_substrate.yml` | Substrate zombienet testleri | 0 referans | TAMAM |
+| `zombienet_cumulus.yml` | Pezcumulus zombienet testleri | 0 referans | TAMAM |
+| `zombienet_bizinikiwi.yml` | Bizinikiwi zombienet testleri | 0 referans | TAMAM |
 | `zombienet_teyrchain-template.yml` | Teyrchain template testleri | 0 referans | TAMAM |
 | `zombienet-reusable-preflight.yml` | Zombienet preflight | 0 referans | TAMAM |
 | `check-zombienet-flaky-tests.yml` | Flaky test kontrolü | 0 referans | TAMAM |
@@ -232,8 +232,8 @@ image: "paritytech/tools:latest"
 #### 7. `tests-misc.yml` (4 değişiklik)
 
 ```yaml
-# Satır 24: Yorum - substrate PR referansı
-# https://github.com/paritytech/substrate/pull/3778
+# Satır 24: Yorum - bizinikiwi PR referansı
+# https://github.com/pezkuwichain/kurdistan-sdk/issues/54
 # DEĞİŞTİR: https://github.com/paritytech/polkadot-sdk/pull/XXX (veya kaldır)
 
 # Satır 204: Docker image
@@ -241,7 +241,7 @@ paritytech/node-bench-regression-guard:latest
 # NOT: Bu image paritytech'e ait. Fork veya alternatif gerekli.
 
 # Satır 248: Yorum
-# https://github.com/paritytech/substrate/pull/6916
+# https://github.com/pezkuwichain/kurdistan-sdk/issues/58
 # DEĞİŞTİR: Güncellenebilir
 
 # Satır 385: Revive URL (BIRAKILMALI - harici dependency)
@@ -378,7 +378,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 | --- | --- | --- |
 | `@polkadot-api/check-runtime` | Runtime uyumluluk | Uyumluluk testi yap, muhtemelen çalışır |
 | `paritytech/revive` | EVM testleri | Harici olarak bırak |
-| `paritytech/try-runtime-cli` | Migration testleri | Substrate fork'u olduğu için muhtemelen uyumlu |
+| `paritytech/try-runtime-cli` | Migration testleri | Bizinikiwi fork'u olduğu için muhtemelen uyumlu |
 | `paritytech/evm-test-suite` | EVM testleri | Harici olarak bırak |
 
 ### Fork Edilmesi Gerekenler

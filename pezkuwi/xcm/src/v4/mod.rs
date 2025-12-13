@@ -36,7 +36,7 @@ use codec::{
 };
 use core::{fmt::Debug, result};
 use derive_where::derive_where;
-use frame_support::dispatch::GetDispatchInfo;
+use pezframe_support::dispatch::GetDispatchInfo;
 use scale_info::TypeInfo;
 
 mod asset;
@@ -316,8 +316,8 @@ impl TryFrom<OldResponse> for Response {
 			ExecutionResult(result) =>
 				Self::ExecutionResult(result.map(|(num, old_error)| (num, old_error.into()))),
 			Version(version) => Self::Version(version),
-			PalletsInfo(pallet_info) => {
-				let inner = pallet_info
+			PalletsInfo(pezpallet_info) => {
+				let inner = pezpallet_info
 					.into_iter()
 					.map(TryInto::try_into)
 					.collect::<result::Result<Vec<_>, _>>()?;
@@ -345,8 +345,8 @@ impl TryFrom<NewResponse> for Response {
 					.transpose()?,
 			),
 			Version(version) => Self::Version(version),
-			PalletsInfo(pallet_info) => {
-				let inner = pallet_info
+			PalletsInfo(pezpallet_info) => {
+				let inner = pezpallet_info
 					.into_iter()
 					.map(TryInto::try_into)
 					.collect::<result::Result<Vec<_>, _>>()?;
@@ -888,7 +888,7 @@ pub enum Instruction<Call> {
 	///
 	/// Sends a `QueryResponse` to Origin whose data field `PalletsInfo` containing the information
 	/// of all pallets on the local chain whose name is equal to `name`. This is empty in the case
-	/// that the local chain is not based on Substrate Frame.
+	/// that the local chain is not based on Bizinikiwi Frame.
 	///
 	/// Safety: No concerns.
 	///

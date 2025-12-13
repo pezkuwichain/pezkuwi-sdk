@@ -1,4 +1,4 @@
-// This file is part of Substrate.
+// This file is part of Bizinikiwi.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
@@ -20,15 +20,15 @@ use crate::{
 	cli::{Cli, Subcommand},
 	service,
 };
-use pezkuwi_sdk::{sc_cli::SubstrateCli, sc_service::PartialComponents, *};
+use pezkuwi_sdk::{pezsc_cli::BizinikiwiCli, pezsc_service::PartialComponents, *};
 
-impl SubstrateCli for Cli {
+impl BizinikiwiCli for Cli {
 	fn impl_name() -> String {
-		"Substrate Node".into()
+		"Bizinikiwi Node".into()
 	}
 
 	fn impl_version() -> String {
-		env!("SUBSTRATE_CLI_IMPL_VERSION").into()
+		env!("BIZINIKIWI_CLI_IMPL_VERSION").into()
 	}
 
 	fn description() -> String {
@@ -47,7 +47,7 @@ impl SubstrateCli for Cli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		Ok(match id {
 			"dev" => Box::new(chain_spec::development_chain_spec()?),
 			path =>
@@ -57,7 +57,7 @@ impl SubstrateCli for Cli {
 }
 
 /// Parse and run command line arguments
-pub fn run() -> sc_cli::Result<()> {
+pub fn run() -> pezsc_cli::Result<()> {
 	let cli = Cli::from_args();
 
 	match &cli.subcommand {
@@ -123,13 +123,13 @@ pub fn run() -> sc_cli::Result<()> {
 			let runner = cli.create_runner(&cli.run)?;
 			runner.run_node_until_exit(|config| async move {
 				match config.network.network_backend {
-					sc_network::config::NetworkBackendType::Libp2p =>
-						service::new_full::<sc_network::NetworkWorker<_, _>>(config, cli.consensus)
-							.map_err(sc_cli::Error::Service),
-					sc_network::config::NetworkBackendType::Litep2p => service::new_full::<
-						sc_network::Litep2pNetworkBackend,
+					pezsc_network::config::NetworkBackendType::Libp2p =>
+						service::new_full::<pezsc_network::NetworkWorker<_, _>>(config, cli.consensus)
+							.map_err(pezsc_cli::Error::Service),
+					pezsc_network::config::NetworkBackendType::Litep2p => service::new_full::<
+						pezsc_network::Litep2pNetworkBackend,
 					>(config, cli.consensus)
-					.map_err(sc_cli::Error::Service),
+					.map_err(pezsc_cli::Error::Service),
 				}
 			})
 		},

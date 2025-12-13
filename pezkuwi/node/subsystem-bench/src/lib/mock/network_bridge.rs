@@ -31,7 +31,7 @@ use pezkuwi_node_subsystem_types::{
 	messages::{BitfieldDistributionMessage, NetworkBridgeEvent, StatementDistributionMessage},
 	OverseerSignal,
 };
-use sc_network::{request_responses::ProtocolConfig, RequestFailure};
+use pezsc_network::{request_responses::ProtocolConfig, RequestFailure};
 
 const LOG_TARGET: &str = "subsystem-bench::network-bridge";
 const ALLOWED_PROTOCOLS: &[&str] = &[

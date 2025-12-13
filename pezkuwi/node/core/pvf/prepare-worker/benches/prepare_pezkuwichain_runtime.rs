@@ -26,7 +26,7 @@ use std::time::Duration;
 fn do_prepare_runtime(pvf: PvfPrepData) {
 	let maybe_compressed_code = pvf.maybe_compressed_code();
 	let raw_validation_code =
-		sp_maybe_compressed_blob::decompress(&maybe_compressed_code, usize::MAX).unwrap();
+		pezsp_maybe_compressed_blob::decompress(&maybe_compressed_code, usize::MAX).unwrap();
 
 	let blob = match prevalidate(&raw_validation_code) {
 		Err(err) => panic!("{:?}", err),
@@ -41,7 +41,7 @@ fn do_prepare_runtime(pvf: PvfPrepData) {
 
 fn prepare_pezkuwichain_runtime(c: &mut Criterion) {
 	let blob = pezkuwichain_runtime::WASM_BINARY.unwrap();
-	let pvf = match sp_maybe_compressed_blob::decompress(&blob, 64 * 1024 * 1024) {
+	let pvf = match pezsp_maybe_compressed_blob::decompress(&blob, 64 * 1024 * 1024) {
 		Ok(code) => PvfPrepData::from_code(
 			code.into_owned(),
 			ExecutorParams::default(),

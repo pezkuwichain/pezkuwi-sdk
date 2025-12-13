@@ -22,7 +22,7 @@ use codec::{Decode, Encode};
 use itertools::Itertools;
 use pezkuwi_node_network_protocol::v3 as protocol_v3;
 use pezkuwi_primitives::{CandidateIndex, Hash, ValidatorIndex};
-use sc_network_types::PeerId;
+use pezsc_network_types::PeerId;
 use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, Encode, Decode, PartialEq, Eq)]

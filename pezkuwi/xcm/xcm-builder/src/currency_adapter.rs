@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Adapters to work with `frame_support::traits::Currency` through XCM.
+//! Adapters to work with `pezframe_support::traits::Currency` through XCM.
 
 #![allow(deprecated)]
 
 use super::MintLocation;
 use core::{fmt::Debug, marker::PhantomData, result};
-use frame_support::traits::{ExistenceRequirement::AllowDeath, Get, WithdrawReasons};
-use sp_runtime::traits::CheckedSub;
+use pezframe_support::traits::{ExistenceRequirement::AllowDeath, Get, WithdrawReasons};
+use pezsp_runtime::traits::CheckedSub;
 use xcm::latest::{Asset, Error as XcmError, Location, Result, XcmContext};
 use xcm_executor::{
 	traits::{ConvertLocation, MatchesFungible, TransactAsset},
@@ -52,13 +52,13 @@ impl From<Error> for XcmError {
 /// # Example
 /// ```
 /// use codec::Decode;
-/// use frame_support::{parameter_types, PalletId};
-/// use sp_runtime::traits::{AccountIdConversion, TrailingZeroInput};
+/// use pezframe_support::{parameter_types, PalletId};
+/// use pezsp_runtime::traits::{AccountIdConversion, TrailingZeroInput};
 /// use xcm::latest::prelude::*;
-/// use staging_xcm_builder::{ParentIsPreset, CurrencyAdapter, IsConcrete};
+/// use pezstaging_xcm_builder::{ParentIsPreset, CurrencyAdapter, IsConcrete};
 ///
 /// /// Our chain's account id.
-/// type AccountId = sp_runtime::AccountId32;
+/// type AccountId = pezsp_runtime::AccountId32;
 ///
 /// /// Our relay chain's location.
 /// parameter_types! {
@@ -93,7 +93,7 @@ pub struct CurrencyAdapter<Currency, Matcher, AccountIdConverter, AccountId, Che
 );
 
 impl<
-		Currency: frame_support::traits::Currency<AccountId>,
+		Currency: pezframe_support::traits::Currency<AccountId>,
 		Matcher: MatchesFungible<Currency::Balance>,
 		AccountIdConverter: ConvertLocation<AccountId>,
 		AccountId: Clone, // can't get away without it since Currency is generic over it.
@@ -129,7 +129,7 @@ impl<
 		if ok {
 			Currency::reactivate(amount);
 		} else {
-			frame_support::defensive!(
+			pezframe_support::defensive!(
 				"`can_check_in` must have returned `true` immediately prior; qed"
 			);
 		}
@@ -137,7 +137,7 @@ impl<
 }
 
 impl<
-		Currency: frame_support::traits::Currency<AccountId>,
+		Currency: pezframe_support::traits::Currency<AccountId>,
 		Matcher: MatchesFungible<Currency::Balance>,
 		AccountIdConverter: ConvertLocation<AccountId>,
 		AccountId: Clone + Debug, // can't get away without it since Currency is generic over it.

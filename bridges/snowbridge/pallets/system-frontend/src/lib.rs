@@ -24,14 +24,14 @@ pub use weights::*;
 pub mod backend_weights;
 pub use backend_weights::*;
 
-use frame_support::{pallet_prelude::*, traits::EnsureOriginWithArg};
-use frame_system::pallet_prelude::*;
-use pallet_asset_conversion::Swap;
+use pezframe_support::{pezpallet_prelude::*, traits::EnsureOriginWithArg};
+use pezframe_system::pezpallet_prelude::*;
+use pezpallet_asset_conversion::Swap;
 use snowbridge_core::{
 	burn_for_teleport, operating_mode::ExportPausedQuery, reward::MessageId, AssetMetadata,
 	BasicOperatingMode as OperatingMode,
 };
-use sp_std::prelude::*;
+use pezsp_std::prelude::*;
 use xcm::{
 	latest::{validate_send, XcmHash},
 	prelude::*,
@@ -39,24 +39,24 @@ use xcm::{
 use xcm_executor::traits::{FeeManager, FeeReason, TransactAsset};
 
 #[cfg(feature = "runtime-benchmarks")]
-use frame_support::traits::OriginTrait;
+use pezframe_support::traits::OriginTrait;
 
 pub use pallet::*;
-pub type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
+pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 
 pub const LOG_TARGET: &str = "snowbridge-system-frontend";
 
-/// Call indices within BridgeHub runtime for dispatchables within `snowbridge-pallet-system-v2`
+/// Call indices within BridgeHub runtime for dispatchables within `snowbridge-pezpallet-system-v2`
 #[allow(clippy::large_enum_variant)]
 #[derive(Encode, Decode, Debug, PartialEq, Clone, TypeInfo)]
-pub enum BridgeHubRuntime<T: frame_system::Config> {
+pub enum BridgeHubRuntime<T: pezframe_system::Config> {
 	#[codec(index = 90)]
 	EthereumSystem(EthereumSystemCall<T>),
 }
 
-/// Call indices for dispatchables within `snowbridge-pallet-system-v2`
+/// Call indices for dispatchables within `snowbridge-pezpallet-system-v2`
 #[derive(Encode, Decode, Debug, PartialEq, Clone, TypeInfo)]
-pub enum EthereumSystemCall<T: frame_system::Config> {
+pub enum EthereumSystemCall<T: pezframe_system::Config> {
 	#[codec(index = 2)]
 	RegisterToken {
 		sender: Box<VersionedLocation>,
@@ -78,7 +78,7 @@ where
 	fn setup_pools(caller: AccountId, asset: Location);
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
 	use xcm_executor::traits::ConvertLocation;
@@ -86,9 +86,9 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Origin check for XCM locations that can register token
 		type RegisterTokenOrigin: EnsureOriginWithArg<
@@ -196,7 +196,7 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T>
 	where
-		<T as frame_system::Config>::AccountId: Into<Location>,
+		<T as pezframe_system::Config>::AccountId: Into<Location>,
 	{
 		/// Set the operating mode for exporting messages to Ethereum.
 		#[pallet::call_index(0)]
@@ -261,7 +261,7 @@ pub mod pallet {
 		)]
 		pub fn add_tip(origin: OriginFor<T>, message_id: MessageId, asset: Asset) -> DispatchResult
 		where
-			<T as frame_system::Config>::AccountId: Into<Location>,
+			<T as pezframe_system::Config>::AccountId: Into<Location>,
 		{
 			let who = ensure_signed(origin)?;
 

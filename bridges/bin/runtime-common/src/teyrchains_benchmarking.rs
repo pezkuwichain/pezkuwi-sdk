@@ -26,9 +26,9 @@ use bp_teyrchains::{
 	teyrchain_head_storage_key_at_source, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 };
 use codec::Encode;
-use frame_support::traits::Get;
-use sp_std::prelude::*;
-use sp_trie::{trie_types::TrieDBMutBuilderV1, LayoutV1, MemoryDB, TrieMut};
+use pezframe_support::traits::Get;
+use pezsp_std::prelude::*;
+use pezsp_trie::{trie_types::TrieDBMutBuilderV1, LayoutV1, MemoryDB, TrieMut};
 
 /// Prepare proof of messages for the `receive_messages_proof` call.
 ///
@@ -40,10 +40,10 @@ pub fn prepare_teyrchain_heads_proof<R, PI>(
 	proof_params: UnverifiedStorageProofParams,
 ) -> (RelayBlockNumber, RelayBlockHash, ParaHeadsProof, Vec<(ParaId, ParaHash)>)
 where
-	R: pallet_bridge_teyrchains::Config<PI>
-		+ pallet_bridge_grandpa::Config<R::BridgesGrandpaPalletInstance>,
+	R: pezpallet_bridge_teyrchains::Config<PI>
+		+ pezpallet_bridge_grandpa::Config<R::BridgesGrandpaPalletInstance>,
 	PI: 'static,
-	<R as pallet_bridge_grandpa::Config<R::BridgesGrandpaPalletInstance>>::BridgedChain:
+	<R as pezpallet_bridge_grandpa::Config<R::BridgesGrandpaPalletInstance>>::BridgedChain:
 		Chain<BlockNumber = RelayBlockNumber, Hash = RelayBlockHash>,
 {
 	let teyrchain_head = ParaHead(vec![0u8; teyrchain_head_size as usize]);

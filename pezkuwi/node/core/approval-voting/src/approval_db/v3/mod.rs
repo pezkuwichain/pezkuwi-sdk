@@ -29,7 +29,7 @@ use pezkuwi_primitives::{
 	GroupIndex, Hash, SessionIndex, ValidatorIndex, ValidatorSignature,
 };
 
-use sp_consensus_slots::Slot;
+use pezsp_consensus_slots::Slot;
 
 use std::collections::BTreeMap;
 

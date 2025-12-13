@@ -14,54 +14,54 @@ workspace = true
 [dependencies]
 jsonrpsee = { features = ["server"], workspace = true }
 mmr-rpc = { workspace = true, default-features = true }
-pallet-transaction-payment-rpc = { workspace = true, default-features = true }
+pezpallet-transaction-payment-rpc = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sc-chain-spec = { workspace = true, default-features = true }
-sc-client-api = { workspace = true, default-features = true }
-sc-consensus-babe = { workspace = true, default-features = true }
-sc-consensus-babe-rpc = { workspace = true, default-features = true }
-sc-consensus-beefy = { workspace = true, default-features = true }
-sc-consensus-beefy-rpc = { workspace = true, default-features = true }
-sc-consensus-grandpa = { workspace = true, default-features = true }
-sc-consensus-grandpa-rpc = { workspace = true, default-features = true }
-sc-rpc = { workspace = true, default-features = true }
-sc-sync-state-rpc = { workspace = true, default-features = true }
-sc-transaction-pool-api = { workspace = true, default-features = true }
-sp-api = { workspace = true, default-features = true }
-sp-application-crypto = { workspace = true, default-features = true }
-sp-block-builder = { workspace = true, default-features = true }
-sp-blockchain = { workspace = true, default-features = true }
-sp-consensus = { workspace = true, default-features = true }
-sp-consensus-babe = { workspace = true, default-features = true }
-sp-consensus-beefy = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
-sp-runtime = { workspace = true, default-features = true }
-substrate-frame-rpc-system = { workspace = true, default-features = true }
-substrate-state-trie-migration-rpc = { workspace = true, default-features = true }
+pezsc-chain-spec = { workspace = true, default-features = true }
+pezsc-client-api = { workspace = true, default-features = true }
+pezsc-consensus-babe = { workspace = true, default-features = true }
+pezsc-consensus-babe-rpc = { workspace = true, default-features = true }
+pezsc-consensus-beefy = { workspace = true, default-features = true }
+pezsc-consensus-beefy-rpc = { workspace = true, default-features = true }
+pezsc-consensus-grandpa = { workspace = true, default-features = true }
+pezsc-consensus-grandpa-rpc = { workspace = true, default-features = true }
+pezsc-rpc = { workspace = true, default-features = true }
+pezsc-sync-state-rpc = { workspace = true, default-features = true }
+pezsc-transaction-pool-api = { workspace = true, default-features = true }
+pezsp-api = { workspace = true, default-features = true }
+pezsp-application-crypto = { workspace = true, default-features = true }
+pezsp-block-builder = { workspace = true, default-features = true }
+pezsp-blockchain = { workspace = true, default-features = true }
+pezsp-consensus = { workspace = true, default-features = true }
+pezsp-consensus-babe = { workspace = true, default-features = true }
+pezsp-consensus-beefy = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
+bizinikiwi-frame-rpc-system = { workspace = true, default-features = true }
+bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
 	"mmr-rpc/runtime-benchmarks",
-	"pallet-transaction-payment-rpc/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sc-chain-spec/runtime-benchmarks",
-	"sc-client-api/runtime-benchmarks",
-	"sc-consensus-babe-rpc/runtime-benchmarks",
-	"sc-consensus-babe/runtime-benchmarks",
-	"sc-consensus-beefy-rpc/runtime-benchmarks",
-	"sc-consensus-beefy/runtime-benchmarks",
-	"sc-consensus-grandpa-rpc/runtime-benchmarks",
-	"sc-consensus-grandpa/runtime-benchmarks",
-	"sc-rpc/runtime-benchmarks",
-	"sc-sync-state-rpc/runtime-benchmarks",
-	"sc-transaction-pool-api/runtime-benchmarks",
-	"sp-api/runtime-benchmarks",
-	"sp-block-builder/runtime-benchmarks",
-	"sp-blockchain/runtime-benchmarks",
-	"sp-consensus-babe/runtime-benchmarks",
-	"sp-consensus-beefy/runtime-benchmarks",
-	"sp-consensus/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"substrate-frame-rpc-system/runtime-benchmarks",
-	"substrate-state-trie-migration-rpc/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-babe-rpc/runtime-benchmarks",
+	"pezsc-consensus-babe/runtime-benchmarks",
+	"pezsc-consensus-beefy-rpc/runtime-benchmarks",
+	"pezsc-consensus-beefy/runtime-benchmarks",
+	"pezsc-consensus-grandpa-rpc/runtime-benchmarks",
+	"pezsc-consensus-grandpa/runtime-benchmarks",
+	"pezsc-rpc/runtime-benchmarks",
+	"pezsc-sync-state-rpc/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"bizinikiwi-frame-rpc-system/runtime-benchmarks",
+	"bizinikiwi-state-trie-migration-rpc/runtime-benchmarks",
 ]

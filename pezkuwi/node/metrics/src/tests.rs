@@ -21,7 +21,7 @@ use hyper::Uri;
 use hyper_util::{client::legacy::Client, rt::TokioExecutor};
 use pezkuwi_primitives::metric_definitions::TEYRCHAIN_INHERENT_DATA_BITFIELDS_PROCESSED;
 use pezkuwi_test_service::{node_config, run_validator_node, test_prometheus_config};
-use sp_keyring::Sr25519Keyring::*;
+use pezsp_keyring::Sr25519Keyring::*;
 use std::collections::HashMap;
 
 const DEFAULT_PROMETHEUS_PORT: u16 = 9616;
@@ -34,7 +34,7 @@ async fn runtime_can_publish_metrics() {
 	// Enable Prometheus metrics for Alice.
 	alice_config.prometheus_config = Some(test_prometheus_config(DEFAULT_PROMETHEUS_PORT));
 
-	let mut builder = sc_cli::LoggerBuilder::new("");
+	let mut builder = pezsc_cli::LoggerBuilder::new("");
 
 	// Enable profiling with `wasm_tracing` target.
 	builder.with_profiling(Default::default(), String::from("wasm_tracing=trace"));

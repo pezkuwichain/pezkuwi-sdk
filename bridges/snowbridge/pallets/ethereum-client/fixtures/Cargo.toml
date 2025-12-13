@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-pallet-ethereum-client-fixtures"
+name = "snowbridge-pezpallet-ethereum-client-fixtures"
 description = "Snowbridge Ethereum Client Test Fixtures"
 version = "0.9.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -21,16 +21,16 @@ exclude-from-umbrella = true
 hex-literal = { workspace = true, default-features = true }
 snowbridge-beacon-primitives = { workspace = true }
 snowbridge-verification-primitives = { workspace = true }
-sp-core = { workspace = true }
-sp-std = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-std = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
 	"snowbridge-beacon-primitives/std",
 	"snowbridge-verification-primitives/std",
-	"sp-core/std",
-	"sp-std/std",
+	"pezsp-core/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
 	"snowbridge-beacon-primitives/runtime-benchmarks",

@@ -30,7 +30,7 @@ To generate weights for all pallets in a particular runtime(s), run the followin
 /cmd bench --runtime kusama pezkuwi
 ```
 
-For Substrate pallets (supports sub-modules too):
+For Bizinikiwi pallets (supports sub-modules too):
 
 ```sh
 /cmd bench --runtime dev --pallet pallet_asset_conversion_ops

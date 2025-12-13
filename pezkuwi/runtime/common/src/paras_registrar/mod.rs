@@ -21,13 +21,13 @@ pub mod migration;
 
 use alloc::{vec, vec::Vec};
 use core::result;
-use frame_support::{
+use pezframe_support::{
 	dispatch::DispatchResult,
 	ensure,
-	pallet_prelude::Weight,
+	pezpallet_prelude::Weight,
 	traits::{Currency, Get, ReservableCurrency},
 };
-use frame_system::{self, ensure_root, ensure_signed};
+use pezframe_system::{self, ensure_root, ensure_signed};
 use pezkuwi_primitives::{HeadData, Id as ParaId, ValidationCode, LOWEST_PUBLIC_ID, MIN_CODE_SIZE};
 use pezkuwi_runtime_teyrchains::{
 	configuration, ensure_teyrchain,
@@ -40,7 +40,7 @@ use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 pub use pallet::*;
 use pezkuwi_runtime_teyrchains::paras::{OnNewHead, ParaKind};
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{CheckedSub, Saturating},
 	RuntimeDebug,
 };
@@ -75,7 +75,7 @@ impl<Account, Balance> ParaInfo<Account, Balance> {
 }
 
 type BalanceOf<T> =
-	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 pub trait WeightInfo {
 	fn reserve() -> Weight;
@@ -112,11 +112,11 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
@@ -127,17 +127,17 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	#[pallet::disable_frame_system_supertrait_check]
+	#[pallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: configuration::Config + paras::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The aggregated origin type must support the `teyrchains` origin. We require that we can
 		/// infallibly convert between this origin and the system origin, but in reality, they're
 		/// the same type, we just can't express that to the Rust type system without writing a
 		/// `where` clause everywhere.
-		type RuntimeOrigin: From<<Self as frame_system::Config>::RuntimeOrigin>
+		type RuntimeOrigin: From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<result::Result<Origin, <Self as Config>::RuntimeOrigin>>;
 
 		/// The system's currency for on-demand teyrchain payment.
@@ -568,7 +568,7 @@ impl<T: Config> Pallet<T> {
 	/// Ensure the origin is one of Root, the `para` owner, or the `para` itself.
 	/// If the origin is the `para` owner, the `para` must be unlocked.
 	fn ensure_root_para_or_owner(
-		origin: <T as frame_system::Config>::RuntimeOrigin,
+		origin: <T as pezframe_system::Config>::RuntimeOrigin,
 		id: ParaId,
 	) -> DispatchResult {
 		if let Ok(who) = ensure_signed(origin.clone()) {
@@ -585,7 +585,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Ensure the origin is one of Root or the `para` itself.
 	fn ensure_root_or_para(
-		origin: <T as frame_system::Config>::RuntimeOrigin,
+		origin: <T as pezframe_system::Config>::RuntimeOrigin,
 		id: ParaId,
 	) -> DispatchResult {
 		if ensure_root(origin.clone()).is_ok() {
@@ -680,7 +680,7 @@ impl<T: Config> Pallet<T> {
 		genesis_head: HeadData,
 		validation_code: ValidationCode,
 		para_kind: ParaKind,
-	) -> Result<(ParaGenesisArgs, BalanceOf<T>), sp_runtime::DispatchError> {
+	) -> Result<(ParaGenesisArgs, BalanceOf<T>), pezsp_runtime::DispatchError> {
 		let config = configuration::ActiveConfig::<T>::get();
 		ensure!(validation_code.0.len() >= MIN_CODE_SIZE as usize, Error::<T>::InvalidCode);
 		ensure!(validation_code.0.len() <= config.max_code_size as usize, Error::<T>::CodeTooLarge);

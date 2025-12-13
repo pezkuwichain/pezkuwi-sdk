@@ -117,19 +117,19 @@ use alloc::{collections::btree_set::BTreeSet, vec::Vec};
 use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
 use codec::{Decode, Encode};
 use core::{cmp, mem};
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{EnsureOriginWithArg, EstimateNextSessionRotation},
 	DefaultNoBound,
 };
-use frame_system::pallet_prelude::*;
+use pezframe_system::pezpallet_prelude::*;
 use pezkuwi_primitives::{
 	ConsensusLog, HeadData, Id as ParaId, PvfCheckStatement, SessionIndex, UpgradeGoAhead,
 	UpgradeRestriction, ValidationCode, ValidationCodeHash, ValidatorSignature, MIN_CODE_SIZE,
 };
 use scale_info::{Type, TypeInfo};
-use sp_core::RuntimeDebug;
-use sp_runtime::{
+use pezsp_core::RuntimeDebug;
+use pezsp_runtime::{
 	traits::{AppVerify, One, Saturating},
 	DispatchResult, SaturatedConversion,
 };
@@ -398,7 +398,7 @@ pub(crate) enum PvfCheckCause<BlockNumber> {
 		/// instead of its relay parent -- in order to keep PVF available in case of chain
 		/// reversions.
 		///
-		/// See https://github.com/paritytech/polkadot/issues/4601 for detailed explanation.
+		/// See https://github.com/pezkuwichain/kurdistan-sdk/issues/151 for detailed explanation.
 		included_at: BlockNumber,
 		/// Whether or not the upgrade should be enacted directly.
 		///
@@ -638,14 +638,14 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::traits::{
+	use pezframe_support::traits::{
 		fungible::{Inspect, Mutate},
 		tokens::{Fortitude, Precision, Preservation},
 	};
-	use sp_runtime::transaction_validity::{
+	use pezsp_runtime::transaction_validity::{
 		InvalidTransaction, TransactionPriority, TransactionSource, TransactionValidity,
 		ValidTransaction,
 	};
@@ -658,13 +658,13 @@ pub mod pallet {
 
 	#[pallet::config]
 	pub trait Config:
-		frame_system::Config
+		pezframe_system::Config
 		+ configuration::Config
 		+ shared::Config
-		+ frame_system::offchain::CreateBare<Call<Self>>
+		+ pezframe_system::offchain::CreateBare<Call<Self>>
 	{
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		#[pallet::constant]
 		type UnsignedPriority: Get<TransactionPriority>;
@@ -1037,7 +1037,7 @@ pub mod pallet {
 			new_head: HeadData,
 		) -> DispatchResult {
 			ensure_root(origin)?;
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 			Self::note_new_head(para, new_head, now);
 			Self::deposit_event(Event::NewHeadNoted(para));
 			Ok(())
@@ -1094,7 +1094,7 @@ pub mod pallet {
 
 				let cfg = configuration::ActiveConfig::<T>::get();
 				Self::enact_pvf_accepted(
-					frame_system::Pallet::<T>::block_number(),
+					pezframe_system::Pallet::<T>::block_number(),
 					&code_hash,
 					&vote.causes,
 					vote.age,
@@ -1204,7 +1204,7 @@ pub mod pallet {
 					PvfCheckOutcome::Accepted => {
 						let cfg = configuration::ActiveConfig::<T>::get();
 						Self::enact_pvf_accepted(
-							frame_system::Pallet::<T>::block_number(),
+							pezframe_system::Pallet::<T>::block_number(),
 							&stmt.subject,
 							&active_vote.causes,
 							active_vote.age,
@@ -1302,7 +1302,7 @@ pub mod pallet {
 			// The requested para must be a valid para (neither onboarding nor offboarding).
 			ensure!(Self::is_valid_para(para), Error::<T>::NotRegistered);
 
-			let now = frame_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pallet::<T>::block_number();
 			let expire_at = now.saturating_add(valid_period);
 
 			// Insert the authorized code hash and ensure it overwrites the existing one for a para.
@@ -1347,7 +1347,7 @@ pub mod pallet {
 			cooldown_until: BlockNumberFor<T>,
 		) -> BalanceOf<T> {
 			let time_left =
-				cooldown_until.saturating_sub(frame_system::Pallet::<T>::block_number());
+				cooldown_until.saturating_sub(pezframe_system::Pallet::<T>::block_number());
 
 			BalanceOf::<T>::from(time_left).saturating_mul(T::CooldownRemovalMultiplier::get())
 		}
@@ -1420,7 +1420,7 @@ pub mod pallet {
 				Call::apply_authorized_force_set_current_code { para, new_code } =>
 					match Self::validate_code_is_authorized(new_code, para) {
 						Ok(authorized_code) => {
-							let now = frame_system::Pallet::<T>::block_number();
+							let now = pezframe_system::Pallet::<T>::block_number();
 							let longevity = authorized_code.expire_at.saturating_sub(now);
 
 							ValidTransaction::with_tag_prefix("ApplyAuthorizedForceSetCurrentCode")
@@ -1482,7 +1482,7 @@ impl<T: Config> Pallet<T> {
 		ensure!(new_code.0.len() >= MIN_CODE_SIZE as usize, Error::<T>::InvalidCode);
 		ensure!(new_code.0.len() <= config.max_code_size as usize, Error::<T>::InvalidCode);
 
-		let current_block = frame_system::Pallet::<T>::block_number();
+		let current_block = pezframe_system::Pallet::<T>::block_number();
 		// Schedule the upgrade with a delay just like if a teyrchain triggered the upgrade.
 		let upgrade_block = current_block.saturating_add(config.validation_upgrade_delay);
 		Self::schedule_code_upgrade(id, new_code, upgrade_block, &config, upgrade_strategy);
@@ -1556,7 +1556,7 @@ impl<T: Config> Pallet<T> {
 	fn apply_actions_queue(session: SessionIndex) -> Vec<ParaId> {
 		let actions = ActionsQueue::<T>::take(session);
 		let mut teyrchains = TeyrchainsCache::new();
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		let mut outgoing = Vec::new();
 
 		for para in actions {
@@ -1977,7 +1977,7 @@ impl<T: Config> Pallet<T> {
 
 		let expected_at = expected_at.saturated_into();
 		let log = ConsensusLog::ParaScheduleUpgradeCode(id, *code_hash, expected_at);
-		frame_system::Pallet::<T>::deposit_log(log.into());
+		pezframe_system::Pallet::<T>::deposit_log(log.into());
 
 		weight
 	}
@@ -2078,7 +2078,7 @@ impl<T: Config> Pallet<T> {
 		//
 		// This is only an intermediate solution and should be fixed in foreseeable future.
 		//
-		// [soaking issue]: https://github.com/paritytech/polkadot/issues/3918
+		// [soaking issue]: https://github.com/pezkuwichain/kurdistan-sdk/issues/146
 		let validation_code =
 			mem::replace(&mut genesis_data.validation_code, ValidationCode(Vec::new()));
 		UpcomingParasGenesis::<T>::insert(&id, genesis_data);
@@ -2307,13 +2307,13 @@ impl<T: Config> Pallet<T> {
 					// The code is known and there is no active PVF vote for it meaning it is
 					// already checked -- fast track the PVF checking into the accepted state.
 					weight += T::DbWeight::get().reads(1);
-					let now = frame_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pallet::<T>::block_number();
 					weight += Self::enact_pvf_accepted(now, &code_hash, &[cause], 0, cfg);
 				} else {
 					// PVF is not being pre-checked and it is not known. Start a new pre-checking
 					// process.
 					weight += T::DbWeight::get().reads_writes(3, 2);
-					let now = frame_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pallet::<T>::block_number();
 					let n_validators = shared::ActiveValidatorKeys::<T>::get().len();
 					PvfActiveVoteMap::<T>::insert(
 						&code_hash,
@@ -2401,10 +2401,10 @@ impl<T: Config> Pallet<T> {
 		CurrentCodeHash::<T>::insert(&id, &new_code_hash);
 
 		let log = ConsensusLog::ParaUpgradeCode(id, new_code_hash);
-		<frame_system::Pallet<T>>::deposit_log(log.into());
+		<pezframe_system::Pallet<T>>::deposit_log(log.into());
 
 		// `now` is only used for registering pruning as part of `fn note_past_code`
-		let now = <frame_system::Pallet<T>>::block_number();
+		let now = <pezframe_system::Pallet<T>>::block_number();
 
 		let weight = if let Some(prior_code_hash) = maybe_prior_code_hash {
 			Self::note_past_code(id, at, now, prior_code_hash)
@@ -2420,7 +2420,7 @@ impl<T: Config> Pallet<T> {
 	fn do_force_set_current_code_update(para: ParaId, new_code: ValidationCode) {
 		let new_code_hash = new_code.hash();
 		Self::increase_code_ref(&new_code_hash, &new_code);
-		Self::set_current_code(para, new_code_hash, frame_system::Pallet::<T>::block_number());
+		Self::set_current_code(para, new_code_hash, pezframe_system::Pallet::<T>::block_number());
 		Self::deposit_event(Event::CurrentCodeUpdated(para));
 	}
 
@@ -2440,7 +2440,7 @@ impl<T: Config> Pallet<T> {
 		stmt: PvfCheckStatement,
 		signature: ValidatorSignature,
 	) {
-		use frame_system::offchain::SubmitTransaction;
+		use pezframe_system::offchain::SubmitTransaction;
 
 		let xt = T::create_bare(Call::include_pvf_check_statement { stmt, signature }.into());
 		if let Err(e) = SubmitTransaction::<T, Call<T>>::submit_transaction(xt) {
@@ -2601,7 +2601,7 @@ impl<T: Config> Pallet<T> {
 		para: &ParaId,
 	) -> Result<AuthorizedCodeHashAndExpiry<BlockNumberFor<T>>, Error<T>> {
 		let authorized = AuthorizedCodeHash::<T>::get(para).ok_or(Error::<T>::NothingAuthorized)?;
-		let now = frame_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pallet::<T>::block_number();
 		ensure!(authorized.expire_at > now, Error::<T>::InvalidBlockNumber);
 		ensure!(authorized.code_hash == code.hash(), Error::<T>::Unauthorized);
 		Ok(authorized)

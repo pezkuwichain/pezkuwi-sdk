@@ -16,8 +16,8 @@
 
 //! Logic for checking GRANDPA Finality Proofs.
 //!
-//! Adapted copy of substrate/client/finality-grandpa/src/justification.rs. If origin
-//! will ever be moved to the sp_consensus_grandpa, we should reuse that implementation.
+//! Adapted copy of bizinikiwi/client/finality-grandpa/src/justification.rs. If origin
+//! will ever be moved to the pezsp_consensus_grandpa, we should reuse that implementation.
 
 mod verification;
 
@@ -33,9 +33,9 @@ pub use verification::{
 use bp_runtime::{BlockNumberOf, Chain, HashOf, HeaderId};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
-use sp_consensus_grandpa::{AuthorityId, AuthoritySignature};
-use sp_runtime::{traits::Header as HeaderT, RuntimeDebug, SaturatedConversion};
-use sp_std::prelude::*;
+use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature};
+use pezsp_runtime::{traits::Header as HeaderT, RuntimeDebug, SaturatedConversion};
+use pezsp_std::prelude::*;
 
 /// A GRANDPA Justification is a proof that a given header was finalized
 /// at a certain height and with a certain set of authorities.

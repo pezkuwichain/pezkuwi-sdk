@@ -18,11 +18,11 @@
 
 use derive_more::Display;
 use pezkuwi_primitives::Hash;
-use sc_network::{
+use pezsc_network::{
 	config::SetConfig, peer_store::PeerStoreProvider, service::NotificationMetrics,
 	types::ProtocolName, NetworkBackend, NotificationService,
 };
-use sp_runtime::traits::Block;
+use pezsp_runtime::traits::Block;
 use std::{
 	collections::{hash_map::Entry, HashMap},
 	ops::{Index, IndexMut},
@@ -64,7 +64,7 @@ pub enum IsAuthority {
 }
 
 impl PeerSet {
-	/// Get `sc_network` peer set configurations for each peerset on the default version.
+	/// Get `pezsc_network` peer set configurations for each peerset on the default version.
 	///
 	/// Those should be used in the network configuration to register the protocols with the
 	/// network service.
@@ -100,7 +100,7 @@ impl PeerSet {
 						in_peers: super::MIN_GOSSIP_PEERS as u32 / 2 - 1,
 						out_peers: super::MIN_GOSSIP_PEERS as u32 / 2 - 1,
 						reserved_nodes: Vec::new(),
-						non_reserved_mode: sc_network::config::NonReservedPeerMode::Accept,
+						non_reserved_mode: pezsc_network::config::NonReservedPeerMode::Accept,
 					},
 					metrics,
 					peer_store_handle,
@@ -125,9 +125,9 @@ impl PeerSet {
 						out_peers: 0,
 						reserved_nodes: Vec::new(),
 						non_reserved_mode: if is_authority == IsAuthority::Yes {
-							sc_network::config::NonReservedPeerMode::Accept
+							pezsc_network::config::NonReservedPeerMode::Accept
 						} else {
-							sc_network::config::NonReservedPeerMode::Deny
+							pezsc_network::config::NonReservedPeerMode::Deny
 						},
 					},
 					metrics,

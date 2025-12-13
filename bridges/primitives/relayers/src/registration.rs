@@ -41,7 +41,7 @@ use crate::{PayRewardFromAccount, RewardsAccountParams};
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{Get, IdentifyAccount, Zero},
 	DispatchError, DispatchResult,
 };

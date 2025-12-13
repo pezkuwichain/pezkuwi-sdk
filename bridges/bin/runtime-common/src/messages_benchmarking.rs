@@ -26,8 +26,8 @@ use bp_messages::{
 use bp_pezkuwi_core::teyrchains::ParaHash;
 use bp_runtime::{AccountIdOf, Chain, HashOf, Teyrchain};
 use codec::Encode;
-use frame_support::weights::Weight;
-use pallet_bridge_messages::{
+use pezframe_support::weights::Weight;
+use pezpallet_bridge_messages::{
 	benchmarking::{MessageDeliveryProofParams, MessageProofParams},
 	messages_generation::{
 		encode_all_messages, encode_lane_data, prepare_message_delivery_storage_proof,
@@ -35,8 +35,8 @@ use pallet_bridge_messages::{
 	},
 	BridgedChainOf, LaneIdOf, ThisChainOf,
 };
-use sp_runtime::traits::{Header, Zero};
-use sp_std::prelude::*;
+use pezsp_runtime::traits::{Header, Zero};
+use pezsp_std::prelude::*;
 use xcm::latest::prelude::*;
 
 /// Prepare inbound bridge message according to given message proof parameters.
@@ -75,10 +75,10 @@ pub fn prepare_message_proof_from_grandpa_chain<R, FI, MI>(
 	message_generator: impl Fn(usize) -> MessagePayload,
 ) -> (FromBridgedChainMessagesProof<HashOf<BridgedChainOf<R, MI>>, LaneIdOf<R, MI>>, Weight)
 where
-	R: pallet_bridge_grandpa::Config<FI, BridgedChain = BridgedChainOf<R, MI>>
-		+ pallet_bridge_messages::Config<
+	R: pezpallet_bridge_grandpa::Config<FI, BridgedChain = BridgedChainOf<R, MI>>
+		+ pezpallet_bridge_messages::Config<
 			MI,
-			BridgedHeaderChain = pallet_bridge_grandpa::Pallet<R, FI>,
+			BridgedHeaderChain = pezpallet_bridge_grandpa::Pallet<R, FI>,
 		>,
 	FI: 'static,
 	MI: 'static,
@@ -128,7 +128,7 @@ pub fn prepare_message_proof_from_teyrchain<R, PI, MI>(
 	message_generator: impl Fn(usize) -> MessagePayload,
 ) -> (FromBridgedChainMessagesProof<HashOf<BridgedChainOf<R, MI>>, LaneIdOf<R, MI>>, Weight)
 where
-	R: pallet_bridge_teyrchains::Config<PI> + pallet_bridge_messages::Config<MI>,
+	R: pezpallet_bridge_teyrchains::Config<PI> + pezpallet_bridge_messages::Config<MI>,
 	PI: 'static,
 	MI: 'static,
 	BridgedChainOf<R, MI>: Chain<Hash = ParaHash> + Teyrchain,
@@ -175,10 +175,10 @@ pub fn prepare_message_delivery_proof_from_grandpa_chain<R, FI, MI>(
 	params: MessageDeliveryProofParams<AccountIdOf<ThisChainOf<R, MI>>, LaneIdOf<R, MI>>,
 ) -> FromBridgedChainMessagesDeliveryProof<HashOf<BridgedChainOf<R, MI>>, LaneIdOf<R, MI>>
 where
-	R: pallet_bridge_grandpa::Config<FI, BridgedChain = BridgedChainOf<R, MI>>
-		+ pallet_bridge_messages::Config<
+	R: pezpallet_bridge_grandpa::Config<FI, BridgedChain = BridgedChainOf<R, MI>>
+		+ pezpallet_bridge_messages::Config<
 			MI,
-			BridgedHeaderChain = pallet_bridge_grandpa::Pallet<R, FI>,
+			BridgedHeaderChain = pezpallet_bridge_grandpa::Pallet<R, FI>,
 		>,
 	FI: 'static,
 	MI: 'static,
@@ -210,7 +210,7 @@ pub fn prepare_message_delivery_proof_from_teyrchain<R, PI, MI>(
 	params: MessageDeliveryProofParams<AccountIdOf<ThisChainOf<R, MI>>, LaneIdOf<R, MI>>,
 ) -> FromBridgedChainMessagesDeliveryProof<HashOf<BridgedChainOf<R, MI>>, LaneIdOf<R, MI>>
 where
-	R: pallet_bridge_teyrchains::Config<PI> + pallet_bridge_messages::Config<MI>,
+	R: pezpallet_bridge_teyrchains::Config<PI> + pezpallet_bridge_messages::Config<MI>,
 	PI: 'static,
 	MI: 'static,
 	BridgedChainOf<R, MI>: Chain<Hash = ParaHash> + Teyrchain,
@@ -239,7 +239,7 @@ pub(crate) fn insert_header_to_grandpa_pallet<R, GI>(
 	state_root: bp_runtime::HashOf<R::BridgedChain>,
 ) -> (bp_runtime::BlockNumberOf<R::BridgedChain>, bp_runtime::HashOf<R::BridgedChain>)
 where
-	R: pallet_bridge_grandpa::Config<GI>,
+	R: pezpallet_bridge_grandpa::Config<GI>,
 	GI: 'static,
 	R::BridgedChain: bp_runtime::Chain,
 {
@@ -252,7 +252,7 @@ where
 		Default::default(),
 	);
 	let bridged_header_hash = bridged_header.hash();
-	pallet_bridge_grandpa::initialize_for_benchmarks::<R, GI>(bridged_header);
+	pezpallet_bridge_grandpa::initialize_for_benchmarks::<R, GI>(bridged_header);
 	(bridged_block_number, bridged_header_hash)
 }
 
@@ -261,7 +261,7 @@ pub(crate) fn insert_header_to_teyrchains_pallet<R, PI, PC>(
 	state_root: bp_runtime::HashOf<PC>,
 ) -> (bp_runtime::BlockNumberOf<PC>, bp_runtime::HashOf<PC>)
 where
-	R: pallet_bridge_teyrchains::Config<PI>,
+	R: pezpallet_bridge_teyrchains::Config<PI>,
 	PI: 'static,
 	PC: Chain<Hash = ParaHash> + Teyrchain,
 {
@@ -274,7 +274,7 @@ where
 		Default::default(),
 	);
 	let bridged_header_hash = bridged_header.hash();
-	pallet_bridge_teyrchains::initialize_for_benchmarks::<R, PI, PC>(bridged_header);
+	pezpallet_bridge_teyrchains::initialize_for_benchmarks::<R, PI, PC>(bridged_header);
 	(bridged_block_number, bridged_header_hash)
 }
 

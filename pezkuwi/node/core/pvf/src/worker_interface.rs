@@ -238,7 +238,7 @@ impl WorkerHandle {
 		let mut command = process::Command::new(program.as_ref());
 		command.env_clear();
 
-		command.env("RUST_LOG", sc_tracing::logging::get_directives().join(","));
+		command.env("RUST_LOG", pezsc_tracing::logging::get_directives().join(","));
 
 		let mut child = command
 			.args(extra_args)

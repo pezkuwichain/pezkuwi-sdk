@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 
-use frame_support::pallet_prelude::DispatchError;
-use pallet_asset_conversion::Swap;
+use pezframe_support::pezpallet_prelude::DispatchError;
+use pezpallet_asset_conversion::Swap;
 use xcm::opaque::latest::Location;
 pub struct SwapExecutor;
 

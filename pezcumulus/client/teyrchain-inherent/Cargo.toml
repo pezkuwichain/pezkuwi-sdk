@@ -1,0 +1,43 @@
+[package]
+name = "pezcumulus-client-teyrchain-inherent"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description = "Inherent that needs to be present in every teyrchain block. Contains messages and a relay chain storage-proof."
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+codec = { features = ["derive"], workspace = true, default-features = true }
+tracing = { workspace = true, default-features = true }
+
+# Bizinikiwi
+pezsc-client-api = { workspace = true, default-features = true }
+pezsc-consensus-babe = { workspace = true, default-features = true }
+pezsc-network-types = { workspace = true, default-features = true }
+pezsp-crypto-hashing = { workspace = true, default-features = true }
+pezsp-inherents = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
+pezsp-state-machine = { workspace = true, default-features = true }
+pezsp-storage = { workspace = true, default-features = true }
+
+# Pezcumulus
+pezcumulus-primitives-core = { workspace = true, default-features = true }
+pezcumulus-primitives-teyrchain-inherent = { workspace = true, default-features = true }
+pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
+pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-babe/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+]

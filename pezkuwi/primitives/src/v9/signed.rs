@@ -19,12 +19,12 @@ use scale_info::TypeInfo;
 
 use alloc::vec::Vec;
 #[cfg(feature = "std")]
-use sp_application_crypto::AppCrypto;
+use pezsp_application_crypto::AppCrypto;
 #[cfg(feature = "std")]
-use sp_keystore::{Error as KeystoreError, KeystorePtr};
+use pezsp_keystore::{Error as KeystoreError, KeystorePtr};
 
-use sp_core::RuntimeDebug;
-use sp_runtime::traits::AppVerify;
+use pezsp_core::RuntimeDebug;
+use pezsp_runtime::traits::AppVerify;
 
 use super::{SigningContext, ValidatorId, ValidatorIndex, ValidatorSignature};
 
@@ -312,7 +312,7 @@ impl<Payload: EncodeAs<RealPayload>, RealPayload: Encode> UncheckedSigned<Payloa
 		context: &SigningContext<H>,
 		validator_index: ValidatorIndex,
 	) -> Self {
-		use sp_application_crypto::RuntimeAppPublic;
+		use pezsp_application_crypto::RuntimeAppPublic;
 		let data = Self::payload_data(&payload, context);
 		let signature = public.sign(&data).unwrap();
 

@@ -19,8 +19,8 @@ use super::*;
 use crate::{account_and_location, new_executor, EnsureDelivery, XcmCallOf};
 use alloc::{vec, vec::Vec};
 use codec::Encode;
-use frame_benchmarking::v2::*;
-use frame_support::{traits::fungible::Inspect, BoundedVec};
+use pezframe_benchmarking::v2::*;
+use pezframe_support::{traits::fungible::Inspect, BoundedVec};
 use xcm::{
 	latest::{prelude::*, MaxDispatchErrorLen, MaybeErrorCode, Weight, MAX_ITEMS_IN_ASSETS},
 	DoubleEncoded,
@@ -727,7 +727,7 @@ mod benchmarks {
 		{
 			executor.bench_process(xcm)?;
 		}
-		use frame_support::traits::Get;
+		use pezframe_support::traits::Get;
 		let universal_location = <T::XcmConfig as xcm_executor::Config>::UniversalLocation::get();
 		assert_eq!(
 			executor.origin(),

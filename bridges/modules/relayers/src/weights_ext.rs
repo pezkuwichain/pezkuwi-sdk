@@ -18,7 +18,7 @@
 
 use crate::weights::WeightInfo;
 
-use frame_support::pallet_prelude::Weight;
+use pezframe_support::pezpallet_prelude::Weight;
 
 /// Extended weight info.
 pub trait WeightInfoExt: WeightInfo {

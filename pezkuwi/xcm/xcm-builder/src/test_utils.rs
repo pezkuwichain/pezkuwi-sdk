@@ -17,7 +17,7 @@
 // Shared test utilities and implementations for the XCM Builder.
 
 use alloc::vec::Vec;
-use frame_support::{
+use pezframe_support::{
 	parameter_types,
 	traits::{Contains, CrateVersion, PalletInfoData, PalletsInfoAccess},
 };
@@ -125,13 +125,13 @@ impl PalletsInfoAccess for TestPalletsInfo {
 			PalletInfoData {
 				index: 0,
 				name: "System",
-				module_name: "pallet_system",
+				module_name: "pezpallet_system",
 				crate_version: CrateVersion { major: 1, minor: 10, patch: 1 },
 			},
 			PalletInfoData {
 				index: 1,
 				name: "Balances",
-				module_name: "pallet_balances",
+				module_name: "pezpallet_balances",
 				crate_version: CrateVersion { major: 1, minor: 42, patch: 69 },
 			},
 		]

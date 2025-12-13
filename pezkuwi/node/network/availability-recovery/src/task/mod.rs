@@ -34,7 +34,7 @@ use codec::Encode;
 use pezkuwi_node_primitives::AvailableData;
 use pezkuwi_node_subsystem::{messages::AvailabilityStoreMessage, overseer, RecoveryError};
 use pezkuwi_primitives::{AuthorityDiscoveryId, CandidateHash, Hash};
-use sc_network::ProtocolName;
+use pezsc_network::ProtocolName;
 
 use futures::channel::{mpsc, oneshot};
 use std::collections::VecDeque;

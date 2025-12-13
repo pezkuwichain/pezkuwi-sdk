@@ -160,7 +160,7 @@ target/testnet/subsystem-bench pezkuwi/node/subsystem-bench/examples/availabilit
 [2024-02-19T14:10:34.096Z INFO  subsystem-bench::network] connectivity 75%, latency Some(PeerLatency { mean_latency_ms: 30, std_dev: 2.0 })
 [2024-02-19T14:10:34.098Z INFO  subsystem-bench::network] Network created, connected validator count 749
 [2024-02-19T14:10:34.099Z INFO  subsystem-bench::availability] Seeding availability store with candidates ...
-[2024-02-19T14:10:34.100Z INFO  substrate_prometheus_endpoint] 〽️ Prometheus exporter started at 127.0.0.1:9999
+[2024-02-19T14:10:34.100Z INFO  bizinikiwi_prometheus_endpoint] 〽️ Prometheus exporter started at 127.0.0.1:9999
 [2024-02-19T14:10:34.387Z INFO  subsystem-bench::availability] Done
 [2024-02-19T14:10:34.387Z INFO  subsystem-bench::availability] Current block #1
 [2024-02-19T14:10:34.389Z INFO  subsystem-bench::availability] Waiting for all emulated peers to receive their chunk from us ...

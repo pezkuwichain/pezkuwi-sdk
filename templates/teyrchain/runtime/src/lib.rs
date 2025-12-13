@@ -17,25 +17,25 @@ extern crate alloc;
 use alloc::vec::Vec;
 use smallvec::smallvec;
 
-use pezkuwi_sdk::{staging_teyrchain_info as teyrchain_info, *};
+use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
 
-use sp_runtime::{
+use pezsp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{BlakeTwo256, IdentifyAccount, Verify},
 	MultiSignature,
 };
 
 #[cfg(feature = "std")]
-use sp_version::NativeVersion;
-use sp_version::RuntimeVersion;
+use pezsp_version::NativeVersion;
+use pezsp_version::RuntimeVersion;
 
-use frame_support::weights::{
+use pezframe_support::weights::{
 	constants::WEIGHT_REF_TIME_PER_SECOND, Weight, WeightToFeeCoefficient, WeightToFeeCoefficients,
 	WeightToFeePolynomial,
 };
 pub use genesis_config_presets::TEYRCHAIN_ID;
-pub use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-pub use sp_runtime::{MultiAddress, Perbill, Permill};
+pub use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
+pub use pezsp_runtime::{MultiAddress, Perbill, Permill};
 
 use weights::ExtrinsicBaseWeight;
 
@@ -53,7 +53,7 @@ pub type Balance = u128;
 pub type Nonce = u32;
 
 /// A hash of some data used by the chain.
-pub type Hash = sp_core::H256;
+pub type Hash = pezsp_core::H256;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -78,16 +78,16 @@ pub type BlockId = generic::BlockId<Block>;
 pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
-		frame_system::AuthorizeCall<Runtime>,
-		frame_system::CheckNonZeroSender<Runtime>,
-		frame_system::CheckSpecVersion<Runtime>,
-		frame_system::CheckTxVersion<Runtime>,
-		frame_system::CheckGenesis<Runtime>,
-		frame_system::CheckEra<Runtime>,
-		frame_system::CheckNonce<Runtime>,
-		frame_system::CheckWeight<Runtime>,
-		pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
-		frame_metadata_hash_extension::CheckMetadataHash<Runtime>,
+		pezframe_system::AuthorizeCall<Runtime>,
+		pezframe_system::CheckNonZeroSender<Runtime>,
+		pezframe_system::CheckSpecVersion<Runtime>,
+		pezframe_system::CheckTxVersion<Runtime>,
+		pezframe_system::CheckGenesis<Runtime>,
+		pezframe_system::CheckEra<Runtime>,
+		pezframe_system::CheckNonce<Runtime>,
+		pezframe_system::CheckWeight<Runtime>,
+		pezpallet_transaction_payment::ChargeTransactionPayment<Runtime>,
+		pezframe_metadata_hash_extension::CheckMetadataHash<Runtime>,
 	),
 >;
 
@@ -96,10 +96,10 @@ pub type UncheckedExtrinsic =
 	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
 
 /// Executive: handles dispatch to the various modules.
-pub type Executive = frame_executive::Executive<
+pub type Executive = pezframe_executive::Executive<
 	Runtime,
 	Block,
-	frame_system::ChainContext<Runtime>,
+	pezframe_system::ChainContext<Runtime>,
 	Runtime,
 	AllPalletsWithSystem,
 >;
@@ -137,8 +137,8 @@ impl WeightToFeePolynomial for WeightToFee {
 /// to even the core data structures.
 pub mod opaque {
 	use super::*;
-	pub use pezkuwi_sdk::sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
-	use pezkuwi_sdk::sp_runtime::{
+	pub use pezkuwi_sdk::pezsp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
+	use pezkuwi_sdk::pezsp_runtime::{
 		generic,
 		traits::{BlakeTwo256, Hash as HashT},
 	};
@@ -159,7 +159,7 @@ impl_opaque_keys! {
 	}
 }
 
-#[sp_version::runtime_version]
+#[pezsp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("teyrchain-template-runtime"),
 	impl_name: alloc::borrow::Cow::Borrowed("teyrchain-template-runtime"),
@@ -175,7 +175,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 mod block_times {
 	/// This determines the average expected block time that we are targeting. Blocks will be
 	/// produced at a minimum duration defined by `SLOT_DURATION`. `SLOT_DURATION` is picked up by
-	/// `pallet_timestamp` which is in turn picked up by `pallet_aura` to implement `fn
+	/// `pezpallet_timestamp` which is in turn picked up by `pezpallet_aura` to implement `fn
 	/// slot_duration()`.
 	///
 	/// Change this to adjust the block time.
@@ -245,7 +245,7 @@ pub fn native_version() -> NativeVersion {
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
-#[frame_support::runtime]
+#[pezframe_support::runtime]
 mod runtime {
 	#[runtime::runtime]
 	#[runtime::derive(
@@ -262,52 +262,52 @@ mod runtime {
 	)]
 	pub struct Runtime;
 
-	#[runtime::pallet_index(0)]
-	pub type System = frame_system;
-	#[runtime::pallet_index(1)]
+	#[runtime::pezpallet_index(0)]
+	pub type System = pezframe_system;
+	#[runtime::pezpallet_index(1)]
 	pub type TeyrchainSystem = cumulus_pallet_teyrchain_system;
-	#[runtime::pallet_index(2)]
-	pub type Timestamp = pallet_timestamp;
-	#[runtime::pallet_index(3)]
+	#[runtime::pezpallet_index(2)]
+	pub type Timestamp = pezpallet_timestamp;
+	#[runtime::pezpallet_index(3)]
 	pub type TeyrchainInfo = teyrchain_info;
-	#[runtime::pallet_index(4)]
+	#[runtime::pezpallet_index(4)]
 	pub type WeightReclaim = cumulus_pallet_weight_reclaim;
 
 	// Monetary stuff.
-	#[runtime::pallet_index(10)]
-	pub type Balances = pallet_balances;
-	#[runtime::pallet_index(11)]
-	pub type TransactionPayment = pallet_transaction_payment;
+	#[runtime::pezpallet_index(10)]
+	pub type Balances = pezpallet_balances;
+	#[runtime::pezpallet_index(11)]
+	pub type TransactionPayment = pezpallet_transaction_payment;
 
 	// Governance
-	#[runtime::pallet_index(15)]
-	pub type Sudo = pallet_sudo;
+	#[runtime::pezpallet_index(15)]
+	pub type Sudo = pezpallet_sudo;
 
 	// Collator support. The order of these 4 are important and shall not change.
-	#[runtime::pallet_index(20)]
-	pub type Authorship = pallet_authorship;
-	#[runtime::pallet_index(21)]
-	pub type CollatorSelection = pallet_collator_selection;
-	#[runtime::pallet_index(22)]
-	pub type Session = pallet_session;
-	#[runtime::pallet_index(23)]
-	pub type Aura = pallet_aura;
-	#[runtime::pallet_index(24)]
+	#[runtime::pezpallet_index(20)]
+	pub type Authorship = pezpallet_authorship;
+	#[runtime::pezpallet_index(21)]
+	pub type CollatorSelection = pezpallet_collator_selection;
+	#[runtime::pezpallet_index(22)]
+	pub type Session = pezpallet_session;
+	#[runtime::pezpallet_index(23)]
+	pub type Aura = pezpallet_aura;
+	#[runtime::pezpallet_index(24)]
 	pub type AuraExt = cumulus_pallet_aura_ext;
 
 	// XCM helpers.
-	#[runtime::pallet_index(30)]
+	#[runtime::pezpallet_index(30)]
 	pub type XcmpQueue = cumulus_pallet_xcmp_queue;
-	#[runtime::pallet_index(31)]
-	pub type PezkuwiXcm = pallet_xcm;
-	#[runtime::pallet_index(32)]
+	#[runtime::pezpallet_index(31)]
+	pub type PezkuwiXcm = pezpallet_xcm;
+	#[runtime::pezpallet_index(32)]
 	pub type CumulusXcm = cumulus_pallet_xcm;
-	#[runtime::pallet_index(33)]
-	pub type MessageQueue = pallet_message_queue;
+	#[runtime::pezpallet_index(33)]
+	pub type MessageQueue = pezpallet_message_queue;
 
 	// Template
-	#[runtime::pallet_index(50)]
-	pub type TemplatePallet = pallet_teyrchain_template;
+	#[runtime::pezpallet_index(50)]
+	pub type TemplatePallet = pezpallet_teyrchain_template;
 }
 
 #[docify::export(register_validate_block)]

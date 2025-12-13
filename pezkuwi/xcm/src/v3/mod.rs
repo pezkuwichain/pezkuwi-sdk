@@ -61,7 +61,7 @@ pub type QueryId = u64;
 #[derive_where(Clone, Eq, PartialEq, Debug)]
 #[codec(encode_bound())]
 #[scale_info(bounds(), skip_type_params(Call))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub struct Xcm<Call>(pub Vec<Instruction<Call>>);
 
@@ -220,7 +220,7 @@ parameter_types! {
 #[derive(
 	Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo, MaxEncodedLen,
 )]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub struct PalletInfo {
 	#[codec(compact)]
@@ -270,7 +270,7 @@ impl TryInto<NewPalletInfo> for PalletInfo {
 #[derive(
 	Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo, MaxEncodedLen,
 )]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum MaybeErrorCode {
 	Success,
@@ -297,7 +297,7 @@ impl Default for MaybeErrorCode {
 #[derive(
 	Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo, MaxEncodedLen,
 )]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum Response {
 	/// No response. Serves as a neutral default.
@@ -331,8 +331,8 @@ impl TryFrom<NewResponse> for Response {
 			ExecutionResult(result) =>
 				Self::ExecutionResult(result.map(|(num, old_error)| (num, old_error.into()))),
 			Version(version) => Self::Version(version),
-			PalletsInfo(pallet_info) => {
-				let inner = pallet_info
+			PalletsInfo(pezpallet_info) => {
+				let inner = pezpallet_info
 					.into_iter()
 					.map(TryInto::try_into)
 					.collect::<result::Result<Vec<_>, _>>()?;
@@ -348,7 +348,7 @@ impl TryFrom<NewResponse> for Response {
 
 /// Information regarding the composition of a query response.
 #[derive(Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo)]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub struct QueryResponseInfo {
 	/// The destination to which the query response message should be send.
@@ -374,7 +374,7 @@ impl TryFrom<NewQueryResponseInfo> for QueryResponseInfo {
 
 /// An optional weight limit.
 #[derive(Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo)]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum WeightLimit {
 	/// No weight limit imposed.
@@ -403,26 +403,26 @@ impl From<WeightLimit> for Option<Weight> {
 
 /// Basically just the XCM (more general) version of `TeyrchainDispatchOrigin`.
 #[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo)]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum OriginKind {
 	/// Origin should just be the native dispatch origin representation for the sender in the
-	/// local runtime framework. For Cumulus/Frame chains this is the `Teyrchain` or `Relay` origin
+	/// local runtime framework. For Pezcumulus/Frame chains this is the `Teyrchain` or `Relay` origin
 	/// if coming from a chain, though there may be others if the `MultiLocation` XCM origin has a
 	/// primary/native dispatch origin form.
 	Native,
 
 	/// Origin should just be the standard account-based origin with the sovereign account of
-	/// the sender. For Cumulus/Frame chains, this is the `Signed` origin.
+	/// the sender. For Pezcumulus/Frame chains, this is the `Signed` origin.
 	SovereignAccount,
 
-	/// Origin should be the super-user. For Cumulus/Frame chains, this is the `Root` origin.
+	/// Origin should be the super-user. For Pezcumulus/Frame chains, this is the `Root` origin.
 	/// This will not usually be an available option.
 	Superuser,
 
 	/// Origin should be interpreted as an XCM native origin and the `MultiLocation` should be
-	/// encoded directly in the dispatch origin unchanged. For Cumulus/Frame chains, this will be
-	/// the `pallet_xcm::Origin::Xcm` type.
+	/// encoded directly in the dispatch origin unchanged. For Pezcumulus/Frame chains, this will be
+	/// the `pezpallet_xcm::Origin::Xcm` type.
 	Xcm,
 }
 
@@ -474,7 +474,7 @@ impl XcmContext {
 #[codec(decode_bound())]
 #[codec(decode_with_mem_tracking_bound())]
 #[scale_info(bounds(), skip_type_params(Call))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum Instruction<Call> {
 	/// Withdraw asset(s) (`assets`) from the ownership of `origin` and place them into the Holding
@@ -927,7 +927,7 @@ pub enum Instruction<Call> {
 	///
 	/// Sends a `QueryResponse` to Origin whose data field `PalletsInfo` containing the information
 	/// of all pallets on the local chain whose name is equal to `name`. This is empty in the case
-	/// that the local chain is not based on Substrate Frame.
+	/// that the local chain is not based on Bizinikiwi Frame.
 	///
 	/// Safety: No concerns.
 	///

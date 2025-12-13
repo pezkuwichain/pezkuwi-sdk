@@ -1,0 +1,68 @@
+[package]
+name = "asset-hub-pezkuwichain-integration-tests"
+version = "1.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Asset Hub Pezkuwichain runtime integration tests with xcm-emulator"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+assert_matches = { workspace = true }
+codec = { workspace = true }
+
+# Bizinikiwi
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezpallet-asset-conversion = { workspace = true }
+pezpallet-asset-rewards = { workspace = true }
+pezpallet-assets = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-message-queue = { workspace = true }
+pezpallet-treasury = { workspace = true }
+pezpallet-utility = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-runtime = { workspace = true }
+
+# Pezkuwi
+pezpallet-xcm = { workspace = true }
+pezkuwi-runtime-common = { workspace = true, default-features = true }
+pezkuwichain-runtime-constants = { workspace = true, default-features = true }
+xcm = { workspace = true }
+xcm-executor = { workspace = true }
+xcm-runtime-apis = { workspace = true, default-features = true }
+
+# Pezcumulus
+asset-test-utils = { workspace = true, default-features = true }
+pezcumulus-pezpallet-teyrchain-system = { workspace = true }
+emulated-integration-tests-common = { workspace = true }
+pezkuwichain-system-emulated-network = { workspace = true }
+teyrchains-common = { workspace = true, default-features = true }
+
+[features]
+runtime-benchmarks = [
+	"asset-test-utils/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-asset-conversion/runtime-benchmarks",
+	"pezpallet-asset-rewards/runtime-benchmarks",
+	"pezpallet-assets/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezpallet-treasury/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezkuwi-runtime-common/runtime-benchmarks",
+	"pezkuwichain-runtime-constants/runtime-benchmarks",
+	"pezkuwichain-system-emulated-network/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-runtime-apis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

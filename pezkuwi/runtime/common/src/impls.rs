@@ -17,42 +17,42 @@
 //! Auxiliary `struct`/`enum`s for pezkuwi runtime.
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use frame_support::traits::{
+use pezframe_support::traits::{
 	fungible::{Balanced, Credit},
 	tokens::imbalance::ResolveTo,
 	Contains, ContainsPair, Imbalance, OnUnbalanced,
 };
-use pallet_treasury::TreasuryAccountId;
+use pezpallet_treasury::TreasuryAccountId;
 use pezkuwi_primitives::Balance;
-use sp_runtime::{traits::TryConvert, Perquintill, RuntimeDebug};
+use pezsp_runtime::{traits::TryConvert, Perquintill, RuntimeDebug};
 use xcm::VersionedLocation;
 
 /// Logic for the author to get a portion of fees.
 pub struct ToAuthor<R>(core::marker::PhantomData<R>);
-impl<R> OnUnbalanced<Credit<R::AccountId, pallet_balances::Pallet<R>>> for ToAuthor<R>
+impl<R> OnUnbalanced<Credit<R::AccountId, pezpallet_balances::Pallet<R>>> for ToAuthor<R>
 where
-	R: pallet_balances::Config + pallet_authorship::Config,
-	<R as frame_system::Config>::AccountId: From<pezkuwi_primitives::AccountId>,
-	<R as frame_system::Config>::AccountId: Into<pezkuwi_primitives::AccountId>,
+	R: pezpallet_balances::Config + pezpallet_authorship::Config,
+	<R as pezframe_system::Config>::AccountId: From<pezkuwi_primitives::AccountId>,
+	<R as pezframe_system::Config>::AccountId: Into<pezkuwi_primitives::AccountId>,
 {
 	fn on_nonzero_unbalanced(
-		amount: Credit<<R as frame_system::Config>::AccountId, pallet_balances::Pallet<R>>,
+		amount: Credit<<R as pezframe_system::Config>::AccountId, pezpallet_balances::Pallet<R>>,
 	) {
-		if let Some(author) = <pallet_authorship::Pallet<R>>::author() {
-			let _ = <pallet_balances::Pallet<R>>::resolve(&author, amount);
+		if let Some(author) = <pezpallet_authorship::Pallet<R>>::author() {
+			let _ = <pezpallet_balances::Pallet<R>>::resolve(&author, amount);
 		}
 	}
 }
 
 pub struct DealWithFees<R>(core::marker::PhantomData<R>);
-impl<R> OnUnbalanced<Credit<R::AccountId, pallet_balances::Pallet<R>>> for DealWithFees<R>
+impl<R> OnUnbalanced<Credit<R::AccountId, pezpallet_balances::Pallet<R>>> for DealWithFees<R>
 where
-	R: pallet_balances::Config + pallet_authorship::Config + pallet_treasury::Config,
-	<R as frame_system::Config>::AccountId: From<pezkuwi_primitives::AccountId>,
-	<R as frame_system::Config>::AccountId: Into<pezkuwi_primitives::AccountId>,
+	R: pezpallet_balances::Config + pezpallet_authorship::Config + pezpallet_treasury::Config,
+	<R as pezframe_system::Config>::AccountId: From<pezkuwi_primitives::AccountId>,
+	<R as pezframe_system::Config>::AccountId: Into<pezkuwi_primitives::AccountId>,
 {
 	fn on_unbalanceds(
-		mut fees_then_tips: impl Iterator<Item = Credit<R::AccountId, pallet_balances::Pallet<R>>>,
+		mut fees_then_tips: impl Iterator<Item = Credit<R::AccountId, pezpallet_balances::Pallet<R>>>,
 	) {
 		if let Some(fees) = fees_then_tips.next() {
 			// for fees, 80% to treasury, 20% to author
@@ -61,7 +61,7 @@ where
 				// for tips, if any, 100% to author
 				tips.merge_into(&mut split.1);
 			}
-			ResolveTo::<TreasuryAccountId<R>, pallet_balances::Pallet<R>>::on_unbalanced(split.0);
+			ResolveTo::<TreasuryAccountId<R>, pezpallet_balances::Pallet<R>>::on_unbalanced(split.0);
 			<ToAuthor<R> as OnUnbalanced<_>>::on_unbalanced(split.1);
 		}
 	}
@@ -93,7 +93,7 @@ pub struct EraPayoutParams {
 /// A specialized function to compute the inflation of the staking system, tailored for pezkuwi
 /// relay chains, such as Pezkuwi, Kusama and Zagros.
 pub fn relay_era_payout(params: EraPayoutParams) -> (Balance, Balance) {
-	use sp_runtime::traits::Saturating;
+	use pezsp_runtime::traits::Saturating;
 
 	let EraPayoutParams {
 		total_staked,
@@ -111,7 +111,7 @@ pub fn relay_era_payout(params: EraPayoutParams) -> (Balance, Balance) {
 	let ideal_stake = ideal_stake.saturating_sub(legacy_auction_proportion.unwrap_or_default());
 
 	let stake = Perquintill::from_rational(total_staked, total_stakable);
-	let adjustment = pallet_staking_reward_fn::compute_inflation(stake, ideal_stake, falloff);
+	let adjustment = pezpallet_staking_reward_fn::compute_inflation(stake, ideal_stake, falloff);
 	let staking_inflation =
 		min_annual_inflation.saturating_add(delta_annual_inflation * adjustment);
 
@@ -243,10 +243,10 @@ where
 pub mod benchmarks {
 	use super::VersionedLocatableAsset;
 	use core::marker::PhantomData;
-	use frame_support::traits::Get;
-	use pallet_asset_rate::AssetKindFactory;
-	use pallet_treasury::ArgumentsFactory as TreasuryArgumentsFactory;
-	use sp_core::{ConstU32, ConstU8};
+	use pezframe_support::traits::Get;
+	use pezpallet_asset_rate::AssetKindFactory;
+	use pezpallet_treasury::ArgumentsFactory as TreasuryArgumentsFactory;
+	use pezsp_core::{ConstU32, ConstU8};
 	use xcm::prelude::*;
 
 	/// Provides a factory method for the [`VersionedLocatableAsset`].
@@ -294,7 +294,7 @@ pub mod benchmarks {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use frame_support::{
+	use pezframe_support::{
 		derive_impl,
 		dispatch::DispatchClass,
 		parameter_types,
@@ -305,24 +305,24 @@ mod tests {
 		weights::Weight,
 		PalletId,
 	};
-	use frame_system::limits;
+	use pezframe_system::limits;
 	use pezkuwi_primitives::AccountId;
-	use sp_core::{ConstU64, H256};
-	use sp_runtime::{
+	use pezsp_core::{ConstU64, H256};
+	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},
 		BuildStorage, Perbill,
 	};
 
-	type Block = frame_system::mocking::MockBlock<Test>;
+	type Block = pezframe_system::mocking::MockBlock<Test>;
 	const TEST_ACCOUNT: AccountId = AccountId::new([1; 32]);
 
-	frame_support::construct_runtime!(
+	pezframe_support::construct_runtime!(
 		pub enum Test
 		{
-			System: frame_system,
-			Authorship: pallet_authorship,
-			Balances: pallet_balances,
-			Treasury: pallet_treasury,
+			System: pezframe_system,
+			Authorship: pezpallet_authorship,
+			Balances: pezpallet_balances,
+			Treasury: pezpallet_treasury,
 		}
 	);
 
@@ -340,9 +340,9 @@ mod tests {
 		pub const AvailableBlockRatio: Perbill = Perbill::one();
 	}
 
-	#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-	impl frame_system::Config for Test {
-		type BaseCallFilter = frame_support::traits::Everything;
+	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+	impl pezframe_system::Config for Test {
+		type BaseCallFilter = pezframe_support::traits::Everything;
 		type RuntimeOrigin = RuntimeOrigin;
 		type Nonce = u64;
 		type RuntimeCall = RuntimeCall;
@@ -357,17 +357,17 @@ mod tests {
 		type DbWeight = ();
 		type Version = ();
 		type PalletInfo = PalletInfo;
-		type AccountData = pallet_balances::AccountData<u64>;
+		type AccountData = pezpallet_balances::AccountData<u64>;
 		type OnNewAccount = ();
 		type OnKilledAccount = ();
 		type SystemWeightInfo = ();
 		type SS58Prefix = ();
 		type OnSetCode = ();
-		type MaxConsumers = frame_support::traits::ConstU32<16>;
+		type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	}
 
-	#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-	impl pallet_balances::Config for Test {
+	#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+	impl pezpallet_balances::Config for Test {
 		type AccountStore = System;
 	}
 
@@ -377,9 +377,9 @@ mod tests {
 		pub TreasuryAccount: AccountId = Treasury::account_id();
 	}
 
-	impl pallet_treasury::Config for Test {
-		type Currency = pallet_balances::Pallet<Test>;
-		type RejectOrigin = frame_system::EnsureRoot<AccountId>;
+	impl pezpallet_treasury::Config for Test {
+		type Currency = pezpallet_balances::Pallet<Test>;
+		type RejectOrigin = pezframe_system::EnsureRoot<AccountId>;
 		type RuntimeEvent = RuntimeEvent;
 		type SpendPeriod = ();
 		type Burn = ();
@@ -388,7 +388,7 @@ mod tests {
 		type SpendFunds = ();
 		type MaxApprovals = MaxApprovals;
 		type WeightInfo = ();
-		type SpendOrigin = frame_support::traits::NeverEnsureOrigin<u64>;
+		type SpendOrigin = pezframe_support::traits::NeverEnsureOrigin<u64>;
 		type AssetKind = ();
 		type Beneficiary = Self::AccountId;
 		type BeneficiaryLookup = IdentityLookup<Self::AccountId>;
@@ -409,15 +409,15 @@ mod tests {
 			Some(TEST_ACCOUNT)
 		}
 	}
-	impl pallet_authorship::Config for Test {
+	impl pezpallet_authorship::Config for Test {
 		type FindAuthor = OneAuthor;
 		type EventHandler = ();
 	}
 
-	pub fn new_test_ext() -> sp_io::TestExternalities {
-		let mut t = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	pub fn new_test_ext() -> pezsp_io::TestExternalities {
+		let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 		// We use default for brevity, but you can configure as desired if needed.
-		pallet_balances::GenesisConfig::<Test>::default()
+		pezpallet_balances::GenesisConfig::<Test>::default()
 			.assimilate_storage(&mut t)
 			.unwrap();
 		t.into()
@@ -430,8 +430,8 @@ mod tests {
 		period_fraction: Perquintill,
 		auctioned_slots: u64,
 	) -> (Balance, Balance) {
-		use pallet_staking_reward_fn::compute_inflation;
-		use sp_runtime::traits::Saturating;
+		use pezpallet_staking_reward_fn::compute_inflation;
+		use pezsp_runtime::traits::Saturating;
 
 		let min_annual_inflation = Perquintill::from_rational(25u64, 1000u64);
 		let delta_annual_inflation = max_annual_inflation.saturating_sub(min_annual_inflation);
@@ -467,11 +467,11 @@ mod tests {
 	fn test_fees_and_tip_split() {
 		new_test_ext().execute_with(|| {
 			let fee =
-				<pallet_balances::Pallet<Test> as frame_support::traits::fungible::Balanced<
+				<pezpallet_balances::Pallet<Test> as pezframe_support::traits::fungible::Balanced<
 					AccountId,
 				>>::issue(10);
 			let tip =
-				<pallet_balances::Pallet<Test> as frame_support::traits::fungible::Balanced<
+				<pezpallet_balances::Pallet<Test> as pezframe_support::traits::fungible::Balanced<
 					AccountId,
 				>>::issue(20);
 
@@ -490,7 +490,7 @@ mod tests {
 	#[test]
 	fn compute_inflation_should_give_sensible_results() {
 		assert_eq!(
-			pallet_staking_reward_fn::compute_inflation(
+			pezpallet_staking_reward_fn::compute_inflation(
 				Perquintill::from_percent(75),
 				Perquintill::from_percent(75),
 				Perquintill::from_percent(5),
@@ -498,7 +498,7 @@ mod tests {
 			Perquintill::one()
 		);
 		assert_eq!(
-			pallet_staking_reward_fn::compute_inflation(
+			pezpallet_staking_reward_fn::compute_inflation(
 				Perquintill::from_percent(50),
 				Perquintill::from_percent(75),
 				Perquintill::from_percent(5),
@@ -506,7 +506,7 @@ mod tests {
 			Perquintill::from_rational(2u64, 3u64)
 		);
 		assert_eq!(
-			pallet_staking_reward_fn::compute_inflation(
+			pezpallet_staking_reward_fn::compute_inflation(
 				Perquintill::from_percent(80),
 				Perquintill::from_percent(75),
 				Perquintill::from_percent(5),

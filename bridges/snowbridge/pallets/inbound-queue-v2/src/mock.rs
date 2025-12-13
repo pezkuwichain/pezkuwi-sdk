@@ -3,7 +3,7 @@
 use super::*;
 
 use crate::{self as inbound_queue_v2};
-use frame_support::{derive_impl, parameter_types, traits::ConstU32};
+use pezframe_support::{derive_impl, parameter_types, traits::ConstU32};
 use hex_literal::hex;
 use snowbridge_beacon_primitives::{
 	types::deneb, BeaconHeader, ExecutionProof, VersionedExecutionPayloadHeader,
@@ -13,14 +13,14 @@ use snowbridge_inbound_queue_primitives::{
 	v2::{CreateAssetCallInfo, MessageToXcm},
 	Log, Proof, VerificationError,
 };
-use sp_core::H160;
-use sp_runtime::{
+use pezsp_core::H160;
+use pezsp_runtime::{
 	traits::{IdentityLookup, MaybeConvert},
 	BuildStorage,
 };
-use sp_std::{convert::From, default::Default, marker::PhantomData};
+use pezsp_std::{convert::From, default::Default, marker::PhantomData};
 use xcm::{opaque::latest::ZAGROS_GENESIS_HASH, prelude::*};
-type Block = frame_system::mocking::MockBlock<Test>;
+type Block = pezframe_system::mocking::MockBlock<Test>;
 use snowbridge_test_utils::mock_rewards::{BridgeReward, MockRewardLedger};
 pub use snowbridge_test_utils::mock_xcm::{MockXcmExecutor, MockXcmSender};
 
@@ -29,25 +29,25 @@ use snowbridge_inbound_queue_primitives::EventFixture;
 #[cfg(feature = "runtime-benchmarks")]
 use snowbridge_pallet_inbound_queue_v2_fixtures::register_token::make_register_token_message;
 
-frame_support::construct_runtime!(
+pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: frame_system::{Pallet, Call, Storage, Event<T>},
-		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
+		System: pezframe_system::{Pallet, Call, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
 		InboundQueue: inbound_queue_v2::{Pallet, Call, Storage, Event<T>},
 	}
 );
 
 pub(crate) const ERROR_ADDRESS: [u8; 20] = hex!("0000000000000000000000000000000000000911");
 
-pub type AccountId = sp_runtime::AccountId32;
+pub type AccountId = pezsp_runtime::AccountId32;
 type Balance = u128;
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for Test {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for Test {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
-	type AccountData = pallet_balances::AccountData<u128>;
+	type AccountData = pezpallet_balances::AccountData<u128>;
 	type Block = Block;
 }
 
@@ -55,8 +55,8 @@ parameter_types! {
 	pub const ExistentialDeposit: u128 = 1;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for Test {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -148,9 +148,9 @@ pub fn setup() {
 	System::set_block_number(1);
 }
 
-pub fn new_tester() -> sp_io::TestExternalities {
-	let storage = frame_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	let mut ext: sp_io::TestExternalities = storage.into();
+pub fn new_tester() -> pezsp_io::TestExternalities {
+	let storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+	let mut ext: pezsp_io::TestExternalities = storage.into();
 	ext.execute_with(setup);
 	ext
 }

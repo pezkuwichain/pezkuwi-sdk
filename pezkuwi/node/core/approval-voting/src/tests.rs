@@ -50,8 +50,8 @@ use std::{cmp::max, time::Duration};
 
 use assert_matches::assert_matches;
 use parking_lot::Mutex;
-use sp_keyring::sr25519::Keyring as Sr25519Keyring;
-use sp_keystore::Keystore;
+use pezsp_keyring::sr25519::Keyring as Sr25519Keyring;
+use pezsp_keystore::Keystore;
 use std::{
 	pin::Pin,
 	sync::{
@@ -540,12 +540,12 @@ fn test_harness<T: Future<Output = VirtualOverseer>>(
 	config: HarnessConfig,
 	test: impl FnOnce(TestHarness) -> T,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
 	let HarnessConfig { sync_oracle, sync_oracle_handle, clock, backend, assignment_criteria } =
 		config;
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (mut context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
 

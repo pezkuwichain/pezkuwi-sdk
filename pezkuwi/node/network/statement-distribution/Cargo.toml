@@ -29,7 +29,7 @@ pezkuwi-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
@@ -41,13 +41,13 @@ pezkuwi-primitives-test-helpers = { workspace = true }
 pezkuwi-subsystem-bench = { workspace = true }
 rand_chacha = { workspace = true, default-features = true }
 rstest = { workspace = true }
-sc-keystore = { workspace = true, default-features = true }
-sc-network = { workspace = true, default-features = true }
-sp-application-crypto = { workspace = true, default-features = true }
-sp-authority-discovery = { workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-tracing = { workspace = true, default-features = true }
+pezsc-keystore = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsp-application-crypto = { workspace = true, default-features = true }
+pezsp-authority-discovery = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
 subsystem-benchmarks = []
@@ -61,7 +61,7 @@ runtime-benchmarks = [
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-subsystem-bench/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
-	"sp-authority-discovery/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

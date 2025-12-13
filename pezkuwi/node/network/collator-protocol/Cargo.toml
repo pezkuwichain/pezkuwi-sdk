@@ -19,9 +19,9 @@ futures-timer = { workspace = true }
 gum = { workspace = true, default-features = true }
 schnellru = { workspace = true }
 
-sp-core = { workspace = true, default-features = true }
-sp-keystore = { workspace = true, default-features = true }
-sp-runtime = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
 
 fatality = { workspace = true }
 pezkuwi-node-network-protocol = { workspace = true, default-features = true }
@@ -41,13 +41,13 @@ tokio = { features = [
 [dev-dependencies]
 assert_matches = { workspace = true }
 rstest = { workspace = true }
-sp-tracing = { workspace = true }
+pezsp-tracing = { workspace = true }
 
 codec = { features = ["std"], workspace = true, default-features = true }
-sc-keystore = { workspace = true, default-features = true }
-sc-network = { workspace = true, default-features = true }
-sp-core = { features = ["std"], workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
+pezsc-keystore = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsp-core = { features = ["std"], workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
 
 itertools = { workspace = true }
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
@@ -65,7 +65,7 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"sc-network/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

@@ -2,10 +2,10 @@
 
 This is a collection of components for building bridges.
 
-These components include Substrate pallets for syncing headers, passing arbitrary messages, as well as libraries for
+These components include Bizinikiwi pallets for syncing headers, passing arbitrary messages, as well as libraries for
 building relayers to provide cross-chain communication capabilities.
 
-Three bridge nodes are also available. The nodes can be used to run test networks which bridge other Substrate chains.
+Three bridge nodes are also available. The nodes can be used to run test networks which bridge other Bizinikiwi chains.
 
 🚧 The bridges are currently under construction - a hardhat is recommended beyond this point 🚧
 
@@ -56,14 +56,14 @@ docker run --rm -it -w /shellhere/parity-bridges-common \
 If you want to reproduce other steps of CI process you can use the following
 [guide](https://github.com/paritytech/scripts#reproduce-ci-locally).
 
-If you need more information about setting up your development environment [Substrate's Installation
+If you need more information about setting up your development environment [Bizinikiwi's Installation
 page](https://docs.pezkuwichain.io/main-docs/install/) is a good resource.
 
 ## High-Level Architecture
 
-This repo has support for bridging foreign chains together using a combination of Substrate pallets and external
+This repo has support for bridging foreign chains together using a combination of Bizinikiwi pallets and external
 processes called relayers. A bridge chain is one that is able to follow the consensus of a foreign chain independently.
-For example, consider the case below where we want to bridge two Substrate based chains.
+For example, consider the case below where we want to bridge two Bizinikiwi based chains.
 
 ```
 +---------------+                 +---------------+
@@ -94,7 +94,7 @@ Here's an overview of how the project is laid out. The main bits are the `bin`, 
 messages between chains.
 
 ```
-├── modules                  // Substrate Runtime Modules (a.k.a Pallets)
+├── modules                  // Bizinikiwi Runtime Modules (a.k.a Pallets)
 │  ├── beefy                 // On-Chain BEEFY Light Client (in progress)
 │  ├── grandpa               // On-Chain GRANDPA Light Client
 │  ├── messages              // Cross Chain Message Passing
@@ -113,4 +113,4 @@ messages between chains.
 
 Apart from live pezkuwichain <> zagros bridge, you may spin up local networks and test see how it works locally. More
 details may be found in
-[this document](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master//cumulus/parachains/runtimes/bridge-hubs/README.md).
+[this document](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master//pezcumulus/parachains/runtimes/bridge-hubs/README.md).

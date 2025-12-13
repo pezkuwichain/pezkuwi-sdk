@@ -13,8 +13,8 @@
 
 use super::*;
 use codec::{Decode, Encode};
-use frame_support::{
-	pallet_prelude::ValueQuery, traits::UncheckedOnRuntimeUpgrade, weights::Weight,
+use pezframe_support::{
+	pezpallet_prelude::ValueQuery, traits::UncheckedOnRuntimeUpgrade, weights::Weight,
 };
 
 #[cfg(feature = "try-runtime")]
@@ -24,13 +24,13 @@ pub mod v0 {
 	use super::*;
 	use alloc::collections::vec_deque::VecDeque;
 
-	use frame_support::storage_alias;
+	use pezframe_support::storage_alias;
 
 	/// All allowed relay-parents storage at version 0.
 	#[storage_alias]
 	pub(crate) type AllowedRelayParents<T: Config> = StorageValue<
 		Pallet<T>,
-		super::v0::AllowedRelayParentsTracker<<T as frame_system::Config>::Hash, BlockNumberFor<T>>,
+		super::v0::AllowedRelayParentsTracker<<T as pezframe_system::Config>::Hash, BlockNumberFor<T>>,
 		ValueQuery,
 	>;
 
@@ -91,7 +91,7 @@ mod v1 {
 	use super::*;
 
 	#[cfg(feature = "try-runtime")]
-	use frame_support::{
+	use pezframe_support::{
 		ensure,
 		traits::{GetStorageVersion, StorageVersion},
 	};
@@ -100,7 +100,7 @@ mod v1 {
 
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateToV1<T> {
 		#[cfg(feature = "try-runtime")]
-		fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: LOG_TARGET, "Running pre_upgrade() for shared MigrateToV1");
 			let bytes = u32::to_ne_bytes(v0::AllowedRelayParents::<T>::get().buffer.len() as u32);
 
@@ -121,7 +121,7 @@ mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: LOG_TARGET, "Running post_upgrade() for shared MigrateToV1");
 			ensure!(
 				Pallet::<T>::on_chain_storage_version() >= StorageVersion::new(1),
@@ -147,19 +147,19 @@ mod v1 {
 }
 
 /// Migrate shared module storage to v1.
-pub type MigrateToV1<T> = frame_support::migrations::VersionedMigration<
+pub type MigrateToV1<T> = pezframe_support::migrations::VersionedMigration<
 	0,
 	1,
 	v1::VersionUncheckedMigrateToV1<T>,
 	Pallet<T>,
-	<T as frame_system::Config>::DbWeight,
+	<T as pezframe_system::Config>::DbWeight,
 >;
 
 #[cfg(test)]
 mod tests {
 	use super::{v1::VersionUncheckedMigrateToV1, *};
 	use crate::mock::{new_test_ext, MockGenesisConfig, Test};
-	use frame_support::traits::UncheckedOnRuntimeUpgrade;
+	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
 	use pezkuwi_primitives::Hash;
 
 	#[test]

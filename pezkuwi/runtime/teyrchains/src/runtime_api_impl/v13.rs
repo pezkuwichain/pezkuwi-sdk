@@ -26,8 +26,8 @@ use alloc::{
 	vec,
 	vec::Vec,
 };
-use frame_support::traits::{GetStorageVersion, StorageVersion};
-use frame_system::pallet_prelude::*;
+use pezframe_support::traits::{GetStorageVersion, StorageVersion};
+use pezframe_system::pezpallet_prelude::*;
 use pezkuwi_primitives::{
 	async_backing::{
 		AsyncBackingParams, BackingState, CandidatePendingAvailability, Constraints,
@@ -40,7 +40,7 @@ use pezkuwi_primitives::{
 	PersistedValidationData, PvfCheckStatement, ScrapedOnChainVotes, SessionIndex, SessionInfo,
 	ValidationCode, ValidationCodeHash, ValidatorId, ValidatorIndex, ValidatorSignature,
 };
-use sp_runtime::traits::One;
+use pezsp_runtime::traits::One;
 
 /// Implementation for the `validators` function of the runtime API.
 pub fn validators<T: initializer::Config>() -> Vec<ValidatorId> {
@@ -52,7 +52,7 @@ pub fn validator_groups<T: initializer::Config>(
 ) -> (Vec<Vec<ValidatorIndex>>, GroupRotationInfo<BlockNumberFor<T>>) {
 	// This formula needs to be the same as the one we use
 	// when populating group_responsible in `availability_cores`
-	let now = frame_system::Pallet::<T>::block_number() + One::one();
+	let now = pezframe_system::Pallet::<T>::block_number() + One::one();
 
 	let groups = scheduler::ValidatorGroups::<T>::get();
 	let rotation_info = scheduler::Pallet::<T>::group_rotation_info(now);
@@ -122,12 +122,12 @@ pub fn availability_cores<T: initializer::Config>() -> Vec<CoreState<T::Hash, Bl
 }
 
 /// Returns current block number being processed and the corresponding root hash.
-fn current_relay_parent<T: frame_system::Config>(
-) -> (BlockNumberFor<T>, <T as frame_system::Config>::Hash) {
+fn current_relay_parent<T: pezframe_system::Config>(
+) -> (BlockNumberFor<T>, <T as pezframe_system::Config>::Hash) {
 	use codec::Decode as _;
-	let state_version = frame_system::Pallet::<T>::runtime_version().state_version();
-	let relay_parent_number = frame_system::Pallet::<T>::block_number();
-	let relay_parent_storage_root = T::Hash::decode(&mut &sp_io::storage::root(state_version)[..])
+	let state_version = pezframe_system::Pallet::<T>::runtime_version().state_version();
+	let relay_parent_number = pezframe_system::Pallet::<T>::block_number();
+	let relay_parent_storage_root = T::Hash::decode(&mut &pezsp_io::storage::root(state_version)[..])
 		.expect("storage root must decode to the Hash type; qed");
 	(relay_parent_number, relay_parent_storage_root)
 }
@@ -207,7 +207,7 @@ pub fn check_validation_outputs<T: initializer::Config>(
 	para_id: ParaId,
 	outputs: pezkuwi_primitives::CandidateCommitments,
 ) -> bool {
-	let relay_parent_number = frame_system::Pallet::<T>::block_number();
+	let relay_parent_number = pezframe_system::Pallet::<T>::block_number();
 	inclusion::Pallet::<T>::check_validation_outputs_for_runtime_api(
 		para_id,
 		relay_parent_number,
@@ -230,7 +230,7 @@ pub fn session_index_for_child<T: initializer::Config>() -> SessionIndex {
 /// Implementation for the `AuthorityDiscoveryApi::authorities()` function of the runtime API.
 /// It is a heavy call, but currently only used for authority discovery, so it is fine.
 /// Gets next, current and some historical authority ids using `session_info` module.
-pub fn relevant_authority_ids<T: initializer::Config + pallet_authority_discovery::Config>(
+pub fn relevant_authority_ids<T: initializer::Config + pezpallet_authority_discovery::Config>(
 ) -> Vec<AuthorityDiscoveryId> {
 	let current_session_index = session_index_for_child::<T>();
 	let earliest_stored_session = session_info::EarliestStoredSession::<T>::get();
@@ -238,8 +238,8 @@ pub fn relevant_authority_ids<T: initializer::Config + pallet_authority_discover
 	// Due to `max_validators`, the `SessionInfo` stores only the validators who are actively
 	// selected to participate in teyrchain consensus. We'd like all authorities for the current
 	// and next sessions to be used in authority-discovery. The two sets likely have large overlap.
-	let mut authority_ids = pallet_authority_discovery::Pallet::<T>::current_authorities().to_vec();
-	authority_ids.extend(pallet_authority_discovery::Pallet::<T>::next_authorities().to_vec());
+	let mut authority_ids = pezpallet_authority_discovery::Pallet::<T>::current_authorities().to_vec();
+	authority_ids.extend(pezpallet_authority_discovery::Pallet::<T>::next_authorities().to_vec());
 
 	// Due to disputes, we'd like to remain connected to authorities of the previous few sessions.
 	// For this, we don't need anyone other than the validators actively participating in consensus.
@@ -281,11 +281,11 @@ pub fn candidate_pending_availability<T: initializer::Config>(
 pub fn candidate_events<T, F>(extract_event: F) -> Vec<CandidateEvent<T::Hash>>
 where
 	T: initializer::Config,
-	F: Fn(<T as frame_system::Config>::RuntimeEvent) -> Option<inclusion::Event<T>>,
+	F: Fn(<T as pezframe_system::Config>::RuntimeEvent) -> Option<inclusion::Event<T>>,
 {
 	use inclusion::Event as RawEvent;
 
-	frame_system::Pallet::<T>::read_events_no_consensus()
+	pezframe_system::Pallet::<T>::read_events_no_consensus()
 		.into_iter()
 		.filter_map(|record| extract_event(record.event))
 		.filter_map(|event| {
@@ -422,7 +422,7 @@ pub fn backing_constraints<T: initializer::Config>(
 	// clears the buffer.
 	//
 	// Thus, minimum relay parent is ensured to have asynchronous backing enabled.
-	let now = frame_system::Pallet::<T>::block_number();
+	let now = pezframe_system::Pallet::<T>::block_number();
 
 	// Use the right storage depending on version to ensure #64 doesn't cause issues with this
 	// migration.

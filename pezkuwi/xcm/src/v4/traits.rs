@@ -21,7 +21,7 @@ use codec::{Decode, Encode};
 use core::result;
 use scale_info::TypeInfo;
 
-pub use sp_weights::Weight;
+pub use pezsp_weights::Weight;
 
 use super::*;
 
@@ -162,8 +162,8 @@ pub type SendResult<T> = result::Result<(T, Assets), SendError>;
 /// # Example
 /// ```rust
 /// # use codec::Encode;
-/// # use staging_xcm::v4::{prelude::*, Weight};
-/// # use staging_xcm::VersionedXcm;
+/// # use pezstaging_xcm::v4::{prelude::*, Weight};
+/// # use pezstaging_xcm::VersionedXcm;
 /// # use std::convert::Infallible;
 ///
 /// /// A sender that only passes the message through and does nothing.
@@ -216,7 +216,7 @@ pub type SendResult<T> = result::Result<(T, Assets), SendError>;
 ///     require_weight_at_most: Weight::zero(),
 ///     call: call.into(),
 /// }]);
-/// let message_hash = message.using_encoded(sp_io::hashing::blake2_256);
+/// let message_hash = message.using_encoded(pezsp_io::hashing::blake2_256);
 ///
 /// // Sender2 will block this.
 /// assert!(send_xcm::<(Sender1, Sender2, Sender3)>(Parent.into(), message.clone()).is_err());

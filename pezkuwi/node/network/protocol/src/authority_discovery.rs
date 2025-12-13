@@ -20,11 +20,11 @@ use std::{collections::HashSet, fmt::Debug};
 
 use async_trait::async_trait;
 
-use sc_authority_discovery::Service as AuthorityDiscoveryService;
+use pezsc_authority_discovery::Service as AuthorityDiscoveryService;
 
 use pezkuwi_primitives::AuthorityDiscoveryId;
-use sc_network::Multiaddr;
-use sc_network_types::PeerId;
+use pezsc_network::Multiaddr;
+use pezsc_network_types::PeerId;
 
 /// An abstraction over the authority discovery service.
 ///

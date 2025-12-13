@@ -25,13 +25,13 @@ xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-sp-arithmetic = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-arithmetic = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 alloy-core = { workspace = true, features = ["sol-types"] }
 ethabi = { workspace = true }
@@ -45,30 +45,30 @@ std = [
 	"alloy-core/std",
 	"codec/std",
 	"ethabi/std",
-	"frame-support/std",
-	"frame-system/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"pezkuwi-teyrchain-primitives/std",
 	"scale-info/std",
 	"snowbridge-core/std",
 	"snowbridge-verification-primitives/std",
-	"sp-arithmetic/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 	"tracing/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
 	"snowbridge-verification-primitives/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",

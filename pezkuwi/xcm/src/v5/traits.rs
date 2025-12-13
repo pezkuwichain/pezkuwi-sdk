@@ -21,7 +21,7 @@ use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::result;
 use scale_info::TypeInfo;
 
-pub use sp_weights::Weight;
+pub use pezsp_weights::Weight;
 
 use super::*;
 
@@ -40,7 +40,7 @@ use super::*;
 	TypeInfo,
 	MaxEncodedLen,
 )]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum Error {
 	// Errors that happen due to instructions being executed. These alone are defined in the
@@ -392,8 +392,8 @@ pub type SendResult<T> = result::Result<(T, Assets), SendError>;
 /// # Example
 /// ```rust
 /// # use codec::Encode;
-/// # use staging_xcm::v5::{prelude::*, Weight};
-/// # use staging_xcm::VersionedXcm;
+/// # use pezstaging_xcm::v5::{prelude::*, Weight};
+/// # use pezstaging_xcm::VersionedXcm;
 /// # use std::convert::Infallible;
 ///
 /// /// A sender that only passes the message through and does nothing.
@@ -446,7 +446,7 @@ pub type SendResult<T> = result::Result<(T, Assets), SendError>;
 ///     call: call.into(),
 ///     fallback_max_weight: None,
 /// }]);
-/// let message_hash = message.using_encoded(sp_io::hashing::blake2_256);
+/// let message_hash = message.using_encoded(pezsp_io::hashing::blake2_256);
 ///
 /// // Sender2 will block this.
 /// assert!(send_xcm::<(Sender1, Sender2, Sender3)>(Parent.into(), message.clone()).is_err());

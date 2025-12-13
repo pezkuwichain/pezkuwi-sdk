@@ -14,21 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Defines structures related to calls of the `pallet-bridge-messages` pallet.
+//! Defines structures related to calls of the `pezpallet-bridge-messages` pallet.
 
 use crate::{MessageNonce, UnrewardedRelayersState};
 
 use codec::{Decode, Encode};
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 use scale_info::TypeInfo;
-use sp_core::RuntimeDebug;
-use sp_std::ops::RangeInclusive;
+use pezsp_core::RuntimeDebug;
+use pezsp_std::ops::RangeInclusive;
 
-/// A minimized version of `pallet-bridge-messages::Call` that can be used without a runtime.
+/// A minimized version of `pezpallet-bridge-messages::Call` that can be used without a runtime.
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 #[allow(non_camel_case_types)]
 pub enum BridgeMessagesCall<AccountId, MessagesProof, MessagesDeliveryProof> {
-	/// `pallet-bridge-messages::Call::receive_messages_proof`
+	/// `pezpallet-bridge-messages::Call::receive_messages_proof`
 	#[codec(index = 2)]
 	receive_messages_proof {
 		/// Account id of relayer at the **bridged** chain.
@@ -40,7 +40,7 @@ pub enum BridgeMessagesCall<AccountId, MessagesProof, MessagesDeliveryProof> {
 		/// Total dispatch weight of messages in the proof.
 		dispatch_weight: Weight,
 	},
-	/// `pallet-bridge-messages::Call::receive_messages_delivery_proof`
+	/// `pezpallet-bridge-messages::Call::receive_messages_delivery_proof`
 	#[codec(index = 3)]
 	receive_messages_delivery_proof {
 		/// Messages delivery proof.

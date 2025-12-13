@@ -46,7 +46,7 @@ pub(crate) const MAX_JUNCTIONS: usize = 8;
 	serde::Deserialize,
 )]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
-#[scale_info(replace_segment("staging_xcm", "xcm"))]
+#[scale_info(replace_segment("pezstaging_xcm", "xcm"))]
 pub enum Junctions {
 	/// The interpreting consensus system.
 	Here,
@@ -461,7 +461,7 @@ impl Junctions {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*, MultiLocation};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*, MultiLocation};
 	/// let mut m = X1(Teyrchain(21));
 	/// assert_eq!(m.append_with(X1(PalletInstance(3))), Ok(()));
 	/// assert_eq!(m, X2(Teyrchain(21), PalletInstance(3)));
@@ -590,7 +590,7 @@ impl Junctions {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v3::{Junctions::*, Junction::*};
+	/// # use pezstaging_xcm::v3::{Junctions::*, Junction::*};
 	/// let mut m = X3(Teyrchain(2), PalletInstance(3), OnlyChild);
 	/// assert_eq!(m.match_and_split(&X2(Teyrchain(2), PalletInstance(3))), Some(&OnlyChild));
 	/// assert_eq!(m.match_and_split(&X1(Teyrchain(2))), None);

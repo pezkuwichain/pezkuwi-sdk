@@ -30,40 +30,40 @@ pub enum Subcommand {
 	#[deprecated(
 		note = "build-spec command will be removed after 1/04/2026. Use export-chain-spec command instead"
 	)]
-	BuildSpec(sc_cli::BuildSpecCmd),
+	BuildSpec(pezsc_cli::BuildSpecCmd),
 
 	/// Export the chain specification.
-	ExportChainSpec(sc_cli::ExportChainSpecCmd),
+	ExportChainSpec(pezsc_cli::ExportChainSpecCmd),
 
 	/// Validate blocks.
-	CheckBlock(sc_cli::CheckBlockCmd),
+	CheckBlock(pezsc_cli::CheckBlockCmd),
 
 	/// Export blocks.
-	ExportBlocks(sc_cli::ExportBlocksCmd),
+	ExportBlocks(pezsc_cli::ExportBlocksCmd),
 
 	/// Export the state of a given block into a chain spec.
-	ExportState(sc_cli::ExportStateCmd),
+	ExportState(pezsc_cli::ExportStateCmd),
 
 	/// Import blocks.
-	ImportBlocks(sc_cli::ImportBlocksCmd),
+	ImportBlocks(pezsc_cli::ImportBlocksCmd),
 
 	/// Remove the whole chain.
-	PurgeChain(sc_cli::PurgeChainCmd),
+	PurgeChain(pezsc_cli::PurgeChainCmd),
 
 	/// Revert the chain to a previous state.
-	Revert(sc_cli::RevertCmd),
+	Revert(pezsc_cli::RevertCmd),
 
 	/// Sub-commands concerned with benchmarking.
 	/// The pallet benchmarking moved to the `pallet` sub-command.
 	#[command(subcommand)]
-	Benchmark(frame_benchmarking_cli::BenchmarkCmd),
+	Benchmark(pezframe_benchmarking_cli::BenchmarkCmd),
 
 	/// Key management CLI utilities
 	#[command(subcommand)]
-	Key(sc_cli::KeySubcommand),
+	Key(pezsc_cli::KeySubcommand),
 
 	/// Db meta columns information.
-	ChainInfo(sc_cli::ChainInfoCmd),
+	ChainInfo(pezsc_cli::ChainInfoCmd),
 }
 
 #[allow(missing_docs)]
@@ -71,7 +71,7 @@ pub enum Subcommand {
 #[group(skip)]
 pub struct RunCmd {
 	#[clap(flatten)]
-	pub base: sc_cli::RunCmd,
+	pub base: pezsc_cli::RunCmd,
 
 	/// Force using Kusama native runtime.
 	#[arg(long = "force-kusama")]
@@ -178,5 +178,5 @@ pub struct Cli {
 	pub run: RunCmd,
 
 	#[clap(flatten)]
-	pub storage_monitor: sc_storage_monitor::StorageMonitorParams,
+	pub storage_monitor: pezsc_storage_monitor::StorageMonitorParams,
 }

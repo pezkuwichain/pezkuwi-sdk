@@ -29,7 +29,7 @@ use pezkuwi_primitives::{
 	BlockNumber, CandidateHash, CandidateIndex, CandidateReceiptV2 as CandidateReceipt, CoreIndex,
 	GroupIndex, Hash, SessionIndex, ValidatorIndex, ValidatorSignature,
 };
-use sp_consensus_slots::Slot;
+use pezsp_consensus_slots::Slot;
 
 use bitvec::{order::Lsb0 as BitOrderLsb0, slice::BitSlice};
 use std::collections::BTreeMap;

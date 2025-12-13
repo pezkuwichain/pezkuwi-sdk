@@ -1,7 +1,7 @@
 [package]
 name = "bp-test-utils"
 version = "0.7.0"
-description = "Utilities for testing substrate-based runtime bridge code"
+description = "Utilities for testing bizinikiwi-based runtime bridge code"
 authors.workspace = true
 edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
@@ -18,12 +18,12 @@ bp-teyrchains = { workspace = true }
 codec = { workspace = true }
 ed25519-dalek = { workspace = true }
 finality-grandpa = { workspace = true }
-sp-application-crypto = { workspace = true }
-sp-consensus-grandpa = { workspace = true }
-sp-core = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
-sp-trie = { workspace = true }
+pezsp-application-crypto = { workspace = true }
+pezsp-consensus-grandpa = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
+pezsp-trie = { workspace = true }
 
 [features]
 default = ["std"]
@@ -35,19 +35,19 @@ std = [
 	"codec/std",
 	"ed25519-dalek/std",
 	"finality-grandpa/std",
-	"sp-application-crypto/std",
-	"sp-consensus-grandpa/std",
-	"sp-core/std",
-	"sp-runtime/std",
-	"sp-std/std",
-	"sp-trie/std",
+	"pezsp-application-crypto/std",
+	"pezsp-consensus-grandpa/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"pezsp-trie/std",
 ]
 runtime-benchmarks = [
 	"bp-header-chain/runtime-benchmarks",
 	"bp-pezkuwi-core/runtime-benchmarks",
 	"bp-runtime/runtime-benchmarks",
 	"bp-teyrchains/runtime-benchmarks",
-	"sp-consensus-grandpa/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
-	"sp-trie/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

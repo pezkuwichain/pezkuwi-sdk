@@ -45,11 +45,11 @@ use pezkuwi_node_subsystem::{
 };
 
 use pezkuwi_node_subsystem_util::TimeoutExt;
-use sc_keystore::LocalKeystore;
-use sp_application_crypto::AppCrypto;
-use sp_core::{sr25519::Pair, testing::TaskExecutor, Pair as PairT};
-use sp_keyring::Sr25519Keyring;
-use sp_keystore::{Keystore, KeystorePtr};
+use pezsc_keystore::LocalKeystore;
+use pezsp_application_crypto::AppCrypto;
+use pezsp_core::{sr25519::Pair, testing::TaskExecutor, Pair as PairT};
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_keystore::{Keystore, KeystorePtr};
 
 use pezkuwi_node_primitives::{Timestamp, ACTIVE_DURATION_SECS};
 use pezkuwi_node_subsystem::{
@@ -169,8 +169,8 @@ struct TestState {
 	validators: Vec<Pair>,
 	validator_public: IndexedVec<ValidatorIndex, ValidatorId>,
 	validator_groups: IndexedVec<GroupIndex, Vec<ValidatorIndex>>,
-	master_keystore: Arc<sc_keystore::LocalKeystore>,
-	subsystem_keystore: Arc<sc_keystore::LocalKeystore>,
+	master_keystore: Arc<pezsc_keystore::LocalKeystore>,
+	subsystem_keystore: Arc<pezsc_keystore::LocalKeystore>,
 	db: Arc<dyn Database>,
 	config: Config,
 	clock: MockClock,
@@ -2156,7 +2156,7 @@ fn concluded_supermajority_against_non_active_after_time() {
 
 #[test]
 fn resume_dispute_without_local_statement() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	let session = 1;
 
 	test_harness(|mut test_state, mut virtual_overseer| {
@@ -2308,7 +2308,7 @@ fn resume_dispute_without_local_statement() {
 
 #[test]
 fn resume_dispute_with_local_statement() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	let session = 1;
 
 	test_harness(|mut test_state, mut virtual_overseer| {
@@ -2838,7 +2838,7 @@ fn participation_with_onchain_disabling_confirmed() {
 
 #[test]
 fn participation_with_offchain_disabling() {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 	test_harness(|mut test_state, mut virtual_overseer| {
 		Box::pin(async move {
 			let session = 1;

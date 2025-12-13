@@ -20,13 +20,13 @@ pub enum Error {
 	PezkuwiService(#[from] pezkuwi_service::Error),
 
 	#[error(transparent)]
-	SubstrateCli(#[from] sc_cli::Error),
+	BizinikiwiCli(#[from] pezsc_cli::Error),
 
 	#[error(transparent)]
-	SubstrateService(#[from] sc_service::Error),
+	BizinikiwiService(#[from] pezsc_service::Error),
 
 	#[error(transparent)]
-	SubstrateTracing(#[from] sc_tracing::logging::Error),
+	BizinikiwiTracing(#[from] pezsc_tracing::logging::Error),
 
 	#[cfg(not(feature = "pyroscope"))]
 	#[error("Binary was not compiled with `--feature=pyroscope`")]
@@ -46,7 +46,7 @@ pub enum Error {
 	CommandNotImplemented,
 
 	#[error(transparent)]
-	Storage(#[from] sc_storage_monitor::Error),
+	Storage(#[from] pezsc_storage_monitor::Error),
 
 	#[error("Other: {0}")]
 	Other(String),

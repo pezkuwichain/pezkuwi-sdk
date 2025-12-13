@@ -17,16 +17,16 @@
 use crate::{ChainId, HeaderIdProvider};
 
 use codec::{Codec, Decode, Encode, MaxEncodedLen};
-use frame_support::{weights::Weight, Parameter};
+use pezframe_support::{weights::Weight, Parameter};
 use num_traits::{AsPrimitive, Bounded, CheckedSub, Saturating, SaturatingAdd, Zero};
-use sp_runtime::{
+use pezsp_runtime::{
 	traits::{
 		AtLeast32Bit, AtLeast32BitUnsigned, Hash as HashT, Header as HeaderT, MaybeDisplay,
 		MaybeSerialize, MaybeSerializeDeserialize, Member, SimpleBitOps, Verify,
 	},
 	FixedPointOperand, StateVersion,
 };
-use sp_std::{fmt::Debug, hash::Hash, str::FromStr, vec, vec::Vec};
+use pezsp_std::{fmt::Debug, hash::Hash, str::FromStr, vec, vec::Vec};
 
 /// Chain call, that is either SCALE-encoded, or decoded.
 #[derive(Debug, Clone, PartialEq)]
@@ -98,18 +98,18 @@ impl<ChainCall: Encode> Encode for EncodedOrDecodedCall<ChainCall> {
 	}
 }
 
-/// Minimal Substrate-based chain representation that may be used from no_std environment.
+/// Minimal Bizinikiwi-based chain representation that may be used from no_std environment.
 pub trait Chain: Send + Sync + 'static {
 	/// Chain id.
 	const ID: ChainId;
 
-	/// A type that fulfills the abstract idea of what a Substrate block number is.
-	// Constraints come from the associated Number type of `sp_runtime::traits::Header`
+	/// A type that fulfills the abstract idea of what a Bizinikiwi block number is.
+	// Constraints come from the associated Number type of `pezsp_runtime::traits::Header`
 	// See here for more info:
-	// https://docs.rs/sp-runtime/latest/sp_runtime/traits/trait.Header.html#associatedtype.Number
+	// https://docs.rs/sp-runtime/latest/pezsp_runtime/traits/trait.Header.html#associatedtype.Number
 	//
 	// Note that the `AsPrimitive<usize>` trait is required by the GRANDPA justification
-	// verifier, and is not usually part of a Substrate Header's Number type.
+	// verifier, and is not usually part of a Bizinikiwi Header's Number type.
 	type BlockNumber: Parameter
 		+ Member
 		+ MaybeSerializeDeserialize
@@ -124,10 +124,10 @@ pub trait Chain: Send + Sync + 'static {
 		+ Saturating
 		+ MaxEncodedLen;
 
-	/// A type that fulfills the abstract idea of what a Substrate hash is.
-	// Constraints come from the associated Hash type of `sp_runtime::traits::Header`
+	/// A type that fulfills the abstract idea of what a Bizinikiwi hash is.
+	// Constraints come from the associated Hash type of `pezsp_runtime::traits::Header`
 	// See here for more info:
-	// https://docs.rs/sp-runtime/latest/sp_runtime/traits/trait.Header.html#associatedtype.Hash
+	// https://docs.rs/sp-runtime/latest/pezsp_runtime/traits/trait.Header.html#associatedtype.Hash
 	type Hash: Parameter
 		+ Member
 		+ MaybeSerializeDeserialize
@@ -141,16 +141,16 @@ pub trait Chain: Send + Sync + 'static {
 		+ AsMut<[u8]>
 		+ MaxEncodedLen;
 
-	/// A type that fulfills the abstract idea of what a Substrate hasher (a type
+	/// A type that fulfills the abstract idea of what a Bizinikiwi hasher (a type
 	/// that produces hashes) is.
-	// Constraints come from the associated Hashing type of `sp_runtime::traits::Header`
+	// Constraints come from the associated Hashing type of `pezsp_runtime::traits::Header`
 	// See here for more info:
-	// https://docs.rs/sp-runtime/latest/sp_runtime/traits/trait.Header.html#associatedtype.Hashing
+	// https://docs.rs/sp-runtime/latest/pezsp_runtime/traits/trait.Header.html#associatedtype.Hashing
 	type Hasher: HashT<Output = Self::Hash>;
 
-	/// A type that fulfills the abstract idea of what a Substrate header is.
+	/// A type that fulfills the abstract idea of what a Bizinikiwi header is.
 	// See here for more info:
-	// https://docs.rs/sp-runtime/latest/sp_runtime/traits/trait.Header.html
+	// https://docs.rs/sp-runtime/latest/pezsp_runtime/traits/trait.Header.html
 	type Header: Parameter
 		+ HeaderT<Number = Self::BlockNumber, Hash = Self::Hash>
 		+ HeaderIdProvider<Self::Header>
@@ -180,7 +180,7 @@ pub trait Chain: Send + Sync + 'static {
 		+ PartialOrd
 		+ SaturatingAdd
 		+ Zero
-		+ TryFrom<sp_core::U256>
+		+ TryFrom<pezsp_core::U256>
 		+ MaxEncodedLen;
 	/// Nonce of a transaction used by the chain.
 	type Nonce: Parameter
@@ -261,8 +261,8 @@ where
 }
 
 /// Adapter for `Get<u32>` to access `TEYRCHAIN_ID` from `trait Teyrchain`
-pub struct TeyrchainIdOf<Para>(sp_std::marker::PhantomData<Para>);
-impl<Para: Teyrchain> frame_support::traits::Get<u32> for TeyrchainIdOf<Para> {
+pub struct TeyrchainIdOf<Para>(pezsp_std::marker::PhantomData<Para>);
+impl<Para: Teyrchain> pezframe_support::traits::Get<u32> for TeyrchainIdOf<Para> {
 	fn get() -> u32 {
 		Para::TEYRCHAIN_ID
 	}
@@ -332,7 +332,7 @@ macro_rules! decl_bridge_finality_runtime_apis {
 						stringify!([<$chain:camel FinalityApi_synced_headers_ $consensus:lower _info>]);
 				)?
 
-				sp_api::decl_runtime_apis! {
+				pezsp_api::decl_runtime_apis! {
 					/// API for querying information about the finalized chain headers.
 					///
 					/// This API is implemented by runtimes that are receiving messages from this chain, not by this
@@ -345,7 +345,7 @@ macro_rules! decl_bridge_finality_runtime_apis {
 						/// The caller expects that if his transaction improves best known header
 						/// at least by the free_headers_interval`, it will be fee-free.
 						///
-						/// See [`pallet_bridge_grandpa::Config::FreeHeadersInterval`] for details.
+						/// See [`pezpallet_bridge_grandpa::Config::FreeHeadersInterval`] for details.
 						fn free_headers_interval() -> Option<BlockNumber>;
 
 						$(
@@ -394,7 +394,7 @@ macro_rules! decl_bridge_messages_runtime_apis {
 				pub const [<FROM_ $chain:upper _MESSAGE_DETAILS_METHOD>]: &str =
 					stringify!([<From $chain:camel InboundLaneApi_message_details>]);
 
-				sp_api::decl_runtime_apis! {
+				pezsp_api::decl_runtime_apis! {
 					/// Outbound message lane API for messages that are sent to this chain.
 					///
 					/// This API is implemented by runtimes that are receiving messages from this chain, not by this

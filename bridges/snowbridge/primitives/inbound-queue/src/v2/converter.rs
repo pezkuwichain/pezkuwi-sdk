@@ -6,12 +6,12 @@ use super::{message::*, traits::*};
 use crate::{v2::LOG_TARGET, CallIndex};
 use codec::{Decode, DecodeLimit, Encode};
 use core::marker::PhantomData;
-use frame_support::ensure;
+use pezframe_support::ensure;
 use snowbridge_core::{ParaId, TokenId};
-use sp_core::{Get, RuntimeDebug, H160};
-use sp_io::hashing::blake2_256;
-use sp_runtime::{traits::MaybeConvert, MultiAddress};
-use sp_std::prelude::*;
+use pezsp_core::{Get, RuntimeDebug, H160};
+use pezsp_io::hashing::blake2_256;
+use pezsp_runtime::{traits::MaybeConvert, MultiAddress};
+use pezsp_std::prelude::*;
 use xcm::{
 	prelude::{Junction::*, *},
 	MAX_XCM_DECODE_DEPTH,
@@ -425,13 +425,13 @@ mod tests {
 	use super::*;
 
 	use codec::Encode;
-	use frame_support::{assert_err, assert_ok, parameter_types};
+	use pezframe_support::{assert_err, assert_ok, parameter_types};
 	use hex_literal::hex;
 	use snowbridge_core::TokenId;
 	use snowbridge_test_utils::mock_converter::{
 		add_location_override, reanchor_to_ethereum, LocationIdConvert,
 	};
-	use sp_core::{H160, H256};
+	use pezsp_core::{H160, H256};
 	const GATEWAY_ADDRESS: [u8; 20] = hex!["eda338e4dc46038493b885327842fd3e301cab39"];
 
 	parameter_types! {
@@ -487,7 +487,7 @@ mod tests {
 
 	#[test]
 	fn test_successful_message() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			let origin: H160 = hex!("29e3b139f4393adda86303fcdaa35f60bb7092bf").into();
 			let native_token_id: H160 = hex!("5615deb798bb3e4dfa0139dfa1b3d433cc23b72f").into();
 			let dot_location = Location::parent();
@@ -723,7 +723,7 @@ mod tests {
 
 	#[test]
 	fn test_invalid_claimer() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			let origin: H160 = hex!("29e3b139f4393adda86303fcdaa35f60bb7092bf").into();
 			let native_token_id: H160 = hex!("5615deb798bb3e4dfa0139dfa1b3d433cc23b72f").into();
 			let beneficiary =
@@ -796,7 +796,7 @@ mod tests {
 
 	#[test]
 	fn test_invalid_xcm() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			let origin: H160 = hex!("29e3b139f4393adda86303fcdaa35f60bb7092bf").into();
 			let native_token_id: H160 = hex!("5615deb798bb3e4dfa0139dfa1b3d433cc23b72f").into();
 			let token_value = 3_000_000_000_000u128;
@@ -833,7 +833,7 @@ mod tests {
 
 	#[test]
 	fn message_with_set_topic_respects_user_topic() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			let origin: H160 = hex!("29e3b139f4393adda86303fcdaa35f60bb7092bf").into();
 
 			// Create a custom topic ID that the user specifies
@@ -879,7 +879,7 @@ mod tests {
 
 	#[test]
 	fn message_with_generates_a_unique_topic_if_no_topic_is_present() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			let origin: H160 = hex!("29e3b139f4393adda86303fcdaa35f60bb7092bf").into();
 
 			let execution_fee = 1_000_000_000_000u128;
@@ -912,7 +912,7 @@ mod tests {
 
 	#[test]
 	fn message_with_user_topic_not_last_instruction_gets_appended() {
-		sp_io::TestExternalities::default().execute_with(|| {
+		pezsp_io::TestExternalities::default().execute_with(|| {
 			let origin: H160 = hex!("29e3b139f4393adda86303fcdaa35f60bb7092bf").into();
 
 			let execution_fee = 1_000_000_000_000u128;

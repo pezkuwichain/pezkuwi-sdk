@@ -5,7 +5,7 @@ use crate::{
 	Update, ValidatorsRoot, Vec,
 };
 use snowbridge_beacon_primitives::PublicKeyPrepared;
-use sp_core::H256;
+use pezsp_core::H256;
 
 pub fn participant_pubkeys<T: Config>(
 	update: &Update,

@@ -6,7 +6,7 @@ use crate::{
 };
 use alloy_core::primitives::FixedBytes;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	traits::{Hooks, ProcessMessage, ProcessMessageError, QueueFootprintQuery},
 	weights::WeightMeter,
@@ -18,7 +18,7 @@ use snowbridge_outbound_queue_primitives::{
 	v2::{abi::OutboundMessageWrapper, Command, Initializer, SendMessage},
 	SendError,
 };
-use sp_core::{hexdisplay::HexDisplay, H256};
+use pezsp_core::{hexdisplay::HexDisplay, H256};
 
 #[test]
 fn submit_messages_and_commit() {

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use crate::{mock::*, DispatchError::Other, Error};
-use frame_support::{assert_err, assert_noop, assert_ok};
-use frame_system::RawOrigin;
+use pezframe_support::{assert_err, assert_noop, assert_ok};
+use pezframe_system::RawOrigin;
 use snowbridge_core::{reward::MessageId, AssetMetadata, BasicOperatingMode};
 use snowbridge_test_utils::mock_swap_executor::TRIGGER_SWAP_ERROR_AMOUNT;
-use sp_keyring::sr25519::Keyring;
+use pezsp_keyring::sr25519::Keyring;
 use xcm::{
 	latest::{Assets, Error as XcmError, Location},
 	opaque::latest::{Asset, AssetId, AssetInstance, Fungibility},
@@ -244,7 +244,7 @@ fn add_tip_origin_not_signed_fails() {
 		let asset = Asset::from((ether_location, tip_amount));
 		assert_noop!(
 			EthereumSystemFrontend::add_tip(RuntimeOrigin::root(), message_id, asset),
-			sp_runtime::DispatchError::BadOrigin
+			pezsp_runtime::DispatchError::BadOrigin
 		);
 	});
 }

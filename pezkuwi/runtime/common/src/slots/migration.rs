@@ -16,7 +16,7 @@
 
 use super::*;
 use crate::crowdloan;
-use sp_runtime::traits::AccountIdConversion;
+use pezsp_runtime::traits::AccountIdConversion;
 
 /// Migrations for using fund index to create fund accounts instead of para ID.
 pub mod slots_crowdloan_index_migration {
@@ -48,7 +48,7 @@ pub mod slots_crowdloan_index_migration {
 		Ok(())
 	}
 
-	pub fn migrate<T: Config + crowdloan::Config>() -> frame_support::weights::Weight {
+	pub fn migrate<T: Config + crowdloan::Config>() -> pezframe_support::weights::Weight {
 		let mut weight = Weight::zero();
 
 		for (para_id, mut leases) in Leases::<T>::iter() {

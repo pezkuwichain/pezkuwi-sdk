@@ -18,8 +18,8 @@ use crate::{
 	pallet::CurrentMigration, Config, CurrentXcmVersion, Pallet, VersionMigrationStage,
 	VersionNotifyTargets,
 };
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{OnRuntimeUpgrade, StorageVersion, UncheckedOnRuntimeUpgrade},
 	weights::Weight,
 };
@@ -221,7 +221,7 @@ pub mod data {
 			weight: &mut Weight,
 			required_xcm_version: XcmVersion,
 		) {
-			const LOG_TARGET: &str = "runtime::xcm::pallet_xcm::migrate_data_to_xcm_version";
+			const LOG_TARGET: &str = "runtime::xcm::pezpallet_xcm::migrate_data_to_xcm_version";
 
 			// check and migrate `Queries`
 			let queries_to_migrate = Queries::<T>::iter().filter_map(|(id, data)| {
@@ -444,18 +444,18 @@ pub mod v1 {
 
 	/// Version checked migration to v1.
 	///
-	/// Wrapped in [`frame_support::migrations::VersionedMigration`] so the pre/post checks don't
+	/// Wrapped in [`pezframe_support::migrations::VersionedMigration`] so the pre/post checks don't
 	/// begin failing after the upgrade is enacted on-chain.
-	pub type MigrateToV1<T> = frame_support::migrations::VersionedMigration<
+	pub type MigrateToV1<T> = pezframe_support::migrations::VersionedMigration<
 		0,
 		1,
 		VersionUncheckedMigrateToV1<T>,
 		crate::pallet::Pallet<T>,
-		<T as frame_system::Config>::DbWeight,
+		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
 
-/// When adding a new XCM version, we need to run this migration for `pallet_xcm` to ensure that all
+/// When adding a new XCM version, we need to run this migration for `pezpallet_xcm` to ensure that all
 /// previously stored data with subkey prefix `XCM_VERSION-1` (and below) are migrated to the
 /// `XCM_VERSION`.
 ///
@@ -477,9 +477,9 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToLatestXcmVersion<T> {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(_: alloc::vec::Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+	fn post_upgrade(_: alloc::vec::Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		use data::NeedsMigration;
-		const LOG_TARGET: &str = "runtime::xcm::pallet_xcm::migrate_to_latest";
+		const LOG_TARGET: &str = "runtime::xcm::pezpallet_xcm::migrate_to_latest";
 
 		let latest = CurrentXcmVersion::get();
 

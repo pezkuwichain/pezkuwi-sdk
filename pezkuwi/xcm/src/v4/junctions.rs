@@ -498,7 +498,7 @@ impl Junctions {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions, Junction::*, Location};
+	/// # use pezstaging_xcm::v4::{Junctions, Junction::*, Location};
 	/// # fn main() {
 	/// let mut m = Junctions::from([Teyrchain(21)]);
 	/// assert_eq!(m.append_with([PalletInstance(3)]), Ok(()));
@@ -543,7 +543,7 @@ impl Junctions {
 	///
 	/// # Example
 	/// ```rust
-	/// # use staging_xcm::v4::{Junctions, Junction::*};
+	/// # use pezstaging_xcm::v4::{Junctions, Junction::*};
 	/// # fn main() {
 	/// let mut m = Junctions::from([Teyrchain(2), PalletInstance(3), OnlyChild]);
 	/// assert_eq!(m.match_and_split(&[Teyrchain(2), PalletInstance(3)].into()), Some(&OnlyChild));

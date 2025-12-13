@@ -8,8 +8,8 @@ use snowbridge_beacon_primitives::{
 	types::deneb, AncestryProof, BeaconHeader, ExecutionProof, VersionedExecutionPayloadHeader,
 };
 use snowbridge_inbound_queue_primitives::{EventFixture, EventProof, Log, Proof};
-use sp_core::U256;
-use sp_std::vec;
+use pezsp_core::U256;
+use pezsp_std::vec;
 
 pub fn make_send_native_eth_message() -> EventFixture {
 	EventFixture {

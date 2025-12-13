@@ -17,21 +17,21 @@
 #![cfg(test)]
 
 use codec::Encode;
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 use pezkuwi_test_client::{
 	BlockBuilderExt, ClientBlockImportExt, DefaultTestClientBuilderExt, InitPezkuwiBlockBuilder,
 	TestClientBuilder, TestClientBuilderExt,
 };
-use pezkuwi_test_runtime::{pallet_test_notifier, xcm_config::XcmConfig};
+use pezkuwi_test_runtime::{pezpallet_test_notifier, xcm_config::XcmConfig};
 use pezkuwi_test_service::construct_extrinsic;
-use sp_runtime::traits::Block;
-use sp_state_machine::InspectState;
+use pezsp_runtime::traits::Block;
+use pezsp_state_machine::InspectState;
 use xcm::{latest::prelude::*, VersionedResponse, VersionedXcm};
 use xcm_executor::traits::WeightBounds;
 
 #[test]
 fn basic_buy_fees_message_executes() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();
 
 	let msg = Xcm(vec![
@@ -44,11 +44,11 @@ fn basic_buy_fees_message_executes() {
 
 	let execute = construct_extrinsic(
 		&client,
-		pezkuwi_test_runtime::RuntimeCall::Xcm(pallet_xcm::Call::execute {
+		pezkuwi_test_runtime::RuntimeCall::Xcm(pezpallet_xcm::Call::execute {
 			message: Box::new(VersionedXcm::from(msg)),
 			max_weight: Weight::from_parts(1_000_000_000, 1024 * 1024),
 		}),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		0,
 	);
 
@@ -57,13 +57,13 @@ fn basic_buy_fees_message_executes() {
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	client.state_at(block_hash).expect("state should exist").inspect_state(|| {
 		assert!(pezkuwi_test_runtime::System::events().iter().any(|r| matches!(
 			r.event,
-			pezkuwi_test_runtime::RuntimeEvent::Xcm(pallet_xcm::Event::Attempted {
+			pezkuwi_test_runtime::RuntimeEvent::Xcm(pezpallet_xcm::Event::Attempted {
 				outcome: Outcome::Complete { .. }
 			}),
 		)));
@@ -72,7 +72,7 @@ fn basic_buy_fees_message_executes() {
 
 #[test]
 fn transact_recursion_limit_works() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();
 
 	let base_xcm = |call: pezkuwi_test_runtime::RuntimeCall| {
@@ -100,7 +100,7 @@ fn transact_recursion_limit_works() {
 			10 => {
 				let inner_call = call.take().unwrap();
 				let expected_transact_status =
-					sp_runtime::DispatchError::Module(sp_runtime::ModuleError {
+					pezsp_runtime::DispatchError::Module(pezsp_runtime::ModuleError {
 						index: 27,
 						error: [28, 0, 40, 0], // ExceedsStackLimit
 						message: Some("LocalExecutionIncompleteWithError"),
@@ -120,7 +120,7 @@ fn transact_recursion_limit_works() {
 		}
 		let max_weight =
 			<XcmConfig as xcm_executor::Config>::Weigher::weight(&mut msg, Weight::MAX).unwrap();
-		call = Some(pezkuwi_test_runtime::RuntimeCall::Xcm(pallet_xcm::Call::execute {
+		call = Some(pezkuwi_test_runtime::RuntimeCall::Xcm(pezpallet_xcm::Call::execute {
 			message: Box::new(VersionedXcm::from(msg.clone())),
 			max_weight,
 		}));
@@ -128,25 +128,25 @@ fn transact_recursion_limit_works() {
 
 	let mut block_builder = client.init_pezkuwi_block_builder();
 
-	let execute = construct_extrinsic(&client, call.unwrap(), sp_keyring::Sr25519Keyring::Alice, 0);
+	let execute = construct_extrinsic(&client, call.unwrap(), pezsp_keyring::Sr25519Keyring::Alice, 0);
 
 	block_builder.push_pezkuwi_extrinsic(execute).expect("pushes extrinsic");
 
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	client.state_at(block_hash).expect("state should exist").inspect_state(|| {
 		let events = pezkuwi_test_runtime::System::events();
-		// verify 10 pallet_xcm calls were successful
+		// verify 10 pezpallet_xcm calls were successful
 		assert_eq!(
 			pezkuwi_test_runtime::System::events()
 				.iter()
 				.filter(|r| matches!(
 					r.event,
-					pezkuwi_test_runtime::RuntimeEvent::Xcm(pallet_xcm::Event::Attempted {
+					pezkuwi_test_runtime::RuntimeEvent::Xcm(pezpallet_xcm::Event::Attempted {
 						outcome: Outcome::Complete { .. }
 					}),
 				))
@@ -157,22 +157,22 @@ fn transact_recursion_limit_works() {
 		assert!(events.iter().any(|r| matches!(
 			&r.event,
 			pezkuwi_test_runtime::RuntimeEvent::TransactionPayment(
-				pallet_transaction_payment::Event::TransactionFeePaid {
+				pezpallet_transaction_payment::Event::TransactionFeePaid {
 					who: payer,
 					..
 				}
-			) if *payer == sp_keyring::Sr25519Keyring::Alice.into(),
+			) if *payer == pezsp_keyring::Sr25519Keyring::Alice.into(),
 		)));
 	});
 }
 
 #[test]
 fn query_response_fires() {
-	use pallet_test_notifier::Event::*;
-	use pallet_xcm::QueryStatus;
+	use pezpallet_test_notifier::Event::*;
+	use pezpallet_xcm::QueryStatus;
 	use pezkuwi_test_runtime::RuntimeEvent::TestNotifier;
 
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();
 
 	let mut block_builder = client.init_pezkuwi_block_builder();
@@ -180,9 +180,9 @@ fn query_response_fires() {
 	let execute = construct_extrinsic(
 		&client,
 		pezkuwi_test_runtime::RuntimeCall::TestNotifier(
-			pallet_test_notifier::Call::prepare_new_query {},
+			pezpallet_test_notifier::Call::prepare_new_query {},
 		),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		0,
 	);
 
@@ -191,7 +191,7 @@ fn query_response_fires() {
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	let mut query_id = None;
@@ -215,11 +215,11 @@ fn query_response_fires() {
 
 	let execute = construct_extrinsic(
 		&client,
-		pezkuwi_test_runtime::RuntimeCall::Xcm(pallet_xcm::Call::execute {
+		pezkuwi_test_runtime::RuntimeCall::Xcm(pezpallet_xcm::Call::execute {
 			message: msg,
 			max_weight: Weight::from_parts(1_000_000_000, 1024 * 1024),
 		}),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		1,
 	);
 
@@ -228,13 +228,13 @@ fn query_response_fires() {
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	client.state_at(block_hash).expect("state should exist").inspect_state(|| {
 		assert!(pezkuwi_test_runtime::System::events().iter().any(|r| matches!(
 			r.event,
-			pezkuwi_test_runtime::RuntimeEvent::Xcm(pallet_xcm::Event::ResponseReady {
+			pezkuwi_test_runtime::RuntimeEvent::Xcm(pezpallet_xcm::Event::ResponseReady {
 				query_id: q,
 				response: Response::ExecutionResult(None),
 			}) if q == query_id,
@@ -251,10 +251,10 @@ fn query_response_fires() {
 
 #[test]
 fn query_response_elicits_handler() {
-	use pallet_test_notifier::Event::*;
+	use pezpallet_test_notifier::Event::*;
 	use pezkuwi_test_runtime::RuntimeEvent::TestNotifier;
 
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();
 
 	let mut block_builder = client.init_pezkuwi_block_builder();
@@ -262,9 +262,9 @@ fn query_response_elicits_handler() {
 	let execute = construct_extrinsic(
 		&client,
 		pezkuwi_test_runtime::RuntimeCall::TestNotifier(
-			pallet_test_notifier::Call::prepare_new_notify_query {},
+			pezpallet_test_notifier::Call::prepare_new_notify_query {},
 		),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		0,
 	);
 
@@ -273,7 +273,7 @@ fn query_response_elicits_handler() {
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	let mut query_id = None;
@@ -296,11 +296,11 @@ fn query_response_elicits_handler() {
 
 	let execute = construct_extrinsic(
 		&client,
-		pezkuwi_test_runtime::RuntimeCall::Xcm(pallet_xcm::Call::execute {
+		pezkuwi_test_runtime::RuntimeCall::Xcm(pezpallet_xcm::Call::execute {
 			message: Box::new(VersionedXcm::from(msg)),
 			max_weight: Weight::from_parts(1_000_000_000, 1024 * 1024),
 		}),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		1,
 	);
 
@@ -309,7 +309,7 @@ fn query_response_elicits_handler() {
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	client.state_at(block_hash).expect("state should exist").inspect_state(|| {
@@ -327,10 +327,10 @@ fn query_response_elicits_handler() {
 /// Simulates a cross-chain message from Teyrchain to Teyrchain through Relay Chain
 /// that deposits assets into the reserve of the destination.
 /// Regression test for `DepositReserveAsset` changes in
-/// <https://github.com/paritytech/polkadot-sdk/pull/3340>
+/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/113>
 #[test]
 fn deposit_reserve_asset_works_for_any_xcm_sender() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();
 
 	// Init values for the simulated origin Teyrchain
@@ -342,7 +342,7 @@ fn deposit_reserve_asset_works_for_any_xcm_sender() {
 	let weight_limit = Unlimited;
 	let reserve = Location::parent();
 	let dest = Location::new(1, [Teyrchain(2000)]);
-	let beneficiary_id = sp_keyring::Sr25519Keyring::Alice.to_account_id();
+	let beneficiary_id = pezsp_keyring::Sr25519Keyring::Alice.to_account_id();
 	let beneficiary = Location::new(0, [AccountId32 { network: None, id: beneficiary_id.into() }]);
 
 	// spends up to half of fees for execution on reserve and other half for execution on
@@ -379,9 +379,9 @@ fn deposit_reserve_asset_works_for_any_xcm_sender() {
 	// Make the para available, so that `DMP` doesn't reject the XCM because the para is unknown.
 	let make_para_available = construct_extrinsic(
 		&client,
-		pezkuwi_test_runtime::RuntimeCall::Sudo(pallet_sudo::Call::sudo {
+		pezkuwi_test_runtime::RuntimeCall::Sudo(pezpallet_sudo::Call::sudo {
 			call: Box::new(pezkuwi_test_runtime::RuntimeCall::System(
-				frame_system::Call::set_storage {
+				pezframe_system::Call::set_storage {
 					items: vec![(
 							pezkuwi_runtime_teyrchains::paras::Heads::<
 								pezkuwi_test_runtime::Runtime,
@@ -391,18 +391,18 @@ fn deposit_reserve_asset_works_for_any_xcm_sender() {
 				},
 			)),
 		}),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		0,
 	);
 
 	// Simulate execution of an incoming XCM message at the reserve chain
 	let execute = construct_extrinsic(
 		&client,
-		pezkuwi_test_runtime::RuntimeCall::Xcm(pallet_xcm::Call::execute {
+		pezkuwi_test_runtime::RuntimeCall::Xcm(pezpallet_xcm::Call::execute {
 			message: Box::new(VersionedXcm::from(msg)),
 			max_weight: Weight::from_parts(1_000_000_000, 1024 * 1024),
 		}),
-		sp_keyring::Sr25519Keyring::Alice,
+		pezsp_keyring::Sr25519Keyring::Alice,
 		1,
 	);
 
@@ -414,13 +414,13 @@ fn deposit_reserve_asset_works_for_any_xcm_sender() {
 	let block = block_builder.build().expect("Finalizes the block").block;
 	let block_hash = block.hash();
 
-	futures::executor::block_on(client.import(sp_consensus::BlockOrigin::Own, block))
+	futures::executor::block_on(client.import(pezsp_consensus::BlockOrigin::Own, block))
 		.expect("imports the block");
 
 	client.state_at(block_hash).expect("state should exist").inspect_state(|| {
 		assert!(pezkuwi_test_runtime::System::events().iter().any(|r| matches!(
 			r.event,
-			pezkuwi_test_runtime::RuntimeEvent::Xcm(pallet_xcm::Event::Attempted {
+			pezkuwi_test_runtime::RuntimeEvent::Xcm(pezpallet_xcm::Event::Attempted {
 				outcome: Outcome::Complete { .. }
 			}),
 		)));

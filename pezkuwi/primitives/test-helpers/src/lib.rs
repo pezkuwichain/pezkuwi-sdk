@@ -31,9 +31,9 @@ use pezkuwi_primitives::{
 };
 pub use rand;
 use scale_info::TypeInfo;
-use sp_application_crypto::{sr25519, ByteArray};
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::{generic::Digest, traits::BlakeTwo256};
+use pezsp_application_crypto::{sr25519, ByteArray};
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::{generic::Digest, traits::BlakeTwo256};
 
 const MAX_POV_SIZE: u32 = 1_000_000;
 
@@ -168,7 +168,7 @@ impl PartialOrd for CommittedCandidateReceipt {
 impl Ord for CommittedCandidateReceipt {
 	fn cmp(&self, other: &Self) -> core::cmp::Ordering {
 		// TODO: compare signatures or something more sane
-		// https://github.com/paritytech/polkadot/issues/222
+		// https://github.com/pezkuwichain/kurdistan-sdk/issues/132
 		self.descriptor()
 			.para_id
 			.cmp(&other.descriptor().para_id)
@@ -389,7 +389,7 @@ pub fn dummy_candidate_descriptor_bad_sig(relay_parent: Hash) -> CandidateDescri
 
 /// Create a candidate descriptor with filler data.
 pub fn dummy_candidate_descriptor<H: AsRef<[u8]>>(relay_parent: H) -> CandidateDescriptor<H> {
-	let collator = sp_keyring::Sr25519Keyring::Ferdie;
+	let collator = pezsp_keyring::Sr25519Keyring::Ferdie;
 	let invalid = Hash::zero();
 	let descriptor = make_valid_candidate_descriptor(
 		1.into(),
@@ -467,7 +467,7 @@ pub fn dummy_pvd(parent_head: HeadData, relay_parent_number: u32) -> PersistedVa
 
 /// Creates a meaningless signature
 pub fn dummy_signature() -> pezkuwi_primitives::ValidatorSignature {
-	sp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64])
+	pezsp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64])
 }
 
 /// Create a meaningless candidate, returning its receipt and PVD.

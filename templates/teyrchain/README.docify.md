@@ -36,7 +36,7 @@
 - ⏫ This template provides a starting point to build a [teyrchain](https://wiki.network.pezkuwichain.io/docs/learn-parachains).
 
 - ☁️ It is based on the
-  [Cumulus](https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
+  [Pezcumulus](https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/polkadot_sdk/pezcumulus/index.html) framework.
 
 - 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
   such as a [Balances pallet](https://docs.pezkuwichain.io/sdk/master/pallet_balances/index.html).
@@ -99,13 +99,13 @@ cargo install pezkuwi-omni-node
 cargo build --profile production
 ```
 
-#### Install `staging-chain-spec-builder`
+#### Install `pezstaging-chain-spec-builder`
 
 ```sh
-cargo install staging-chain-spec-builder
+cargo install pezstaging-chain-spec-builder
 ```
 
-> For more advanced options, please see the installation section at [`crates.io/staging-chain-spec-builder`](https://crates.io/crates/staging-chain-spec-builder).
+> For more advanced options, please see the installation section at [`crates.io/pezstaging-chain-spec-builder`](https://crates.io/crates/pezstaging-chain-spec-builder).
 
 #### Use `chain-spec-builder` to generate the `chain_spec.json` file
 
@@ -152,7 +152,7 @@ export PATH="$PATH:<path/to/binaries>"
 To simplify the process of using the teyrchain-template with zombienet and Omni Node, we've added a pre-configured
 development chain spec (dev_chain_spec.json) to the teyrchain template. The zombienet-omni-node.toml file of this
 template points to it, but you can update it to an updated chain spec generated on your machine. To generate a
-chain spec refer to [staging-chain-spec-builder](https://crates.io/crates/staging-chain-spec-builder)
+chain spec refer to [pezstaging-chain-spec-builder](https://crates.io/crates/pezstaging-chain-spec-builder)
 
 Then make the changes in the network specification like so:
 
@@ -195,7 +195,7 @@ zombienet --provider native spawn zombienet.toml
 ### Connect with the Pezkuwi-JS Apps Front-End
 
 - 🌐 You can interact with your local node using the
-  hosted version of the Pezkuwi/Substrate Portal:
+  hosted version of the Pezkuwi/Bizinikiwi Portal:
   [relay chain](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9944)
   and [teyrchain](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9988).
 
@@ -263,6 +263,6 @@ relay chain network (see [Teyrchain Template node](#teyrchain-template-node) set
   the Pezkuwi SDK documentation resources.
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/pezkuwichain/pezkuwi-sdk/issues) and
-  [Substrate StackExchange](https://exchange.pezkuwichain.app/).
+  [Bizinikiwi StackExchange](https://exchange.pezkuwichain.app/).
 - 👥You can also reach out on the [Official Pezkuwi discord server](https://polkadot-discord.w3f.tools/)
-- 🧑Reach out on [Telegram](https://t.me/substratedevs) for more questions and discussions
+- 🧑Reach out on [Telegram](https://t.me/bizinikiwidevs) for more questions and discussions

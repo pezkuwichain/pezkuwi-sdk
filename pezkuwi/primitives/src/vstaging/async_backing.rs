@@ -19,7 +19,7 @@ use super::*;
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-use sp_core::RuntimeDebug;
+use pezsp_core::RuntimeDebug;
 
 /// A candidate pending availability.
 #[derive(RuntimeDebug, Clone, PartialEq, Encode, Decode, TypeInfo)]

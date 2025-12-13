@@ -43,7 +43,7 @@ use pezkuwi_node_subsystem::{
 	overseer, RecoveryError,
 };
 use pezkuwi_primitives::{AuthorityDiscoveryId, BlakeTwo256, ChunkIndex, HashT, ValidatorIndex};
-use sc_network::{IfDisconnected, OutboundFailure, ProtocolName, RequestFailure};
+use pezsc_network::{IfDisconnected, OutboundFailure, ProtocolName, RequestFailure};
 use std::{
 	collections::{BTreeMap, HashMap, VecDeque},
 	time::Duration,
@@ -652,7 +652,7 @@ mod tests {
 	};
 	use pezkuwi_primitives::{CandidateHash, HeadData, PersistedValidationData};
 	use pezkuwi_primitives_test_helpers::dummy_hash;
-	use sp_keyring::Sr25519Keyring;
+	use pezsp_keyring::Sr25519Keyring;
 	use std::sync::Arc;
 
 	const TIMEOUT: Duration = Duration::from_secs(1);

@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-mod pallet_xcm_benchmarks_fungible;
-mod pallet_xcm_benchmarks_generic;
+mod pezpallet_xcm_benchmarks_fungible;
+mod pezpallet_xcm_benchmarks_generic;
 
 use crate::Runtime;
 use alloc::vec::Vec;
-use frame_support::weights::Weight;
+use pezframe_support::weights::Weight;
 use xcm::{
 	latest::{prelude::*, QueryResponseInfo},
 	DoubleEncoded,
 };
 
-use pallet_xcm_benchmarks_fungible::WeightInfo as XcmBalancesWeight;
-use pallet_xcm_benchmarks_generic::WeightInfo as XcmGeneric;
-use sp_runtime::BoundedVec;
+use pezpallet_xcm_benchmarks_fungible::WeightInfo as XcmBalancesWeight;
+use pezpallet_xcm_benchmarks_generic::WeightInfo as XcmGeneric;
+use pezsp_runtime::BoundedVec;
 use xcm::latest::AssetTransferFilter;
 
 /// Types of asset supported by the zagros runtime.
 pub enum AssetTypes {
-	/// An asset backed by `pallet-balances`.
+	/// An asset backed by `pezpallet-balances`.
 	Balances,
 	/// Unknown asset.
 	Unknown,

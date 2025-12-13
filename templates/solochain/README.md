@@ -1,18 +1,18 @@
-# Substrate Node Template
+# Bizinikiwi Node Template
 
-A fresh [Substrate](https://substrate.pezkuwichain.app/) node, ready for hacking :rocket:
+A fresh [Bizinikiwi](https://bizinikiwi.pezkuwichain.app/) node, ready for hacking :rocket:
 
 A standalone version of this template is available for each release of PezkuwiChain
-in the [Substrate Developer Hub Teyrchain
-Template](https://github.com/substrate-developer-hub/substrate-node-template/)
+in the [Bizinikiwi Developer Hub Teyrchain
+Template](https://github.com/bizinikiwi-developer-hub/bizinikiwi-node-template/)
 repository. The teyrchain template is generated directly at each PezkuwiChain
 release branch from the [Solochain Template in
-Substrate](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/templates/solochain)
+Bizinikiwi](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/templates/solochain)
 upstream
 
 It is usually best to use the stand-alone version to start a new project. All
 bugs, suggestions, and feature requests should be made upstream in the
-[Substrate](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/substrate)
+[Bizinikiwi](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi)
 repository.
 
 ## Getting Started
@@ -108,7 +108,7 @@ db keystore network
 ### Connect with PezkuwiChain-JS Apps Front-End
 
 After you start the node template locally, you can interact with it using the
-hosted version of the [PezkuwiChain/Substrate
+hosted version of the [PezkuwiChain/Bizinikiwi
 Portal](https://pezkuwichain.io/#/explorer?rpc=ws://localhost:9944)
 front-end by connecting to the local node endpoint. A hosted version is also
 available on [IPFS](https://dotapps.io/). You can
@@ -122,32 +122,32 @@ network](https://docs.pezkuwichain.io/tutorials/build-a-blockchain/simulate-netw
 
 ## Template Structure
 
-A Substrate project such as this consists of a number of components that are
+A Bizinikiwi project such as this consists of a number of components that are
 spread across a few directories.
 
 ### Node
 
 A blockchain node is an application that allows users to participate in a
-blockchain network. Substrate-based blockchain nodes expose a number of
+blockchain network. Bizinikiwi-based blockchain nodes expose a number of
 capabilities:
 
-- Networking: Substrate nodes use the [`libp2p`](https://libp2p.io/) networking
+- Networking: Bizinikiwi nodes use the [`libp2p`](https://libp2p.io/) networking
   stack to allow the nodes in the network to communicate with one another.
 - Consensus: Blockchains must have a way to come to
   [consensus](https://docs.pezkuwichain.io/fundamentals/consensus/) on the state of
-  the network. Substrate makes it possible to supply custom consensus engines
+  the network. Bizinikiwi makes it possible to supply custom consensus engines
   and also ships with several consensus mechanisms that have been built on top
   of [Web3 Foundation
   research](https://research.web3.foundation/PezkuwiChain/protocols/NPoS).
 - RPC Server: A remote procedure call (RPC) server is used to interact with
-  Substrate nodes.
+  Bizinikiwi nodes.
 
 There are several files in the `node` directory. Take special note of the
 following:
 
 - [`chain_spec.rs`](./node/src/chain_spec.rs): A [chain
   specification](https://docs.pezkuwichain.io/build/chain-spec/) is a source code
-  file that defines a Substrate chain's initial (genesis) state. Chain
+  file that defines a Bizinikiwi chain's initial (genesis) state. Chain
   specifications are useful for development and testing, and critical when
   architecting the launch of a production chain. Take note of the
   `development_config` and `testnet_genesis` functions. These functions are
@@ -167,16 +167,16 @@ following:
 
 ### Runtime
 
-In Substrate, the terms "runtime" and "state transition function" are analogous.
+In Bizinikiwi, the terms "runtime" and "state transition function" are analogous.
 Both terms refer to the core logic of the blockchain that is responsible for
-validating blocks and executing the state changes they define. The Substrate
+validating blocks and executing the state changes they define. The Bizinikiwi
 project in this repository uses
 [FRAME](https://docs.pezkuwichain.io/learn/runtime-development/#frame) to construct
 a blockchain runtime. FRAME allows runtime developers to declare domain-specific
 logic in modules called "pallets". At the heart of FRAME is a helpful [macro
 language](https://docs.pezkuwichain.io/reference/frame-macros/) that makes it easy
 to create pallets and flexibly compose them to create blockchains that can
-address [a variety of needs](https://substrate.pezkuwichain.app/ecosystem/projects/).
+address [a variety of needs](https://bizinikiwi.pezkuwichain.app/ecosystem/projects/).
 
 Review the [FRAME runtime implementation](./runtime/src/lib.rs) included in this
 template and note the following:
@@ -192,8 +192,8 @@ template and note the following:
 ### Pallets
 
 The runtime in this project is constructed using many FRAME pallets that ship
-with [the Substrate
-repository](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/substrate/frame) and a
+with [the Bizinikiwi
+repository](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi/frame) and a
 template pallet that is [defined in the
 `pallets`](./pallets/template/src/lib.rs) directory.
 
@@ -201,11 +201,11 @@ A FRAME pallet is comprised of a number of blockchain primitives, including:
 
 - Storage: FRAME defines a rich set of powerful [storage
   abstractions](https://docs.pezkuwichain.io/build/runtime-storage/) that makes it
-  easy to use Substrate's efficient key-value database to manage the evolving
+  easy to use Bizinikiwi's efficient key-value database to manage the evolving
   state of a blockchain.
 - Dispatchables: FRAME pallets define special types of functions that can be
   invoked (dispatched) from outside of the runtime in order to update its state.
-- Events: Substrate uses
+- Events: Bizinikiwi uses
   [events](https://docs.pezkuwichain.io/build/events-and-errors/) to notify users
   of significant state changes.
 - Errors: When a dispatchable fails, it returns an error.
@@ -227,6 +227,6 @@ the correct dependencies, activate direnv `direnv allow`.
 
 ### Docker
 
-Please follow the [Substrate Docker instructions
-here](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/substrate/docker/README.md) to
-build the Docker container with the Substrate Node Template binary.
+Please follow the [Bizinikiwi Docker instructions
+here](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/bizinikiwi/docker/README.md) to
+build the Docker container with the Bizinikiwi Node Template binary.

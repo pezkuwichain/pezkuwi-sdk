@@ -33,11 +33,11 @@ pub use core::{
 	fmt::Debug,
 	ops::ControlFlow,
 };
-use frame_support::traits::{ContainsPair, Everything};
-pub use frame_support::{
+use pezframe_support::traits::{ContainsPair, Everything};
+pub use pezframe_support::{
 	dispatch::{DispatchInfo, DispatchResultWithPostInfo, GetDispatchInfo, PostDispatchInfo},
 	ensure, parameter_types,
-	sp_runtime::{traits::Dispatchable, DispatchError, DispatchErrorWithPostInfo},
+	pezsp_runtime::{traits::Dispatchable, DispatchError, DispatchErrorWithPostInfo},
 	traits::{Contains, Get, IsInVec},
 };
 pub use xcm::latest::{prelude::*, QueryId, Weight};
@@ -418,7 +418,7 @@ pub fn response(query_id: u64) -> Option<Response> {
 /// Mock implementation of the [`QueryHandler`] trait for creating XCM success queries and expecting
 /// responses.
 pub struct TestQueryHandler<T, BlockNumber>(core::marker::PhantomData<(T, BlockNumber)>);
-impl<T: Config, BlockNumber: sp_runtime::traits::Zero + Encode> QueryHandler
+impl<T: Config, BlockNumber: pezsp_runtime::traits::Zero + Encode> QueryHandler
 	for TestQueryHandler<T, BlockNumber>
 {
 	type BlockNumber = BlockNumber;
@@ -778,5 +778,5 @@ pub fn fungible_multi_asset(location: Location, amount: u128) -> Asset {
 }
 
 pub fn fake_message_hash<T>(message: &Xcm<T>) -> XcmHash {
-	message.using_encoded(sp_io::hashing::blake2_256)
+	message.using_encoded(pezsp_io::hashing::blake2_256)
 }

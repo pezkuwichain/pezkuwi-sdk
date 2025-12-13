@@ -14,9 +14,9 @@ workspace = true
 codec = { features = ["bit-vec", "derive"], workspace = true }
 scale-info = { features = ["bit-vec", "derive"], workspace = true }
 
-# Substrate Dependencies
-sp-core = { workspace = true }
-sp-runtime = { workspace = true }
+# Bizinikiwi Dependencies
+pezsp-core = { workspace = true }
+pezsp-runtime = { workspace = true }
 
 # Pezkuwi Dependencies
 xcm = { workspace = true }
@@ -26,8 +26,8 @@ default = ["std"]
 std = [
 	"codec/std",
 	"scale-info/std",
-	"sp-core/std",
-	"sp-runtime/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
 	"xcm/std",
 ]
-runtime-benchmarks = ["sp-runtime/runtime-benchmarks", "xcm/runtime-benchmarks"]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks", "xcm/runtime-benchmarks"]

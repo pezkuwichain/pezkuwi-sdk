@@ -17,8 +17,8 @@
 use crate::{Junctions::Here, Xcm};
 use codec::{Decode, Encode};
 use core::{fmt::Debug, result};
-use frame_support::{pallet_prelude::Get, parameter_types};
-use sp_arithmetic::traits::Zero;
+use pezframe_support::{pezpallet_prelude::Get, parameter_types};
+use pezsp_arithmetic::traits::Zero;
 use xcm::latest::{
 	Error as XcmError, InteriorLocation, Location, QueryId, Response, Result as XcmResult, Weight,
 	XcmContext,

@@ -23,7 +23,7 @@ use crate::{
 use assert_matches::assert_matches;
 use pezkuwi_primitives::Hash;
 use pezkuwi_primitives_test_helpers::validator_pubkeys;
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
 #[test]
 fn tracker_earliest_block_number() {

@@ -18,18 +18,18 @@
 
 use crate::configuration::{self, Config, Pallet};
 use alloc::vec::Vec;
-use frame_support::{
-	pallet_prelude::*,
+use pezframe_support::{
+	pezpallet_prelude::*,
 	traits::{Defensive, StorageVersion},
 	weights::Weight,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
+use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezkuwi_primitives::{
 	AsyncBackingParams, Balance, ExecutorParams, SessionIndex, ON_DEMAND_DEFAULT_QUEUE_MAX_SIZE,
 };
-use sp_runtime::Perbill;
+use pezsp_runtime::Perbill;
 
-use frame_support::traits::OnRuntimeUpgrade;
+use pezframe_support::traits::OnRuntimeUpgrade;
 
 use super::v7::V7HostConfiguration;
 /// All configuration of the runtime with respect to paras.
@@ -134,11 +134,11 @@ impl<BlockNumber: Default + From<u32>> Default for V8HostConfiguration<BlockNumb
 mod v7 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V7HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V7HostConfiguration<BlockNumberFor<T>>)>,
@@ -149,11 +149,11 @@ mod v7 {
 mod v8 {
 	use super::*;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
 		StorageValue<Pallet<T>, V8HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
-	#[frame_support::storage_alias]
+	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
 		Pallet<T>,
 		Vec<(SessionIndex, V8HostConfiguration<BlockNumberFor<T>>)>,
@@ -164,7 +164,7 @@ mod v8 {
 pub struct MigrateToV8<T>(core::marker::PhantomData<T>);
 impl<T: Config> OnRuntimeUpgrade for MigrateToV8<T> {
 	#[cfg(feature = "try-runtime")]
-	fn pre_upgrade() -> Result<Vec<u8>, sp_runtime::TryRuntimeError> {
+	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running pre_upgrade() for HostConfiguration MigrateToV8");
 		Ok(Vec::new())
 	}
@@ -185,7 +185,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToV8<T> {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(_state: Vec<u8>) -> Result<(), sp_runtime::TryRuntimeError> {
+	fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running post_upgrade() for HostConfiguration MigrateToV8");
 		ensure!(
 			StorageVersion::get::<Pallet<T>>() >= 8,

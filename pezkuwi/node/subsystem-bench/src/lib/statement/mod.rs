@@ -51,11 +51,11 @@ use pezkuwi_primitives::{
 	AuthorityDiscoveryId, Block, GroupIndex, Hash, Id, ValidatorId, ValidatorIndex,
 };
 use pezkuwi_statement_distribution::StatementDistributionSubsystem;
-use sc_keystore::LocalKeystore;
-use sc_network_types::PeerId;
-use sc_service::SpawnTaskHandle;
-use sp_keystore::{Keystore, KeystorePtr};
-use sp_runtime::RuntimeAppPublic;
+use pezsc_keystore::LocalKeystore;
+use pezsc_network_types::PeerId;
+use pezsc_service::SpawnTaskHandle;
+use pezsp_keystore::{Keystore, KeystorePtr};
+use pezsp_runtime::RuntimeAppPublic;
 use std::{
 	sync::{atomic::Ordering, Arc},
 	time::{Duration, Instant},
@@ -109,7 +109,7 @@ fn build_overseer(
 		state.own_backing_group.clone(),
 	);
 	let (candidate_req_receiver, candidate_req_cfg) =
-		IncomingRequest::get_config_receiver::<Block, sc_network::NetworkWorker<Block, Hash>>(
+		IncomingRequest::get_config_receiver::<Block, pezsc_network::NetworkWorker<Block, Hash>>(
 			&ReqProtocolNames::new(GENESIS_HASH, None),
 		);
 	let keystore = make_keystore();

@@ -15,7 +15,7 @@ SDK](https://github.com/pezkuwichain/pezkuwi-sdk), in the sense that it is an "u
 encompasses other components. More specifically, it re-exports all the crates that are needed by
 builders.
 
-`pezkuwi-sdk` aims to be the entry to the PezkuwiChain and Substrate ecosystem and make the SDK more
+`pezkuwi-sdk` aims to be the entry to the PezkuwiChain and Bizinikiwi ecosystem and make the SDK more
 approachable—the entire development environment made available with **one dependency**. More
 importantly, it guarantees the compatible combination of crate versions. So even if you know exactly
 which crates to use, you may still benefit from using `pezkuwi-sdk` for painless dependency
@@ -63,7 +63,7 @@ with-tracing = ["pezkuwi-sdk/with-tracing"]
 cargo build --features "runtime-benchmarks,with-tracing"
 ```
 
-Substrate's [try-runtime](https://paritytech.github.io/try-runtime-cli/try_runtime/) is an essential
+Bizinikiwi's [try-runtime](https://paritytech.github.io/try-runtime-cli/try_runtime/) is an essential
 tool for testing runtime protocol upgrades locally, which can be enabled with the `try-runtime`
 feature.
 
@@ -79,7 +79,7 @@ try-runtime = ["pezkuwi-sdk/try-runtime"]
 cargo build --features "try-runtime"
 ```
 
-In Substrate, a runtime can be seen as a tuple of various pallets. Since the number of pallets can
+In Bizinikiwi, a runtime can be seen as a tuple of various pallets. Since the number of pallets can
 vary and there is no way to anticipate it, we have to generate impl-trait for tuples of different
 sizes upfront, from 0-tuple to 64-tuple to be specific (64 is chosen to balance between usability
 and compile time).

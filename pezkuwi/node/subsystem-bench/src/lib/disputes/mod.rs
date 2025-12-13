@@ -56,12 +56,12 @@ use pezkuwi_overseer::{
 	Handle as OverseerHandle, Overseer, OverseerConnector, OverseerMetrics, SpawnGlue,
 };
 use pezkuwi_primitives::{AuthorityDiscoveryId, Block, Hash, ValidatorId};
-use sc_keystore::LocalKeystore;
-use sc_network::request_responses::IncomingRequest as RawIncomingRequest;
-use sc_service::SpawnTaskHandle;
+use pezsc_keystore::LocalKeystore;
+use pezsc_network::request_responses::IncomingRequest as RawIncomingRequest;
+use pezsc_service::SpawnTaskHandle;
 use serde::{Deserialize, Serialize};
-use sp_keystore::Keystore;
-use sp_runtime::RuntimeAppPublic;
+use pezsp_keystore::Keystore;
+use pezsp_runtime::RuntimeAppPublic;
 use std::{sync::Arc, time::Instant};
 pub use test_state::TestState;
 
@@ -106,7 +106,7 @@ fn build_overseer(
 	let keystore = make_keystore();
 	let (dispute_req_receiver, dispute_req_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&ReqProtocolNames::new(GENESIS_HASH, None));
 	let mock_runtime_api = MockRuntimeApi::new(
 		state.config.clone(),

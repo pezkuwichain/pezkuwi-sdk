@@ -40,4 +40,4 @@ pub use cli::*;
 pub use command::*;
 
 #[cfg(feature = "cli")]
-pub use sc_cli::{Error, Result};
+pub use pezsc_cli::{Error, Result};

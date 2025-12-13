@@ -29,21 +29,21 @@ thiserror = { workspace = true }
 
 pezkuwi-service = { optional = true, workspace = true }
 
-frame-benchmarking-cli = { optional = true, workspace = true, default-features = true }
+pezframe-benchmarking-cli = { optional = true, workspace = true, default-features = true }
 pezkuwi-node-metrics = { workspace = true, default-features = true }
 pezkuwi-node-primitives = { workspace = true, default-features = true }
-sc-cli = { optional = true, workspace = true, default-features = true }
-sc-network-types = { workspace = true, default-features = true }
-sc-service = { optional = true, workspace = true, default-features = true }
-sc-storage-monitor = { workspace = true, default-features = true }
-sc-sysinfo = { workspace = true, default-features = true }
-sc-tracing = { optional = true, workspace = true, default-features = true }
-sp-core = { workspace = true, default-features = true }
-sp-keyring = { workspace = true, default-features = true }
-sp-runtime = { workspace = true, default-features = true }
+pezsc-cli = { optional = true, workspace = true, default-features = true }
+pezsc-network-types = { workspace = true, default-features = true }
+pezsc-service = { optional = true, workspace = true, default-features = true }
+pezsc-storage-monitor = { workspace = true, default-features = true }
+pezsc-sysinfo = { workspace = true, default-features = true }
+pezsc-tracing = { optional = true, workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
 
 [build-dependencies]
-substrate-build-script-utils = { workspace = true, default-features = true }
+bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
 default = ["cli", "db", "full-node"]
@@ -52,26 +52,26 @@ metadata-hash = ["pezkuwi-service/metadata-hash"]
 service = ["dep:pezkuwi-service"]
 cli = [
 	"clap",
-	"frame-benchmarking-cli",
-	"sc-cli",
-	"sc-service",
-	"sc-tracing",
+	"pezframe-benchmarking-cli",
+	"pezsc-cli",
+	"pezsc-service",
+	"pezsc-tracing",
 	"service",
 ]
 runtime-benchmarks = [
-	"frame-benchmarking-cli?/runtime-benchmarks",
+	"pezframe-benchmarking-cli?/runtime-benchmarks",
 	"pezkuwi-node-metrics/runtime-benchmarks",
 	"pezkuwi-node-primitives/runtime-benchmarks",
 	"pezkuwi-service?/runtime-benchmarks",
-	"sc-cli?/runtime-benchmarks",
-	"sc-service?/runtime-benchmarks",
-	"sc-sysinfo/runtime-benchmarks",
-	"sc-tracing?/runtime-benchmarks",
-	"sp-keyring/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsc-cli?/runtime-benchmarks",
+	"pezsc-service?/runtime-benchmarks",
+	"pezsc-sysinfo/runtime-benchmarks",
+	"pezsc-tracing?/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 full-node = ["pezkuwi-service/full-node"]
-try-runtime = ["pezkuwi-service?/try-runtime", "sp-runtime/try-runtime"]
+try-runtime = ["pezkuwi-service?/try-runtime", "pezsp-runtime/try-runtime"]
 fast-runtime = ["pezkuwi-service/fast-runtime"]
 pyroscope = ["dep:pyroscope", "pyroscope_pprofrs"]
 

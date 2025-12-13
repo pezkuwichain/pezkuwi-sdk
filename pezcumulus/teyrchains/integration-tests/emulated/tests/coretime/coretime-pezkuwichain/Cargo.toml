@@ -1,0 +1,42 @@
+[package]
+name = "coretime-pezkuwichain-integration-tests"
+version = "0.0.0"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+description = "Coretime Pezkuwichain runtime integration tests with xcm-emulator"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Bizinikiwi
+pezframe-support = { workspace = true }
+pezpallet-broker = { workspace = true, default-features = true }
+pezpallet-message-queue = { workspace = true }
+pezsp-runtime = { workspace = true }
+
+# Pezkuwi
+pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
+pezkuwichain-runtime-constants = { workspace = true, default-features = true }
+xcm = { workspace = true }
+
+# Pezcumulus
+pezcumulus-pezpallet-teyrchain-system = { workspace = true, default-features = true }
+emulated-integration-tests-common = { workspace = true }
+pezkuwichain-system-emulated-network = { workspace = true }
+
+[features]
+runtime-benchmarks = [
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezpallet-broker/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwichain-runtime-constants/runtime-benchmarks",
+	"pezkuwichain-system-emulated-network/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

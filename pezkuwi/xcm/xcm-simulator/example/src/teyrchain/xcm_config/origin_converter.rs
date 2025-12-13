@@ -17,7 +17,7 @@
 use crate::teyrchain::{
 	constants::RelayNetwork, location_converter::LocationConverter, RuntimeOrigin,
 };
-use pallet_xcm::XcmPassthrough;
+use pezpallet_xcm::XcmPassthrough;
 use xcm_builder::{SignedAccountId32AsNative, SovereignSignedViaLocation};
 
 type XcmOriginToCallOrigin = (

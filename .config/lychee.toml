@@ -35,9 +35,9 @@ exclude = [
 	"https://www.urltomysnapshot.com/",
 	# TODO meta issue: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/134>
 	"https://github.com/ipfs/js-ipfs-bitswap/blob/",
-	"https://github.com/paritytech/substrate/frame/fast-unstake",
+	"https://github.com/paritytech/bizinikiwi/pezframe/fast-unstake",
 	# Exclude wiki.network.pezkuwichain.io - SSL certificate hostname mismatch
-	"https://github.com/pezkuwichain/pezkuwi-sdk/substrate/frame/timestamp",
+	"https://github.com/pezkuwichain/pezkuwi-sdk/bizinikiwi/pezframe/timestamp",
 	"https://github.com/zkcrypto/bls12_381/blob/e224ad4ea1babfc582ccd751c2bf128611d10936/src/test-data/mod.rs",
 	"https://polkadot.network/the-path-of-a-parachain-block/",
 	"https://research.web3.foundation/en/latest/polkadot/NPoS/3.%20Balancing.html",

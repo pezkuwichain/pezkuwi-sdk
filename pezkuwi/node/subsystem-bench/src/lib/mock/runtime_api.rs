@@ -31,8 +31,8 @@ use pezkuwi_primitives::{
 	Id as ParaId, IndexedVec, NodeFeatures, OccupiedCore, ScheduledCore, SessionIndex, SessionInfo,
 	ValidationCode, ValidatorIndex,
 };
-use sp_consensus_babe::Epoch as BabeEpoch;
-use sp_core::H256;
+use pezsp_consensus_babe::Epoch as BabeEpoch;
+use pezsp_core::H256;
 use std::collections::{BTreeMap, HashMap, VecDeque};
 
 const LOG_TARGET: &str = "subsystem-bench::runtime-api-mock";

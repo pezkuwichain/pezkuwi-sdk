@@ -19,7 +19,7 @@
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use frame_support::pallet_prelude::{MaxEncodedLen, TypeInfo};
+use pezframe_support::pezpallet_prelude::{MaxEncodedLen, TypeInfo};
 use xcm::VersionedLocation;
 
 /// Entry of an authorized aliaser for a local origin. The aliaser `location` is only authorized
@@ -30,7 +30,7 @@ pub struct OriginAliaser {
 	pub expiry: Option<u64>,
 }
 
-sp_api::decl_runtime_apis! {
+pezsp_api::decl_runtime_apis! {
 	/// API for querying XCM authorized aliases
 	pub trait AuthorizedAliasersApi {
 		/// Returns locations allowed to alias into and act as `target`.

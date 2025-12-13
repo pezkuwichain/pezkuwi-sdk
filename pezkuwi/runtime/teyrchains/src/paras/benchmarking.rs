@@ -17,13 +17,13 @@
 use super::*;
 use crate::configuration::HostConfiguration;
 use alloc::vec;
-use frame_benchmarking::v2::*;
-use frame_support::traits::fungible::Mutate;
-use frame_system::{pallet_prelude::BlockNumberFor, RawOrigin};
+use pezframe_benchmarking::v2::*;
+use pezframe_support::traits::fungible::Mutate;
+use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
 use pezkuwi_primitives::{
 	HeadData, Id as ParaId, ValidationCode, MAX_CODE_SIZE, MAX_HEAD_DATA_SIZE,
 };
-use sp_runtime::traits::{One, Saturating};
+use pezsp_runtime::traits::{One, Saturating};
 
 pub mod mmr_setup;
 mod pvf_check;
@@ -37,10 +37,10 @@ use self::pvf_check::{VoteCause, VoteOutcome};
 const SAMPLE_SIZE: u32 = 1024;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = frame_system::Pallet::<T>::events();
-	let system_event: <T as frame_system::Config>::RuntimeEvent = generic_event.into();
+	let events = pezframe_system::Pallet::<T>::events();
+	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
-	let frame_system::EventRecord { event, .. } = &events[events.len() - 1];
+	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 	assert_eq!(event, &system_event);
 }
 
@@ -141,10 +141,10 @@ mod benchmarks {
 		let new_head = HeadData(vec![0; s as usize]);
 		let old_code_hash = ValidationCode(vec![0]).hash();
 		CurrentCodeHash::<T>::insert(&para_id, old_code_hash);
-		frame_system::Pallet::<T>::set_block_number(10u32.into());
+		pezframe_system::Pallet::<T>::set_block_number(10u32.into());
 		// schedule an expired code upgrade for this `para_id` so that force_note_new_head would use
 		// the worst possible code path
-		let expired = frame_system::Pallet::<T>::block_number().saturating_sub(One::one());
+		let expired = pezframe_system::Pallet::<T>::block_number().saturating_sub(One::one());
 		let config = HostConfiguration::<BlockNumberFor<T>>::default();
 		generate_disordered_pruning::<T>();
 		Pallet::<T>::schedule_code_upgrade(
@@ -256,8 +256,8 @@ mod benchmarks {
 		let para_id = ParaId::from(1000);
 		let old_code_hash = ValidationCode(vec![0]).hash();
 		CurrentCodeHash::<T>::insert(&para_id, old_code_hash);
-		frame_system::Pallet::<T>::set_block_number(10u32.into());
-		let inclusion = frame_system::Pallet::<T>::block_number().saturating_add(10u32.into());
+		pezframe_system::Pallet::<T>::set_block_number(10u32.into());
+		let inclusion = pezframe_system::Pallet::<T>::block_number().saturating_add(10u32.into());
 		let config = HostConfiguration::<BlockNumberFor<T>>::default();
 		Pallet::<T>::schedule_code_upgrade(
 			para_id,
@@ -297,7 +297,7 @@ mod benchmarks {
 			Event::CodeAuthorized {
 				para_id,
 				code_hash: new_code_hash,
-				expire_at: frame_system::Pallet::<T>::block_number().saturating_add(valid_period),
+				expire_at: pezframe_system::Pallet::<T>::block_number().saturating_add(valid_period),
 			}
 			.into(),
 		);
@@ -308,7 +308,7 @@ mod benchmarks {
 		let code = ValidationCode(vec![0; c as usize]);
 		let para_id = ParaId::from(1000);
 		let expire_at =
-			frame_system::Pallet::<T>::block_number().saturating_add(BlockNumberFor::<T>::from(c));
+			pezframe_system::Pallet::<T>::block_number().saturating_add(BlockNumberFor::<T>::from(c));
 		AuthorizedCodeHash::<T>::insert(
 			&para_id,
 			AuthorizedCodeHashAndExpiry::from((code.hash(), expire_at)),

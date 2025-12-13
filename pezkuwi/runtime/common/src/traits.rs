@@ -17,7 +17,7 @@
 //! Traits used across pallets for Pezkuwi.
 
 use alloc::vec::*;
-use frame_support::{
+use pezframe_support::{
 	dispatch::DispatchResult,
 	traits::{Currency, ReservableCurrency},
 };

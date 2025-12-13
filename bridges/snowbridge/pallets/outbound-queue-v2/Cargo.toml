@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-pallet-outbound-queue-v2"
+name = "snowbridge-pezpallet-outbound-queue-v2"
 description = "Snowbridge Outbound Queue Pallet V2"
 version = "0.2.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -25,14 +25,14 @@ hex-literal = { workspace = true, default-features = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 
-frame-benchmarking = { optional = true, workspace = true }
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-sp-arithmetic = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-arithmetic = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 bp-relayers = { workspace = true }
 
@@ -47,7 +47,7 @@ xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 
 [dev-dependencies]
-pallet-message-queue = { workspace = true }
+pezpallet-message-queue = { workspace = true }
 snowbridge-test-utils = { workspace = true }
 
 [features]
@@ -57,10 +57,10 @@ std = [
 	"bp-relayers/std",
 	"codec/std",
 	"ethabi/std",
-	"frame-benchmarking/std",
-	"frame-support/std",
-	"frame-system/std",
-	"pallet-message-queue/std",
+	"pezframe-benchmarking/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-message-queue/std",
 	"scale-info/std",
 	"serde/std",
 	"snowbridge-beacon-primitives/std",
@@ -68,37 +68,37 @@ std = [
 	"snowbridge-merkle-tree/std",
 	"snowbridge-outbound-queue-primitives/std",
 	"snowbridge-verification-primitives/std",
-	"sp-arithmetic/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
 	"bp-relayers/runtime-benchmarks",
-	"frame-benchmarking",
-	"frame-benchmarking/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
-	"pallet-message-queue/runtime-benchmarks",
+	"pezframe-benchmarking",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
 	"snowbridge-beacon-primitives/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
 	"snowbridge-merkle-tree/runtime-benchmarks",
 	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
 	"snowbridge-test-utils/runtime-benchmarks",
 	"snowbridge-verification-primitives/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"pallet-message-queue/try-runtime",
-	"sp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

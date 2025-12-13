@@ -5,9 +5,9 @@ use crate::{
 };
 use bp_beefy::{merkle_root, verify_mmr_leaves_proof, BeefyAuthorityId, MmrDataOrHash};
 use codec::Encode;
-use frame_support::ensure;
-use sp_runtime::traits::{Convert, Hash};
-use sp_std::{vec, vec::Vec};
+use pezframe_support::ensure;
+use pezsp_runtime::traits::{Convert, Hash};
+use pezsp_std::{vec, vec::Vec};
 
 type BridgedMmrDataOrHash<T, I> = MmrDataOrHash<BridgedMmrHashing<T, I>, BridgedBeefyMmrLeaf<T, I>>;
 /// A way to encode validator id to the BEEFY merkle tree leaf.
@@ -161,8 +161,8 @@ mod tests {
 	use super::*;
 	use crate::{mock::*, mock_chain::*, *};
 	use bp_beefy::{BeefyPayload, MMR_ROOT_PAYLOAD_ID};
-	use frame_support::{assert_noop, assert_ok};
-	use sp_consensus_beefy::ValidatorSet;
+	use pezframe_support::{assert_noop, assert_ok};
+	use pezsp_consensus_beefy::ValidatorSet;
 
 	#[test]
 	fn submit_commitment_checks_metadata() {

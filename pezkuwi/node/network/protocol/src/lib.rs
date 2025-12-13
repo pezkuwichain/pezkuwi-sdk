@@ -24,8 +24,8 @@ use pezkuwi_primitives::{BlockNumber, Hash};
 use std::fmt;
 
 #[doc(hidden)]
-pub use sc_network::IfDisconnected;
-pub use sc_network_types::PeerId;
+pub use pezsc_network::IfDisconnected;
+pub use pezsc_network_types::PeerId;
 #[doc(hidden)]
 pub use std::sync::Arc;
 
@@ -69,22 +69,22 @@ pub enum ObservedRole {
 	Authority,
 }
 
-impl From<sc_network::ObservedRole> for ObservedRole {
-	fn from(role: sc_network::ObservedRole) -> ObservedRole {
+impl From<pezsc_network::ObservedRole> for ObservedRole {
+	fn from(role: pezsc_network::ObservedRole) -> ObservedRole {
 		match role {
-			sc_network::ObservedRole::Light => ObservedRole::Light,
-			sc_network::ObservedRole::Authority => ObservedRole::Authority,
-			sc_network::ObservedRole::Full => ObservedRole::Full,
+			pezsc_network::ObservedRole::Light => ObservedRole::Light,
+			pezsc_network::ObservedRole::Authority => ObservedRole::Authority,
+			pezsc_network::ObservedRole::Full => ObservedRole::Full,
 		}
 	}
 }
 
-impl Into<sc_network::ObservedRole> for ObservedRole {
-	fn into(self) -> sc_network::ObservedRole {
+impl Into<pezsc_network::ObservedRole> for ObservedRole {
+	fn into(self) -> pezsc_network::ObservedRole {
 		match self {
-			ObservedRole::Light => sc_network::ObservedRole::Light,
-			ObservedRole::Full => sc_network::ObservedRole::Full,
-			ObservedRole::Authority => sc_network::ObservedRole::Authority,
+			ObservedRole::Light => pezsc_network::ObservedRole::Light,
+			ObservedRole::Full => pezsc_network::ObservedRole::Full,
+			ObservedRole::Authority => pezsc_network::ObservedRole::Authority,
 		}
 	}
 }
@@ -502,7 +502,7 @@ pub mod v1 {
 	///
 	/// The payload is the local peer id of the node, which serves to prove that it
 	/// controls the collator key it is declaring an intention to collate under.
-	pub fn declare_signature_payload(peer_id: &sc_network_types::PeerId) -> Vec<u8> {
+	pub fn declare_signature_payload(peer_id: &pezsc_network_types::PeerId) -> Vec<u8> {
 		let mut payload = peer_id.to_bytes();
 		payload.extend_from_slice(b"COLL");
 		payload

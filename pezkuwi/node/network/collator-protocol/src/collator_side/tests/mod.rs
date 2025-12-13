@@ -27,10 +27,10 @@ use futures_timer::Delay;
 
 use codec::{Decode, Encode};
 
-use sc_network::config::IncomingRequest as RawIncomingRequest;
-use sp_core::crypto::Pair;
-use sp_keyring::Sr25519Keyring;
-use sp_runtime::traits::AppVerify;
+use pezsc_network::config::IncomingRequest as RawIncomingRequest;
+use pezsp_core::crypto::Pair;
+use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::traits::AppVerify;
 
 use itertools::Itertools;
 use pezkuwi_node_network_protocol::{
@@ -200,7 +200,7 @@ type VirtualOverseer =
 
 struct TestHarness {
 	virtual_overseer: VirtualOverseer,
-	req_v2_cfg: sc_network::config::RequestResponseConfig,
+	req_v2_cfg: pezsc_network::config::RequestResponseConfig,
 }
 
 fn test_harness<T: Future<Output = TestHarness>>(
@@ -209,9 +209,9 @@ fn test_harness<T: Future<Output = TestHarness>>(
 	reputation: ReputationAggregator,
 	test: impl FnOnce(TestHarness) -> T,
 ) {
-	let _ = sp_tracing::init_for_tests();
+	let _ = pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 
 	let (context, virtual_overseer) =
 		pezkuwi_node_subsystem_test_helpers::make_subsystem_context(pool.clone());
@@ -221,7 +221,7 @@ fn test_harness<T: Future<Output = TestHarness>>(
 
 	let (collation_req_v2_receiver, req_v2_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let subsystem = async {
 		run_inner(
@@ -1325,8 +1325,8 @@ fn collators_reject_declare_messages() {
 /// successful completion.
 fn test_validator_send_sequence<T, F>(handle_first_response: T)
 where
-	T: FnOnce(oneshot::Receiver<sc_network::config::OutgoingResponse>, oneshot::Sender<()>) -> F,
-	F: Future<Output = oneshot::Receiver<sc_network::config::OutgoingResponse>>,
+	T: FnOnce(oneshot::Receiver<pezsc_network::config::OutgoingResponse>, oneshot::Sender<()>) -> F,
+	F: Future<Output = oneshot::Receiver<pezsc_network::config::OutgoingResponse>>,
 {
 	let test_state = TestState::default();
 	let local_peer_id = test_state.local_peer_id;

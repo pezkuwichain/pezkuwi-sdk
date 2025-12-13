@@ -16,7 +16,7 @@
 
 #![cfg(test)]
 
-use crate as pallet_bridge_relayers;
+use crate as pezpallet_bridge_relayers;
 
 use bp_header_chain::ChainWithGrandpa;
 use bp_messages::{
@@ -29,14 +29,14 @@ use bp_relayers::{
 use bp_runtime::{messages::MessageDispatchResult, Chain, ChainId, Teyrchain};
 use bp_teyrchains::SingleParaStoredHeaderDataBuilder;
 use codec::Encode;
-use frame_support::{
+use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::fungible::Mutate,
 	weights::{ConstantMultiplier, IdentityFee, RuntimeDbWeight, Weight},
 };
-use pallet_transaction_payment::Multiplier;
-use sp_core::H256;
-use sp_runtime::{
+use pezpallet_transaction_payment::Multiplier;
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{BlakeTwo256, ConstU32, ConstU64, ConstU8},
 	BuildStorage, FixedPointNumber, Perquintill, StateVersion,
 };
@@ -52,9 +52,9 @@ pub type ThisChainHash = H256;
 /// Hasher at `ThisChain`.
 pub type ThisChainHasher = BlakeTwo256;
 /// Header of `ThisChain`.
-pub type ThisChainHeader = sp_runtime::generic::Header<ThisChainBlockNumber, ThisChainHasher>;
+pub type ThisChainHeader = pezsp_runtime::generic::Header<ThisChainBlockNumber, ThisChainHasher>;
 /// Block of `ThisChain`.
-pub type ThisChainBlock = frame_system::mocking::MockBlockU32<TestRuntime>;
+pub type ThisChainBlock = pezframe_system::mocking::MockBlockU32<TestRuntime>;
 
 /// Account identifier at the `BridgedChain`.
 pub type BridgedChainAccountId = u128;
@@ -68,7 +68,7 @@ pub type BridgedChainHash = H256;
 pub type BridgedChainHasher = BlakeTwo256;
 /// Header of the `BridgedChain`.
 pub type BridgedChainHeader =
-	sp_runtime::generic::Header<BridgedChainBlockNumber, BridgedChainHasher>;
+	pezsp_runtime::generic::Header<BridgedChainBlockNumber, BridgedChainHasher>;
 
 /// Bridged chain id used in tests.
 pub const TEST_BRIDGED_CHAIN_ID: ChainId = *b"brdg";
@@ -97,7 +97,7 @@ impl Chain for ThisUnderlyingChain {
 	type AccountId = ThisChainAccountId;
 	type Balance = ThisChainBalance;
 	type Nonce = u32;
-	type Signature = sp_runtime::MultiSignature;
+	type Signature = pezsp_runtime::MultiSignature;
 
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
@@ -130,7 +130,7 @@ impl Chain for BridgedUnderlyingTeyrchain {
 	type AccountId = BridgedChainAccountId;
 	type Balance = BridgedChainBalance;
 	type Nonce = u32;
-	type Signature = sp_runtime::MultiSignature;
+	type Signature = pezsp_runtime::MultiSignature;
 
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
@@ -161,7 +161,7 @@ impl Teyrchain for BridgedUnderlyingTeyrchain {
 	const MAX_HEADER_SIZE: u32 = 1_024;
 }
 
-pub type TestStakeAndSlash = pallet_bridge_relayers::StakeAndSlashNamed<
+pub type TestStakeAndSlash = pezpallet_bridge_relayers::StakeAndSlashNamed<
 	ThisChainAccountId,
 	ThisChainBlockNumber,
 	Balances,
@@ -170,17 +170,17 @@ pub type TestStakeAndSlash = pallet_bridge_relayers::StakeAndSlashNamed<
 	Lease,
 >;
 
-frame_support::construct_runtime! {
+pezframe_support::construct_runtime! {
 	pub enum TestRuntime
 	{
-		System: frame_system,
-		Utility: pallet_utility,
-		Balances: pallet_balances,
-		TransactionPayment: pallet_transaction_payment,
-		BridgeRelayers: pallet_bridge_relayers,
-		BridgeGrandpa: pallet_bridge_grandpa,
-		BridgeTeyrchains: pallet_bridge_teyrchains,
-		BridgeMessages: pallet_bridge_messages,
+		System: pezframe_system,
+		Utility: pezpallet_utility,
+		Balances: pezpallet_balances,
+		TransactionPayment: pezpallet_transaction_payment,
+		BridgeRelayers: pezpallet_bridge_relayers,
+		BridgeGrandpa: pezpallet_bridge_grandpa,
+		BridgeTeyrchains: pezpallet_bridge_teyrchains,
+		BridgeMessages: pezpallet_bridge_messages,
 	}
 }
 
@@ -196,38 +196,38 @@ parameter_types! {
 	pub const TransactionByteFee: ThisChainBalance = 1;
 	pub AdjustmentVariable: Multiplier = Multiplier::saturating_from_rational(3, 100_000);
 	pub MinimumMultiplier: Multiplier = Multiplier::saturating_from_rational(1, 1_000_000u128);
-	pub MaximumMultiplier: Multiplier = sp_runtime::traits::Bounded::max_value();
+	pub MaximumMultiplier: Multiplier = pezsp_runtime::traits::Bounded::max_value();
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type Block = ThisChainBlock;
-	// TODO: remove when https://github.com/paritytech/polkadot-sdk/pull/4543 merged
+	// TODO: remove when https://github.com/pezkuwichain/kurdistan-sdk/issues/120 merged
 	type BlockHashCount = ConstU32<10>;
-	type AccountData = pallet_balances::AccountData<ThisChainBalance>;
+	type AccountData = pezpallet_balances::AccountData<ThisChainBalance>;
 	type DbWeight = DbWeight;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for TestRuntime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for TestRuntime {
 	type ReserveIdentifier = [u8; 8];
 	type AccountStore = System;
 }
 
-impl pallet_utility::Config for TestRuntime {
+impl pezpallet_utility::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
 	type PalletsOrigin = OriginCaller;
 	type WeightInfo = ();
 }
 
-#[derive_impl(pallet_transaction_payment::config_preludes::TestDefaultConfig)]
-impl pallet_transaction_payment::Config for TestRuntime {
-	type OnChargeTransaction = pallet_transaction_payment::FungibleAdapter<Balances, ()>;
+#[derive_impl(pezpallet_transaction_payment::config_preludes::TestDefaultConfig)]
+impl pezpallet_transaction_payment::Config for TestRuntime {
+	type OnChargeTransaction = pezpallet_transaction_payment::FungibleAdapter<Balances, ()>;
 	type OperationalFeeMultiplier = ConstU8<5>;
 	type WeightToFee = IdentityFee<ThisChainBalance>;
 	type LengthToFee = ConstantMultiplier<ThisChainBalance, TransactionByteFee>;
-	type FeeMultiplierUpdate = pallet_transaction_payment::TargetedFeeAdjustment<
+	type FeeMultiplierUpdate = pezpallet_transaction_payment::TargetedFeeAdjustment<
 		TestRuntime,
 		TargetBlockFullness,
 		AdjustmentVariable,
@@ -237,16 +237,16 @@ impl pallet_transaction_payment::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 }
 
-impl pallet_bridge_grandpa::Config for TestRuntime {
+impl pezpallet_bridge_grandpa::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type BridgedChain = BridgedUnderlyingTeyrchain;
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<1_024>;
 	type HeadersToKeep = ConstU32<8>;
-	type WeightInfo = pallet_bridge_grandpa::weights::BridgeWeight<TestRuntime>;
+	type WeightInfo = pezpallet_bridge_grandpa::weights::BridgeWeight<TestRuntime>;
 }
 
-impl pallet_bridge_teyrchains::Config for TestRuntime {
+impl pezpallet_bridge_teyrchains::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type BridgesGrandpaPalletInstance = ();
 	type ParasPalletName = BridgedParasPalletName;
@@ -254,20 +254,20 @@ impl pallet_bridge_teyrchains::Config for TestRuntime {
 		SingleParaStoredHeaderDataBuilder<BridgedUnderlyingTeyrchain>;
 	type HeadsToKeep = ConstU32<8>;
 	type MaxParaHeadDataSize = ConstU32<1024>;
-	type WeightInfo = pallet_bridge_teyrchains::weights::BridgeWeight<TestRuntime>;
+	type WeightInfo = pezpallet_bridge_teyrchains::weights::BridgeWeight<TestRuntime>;
 	type OnNewHead = ();
 }
 
-impl pallet_bridge_messages::Config for TestRuntime {
+impl pezpallet_bridge_messages::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_bridge_messages::weights::BridgeWeight<TestRuntime>;
+	type WeightInfo = pezpallet_bridge_messages::weights::BridgeWeight<TestRuntime>;
 
 	type OutboundPayload = Vec<u8>;
 	type InboundPayload = Vec<u8>;
 	type LaneId = TestLaneIdType;
 
 	type DeliveryPayments = ();
-	type DeliveryConfirmationPayments = pallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
+	type DeliveryConfirmationPayments = pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
 		TestRuntime,
 		(),
 		(),
@@ -281,10 +281,10 @@ impl pallet_bridge_messages::Config for TestRuntime {
 	type BridgedHeaderChain = BridgeGrandpa;
 }
 
-impl pallet_bridge_relayers::Config for TestRuntime {
+impl pezpallet_bridge_relayers::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type RewardBalance = RewardBalance;
-	type Reward = RewardsAccountParams<pallet_bridge_messages::LaneIdOf<TestRuntime, ()>>;
+	type Reward = RewardsAccountParams<pezpallet_bridge_messages::LaneIdOf<TestRuntime, ()>>;
 	type PaymentProcedure = TestPaymentProcedure;
 	type StakeAndSlash = TestStakeAndSlash;
 	type Balance = ThisChainBalance;
@@ -292,7 +292,7 @@ impl pallet_bridge_relayers::Config for TestRuntime {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-impl pallet_bridge_relayers::benchmarking::Config for TestRuntime {
+impl pezpallet_bridge_relayers::benchmarking::Config for TestRuntime {
 	fn bench_reward() -> Self::Reward {
 		RewardsAccountParams::new(
 			TestLaneIdType::default(),
@@ -317,7 +317,7 @@ impl pallet_bridge_relayers::benchmarking::Config for TestRuntime {
 	}
 
 	fn deposit_account(account: Self::AccountId, balance: Self::Balance) {
-		frame_support::assert_ok!(Balances::mint_into(
+		pezframe_support::assert_ok!(Balances::mint_into(
 			&account,
 			balance.saturating_add(ExistentialDeposit::get())
 		));
@@ -370,7 +370,7 @@ pub struct DummyMessageDispatch;
 
 impl DummyMessageDispatch {
 	pub fn deactivate(lane: TestLaneIdType) {
-		frame_support::storage::unhashed::put(&(b"inactive", lane).encode()[..], &false);
+		pezframe_support::storage::unhashed::put(&(b"inactive", lane).encode()[..], &false);
 	}
 }
 
@@ -380,7 +380,7 @@ impl MessageDispatch for DummyMessageDispatch {
 	type LaneId = TestLaneIdType;
 
 	fn is_active(lane: Self::LaneId) -> bool {
-		frame_support::storage::unhashed::take::<bool>(&(b"inactive", lane).encode()[..]) !=
+		pezframe_support::storage::unhashed::take::<bool>(&(b"inactive", lane).encode()[..]) !=
 			Some(false)
 	}
 
@@ -407,9 +407,9 @@ pub fn test_reward_account_param() -> RewardsAccountParams<TestLaneIdType> {
 }
 
 /// Return test externalities to use in tests.
-pub fn new_test_ext() -> sp_io::TestExternalities {
-	let t = frame_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
-	sp_io::TestExternalities::new(t)
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
+	let t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	pezsp_io::TestExternalities::new(t)
 }
 
 /// Run pallet test.

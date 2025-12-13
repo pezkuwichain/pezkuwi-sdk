@@ -1,0 +1,125 @@
+[package]
+name = "bridge-hub-test-utils"
+version = "0.7.0"
+authors.workspace = true
+edition.workspace = true
+description = "Utils for BridgeHub testing"
+license = "Apache-2.0"
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { features = ["derive", "max-encoded-len"], workspace = true }
+impl-trait-for-tuples = { workspace = true }
+tracing = { workspace = true }
+
+# Bizinikiwi
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezpallet-balances = { workspace = true }
+pezpallet-timestamp = { workspace = true }
+pezpallet-utility = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-keyring = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
+pezsp-tracing = { workspace = true, default-features = true }
+
+# Pezcumulus
+asset-test-utils = { workspace = true, default-features = true }
+pezcumulus-pezpallet-teyrchain-system = { workspace = true }
+pezcumulus-pezpallet-xcmp-queue = { workspace = true }
+teyrchains-common = { workspace = true }
+teyrchains-runtimes-test-utils = { workspace = true }
+
+# Pezkuwi
+pezpallet-xcm = { workspace = true }
+xcm = { workspace = true }
+xcm-builder = { workspace = true }
+xcm-executor = { workspace = true }
+
+# Bridges
+bp-header-chain = { workspace = true }
+bp-messages = { workspace = true }
+bp-pezkuwi-core = { workspace = true }
+bp-relayers = { workspace = true }
+bp-runtime = { workspace = true }
+bp-test-utils = { workspace = true }
+bp-teyrchains = { workspace = true }
+pezpallet-bridge-grandpa = { workspace = true }
+pezpallet-bridge-messages = { features = ["test-helpers"], workspace = true }
+pezpallet-bridge-relayers = { workspace = true }
+pezpallet-bridge-teyrchains = { workspace = true }
+pezpallet-xcm-bridge-hub = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+	"asset-test-utils/std",
+	"bp-header-chain/std",
+	"bp-messages/std",
+	"bp-pezkuwi-core/std",
+	"bp-relayers/std",
+	"bp-runtime/std",
+	"bp-test-utils/std",
+	"bp-teyrchains/std",
+	"codec/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
+	"pezcumulus-pezpallet-xcmp-queue/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-balances/std",
+	"pezpallet-bridge-grandpa/std",
+	"pezpallet-bridge-messages/std",
+	"pezpallet-bridge-relayers/std",
+	"pezpallet-bridge-teyrchains/std",
+	"pezpallet-timestamp/std",
+	"pezpallet-utility/std",
+	"pezpallet-xcm-bridge-hub/std",
+	"pezpallet-xcm/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"teyrchains-common/std",
+	"teyrchains-runtimes-test-utils/std",
+	"tracing/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm/std",
+]
+runtime-benchmarks = [
+	"asset-test-utils/runtime-benchmarks",
+	"bp-header-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"bp-relayers/runtime-benchmarks",
+	"bp-runtime/runtime-benchmarks",
+	"bp-test-utils/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-bridge-grandpa/runtime-benchmarks",
+	"pezpallet-bridge-messages/runtime-benchmarks",
+	"pezpallet-bridge-relayers/runtime-benchmarks",
+	"pezpallet-bridge-teyrchains/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"teyrchains-runtimes-test-utils/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+]

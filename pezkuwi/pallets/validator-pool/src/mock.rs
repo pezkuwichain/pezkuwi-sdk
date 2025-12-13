@@ -1,12 +1,12 @@
 use super::*;
-use crate::{self as pallet_validator_pool, types::*};
-use frame_support::{
+use crate::{self as pezpallet_validator_pool, types::*};
+use pezframe_support::{
 	construct_runtime, parameter_types,
 	traits::{ConstU32, Everything},
 };
-use frame_system as system;
-use sp_core::H256;
-use sp_runtime::{
+use pezframe_system as system;
+use pezsp_core::H256;
+use pezsp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	BuildStorage,
 };
@@ -16,13 +16,13 @@ pub type Balance = u128;
 pub type BlockNumber = u64;
 
 // Configure a mock runtime to test the pallet.
-// Note: We don't include pallet_session here because it requires complex Currency setup.
+// Note: We don't include pezpallet_session here because it requires complex Currency setup.
 // We can test SessionManager trait implementation directly.
 construct_runtime!(
 	pub enum Test {
-		System: frame_system,
-		Balances: pallet_balances,
-		ValidatorPool: pallet_validator_pool,
+		System: pezframe_system,
+		Balances: pezpallet_balances,
+		ValidatorPool: pezpallet_validator_pool,
 	}
 );
 
@@ -44,12 +44,12 @@ impl system::Config for Test {
 	type Hashing = BlakeTwo256;
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
-	type Block = frame_system::mocking::MockBlock<Test>;
+	type Block = pezframe_system::mocking::MockBlock<Test>;
 	type RuntimeEvent = RuntimeEvent;
 	type BlockHashCount = BlockHashCount;
 	type Version = ();
 	type PalletInfo = PalletInfo;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
@@ -70,7 +70,7 @@ parameter_types! {
 	pub const MaxReserves: u32 = 50;
 }
 
-impl pallet_balances::Config for Test {
+impl pezpallet_balances::Config for Test {
 	type MaxLocks = MaxLocks;
 	type MaxReserves = MaxReserves;
 	type ReserveIdentifier = [u8; 8];
@@ -150,28 +150,28 @@ parameter_types! {
 // Mock WeightInfo implementation
 pub struct MockWeightInfo;
 impl crate::WeightInfo for MockWeightInfo {
-	fn join_validator_pool() -> frame_support::weights::Weight {
-		frame_support::weights::Weight::from_parts(10_000, 0)
+	fn join_validator_pool() -> pezframe_support::weights::Weight {
+		pezframe_support::weights::Weight::from_parts(10_000, 0)
 	}
 
-	fn leave_validator_pool() -> frame_support::weights::Weight {
-		frame_support::weights::Weight::from_parts(10_000, 0)
+	fn leave_validator_pool() -> pezframe_support::weights::Weight {
+		pezframe_support::weights::Weight::from_parts(10_000, 0)
 	}
 
-	fn update_performance_metrics() -> frame_support::weights::Weight {
-		frame_support::weights::Weight::from_parts(10_000, 0)
+	fn update_performance_metrics() -> pezframe_support::weights::Weight {
+		pezframe_support::weights::Weight::from_parts(10_000, 0)
 	}
 
-	fn force_new_era() -> frame_support::weights::Weight {
-		frame_support::weights::Weight::from_parts(50_000, 0)
+	fn force_new_era() -> pezframe_support::weights::Weight {
+		pezframe_support::weights::Weight::from_parts(50_000, 0)
 	}
 
-	fn update_category() -> frame_support::weights::Weight {
-		frame_support::weights::Weight::from_parts(10_000, 0)
+	fn update_category() -> pezframe_support::weights::Weight {
+		pezframe_support::weights::Weight::from_parts(10_000, 0)
 	}
 
-	fn set_pool_parameters() -> frame_support::weights::Weight {
-		frame_support::weights::Weight::from_parts(10_000, 0)
+	fn set_pool_parameters() -> pezframe_support::weights::Weight {
+		pezframe_support::weights::Weight::from_parts(10_000, 0)
 	}
 }
 
@@ -183,23 +183,23 @@ impl Config for Test {
 	type TikiSource = TestTikiProvider;
 	type ReferralSource = TestReferralProvider;
 	type PerwerdeSource = TestPerwerdeProvider;
-	type PoolManagerOrigin = frame_system::EnsureRoot<AccountId>;
+	type PoolManagerOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type MaxValidators = MaxValidators;
 	type MaxPoolSize = MaxPoolSize;
 	type MinStakeAmount = MinStakeAmount;
 }
 
 // Build genesis storage according to the mock runtime.
-pub fn new_test_ext() -> sp_io::TestExternalities {
+pub fn new_test_ext() -> pezsp_io::TestExternalities {
 	new_test_ext_with_mode(OperationMode::Active)
 }
 
 // Build genesis storage with specific operation mode
-pub fn new_test_ext_with_mode(mode: OperationMode) -> sp_io::TestExternalities {
+pub fn new_test_ext_with_mode(mode: OperationMode) -> pezsp_io::TestExternalities {
 	let mut storage = system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
 	// Initialize balances - Fixed genesis config with correct type
-	pallet_balances::GenesisConfig::<Test> {
+	pezpallet_balances::GenesisConfig::<Test> {
 		balances: vec![
 			(1, 10000),
 			(2, 8000),
@@ -218,7 +218,7 @@ pub fn new_test_ext_with_mode(mode: OperationMode) -> sp_io::TestExternalities {
 	.unwrap();
 
 	// Initialize validator pool with genesis config
-	pallet_validator_pool::GenesisConfig::<Test> {
+	pezpallet_validator_pool::GenesisConfig::<Test> {
 		operation_mode: mode,
 		era_length: 100,
 		initial_pool_members: vec![],
@@ -226,7 +226,7 @@ pub fn new_test_ext_with_mode(mode: OperationMode) -> sp_io::TestExternalities {
 	.assimilate_storage(&mut storage)
 	.unwrap();
 
-	let mut ext = sp_io::TestExternalities::new(storage);
+	let mut ext = pezsp_io::TestExternalities::new(storage);
 	ext.execute_with(|| {
 		System::set_block_number(1);
 	});
@@ -234,7 +234,7 @@ pub fn new_test_ext_with_mode(mode: OperationMode) -> sp_io::TestExternalities {
 }
 
 // Build genesis storage for shadow mode testing
-pub fn new_test_ext_shadow_mode() -> sp_io::TestExternalities {
+pub fn new_test_ext_shadow_mode() -> pezsp_io::TestExternalities {
 	new_test_ext_with_mode(OperationMode::Shadow)
 }
 

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
-//! Implementation for [`frame_support::traits::ProcessMessage`]
+//! Implementation for [`pezframe_support::traits::ProcessMessage`]
 use super::*;
 use crate::weights::WeightInfo;
-use frame_support::{
+use pezframe_support::{
 	traits::{ProcessMessage, ProcessMessageError},
 	weights::WeightMeter,
 };

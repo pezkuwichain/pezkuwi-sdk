@@ -26,8 +26,8 @@ use futures::{
 };
 use rstest::rstest;
 
-use sc_network::{self as network, ProtocolName};
-use sp_keyring::Sr25519Keyring;
+use pezsc_network::{self as network, ProtocolName};
+use pezsp_keyring::Sr25519Keyring;
 
 use pezkuwi_node_network_protocol::request_response::{
 	v1::{self, ChunkResponse},
@@ -245,7 +245,7 @@ struct TestRun {
 
 impl TestRun {
 	fn run(self, task: RunningTask, rx: mpsc::Receiver<FromFetchTask>) {
-		sp_tracing::init_for_tests();
+		pezsp_tracing::init_for_tests();
 		let mut rx = rx.fuse();
 		let task = task.run_inner().fuse();
 		futures::pin_mut!(task);

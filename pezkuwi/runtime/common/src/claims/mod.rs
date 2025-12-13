@@ -21,7 +21,7 @@ use alloc::{format, string::String};
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::fmt::Debug;
-use frame_support::{
+use pezframe_support::{
 	ensure,
 	traits::{Currency, Get, IsSubType, VestingSchedule},
 	weights::Weight,
@@ -31,8 +31,8 @@ pub use pallet::*;
 use pezkuwi_primitives::ValidityError;
 use scale_info::TypeInfo;
 use serde::{self, Deserialize, Deserializer, Serialize, Serializer};
-use sp_io::{crypto::secp256k1_ecdsa_recover, hashing::keccak_256};
-use sp_runtime::{
+use pezsp_io::{crypto::secp256k1_ecdsa_recover, hashing::keccak_256};
+use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{
 		AsSystemOriginSigner, AsTransactionAuthorizedOrigin, CheckedSub, DispatchInfoOf,
@@ -46,9 +46,9 @@ use sp_runtime::{
 };
 
 type CurrencyOf<T> = <<T as Config>::VestingSchedule as VestingSchedule<
-	<T as frame_system::Config>::AccountId,
+	<T as pezframe_system::Config>::AccountId,
 >>::Currency;
-type BalanceOf<T> = <CurrencyOf<T> as Currency<<T as frame_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> = <CurrencyOf<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 pub trait WeightInfo {
 	fn claim() -> Weight;
@@ -195,21 +195,21 @@ impl core::fmt::Debug for EcdsaSignature {
 	}
 }
 
-#[frame_support::pallet]
+#[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use pezframe_support::pezpallet_prelude::*;
+	use pezframe_system::pezpallet_prelude::*;
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
 	/// Configuration trait.
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
+	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type VestingSchedule: VestingSchedule<Self::AccountId, Moment = BlockNumberFor<Self>>;
 		#[pallet::constant]
 		type Prefix: Get<&'static [u8]>;
@@ -586,7 +586,7 @@ impl<T: Config> Pallet<T> {
 		Some(res)
 	}
 
-	fn process_claim(signer: EthereumAddress, dest: T::AccountId) -> sp_runtime::DispatchResult {
+	fn process_claim(signer: EthereumAddress, dest: T::AccountId) -> pezsp_runtime::DispatchResult {
 		let balance_due = Claims::<T>::get(&signer).ok_or(Error::<T>::SignerHasNoClaim)?;
 
 		let new_total =
@@ -632,7 +632,7 @@ pub struct PrevalidateAttests<T>(core::marker::PhantomData<fn(T)>);
 
 impl<T: Config> Debug for PrevalidateAttests<T>
 where
-	<T as frame_system::Config>::RuntimeCall: IsSubType<Call<T>>,
+	<T as pezframe_system::Config>::RuntimeCall: IsSubType<Call<T>>,
 {
 	#[cfg(feature = "std")]
 	fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
@@ -647,7 +647,7 @@ where
 
 impl<T: Config> PrevalidateAttests<T>
 where
-	<T as frame_system::Config>::RuntimeCall: IsSubType<Call<T>>,
+	<T as pezframe_system::Config>::RuntimeCall: IsSubType<Call<T>>,
 {
 	/// Create new `TransactionExtension` to check runtime version.
 	pub fn new() -> Self {
@@ -657,8 +657,8 @@ where
 
 impl<T: Config> TransactionExtension<T::RuntimeCall> for PrevalidateAttests<T>
 where
-	<T as frame_system::Config>::RuntimeCall: IsSubType<Call<T>>,
-	<<T as frame_system::Config>::RuntimeCall as Dispatchable>::RuntimeOrigin:
+	<T as pezframe_system::Config>::RuntimeCall: IsSubType<Call<T>>,
+	<<T as pezframe_system::Config>::RuntimeCall as Dispatchable>::RuntimeOrigin:
 		AsSystemOriginSigner<T::AccountId> + AsTransactionAuthorizedOrigin + Clone,
 {
 	const IDENTIFIER: &'static str = "PrevalidateAttests";

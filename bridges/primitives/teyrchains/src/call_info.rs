@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Defines structures related to calls of the `pallet-bridge-teyrchains` pallet.
+//! Defines structures related to calls of the `pezpallet-bridge-teyrchains` pallet.
 
 use crate::{ParaHash, ParaId, RelayBlockHash, RelayBlockNumber};
 
@@ -22,14 +22,14 @@ use bp_pezkuwi_core::teyrchains::ParaHeadsProof;
 use bp_runtime::HeaderId;
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
-use sp_runtime::RuntimeDebug;
-use sp_std::vec::Vec;
+use pezsp_runtime::RuntimeDebug;
+use pezsp_std::vec::Vec;
 
-/// A minimized version of `pallet-bridge-teyrchains::Call` that can be used without a runtime.
+/// A minimized version of `pezpallet-bridge-teyrchains::Call` that can be used without a runtime.
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 #[allow(non_camel_case_types)]
 pub enum BridgeTeyrchainCall {
-	/// `pallet-bridge-teyrchains::Call::submit_teyrchain_heads`
+	/// `pezpallet-bridge-teyrchains::Call::submit_teyrchain_heads`
 	#[codec(index = 0)]
 	submit_teyrchain_heads {
 		/// Relay chain block, for which we have submitted the `teyrchain_heads_proof`.

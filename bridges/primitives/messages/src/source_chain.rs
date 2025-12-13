@@ -21,8 +21,8 @@ use crate::{MessageNonce, UnrewardedRelayer};
 use bp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use scale_info::TypeInfo;
-use sp_core::RuntimeDebug;
-use sp_std::{
+use pezsp_core::RuntimeDebug;
+use pezsp_std::{
 	collections::{btree_map::BTreeMap, vec_deque::VecDeque},
 	fmt::Debug,
 	ops::RangeInclusive,
@@ -52,7 +52,7 @@ impl<BridgedHeaderHash, LaneId> Size
 	for FromBridgedChainMessagesDeliveryProof<BridgedHeaderHash, LaneId>
 {
 	fn size(&self) -> u32 {
-		use frame_support::sp_runtime::SaturatedConversion;
+		use pezframe_support::pezsp_runtime::SaturatedConversion;
 		raw_storage_proof_size(&self.storage_proof).saturated_into()
 	}
 }

@@ -32,13 +32,13 @@ use futures::{
 };
 use futures_timer::Delay;
 
-use sc_network::{config::RequestResponseConfig, ProtocolName};
+use pezsc_network::{config::RequestResponseConfig, ProtocolName};
 
 use pezkuwi_node_network_protocol::{
 	request_response::{v1::DisputeRequest, IncomingRequest, ReqProtocolNames},
 	PeerId,
 };
-use sp_keyring::Sr25519Keyring;
+use pezsp_keyring::Sr25519Keyring;
 
 use pezkuwi_node_network_protocol::{
 	request_response::{v1::DisputeResponse, Recipient, Requests},
@@ -90,7 +90,7 @@ fn send_dispute_sends_dispute() {
 
 #[test]
 fn send_honors_rate_limit() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let test = |mut handle: TestSubsystemContextHandle<DisputeDistributionMessage>, _req_cfg| async move {
 		let _ = handle_subsystem_startup(&mut handle, None).await;
 
@@ -180,7 +180,7 @@ fn received_non_authorities_are_dropped() {
 		assert_matches!(
 			rx_response.await,
 			Ok(resp) => {
-				let sc_network::config::OutgoingResponse {
+				let pezsc_network::config::OutgoingResponse {
 					result: _,
 					reputation_changes,
 					sent_feedback: _,
@@ -276,7 +276,7 @@ fn batching_works() {
 			assert_matches!(
 				rx_response.await,
 				Ok(resp) => {
-					let sc_network::config::OutgoingResponse {
+					let pezsc_network::config::OutgoingResponse {
 						result,
 						reputation_changes,
 						sent_feedback: _,
@@ -318,7 +318,7 @@ fn batching_works() {
 			assert_matches!(
 				rx_response.await,
 				Ok(resp) => {
-					let sc_network::config::OutgoingResponse {
+					let pezsc_network::config::OutgoingResponse {
 						result,
 						reputation_changes: _,
 						sent_feedback,
@@ -389,7 +389,7 @@ fn receive_rate_limit_is_enforced() {
 		assert_matches!(
 			rx_response_flood.await,
 			Ok(resp) => {
-				let sc_network::config::OutgoingResponse {
+				let pezsc_network::config::OutgoingResponse {
 					result,
 					reputation_changes: _,
 					sent_feedback: _,
@@ -426,7 +426,7 @@ fn receive_rate_limit_is_enforced() {
 			assert_matches!(
 				rx_response.await,
 				Ok(resp) => {
-					let sc_network::config::OutgoingResponse {
+					let pezsc_network::config::OutgoingResponse {
 						result,
 						reputation_changes: _,
 						sent_feedback,
@@ -505,7 +505,7 @@ fn send_dispute_gets_cleaned_up() {
 
 #[test]
 fn dispute_retries_and_works_across_session_boundaries() {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let test = |mut handle: TestSubsystemContextHandle<DisputeDistributionMessage>, _| async move {
 		let old_head = handle_subsystem_startup(&mut handle, None).await;
 
@@ -586,13 +586,13 @@ fn dispute_retries_and_works_across_session_boundaries() {
 }
 
 async fn send_network_dispute_request(
-	req_tx: &mut async_channel::Sender<sc_network::config::IncomingRequest>,
+	req_tx: &mut async_channel::Sender<pezsc_network::config::IncomingRequest>,
 	peer: PeerId,
 	message: DisputeRequest,
-) -> oneshot::Receiver<sc_network::config::OutgoingResponse> {
+) -> oneshot::Receiver<pezsc_network::config::OutgoingResponse> {
 	let (pending_response, rx_response) = oneshot::channel();
 	let req =
-		sc_network::config::IncomingRequest { peer, payload: message.encode(), pending_response };
+		pezsc_network::config::IncomingRequest { peer, payload: message.encode(), pending_response };
 	req_tx.send(req).await.unwrap();
 	rx_response
 }
@@ -602,7 +602,7 @@ async fn send_network_dispute_request(
 /// Passed in function will be called while votes are still being imported.
 async fn nested_network_dispute_request<'a, F, O>(
 	handle: &'a mut TestSubsystemContextHandle<DisputeDistributionMessage>,
-	req_tx: &'a mut async_channel::Sender<sc_network::config::IncomingRequest>,
+	req_tx: &'a mut async_channel::Sender<pezsc_network::config::IncomingRequest>,
 	peer: PeerId,
 	message: DisputeRequest,
 	import_result: ImportStatementsResult,
@@ -611,7 +611,7 @@ async fn nested_network_dispute_request<'a, F, O>(
 ) where
 	F: FnOnce(
 			&'a mut TestSubsystemContextHandle<DisputeDistributionMessage>,
-			&'a mut async_channel::Sender<sc_network::config::IncomingRequest>,
+			&'a mut async_channel::Sender<pezsc_network::config::IncomingRequest>,
 			DisputeRequest,
 		) -> O
 		+ 'a,
@@ -681,7 +681,7 @@ async fn nested_network_dispute_request<'a, F, O>(
 	assert_matches!(
 		rx_response.await,
 		Ok(resp) => {
-			let sc_network::config::OutgoingResponse {
+			let pezsc_network::config::OutgoingResponse {
 				result,
 				reputation_changes,
 				sent_feedback,
@@ -869,14 +869,14 @@ where
 	) -> Fut,
 	Fut: Future<Output = ()>,
 {
-	sp_tracing::try_init_simple();
+	pezsp_tracing::try_init_simple();
 	let keystore = make_ferdie_keystore();
 
 	let genesis_hash = Hash::repeat_byte(0xff);
 	let req_protocol_names = ReqProtocolNames::new(&genesis_hash, None);
 	let (req_receiver, req_cfg) = IncomingRequest::get_config_receiver::<
 		Block,
-		sc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::NetworkWorker<Block, Hash>,
 	>(&req_protocol_names);
 	let subsystem = DisputeDistributionSubsystem::new(
 		keystore,

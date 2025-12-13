@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::teyrchain::Runtime;
-use frame_support::parameter_types;
+use pezframe_support::parameter_types;
 use xcm::latest::prelude::*;
 use xcm_simulator::mock_message_queue::TeyrchainId;
 

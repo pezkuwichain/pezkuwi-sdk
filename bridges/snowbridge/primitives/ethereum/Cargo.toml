@@ -33,9 +33,9 @@ serde-big-array = { optional = true, features = [
 	"const-generics",
 ], workspace = true }
 
-sp-io = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 ethabi = { workspace = true }
 
@@ -57,11 +57,11 @@ std = [
 	"scale-info/std",
 	"serde",
 	"serde-big-array",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

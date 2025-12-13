@@ -83,7 +83,7 @@
 //! When testing,
 //!
 //! ```rs
-//! sp_tracing::init_for_tests();
+//! pezsp_tracing::init_for_tests();
 //! ```
 //!
 //! should enable all trace logs.
@@ -91,7 +91,7 @@
 //! Alternatively, you can do:
 //!
 //! ```rs
-//! sp_tracing::try_init_simple();
+//! pezsp_tracing::try_init_simple();
 //! ```
 //!
 //! On the command line you specify `RUST_LOG` with the desired target and trace level:

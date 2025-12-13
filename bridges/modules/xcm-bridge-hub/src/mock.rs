@@ -16,7 +16,7 @@
 
 #![cfg(test)]
 
-use crate as pallet_xcm_bridge_hub;
+use crate as pezpallet_xcm_bridge_hub;
 
 use bp_messages::{
 	target_chain::{DispatchMessage, MessageDispatch},
@@ -25,19 +25,19 @@ use bp_messages::{
 use bp_runtime::{messages::MessageDispatchResult, Chain, ChainId, HashOf};
 use bp_xcm_bridge_hub::{BridgeId, LocalXcmChannelManager};
 use codec::{Decode, Encode};
-use frame_support::{
+use pezframe_support::{
 	assert_ok, derive_impl, parameter_types,
 	traits::{EnsureOrigin, Equals, Everything, Get, OriginTrait},
 	weights::RuntimeDbWeight,
 };
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
-use sp_core::H256;
-use sp_runtime::{
-	testing::Header as SubstrateHeader,
+use pezsp_core::H256;
+use pezsp_runtime::{
+	testing::Header as BizinikiwiHeader,
 	traits::{BlakeTwo256, ConstU128, ConstU32, IdentityLookup},
 	AccountId32, BuildStorage, StateVersion,
 };
-use sp_std::cell::RefCell;
+use pezsp_std::cell::RefCell;
 use xcm::{latest::PEZKUWICHAIN_GENESIS_HASH, prelude::*};
 use xcm_builder::{
 	AllowUnpaidExecutionFrom, DispatchBlob, DispatchBlobError, FixedWeightBounds,
@@ -48,7 +48,7 @@ use xcm_executor::{traits::ConvertOrigin, XcmExecutor};
 
 pub type AccountId = AccountId32;
 pub type Balance = u64;
-type Block = frame_system::mocking::MockBlock<TestRuntime>;
+type Block = pezframe_system::mocking::MockBlock<TestRuntime>;
 
 /// Lane identifier type used for tests.
 pub type TestLaneIdType = HashedLaneId;
@@ -57,13 +57,13 @@ pub const SIBLING_ASSET_HUB_ID: u32 = 2001;
 pub const THIS_BRIDGE_HUB_ID: u32 = 2002;
 pub const BRIDGED_ASSET_HUB_ID: u32 = 1001;
 
-frame_support::construct_runtime! {
+pezframe_support::construct_runtime! {
 	pub enum TestRuntime {
-		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pallet_balances::{Pallet, Event<T>},
-		Messages: pallet_bridge_messages::{Pallet, Call, Event<T>},
-		XcmOverBridge: pallet_xcm_bridge_hub::{Pallet, Call, HoldReason, Event<T>},
-		XcmOverBridgeWrappedWithExportMessageRouter: pallet_xcm_bridge_hub_router = 57,
+		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pallet, Event<T>},
+		Messages: pezpallet_bridge_messages::{Pallet, Call, Event<T>},
+		XcmOverBridge: pezpallet_xcm_bridge_hub::{Pallet, Call, HoldReason, Event<T>},
+		XcmOverBridgeWrappedWithExportMessageRouter: pezpallet_xcm_bridge_hub_router = 57,
 	}
 }
 
@@ -72,20 +72,20 @@ parameter_types! {
 	pub const ExistentialDeposit: Balance = 1;
 }
 
-#[derive_impl(frame_system::config_preludes::TestDefaultConfig)]
-impl frame_system::Config for TestRuntime {
+#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
+impl pezframe_system::Config for TestRuntime {
 	type AccountId = AccountId;
-	type AccountData = pallet_balances::AccountData<Balance>;
+	type AccountData = pezpallet_balances::AccountData<Balance>;
 	type Block = Block;
 	type Lookup = IdentityLookup<Self::AccountId>;
 }
 
-#[derive_impl(pallet_balances::config_preludes::TestDefaultConfig)]
-impl pallet_balances::Config for TestRuntime {
+#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
+impl pezpallet_balances::Config for TestRuntime {
 	type AccountStore = System;
 }
 
-impl pallet_bridge_messages::Config for TestRuntime {
+impl pezpallet_bridge_messages::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = TestMessagesWeights;
 
@@ -106,7 +106,7 @@ impl pallet_bridge_messages::Config for TestRuntime {
 
 pub struct TestMessagesWeights;
 
-impl pallet_bridge_messages::WeightInfo for TestMessagesWeights {
+impl pezpallet_bridge_messages::WeightInfo for TestMessagesWeights {
 	fn receive_single_message_proof() -> Weight {
 		Weight::zero()
 	}
@@ -133,7 +133,7 @@ impl pallet_bridge_messages::WeightInfo for TestMessagesWeights {
 	}
 }
 
-impl pallet_bridge_messages::WeightInfoExt for TestMessagesWeights {
+impl pezpallet_bridge_messages::WeightInfoExt for TestMessagesWeights {
 	fn expected_extra_storage_proof_size() -> u32 {
 		0
 	}
@@ -164,7 +164,7 @@ parameter_types! {
 
 	pub const BridgeDeposit: Balance = 100_000;
 
-	// configuration for pallet_xcm_bridge_hub_router
+	// configuration for pezpallet_xcm_bridge_hub_router
 	pub BridgeHubLocation: Location = Here.into();
 	pub BridgeFeeAsset: AssetId = Location::here().into();
 	pub BridgeTable: Vec<NetworkExportTableItem>
@@ -184,7 +184,7 @@ pub fn bridged_asset_hub_universal_location() -> InteriorLocation {
 	BridgedUniversalDestination::get()
 }
 
-impl pallet_xcm_bridge_hub::Config for TestRuntime {
+impl pezpallet_xcm_bridge_hub::Config for TestRuntime {
 	type RuntimeEvent = RuntimeEvent;
 
 	type UniversalLocation = UniversalLocation;
@@ -194,7 +194,7 @@ impl pallet_xcm_bridge_hub::Config for TestRuntime {
 	type MessageExportPrice = ();
 	type DestinationVersion = AlwaysLatest;
 
-	type ForceOrigin = frame_system::EnsureNever<()>;
+	type ForceOrigin = pezframe_system::EnsureNever<()>;
 	type OpenBridgeOrigin = OpenBridgeOrigin;
 	type BridgeOriginAccountIdConverter = LocationToAccountId;
 
@@ -211,7 +211,7 @@ impl pallet_xcm_bridge_hub::Config for TestRuntime {
 /// A router instance simulates a scenario where the router is deployed on a different chain than
 /// the `MessageExporter`. This means that the router sends an `ExportMessage`.
 pub type XcmOverBridgeWrappedWithExportMessageRouterInstance = ();
-impl pallet_xcm_bridge_hub_router::Config<XcmOverBridgeWrappedWithExportMessageRouterInstance>
+impl pezpallet_xcm_bridge_hub_router::Config<XcmOverBridgeWrappedWithExportMessageRouterInstance>
 	for TestRuntime
 {
 	type RuntimeEvent = RuntimeEvent;
@@ -224,9 +224,9 @@ impl pallet_xcm_bridge_hub_router::Config<XcmOverBridgeWrappedWithExportMessageR
 	type DestinationVersion = AlwaysLatest;
 
 	// We convert to root `here` location with `BridgeHubLocationXcmOriginAsRoot`
-	type BridgeHubOrigin = frame_system::EnsureRoot<AccountId>;
+	type BridgeHubOrigin = pezframe_system::EnsureRoot<AccountId>;
 	// **Note**: The crucial part is that `ExportMessage` is processed by `XcmExecutor`, which
-	// calls the `ExportXcm` implementation of `pallet_xcm_bridge_hub` as the
+	// calls the `ExportXcm` implementation of `pezpallet_xcm_bridge_hub` as the
 	// `MessageExporter`.
 	type ToBridgeHubSender = ExecuteXcmOverSendXcm;
 	type LocalXcmChannelManager = TestLocalXcmChannelManager;
@@ -257,7 +257,7 @@ impl xcm_executor::Config for XcmConfig {
 	type AssetLocker = ();
 	type AssetExchanger = ();
 	type FeeManager = ();
-	// We just set `MessageExporter` as our `pallet_xcm_bridge_hub` instance.
+	// We just set `MessageExporter` as our `pezpallet_xcm_bridge_hub` instance.
 	type MessageExporter = (XcmOverBridge,);
 	type UniversalAliases = ();
 	type CallDispatcher = RuntimeCall;
@@ -276,11 +276,11 @@ thread_local! {
 
 /// The `SendXcm` implementation directly executes XCM using `XcmExecutor`.
 ///
-/// We ensure that the `ExportMessage` produced by `pallet_xcm_bridge_hub_router` is compatible with
-/// the `ExportXcm` implementation of `pallet_xcm_bridge_hub`.
+/// We ensure that the `ExportMessage` produced by `pezpallet_xcm_bridge_hub_router` is compatible with
+/// the `ExportXcm` implementation of `pezpallet_xcm_bridge_hub`.
 ///
 /// Note: The crucial part is that `ExportMessage` is processed by `XcmExecutor`, which calls the
-/// `ExportXcm` implementation of `pallet_xcm_bridge_hub` as `MessageExporter`.
+/// `ExportXcm` implementation of `pezpallet_xcm_bridge_hub` as `MessageExporter`.
 pub struct ExecuteXcmOverSendXcm;
 impl SendXcm for ExecuteXcmOverSendXcm {
 	type Ticket = Xcm<()>;
@@ -296,7 +296,7 @@ impl SendXcm for ExecuteXcmOverSendXcm {
 		let xcm: Xcm<RuntimeCall> = ticket.into();
 
 		let origin = EXECUTE_XCM_ORIGIN.with(|o| o.borrow().clone().unwrap());
-		let mut hash = xcm.using_encoded(sp_io::hashing::blake2_256);
+		let mut hash = xcm.using_encoded(pezsp_io::hashing::blake2_256);
 		let outcome = XcmExecutor::<XcmConfig>::prepare_and_execute(
 			origin,
 			xcm,
@@ -345,7 +345,7 @@ thread_local! {
 }
 
 pub struct BridgeHubLocationXcmOriginAsRoot<RuntimeOrigin>(
-	sp_std::marker::PhantomData<RuntimeOrigin>,
+	pezsp_std::marker::PhantomData<RuntimeOrigin>,
 );
 impl<RuntimeOrigin: OriginTrait> ConvertOrigin<RuntimeOrigin>
 	for BridgeHubLocationXcmOriginAsRoot<RuntimeOrigin>
@@ -447,13 +447,13 @@ impl EnsureOrigin<RuntimeOrigin> for OpenBridgeOrigin {
 }
 
 pub(crate) type OpenBridgeOriginOf<T, I> =
-	<T as pallet_xcm_bridge_hub::Config<I>>::OpenBridgeOrigin;
+	<T as pezpallet_xcm_bridge_hub::Config<I>>::OpenBridgeOrigin;
 
 pub struct TestLocalXcmChannelManager;
 
 impl TestLocalXcmChannelManager {
 	pub fn make_congested() {
-		frame_support::storage::unhashed::put(b"TestLocalXcmChannelManager.Congested", &true);
+		pezframe_support::storage::unhashed::put(b"TestLocalXcmChannelManager.Congested", &true);
 	}
 
 	fn suspended_key(bridge: &BridgeId) -> Vec<u8> {
@@ -464,11 +464,11 @@ impl TestLocalXcmChannelManager {
 	}
 
 	pub fn is_bridge_suspended(bridge: &BridgeId) -> bool {
-		frame_support::storage::unhashed::get_or_default(&Self::suspended_key(bridge))
+		pezframe_support::storage::unhashed::get_or_default(&Self::suspended_key(bridge))
 	}
 
 	pub fn is_bridge_resumed(bridge: &BridgeId) -> bool {
-		frame_support::storage::unhashed::get_or_default(&Self::resumed_key(bridge))
+		pezframe_support::storage::unhashed::get_or_default(&Self::resumed_key(bridge))
 	}
 
 	fn build_congestion_message(bridge: &BridgeId, is_congested: bool) -> Vec<Instruction<()>> {
@@ -480,7 +480,7 @@ impl TestLocalXcmChannelManager {
 			XcmOverBridgeWrappedWithExportMessageRouter(XcmBridgeHubRouterCall),
 		}
 
-		sp_std::vec![
+		pezsp_std::vec![
 			UnpaidExecution { weight_limit: Unlimited, check_origin: None },
 			Transact {
 				origin_kind: OriginKind::Xcm,
@@ -512,7 +512,7 @@ impl TestLocalXcmChannelManager {
 		);
 
 		if result.is_ok() {
-			frame_support::storage::unhashed::put(&key, &true);
+			pezframe_support::storage::unhashed::put(&key, &true);
 		}
 
 		result.map(|_| ())
@@ -523,7 +523,7 @@ impl LocalXcmChannelManager for TestLocalXcmChannelManager {
 	type Error = SendError;
 
 	fn is_congested(_with: &Location) -> bool {
-		frame_support::storage::unhashed::get_or_default(b"TestLocalXcmChannelManager.Congested")
+		pezframe_support::storage::unhashed::get_or_default(b"TestLocalXcmChannelManager.Congested")
 	}
 
 	fn suspend_bridge(local_origin: &Location, bridge: BridgeId) -> Result<(), Self::Error> {
@@ -535,7 +535,7 @@ impl LocalXcmChannelManager for TestLocalXcmChannelManager {
 	}
 }
 
-impl pallet_xcm_bridge_hub_router::XcmChannelStatusProvider for TestLocalXcmChannelManager {
+impl pezpallet_xcm_bridge_hub_router::XcmChannelStatusProvider for TestLocalXcmChannelManager {
 	fn is_congested(with: &Location) -> bool {
 		<Self as LocalXcmChannelManager>::is_congested(with)
 	}
@@ -545,13 +545,13 @@ pub struct TestBlobDispatcher;
 
 impl TestBlobDispatcher {
 	pub fn is_dispatched() -> bool {
-		frame_support::storage::unhashed::get_or_default(b"TestBlobDispatcher.Dispatched")
+		pezframe_support::storage::unhashed::get_or_default(b"TestBlobDispatcher.Dispatched")
 	}
 }
 
 impl DispatchBlob for TestBlobDispatcher {
 	fn dispatch_blob(_blob: Vec<u8>) -> Result<(), DispatchBlobError> {
-		frame_support::storage::unhashed::put(b"TestBlobDispatcher.Dispatched", &true);
+		pezframe_support::storage::unhashed::put(b"TestBlobDispatcher.Dispatched", &true);
 		Ok(())
 	}
 }
@@ -564,11 +564,11 @@ impl Chain for ThisUnderlyingChain {
 	type BlockNumber = u64;
 	type Hash = H256;
 	type Hasher = BlakeTwo256;
-	type Header = SubstrateHeader;
+	type Header = BizinikiwiHeader;
 	type AccountId = AccountId;
 	type Balance = Balance;
 	type Nonce = u64;
-	type Signature = sp_runtime::MultiSignature;
+	type Signature = pezsp_runtime::MultiSignature;
 
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
@@ -588,7 +588,7 @@ impl ChainWithMessages for ThisUnderlyingChain {
 }
 
 pub type BridgedHeaderHash = H256;
-pub type BridgedChainHeader = SubstrateHeader;
+pub type BridgedChainHeader = BizinikiwiHeader;
 
 pub struct BridgedUnderlyingChain;
 impl Chain for BridgedUnderlyingChain {
@@ -600,7 +600,7 @@ impl Chain for BridgedUnderlyingChain {
 	type AccountId = AccountId;
 	type Balance = Balance;
 	type Nonce = u64;
-	type Signature = sp_runtime::MultiSignature;
+	type Signature = pezsp_runtime::MultiSignature;
 
 	const STATE_VERSION: StateVersion = StateVersion::V1;
 
@@ -633,7 +633,7 @@ pub struct TestMessageDispatch;
 
 impl TestMessageDispatch {
 	pub fn deactivate(lane: TestLaneIdType) {
-		frame_support::storage::unhashed::put(&(b"inactive", lane).encode()[..], &false);
+		pezframe_support::storage::unhashed::put(&(b"inactive", lane).encode()[..], &false);
 	}
 }
 
@@ -643,7 +643,7 @@ impl MessageDispatch for TestMessageDispatch {
 	type LaneId = TestLaneIdType;
 
 	fn is_active(lane: Self::LaneId) -> bool {
-		frame_support::storage::unhashed::take::<bool>(&(b"inactive", lane).encode()[..]) !=
+		pezframe_support::storage::unhashed::take::<bool>(&(b"inactive", lane).encode()[..]) !=
 			Some(false)
 	}
 
@@ -662,8 +662,8 @@ impl MessageDispatch for TestMessageDispatch {
 
 /// Run pallet test.
 pub fn run_test<T>(test: impl FnOnce() -> T) -> T {
-	sp_io::TestExternalities::new(
-		frame_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap(),
+	pezsp_io::TestExternalities::new(
+		pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap(),
 	)
 	.execute_with(test)
 }

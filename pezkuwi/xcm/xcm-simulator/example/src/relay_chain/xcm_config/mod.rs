@@ -23,7 +23,7 @@ pub mod teleporter;
 pub mod weigher;
 
 use crate::relay_chain::{RuntimeCall, XcmPallet};
-use frame_support::traits::{Everything, Nothing};
+use pezframe_support::traits::{Everything, Nothing};
 use xcm_builder::{EnsureDecodableXcm, FixedRateOfFungible, FrameTransactionalProcessor};
 use xcm_executor::Config;
 

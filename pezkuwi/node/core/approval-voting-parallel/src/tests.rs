@@ -47,11 +47,11 @@ use pezkuwi_node_subsystem::{
 use pezkuwi_node_subsystem_test_helpers::{mock::new_leaf, TestSubsystemContext};
 use pezkuwi_overseer::{ActiveLeavesUpdate, OverseerSignal, SpawnGlue, TimeoutExt};
 use pezkuwi_primitives::{CandidateHash, CoreIndex, Hash, ValidatorIndex};
-use sc_keystore::{Keystore, LocalKeystore};
-use sp_consensus::SyncOracle;
-use sp_consensus_babe::{VrfPreOutput, VrfProof, VrfSignature};
-use sp_core::{testing::TaskExecutor, H256};
-use sp_keyring::Sr25519Keyring;
+use pezsc_keystore::{Keystore, LocalKeystore};
+use pezsp_consensus::SyncOracle;
+use pezsp_consensus_babe::{VrfPreOutput, VrfProof, VrfSignature};
+use pezsp_core::{testing::TaskExecutor, H256};
+use pezsp_keyring::Sr25519Keyring;
 type VirtualOverseer =
 	pezkuwi_node_subsystem_test_helpers::TestSubsystemContextHandle<ApprovalVotingParallelMessage>;
 
@@ -86,7 +86,7 @@ fn fake_assignment_cert_v2(
 
 /// Creates a meaningless signature
 pub fn dummy_signature() -> pezkuwi_primitives::ValidatorSignature {
-	sp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64])
+	pezsp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64])
 }
 
 fn build_subsystem(
@@ -96,9 +96,9 @@ fn build_subsystem(
 	TestSubsystemContext<ApprovalVotingParallelMessage, SpawnGlue<TaskExecutor>>,
 	VirtualOverseer,
 ) {
-	sp_tracing::init_for_tests();
+	pezsp_tracing::init_for_tests();
 
-	let pool = sp_core::testing::TaskExecutor::new();
+	let pool = pezsp_core::testing::TaskExecutor::new();
 	let (context, virtual_overseer) = pezkuwi_node_subsystem_test_helpers::make_subsystem_context::<
 		ApprovalVotingParallelMessage,
 		_,

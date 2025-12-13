@@ -1,0 +1,41 @@
+[package]
+name = "pezsc-runtime-test"
+version = "2.0.0"
+authors.workspace = true
+edition.workspace = true
+build = "build.rs"
+license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
+publish = false
+homepage.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+pezsp-core = { workspace = true }
+pezsp-io = { features = ["improved_panic_error_reporting"], workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-runtime-interface = { workspace = true }
+
+[build-dependencies]
+bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
+
+[features]
+default = ["std"]
+std = [
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime-interface/std",
+	"pezsp-runtime/std",
+	"bizinikiwi-wasm-builder",
+]
+runtime-benchmarks = [
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime-interface/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+]

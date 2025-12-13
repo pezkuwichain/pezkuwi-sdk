@@ -20,12 +20,12 @@ codec = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 tracing = { workspace = true }
 
-frame-support = { workspace = true }
-frame-system = { workspace = true }
-sp-core = { workspace = true }
-sp-io = { workspace = true }
-sp-runtime = { workspace = true }
-sp-std = { workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
 
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
@@ -48,16 +48,16 @@ std = [
 	"alloy-core/std",
 	"assets-common/std",
 	"codec/std",
-	"frame-support/std",
-	"frame-system/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"scale-info/std",
 	"snowbridge-beacon-primitives/std",
 	"snowbridge-core/std",
 	"snowbridge-verification-primitives/std",
-	"sp-core/std",
-	"sp-io/std",
-	"sp-runtime/std",
-	"sp-std/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
 	"tracing/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
@@ -65,21 +65,21 @@ std = [
 ]
 runtime-benchmarks = [
 	"assets-common/runtime-benchmarks",
-	"frame-support/runtime-benchmarks",
-	"frame-system/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"snowbridge-beacon-primitives/runtime-benchmarks",
 	"snowbridge-core/runtime-benchmarks",
 	"snowbridge-test-utils/runtime-benchmarks",
 	"snowbridge-verification-primitives/runtime-benchmarks",
-	"sp-io/runtime-benchmarks",
-	"sp-runtime/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
 	"assets-common/try-runtime",
-	"frame-support/try-runtime",
-	"frame-system/try-runtime",
-	"sp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

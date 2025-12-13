@@ -28,7 +28,7 @@ use pezkuwi_primitives::{
 	BlockNumber, CandidateHash, CandidateReceiptV2 as CandidateReceipt, CoreIndex, GroupIndex,
 	Hash, SessionIndex, ValidatorIndex, ValidatorSignature,
 };
-use sp_consensus_slots::Slot;
+use pezsp_consensus_slots::Slot;
 use std::collections::BTreeMap;
 
 use super::v2::Bitfield;

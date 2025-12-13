@@ -22,7 +22,7 @@ use bp_header_chain::justification::{
 };
 use bp_test_utils::*;
 
-type TestHeader = sp_runtime::testing::Header;
+type TestHeader = pezsp_runtime::testing::Header;
 
 #[test]
 fn valid_justification_accepted() {
@@ -74,7 +74,7 @@ fn valid_justification_accepted_with_single_fork() {
 #[test]
 fn valid_justification_accepted_with_arbitrary_number_of_authorities() {
 	use finality_grandpa::voter_set::VoterSet;
-	use sp_consensus_grandpa::AuthorityId;
+	use pezsp_consensus_grandpa::AuthorityId;
 
 	let n = 15;
 	let required_signatures = required_justification_precommits(n as _);
@@ -136,7 +136,7 @@ fn justification_with_invalid_commit_rejected() {
 fn justification_with_invalid_authority_signature_rejected() {
 	let mut justification = make_default_justification::<TestHeader>(&test_header(1));
 	justification.commit.precommits[0].signature =
-		sp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]);
+		pezsp_core::crypto::UncheckedFrom::unchecked_from([1u8; 64]);
 
 	assert_eq!(
 		verify_justification::<TestHeader>(

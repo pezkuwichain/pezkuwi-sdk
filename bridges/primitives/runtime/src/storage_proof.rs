@@ -16,10 +16,10 @@
 
 //! Logic for working with storage proofs.
 
-use frame_support::PalletError;
-use sp_core::RuntimeDebug;
-use sp_std::vec::Vec;
-use sp_trie::{
+use pezframe_support::PalletError;
+use pezsp_core::RuntimeDebug;
+use pezsp_std::vec::Vec;
+use pezsp_trie::{
 	accessed_nodes_tracker::AccessedNodesTracker, read_trie_value, LayoutV1, MemoryDB, StorageProof,
 };
 
@@ -27,7 +27,7 @@ use codec::{Decode, DecodeWithMemTracking, Encode};
 use hash_db::{HashDB, Hasher, EMPTY_PREFIX};
 use scale_info::TypeInfo;
 #[cfg(feature = "test-helpers")]
-use sp_trie::{recorder_ext::RecorderExt, Recorder, TrieDBBuilder, TrieError, TrieHash};
+use pezsp_trie::{recorder_ext::RecorderExt, Recorder, TrieDBBuilder, TrieError, TrieHash};
 #[cfg(feature = "test-helpers")]
 use trie_db::{Trie, TrieConfiguration, TrieDBMut};
 
@@ -59,24 +59,24 @@ pub enum StorageProofError {
 	DuplicateNodes,
 }
 
-impl From<sp_trie::StorageProofError> for StorageProofError {
-	fn from(e: sp_trie::StorageProofError) -> Self {
+impl From<pezsp_trie::StorageProofError> for StorageProofError {
+	fn from(e: pezsp_trie::StorageProofError) -> Self {
 		match e {
-			sp_trie::StorageProofError::DuplicateNodes => StorageProofError::DuplicateNodes,
+			pezsp_trie::StorageProofError::DuplicateNodes => StorageProofError::DuplicateNodes,
 		}
 	}
 }
 
-impl From<sp_trie::accessed_nodes_tracker::Error> for StorageProofError {
-	fn from(e: sp_trie::accessed_nodes_tracker::Error) -> Self {
+impl From<pezsp_trie::accessed_nodes_tracker::Error> for StorageProofError {
+	fn from(e: pezsp_trie::accessed_nodes_tracker::Error) -> Self {
 		match e {
-			sp_trie::accessed_nodes_tracker::Error::UnusedNodes => StorageProofError::UnusedKey,
+			pezsp_trie::accessed_nodes_tracker::Error::UnusedNodes => StorageProofError::UnusedKey,
 		}
 	}
 }
 
 /// Raw storage proof type (just raw trie nodes).
-pub type RawStorageProof = sp_trie::RawStorageProof;
+pub type RawStorageProof = pezsp_trie::RawStorageProof;
 
 /// Calculates size for `RawStorageProof`.
 pub fn raw_storage_proof_size(raw_storage_proof: &RawStorageProof) -> usize {
@@ -204,7 +204,7 @@ where
 pub fn grow_storage_value(mut value: Vec<u8>, params: &UnverifiedStorageProofParams) -> Vec<u8> {
 	if let Some(db_size) = params.db_size {
 		if db_size as usize > value.len() {
-			value.extend(sp_std::iter::repeat(42u8).take(db_size as usize - value.len()));
+			value.extend(pezsp_std::iter::repeat(42u8).take(db_size as usize - value.len()));
 		}
 	}
 	value
@@ -221,7 +221,7 @@ pub fn grow_storage_proof<L: TrieConfiguration>(
 	prefix: Vec<u8>,
 	num_extra_nodes: usize,
 ) {
-	use sp_trie::TrieMut;
+	use pezsp_trie::TrieMut;
 
 	let mut added_nodes = 0;
 	for i in 0..prefix.len() {
@@ -266,7 +266,7 @@ pub fn grow_storage_proof<L: TrieConfiguration>(
 pub fn record_all_keys<L: TrieConfiguration, DB>(
 	db: &DB,
 	root: &TrieHash<L>,
-) -> Result<RawStorageProof, sp_std::boxed::Box<TrieError<L>>>
+) -> Result<RawStorageProof, pezsp_std::boxed::Box<TrieError<L>>>
 where
 	DB: hash_db::HashDBRef<L::Hash, trie_db::DBValue>,
 {
@@ -284,14 +284,14 @@ where
 ///
 /// Note: This should only be used for **testing**.
 #[cfg(feature = "std")]
-pub fn craft_valid_storage_proof() -> (sp_core::H256, RawStorageProof) {
-	use sp_state_machine::{backend::Backend, prove_read, InMemoryBackend};
+pub fn craft_valid_storage_proof() -> (pezsp_core::H256, RawStorageProof) {
+	use pezsp_state_machine::{backend::Backend, prove_read, InMemoryBackend};
 
-	let state_version = sp_runtime::StateVersion::default();
+	let state_version = pezsp_runtime::StateVersion::default();
 
 	// construct storage proof
-	let backend = <InMemoryBackend<sp_core::Blake2Hasher>>::from((
-		sp_std::vec![
+	let backend = <InMemoryBackend<pezsp_core::Blake2Hasher>>::from((
+		pezsp_std::vec![
 			(None, vec![(b"key1".to_vec(), Some(b"value1".to_vec()))]),
 			(None, vec![(b"key2".to_vec(), Some(b"value2".to_vec()))]),
 			(None, vec![(b"key3".to_vec(), Some(b"value3".to_vec()))]),
@@ -301,7 +301,7 @@ pub fn craft_valid_storage_proof() -> (sp_core::H256, RawStorageProof) {
 		],
 		state_version,
 	));
-	let root = backend.storage_root(sp_std::iter::empty(), state_version).0;
+	let root = backend.storage_root(pezsp_std::iter::empty(), state_version).0;
 	let proof =
 		prove_read(backend, &[&b"key1"[..], &b"key2"[..], &b"key4"[..], &b"key22"[..]]).unwrap();
 
@@ -319,7 +319,7 @@ pub mod tests_for_storage_proof_checker {
 
 		// check proof in runtime
 		let mut checker =
-			<StorageProofChecker<sp_core::Blake2Hasher>>::new(root, proof.clone()).unwrap();
+			<StorageProofChecker<pezsp_core::Blake2Hasher>>::new(root, proof.clone()).unwrap();
 		assert_eq!(checker.read_value(b"key1"), Ok(Some(b"value1".to_vec())));
 		assert_eq!(checker.read_value(b"key2"), Ok(Some(b"value2".to_vec())));
 		assert_eq!(checker.read_value(b"key4"), Ok(Some((42u64, 42u32, 42u16, 42u8).encode())));
@@ -336,7 +336,7 @@ pub mod tests_for_storage_proof_checker {
 
 		// checking proof against invalid commitment fails
 		assert_eq!(
-			<StorageProofChecker<sp_core::Blake2Hasher>>::new(sp_core::H256::random(), proof).err(),
+			<StorageProofChecker<pezsp_core::Blake2Hasher>>::new(pezsp_core::H256::random(), proof).err(),
 			Some(StorageProofError::StorageRootMismatch)
 		);
 	}
@@ -346,14 +346,14 @@ pub mod tests_for_storage_proof_checker {
 		let (root, proof) = craft_valid_storage_proof();
 
 		let mut checker =
-			StorageProofChecker::<sp_core::Blake2Hasher>::new(root, proof.clone()).unwrap();
+			StorageProofChecker::<pezsp_core::Blake2Hasher>::new(root, proof.clone()).unwrap();
 		checker.read_value(b"key1").unwrap().unwrap();
 		checker.read_value(b"key2").unwrap();
 		checker.read_value(b"key4").unwrap();
 		checker.read_value(b"key22").unwrap();
 		assert_eq!(checker.ensure_no_unused_nodes(), Ok(()));
 
-		let checker = StorageProofChecker::<sp_core::Blake2Hasher>::new(root, proof).unwrap();
+		let checker = StorageProofChecker::<pezsp_core::Blake2Hasher>::new(root, proof).unwrap();
 		assert_eq!(checker.ensure_no_unused_nodes(), Err(StorageProofError::UnusedKey));
 	}
 }

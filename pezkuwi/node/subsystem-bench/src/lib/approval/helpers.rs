@@ -35,14 +35,14 @@ use pezkuwi_primitives::{
 use pezkuwi_primitives_test_helpers::dummy_candidate_receipt_v2_bad_sig;
 use rand::{seq::SliceRandom, SeedableRng};
 use rand_chacha::ChaCha20Rng;
-use sc_network_types::PeerId;
-use sp_consensus_babe::{
+use pezsc_network_types::PeerId;
+use pezsp_consensus_babe::{
 	digests::{CompatibleDigestItem, PreDigest, SecondaryVRFPreDigest},
 	AllowedSlots, BabeEpochConfiguration, Epoch as BabeEpoch, VrfSignature, VrfTranscript,
 };
-use sp_core::crypto::VrfSecret;
-use sp_keyring::sr25519::Keyring as Sr25519Keyring;
-use sp_runtime::{Digest, DigestItem};
+use pezsp_core::crypto::VrfSecret;
+use pezsp_keyring::sr25519::Keyring as Sr25519Keyring;
+use pezsp_runtime::{Digest, DigestItem};
 use std::sync::{atomic::AtomicU64, Arc};
 
 /// A fake system clock used for driving the approval voting and make

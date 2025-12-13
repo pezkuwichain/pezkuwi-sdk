@@ -28,7 +28,7 @@ pub trait EventEmitter {
 	/// # Parameters
 	/// - `origin`: The origin location of the XCM.
 	/// - `destination`: The target location where the message is sent.
-	/// - `message`: `Some(Xcm)` for `pallet_xcm::Event::Sent`, `None` for other events to reduce
+	/// - `message`: `Some(Xcm)` for `pezpallet_xcm::Event::Sent`, `None` for other events to reduce
 	///   storage.
 	/// - `message_id`: A unique identifier for the XCM.
 	fn emit_sent_event(

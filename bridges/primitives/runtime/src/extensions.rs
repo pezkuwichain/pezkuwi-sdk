@@ -19,12 +19,12 @@
 use codec::{Compact, Decode, DecodeWithMemTracking, Encode};
 use impl_trait_for_tuples::impl_for_tuples;
 use scale_info::{StaticTypeInfo, TypeInfo};
-use sp_runtime::{
+use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{Dispatchable, TransactionExtension},
 	transaction_validity::TransactionValidityError,
 };
-use sp_std::{fmt::Debug, marker::PhantomData};
+use pezsp_std::{fmt::Debug, marker::PhantomData};
 
 /// Trait that describes some properties of a `TransactionExtension` that are needed in order to
 /// send a transaction to the chain.
@@ -56,28 +56,28 @@ where
 	type Implicit = S;
 }
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckNonZeroSender`.
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckNonZeroSender`.
 pub type CheckNonZeroSender = GenericTransactionExtensionSchema<(), ()>;
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckSpecVersion`.
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckSpecVersion`.
 pub type CheckSpecVersion = GenericTransactionExtensionSchema<(), u32>;
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckTxVersion`.
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckTxVersion`.
 pub type CheckTxVersion = GenericTransactionExtensionSchema<(), u32>;
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckGenesis`.
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckGenesis`.
 pub type CheckGenesis<Hash> = GenericTransactionExtensionSchema<(), Hash>;
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckEra`.
-pub type CheckEra<Hash> = GenericTransactionExtensionSchema<sp_runtime::generic::Era, Hash>;
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckEra`.
+pub type CheckEra<Hash> = GenericTransactionExtensionSchema<pezsp_runtime::generic::Era, Hash>;
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckNonce`.
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckNonce`.
 pub type CheckNonce<TxNonce> = GenericTransactionExtensionSchema<Compact<TxNonce>, ()>;
 
-/// The `TransactionExtensionSchema` for `frame_system::CheckWeight`.
+/// The `TransactionExtensionSchema` for `pezframe_system::CheckWeight`.
 pub type CheckWeight = GenericTransactionExtensionSchema<(), ()>;
 
-/// The `TransactionExtensionSchema` for `pallet_transaction_payment::ChargeTransactionPayment`.
+/// The `TransactionExtensionSchema` for `pezpallet_transaction_payment::ChargeTransactionPayment`.
 pub type ChargeTransactionPayment<Balance> =
 	GenericTransactionExtensionSchema<Compact<Balance>, ()>;
 
@@ -139,8 +139,8 @@ where
 		// is kinda random here
 		self.implicit
 			.clone()
-			.ok_or(frame_support::unsigned::TransactionValidityError::Unknown(
-				frame_support::unsigned::UnknownTransaction::Custom(0xFF),
+			.ok_or(pezframe_support::unsigned::TransactionValidityError::Unknown(
+				pezframe_support::unsigned::UnknownTransaction::Custom(0xFF),
 			))
 	}
 	type Pre = ();
