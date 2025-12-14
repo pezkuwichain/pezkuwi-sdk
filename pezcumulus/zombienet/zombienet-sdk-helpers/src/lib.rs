@@ -3,7 +3,7 @@
 
 use anyhow::anyhow;
 use codec::{Compact, Decode};
-use cumulus_primitives_core::{relay_chain, rpsr_digest::RPSR_CONSENSUS_ID};
+use pezcumulus_primitives_core::{relay_chain, rpsr_digest::RPSR_CONSENSUS_ID};
 use futures::stream::StreamExt;
 use pezkuwi_primitives::{CandidateReceiptV2, Id as ParaId};
 use std::{
@@ -70,7 +70,7 @@ fn find_event_and_decode_fields<T: Decode>(
 	let mut result = vec![];
 	for event in events.iter() {
 		let event = event?;
-		if event.pezpallet_name() == pallet && event.variant_name() == variant {
+		if event.pallet_name() == pallet && event.variant_name() == variant {
 			let field_bytes = event.field_bytes().to_vec();
 			result.push(T::decode(&mut &field_bytes[..])?);
 		}
@@ -84,7 +84,7 @@ async fn is_session_change(
 	let events = block.events().await?;
 	Ok(events.iter().any(|event| {
 		event.as_ref().is_ok_and(|event| {
-			event.pezpallet_name() == "Session" && event.variant_name() == "NewSession"
+			event.pallet_name() == "Session" && event.variant_name() == "NewSession"
 		})
 	}))
 }

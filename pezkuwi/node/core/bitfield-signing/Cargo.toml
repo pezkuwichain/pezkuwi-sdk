@@ -7,6 +7,7 @@ license.workspace = true
 description = "Bitfield signing subsystem for the Pezkuwi node"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-bitfield-signing"
 
 [lints]
 workspace = true
@@ -27,10 +28,10 @@ pezkuwi-primitives-test-helpers = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
 ]

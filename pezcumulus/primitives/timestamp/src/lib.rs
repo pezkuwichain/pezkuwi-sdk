@@ -28,7 +28,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use core::time::Duration;
-use cumulus_primitives_core::relay_chain::Slot;
+use pezcumulus_primitives_core::relay_chain::Slot;
 use pezsp_inherents::{Error, InherentData};
 
 pub use pezsp_timestamp::{InherentType, INHERENT_IDENTIFIER};

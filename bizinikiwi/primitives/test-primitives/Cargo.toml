@@ -7,6 +7,8 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+description = "Pezkuwi SDK primitive: test primitives"
+documentation = "https://docs.rs/pezsp-test-primitives"
 
 [lints]
 workspace = true
@@ -25,19 +27,19 @@ pezsp-runtime = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-	"dep:serde",
-	"pezsp-application-crypto/serde",
-	"pezsp-core/serde",
-	"pezsp-runtime/serde",
+  "dep:serde",
+  "pezsp-application-crypto/serde",
+  "pezsp-core/serde",
+  "pezsp-runtime/serde",
 ]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

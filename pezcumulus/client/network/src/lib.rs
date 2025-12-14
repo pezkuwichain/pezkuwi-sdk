@@ -28,7 +28,7 @@ use pezsp_consensus::block_validation::{
 use pezsp_core::traits::SpawnNamed;
 use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT};
 
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 use pezkuwi_node_primitives::{CollationSecondedSignal, Statement};
 use pezkuwi_node_subsystem::messages::RuntimeApiRequest;
 use pezkuwi_primitives::{

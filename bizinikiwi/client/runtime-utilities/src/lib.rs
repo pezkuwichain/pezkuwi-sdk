@@ -127,14 +127,14 @@ mod tests {
 	use pezsp_version::RuntimeVersion;
 
 	type TeyrchainHostFunctions = (
-		cumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
+		pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
 		pezsp_io::BizinikiwiHostFunctions,
 	);
 
 	#[test]
 	fn test_fetch_latest_metadata_from_blob_fetches_metadata() {
 		let executor: WasmExecutor<TeyrchainHostFunctions> = WasmExecutor::builder().build();
-		let code_bytes = cumulus_test_runtime::WASM_BINARY
+		let code_bytes = pezcumulus_test_runtime::WASM_BINARY
 			.expect("To run this test, build the wasm binary of pezcumulus-test-runtime")
 			.to_vec();
 		let metadata = subxt::Metadata::decode(
@@ -143,13 +143,13 @@ mod tests {
 			.as_slice(),
 		)
 		.unwrap();
-		assert!(metadata.pezpallet_by_name("TeyrchainInfo").is_some());
+		assert!(metadata.pallet_by_name("TeyrchainInfo").is_some());
 	}
 
 	#[test]
 	fn test_runtime_caller_can_call_into_runtime() {
 		let executor: WasmExecutor<TeyrchainHostFunctions> = WasmExecutor::builder().build();
-		let code_bytes = cumulus_test_runtime::WASM_BINARY
+		let code_bytes = pezcumulus_test_runtime::WASM_BINARY
 			.expect("To run this test, build the wasm binary of pezcumulus-test-runtime")
 			.to_vec();
 		let runtime_caller = super::RuntimeCaller::new(&executor, code_bytes.into());

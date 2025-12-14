@@ -58,7 +58,7 @@ extern crate alloc;
 use alloc::{collections::BTreeSet, vec, vec::Vec};
 use bounded_collections::{BoundedBTreeSet, BoundedSlice, BoundedVec};
 use codec::{Compact, Decode, DecodeLimit, Encode, MaxEncodedLen};
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::BlockNumber as RelayBlockNumber, ChannelStatus, GetChannelInfo, MessageSendError,
 	ParaId, XcmpMessageFormat, XcmpMessageHandler, XcmpMessageSource,
 };

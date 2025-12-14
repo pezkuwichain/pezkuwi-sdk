@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "election provider supporting traits"
+documentation = "https://docs.rs/pezframe-election-provider-support"
 
 [lints]
 workspace = true
@@ -36,27 +37,27 @@ pezsp-npos-elections = { workspace = true, default-features = true }
 default = ["std"]
 fuzz = ["default"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"scale-info/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-npos-elections/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-npos-elections/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-election-provider-solution-type/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-npos-elections/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-election-provider-solution-type/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-npos-elections/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

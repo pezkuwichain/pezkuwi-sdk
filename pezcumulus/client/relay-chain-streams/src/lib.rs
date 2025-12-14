@@ -19,7 +19,7 @@
 
 use std::sync::Arc;
 
-use cumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
+use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
 use futures::{Stream, StreamExt};
 use pezkuwi_node_subsystem::messages::RuntimeApiRequest;
 use pezkuwi_primitives::{

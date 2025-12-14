@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Proc macro helpers for procedural macros"
+documentation = "https://docs.rs/pezframe-support-procedural-tools"
 
 [lints]
 workspace = true

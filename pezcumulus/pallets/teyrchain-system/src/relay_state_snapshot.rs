@@ -18,7 +18,7 @@
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain, AbridgedHostConfiguration, AbridgedHrmpChannel, ParaId,
 };
 use scale_info::TypeInfo;

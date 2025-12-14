@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-pvf-checker"
 
 [lints]
 workspace = true
@@ -33,12 +34,12 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

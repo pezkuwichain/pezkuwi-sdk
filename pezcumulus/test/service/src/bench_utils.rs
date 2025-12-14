@@ -19,12 +19,12 @@ use codec::Encode;
 use pezsc_block_builder::BlockBuilderBuilder;
 
 use crate::{construct_extrinsic, Client as TestClient};
-use cumulus_pallet_teyrchain_system::teyrchain_inherent::{
+use pezcumulus_pallet_teyrchain_system::teyrchain_inherent::{
 	BasicTeyrchainInherentData, InboundMessagesData,
 };
-use cumulus_primitives_core::{relay_chain::AccountId, PersistedValidationData};
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-use cumulus_test_runtime::{
+use pezcumulus_primitives_core::{relay_chain::AccountId, PersistedValidationData};
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_test_runtime::{
 	BalancesCall, GluttonCall, NodeBlock, SudoCall, UncheckedExtrinsic, WASM_BINARY,
 };
 use pezframe_system_rpc_runtime_api::AccountNonceApi;
@@ -69,9 +69,9 @@ pub fn create_benchmark_accounts() -> (Vec<sr25519::Pair>, Vec<sr25519::Pair>, V
 pub fn extrinsic_set_time(client: &TestClient) -> OpaqueExtrinsic {
 	let best_number = client.usage_info().chain.best_number;
 
-	let timestamp = best_number as u64 * cumulus_test_runtime::MinimumPeriod::get();
-	cumulus_test_runtime::UncheckedExtrinsic::new_bare(
-		cumulus_test_runtime::RuntimeCall::Timestamp(pezpallet_timestamp::Call::set {
+	let timestamp = best_number as u64 * pezcumulus_test_runtime::MinimumPeriod::get();
+	pezcumulus_test_runtime::UncheckedExtrinsic::new_bare(
+		pezcumulus_test_runtime::RuntimeCall::Timestamp(pezpallet_timestamp::Call::set {
 			now: timestamp,
 		}),
 	)
@@ -80,11 +80,11 @@ pub fn extrinsic_set_time(client: &TestClient) -> OpaqueExtrinsic {
 
 /// Create a set validation data extrinsic
 pub fn extrinsic_set_validation_data(
-	parent_header: cumulus_test_runtime::Header,
+	parent_header: pezcumulus_test_runtime::Header,
 ) -> OpaqueExtrinsic {
 	let parent_head = HeadData(parent_header.encode());
 	let sproof_builder = RelayStateSproofBuilder {
-		para_id: cumulus_test_runtime::TEYRCHAIN_ID.into(),
+		para_id: pezcumulus_test_runtime::TEYRCHAIN_ID.into(),
 		included_para_head: parent_head.clone().into(),
 		..Default::default()
 	};
@@ -107,9 +107,9 @@ pub fn extrinsic_set_validation_data(
 		horizontal_messages: Default::default(),
 	};
 
-	cumulus_test_runtime::UncheckedExtrinsic::new_bare(
-		cumulus_test_runtime::RuntimeCall::TeyrchainSystem(
-			cumulus_pallet_teyrchain_system::Call::set_validation_data {
+	pezcumulus_test_runtime::UncheckedExtrinsic::new_bare(
+		pezcumulus_test_runtime::RuntimeCall::TeyrchainSystem(
+			pezcumulus_pallet_teyrchain_system::Call::set_validation_data {
 				data,
 				inbound_messages_data,
 			},

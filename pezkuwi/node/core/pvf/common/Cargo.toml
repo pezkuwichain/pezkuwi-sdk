@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-pvf-common"
 
 [lints]
 workspace = true
@@ -53,11 +54,11 @@ tempfile = { workspace = true }
 test-utils = []
 jemalloc-allocator = []
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsc-executor-wasmtime/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsc-executor-wasmtime/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
 ]

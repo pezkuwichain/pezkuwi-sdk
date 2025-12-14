@@ -23,8 +23,8 @@ pub mod bench_utils;
 
 pub mod chain_spec;
 
-use cumulus_client_collator::service::CollatorService;
-use cumulus_client_consensus_aura::{
+use pezcumulus_client_collator::service::CollatorService;
+use pezcumulus_client_consensus_aura::{
 	collators::{
 		lookahead::{self as aura, Params as AuraParams},
 		slot_based::{
@@ -47,20 +47,20 @@ use std::{
 use url::Url;
 
 use crate::runtime::Weight;
-use cumulus_client_cli::{CollatorOptions, RelayChainMode};
-use cumulus_client_consensus_common::TeyrchainBlockImport as TTeyrchainBlockImport;
-use cumulus_client_pov_recovery::{RecoveryDelayRange, RecoveryHandle};
-use cumulus_client_service::{
+use pezcumulus_client_cli::{CollatorOptions, RelayChainMode};
+use pezcumulus_client_consensus_common::TeyrchainBlockImport as TTeyrchainBlockImport;
+use pezcumulus_client_pov_recovery::{RecoveryDelayRange, RecoveryHandle};
+use pezcumulus_client_service::{
 	build_network, prepare_node_config, start_relay_chain_tasks, BuildNetworkParams,
 	CollatorSybilResistance, DARecoveryProfile, StartRelayChainTasksParams,
 	TeyrchainTracingExecuteBlock,
 };
-use cumulus_primitives_core::{relay_chain::ValidationCode, GetTeyrchainInfo, ParaId};
-use cumulus_relay_chain_inprocess_interface::RelayChainInProcessInterface;
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
-use cumulus_relay_chain_minimal_node::build_minimal_relay_chain_node_with_rpc;
+use pezcumulus_primitives_core::{relay_chain::ValidationCode, GetTeyrchainInfo, ParaId};
+use pezcumulus_relay_chain_inprocess_interface::RelayChainInProcessInterface;
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
+use pezcumulus_relay_chain_minimal_node::build_minimal_relay_chain_node_with_rpc;
 
-use cumulus_test_runtime::{Hash, NodeBlock as Block, RuntimeApi};
+use pezcumulus_test_runtime::{Hash, NodeBlock as Block, RuntimeApi};
 
 use pezframe_system_rpc_runtime_api::AccountNonceApi;
 use pezkuwi_node_subsystem::{errors::RecoveryError, messages::AvailabilityRecoveryMessage};
@@ -95,7 +95,7 @@ use bizinikiwi_test_client::{
 };
 
 pub use chain_spec::*;
-pub use cumulus_test_runtime as runtime;
+pub use pezcumulus_test_runtime as runtime;
 pub use pezsp_keyring::Sr25519Keyring as Keyring;
 
 const LOG_TARGET: &str = "pezcumulus-test-service";
@@ -104,7 +104,7 @@ const LOG_TARGET: &str = "pezcumulus-test-service";
 pub type AnnounceBlockFn = Arc<dyn Fn(Hash, Option<Vec<u8>>) + Send + Sync>;
 
 type HostFunctions =
-	(pezsp_io::BizinikiwiHostFunctions, cumulus_client_service::storage_proof_size::HostFunctions);
+	(pezsp_io::BizinikiwiHostFunctions, pezcumulus_client_service::storage_proof_size::HostFunctions);
 /// The client type being used by the test service.
 pub type Client = TFullClient<runtime::NodeBlock, runtime::RuntimeApi, WasmExecutor<HostFunctions>>;
 
@@ -215,7 +215,7 @@ pub fn new_partial(
 	);
 
 	let slot_duration = pezsc_consensus_aura::slot_duration(&*client)?;
-	let import_queue = cumulus_client_consensus_aura::import_queue::<AuthorityPair, _, _, _, _, _>(
+	let import_queue = pezcumulus_client_consensus_aura::import_queue::<AuthorityPair, _, _, _, _, _>(
 		ImportQueueParams {
 			block_import: block_import.clone(),
 			client: client.clone(),
@@ -258,7 +258,7 @@ async fn build_relay_chain_interface(
 	task_manager: &mut TaskManager,
 ) -> RelayChainResult<Arc<dyn RelayChainInterface + 'static>> {
 	let relay_chain_node = match collator_options.relay_chain_mode {
-		cumulus_client_cli::RelayChainMode::Embedded => pezkuwi_test_service::new_full(
+		pezcumulus_client_cli::RelayChainMode::Embedded => pezkuwi_test_service::new_full(
 			relay_chain_config,
 			if let Some(ref key) = collator_key {
 				pezkuwi_service::IsTeyrchainNode::Collator(key.clone())
@@ -270,7 +270,7 @@ async fn build_relay_chain_interface(
 			Some("Relaychain"),
 		)
 		.map_err(|e| RelayChainError::Application(Box::new(e) as Box<_>))?,
-		cumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) =>
+		pezcumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) =>
 			return build_minimal_relay_chain_node_with_rpc(
 				relay_chain_config,
 				teyrchain_prometheus_registry,
@@ -770,13 +770,13 @@ pub fn node_config(
 	endowed_accounts: Vec<AccountId>,
 ) -> Result<Configuration, ServiceError> {
 	let base_path = BasePath::new_temp_dir()?;
-	let root = base_path.path().join(format!("cumulus_test_service_{}", key));
+	let root = base_path.path().join(format!("pezcumulus_test_service_{}", key));
 	let role = if is_collator { Role::Authority } else { Role::Full };
 	let key_seed = key.to_seed();
 	let mut spec = Box::new(chain_spec::get_chain_spec_with_extra_endowed(
 		Some(para_id),
 		endowed_accounts,
-		cumulus_test_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+		pezcumulus_test_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
 	));
 
 	let mut storage = spec.as_storage_builder().build_storage().expect("could not build storage");

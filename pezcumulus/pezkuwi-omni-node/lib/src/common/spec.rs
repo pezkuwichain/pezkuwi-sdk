@@ -29,15 +29,15 @@ use crate::{
 	},
 };
 use codec::Encode;
-use cumulus_client_bootnodes::{start_bootnode_tasks, StartBootnodeTasksParams};
-use cumulus_client_cli::CollatorOptions;
-use cumulus_client_service::{
+use pezcumulus_client_bootnodes::{start_bootnode_tasks, StartBootnodeTasksParams};
+use pezcumulus_client_cli::CollatorOptions;
+use pezcumulus_client_service::{
 	build_network, build_relay_chain_interface, prepare_node_config, start_relay_chain_tasks,
 	BuildNetworkParams, CollatorSybilResistance, DARecoveryProfile, StartRelayChainTasksParams,
 	TeyrchainTracingExecuteBlock,
 };
-use cumulus_primitives_core::{BlockT, GetTeyrchainInfo, ParaId};
-use cumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
+use pezcumulus_primitives_core::{BlockT, GetTeyrchainInfo, ParaId};
+use pezcumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
 use futures::FutureExt;
 use log::info;
 use pezkuwi_primitives::CollatorPair;
@@ -175,7 +175,7 @@ pub(crate) trait BaseNodeSpec {
 				.teyrchain_id(best_hash)
 				.inspect_err(|err| {
 					log::error!(
-								"`cumulus_primitives_core::GetTeyrchainInfo` runtime API call errored with {}",
+								"`pezcumulus_primitives_core::GetTeyrchainInfo` runtime API call errored with {}",
 								err
 							);
 				})

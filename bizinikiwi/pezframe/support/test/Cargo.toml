@@ -7,6 +7,8 @@ license = "Apache-2.0"
 publish = false
 homepage.workspace = true
 repository.workspace = true
+description = "Pezkuwi SDK FRAME support: support test"
+documentation = "https://docs.rs/pezframe-support-test"
 
 [lints]
 workspace = true
@@ -41,42 +43,42 @@ test-pallet = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking/std",
-	"pezframe-executive/std",
-	"frame-metadata/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-api/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-metadata-ir/std",
-	"pezsp-runtime/std",
-	"pezsp-state-machine/std",
-	"pezsp-version/std",
-	"test-pallet/std",
+  "codec/std",
+  "pezframe-benchmarking/std",
+  "pezframe-executive/std",
+  "frame-metadata/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-api/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-metadata-ir/std",
+  "pezsp-runtime/std",
+  "pezsp-state-machine/std",
+  "pezsp-version/std",
+  "test-pallet/std",
 ]
 experimental = ["pezframe-support/experimental", "pezframe-system/experimental"]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-executive/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine?/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
-	"test-pallet/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-executive/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine?/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
+  "test-pallet/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-executive/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-executive/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 # WARNING:
 # Only CI runs with this feature enabled. This feature is for testing stuff related to the FRAME macros

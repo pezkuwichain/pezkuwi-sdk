@@ -106,7 +106,7 @@ impl PrivilegeCmp<OriginCaller> for EqualOrGreatestRootCmp {
 pub mod benchmarks {
 	use super::*;
 	use crate::TeyrchainSystem;
-	use cumulus_primitives_core::{ChannelStatus, GetChannelInfo};
+	use pezcumulus_primitives_core::{ChannelStatus, GetChannelInfo};
 	use pezframe_support::traits::{
 		fungible,
 		tokens::{Pay, PaymentStatus},

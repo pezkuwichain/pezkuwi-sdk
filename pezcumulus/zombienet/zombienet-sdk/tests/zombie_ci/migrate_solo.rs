@@ -7,7 +7,7 @@ use std::{path::Path, str::FromStr};
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use cumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::Id as ParaId;
 use pezsp_core::{hexdisplay::AsBytesRef, Bytes};
 use zombienet_sdk::{

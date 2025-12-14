@@ -38,7 +38,7 @@ decl_test_teyrchains! {
 			XcmpMessageHandler: collectives_zagros_runtime::XcmpQueue,
 			LocationToAccountId: collectives_zagros_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: collectives_zagros_runtime::TeyrchainInfo,
-			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
+			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {

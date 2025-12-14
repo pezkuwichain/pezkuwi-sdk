@@ -7,6 +7,7 @@ description = "Adds functionality to migrate from a Solo to a Teyrchain"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-pezpallet-solo-to-para"
 
 [lints]
 workspace = true
@@ -30,27 +31,27 @@ pezcumulus-pezpallet-teyrchain-system = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezcumulus-pezpallet-teyrchain-system/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-sudo/std",
-	"pezkuwi-primitives/std",
-	"scale-info/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezcumulus-pezpallet-teyrchain-system/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-sudo/std",
+  "pezkuwi-primitives/std",
+  "scale-info/std",
+  "pezsp-runtime/std",
 ]
 try-runtime = [
-	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-sudo/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezcumulus-pezpallet-teyrchain-system/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-sudo/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-sudo/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-sudo/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

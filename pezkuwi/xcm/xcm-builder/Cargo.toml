@@ -7,6 +7,7 @@ license.workspace = true
 version = "7.0.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezstaging-xcm-builder"
 
 [lints]
 workspace = true
@@ -41,9 +42,9 @@ pezkuwi-primitives = { workspace = true, default-features = true }
 pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
 pezkuwi-test-runtime = { workspace = true }
 primitive-types = { features = [
-	"codec",
-	"num-traits",
-	"scale-info",
+  "codec",
+  "num-traits",
+  "scale-info",
 ], workspace = true }
 pezsp-tracing = { workspace = true, default-features = true }
 xcm-simulator = { workspace = true, default-features = true }
@@ -51,40 +52,40 @@ xcm-simulator = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-asset-conversion/runtime-benchmarks",
-	"pezpallet-assets/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-salary/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-test-runtime/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-asset-conversion/runtime-benchmarks",
+  "pezpallet-assets/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-salary/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-test-runtime/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 std = [
-	"codec/std",
-	"environmental/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-asset-conversion/std",
-	"pezpallet-transaction-payment/std",
-	"pezkuwi-teyrchain-primitives/std",
-	"primitive-types/std",
-	"scale-info/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-weights/std",
-	"tracing/std",
-	"xcm-executor/std",
-	"xcm/std",
+  "codec/std",
+  "environmental/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-asset-conversion/std",
+  "pezpallet-transaction-payment/std",
+  "pezkuwi-teyrchain-primitives/std",
+  "primitive-types/std",
+  "scale-info/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-weights/std",
+  "tracing/std",
+  "xcm-executor/std",
+  "xcm/std",
 ]

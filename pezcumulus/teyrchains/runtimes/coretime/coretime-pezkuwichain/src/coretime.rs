@@ -16,8 +16,8 @@
 
 use crate::{xcm_config::LocationToAccountId, *};
 use codec::{Decode, Encode};
-use cumulus_pallet_teyrchain_system::RelaychainDataProvider;
-use cumulus_primitives_core::relay_chain;
+use pezcumulus_pallet_teyrchain_system::RelaychainDataProvider;
+use pezcumulus_primitives_core::relay_chain;
 use pezframe_support::{
 	parameter_types,
 	traits::{

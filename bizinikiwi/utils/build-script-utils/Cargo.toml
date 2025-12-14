@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Crate with utility functions for `build.rs` scripts."
 readme = "README.md"
+documentation = "https://docs.rs/bizinikiwi-build-script-utils"
 
 [lints]
 workspace = true

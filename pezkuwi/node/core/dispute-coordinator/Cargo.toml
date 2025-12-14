@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-dispute-coordinator"
 
 [lints]
 workspace = true
@@ -52,13 +53,13 @@ pezkuwi-subsystem-bench = { workspace = true }
 disputes = []
 subsystem-benchmarks = []
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-subsystem-bench/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-subsystem-bench/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
 ]

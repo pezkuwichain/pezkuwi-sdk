@@ -31,7 +31,7 @@ use tokio::sync::mpsc::Sender as TokioSender;
 
 use codec::{Decode, Encode};
 
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{
 		async_backing::{AsyncBackingParams, BackingState, Constraints},
 		slashing, ApprovalVotingParams, BlockNumber, CandidateCommitments, CandidateEvent,
@@ -43,7 +43,7 @@ use cumulus_primitives_core::{
 	},
 	InboundDownwardMessage, ParaId, PersistedValidationData,
 };
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainResult};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainResult};
 
 use pezsc_client_api::StorageData;
 use pezsc_rpc_api::{state::ReadProof, system::Health};

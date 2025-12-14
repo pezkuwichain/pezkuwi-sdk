@@ -20,12 +20,12 @@ use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughpu
 use pezsc_client_api::UsageProvider;
 
 use core::time::Duration;
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezsc_block_builder::BlockBuilderBuilder;
 
 use pezsp_keyring::Sr25519Keyring::Alice;
 
-use cumulus_test_service::bench_utils as utils;
+use pezcumulus_test_service::bench_utils as utils;
 
 fn benchmark_block_production(c: &mut Criterion) {
 	pezsp_tracing::try_init_simple();
@@ -39,7 +39,7 @@ fn benchmark_block_production(c: &mut Criterion) {
 
 	let para_id = ParaId::from(100);
 	let alice = runtime.block_on(
-		cumulus_test_service::TestNodeBuilder::new(para_id, tokio_handle.clone(), Alice)
+		pezcumulus_test_service::TestNodeBuilder::new(para_id, tokio_handle.clone(), Alice)
 			// Preload all accounts with funds for the transfers
 			.endowed_accounts(account_ids)
 			.build(),

@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pallet staking async"
+documentation = "https://docs.rs/pezpallet-staking-async"
 
 [lints]
 workspace = true
@@ -40,7 +41,7 @@ anyhow = { workspace = true }
 env_logger = { workspace = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-support = { features = [
-	"experimental",
+  "experimental",
 ], workspace = true, default-features = true }
 pezpallet-bags-list = { workspace = true, default-features = true }
 pezpallet-balances = { workspace = true, default-features = true }
@@ -51,48 +52,48 @@ bizinikiwi-test-utils = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"anyhow/std",
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-election-provider-support/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-bags-list/std",
-	"pezpallet-balances/std",
-	"pezpallet-staking-async-rc-client/std",
-	"rand/std",
-	"rand_chacha/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-npos-elections/std",
-	"pezsp-runtime/std",
-	"pezsp-staking/std",
-	"pezsp-tracing/std",
+  "anyhow/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-election-provider-support/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-bags-list/std",
+  "pezpallet-balances/std",
+  "pezpallet-staking-async-rc-client/std",
+  "rand/std",
+  "rand_chacha/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-npos-elections/std",
+  "pezsp-runtime/std",
+  "pezsp-staking/std",
+  "pezsp-tracing/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-election-provider-support/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-bags-list/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-staking-async-rc-client/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-npos-elections/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-election-provider-support/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-bags-list/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-staking-async-rc-client/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-npos-elections/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-election-provider-support/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-bags-list/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-staking-async-rc-client/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-election-provider-support/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-bags-list/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-staking-async-rc-client/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

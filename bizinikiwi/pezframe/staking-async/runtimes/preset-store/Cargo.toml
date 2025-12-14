@@ -8,6 +8,7 @@ description = "Simple pallet to store the preset used to generate a runtime's ge
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-staking-async-preset-store"
 
 
 [dependencies]
@@ -19,12 +20,12 @@ scale-info = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"frame/std",
-	"pezpallet-staking-async-ah-client/std",
-	"scale-info/std",
+  "codec/std",
+  "frame/std",
+  "pezpallet-staking-async-ah-client/std",
+  "scale-info/std",
 ]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-staking-async-ah-client/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-staking-async-ah-client/runtime-benchmarks",
 ]

@@ -231,7 +231,7 @@ pub(crate) fn initialize_bridge_grandpa_pallet<Runtime, GPI>(
 	init_data: bp_header_chain::InitializationData<BridgedHeader<Runtime, GPI>>,
 ) where
 	Runtime: BridgeGrandpaConfig<GPI>
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ pezpallet_timestamp::Config,
 {
 	pezpallet_bridge_grandpa::Pallet::<Runtime, GPI>::initialize(
@@ -274,7 +274,7 @@ pub fn relayed_incoming_message_works<Runtime, AllPalletsWithoutSystem, MPI>(
 		bp_runtime::ChainId,
 	) -> CallsAndVerifiers<Runtime>,
 ) where
-	Runtime: BasicTeyrchainRuntime + cumulus_pallet_xcmp_queue::Config + BridgeMessagesConfig<MPI>,
+	Runtime: BasicTeyrchainRuntime + pezcumulus_pallet_xcmp_queue::Config + BridgeMessagesConfig<MPI>,
 	AllPalletsWithoutSystem:
 		OnInitialize<BlockNumberFor<Runtime>> + OnFinalize<BlockNumberFor<Runtime>>,
 	MPI: 'static,
@@ -307,7 +307,7 @@ pub fn relayed_incoming_message_works<Runtime, AllPalletsWithoutSystem, MPI>(
 				2,
 				AccountId::from(alice).into(),
 			);
-			mock_open_hrmp_channel::<Runtime, cumulus_pallet_teyrchain_system::Pallet<Runtime>>(
+			mock_open_hrmp_channel::<Runtime, pezcumulus_pallet_teyrchain_system::Pallet<Runtime>>(
 				runtime_para_id.into(),
 				sibling_teyrchain_id.into(),
 				included_head,
@@ -351,7 +351,7 @@ pub fn relayed_incoming_message_works<Runtime, AllPalletsWithoutSystem, MPI>(
 
 			// verify that imported XCM contains original message
 			let imported_xcm =
-				RuntimeHelper::<cumulus_pallet_xcmp_queue::Pallet<Runtime>>::take_xcm(
+				RuntimeHelper::<pezcumulus_pallet_xcmp_queue::Pallet<Runtime>>::take_xcm(
 					sibling_teyrchain_id.into(),
 				)
 				.unwrap();
@@ -473,7 +473,7 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 	) where
 		Runtime: pezframe_system::Config
 			+ pezpallet_xcm_bridge_hub::Config<XcmOverBridgePalletInstance>
-			+ cumulus_pallet_teyrchain_system::Config
+			+ pezcumulus_pallet_teyrchain_system::Config
 			+ pezpallet_xcm::Config,
 		XcmOverBridgePalletInstance: 'static,
 		<Runtime as pezframe_system::Config>::RuntimeCall:

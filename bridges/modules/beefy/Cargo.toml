@@ -7,6 +7,8 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
 publish = false
+documentation = "https://docs.rs/pezpallet-bridge-beefy"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -40,34 +42,34 @@ pezsp-io = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"bp-beefy/std",
-	"bp-runtime/std",
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"tracing/std",
+  "bp-beefy/std",
+  "bp-runtime/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "tracing/std",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-beefy-mmr/try-runtime",
-	"pezpallet-mmr/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-beefy-mmr/try-runtime",
+  "pezpallet-mmr/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"bp-beefy/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-test-utils/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-beefy-mmr/runtime-benchmarks",
-	"pezpallet-mmr/runtime-benchmarks",
-	"pezsp-consensus-beefy/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "bp-beefy/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "bp-test-utils/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-beefy-mmr/runtime-benchmarks",
+  "pezpallet-mmr/runtime-benchmarks",
+  "pezsp-consensus-beefy/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

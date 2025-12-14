@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "RPC runtime API for transaction payment FRAME pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-staking-runtime-api"
 
 [lints]
 workspace = true
@@ -24,6 +25,6 @@ pezsp-staking = { workspace = true }
 default = ["std"]
 std = ["codec/std", "pezsp-api/std", "pezsp-staking/std"]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

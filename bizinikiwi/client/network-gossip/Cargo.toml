@@ -39,9 +39,9 @@ tokio = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-network-common/runtime-benchmarks",
-	"pezsc-network-sync/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezsc-network-common/runtime-benchmarks",
+  "pezsc-network-sync/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

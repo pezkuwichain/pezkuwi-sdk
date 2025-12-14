@@ -1,0 +1,59 @@
+[package]
+name = "bizinikiwi-txtesttool"
+version = "0.7.0"
+description = "Bizinikiwi utility: A library and CLI tool for sending transactions to Pezkuwi blockchain, enabling developers to test and monitor transaction scenarios."
+documentation = "https://docs.rs/bizinikiwi-txtesttool"
+license = "Apache-2.0 OR GPL-3.0"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "txtt"
+path = "bin/main.rs"
+
+[dependencies]
+async-trait = { workspace = true }
+futures = { workspace = true }
+futures-util = { workspace = true }
+jsonrpsee = { workspace = true, features = [
+	"async-client",
+	"client-web-transport",
+	"jsonrpsee-types",
+] }
+average = "0.15.1"
+chrono = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+clap_derive = "4.0.0-rc.1"
+ctrlc = "3.4.4"
+hex = { workspace = true, default-features = true }
+codec = { workspace = true }
+parking_lot = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, features = ["arbitrary_precision"] }
+subxt = { workspace = true, default-features = true }
+subxt-core = { workspace = true, default-features = true }
+subxt-rpcs = { workspace = true, default-features = true }
+subxt-signer = { workspace = true, features = ["unstable-eth"] }
+termplot = "0.1.1"
+thiserror = { workspace = true }
+time = { version = "0.3.36", features = [
+	"formatting",
+	"local-offset",
+	"macros",
+] }
+tokio = { workspace = true, features = [
+	"macros",
+	"rt-multi-thread",
+	"sync",
+	"time",
+] }
+tokio-util = { workspace = true, features = ["compat"] }
+tracing = { workspace = true, default-features = true }
+tracing-subscriber = { workspace = true, features = [
+	"env-filter",
+	"fmt",
+	"time",
+] }

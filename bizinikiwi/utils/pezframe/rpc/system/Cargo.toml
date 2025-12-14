@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME's system exposed over Bizinikiwi RPC"
 readme = "README.md"
+documentation = "https://docs.rs/bizinikiwi-frame-rpc-system"
 
 [lints]
 workspace = true
@@ -21,9 +22,9 @@ docify = { workspace = true }
 pezframe-system-rpc-runtime-api = { workspace = true, default-features = true }
 futures = { workspace = true }
 jsonrpsee = { features = [
-	"client-core",
-	"macros",
-	"server-core",
+  "client-core",
+  "macros",
+  "server-core",
 ], workspace = true }
 log = { workspace = true, default-features = true }
 pezsc-rpc-api = { workspace = true, default-features = true }
@@ -43,13 +44,13 @@ tokio = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
-	"pezsc-rpc-api/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsc-transaction-pool/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-block-builder/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezframe-system-rpc-runtime-api/runtime-benchmarks",
+  "pezsc-rpc-api/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsc-transaction-pool/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-block-builder/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

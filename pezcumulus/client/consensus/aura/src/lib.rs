@@ -23,9 +23,9 @@
 //! For more information about AuRa, the Bizinikiwi crate should be checked.
 
 use codec::Encode;
-use cumulus_primitives_core::PersistedValidationData;
+use pezcumulus_primitives_core::PersistedValidationData;
 
-use cumulus_primitives_core::relay_chain::HeadData;
+use pezcumulus_primitives_core::relay_chain::HeadData;
 use pezkuwi_primitives::{BlockNumber as RBlockNumber, Hash as RHash};
 use pezsp_runtime::traits::{Block as BlockT, NumberFor};
 use std::{fs, fs::File, path::PathBuf};

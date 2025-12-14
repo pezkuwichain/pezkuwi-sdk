@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-outbound-queue-primitives"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -42,34 +44,34 @@ snowbridge-verification-primitives = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"alloy-core/std",
-	"codec/std",
-	"ethabi/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezkuwi-teyrchain-primitives/std",
-	"scale-info/std",
-	"snowbridge-core/std",
-	"snowbridge-verification-primitives/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"tracing/std",
-	"xcm-builder/std",
-	"xcm-executor/std",
-	"xcm/std",
+  "alloy-core/std",
+  "codec/std",
+  "ethabi/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezkuwi-teyrchain-primitives/std",
+  "scale-info/std",
+  "snowbridge-core/std",
+  "snowbridge-verification-primitives/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "tracing/std",
+  "xcm-builder/std",
+  "xcm-executor/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"snowbridge-core/runtime-benchmarks",
-	"snowbridge-verification-primitives/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "snowbridge-verification-primitives/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

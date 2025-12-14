@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "An externalities provided environment that can load itself from remote nodes or cached files"
+documentation = "https://docs.rs/frame-remote-externalities"
 
 [lints]
 workspace = true
@@ -29,8 +30,8 @@ pezsp-state-machine = { workspace = true, default-features = true }
 spinners = { workspace = true }
 bizinikiwi-rpc-client = { workspace = true, default-features = true }
 tokio = { features = [
-	"macros",
-	"rt-multi-thread",
+  "macros",
+  "rt-multi-thread",
 ], workspace = true, default-features = true }
 tokio-retry = { workspace = true }
 
@@ -40,8 +41,8 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 remote-test = []
 runtime-benchmarks = [
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"bizinikiwi-rpc-client/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "bizinikiwi-rpc-client/runtime-benchmarks",
 ]

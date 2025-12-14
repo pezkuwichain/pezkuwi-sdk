@@ -16,8 +16,8 @@
 
 use crate::{validate_block::MemoryOptimizedValidationParams, *};
 use codec::{Decode, DecodeAll, Encode};
-use cumulus_primitives_core::{relay_chain, PersistedValidationData, TeyrchainBlockData};
-use cumulus_test_client::{
+use pezcumulus_primitives_core::{relay_chain, PersistedValidationData, TeyrchainBlockData};
+use pezcumulus_test_client::{
 	generate_extrinsic, generate_extrinsic_with_pair,
 	runtime::{
 		self as test_runtime, Block, Hash, Header, SudoCall, SystemCall, TestPalletCall,
@@ -28,7 +28,7 @@ use cumulus_test_client::{
 	Sr25519Keyring::{Alice, Bob, Charlie},
 	TestClientBuilder, TestClientBuilderExt, ValidationParams,
 };
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 use pezkuwi_teyrchain_primitives::primitives::ValidationResult;
 use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};
 use pezsp_api::{ApiExt, Core, ProofRecorder, ProvideRuntimeApi};
@@ -46,8 +46,8 @@ fn call_validate_block_validation_result(
 	parent_head: Header,
 	block_data: TeyrchainBlockData<Block>,
 	relay_parent_storage_root: Hash,
-) -> cumulus_test_client::ExecutorResult<ValidationResult> {
-	cumulus_test_client::validate_block(
+) -> pezcumulus_test_client::ExecutorResult<ValidationResult> {
+	pezcumulus_test_client::validate_block(
 		ValidationParams {
 			block_data: BlockData(block_data.encode()),
 			parent_head: HeadData(parent_head.encode()),
@@ -62,7 +62,7 @@ fn call_validate_block(
 	parent_head: Header,
 	block_data: TeyrchainBlockData<Block>,
 	relay_parent_storage_root: Hash,
-) -> cumulus_test_client::ExecutorResult<Header> {
+) -> pezcumulus_test_client::ExecutorResult<Header> {
 	call_validate_block_validation_result(
 		WASM_BINARY.expect("You need to build the WASM binaries to run the tests!"),
 		parent_head,
@@ -77,7 +77,7 @@ fn call_validate_block_elastic_scaling(
 	parent_head: Header,
 	block_data: TeyrchainBlockData<Block>,
 	relay_parent_storage_root: Hash,
-) -> cumulus_test_client::ExecutorResult<Header> {
+) -> pezcumulus_test_client::ExecutorResult<Header> {
 	call_validate_block_validation_result(
 		test_runtime::elastic_scaling_500ms::WASM_BINARY
 			.expect("You need to build the WASM binaries to run the tests!"),
@@ -145,7 +145,7 @@ fn build_block_with_witness(
 		..Default::default()
 	};
 
-	let cumulus_test_client::BlockBuilderAndSupportData {
+	let pezcumulus_test_client::BlockBuilderAndSupportData {
 		mut block_builder,
 		persisted_validation_data,
 	} = client.init_block_builder_with_pre_digests(Some(validation_data), sproof_builder, pre_digests);
@@ -198,7 +198,7 @@ fn build_multiple_blocks_with_witness(
 	let mut ignored_nodes = IgnoredNodes::<H256>::default();
 
 	for i in 0..num_blocks {
-		let cumulus_test_client::BlockBuilderAndSupportData {
+		let pezcumulus_test_client::BlockBuilderAndSupportData {
 			mut block_builder,
 			persisted_validation_data: p_v_data,
 		} = client.init_block_builder_with_ignored_nodes(
@@ -614,7 +614,7 @@ fn state_changes_in_multiple_blocks_are_applied_in_exact_order() {
 
 #[test]
 fn validate_block_handles_ump_signal() {
-	use cumulus_primitives_core::{
+	use pezcumulus_primitives_core::{
 		relay_chain::{UMPSignal, UMP_SEPARATOR},
 		ClaimQueueOffset, CoreInfo, CoreSelector,
 	};

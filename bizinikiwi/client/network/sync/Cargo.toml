@@ -42,8 +42,8 @@ pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tokio = { features = [
-	"macros",
-	"time",
+  "macros",
+  "time",
 ], workspace = true, default-features = true }
 tokio-stream = { workspace = true }
 
@@ -59,15 +59,15 @@ prost-build = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-network-common/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus-grandpa/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-test-primitives/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-network-common/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus-grandpa/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-test-primitives/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

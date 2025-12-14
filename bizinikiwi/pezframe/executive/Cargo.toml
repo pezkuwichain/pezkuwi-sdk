@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME executives engine"
 readme = "README.md"
+documentation = "https://docs.rs/pezframe-executive"
 
 [lints]
 workspace = true
@@ -42,39 +43,39 @@ bizinikiwi-test-runtime-client = { workspace = true }
 default = ["std"]
 with-tracing = ["pezsp-tracing/with-tracing"]
 std = [
-	"codec/std",
-	"pezframe-support/experimental",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezframe-try-runtime/std",
-	"log/std",
-	"pezpallet-balances/std",
-	"pezpallet-transaction-payment/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-inherents/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-tracing/std",
-	"pezsp-version/std",
+  "codec/std",
+  "pezframe-support/experimental",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezframe-try-runtime/std",
+  "log/std",
+  "pezpallet-balances/std",
+  "pezpallet-transaction-payment/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-inherents/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-tracing/std",
+  "pezsp-version/std",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezframe-try-runtime/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-transaction-payment/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezframe-try-runtime/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-transaction-payment/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezframe-try-runtime?/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezframe-try-runtime?/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

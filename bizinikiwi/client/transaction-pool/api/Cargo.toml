@@ -7,6 +7,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Transaction pool client facing API."
+documentation = "https://docs.rs/pezsc-transaction-pool-api"
 
 [lints]
 workspace = true
@@ -28,6 +29,6 @@ serde_json = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

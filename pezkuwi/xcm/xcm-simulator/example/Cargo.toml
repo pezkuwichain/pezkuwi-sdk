@@ -7,6 +7,8 @@ license.workspace = true
 version = "7.0.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/xcm-simulator-example"
+publish = false
 
 [lints]
 workspace = true
@@ -14,7 +16,7 @@ workspace = true
 [dependencies]
 codec = { workspace = true, default-features = true }
 scale-info = { features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 tracing = { workspace = true }
 
@@ -42,18 +44,18 @@ pezsp-tracing = { workspace = true }
 [features]
 default = []
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"pezpallet-uniques/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-uniques/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

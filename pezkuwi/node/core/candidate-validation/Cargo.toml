@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-candidate-validation"
 
 [lints]
 workspace = true
@@ -45,16 +46,16 @@ pezsp-maybe-compressed-blob = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-core-pvf/runtime-benchmarks",
-	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-core-pvf/runtime-benchmarks",
+  "pezkuwi-node-metrics/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
 ]

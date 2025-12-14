@@ -203,7 +203,7 @@ impl pezpallet_xcm_bridge_hub::LocalXcmChannelManager for CongestionManager {
 		// dispatched and sent to the sibling teyrchain. Therefore, checking outbound `XcmpQueue`
 		// is sufficient here.
 		use bp_xcm_bridge_hub_router::XcmChannelStatusProvider;
-		cumulus_pallet_xcmp_queue::bridging::OutXcmpChannelStatusProvider::<Runtime>::is_congested(
+		pezcumulus_pallet_xcmp_queue::bridging::OutXcmpChannelStatusProvider::<Runtime>::is_congested(
 			with,
 		)
 	}

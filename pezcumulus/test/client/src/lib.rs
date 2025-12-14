@@ -19,8 +19,8 @@
 mod block_builder;
 pub use block_builder::*;
 use codec::{Decode, Encode};
-pub use cumulus_test_runtime as runtime;
-use cumulus_test_runtime::AuraId;
+pub use pezcumulus_test_runtime as runtime;
+use pezcumulus_test_runtime::AuraId;
 pub use pezkuwi_teyrchain_primitives::primitives::{
 	BlockData, HeadData, ValidationParams, ValidationResult,
 };
@@ -46,7 +46,7 @@ use pezsp_runtime::{generic::Era, traits::Header, BuildStorage, MultiAddress, Sa
 use std::sync::Arc;
 pub use bizinikiwi_test_client::*;
 
-pub type TeyrchainBlockData = cumulus_primitives_core::TeyrchainBlockData<Block>;
+pub type TeyrchainBlockData = pezcumulus_primitives_core::TeyrchainBlockData<Block>;
 
 /// Test client database backend.
 pub type Backend = bizinikiwi_test_client::Backend<Block>;
@@ -57,7 +57,7 @@ pub type Executor = client::LocalCallExecutor<
 	Backend,
 	WasmExecutor<(
 		pezsp_io::BizinikiwiHostFunctions,
-		cumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
+		pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
 	)>,
 >;
 
@@ -74,17 +74,17 @@ pub type Client = client::Client<Backend, Executor, Block, runtime::RuntimeApi>;
 /// Parameters of test-client builder with test-runtime.
 #[derive(Default)]
 pub struct GenesisParameters {
-	pub endowed_accounts: Vec<cumulus_test_runtime::AccountId>,
+	pub endowed_accounts: Vec<pezcumulus_test_runtime::AccountId>,
 	pub wasm: Option<Vec<u8>>,
 }
 
 impl bizinikiwi_test_client::GenesisInit for GenesisParameters {
 	fn genesis_storage(&self) -> Storage {
-		cumulus_test_service::chain_spec::get_chain_spec_with_extra_endowed(
+		pezcumulus_test_service::chain_spec::get_chain_spec_with_extra_endowed(
 			None,
 			self.endowed_accounts.clone(),
 			self.wasm.as_deref().unwrap_or_else(|| {
-				cumulus_test_runtime::WASM_BINARY.expect("WASM binary not compiled!")
+				pezcumulus_test_runtime::WASM_BINARY.expect("WASM binary not compiled!")
 			}),
 		)
 		.build_storage()
@@ -205,7 +205,7 @@ pub fn validate_block(
 	let heap_pages = HeapAllocStrategy::Static { extra_pages: 2048 };
 	let executor = WasmExecutor::<(
 		pezsp_io::BizinikiwiHostFunctions,
-		cumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
+		pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
 	)>::builder()
 	.with_execution_method(WasmExecutionMethod::default())
 	.with_max_runtime_instances(1)

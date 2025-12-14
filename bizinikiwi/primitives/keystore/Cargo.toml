@@ -23,7 +23,12 @@ pezsp-externalities = { workspace = true }
 
 [features]
 default = ["std"]
-std = ["codec/std", "dep:parking_lot", "pezsp-core/std", "pezsp-externalities/std"]
+std = [
+  "codec/std",
+  "dep:parking_lot",
+  "pezsp-core/std",
+  "pezsp-externalities/std",
+]
 
 # This feature adds BLS crypto primitives.
 # It should not be used in production since the implementation and interface may still

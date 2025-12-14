@@ -18,7 +18,7 @@
 //! Notably:
 //!
 //! - [`pezframe-system`](frame::prelude::pezframe_system), like all FRAME-based runtimes.
-//! - [`cumulus_pallet_teyrchain_system`]
+//! - [`pezcumulus_pallet_teyrchain_system`]
 //! - [`teyrchain_info`]
 #![doc = docify::embed!("./src/pezkuwi_sdk/pezcumulus.rs", system_pallets)]
 //!
@@ -27,7 +27,7 @@
 //!
 //! - [`pezpallet_timestamp`]
 //! - [`pezpallet_aura`]
-//! - [`cumulus_pallet_aura_ext`]
+//! - [`pezcumulus_pallet_aura_ext`]
 #![doc = docify::embed!("./src/pezkuwi_sdk/pezcumulus.rs", consensus_pallets)]
 //!
 //!
@@ -59,12 +59,12 @@ mod tests {
 				// system-level pallets.
 				System: pezframe_system,
 				Timestamp: pezpallet_timestamp,
-				TeyrchainSystem: cumulus_pallet_teyrchain_system,
+				TeyrchainSystem: pezcumulus_pallet_teyrchain_system,
 				TeyrchainInfo: teyrchain_info,
 
 				// teyrchain consensus support -- mandatory.
 				Aura: pezpallet_aura,
-				AuraExt: cumulus_pallet_aura_ext,
+				AuraExt: pezcumulus_pallet_aura_ext,
 			}
 		);
 
@@ -75,10 +75,10 @@ mod tests {
 			#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 			impl pezframe_system::Config for Runtime {
 				type Block = MockBlock<Self>;
-				type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+				type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
 			}
 
-			impl cumulus_pallet_teyrchain_system::Config for Runtime {
+			impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 				type RuntimeEvent = RuntimeEvent;
 				type OnSystemEvent = ();
 				type SelfParaId = teyrchain_info::Pallet<Runtime>;
@@ -87,8 +87,8 @@ mod tests {
 				type ReservedDmpWeight = ();
 				type ReservedXcmpWeight = ();
 				type CheckAssociatedRelayNumber =
-					cumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
-				type ConsensusHook = cumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+					pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+				type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
 					Runtime,
 					6000, // relay chain block time
 					1,
@@ -118,13 +118,13 @@ mod tests {
 			#[derive_impl(pezpallet_timestamp::config_preludes::TestDefaultConfig)]
 			impl pezpallet_timestamp::Config for Runtime {}
 
-			impl cumulus_pallet_aura_ext::Config for Runtime {}
+			impl pezcumulus_pallet_aura_ext::Config for Runtime {}
 		}
 
 		#[docify::export(validate_block)]
-		cumulus_pallet_teyrchain_system::register_validate_block! {
+		pezcumulus_pallet_teyrchain_system::register_validate_block! {
 			Runtime = Runtime,
-			BlockExecutor = cumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+			BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 		}
 	}
 }

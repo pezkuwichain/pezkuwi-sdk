@@ -37,7 +37,7 @@ use crate::{
 };
 use clap::{error::ErrorKind, Args, CommandFactory, Parser};
 use codec::{Decode, Encode};
-use cumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
+use pezcumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
 use fake_runtime_api::RuntimeApi as FakeRuntimeApi;
 use pezframe_support::Deserialize;
 use genesis_state::WARN_SPEC_GENESIS_CTOR;
@@ -173,7 +173,7 @@ pub(crate) enum BenchmarkType {
 
 /// Hostfunctions that are typically used by teyrchains.
 pub type TeyrchainHostFunctions = (
-	cumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
+	pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
 	pezsp_io::BizinikiwiHostFunctions,
 );
 
@@ -239,9 +239,9 @@ fn create_inherent_data<Client: UsageProvider<Block> + HeaderBackend<Block>, Blo
 /// Chains containing the `TeyrchainSystem` and `TeyrchainInfo` pallet are considered teyrchains.
 /// Chains containing the `ParaInherent` pallet are considered relay chains.
 fn identify_chain(metadata: &Metadata, para_id: Option<u32>) -> ChainType {
-	let teyrchain_info_exists = metadata.pezpallet_by_name("TeyrchainInfo").is_some();
-	let teyrchain_system_exists = metadata.pezpallet_by_name("TeyrchainSystem").is_some();
-	let para_inherent_exists = metadata.pezpallet_by_name("ParaInherent").is_some();
+	let teyrchain_info_exists = metadata.pallet_by_name("TeyrchainInfo").is_some();
+	let teyrchain_system_exists = metadata.pallet_by_name("TeyrchainSystem").is_some();
+	let para_inherent_exists = metadata.pallet_by_name("ParaInherent").is_some();
 
 	log::debug!("{} TeyrchainSystem", if teyrchain_system_exists { "✅" } else { "❌" });
 	log::debug!("{} TeyrchainInfo", if teyrchain_info_exists { "✅" } else { "❌" });
@@ -707,7 +707,7 @@ mod tests {
 	#[test]
 	fn test_chain_type_teyrchain() {
 		let executor: WasmExecutor<TeyrchainHostFunctions> = WasmExecutor::builder().build();
-		let code_bytes = cumulus_test_runtime::WASM_BINARY
+		let code_bytes = pezcumulus_test_runtime::WASM_BINARY
 			.expect("To run this test, build the wasm binary of pezcumulus-test-runtime")
 			.to_vec();
 		let opaque_metadata =

@@ -145,7 +145,7 @@ fn resolve_sc_tracing() -> Result<Path> {
 	match crate_name("pezkuwi-sdk") {
 		Ok(FoundCrate::Itself) => syn::parse_str("pezkuwi_sdk::pezsc_tracing"),
 		Ok(FoundCrate::Name(sdk_name)) => syn::parse_str(&format!("{}::pezsc_tracing", sdk_name)),
-		Err(_) => match crate_name("sc-tracing") {
+		Err(_) => match crate_name("pezsc-tracing") {
 			Ok(FoundCrate::Itself) => syn::parse_str("pezsc_tracing"),
 			Ok(FoundCrate::Name(name)) => syn::parse_str(&name),
 			Err(e) => Err(syn::Error::new(Span::call_site(), e)),

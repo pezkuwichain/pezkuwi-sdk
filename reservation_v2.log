@@ -1,0 +1,12 @@
+nohup: ignoring input
+Toplam Crate Sayısı: 150
+Bekleme Süresi: 360 saniye
+[1/150] asset-hub-pezkuwichain-emulated-chain... ✓ ZATEN VAR (Atlandı)
+[2/150] asset-hub-pezkuwichain-integration-tests... ✓ ZATEN VAR (Atlandı)
+[3/150] asset-hub-pezkuwichain-runtime... ✓ ZATEN VAR (Atlandı)
+[4/150] asset-hub-zagros-emulated-chain... ✓ ZATEN VAR (Atlandı)
+[5/150] asset-hub-zagros-integration-tests... ✓ ZATEN VAR (Atlandı)
+[6/150] asset-hub-zagros-runtime... ✓ ZATEN VAR (Atlandı)
+[7/150] asset-test-pezutils... ✓ ZATEN VAR (Atlandı)
+[8/150] pez-binary-merkle-tree... ✓ ZATEN VAR (Atlandı)
+[9/150] pez-chain-spec-guide-runtime... 

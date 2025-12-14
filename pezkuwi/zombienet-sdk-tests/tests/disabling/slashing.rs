@@ -7,7 +7,7 @@
 
 use anyhow::anyhow;
 use codec::Decode;
-use cumulus_zombienet_sdk_helpers::{
+use pezcumulus_zombienet_sdk_helpers::{
 	assert_blocks_are_being_finalized, assert_para_throughput, wait_for_first_session_change,
 };
 use pezkuwi_primitives::{BlockNumber, CandidateHash, DisputeState, Id as ParaId, SessionIndex};

@@ -31,7 +31,7 @@ futures = { workspace = true }
 [features]
 default = []
 runtime-benchmarks = [
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
 ]

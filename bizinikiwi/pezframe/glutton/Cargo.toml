@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pallet for pushing a chain to its weight limits"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-glutton"
 
 [lints]
 workspace = true
@@ -31,29 +32,29 @@ pezsp-runtime = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"blake2/std",
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-inherents/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
+  "blake2/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-inherents/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

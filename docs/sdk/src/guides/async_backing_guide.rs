@@ -61,13 +61,13 @@
 //! pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
 //! ```
 //!
-//! 4. Configure `cumulus_pallet_teyrchain_system` in the runtime.
+//! 4. Configure `pezcumulus_pallet_teyrchain_system` in the runtime.
 //!
 //! - Define a `FixedVelocityConsensusHook` using our capacity, velocity, and relay slot duration
 //! constants. Use this to set the teyrchain system `ConsensusHook` property.
 #![doc = docify::embed!("../../templates/teyrchain/runtime/src/lib.rs", ConsensusHook)]
 //! ```ignore
-//! impl cumulus_pallet_teyrchain_system::Config for Runtime {
+//! impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 //!     ..
 //!     type ConsensusHook = ConsensusHook;
 //!     ..
@@ -76,7 +76,7 @@
 //! - Set the teyrchain system property `CheckAssociatedRelayNumber` to
 //! `RelayNumberMonotonicallyIncreases`
 //! ```ignore
-//! impl cumulus_pallet_teyrchain_system::Config for Runtime {
+//! impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 //! 	..
 //! 	type CheckAssociatedRelayNumber = RelayNumberMonotonicallyIncreases;
 //! 	..
@@ -117,7 +117,7 @@
 //! - In the same file, add `"pezcumulus-primitives-aura/std",` to the `std` feature.
 //!
 //! - Inside the `impl_runtime_apis!` block for your runtime, implement the
-//!   `cumulus_primitives_aura::AuraUnincludedSegmentApi` as shown below.
+//!   `pezcumulus_primitives_aura::AuraUnincludedSegmentApi` as shown below.
 #![doc = docify::embed!("../../templates/teyrchain/runtime/src/apis.rs", impl_can_build_upon)]
 //!
 //! **Note:** With a capacity of 1 we have an effective velocity of ½ even when velocity is
@@ -136,8 +136,8 @@
 //!
 //! This phase consists of plugging in the new lookahead collator node.
 //!
-//! 1. Import `cumulus_primitives_core::ValidationCode` to `node/src/service.rs`.
-#![doc = docify::embed!("../../templates/teyrchain/node/src/service.rs", cumulus_primitives)]
+//! 1. Import `pezcumulus_primitives_core::ValidationCode` to `node/src/service.rs`.
+#![doc = docify::embed!("../../templates/teyrchain/node/src/service.rs", pezcumulus_primitives)]
 //!
 //! 2. In `node/src/service.rs`, modify `pezsc_service::spawn_tasks` to use a clone of `Backend` rather
 //!    than the original

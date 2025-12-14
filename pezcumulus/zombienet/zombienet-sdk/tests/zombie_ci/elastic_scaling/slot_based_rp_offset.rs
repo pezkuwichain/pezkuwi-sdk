@@ -5,7 +5,7 @@
 // elastic scaling with RFC103 can achieve full throughput of 3 candidates per block.
 
 use anyhow::anyhow;
-use cumulus_zombienet_sdk_helpers::{assert_relay_parent_offset, assign_cores};
+use pezcumulus_zombienet_sdk_helpers::{assert_relay_parent_offset, assign_cores};
 use serde_json::json;
 use zombienet_sdk::{
 	subxt::{OnlineClient, PolkadotConfig},

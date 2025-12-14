@@ -98,7 +98,7 @@ fn register_token_from_ethereum_to_asset_hub() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -147,7 +147,7 @@ fn send_weth_token_from_ethereum_to_asset_hub() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -251,7 +251,7 @@ fn send_weth_from_ethereum_to_penpal() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -262,7 +262,7 @@ fn send_weth_from_ethereum_to_penpal() {
 			AssetHubZagros,
 			vec![
 				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -324,7 +324,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -433,7 +433,7 @@ fn register_weth_token_in_asset_hub_fail_for_insufficient_fee() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -481,7 +481,7 @@ fn send_weth_from_ethereum_to_asset_hub_with_fee(account_id: [u8; 32], fee: u128
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -590,7 +590,7 @@ fn send_token_from_ethereum_to_asset_hub() {
 		// Check that the message was sent
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -634,7 +634,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 		// Check that the send token message was sent using xcm
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
 		);
 	});
 
@@ -778,7 +778,7 @@ fn send_token_from_ethereum_to_penpal() {
 		// Check that the send token message was sent using xcm
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
 		);
 	});
 
@@ -789,7 +789,7 @@ fn send_token_from_ethereum_to_penpal() {
 			AssetHubZagros,
 			vec![
 				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -922,7 +922,7 @@ fn transfer_relay_token() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -1087,7 +1087,7 @@ fn transfer_ah_token() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -1192,7 +1192,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -1333,7 +1333,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 			vec![
 				// message sent to destination
 				RuntimeEvent::XcmpQueue(
-					cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+					pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 				) => {},
 			]
 		);
@@ -1582,7 +1582,7 @@ fn transfer_penpal_native_asset() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -1795,7 +1795,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>
 	{},]
 		);
 	});
@@ -2148,7 +2148,7 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 		let _ = EthereumInboundQueue::send_xcm(xcm, AssetHubZagros::para_id().into()).unwrap();
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 

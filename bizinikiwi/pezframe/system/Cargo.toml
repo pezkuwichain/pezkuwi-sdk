@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME system module"
 readme = "README.md"
+documentation = "https://docs.rs/pezframe-system"
 
 [lints]
 workspace = true
@@ -42,23 +43,23 @@ bizinikiwi-test-runtime-client = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"log/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-version/std",
-	"pezsp-weights/std",
+  "codec/std",
+  "pezframe-support/std",
+  "log/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-version/std",
+  "pezsp-weights/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]
 try-runtime = ["pezframe-support/try-runtime", "pezsp-runtime/try-runtime"]
 experimental = ["pezframe-support/experimental"]

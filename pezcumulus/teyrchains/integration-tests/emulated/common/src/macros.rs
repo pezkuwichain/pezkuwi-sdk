@@ -43,7 +43,7 @@ pub use xcm_executor::traits::{DropAssets, TransferType};
 
 // Pezcumulus
 pub use asset_test_utils;
-pub use cumulus_pallet_xcmp_queue;
+pub use pezcumulus_pallet_xcmp_queue;
 pub use teyrchains_common::AccountId;
 pub use xcm_emulator::{
 	assert_expected_events, Chain, RelayChain, TestArgs, TestContext, TestExt, Teyrchain as Para,
@@ -162,7 +162,7 @@ macro_rules! test_teyrchain_is_trusted_teleporter {
 									$crate::macros::pezpallet_xcm::Event::Attempted { outcome: $crate::macros::Outcome::Complete { .. } }
 								) => {},
 								RuntimeEvent::XcmpQueue(
-									$crate::macros::cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+									$crate::macros::pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 								) => {},
 								RuntimeEvent::Balances(
 									$crate::macros::pezpallet_balances::Event::Burned { who: sender, amount }

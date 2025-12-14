@@ -17,8 +17,8 @@
 
 use crate::LOG_TARGET;
 use codec::Codec;
-use cumulus_primitives_aura::Slot;
-use cumulus_primitives_core::BlockT;
+use pezcumulus_primitives_aura::Slot;
+use pezcumulus_primitives_core::BlockT;
 use pezsc_client_api::UsageProvider;
 use pezsc_consensus_aura::SlotDuration;
 use pezsp_api::ProvideRuntimeApi;

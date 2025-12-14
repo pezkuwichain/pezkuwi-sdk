@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Penpal emulated chain"
 publish = false
+documentation = "https://docs.rs/penpal-emulated-chain"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -27,11 +30,11 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"penpal-runtime/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "penpal-runtime/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

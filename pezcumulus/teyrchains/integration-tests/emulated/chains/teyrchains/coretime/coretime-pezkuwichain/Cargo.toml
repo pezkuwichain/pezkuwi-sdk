@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Coretime Pezkuwichain emulated chain"
 publish = false
+documentation = "https://docs.rs/coretime-pezkuwichain-emulated-chain"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -20,16 +23,16 @@ coretime-pezkuwichain-runtime = { workspace = true, default-features = true }
 pezcumulus-primitives-core = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 testnet-teyrchains-constants = { features = [
-	"pezkuwichain",
+  "pezkuwichain",
 ], workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"coretime-pezkuwichain-runtime/runtime-benchmarks",
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
+  "coretime-pezkuwichain-runtime/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "testnet-teyrchains-constants/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
 ]

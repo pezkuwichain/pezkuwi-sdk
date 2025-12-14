@@ -6,6 +6,9 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 publish = false
+documentation = "https://docs.rs/xcm-simulator-fuzzer"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -19,7 +22,7 @@ arbitrary = { workspace = true }
 codec = { workspace = true, default-features = true }
 honggfuzz = { workspace = true }
 scale-info = { features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 
 pezframe-executive = { workspace = true, default-features = true }
@@ -43,31 +46,31 @@ xcm-simulator = { workspace = true, default-features = true }
 
 [features]
 try-runtime = [
-	"pezframe-executive/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezframe-try-runtime/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-message-queue/try-runtime",
-	"pezpallet-xcm/try-runtime",
-	"pezkuwi-runtime-teyrchains/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-executive/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezframe-try-runtime/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-message-queue/try-runtime",
+  "pezpallet-xcm/try-runtime",
+  "pezkuwi-runtime-teyrchains/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezframe-executive/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezframe-try-runtime/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwi-core-primitives/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-executive/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezframe-try-runtime/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-core-primitives/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

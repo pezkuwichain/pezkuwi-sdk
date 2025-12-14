@@ -8,6 +8,7 @@ edition.workspace = true
 license.workspace = true
 publish = false
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-referral"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
@@ -20,7 +21,7 @@ pezframe-system = { default-features = false, workspace = true }
 log = { default-features = false, workspace = true }
 pezpallet-identity-kyc = { workspace = true, default-features = false }
 scale-info = { default-features = false, features = [
-	"derive",
+  "derive",
 ], workspace = true }
 pezsp-runtime = { default-features = false, workspace = true }
 pezsp-std = { default-features = false, workspace = true }
@@ -37,38 +38,38 @@ pezsp-io = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-balances/std",
-	"pezpallet-identity-kyc/std",
-	"pezpallet-nfts/std",
-	"pezkuwi-primitives/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-balances/std",
+  "pezpallet-identity-kyc/std",
+  "pezpallet-nfts/std",
+  "pezkuwi-primitives/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking",
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-identity-kyc/runtime-benchmarks",
-	"pezpallet-nfts/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-identity-kyc/runtime-benchmarks",
+  "pezpallet-nfts/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-identity-kyc/try-runtime",
-	"pezpallet-nfts/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-identity-kyc/try-runtime",
+  "pezpallet-nfts/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bag threshold generation script for pezpallet-bag-list and kitchensink-runtime."
 publish = false
+documentation = "https://docs.rs/node-runtime-generate-bags"
 
 [lints]
 workspace = true
@@ -21,6 +22,6 @@ clap = { features = ["derive"], workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"generate-bags/runtime-benchmarks",
-	"kitchensink-runtime/runtime-benchmarks",
+  "generate-bags/runtime-benchmarks",
+  "kitchensink-runtime/runtime-benchmarks",
 ]

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "A crate which contains primitives related to the statement store"
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-statement-store"
 
 [lints]
 workspace = true
@@ -33,44 +34,44 @@ curve25519-dalek = { optional = true, workspace = true }
 ed25519-dalek = { optional = true, workspace = true, default-features = true }
 hkdf = { optional = true, workspace = true }
 rand = { features = [
-	"small_rng",
+  "small_rng",
 ], optional = true, workspace = true, default-features = true }
 sha2 = { optional = true, workspace = true, default-features = true }
 x25519-dalek = { optional = true, features = [
-	"static_secrets",
+  "static_secrets",
 ], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-	"aes-gcm",
-	"aes-gcm?/std",
-	"codec/std",
-	"curve25519-dalek",
-	"ed25519-dalek",
-	"hkdf",
-	"hkdf?/std",
-	"rand",
-	"scale-info/std",
-	"sha2",
-	"pezsp-api/std",
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-crypto-hashing/std",
-	"pezsp-externalities/std",
-	"pezsp-runtime-interface/std",
-	"pezsp-runtime/std",
-	"thiserror",
-	"x25519-dalek",
+  "aes-gcm",
+  "aes-gcm?/std",
+  "codec/std",
+  "curve25519-dalek",
+  "ed25519-dalek",
+  "hkdf",
+  "hkdf?/std",
+  "rand",
+  "scale-info/std",
+  "sha2",
+  "pezsp-api/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-crypto-hashing/std",
+  "pezsp-externalities/std",
+  "pezsp-runtime-interface/std",
+  "pezsp-runtime/std",
+  "thiserror",
+  "x25519-dalek",
 ]
 serde = [
-	"scale-info/serde",
-	"pezsp-application-crypto/serde",
-	"pezsp-core/serde",
-	"pezsp-runtime/serde",
+  "scale-info/serde",
+  "pezsp-application-crypto/serde",
+  "pezsp-core/serde",
+  "pezsp-runtime/serde",
 ]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-runtime-interface/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME Merkle Mountain Range pallet."
+documentation = "https://docs.rs/pezpallet-mmr"
 
 [lints]
 workspace = true
@@ -28,14 +29,14 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"frame/std",
-	"log/std",
-	"scale-info/std",
-	"pezsp-mmr-primitives/std",
+  "codec/std",
+  "frame/std",
+  "log/std",
+  "scale-info/std",
+  "pezsp-mmr-primitives/std",
 ]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezsp-mmr-primitives/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezsp-mmr-primitives/runtime-benchmarks",
 ]
 try-runtime = ["frame/try-runtime"]

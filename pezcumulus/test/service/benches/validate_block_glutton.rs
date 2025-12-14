@@ -18,13 +18,13 @@
 use codec::{Decode, Encode};
 use core::time::Duration;
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion};
-use cumulus_primitives_core::{relay_chain::AccountId, PersistedValidationData, ValidationParams};
-use cumulus_test_client::{
+use pezcumulus_primitives_core::{relay_chain::AccountId, PersistedValidationData, ValidationParams};
+use pezcumulus_test_client::{
 	generate_extrinsic_with_pair, BlockBuilderAndSupportData, BuildTeyrchainBlockData, Client,
 	InitBlockBuilder, TestClientBuilder, TeyrchainBlockData, ValidationResult,
 };
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-use cumulus_test_runtime::{Block, GluttonCall, Header, SudoCall};
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_test_runtime::{Block, GluttonCall, Header, SudoCall};
 use pezkuwi_primitives::HeadData;
 use pezsc_client_api::UsageProvider;
 use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy, ImportResult, StateAction};
@@ -40,11 +40,11 @@ use pezsp_consensus::BlockOrigin;
 use pezsp_keyring::Sr25519Keyring::Alice;
 use pezsp_runtime::traits::Header as HeaderT;
 
-use cumulus_test_service::bench_utils as utils;
+use pezcumulus_test_service::bench_utils as utils;
 
 async fn import_block(
-	client: &cumulus_test_client::Client,
-	built: cumulus_test_runtime::Block,
+	client: &pezcumulus_test_client::Client,
+	built: pezcumulus_test_runtime::Block,
 	import_existing: bool,
 ) {
 	let mut params = BlockImportParams::new(BlockOrigin::File, built.header.clone());
@@ -63,7 +63,7 @@ fn benchmark_block_validation(c: &mut Criterion) {
 	let endowed_accounts = vec![AccountId::from(Alice.public())];
 	let mut test_client_builder = TestClientBuilder::with_default_backend();
 	let genesis_init = test_client_builder.genesis_init_mut();
-	*genesis_init = cumulus_test_client::GenesisParameters { endowed_accounts, wasm: None };
+	*genesis_init = pezcumulus_test_client::GenesisParameters { endowed_accounts, wasm: None };
 
 	let client = test_client_builder.build_with_native_executor(None).0;
 
@@ -99,7 +99,7 @@ fn benchmark_block_validation(c: &mut Criterion) {
 		let sproof_builder: RelayStateSproofBuilder = Default::default();
 		let (relay_parent_storage_root, _) = sproof_builder.clone().into_state_root_and_proof();
 		let encoded_params = ValidationParams {
-			block_data: cumulus_test_client::BlockData(teyrchain_block.clone().encode()),
+			block_data: pezcumulus_test_client::BlockData(teyrchain_block.clone().encode()),
 			parent_head: HeadData(parent_header.encode()),
 			relay_parent_number: 1,
 			relay_parent_storage_root,

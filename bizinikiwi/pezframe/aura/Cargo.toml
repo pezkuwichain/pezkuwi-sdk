@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME AURA consensus pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-aura"
 
 [lints]
 workspace = true
@@ -33,29 +34,29 @@ pezsp-io = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-timestamp/std",
-	"scale-info/std",
-	"pezsp-application-crypto/std",
-	"pezsp-consensus-aura/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-timestamp/std",
+  "scale-info/std",
+  "pezsp-application-crypto/std",
+  "pezsp-consensus-aura/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-timestamp/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-consensus-aura/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezsp-consensus-aura/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

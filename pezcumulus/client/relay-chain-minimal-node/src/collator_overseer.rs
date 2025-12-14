@@ -27,7 +27,7 @@ use pezsc_network::{request_responses::IncomingRequest, service::traits::Network
 use pezsc_service::TaskManager;
 use pezsc_utils::mpsc::tracing_unbounded;
 
-use cumulus_relay_chain_interface::RelayChainError;
+use pezcumulus_relay_chain_interface::RelayChainError;
 
 use crate::BlockChainRpcClient;
 

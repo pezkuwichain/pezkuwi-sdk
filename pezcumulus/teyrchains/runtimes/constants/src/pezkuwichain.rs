@@ -123,7 +123,7 @@ pub mod consensus {
 	/// We allow for 2 seconds of compute with a 6 second average block.
 	pub const MAXIMUM_BLOCK_WEIGHT: Weight = Weight::from_parts(
 		WEIGHT_REF_TIME_PER_SECOND.saturating_mul(2),
-		cumulus_primitives_core::relay_chain::MAX_POV_SIZE as u64,
+		pezcumulus_primitives_core::relay_chain::MAX_POV_SIZE as u64,
 	);
 
 	/// This determines the average expected block time that we are targeting.

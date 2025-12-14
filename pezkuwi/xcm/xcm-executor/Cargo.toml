@@ -7,6 +7,7 @@ license.workspace = true
 version = "7.0.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezstaging-xcm-executor"
 
 [lints]
 workspace = true
@@ -29,23 +30,23 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 std = [
-	"codec/std",
-	"environmental/std",
-	"pezframe-benchmarking/std",
-	"pezframe-support/std",
-	"scale-info/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-weights/std",
-	"tracing/std",
-	"xcm/std",
+  "codec/std",
+  "environmental/std",
+  "pezframe-benchmarking/std",
+  "pezframe-support/std",
+  "scale-info/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-weights/std",
+  "tracing/std",
+  "xcm/std",
 ]

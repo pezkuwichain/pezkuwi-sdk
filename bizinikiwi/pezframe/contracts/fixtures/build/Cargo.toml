@@ -4,6 +4,12 @@ version = "0.6.3"
 edition = "2021"
 
 # Binary targets are injected dynamically by the build script.
+description = "Pezkuwi SDK component: contracts"
+documentation = "https://docs.rs/contracts"
+repository = { workspace = true }
+homepage = { workspace = true }
+authors = { workspace = true }
+license = { workspace = true }
 [[bin]]
 
 # All paths or versions are injected dynamically by the build script.

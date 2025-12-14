@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi RPC servers."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-rpc-server"
 
 [lints]
 workspace = true
@@ -31,7 +32,7 @@ pezsc-rpc-api = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true, default-features = true }
 tokio = { features = [
-	"parking_lot",
+  "parking_lot",
 ], workspace = true, default-features = true }
 tower = { workspace = true, features = ["util"] }
 tower-http = { workspace = true, features = ["cors"] }

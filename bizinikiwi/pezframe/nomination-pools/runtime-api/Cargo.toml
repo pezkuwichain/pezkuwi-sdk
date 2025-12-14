@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Runtime API for nomination-pools FRAME pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-nomination-pools-runtime-api"
 
 [lints]
 workspace = true
@@ -24,6 +25,6 @@ pezsp-api = { workspace = true }
 default = ["std"]
 std = ["codec/std", "pezpallet-nomination-pools/std", "pezsp-api/std"]
 runtime-benchmarks = [
-	"pezpallet-nomination-pools/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
+  "pezpallet-nomination-pools/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
 ]

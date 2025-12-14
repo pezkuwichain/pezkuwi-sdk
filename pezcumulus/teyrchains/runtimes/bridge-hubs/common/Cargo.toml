@@ -7,6 +7,7 @@ description = "Bridge hub common utilities"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/bridge-hub-common"
 
 [lints]
 workspace = true
@@ -28,26 +29,26 @@ xcm-executor = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezcumulus-primitives-core/std",
-	"pezframe-support/std",
-	"pezpallet-message-queue/std",
-	"scale-info/std",
-	"snowbridge-core/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"xcm-builder/std",
-	"xcm-executor/std",
-	"xcm/std",
+  "codec/std",
+  "pezcumulus-primitives-core/std",
+  "pezframe-support/std",
+  "pezpallet-message-queue/std",
+  "scale-info/std",
+  "snowbridge-core/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "xcm-builder/std",
+  "xcm-executor/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"snowbridge-core/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

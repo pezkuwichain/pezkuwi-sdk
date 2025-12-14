@@ -21,7 +21,7 @@ use std::collections::BTreeMap;
 use XcmpMessageFormat::*;
 
 use codec::Input;
-use cumulus_primitives_core::{ParaId, XcmpMessageHandler};
+use pezcumulus_primitives_core::{ParaId, XcmpMessageHandler};
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok, assert_storage_noop, hypothetically,
 	traits::{BatchFootprint, Hooks},
@@ -756,7 +756,7 @@ fn hrmp_signals_are_prioritized() {
 
 		TeyrchainSystem::open_custom_outbound_hrmp_channel_for_benchmarks_or_tests(
 			sibling_para_id,
-			cumulus_primitives_core::AbridgedHrmpChannel {
+			pezcumulus_primitives_core::AbridgedHrmpChannel {
 				max_capacity: 128,
 				max_total_size: 1 << 16,
 				max_message_size: 128,
@@ -1053,7 +1053,7 @@ fn xcmp_queue_send_too_big_xcm_fails() {
 		// open HRMP channel to the sibling_para_id with a set `max_message_size`
 		TeyrchainSystem::open_custom_outbound_hrmp_channel_for_benchmarks_or_tests(
 			sibling_para_id,
-			cumulus_primitives_core::AbridgedHrmpChannel {
+			pezcumulus_primitives_core::AbridgedHrmpChannel {
 				max_message_size,
 				max_capacity: 10,
 				max_total_size: 10_000_000_u32,
@@ -1088,7 +1088,7 @@ fn xcmp_queue_send_too_big_xcm_fails() {
 
 #[test]
 fn verify_fee_factor_increase_and_decrease() {
-	use cumulus_primitives_core::AbridgedHrmpChannel;
+	use pezcumulus_primitives_core::AbridgedHrmpChannel;
 	use pezsp_runtime::FixedU128;
 
 	let sibling_para_id = ParaId::from(12345);

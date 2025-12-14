@@ -8,6 +8,8 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 publish = false
 homepage.workspace = true
 repository.workspace = true
+description = "Pezkuwi SDK client component: runtime test"
+documentation = "https://docs.rs/pezsc-runtime-test"
 
 [lints]
 workspace = true
@@ -27,15 +29,15 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime-interface/std",
-	"pezsp-runtime/std",
-	"bizinikiwi-wasm-builder",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime-interface/std",
+  "pezsp-runtime/std",
+  "bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime-interface/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]

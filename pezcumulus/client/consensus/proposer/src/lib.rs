@@ -21,7 +21,7 @@
 //! This utility is designed to be composed within any collator consensus algorithm.
 
 use async_trait::async_trait;
-use cumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
+use pezcumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
 use pezsc_basic_authorship::{ProposeArgs, ProposerFactory};
 use pezsc_block_builder::BlockBuilderApi;
 use pezsc_transaction_pool_api::TransactionPool;

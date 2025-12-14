@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Insecure do not use in production: FRAME randomness collective flip pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-insecure-randomness-collective-flip"
 
 [lints]
 workspace = true

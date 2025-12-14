@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pallet to queue and process messages"
+documentation = "https://docs.rs/pezpallet-message-queue"
 
 [lints]
 workspace = true
@@ -17,7 +18,7 @@ environmental = { workspace = true }
 log = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 
 pezsp-arithmetic = { workspace = true }
@@ -40,29 +41,29 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"environmental/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"scale-info/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-tracing/std",
-	"pezsp-weights/std",
+  "codec/std",
+  "environmental/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "scale-info/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-tracing/std",
+  "pezsp-weights/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

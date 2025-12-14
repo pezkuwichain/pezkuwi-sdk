@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-system-v2-runtime-api"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -27,14 +29,14 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"snowbridge-core/std",
-	"pezsp-api/std",
-	"pezsp-std/std",
-	"xcm/std",
+  "codec/std",
+  "snowbridge-core/std",
+  "pezsp-api/std",
+  "pezsp-std/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"snowbridge-core/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

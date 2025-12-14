@@ -18,8 +18,8 @@
 use codec::Decode;
 use pezkuwi_primitives::{Block as PBlock, Hash as PHash, Header as PHeader, ValidationCodeHash};
 
-use cumulus_primitives_core::{relay_chain, AbridgedHostConfiguration};
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
+use pezcumulus_primitives_core::{relay_chain, AbridgedHostConfiguration};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
 
 use pezsc_client_api::Backend;
 use pezsc_consensus::{shared_data::SharedData, BlockImport, ImportResult};
@@ -38,7 +38,7 @@ mod teyrchain_consensus;
 
 pub use parent_search::*;
 
-pub use cumulus_relay_chain_streams::finalized_heads;
+pub use pezcumulus_relay_chain_streams::finalized_heads;
 pub use teyrchain_consensus::spawn_teyrchain_consensus_tasks;
 
 use level_monitor::LevelMonitor;

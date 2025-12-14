@@ -30,8 +30,8 @@ use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, pezstaging_xcm as
 use pezkuwi_sdk::{pezstaging_xcm_builder as xcm_builder, pezstaging_xcm_executor as xcm_executor};
 
 // Bizinikiwi and Pezkuwi dependencies
-use cumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
-use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
+use pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	derive_impl,
 	dispatch::DispatchClass,
@@ -131,13 +131,13 @@ impl pezframe_system::Config for Runtime {
 	/// This is used as an identifier of the chain. 42 is the generic bizinikiwi prefix.
 	type SS58Prefix = SS58Prefix;
 	/// The action to take on a Runtime Upgrade
-	type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = SingleBlockMigrations;
 }
 
 /// Configure the palelt weight reclaim tx.
-impl cumulus_pallet_weight_reclaim::Config for Runtime {
+impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
 	type WeightInfo = ();
 }
 
@@ -204,7 +204,7 @@ parameter_types! {
 	pub const RelayOrigin: AggregateMessageOrigin = AggregateMessageOrigin::Parent;
 }
 
-impl cumulus_pallet_teyrchain_system::Config for Runtime {
+impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
@@ -230,7 +230,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type WeightInfo = ();
 	#[cfg(feature = "runtime-benchmarks")]
 	type MessageProcessor = pezpallet_message_queue::mock_helpers::NoopMessageProcessor<
-		cumulus_primitives_core::AggregateMessageOrigin,
+		pezcumulus_primitives_core::AggregateMessageOrigin,
 	>;
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type MessageProcessor = xcm_builder::ProcessXcmMessage<
@@ -248,7 +248,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type IdleMaxServiceWeight = ();
 }
 
-impl cumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
 	/// The asset ID for the asset that we use to pay for message delivery fees.
@@ -266,7 +266,7 @@ pub type PriceForSiblingTeyrchainDelivery =
 pub type PriceForParentDelivery =
 	ExponentialPrice<FeeAssetId, ToParentBaseDeliveryFee, TransactionByteFee, TeyrchainSystem>;
 
-impl cumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = ();

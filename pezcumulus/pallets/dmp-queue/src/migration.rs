@@ -18,7 +18,7 @@
 
 use crate::*;
 use alloc::vec::Vec;
-use cumulus_primitives_core::relay_chain::BlockNumber as RelayBlockNumber;
+use pezcumulus_primitives_core::relay_chain::BlockNumber as RelayBlockNumber;
 use pezframe_support::{pezpallet_prelude::*, storage_alias, traits::HandleMessage};
 
 pub(crate) const LOG: &str = "runtime::dmp-queue-export-xcms";

@@ -7,6 +7,7 @@ description = "Teyrchain node CLI utilities."
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-client-cli"
 
 [lints]
 workspace = true
@@ -27,10 +28,10 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-chain-spec/runtime-benchmarks",
-	"pezsc-cli/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsc-chain-spec/runtime-benchmarks",
+  "pezsc-cli/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

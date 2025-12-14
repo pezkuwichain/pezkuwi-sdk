@@ -8,6 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+documentation = "https://docs.rs/bizinikiwi-test-client"
 
 [lints]
 workspace = true
@@ -22,7 +23,7 @@ codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-client-db = { features = [
-	"test-helpers",
+  "test-helpers",
 ], workspace = true, default-features = false }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsc-executor = { workspace = true, default-features = true }
@@ -39,13 +40,13 @@ tokio = { features = ["sync"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-client-db/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

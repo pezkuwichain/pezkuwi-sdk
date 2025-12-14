@@ -7,6 +7,7 @@ description = "Inherent that needs to be present in every teyrchain block. Conta
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-primitives-teyrchain-inherent"
 
 [lints]
 workspace = true
@@ -27,16 +28,16 @@ pezcumulus-primitives-core = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"async-trait",
-	"codec/std",
-	"pezcumulus-primitives-core/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-inherents/std",
-	"pezsp-trie/std",
+  "async-trait",
+  "codec/std",
+  "pezcumulus-primitives-core/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-inherents/std",
+  "pezsp-trie/std",
 ]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
 ]

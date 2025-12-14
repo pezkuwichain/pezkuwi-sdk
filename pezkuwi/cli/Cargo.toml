@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-cli"
 
 [lints]
 workspace = true
@@ -51,24 +52,24 @@ db = ["pezkuwi-service/db"]
 metadata-hash = ["pezkuwi-service/metadata-hash"]
 service = ["dep:pezkuwi-service"]
 cli = [
-	"clap",
-	"pezframe-benchmarking-cli",
-	"pezsc-cli",
-	"pezsc-service",
-	"pezsc-tracing",
-	"service",
+  "clap",
+  "pezframe-benchmarking-cli",
+  "pezsc-cli",
+  "pezsc-service",
+  "pezsc-tracing",
+  "service",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking-cli?/runtime-benchmarks",
-	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-service?/runtime-benchmarks",
-	"pezsc-cli?/runtime-benchmarks",
-	"pezsc-service?/runtime-benchmarks",
-	"pezsc-sysinfo/runtime-benchmarks",
-	"pezsc-tracing?/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking-cli?/runtime-benchmarks",
+  "pezkuwi-node-metrics/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-service?/runtime-benchmarks",
+  "pezsc-cli?/runtime-benchmarks",
+  "pezsc-service?/runtime-benchmarks",
+  "pezsc-sysinfo/runtime-benchmarks",
+  "pezsc-tracing?/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 full-node = ["pezkuwi-service/full-node"]
 try-runtime = ["pezkuwi-service?/try-runtime", "pezsp-runtime/try-runtime"]
@@ -81,6 +82,6 @@ pezkuwichain-native = ["pezkuwi-service/pezkuwichain-native"]
 
 malus = ["full-node", "pezkuwi-service/malus"]
 runtime-metrics = [
-	"pezkuwi-node-metrics/runtime-metrics",
-	"pezkuwi-service/runtime-metrics",
+  "pezkuwi-node-metrics/runtime-metrics",
+  "pezkuwi-service/runtime-metrics",
 ]

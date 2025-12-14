@@ -124,13 +124,13 @@ pub enum Subcommand {
 	ChainSpecBuilder(ChainSpecBuilder),
 
 	/// Remove the whole chain.
-	PurgeChain(cumulus_client_cli::PurgeChainCmd),
+	PurgeChain(pezcumulus_client_cli::PurgeChainCmd),
 	/// Export the genesis state of the teyrchain.
 	#[command(alias = "export-genesis-state")]
-	ExportGenesisHead(cumulus_client_cli::ExportGenesisHeadCommand),
+	ExportGenesisHead(pezcumulus_client_cli::ExportGenesisHeadCommand),
 
 	/// Export the genesis wasm of the teyrchain.
-	ExportGenesisWasm(cumulus_client_cli::ExportGenesisWasmCommand),
+	ExportGenesisWasm(pezcumulus_client_cli::ExportGenesisWasmCommand),
 
 	/// Sub-commands concerned with benchmarking.
 	/// The pallet benchmarking moved to the `pallet` sub-command.
@@ -155,7 +155,7 @@ pub struct Cli<Config: CliConfig> {
 
 	/// The shared parameters with all pezcumulus-based teyrchain nodes.
 	#[command(flatten)]
-	pub run: cumulus_client_cli::RunCmd,
+	pub run: pezcumulus_client_cli::RunCmd,
 
 	/// Parameters for storage monitoring.
 	#[command(flatten)]

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME proxying pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-proxy"
 
 [lints]
 workspace = true
@@ -28,12 +29,12 @@ pezpallet-utility = { workspace = true, default-features = true }
 default = ["std"]
 std = ["codec/std", "frame/std", "scale-info/std"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-utility/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-utility/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-utility/try-runtime",
+  "frame/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-utility/try-runtime",
 ]

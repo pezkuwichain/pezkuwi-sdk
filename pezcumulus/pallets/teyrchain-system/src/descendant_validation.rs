@@ -213,8 +213,8 @@ pub(crate) enum RelayParentVerificationError<H: Header> {
 mod tests {
 	use super::*;
 	use codec::{Decode, Encode};
-	use cumulus_primitives_core::relay_chain;
-	use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+	use pezcumulus_primitives_core::relay_chain;
+	use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 	use rstest::rstest;
 	use pezsp_consensus_babe::{
 		digests::{CompatibleDigestItem, NextEpochDescriptor, PreDigest, PrimaryPreDigest},

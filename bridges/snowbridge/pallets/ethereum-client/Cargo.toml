@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-pezpallet-ethereum-client"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -51,43 +53,49 @@ pezsp-io = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
-fuzzing = ["hex-literal", "pezpallet-timestamp", "serde", "serde_json", "pezsp-io"]
+fuzzing = [
+  "hex-literal",
+  "pezpallet-timestamp",
+  "serde",
+  "serde_json",
+  "pezsp-io",
+]
 std = [
-	"codec/std",
-	"pezframe-benchmarking/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-timestamp/std",
-	"scale-info/std",
-	"serde",
-	"snowbridge-beacon-primitives/std",
-	"snowbridge-core/std",
-	"snowbridge-ethereum/std",
-	"snowbridge-pezpallet-ethereum-client-fixtures/std",
-	"snowbridge-verification-primitives/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"tracing/std",
+  "codec/std",
+  "pezframe-benchmarking/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-timestamp/std",
+  "scale-info/std",
+  "serde",
+  "snowbridge-beacon-primitives/std",
+  "snowbridge-core/std",
+  "snowbridge-ethereum/std",
+  "snowbridge-pezpallet-ethereum-client-fixtures/std",
+  "snowbridge-verification-primitives/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "tracing/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"hex-literal",
-	"pezpallet-timestamp?/runtime-benchmarks",
-	"snowbridge-beacon-primitives/runtime-benchmarks",
-	"snowbridge-core/runtime-benchmarks",
-	"snowbridge-ethereum/runtime-benchmarks",
-	"snowbridge-pezpallet-ethereum-client-fixtures/runtime-benchmarks",
-	"snowbridge-verification-primitives/runtime-benchmarks",
-	"pezsp-io?/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "hex-literal",
+  "pezpallet-timestamp?/runtime-benchmarks",
+  "snowbridge-beacon-primitives/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "snowbridge-ethereum/runtime-benchmarks",
+  "snowbridge-pezpallet-ethereum-client-fixtures/runtime-benchmarks",
+  "snowbridge-verification-primitives/runtime-benchmarks",
+  "pezsp-io?/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-timestamp?/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-timestamp?/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

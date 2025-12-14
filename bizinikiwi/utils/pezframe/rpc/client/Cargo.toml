@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Shared JSON-RPC client"
+documentation = "https://docs.rs/bizinikiwi-rpc-client"
 
 [lints]
 workspace = true
@@ -25,13 +26,13 @@ pezsp-runtime = { workspace = true, default-features = true }
 [dev-dependencies]
 pezsp-core = { workspace = true, default-features = true }
 tokio = { features = [
-	"macros",
-	"rt-multi-thread",
-	"sync",
+  "macros",
+  "rt-multi-thread",
+  "sync",
 ], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-rpc-api/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsc-rpc-api/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

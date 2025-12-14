@@ -25,7 +25,7 @@ use crate::{
 	Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, Scheduler, TeyrchainInfo,
 	ZagrosTreasuryAccount, DAYS,
 };
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
 	parameter_types,
 	traits::{

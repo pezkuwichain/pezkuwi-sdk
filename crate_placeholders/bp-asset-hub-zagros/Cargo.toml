@@ -1,0 +1,14 @@
+[package]
+name = "bp-asset-hub-zagros"
+version = "0.1.0"
+edition = "2021"
+description = "PezkuwiChain SDK component - placeholder for name reservation"
+license = "Apache-2.0"
+repository = "https://github.com/pezkuwichain/pezkuwi-sdk"
+homepage = "https://pezkuwichain.io"
+documentation = "https://docs.pezkuwichain.io/sdk/"
+authors = ["Kurdistan Tech Institute <info@pezkuwichain.io>"]
+keywords = ["pezkuwichain", "blockchain", "sdk"]
+categories = ["cryptography::cryptocurrencies"]
+
+[dependencies]

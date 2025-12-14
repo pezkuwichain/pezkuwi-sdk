@@ -28,7 +28,7 @@ use alloc::vec::Vec;
 
 use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
 
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
 	genesis_builder_helper::{build_state, get_preset},
 	weights::Weight,
@@ -61,7 +61,7 @@ impl Runtime {
 	#[docify::export]
 	fn impl_can_build_upon(
 		included_hash: <Block as BlockT>::Hash,
-		slot: cumulus_primitives_aura::Slot,
+		slot: pezcumulus_primitives_aura::Slot,
 	) -> bool {
 		ConsensusHook::can_build_upon(included_hash, slot)
 	}
@@ -78,16 +78,16 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
+	impl pezcumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
 		fn relay_parent_offset() -> u32 {
 			0
 		}
 	}
 
-	impl cumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
+	impl pezcumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
 		fn can_build_upon(
 			included_hash: <Block as BlockT>::Hash,
-			slot: cumulus_primitives_aura::Slot,
+			slot: pezcumulus_primitives_aura::Slot,
 		) -> bool {
 			Runtime::impl_can_build_upon(included_hash, slot)
 		}
@@ -226,8 +226,8 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
-		fn collect_collation_info(header: &<Block as BlockT>::Header) -> cumulus_primitives_core::CollationInfo {
+	impl pezcumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
+		fn collect_collation_info(header: &<Block as BlockT>::Header) -> pezcumulus_primitives_core::CollationInfo {
 			TeyrchainSystem::collect_collation_info(header)
 		}
 	}
@@ -262,7 +262,7 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezkuwi_sdk::pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
 			use super::*;
 
 			let mut list = Vec::<BenchmarkList>::new();
@@ -287,12 +287,12 @@ impl_runtime_apis! {
 				}
 
 				fn verify_set_code() {
-					System::assert_last_event(cumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
+					System::assert_last_event(pezcumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
 				}
 			}
 
-			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
-			impl cumulus_pallet_session_benchmarking::Config for Runtime {}
+			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			impl pezcumulus_pallet_session_benchmarking::Config for Runtime {}
 
 			use pezkuwi_sdk::pezframe_support::traits::WhitelistedStorageKeys;
 			let whitelist = AllPalletsWithSystem::whitelisted_storage_keys();
@@ -320,7 +320,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
+	impl pezcumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
 		fn teyrchain_id() -> ParaId {
 			teyrchain_info::Pallet::<Runtime>::teyrchain_id()
 		}

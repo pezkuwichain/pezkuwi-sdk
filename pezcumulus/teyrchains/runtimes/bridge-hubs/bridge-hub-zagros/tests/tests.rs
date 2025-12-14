@@ -42,7 +42,7 @@ use bridge_to_pezkuwichain_config::{
 	WithBridgeHubPezkuwichainMessagesInstance, XcmOverBridgeHubPezkuwichainInstance,
 };
 use codec::{Decode, Encode};
-use cumulus_primitives_core::UpwardMessageSender;
+use pezcumulus_primitives_core::UpwardMessageSender;
 use pezframe_support::{
 	assert_err, assert_ok,
 	dispatch::GetDispatchInfo,

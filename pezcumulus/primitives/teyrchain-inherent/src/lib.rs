@@ -30,7 +30,7 @@
 extern crate alloc;
 
 use alloc::{collections::btree_map::BTreeMap, vec::Vec};
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{
 		ApprovedPeerId, BlakeTwo256, BlockNumber as RelayChainBlockNumber, Hash as RelayHash,
 		HashT as _, Header as RelayHeader,
@@ -49,7 +49,7 @@ pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"sysi1338";
 /// `relay_parent_descendants` and `collator_peer_id` fields.
 pub mod v0 {
 	use alloc::{collections::BTreeMap, vec::Vec};
-	use cumulus_primitives_core::{
+	use pezcumulus_primitives_core::{
 		InboundDownwardMessage, InboundHrmpMessage, ParaId, PersistedValidationData,
 	};
 	use scale_info::TypeInfo;

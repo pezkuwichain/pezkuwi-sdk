@@ -7,6 +7,7 @@ license.workspace = true
 description = "Primitives types for the Node-side"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-network-protocol"
 
 [lints]
 workspace = true
@@ -36,10 +37,10 @@ rand_chacha = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-authority-discovery/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-authority-discovery/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME sessions pallet benchmarking"
 readme = "README.md"
+documentation = "https://docs.rs/pezcumulus-pezpallet-session-benchmarking"
 
 [lints]
 workspace = true
@@ -26,17 +27,17 @@ pezsp-runtime = { workspace = true }
 [features]
 default = ["std"]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-session/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 std = [
-	"codec/std",
-	"pezframe-benchmarking/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-session/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezframe-benchmarking/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-session/std",
+  "pezsp-runtime/std",
 ]

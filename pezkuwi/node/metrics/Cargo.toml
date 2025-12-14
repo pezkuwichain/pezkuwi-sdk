@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-metrics"
 
 [lints]
 workspace = true
@@ -39,10 +40,10 @@ tokio = { workspace = true, default-features = true }
 default = []
 runtime-metrics = []
 runtime-benchmarks = [
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-test-service/runtime-benchmarks",
-	"pezsc-cli/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsc-tracing/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-test-service/runtime-benchmarks",
+  "pezsc-cli/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsc-tracing/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
 ]

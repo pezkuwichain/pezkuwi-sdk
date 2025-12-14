@@ -7,6 +7,7 @@ license.workspace = true
 description = "Helper crate for generating slot ranges for the Pezkuwi runtime."
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/slot-range-helper"
 
 [lints]
 workspace = true

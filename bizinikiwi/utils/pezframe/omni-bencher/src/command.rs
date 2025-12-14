@@ -119,7 +119,7 @@ pub struct V1BenchmarkCommand {
 
 type HostFunctions = (
 	pezsp_statement_store::runtime_api::HostFunctions,
-	cumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
+	pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
 );
 
 impl Command {

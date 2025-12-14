@@ -7,6 +7,8 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+description = "Bizinikiwi utility: test runtime client"
+documentation = "https://docs.rs/bizinikiwi-test-runtime-client"
 
 [lints]
 workspace = true
@@ -30,13 +32,13 @@ bizinikiwi-test-runtime = { workspace = true }
 [features]
 bls-experimental = ["bizinikiwi-test-runtime/bls-experimental"]
 runtime-benchmarks = [
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-client/runtime-benchmarks",
-	"bizinikiwi-test-runtime/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-client/runtime-benchmarks",
+  "bizinikiwi-test-runtime/runtime-benchmarks",
 ]

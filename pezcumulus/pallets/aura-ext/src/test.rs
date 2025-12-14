@@ -16,11 +16,11 @@
 
 use super::*;
 use core::num::NonZeroU32;
-use cumulus_pallet_teyrchain_system::{
+use pezcumulus_pallet_teyrchain_system::{
 	consensus_hook::ExpectParentIncluded, Ancestor, AnyRelayNumber, ConsensusHook,
 	RelayChainStateProof, TeyrchainSetCode, UsedBandwidth,
 };
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
 	derive_impl,
 	pezpallet_prelude::ConstU32,
@@ -57,7 +57,7 @@ pub mod test_pallet {
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			let proof_size =
-				cumulus_primitives_proof_size_hostfunction::storage_proof_size::storage_proof_size(
+				pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::storage_proof_size(
 				);
 			// We need to commit the `proof_size` to ensure that the test is failing if we are
 			// receiving a different proof size later on.
@@ -73,7 +73,7 @@ type Block = pezframe_system::mocking::MockBlock<Test>;
 pezframe_support::construct_runtime!(
 	pub enum Test {
 		System: pezframe_system,
-		TeyrchainSystem: cumulus_pallet_teyrchain_system,
+		TeyrchainSystem: pezcumulus_pallet_teyrchain_system,
 		Aura: pezpallet_aura,
 		AuraExt: crate,
 		TestPallet: test_pallet,
@@ -137,7 +137,7 @@ impl pezpallet_timestamp::Config for Test {
 	type WeightInfo = ();
 }
 
-impl cumulus_pallet_teyrchain_system::Config for Test {
+impl pezcumulus_pallet_teyrchain_system::Config for Test {
 	type WeightInfo = ();
 	type RuntimeEvent = ();
 	type OnSystemEvent = ();
@@ -160,7 +160,7 @@ fn set_ancestors() {
 		ancestor.replace_para_head_hash(H256::repeat_byte(i + 1));
 		ancestors.push(ancestor);
 	}
-	cumulus_pallet_teyrchain_system::UnincludedSegment::<Test>::put(ancestors);
+	pezcumulus_pallet_teyrchain_system::UnincludedSegment::<Test>::put(ancestors);
 }
 
 fn new_test_ext(para_slot: u64) -> pezsp_io::TestExternalities {
@@ -178,7 +178,7 @@ fn set_relay_slot(slot: u64, authored: u32) {
 }
 
 fn relay_chain_state_proof(relay_slot: u64) -> RelayChainStateProof {
-	let mut builder = cumulus_test_relay_sproof_builder::RelayStateSproofBuilder::default();
+	let mut builder = pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder::default();
 	builder.current_slot = relay_slot.into();
 
 	let (hash, state_proof) = builder.into_state_root_and_proof();

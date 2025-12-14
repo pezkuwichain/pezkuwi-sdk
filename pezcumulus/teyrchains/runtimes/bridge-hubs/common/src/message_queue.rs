@@ -15,7 +15,7 @@
 //! Runtime configuration for MessageQueue pallet
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::marker::PhantomData;
-use cumulus_primitives_core::{AggregateMessageOrigin as CumulusAggregateMessageOrigin, ParaId};
+use pezcumulus_primitives_core::{AggregateMessageOrigin as CumulusAggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	traits::{ProcessMessage, ProcessMessageError, QueueFootprint, QueuePausedQuery},
 	weights::WeightMeter,

@@ -23,7 +23,7 @@ use alloc::{
 	vec,
 	vec::Vec,
 };
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::build_struct_json_patch;
 use pezsp_core::{crypto::get_public_from_string_or_panic, sr25519};
 use pezsp_genesis_builder::PresetId;

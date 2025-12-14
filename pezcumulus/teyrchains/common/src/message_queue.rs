@@ -17,7 +17,7 @@
 //! Helpers to deal with configuring the message queue in the runtime.
 
 use core::marker::PhantomData;
-use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
+use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use pezframe_support::traits::{QueueFootprint, QueuePausedQuery};
 use pezpallet_message_queue::OnQueueChanged;
 

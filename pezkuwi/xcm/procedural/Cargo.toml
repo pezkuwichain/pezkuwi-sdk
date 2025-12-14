@@ -8,6 +8,7 @@ version = "7.0.0"
 publish = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/xcm-procedural"
 
 [lints]
 workspace = true
@@ -30,6 +31,6 @@ pezframe-support = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

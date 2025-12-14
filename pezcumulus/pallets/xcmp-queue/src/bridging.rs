@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use crate::{pallet, OutboundState};
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use xcm::latest::prelude::*;
 
 /// Adapter implementation for `bp_xcm_bridge_hub_router::XcmChannelStatusProvider` which checks

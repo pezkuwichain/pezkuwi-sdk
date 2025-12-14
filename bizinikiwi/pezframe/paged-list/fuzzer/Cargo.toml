@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Fuzz storage types of pezpallet-paged-list"
 publish = false
+documentation = "https://docs.rs/pezpallet-paged-list-fuzzer"
 
 [lints]
 workspace = true
@@ -26,6 +27,6 @@ pezpallet-paged-list = { features = ["std"], workspace = true }
 default = ["std"]
 std = ["frame/std", "pezpallet-paged-list/std"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-paged-list/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-paged-list/runtime-benchmarks",
 ]

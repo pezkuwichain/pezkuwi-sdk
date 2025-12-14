@@ -7,6 +7,7 @@ homepage.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-asset-rate"
 
 [lints]
 workspace = true
@@ -31,28 +32,28 @@ pezsp-io = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-balances/std",
-	"scale-info/std",
-	"pezsp-core?/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-balances/std",
+  "scale-info/std",
+  "pezsp-core?/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezsp-core",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezsp-core",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

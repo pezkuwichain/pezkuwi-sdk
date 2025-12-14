@@ -28,7 +28,7 @@ use syn::{
 
 /// Generates the access to the `pezsc_client` crate.
 pub fn generate_crate_access() -> TokenStream {
-	match crate_name("sp-api") {
+	match crate_name("pezsp-api") {
 		Ok(FoundCrate::Itself) => quote!(pezsp_api::__private),
 		Ok(FoundCrate::Name(renamed_name)) => {
 			let renamed_name = Ident::new(&renamed_name, Span::call_site());

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME's I'm online pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-im-online"
 
 [lints]
 workspace = true
@@ -36,37 +37,37 @@ pezpallet-session = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-authorship/std",
-	"pezpallet-balances/std",
-	"pezpallet-session/std",
-	"scale-info/std",
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-staking/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-authorship/std",
+  "pezpallet-balances/std",
+  "pezpallet-session/std",
+  "scale-info/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-staking/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-authorship/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-authorship/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-session/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-authorship/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-session/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-authorship/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-session/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

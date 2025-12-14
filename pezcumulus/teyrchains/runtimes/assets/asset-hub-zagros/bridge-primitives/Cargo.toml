@@ -6,6 +6,8 @@ authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
+documentation = "https://docs.rs/bp-asset-hub-zagros"
+homepage = { workspace = true }
 
 [package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true
@@ -35,25 +37,25 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bp-bridge-hub-pezcumulus/std",
-	"bp-messages/std",
-	"bp-runtime/std",
-	"bp-xcm-bridge-hub-router/std",
-	"codec/std",
-	"pezframe-support/std",
-	"scale-info/std",
-	"pezsp-api/std",
-	"pezsp-core/std",
-	"testnet-teyrchains-constants/std",
-	"xcm/std",
+  "bp-bridge-hub-pezcumulus/std",
+  "bp-messages/std",
+  "bp-runtime/std",
+  "bp-xcm-bridge-hub-router/std",
+  "codec/std",
+  "pezframe-support/std",
+  "scale-info/std",
+  "pezsp-api/std",
+  "pezsp-core/std",
+  "testnet-teyrchains-constants/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"bp-bridge-hub-pezcumulus/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-xcm-bridge-hub-router/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "bp-bridge-hub-pezcumulus/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "bp-xcm-bridge-hub-router/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "testnet-teyrchains-constants/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

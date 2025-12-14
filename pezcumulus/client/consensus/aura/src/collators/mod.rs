@@ -23,10 +23,10 @@
 
 use crate::collator::SlotClaim;
 use codec::Codec;
-use cumulus_client_consensus_common::{self as consensus_common, ParentSearchParams};
-use cumulus_primitives_aura::{AuraUnincludedSegmentApi, Slot};
-use cumulus_primitives_core::{relay_chain::Header as RelayHeader, BlockT};
-use cumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
+use pezcumulus_client_consensus_common::{self as consensus_common, ParentSearchParams};
+use pezcumulus_primitives_aura::{AuraUnincludedSegmentApi, Slot};
+use pezcumulus_primitives_core::{relay_chain::Header as RelayHeader, BlockT};
+use pezcumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
 use pezkuwi_node_subsystem::messages::{CollatorProtocolMessage, RuntimeApiRequest};
 use pezkuwi_node_subsystem_util::runtime::ClaimQueueSnapshot;
 use pezkuwi_primitives::{
@@ -267,7 +267,7 @@ where
 		.then(|| SlotClaim::unchecked::<P>(author_pub, para_slot, timestamp))
 }
 
-/// Use [`cumulus_client_consensus_common::find_potential_parents`] to find teyrchain blocks that
+/// Use [`pezcumulus_client_consensus_common::find_potential_parents`] to find teyrchain blocks that
 /// we can build on. Once a list of potential parents is retrieved, return the last one of the
 /// longest chain.
 async fn find_parent<Block>(
@@ -290,7 +290,7 @@ where
 		ignore_alternative_branches: true,
 	};
 
-	let potential_parents = cumulus_client_consensus_common::find_potential_parents::<Block>(
+	let potential_parents = pezcumulus_client_consensus_common::find_potential_parents::<Block>(
 		parent_search_params,
 		para_backend,
 		relay_client,
@@ -323,15 +323,15 @@ mod tests {
 	use super::*;
 	use crate::collators::{can_build_upon, BackingGroupConnectionHelper};
 	use codec::Encode;
-	use cumulus_primitives_aura::Slot;
-	use cumulus_primitives_core::BlockT;
-	use cumulus_relay_chain_interface::PHash;
-	use cumulus_test_client::{
+	use pezcumulus_primitives_aura::Slot;
+	use pezcumulus_primitives_core::BlockT;
+	use pezcumulus_relay_chain_interface::PHash;
+	use pezcumulus_test_client::{
 		runtime::{Block, Hash},
 		Client, DefaultTestClientBuilderExt, InitBlockBuilder, TestClientBuilder,
 		TestClientBuilderExt,
 	};
-	use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+	use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 	use futures::StreamExt;
 	use pezkuwi_overseer::{Event, Handle};
 	use pezkuwi_primitives::HeadData;
@@ -359,7 +359,7 @@ mod tests {
 		let header = client.header(hash).ok().flatten().expect("No header for parent block");
 		let included = HeadData(header.encode());
 		let mut builder = RelayStateSproofBuilder::default();
-		builder.para_id = cumulus_test_client::runtime::TEYRCHAIN_ID.into();
+		builder.para_id = pezcumulus_test_client::runtime::TEYRCHAIN_ID.into();
 		builder.included_para_head = Some(included);
 
 		builder

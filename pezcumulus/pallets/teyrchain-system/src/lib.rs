@@ -32,14 +32,14 @@ extern crate alloc;
 use alloc::{collections::btree_map::BTreeMap, vec, vec::Vec};
 use codec::{Decode, DecodeLimit, Encode};
 use core::cmp;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{self, UMPSignal, UMP_SEPARATOR},
 	AbridgedHostConfiguration, ChannelInfo, ChannelStatus, CollationInfo, CumulusDigestItem,
 	GetChannelInfo, ListChannelInfos, MessageSendError, OutboundHrmpMessage, ParaId,
 	PersistedValidationData, UpwardMessage, UpwardMessageSender, XcmpMessageHandler,
 	XcmpMessageSource,
 };
-use cumulus_primitives_teyrchain_inherent::{v0, MessageQueueChain, TeyrchainInherentData};
+use pezcumulus_primitives_teyrchain_inherent::{v0, MessageQueueChain, TeyrchainInherentData};
 use pezframe_support::{
 	dispatch::{DispatchClass, DispatchResult},
 	ensure,
@@ -98,14 +98,14 @@ pub use consensus_hook::{ConsensusHook, ExpectParentIncluded};
 ///     struct BlockExecutor;
 ///     struct Runtime;
 ///
-///     cumulus_pallet_teyrchain_system::register_validate_block! {
+///     pezcumulus_pallet_teyrchain_system::register_validate_block! {
 ///         Runtime = Runtime,
 ///         BlockExecutor = Executive,
 ///     }
 ///
 /// # fn main() {}
 /// ```
-pub use cumulus_pallet_teyrchain_system_proc_macro::register_validate_block;
+pub use pezcumulus_pezpallet_teyrchain_system_proc_macro::register_validate_block;
 pub use relay_state_snapshot::{MessagingStateSnapshot, RelayChainStateProof};
 pub use unincluded_segment::{Ancestor, UsedBandwidth};
 
@@ -188,7 +188,7 @@ pub mod ump_constants {
 #[pezframe_support::pallet]
 pub mod pallet {
 	use super::*;
-	use cumulus_primitives_core::CoreInfoExistsAtMaxOnce;
+	use pezcumulus_primitives_core::CoreInfoExistsAtMaxOnce;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
@@ -637,7 +637,7 @@ pub mod pallet {
 			// TODO: remove this in favor of the relay-parent's hash after
 			// https://github.com/pezkuwichain/kurdistan-sdk/issues/92
 			pezframe_system::Pallet::<T>::deposit_log(
-				cumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
+				pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 					vfp.relay_parent_storage_root,
 					vfp.relay_parent_number,
 				),
@@ -966,7 +966,7 @@ pub mod pallet {
 		type Call = Call<T>;
 		type Error = pezsp_inherents::MakeFatalError<()>;
 		const INHERENT_IDENTIFIER: InherentIdentifier =
-			cumulus_primitives_teyrchain_inherent::INHERENT_IDENTIFIER;
+			pezcumulus_primitives_teyrchain_inherent::INHERENT_IDENTIFIER;
 
 		fn create_inherent(data: &InherentData) -> Option<Self::Call> {
 			let data = match data
@@ -981,7 +981,7 @@ pub mod pallet {
 					// version.
 					let data = data
 						.get_data::<v0::TeyrchainInherentData>(
-							&cumulus_primitives_teyrchain_inherent::TEYRCHAIN_INHERENT_IDENTIFIER_V0,
+							&pezcumulus_primitives_teyrchain_inherent::TEYRCHAIN_INHERENT_IDENTIFIER_V0,
 						)
 						.ok()
 						.flatten()?;
@@ -1211,7 +1211,7 @@ impl<T: Config> Pallet<T> {
 	}
 
 	fn check_hrmp_mcq_heads(
-		ingress_channels: &[(ParaId, cumulus_primitives_core::AbridgedHrmpChannel)],
+		ingress_channels: &[(ParaId, pezcumulus_primitives_core::AbridgedHrmpChannel)],
 		mqc_heads: &mut BTreeMap<ParaId, MessageQueueChain>,
 	) {
 		// Check that the MQC heads for each channel provided by the relay chain match the MQC
@@ -1233,7 +1233,7 @@ impl<T: Config> Pallet<T> {
 	/// **Panics** if the message submitted by the collator doesn't respect the expected order or if
 	///            it was sent from a para which has no open channel to this teyrchain.
 	fn check_hrmp_message_metadata(
-		ingress_channels: &[(ParaId, cumulus_primitives_core::AbridgedHrmpChannel)],
+		ingress_channels: &[(ParaId, pezcumulus_primitives_core::AbridgedHrmpChannel)],
 		maybe_prev_msg_metadata: &mut Option<(u32, ParaId)>,
 		msg_metadata: (u32, ParaId),
 	) {
@@ -1267,7 +1267,7 @@ impl<T: Config> Pallet<T> {
 	///            messages across all inbound channels MQCs were obtained which do not
 	///            correspond to the ones found on the relay-chain.
 	fn enqueue_inbound_horizontal_messages(
-		ingress_channels: &[(ParaId, cumulus_primitives_core::AbridgedHrmpChannel)],
+		ingress_channels: &[(ParaId, pezcumulus_primitives_core::AbridgedHrmpChannel)],
 		horizontal_messages: AbridgedInboundHrmpMessages,
 		relay_parent_number: relay_chain::BlockNumber,
 	) -> Weight {
@@ -1497,7 +1497,7 @@ impl<T: Config> Pallet<T> {
 	/// for.
 	///
 	/// This is expected to be used by the
-	/// [`CollectCollationInfo`](cumulus_primitives_core::CollectCollationInfo) runtime api.
+	/// [`CollectCollationInfo`](pezcumulus_primitives_core::CollectCollationInfo) runtime api.
 	pub fn collect_collation_info(header: &HeaderFor<T>) -> CollationInfo {
 		CollationInfo {
 			hrmp_watermark: HrmpWatermark::<T>::get(),
@@ -1550,7 +1550,7 @@ impl<T: Config> Pallet<T> {
 			ingress_channels: Default::default(),
 			egress_channels: vec![(
 				target_teyrchain,
-				cumulus_primitives_core::AbridgedHrmpChannel {
+				pezcumulus_primitives_core::AbridgedHrmpChannel {
 					max_capacity: 10,
 					max_total_size: 10_000_000_u32,
 					max_message_size: 10_000_000_u32,
@@ -1569,7 +1569,7 @@ impl<T: Config> Pallet<T> {
 	#[cfg(any(feature = "runtime-benchmarks", feature = "std"))]
 	pub fn open_custom_outbound_hrmp_channel_for_benchmarks_or_tests(
 		target_teyrchain: ParaId,
-		channel: cumulus_primitives_core::AbridgedHrmpChannel,
+		channel: pezcumulus_primitives_core::AbridgedHrmpChannel,
 	) {
 		RelevantMessagingState::<T>::put(MessagingStateSnapshot {
 			dmq_mqc_head: Default::default(),

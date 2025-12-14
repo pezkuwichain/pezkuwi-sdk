@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi chain configurations."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-chain-spec"
 
 [lints]
 workspace = true
@@ -47,15 +48,15 @@ bizinikiwi-test-runtime = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-genesis-builder/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"bizinikiwi-test-runtime/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-genesis-builder/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "bizinikiwi-test-runtime/runtime-benchmarks",
 ]

@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-test-utils"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -22,7 +24,7 @@ pezframe-support = { workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }
 pezpallet-asset-conversion = { workspace = true, default-features = true }
 scale-info = { features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 snowbridge-core = { workspace = true, default-features = true }
 snowbridge-outbound-queue-primitives = { workspace = true, default-features = true }
@@ -33,14 +35,14 @@ xcm-executor = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-relayers/runtime-benchmarks",
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-asset-conversion/runtime-benchmarks",
-	"snowbridge-core/runtime-benchmarks",
-	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "bp-relayers/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-asset-conversion/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "snowbridge-outbound-queue-primitives/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

@@ -17,7 +17,7 @@
 extern crate alloc;
 
 use alloc::collections::btree_map::BTreeMap;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain, AbridgedHostConfiguration, AbridgedHrmpChannel, ParaId,
 };
 use pezkuwi_primitives::UpgradeGoAhead;
@@ -55,7 +55,7 @@ impl Default for RelayStateSproofBuilder {
 	fn default() -> Self {
 		RelayStateSproofBuilder {
 			para_id: ParaId::from(200),
-			host_config: cumulus_primitives_core::AbridgedHostConfiguration {
+			host_config: pezcumulus_primitives_core::AbridgedHostConfiguration {
 				max_code_size: 2 * 1024 * 1024,
 				max_head_data_size: 1024 * 1024,
 				max_upward_queue_count: 8,

@@ -7,6 +7,7 @@ repository.workspace = true
 license.workspace = true
 homepage.workspace = true
 description = "A tool for validating PoVs locally"
+documentation = "https://docs.rs/pezcumulus-pov-validator"
 
 [lints]
 workspace = true
@@ -27,9 +28,9 @@ tracing-subscriber = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
 ]

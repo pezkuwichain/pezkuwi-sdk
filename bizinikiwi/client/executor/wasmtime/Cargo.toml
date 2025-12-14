@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Defines a `WasmRuntime` that uses the Wasmtime JIT to execute."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-executor-wasmtime"
 
 [lints]
 workspace = true
@@ -26,19 +27,19 @@ pezsc-allocator = { workspace = true, default-features = true }
 pezsc-executor-common = { workspace = true, default-features = true }
 pezsp-runtime-interface = { workspace = true, default-features = true }
 pezsp-wasm-interface = { features = [
-	"wasmtime",
+  "wasmtime",
 ], workspace = true, default-features = true }
 wasmtime = { features = [
-	"addr2line",
-	"cache",
-	"cranelift",
-	"demangle",
-	"gc",
-	"gc-null",
-	"parallel-compilation",
-	"pooling-allocator",
-	"profiling",
-	"threads",
+  "addr2line",
+  "cache",
+  "cranelift",
+  "demangle",
+  "gc",
+  "gc-null",
+  "parallel-compilation",
+  "pooling-allocator",
+  "profiling",
+  "threads",
 ], workspace = true }
 
 # Here we include the rustix crate in the exactly same semver-compatible version as used by
@@ -48,11 +49,11 @@ wasmtime = { features = [
 # this doesn't have any actual benefits for us besides making it harder to debug memory
 # problems (since then `mmap` etc. cannot be easily hooked into).
 rustix = { features = [
-	"fs",
-	"mm",
-	"param",
-	"std",
-	"use-libc",
+  "fs",
+  "mm",
+  "param",
+  "std",
+  "use-libc",
 ], workspace = true }
 
 [dev-dependencies]
@@ -66,7 +67,7 @@ wat = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-runtime-test/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime-interface/runtime-benchmarks",
+  "pezsc-runtime-test/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
 ]

@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-primitives"
 
 [lints]
 workspace = true
@@ -34,8 +35,8 @@ zstd = { workspace = true, default-features = false }
 
 [features]
 runtime-benchmarks = [
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-consensus-slots/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-consensus-slots/runtime-benchmarks",
 ]

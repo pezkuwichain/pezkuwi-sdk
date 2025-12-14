@@ -24,14 +24,14 @@ use pezframe_system::{BlockWeight, CheckWeight};
 use pezsp_runtime::{traits::DispatchTransaction, AccountId32, BuildStorage};
 use pezsp_trie::proof_size_extension::ProofSizeExt;
 
-type Test = cumulus_test_runtime::Runtime;
+type Test = pezcumulus_test_runtime::Runtime;
 const CALL: &<Test as Config>::RuntimeCall =
-	&cumulus_test_runtime::RuntimeCall::System(pezframe_system::Call::set_heap_pages { pages: 0u64 });
+	&pezcumulus_test_runtime::RuntimeCall::System(pezframe_system::Call::set_heap_pages { pages: 0u64 });
 const ALICE: AccountId32 = AccountId32::new([1u8; 32]);
 const LEN: usize = 150;
 
 fn new_test_ext() -> pezsp_io::TestExternalities {
-	let ext: pezsp_io::TestExternalities = cumulus_test_runtime::RuntimeGenesisConfig::default()
+	let ext: pezsp_io::TestExternalities = pezcumulus_test_runtime::RuntimeGenesisConfig::default()
 		.build_storage()
 		.unwrap()
 		.into();

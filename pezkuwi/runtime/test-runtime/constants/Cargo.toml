@@ -5,6 +5,10 @@ version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Pezkuwi SDK component: test runtime constants"
+documentation = "https://docs.rs/test-runtime-constants"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -20,7 +24,7 @@ pezsp-runtime = { workspace = true }
 default = ["std"]
 std = ["pezframe-support/std", "pezkuwi-primitives/std", "pezsp-runtime/std"]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

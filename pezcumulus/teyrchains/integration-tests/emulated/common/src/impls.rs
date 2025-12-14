@@ -46,9 +46,9 @@ pub use xcm::{
 };
 
 // Pezcumulus
-pub use cumulus_pallet_teyrchain_system;
-pub use cumulus_pallet_xcmp_queue;
-pub use cumulus_primitives_core::{
+pub use pezcumulus_pallet_teyrchain_system;
+pub use pezcumulus_pallet_xcmp_queue;
+pub use pezcumulus_primitives_core::{
 	relay_chain::HrmpChannelId, DmpMessageHandler, Junction, Junctions, NetworkId, ParaId,
 	XcmpMessageHandler,
 };
@@ -516,7 +516,7 @@ macro_rules! impl_assert_events_helpers_for_teyrchain {
 						Self,
 						vec![
 							[<$chain RuntimeEvent>]::<N>::TeyrchainSystem(
-								$crate::impls::cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+								$crate::impls::pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
 							) => {},
 						]
 					);

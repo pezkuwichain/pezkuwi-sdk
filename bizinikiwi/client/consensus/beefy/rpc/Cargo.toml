@@ -7,6 +7,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
 description = "RPC for the BEEFY Client gadget for bizinikiwi"
 homepage.workspace = true
+documentation = "https://docs.rs/pezsc-consensus-beefy-rpc"
 
 [lints]
 workspace = true
@@ -15,9 +16,9 @@ workspace = true
 codec = { features = ["derive"], workspace = true, default-features = true }
 futures = { workspace = true }
 jsonrpsee = { features = [
-	"client-core",
-	"macros",
-	"server-core",
+  "client-core",
+  "macros",
+  "server-core",
 ], workspace = true }
 log = { workspace = true, default-features = true }
 parking_lot = { workspace = true, default-features = true }
@@ -32,16 +33,16 @@ thiserror = { workspace = true }
 
 [dev-dependencies]
 pezsc-rpc = { features = [
-	"test-helpers",
+  "test-helpers",
 ], workspace = true, default-features = true }
 bizinikiwi-test-runtime-client = { workspace = true }
 tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-consensus-beefy/runtime-benchmarks",
-	"pezsc-rpc/runtime-benchmarks",
-	"pezsp-consensus-beefy/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezsc-consensus-beefy/runtime-benchmarks",
+  "pezsc-rpc/runtime-benchmarks",
+  "pezsp-consensus-beefy/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

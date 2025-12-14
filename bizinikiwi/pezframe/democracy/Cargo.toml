@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pallet for democracy"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-democracy"
 
 [lints]
 workspace = true
@@ -23,7 +24,7 @@ pezframe-system = { workspace = true }
 log = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { features = [
-	"derive",
+  "derive",
 ], optional = true, workspace = true, default-features = true }
 pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
@@ -37,35 +38,35 @@ pezpallet-scheduler = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-balances/std",
-	"pezpallet-preimage/std",
-	"pezpallet-scheduler/std",
-	"scale-info/std",
-	"serde",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-balances/std",
+  "pezpallet-preimage/std",
+  "pezpallet-scheduler/std",
+  "scale-info/std",
+  "serde",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-preimage/runtime-benchmarks",
-	"pezpallet-scheduler/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-preimage/runtime-benchmarks",
+  "pezpallet-scheduler/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-preimage/try-runtime",
-	"pezpallet-scheduler/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-preimage/try-runtime",
+  "pezpallet-scheduler/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

@@ -92,7 +92,7 @@ fn register_token_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -203,7 +203,7 @@ fn send_token_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -312,7 +312,7 @@ fn send_weth_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -469,7 +469,7 @@ fn register_and_send_token_in_one_transaction_fails() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -622,7 +622,7 @@ fn send_token_to_penpal_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -658,7 +658,7 @@ fn send_token_to_penpal_v2() {
 					asset_id: *asset_id == token_location,
 					owner: *owner == penpal_sov_on_ah,
 				},
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 
@@ -806,7 +806,7 @@ fn send_foreign_erc20_token_back_to_pezkuwi() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -902,7 +902,7 @@ fn invalid_xcm_traps_funds_on_ah() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -970,7 +970,7 @@ fn invalid_claimer_does_not_fail_the_message() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,

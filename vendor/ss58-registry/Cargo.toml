@@ -1,0 +1,25 @@
+[package]
+name = "pezkuwi-ss58-registry"
+version = "1.51.0"
+description = "Registry of known SS58 address types - PezkuwiChain fork"
+documentation = "https://docs.rs/pez-ss58-registry"
+license = "Apache-2.0"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[features]
+default = ["std"]
+std = ["num-format"]
+
+[dependencies]
+num-format = { version = "0.4.3", optional = true }
+
+[build-dependencies]
+quote = { version = "1.0.15", default-features = false }
+serde = { version = "1.0.136", default-features = false, features = ["std", "derive"] }
+serde_json = { version = "1.0.79", default-features = false, features = ["std"] }
+proc-macro2 = "1.0.36"
+Inflector = { version = "0.11.4", default-features = false }
+unicode-xid = "0.2.2"

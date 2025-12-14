@@ -16,7 +16,7 @@
 pub mod benchmarks {
 	use crate::TeyrchainSystem;
 	use core::marker::PhantomData;
-	use cumulus_primitives_core::{ChannelStatus, GetChannelInfo};
+	use pezcumulus_primitives_core::{ChannelStatus, GetChannelInfo};
 	use pezframe_support::traits::{
 		tokens::{Pay, PaymentStatus},
 		Get,

@@ -21,11 +21,11 @@ use crate::mock::*;
 
 use alloc::collections::BTreeMap;
 use core::num::NonZeroU32;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::ApprovedPeerId, AbridgedHrmpChannel, ClaimQueueOffset, CoreInfo, CoreSelector,
 	InboundDownwardMessage, InboundHrmpMessage, CUMULUS_CONSENSUS_ID,
 };
-use cumulus_primitives_teyrchain_inherent::{
+use pezcumulus_primitives_teyrchain_inherent::{
 	v0, INHERENT_IDENTIFIER, TEYRCHAIN_INHERENT_IDENTIFIER_V0,
 };
 use pezframe_support::{assert_ok, parameter_types, weights::Weight};
@@ -1604,7 +1604,7 @@ fn deposits_relay_parent_storage_root() {
 		|| {},
 		|| {
 			let digest = System::digest();
-			assert!(cumulus_primitives_core::rpsr_digest::extract_relay_parent_storage_root(
+			assert!(pezcumulus_primitives_core::rpsr_digest::extract_relay_parent_storage_root(
 				&digest
 			)
 			.is_some());

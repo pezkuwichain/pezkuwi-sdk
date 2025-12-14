@@ -8,20 +8,21 @@ edition.workspace = true
 license.workspace = true
 publish = false
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-token-wrapper"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { package = "parity-scale-codec", version = "3.6.12", default-features = false, features = [
-	"derive",
-	"max-encoded-len",
+  "derive",
+  "max-encoded-len",
 ] }
 scale-info = { default-features = false, features = [
-	"derive",
+  "derive",
 ], workspace = true }
 serde = { version = "1.0", default-features = false, features = [
-	"derive",
+  "derive",
 ], optional = true }
 
 pezframe-benchmarking = { optional = true, workspace = true }
@@ -42,34 +43,34 @@ pezsp-io = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-assets/std",
-	"pezpallet-balances/std",
-	"scale-info/std",
-	"serde",
-	"pezsp-core?/std",
-	"pezsp-io?/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-assets/std",
+  "pezpallet-balances/std",
+  "scale-info/std",
+  "serde",
+  "pezsp-core?/std",
+  "pezsp-io?/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-assets/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezsp-core",
-	"pezsp-io",
-	"pezsp-io?/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-assets/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezsp-core",
+  "pezsp-io",
+  "pezsp-io?/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-assets/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-assets/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Node-specific RPC methods for interaction with Merkle Mountain Range pallet."
+documentation = "https://docs.rs/mmr-rpc"
 
 [lints]
 workspace = true
@@ -17,9 +18,9 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 codec = { workspace = true, default-features = true }
 jsonrpsee = { features = [
-	"client-core",
-	"macros",
-	"server-core",
+  "client-core",
+  "macros",
+  "server-core",
 ], workspace = true }
 serde = { features = ["derive"], workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
@@ -33,8 +34,8 @@ serde_json = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-mmr-primitives/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-mmr-primitives/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

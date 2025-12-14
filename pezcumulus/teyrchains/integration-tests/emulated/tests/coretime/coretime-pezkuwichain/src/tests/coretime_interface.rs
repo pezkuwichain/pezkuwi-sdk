@@ -100,7 +100,7 @@ fn transact_hardcoded_weights_are_sane() {
 					pezpallet_broker::Event::CoreCountRequested { core_count: 1 }
 				) => {},
 				CoretimeEvent::TeyrchainSystem(
-					cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+					pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
 				) => {},
 			]
 		);
@@ -162,7 +162,7 @@ fn transact_hardcoded_weights_are_sane() {
 					pezpallet_broker::Event::CoreAssigned { .. }
 				) => {},
 				CoretimeEvent::TeyrchainSystem(
-					cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+					pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
 				) => {},
 			]
 		);
@@ -197,7 +197,7 @@ fn transact_hardcoded_weights_are_sane() {
 			CoretimePezkuwichain,
 			vec![
 				CoretimeEvent::TeyrchainSystem(
-					cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+					pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
 				) => {},
 			]
 		);

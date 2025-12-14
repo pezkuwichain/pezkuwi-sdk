@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Support code for the runtime."
 readme = "README.md"
+documentation = "https://docs.rs/pezframe-support"
 
 [lints]
 workspace = true
@@ -62,58 +63,58 @@ pezsp-timestamp = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"binary-merkle-tree/std",
-	"codec/std",
-	"environmental/std",
-	"frame-metadata/std",
-	"pezframe-support-procedural/std",
-	"pezframe-system/std",
-	"k256/std",
-	"log/std",
-	"scale-info/std",
-	"serde/std",
-	"serde_json/std",
-	"pezsp-api/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-debug-derive/std",
-	"pezsp-genesis-builder/std",
-	"pezsp-inherents/std",
-	"pezsp-io/std",
-	"pezsp-metadata-ir/std",
-	"pezsp-runtime/std",
-	"pezsp-staking/std",
-	"pezsp-state-machine/std",
-	"pezsp-std/std",
-	"pezsp-tracing/std",
-	"pezsp-trie/std",
-	"pezsp-weights/std",
+  "binary-merkle-tree/std",
+  "codec/std",
+  "environmental/std",
+  "frame-metadata/std",
+  "pezframe-support-procedural/std",
+  "pezframe-system/std",
+  "k256/std",
+  "log/std",
+  "scale-info/std",
+  "serde/std",
+  "serde_json/std",
+  "pezsp-api/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-debug-derive/std",
+  "pezsp-genesis-builder/std",
+  "pezsp-inherents/std",
+  "pezsp-io/std",
+  "pezsp-metadata-ir/std",
+  "pezsp-runtime/std",
+  "pezsp-staking/std",
+  "pezsp-state-machine/std",
+  "pezsp-std/std",
+  "pezsp-tracing/std",
+  "pezsp-trie/std",
+  "pezsp-weights/std",
 ]
 runtime-benchmarks = [
-	"binary-merkle-tree/runtime-benchmarks",
-	"pezframe-support-procedural/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-genesis-builder/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
-	"pezsp-state-machine?/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
+  "binary-merkle-tree/runtime-benchmarks",
+  "pezframe-support-procedural/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-genesis-builder/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
+  "pezsp-state-machine?/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-system/try-runtime",
-	"pezsp-debug-derive/force-debug",
-	"pezsp-runtime/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-debug-derive/force-debug",
+  "pezsp-runtime/try-runtime",
 ]
 experimental = ["pezframe-support-procedural/experimental"]
 # By default some types have documentation, `no-metadata-docs` allows to reduce the documentation
 # in the metadata.
 no-metadata-docs = [
-	"pezframe-support-procedural/no-metadata-docs",
-	"pezsp-api/no-metadata-docs",
+  "pezframe-support-procedural/no-metadata-docs",
+  "pezsp-api/no-metadata-docs",
 ]
 # By default some types have documentation, `full-metadata-docs` allows to add documentation to
 # more types in the metadata.

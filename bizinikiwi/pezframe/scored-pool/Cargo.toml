@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pallet for scored pools"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-scored-pool"
 
 [lints]
 workspace = true
@@ -29,24 +30,24 @@ pezpallet-balances = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-balances/std",
-	"scale-info/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-balances/std",
+  "scale-info/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

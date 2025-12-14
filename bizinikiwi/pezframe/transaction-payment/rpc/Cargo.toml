@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "RPC interface for the transaction payment pallet."
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-transaction-payment-rpc"
 
 [lints]
 workspace = true
@@ -18,9 +19,9 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 codec = { workspace = true, default-features = true }
 jsonrpsee = { features = [
-	"client-core",
-	"macros",
-	"server-core",
+  "client-core",
+  "macros",
+  "server-core",
 ], workspace = true }
 pezpallet-transaction-payment-rpc-runtime-api = { workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
@@ -32,8 +33,8 @@ pezsp-weights = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

@@ -21,8 +21,8 @@
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-use cumulus_pallet_xcm::{ensure_sibling_para, Origin as CumulusOrigin};
-use cumulus_primitives_core::ParaId;
+use pezcumulus_pallet_xcm::{ensure_sibling_para, Origin as CumulusOrigin};
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{parameter_types, BoundedVec};
 use pezframe_system::Config as SystemConfig;
 use pezsp_runtime::traits::Saturating;

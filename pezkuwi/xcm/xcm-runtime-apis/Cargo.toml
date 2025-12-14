@@ -6,6 +6,8 @@ edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
 description = "XCM runtime APIs"
+documentation = "https://docs.rs/xcm-runtime-apis"
+homepage = { workspace = true }
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
@@ -35,31 +37,31 @@ xcm-simulator = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-assets/std",
-	"pezpallet-balances/std",
-	"pezpallet-xcm/std",
-	"scale-info/std",
-	"pezsp-api/std",
-	"pezsp-io/std",
-	"pezsp-weights/std",
-	"tracing/std",
-	"xcm-builder/std",
-	"xcm-executor/std",
-	"xcm/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-assets/std",
+  "pezpallet-balances/std",
+  "pezpallet-xcm/std",
+  "scale-info/std",
+  "pezsp-api/std",
+  "pezsp-io/std",
+  "pezsp-weights/std",
+  "tracing/std",
+  "xcm-builder/std",
+  "xcm-executor/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-assets/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-assets/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

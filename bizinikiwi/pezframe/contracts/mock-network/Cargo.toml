@@ -7,6 +7,7 @@ license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 description = "A mock network for testing pezpallet-contracts"
+documentation = "https://docs.rs/pezpallet-contracts-mock-network"
 
 [lints]
 workspace = true
@@ -44,41 +45,41 @@ pezpallet-contracts-fixtures = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-balances/std",
-	"pezpallet-contracts/std",
-	"pezpallet-timestamp/std",
-	"pezpallet-xcm/std",
-	"scale-info/std",
-	"pezsp-api/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-keystore/std",
-	"pezsp-runtime/std",
-	"xcm-executor/std",
-	"xcm/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-balances/std",
+  "pezpallet-contracts/std",
+  "pezpallet-timestamp/std",
+  "pezpallet-xcm/std",
+  "scale-info/std",
+  "pezsp-api/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-keystore/std",
+  "pezsp-runtime/std",
+  "xcm-executor/std",
+  "xcm/std",
 ]
 
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-assets/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-contracts-fixtures/runtime-benchmarks",
-	"pezpallet-contracts/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-assets/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-contracts-fixtures/runtime-benchmarks",
+  "pezpallet-contracts/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

@@ -389,7 +389,7 @@ fn ss58hash(data: &[u8]) -> Vec<u8> {
 /// Default prefix number
 #[cfg(feature = "serde")]
 static DEFAULT_VERSION: core::sync::atomic::AtomicU16 = core::sync::atomic::AtomicU16::new(
-	from_known_address_format(Ss58AddressFormatRegistry::BizinikiwiAccount),
+	from_known_address_format(Ss58AddressFormatRegistry::PezkuwichainAccount),
 );
 
 /// Returns default SS58 format used by the current active process.

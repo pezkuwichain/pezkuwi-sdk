@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
 publish = false
+documentation = "https://docs.rs/chain-spec-guide-runtime"
 
 [dependencies]
 codec = { workspace = true }
@@ -37,28 +38,28 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"scale-info/std",
+  "codec/std",
+  "scale-info/std",
 
-	"pezframe-support/std",
-	"frame/std",
+  "pezframe-support/std",
+  "frame/std",
 
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-genesis-builder/std",
-	"pezsp-keyring/std",
-	"pezsp-runtime/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-genesis-builder/std",
+  "pezsp-keyring/std",
+  "pezsp-runtime/std",
 
-	"serde/std",
-	"serde_json/std",
-	"bizinikiwi-wasm-builder",
+  "serde/std",
+  "serde_json/std",
+  "bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"frame/runtime-benchmarks",
-	"pezsc-chain-spec/runtime-benchmarks",
-	"pezsp-genesis-builder/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezsc-chain-spec/runtime-benchmarks",
+  "pezsp-genesis-builder/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]

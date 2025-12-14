@@ -139,7 +139,7 @@ mod bridge_hub_zagros_tests {
 		BridgeHubZagrosLocation, WithBridgeHubZagrosMessagesInstance,
 		XcmOverBridgeHubZagrosInstance, ZagrosGlobalConsensusNetwork,
 	};
-	use cumulus_primitives_core::UpwardMessageSender;
+	use pezcumulus_primitives_core::UpwardMessageSender;
 
 	// Random para id of sibling chain used in tests.
 	pub const SIBLING_TEYRCHAIN_ID: u32 = 2053;
@@ -531,7 +531,7 @@ mod bridge_hub_bulletin_tests {
 		PezkuwichainBulletinGlobalConsensusNetworkLocation,
 		WithPezkuwichainBulletinMessagesInstance, XcmOverPezkuwiBulletinInstance,
 	};
-	use cumulus_primitives_core::UpwardMessageSender;
+	use pezcumulus_primitives_core::UpwardMessageSender;
 
 	// Random para id of sibling chain used in tests.
 	pub const SIBLING_PEOPLE_TEYRCHAIN_ID: u32 =

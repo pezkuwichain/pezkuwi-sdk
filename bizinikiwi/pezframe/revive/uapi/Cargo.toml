@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Exposes all the host functions that a contract can import."
+documentation = "https://docs.rs/pezpallet-revive-uapi"
 
 [lints]
 workspace = true
@@ -19,8 +20,8 @@ targets = ["riscv64imac-unknown-none-elf"]
 alloy-core = { workspace = true, optional = true, features = ["sol-types"] }
 bitflags = { workspace = true }
 codec = { features = [
-	"derive",
-	"max-encoded-len",
+  "derive",
+  "max-encoded-len",
 ], optional = true, workspace = true }
 const-crypto = { version = "0.3.0", default-features = false }
 hex-literal = { version = "0.4.1", default-features = false }

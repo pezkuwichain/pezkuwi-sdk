@@ -23,8 +23,8 @@ use std::{
 };
 
 use async_trait::async_trait;
-use cumulus_client_bootnodes::bootnode_request_response_config;
-use cumulus_primitives_core::{
+use pezcumulus_client_bootnodes::bootnode_request_response_config;
+use pezcumulus_primitives_core::{
 	relay_chain::{
 		runtime_api::TeyrchainHost, Block as PBlock, BlockId, BlockNumber,
 		CommittedCandidateReceiptV2 as CommittedCandidateReceipt, CoreIndex, CoreState,
@@ -33,7 +33,7 @@ use cumulus_primitives_core::{
 	},
 	InboundDownwardMessage, ParaId, PersistedValidationData,
 };
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use futures::{FutureExt, Stream, StreamExt};
 use pezkuwi_primitives::CandidateEvent;
 use pezkuwi_service::{

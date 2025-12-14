@@ -53,7 +53,7 @@ decl_test_teyrchains! {
 			XcmpMessageHandler: penpal_runtime::XcmpQueue,
 			LocationToAccountId: penpal_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: penpal_runtime::TeyrchainInfo,
-			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
+			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {
@@ -78,7 +78,7 @@ decl_test_teyrchains! {
 			XcmpMessageHandler: penpal_runtime::XcmpQueue,
 			LocationToAccountId: penpal_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: penpal_runtime::TeyrchainInfo,
-			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
+			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {

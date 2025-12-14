@@ -24,7 +24,7 @@ extern crate alloc;
 use alloc::{vec, vec::Vec};
 use codec::Encode;
 use core::marker::PhantomData;
-use cumulus_primitives_core::{MessageSendError, UpwardMessageSender};
+use pezcumulus_primitives_core::{MessageSendError, UpwardMessageSender};
 use pezframe_support::{
 	defensive,
 	traits::{tokens::fungibles, Get, OnUnbalanced as OnUnbalancedT},
@@ -577,7 +577,7 @@ where
 #[cfg(test)]
 mod test_xcm_router {
 	use super::*;
-	use cumulus_primitives_core::UpwardMessage;
+	use pezcumulus_primitives_core::UpwardMessage;
 	use pezframe_support::assert_ok;
 	use xcm::MAX_XCM_DECODE_DEPTH;
 

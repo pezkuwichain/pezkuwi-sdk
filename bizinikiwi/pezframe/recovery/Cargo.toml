@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME account recovery pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-recovery"
 
 [lints]
 workspace = true
@@ -26,8 +27,8 @@ pezpallet-balances = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
 ]
 std = ["codec/std", "frame/std", "pezpallet-balances/std", "scale-info/std"]
 try-runtime = ["frame/try-runtime", "pezpallet-balances/try-runtime"]

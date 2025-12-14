@@ -20,20 +20,20 @@ use crate::*;
 use crate::teyrchain_consensus::run_teyrchain_consensus;
 use async_trait::async_trait;
 use codec::Encode;
-use cumulus_client_pov_recovery::RecoveryKind;
-use cumulus_primitives_core::{
+use pezcumulus_client_pov_recovery::RecoveryKind;
+use pezcumulus_primitives_core::{
 	relay_chain::{BlockId, BlockNumber, CoreState},
 	CumulusDigestItem, InboundDownwardMessage, InboundHrmpMessage, PersistedValidationData,
 };
-use cumulus_relay_chain_interface::{
+use pezcumulus_relay_chain_interface::{
 	CommittedCandidateReceipt, CoreIndex, OccupiedCoreAssumption, OverseerHandle, PHeader, ParaId,
 	RelayChainInterface, RelayChainResult, SessionIndex, StorageValue, ValidatorId,
 };
-use cumulus_test_client::{
+use pezcumulus_test_client::{
 	runtime::{Block, Hash, Header},
 	Backend, Client, InitBlockBuilder, TestClientBuilder, TestClientBuilderExt,
 };
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 use futures::{channel::mpsc, executor::block_on, select, FutureExt, Stream, StreamExt};
 use futures_timer::Delay;
 use pezkuwi_primitives::{CandidateEvent, HeadData};
@@ -308,7 +308,7 @@ fn sproof_with_parent_by_hash(client: &Client, hash: PHash) -> RelayStateSproofB
 
 fn sproof_with_parent(parent: HeadData) -> RelayStateSproofBuilder {
 	let mut x = RelayStateSproofBuilder::default();
-	x.para_id = cumulus_test_client::runtime::TEYRCHAIN_ID.into();
+	x.para_id = pezcumulus_test_client::runtime::TEYRCHAIN_ID.into();
 	x.included_para_head = Some(parent);
 
 	x
@@ -321,7 +321,7 @@ fn build_block<B: InitBlockBuilder>(
 	timestamp: Option<u64>,
 	relay_parent: Option<PHash>,
 ) -> Block {
-	let cumulus_test_client::BlockBuilderAndSupportData { block_builder, .. } = match at {
+	let pezcumulus_test_client::BlockBuilderAndSupportData { block_builder, .. } = match at {
 		Some(at) => match timestamp {
 			Some(ts) => builder.init_block_builder_with_timestamp(at, None, sproof, ts),
 			None => builder.init_block_builder_at(at, None, sproof),

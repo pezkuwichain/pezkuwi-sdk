@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezkuwi_omni_node_lib::chain_spec::{Extensions, GenericChainSpec};
 use pezsc_service::ChainType;
 

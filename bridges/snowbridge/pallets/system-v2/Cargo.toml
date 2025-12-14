@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-pezpallet-system-v2"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -47,41 +49,41 @@ pezsp-keyring = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"scale-info/std",
-	"snowbridge-core/std",
-	"snowbridge-outbound-queue-primitives/std",
-	"snowbridge-pezpallet-system/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"tracing/std",
-	"xcm-executor/std",
-	"xcm/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "snowbridge-core/std",
+  "snowbridge-outbound-queue-primitives/std",
+  "snowbridge-pezpallet-system/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "tracing/std",
+  "xcm-executor/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"snowbridge-core/runtime-benchmarks",
-	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
-	"snowbridge-pezpallet-system/runtime-benchmarks",
-	"snowbridge-test-utils/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "snowbridge-outbound-queue-primitives/runtime-benchmarks",
+  "snowbridge-pezpallet-system/runtime-benchmarks",
+  "snowbridge-test-utils/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"snowbridge-pezpallet-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "snowbridge-pezpallet-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

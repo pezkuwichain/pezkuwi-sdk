@@ -24,7 +24,7 @@ use bridge_hub_pezkuwichain_runtime::{
 	TxExtension, UncheckedExtrinsic,
 };
 use codec::{Decode, Encode};
-use cumulus_primitives_core::XcmError::FailedToTransactAsset;
+use pezcumulus_primitives_core::XcmError::FailedToTransactAsset;
 use pezframe_support::parameter_types;
 use snowbridge_pallet_ethereum_client::WeightInfo;
 use pezsp_core::H160;

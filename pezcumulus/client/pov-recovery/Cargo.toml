@@ -7,6 +7,7 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-client-pov-recovery"
 
 [lints]
 workspace = true
@@ -53,20 +54,20 @@ pezcumulus-test-client = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezcumulus-relay-chain-interface/runtime-benchmarks",
-	"pezcumulus-relay-chain-streams/runtime-benchmarks",
-	"pezcumulus-test-client/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezcumulus-relay-chain-interface/runtime-benchmarks",
+  "pezcumulus-relay-chain-streams/runtime-benchmarks",
+  "pezcumulus-test-client/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]

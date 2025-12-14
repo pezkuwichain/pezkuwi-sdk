@@ -15,7 +15,7 @@
 
 use crate::local_and_foreign_assets::ForeignAssetReserveData;
 use core::fmt::Debug;
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
 	pezpallet_prelude::Get,
 	traits::{tokens::ProvideAssetReserves, Contains, ContainsPair},

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Collection of common consensus specific implementations for Bizinikiwi (client)"
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-consensus"
 
 [lints]
 workspace = true
@@ -38,10 +39,10 @@ pezsp-test-primitives = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"pezsp-test-primitives/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "pezsp-test-primitives/runtime-benchmarks",
 ]

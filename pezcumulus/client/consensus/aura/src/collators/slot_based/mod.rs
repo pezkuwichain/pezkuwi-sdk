@@ -29,7 +29,7 @@
 //!
 //! 1. Awaits the next production signal from the internal timer
 //! 2. Retrieves the current best relay chain block and identifies a valid parent block (see
-//!    [find_potential_parents][cumulus_client_consensus_common::find_potential_parents] for parent
+//!    [find_potential_parents][pezcumulus_client_consensus_common::find_potential_parents] for parent
 //!    selection criteria)
 //! 3. Validates that:
 //!    - The teyrchain has an assigned core on the relay chain
@@ -70,12 +70,12 @@ use self::{block_builder_task::run_block_builder, collation_task::run_collation_
 pub use block_import::{SlotBasedBlockImport, SlotBasedBlockImportHandle};
 use codec::Codec;
 use consensus_common::TeyrchainCandidate;
-use cumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
-use cumulus_client_consensus_common::{self as consensus_common, TeyrchainBlockImportMarker};
-use cumulus_client_consensus_proposer::ProposerInterface;
-use cumulus_primitives_aura::AuraUnincludedSegmentApi;
-use cumulus_primitives_core::RelayParentOffsetApi;
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
+use pezcumulus_client_consensus_common::{self as consensus_common, TeyrchainBlockImportMarker};
+use pezcumulus_client_consensus_proposer::ProposerInterface;
+use pezcumulus_primitives_aura::AuraUnincludedSegmentApi;
+use pezcumulus_primitives_core::RelayParentOffsetApi;
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 use futures::FutureExt;
 use pezkuwi_primitives::{
 	CollatorPair, CoreIndex, Hash as RelayHash, Id as ParaId, ValidationCodeHash,

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi statement store."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-statement-store"
 
 [lints]
 workspace = true
@@ -42,10 +43,10 @@ required-features = []
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-network-statement/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-statement-store/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-network-statement/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-statement-store/runtime-benchmarks",
 ]

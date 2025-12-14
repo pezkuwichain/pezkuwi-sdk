@@ -45,7 +45,7 @@
 //!
 //! 3. Generate the chain spec:
 //! ```bash
-//! target/release/chain-spec-builder create -r target/release/wbuild/pezcumulus-test-runtime/cumulus_test_runtime.wasm named-preset development
+//! target/release/chain-spec-builder create -r target/release/wbuild/pezcumulus-test-runtime/pezcumulus_test_runtime.wasm named-preset development
 //! ```
 //!
 //! 4. Replace the chain spec:
@@ -116,7 +116,7 @@ use anyhow::anyhow;
 use pezkuwi_primitives::Id as ParaId;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
-use cumulus_zombienet_sdk_helpers::assert_para_is_registered;
+use pezcumulus_zombienet_sdk_helpers::assert_para_is_registered;
 use zombienet_sdk::{
 	subxt::{OnlineClient, PolkadotConfig},
 	NetworkConfig, NetworkConfigBuilder,

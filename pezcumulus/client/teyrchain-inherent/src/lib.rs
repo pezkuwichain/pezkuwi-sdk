@@ -19,15 +19,15 @@
 mod mock;
 
 use codec::Decode;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{
 		self, ApprovedPeerId, Block as RelayBlock, Hash as PHash, Header as RelayHeader,
 		HrmpChannelId,
 	},
 	ParaId, PersistedValidationData,
 };
-pub use cumulus_primitives_teyrchain_inherent::{TeyrchainInherentData, INHERENT_IDENTIFIER};
-use cumulus_relay_chain_interface::RelayChainInterface;
+pub use pezcumulus_primitives_teyrchain_inherent::{TeyrchainInherentData, INHERENT_IDENTIFIER};
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 pub use mock::{MockValidationDataInherentDataProvider, MockXcmConfig};
 use pezsc_network_types::PeerId;
 

@@ -7,6 +7,7 @@ description = "Minimal node implementation to be used in tandem with RPC or ligh
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-relay-chain-minimal-node"
 
 [lints]
 workspace = true
@@ -51,26 +52,26 @@ tracing = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-client-bootnodes/runtime-benchmarks",
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezcumulus-relay-chain-interface/runtime-benchmarks",
-	"pezcumulus-relay-chain-rpc-interface/runtime-benchmarks",
-	"pezkuwi-core-primitives/runtime-benchmarks",
-	"pezkuwi-network-bridge/runtime-benchmarks",
-	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-service/runtime-benchmarks",
-	"pezsc-authority-discovery/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-network-common/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsc-tracing/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezcumulus-client-bootnodes/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezcumulus-relay-chain-interface/runtime-benchmarks",
+  "pezcumulus-relay-chain-rpc-interface/runtime-benchmarks",
+  "pezkuwi-core-primitives/runtime-benchmarks",
+  "pezkuwi-network-bridge/runtime-benchmarks",
+  "pezkuwi-node-network-protocol/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-service/runtime-benchmarks",
+  "pezsc-authority-discovery/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-network-common/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsc-tracing/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

@@ -32,13 +32,16 @@ tempfile = { workspace = true }
 # This feature adds BLS crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
-bls-experimental = ["pezsp-core/bls-experimental", "pezsp-keystore/bls-experimental"]
+bls-experimental = [
+  "pezsp-core/bls-experimental",
+  "pezsp-keystore/bls-experimental",
+]
 
 # This feature adds Bandersnatch crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
 bandersnatch-experimental = [
-	"pezsp-application-crypto/bandersnatch-experimental",
-	"pezsp-core/bandersnatch-experimental",
-	"pezsp-keystore/bandersnatch-experimental",
+  "pezsp-application-crypto/bandersnatch-experimental",
+  "pezsp-core/bandersnatch-experimental",
+  "pezsp-keystore/bandersnatch-experimental",
 ]

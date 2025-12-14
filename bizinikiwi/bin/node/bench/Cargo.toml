@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+documentation = "https://docs.rs/node-bench"
 
 [lints]
 workspace = true
@@ -48,17 +49,17 @@ tempfile = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"kitchensink-runtime/runtime-benchmarks",
-	"node-primitives/runtime-benchmarks",
-	"node-testing/runtime-benchmarks",
-	"pezsc-basic-authorship/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsc-transaction-pool/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
+  "kitchensink-runtime/runtime-benchmarks",
+  "node-primitives/runtime-benchmarks",
+  "node-testing/runtime-benchmarks",
+  "pezsc-basic-authorship/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsc-transaction-pool/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
 ]

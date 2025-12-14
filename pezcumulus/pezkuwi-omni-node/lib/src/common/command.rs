@@ -15,7 +15,7 @@
 // limitations under the License.
 
 use crate::common::spec::BaseNodeSpec;
-use cumulus_client_cli::ExportGenesisHeadCommand;
+use pezcumulus_client_cli::ExportGenesisHeadCommand;
 use pezframe_benchmarking_cli::BlockCmd;
 #[cfg(any(feature = "runtime-benchmarks"))]
 use pezframe_benchmarking_cli::StorageCmd;

@@ -17,7 +17,7 @@
 
 use async_trait::async_trait;
 use core::time::Duration;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{
 		CandidateEvent, CommittedCandidateReceiptV2 as CommittedCandidateReceipt,
 		Hash as RelayHash, Header as RelayHeader, InboundHrmpMessage, OccupiedCoreAssumption,
@@ -25,7 +25,7 @@ use cumulus_primitives_core::{
 	},
 	InboundDownwardMessage, ParaId, PersistedValidationData,
 };
-use cumulus_relay_chain_interface::{
+use pezcumulus_relay_chain_interface::{
 	BlockNumber, CoreState, PHeader, RelayChainError, RelayChainInterface, RelayChainResult,
 };
 use futures::{FutureExt, Stream, StreamExt};
@@ -37,7 +37,7 @@ use pezsp_storage::StorageKey;
 use pezsp_version::RuntimeVersion;
 use std::{collections::btree_map::BTreeMap, pin::Pin};
 
-use cumulus_primitives_core::relay_chain::BlockId;
+use pezcumulus_primitives_core::relay_chain::BlockId;
 pub use url::Url;
 
 mod metrics;
@@ -274,7 +274,7 @@ impl RelayChainInterface for RelayChainRpcInterface {
 		&self,
 		relay_parent: RelayHash,
 	) -> RelayChainResult<
-		BTreeMap<cumulus_relay_chain_interface::CoreIndex, std::collections::VecDeque<ParaId>>,
+		BTreeMap<pezcumulus_relay_chain_interface::CoreIndex, std::collections::VecDeque<ParaId>>,
 	> {
 		self.rpc_client.teyrchain_host_claim_queue(relay_parent).await
 	}

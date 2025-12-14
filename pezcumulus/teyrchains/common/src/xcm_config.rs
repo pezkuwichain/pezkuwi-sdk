@@ -15,7 +15,7 @@
 
 use crate::impls::AccountIdOf;
 use core::marker::PhantomData;
-use cumulus_primitives_core::{IsSystem, ParaId};
+use pezcumulus_primitives_core::{IsSystem, ParaId};
 use pezframe_support::{
 	traits::{fungibles::Inspect, tokens::ConversionToAssetBalance, Contains, ContainsPair},
 	weights::Weight,
@@ -33,7 +33,7 @@ pub struct AssetFeeAsExistentialDepositMultiplier<
 	AssetInstance: 'static,
 >(PhantomData<(Runtime, WeightToFee, BalanceConverter, AssetInstance)>);
 impl<CurrencyBalance, Runtime, WeightToFee, BalanceConverter, AssetInstance>
-	cumulus_primitives_utility::ChargeWeightInFungibles<
+	pezcumulus_primitives_utility::ChargeWeightInFungibles<
 		AccountIdOf<Runtime>,
 		pezpallet_assets::Pallet<Runtime, AssetInstance>,
 	> for AssetFeeAsExistentialDepositMultiplier<Runtime, WeightToFee, BalanceConverter, AssetInstance>

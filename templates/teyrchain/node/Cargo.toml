@@ -9,6 +9,7 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
+documentation = "https://docs.rs/teyrchain-template-node"
 
 [lints]
 workspace = true
@@ -37,10 +38,10 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 default = ["std"]
 std = ["log/std", "pezkuwi-sdk/std", "teyrchain-template-runtime/std"]
 runtime-benchmarks = [
-	"pezkuwi-sdk/runtime-benchmarks",
-	"teyrchain-template-runtime/runtime-benchmarks",
+  "pezkuwi-sdk/runtime-benchmarks",
+  "teyrchain-template-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezkuwi-sdk/try-runtime",
-	"teyrchain-template-runtime/try-runtime",
+  "pezkuwi-sdk/try-runtime",
+  "teyrchain-template-runtime/try-runtime",
 ]

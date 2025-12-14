@@ -31,19 +31,19 @@ thiserror = { optional = true, workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"impl-serde/std",
-	"parity-wasm",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"thiserror",
+  "codec/std",
+  "impl-serde/std",
+  "parity-wasm",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "thiserror",
 ]
 
 # Serde support without relying on std features.
 serde = ["dep:serde", "impl-serde", "pezsp-runtime/serde"]
 runtime-benchmarks = [
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version-proc-macro/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version-proc-macro/runtime-benchmarks",
 ]

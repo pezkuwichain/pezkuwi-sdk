@@ -6,6 +6,8 @@ version = "0.1.0"
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-ah-ops"
+homepage = { workspace = true }
 
 [package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true # for AHM only
@@ -29,36 +31,36 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-balances/std",
-	"pezpallet-timestamp/std",
-	"pezpallet-utility/std",
-	"scale-info/std",
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-balances/std",
+  "pezpallet-timestamp/std",
+  "pezpallet-utility/std",
+  "scale-info/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezpallet-utility/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezpallet-utility/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezpallet-utility/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-timestamp/try-runtime",
+  "pezpallet-utility/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

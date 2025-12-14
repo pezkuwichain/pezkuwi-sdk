@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use core::{marker::PhantomData, ops::ControlFlow};
-use cumulus_primitives_core::Weight;
+use pezcumulus_primitives_core::Weight;
 use pezframe_support::traits::{Contains, ProcessMessageError};
 use xcm::prelude::{ExportMessage, Instruction, Location, NetworkId};
 

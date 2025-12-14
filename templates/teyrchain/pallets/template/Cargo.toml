@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
 publish = false
+documentation = "https://docs.rs/pezpallet-teyrchain-template"
 
 [lints]
 workspace = true
@@ -20,8 +21,8 @@ codec = { features = ["derive"], workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 frame = { workspace = true, default-features = false, features = [
-	"experimental",
-	"runtime",
+  "experimental",
+  "runtime",
 ] }
 
 [features]

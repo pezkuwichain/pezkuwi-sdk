@@ -21,8 +21,8 @@ use super::{
 };
 use async_trait::async_trait;
 use codec::Encode;
-use cumulus_primitives_core::{ClaimQueueOffset, CoreInfo, CoreSelector, CumulusDigestItem};
-use cumulus_relay_chain_interface::*;
+use pezcumulus_primitives_core::{ClaimQueueOffset, CoreInfo, CoreSelector, CumulusDigestItem};
+use pezcumulus_relay_chain_interface::*;
 use futures::Stream;
 use pezkuwi_node_subsystem_util::runtime::ClaimQueueSnapshot;
 use pezkuwi_primitives::{
@@ -191,7 +191,7 @@ async fn determine_core_with_core_info() {
 	let mut digest = pezsp_runtime::generic::Digest::default();
 	digest.push(CumulusDigestItem::CoreInfo(core_info).to_digest_item());
 	// Add relay parent storage root to make it a non-new relay parent
-	digest.push(cumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
+	digest.push(pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 		*relay_parent.state_root(),
 		*relay_parent.number(),
 	));
@@ -270,7 +270,7 @@ async fn determine_core_selector_overflow() {
 	let mut digest = pezsp_runtime::generic::Digest::default();
 	digest.push(CumulusDigestItem::CoreInfo(core_info).to_digest_item());
 	// Add relay parent storage root to make it a non-new relay parent
-	digest.push(cumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
+	digest.push(pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 		*relay_parent.state_root(),
 		*relay_parent.number(),
 	));
@@ -310,7 +310,7 @@ async fn determine_core_uses_last_claimed_core_selector() {
 	// Create a para parent header without core info in digest (non-genesis)
 	// Need to add relay parent storage root to digest to make it a non-new relay parent
 	let mut digest = pezsp_runtime::generic::Digest::default();
-	digest.push(cumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
+	digest.push(pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 		*relay_parent.state_root(),
 		*relay_parent.number(),
 	));
@@ -362,7 +362,7 @@ async fn determine_core_uses_last_claimed_core_selector_wraps_around() {
 	// Create a para parent header without core info in digest (non-genesis)
 	// Need to add relay parent storage root to digest to make it a non-new relay parent
 	let mut digest = pezsp_runtime::generic::Digest::default();
-	digest.push(cumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
+	digest.push(pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 		*relay_parent.state_root(),
 		*relay_parent.number(),
 	));
@@ -412,7 +412,7 @@ async fn determine_core_no_last_claimed_core_selector() {
 	// Create a para parent header without core info in digest (non-genesis)
 	// Need to add relay parent storage root to digest to make it a non-new relay parent
 	let mut digest = pezsp_runtime::generic::Digest::default();
-	digest.push(cumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
+	digest.push(pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 		*relay_parent.state_root(),
 		*relay_parent.number(),
 	));
@@ -492,7 +492,7 @@ impl RelayChainInterface for TestRelayClient {
 		_: ParaId,
 		_: OccupiedCoreAssumption,
 	) -> RelayChainResult<Option<PersistedValidationData>> {
-		use cumulus_primitives_core::PersistedValidationData;
+		use pezcumulus_primitives_core::PersistedValidationData;
 		Ok(Some(PersistedValidationData {
 			parent_head: Default::default(),
 			relay_parent_number: 100,

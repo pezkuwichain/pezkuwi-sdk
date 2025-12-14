@@ -9,6 +9,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi authority discovery."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-authority-discovery"
 
 [lints]
 workspace = true
@@ -54,12 +55,12 @@ prost-build = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-authority-discovery/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-authority-discovery/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

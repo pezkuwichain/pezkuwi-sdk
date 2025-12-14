@@ -7,6 +7,7 @@ license.workspace = true
 description = "The Chain API subsystem provides access to chain related utility functions like block number to hash conversions."
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-chain-api"
 
 [lints]
 workspace = true
@@ -32,14 +33,14 @@ pezsp-core = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-types/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus-babe/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-metrics/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-types/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus-babe/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
 ]

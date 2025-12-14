@@ -21,8 +21,8 @@
 /// may see equivocations in a different order, and therefore may not agree on which blocks
 /// should be thrown out and which ones should be kept.
 use codec::Codec;
-use cumulus_client_consensus_common::TeyrchainBlockImportMarker;
-use cumulus_primitives_core::{CumulusDigestItem, RelayBlockIdentifier};
+use pezcumulus_client_consensus_common::TeyrchainBlockImportMarker;
+use pezcumulus_primitives_core::{CumulusDigestItem, RelayBlockIdentifier};
 use parking_lot::Mutex;
 use pezkuwi_primitives::Hash as RHash;
 use pezsc_consensus::{
@@ -305,11 +305,11 @@ where
 mod test {
 	use super::*;
 	use codec::Encode;
-	use cumulus_test_client::{
+	use pezcumulus_test_client::{
 		runtime::Block, seal_block, Client, InitBlockBuilder, TestClientBuilder,
 		TestClientBuilderExt,
 	};
-	use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+	use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 	use futures::FutureExt;
 	use pezkuwi_primitives::{HeadData, PersistedValidationData};
 	use pezsc_client_api::HeaderBackend;
@@ -336,7 +336,7 @@ mod test {
 		let genesis = client.info().best_hash;
 		let mut sproof = RelayStateSproofBuilder::default();
 		sproof.included_para_head = Some(HeadData(client.header(genesis).unwrap().encode()));
-		sproof.para_id = cumulus_test_client::runtime::TEYRCHAIN_ID.into();
+		sproof.para_id = pezcumulus_test_client::runtime::TEYRCHAIN_ID.into();
 
 		let validation_data = PersistedValidationData {
 			relay_parent_number: 1,

@@ -6,6 +6,8 @@ edition.workspace = true
 repository.workspace = true
 description = "Migrates messages from the old DMP queue pallet."
 license = "Apache-2.0"
+documentation = "https://docs.rs/pezcumulus-pezpallet-dmp-queue"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -37,28 +39,28 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezcumulus-primitives-core/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"scale-info/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"xcm/std",
+  "codec/std",
+  "pezcumulus-primitives-core/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "scale-info/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

@@ -6,6 +6,8 @@ authors.workspace = true
 edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-bridge-messages"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -39,44 +41,44 @@ pezsp-io = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bp-header-chain/std",
-	"bp-messages/std",
-	"bp-runtime/std",
-	"bp-test-utils/std",
-	"codec/std",
-	"pezframe-benchmarking/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-balances/std",
-	"pezpallet-bridge-grandpa/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"pezsp-trie/std",
-	"tracing/std",
+  "bp-header-chain/std",
+  "bp-messages/std",
+  "bp-runtime/std",
+  "bp-test-utils/std",
+  "codec/std",
+  "pezframe-benchmarking/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-balances/std",
+  "pezpallet-bridge-grandpa/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "pezsp-trie/std",
+  "tracing/std",
 ]
 runtime-benchmarks = [
-	"bp-header-chain/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-runtime/test-helpers",
-	"bp-test-utils/runtime-benchmarks",
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-bridge-grandpa/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-trie?/runtime-benchmarks",
+  "bp-header-chain/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "bp-runtime/test-helpers",
+  "bp-test-utils/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-bridge-grandpa/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-trie?/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-bridge-grandpa/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-bridge-grandpa/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 test-helpers = ["bp-runtime/test-helpers", "pezsp-trie"]

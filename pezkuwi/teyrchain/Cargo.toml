@@ -7,6 +7,7 @@ license.workspace = true
 version = "6.0.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-teyrchain-primitives"
 
 [lints]
 workspace = true
@@ -32,16 +33,16 @@ serde = { features = ["alloc", "derive"], workspace = true }
 default = ["std"]
 wasm-api = []
 std = [
-	"bounded-collections/std",
-	"codec/std",
-	"pezkuwi-core-primitives/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
-	"pezsp-weights/std",
+  "bounded-collections/std",
+  "codec/std",
+  "pezkuwi-core-primitives/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
+  "pezsp-weights/std",
 ]
 runtime-benchmarks = [
-	"pezkuwi-core-primitives/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezkuwi-core-primitives/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

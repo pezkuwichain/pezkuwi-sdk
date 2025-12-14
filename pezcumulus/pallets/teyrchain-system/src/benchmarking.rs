@@ -21,7 +21,7 @@
 
 use super::*;
 use crate::teyrchain_inherent::InboundDownwardMessages;
-use cumulus_primitives_core::{relay_chain::Hash as RelayHash, InboundDownwardMessage};
+use pezcumulus_primitives_core::{relay_chain::Hash as RelayHash, InboundDownwardMessage};
 use pezframe_benchmarking::v2::*;
 use pezsp_runtime::traits::BlakeTwo256;
 

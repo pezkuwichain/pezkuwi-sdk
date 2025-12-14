@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-erasure-coding"
 
 [lints]
 workspace = true
@@ -30,7 +31,7 @@ harness = false
 
 [features]
 runtime-benchmarks = [
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
 ]

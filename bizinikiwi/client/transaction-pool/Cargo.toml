@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi transaction pool implementation."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-transaction-pool"
 
 [lints]
 workspace = true
@@ -42,8 +43,8 @@ pezsp-tracing = { workspace = true, default-features = true }
 pezsp-transaction-pool = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tokio = { workspace = true, default-features = true, features = [
-	"macros",
-	"time",
+  "macros",
+  "time",
 ] }
 tokio-stream = { workspace = true }
 tracing = { workspace = true, default-features = true }
@@ -71,16 +72,16 @@ zombienet-sdk = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-transaction-pool/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
-	"bizinikiwi-test-runtime-transaction-pool/runtime-benchmarks",
-	"bizinikiwi-test-runtime/runtime-benchmarks",
+  "pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-transaction-pool/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "bizinikiwi-test-runtime-transaction-pool/runtime-benchmarks",
+  "bizinikiwi-test-runtime/runtime-benchmarks",
 ]

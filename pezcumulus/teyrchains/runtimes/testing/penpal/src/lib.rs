@@ -54,8 +54,8 @@ use assets_common::{
 	local_and_foreign_assets::{LocalFromLeft, TargetFromLeft},
 	AssetIdForTrustBackedAssetsConvert,
 };
-use cumulus_pallet_teyrchain_system::RelayNumberStrictlyIncreases;
-use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
+use pezcumulus_pallet_teyrchain_system::RelayNumberStrictlyIncreases;
+use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	construct_runtime, derive_impl,
 	dispatch::DispatchClass,
@@ -308,7 +308,7 @@ const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 /// We allow for 0.5 of a second of compute with a 12 second average block time.
 const MAXIMUM_BLOCK_WEIGHT: Weight = Weight::from_parts(
 	WEIGHT_REF_TIME_PER_SECOND.saturating_div(2),
-	cumulus_primitives_core::relay_chain::MAX_POV_SIZE as u64,
+	pezcumulus_primitives_core::relay_chain::MAX_POV_SIZE as u64,
 );
 
 /// The version information used to identify this runtime when compiled natively.
@@ -394,7 +394,7 @@ impl pezframe_system::Config for Runtime {
 	/// This is used as an identifier of the chain. 42 is the generic bizinikiwi prefix.
 	type SS58Prefix = SS58Prefix;
 	/// The action to take on a Runtime Upgrade
-	type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = Migrations;
 }
@@ -638,14 +638,14 @@ parameter_types! {
 	pub const RelayOrigin: AggregateMessageOrigin = AggregateMessageOrigin::Parent;
 }
 
-type ConsensusHook = cumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
 	UNINCLUDED_SEGMENT_CAPACITY,
 >;
 
-impl cumulus_pallet_teyrchain_system::Config for Runtime {
+impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
@@ -656,7 +656,7 @@ impl cumulus_pallet_teyrchain_system::Config for Runtime {
 	type XcmpMessageHandler = XcmpQueue;
 	type ReservedXcmpWeight = ReservedXcmpWeight;
 	type CheckAssociatedRelayNumber = RelayNumberStrictlyIncreases;
-	type ConsensusHook = cumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+	type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
 		Runtime,
 		RELAY_CHAIN_SLOT_DURATION_MILLIS,
 		BLOCK_PROCESSING_VELOCITY,
@@ -690,7 +690,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type IdleMaxServiceWeight = MessageQueueServiceWeight;
 }
 
-impl cumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
 	/// The asset ID for the asset that we use to pay for message delivery fees.
@@ -706,7 +706,7 @@ pub type PriceForSiblingTeyrchainDelivery = pezkuwi_runtime_common::xcm_sender::
 	XcmpQueue,
 >;
 
-impl cumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = PezkuwiXcm;
@@ -863,7 +863,7 @@ construct_runtime!(
 	{
 		// System support stuff.
 		System: pezframe_system = 0,
-		TeyrchainSystem: cumulus_pallet_teyrchain_system = 1,
+		TeyrchainSystem: pezcumulus_pallet_teyrchain_system = 1,
 		Timestamp: pezpallet_timestamp = 2,
 		TeyrchainInfo: teyrchain_info = 3,
 
@@ -877,12 +877,12 @@ construct_runtime!(
 		CollatorSelection: pezpallet_collator_selection = 21,
 		Session: pezpallet_session = 22,
 		Aura: pezpallet_aura = 23,
-		AuraExt: cumulus_pallet_aura_ext = 24,
+		AuraExt: pezcumulus_pallet_aura_ext = 24,
 
 		// XCM helpers.
-		XcmpQueue: cumulus_pallet_xcmp_queue = 30,
+		XcmpQueue: pezcumulus_pallet_xcmp_queue = 30,
 		PezkuwiXcm: pezpallet_xcm = 31,
-		CumulusXcm: cumulus_pallet_xcm = 32,
+		CumulusXcm: pezcumulus_pallet_xcm = 32,
 		MessageQueue: pezpallet_message_queue = 34,
 
 		// Handy utilities.
@@ -911,8 +911,8 @@ mod benches {
 		[pezpallet_sudo, Sudo]
 		[pezpallet_timestamp, Timestamp]
 		[pezpallet_collator_selection, CollatorSelection]
-		[cumulus_pallet_teyrchain_system, TeyrchainSystem]
-		[cumulus_pallet_xcmp_queue, XcmpQueue]
+		[pezcumulus_pallet_teyrchain_system, TeyrchainSystem]
+		[pezcumulus_pallet_xcmp_queue, XcmpQueue]
 		[pezpallet_utility, Utility]
 	);
 }
@@ -1060,8 +1060,8 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 		}
 	}
 
-	impl cumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
-		fn collect_collation_info(header: &<Block as BlockT>::Header) -> cumulus_primitives_core::CollationInfo {
+	impl pezcumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
+		fn collect_collation_info(header: &<Block as BlockT>::Header) -> pezcumulus_primitives_core::CollationInfo {
 			TeyrchainSystem::collect_collation_info(header)
 		}
 	}
@@ -1162,7 +1162,7 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			use pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pallet as SystemBench;
 			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -1182,8 +1182,8 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
 			impl pezframe_system_benchmarking::Config for Runtime {}
 
-			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
-			impl cumulus_pallet_session_benchmarking::Config for Runtime {}
+			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			impl pezcumulus_pallet_session_benchmarking::Config for Runtime {}
 
 			use pezframe_support::traits::WhitelistedStorageKeys;
 			let whitelist: Vec<TrackedStorageKey> = AllPalletsWithSystem::whitelisted_storage_keys();
@@ -1211,23 +1211,23 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 		}
 	}
 
-	impl cumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
+	impl pezcumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
 		fn teyrchain_id() -> ParaId {
 			TeyrchainInfo::teyrchain_id()
 		}
 	}
 
-	impl cumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
+	impl pezcumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
 		fn can_build_upon(
 			included_hash: <Block as BlockT>::Hash,
-			slot: cumulus_primitives_aura::Slot,
+			slot: pezcumulus_primitives_aura::Slot,
 		) -> bool {
 			ConsensusHook::can_build_upon(included_hash, slot)
 		}
 	}
 );
 
-cumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = cumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

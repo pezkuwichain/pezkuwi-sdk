@@ -72,7 +72,7 @@ parameter_types! {
 	pub const RootLocation: Location = Location::here();
 	pub const ZagrosLocation: Location = Location::parent();
 	pub const RelayNetwork: Option<NetworkId> = Some(NetworkId::ByGenesis(ZAGROS_GENESIS_HASH));
-	pub RelayChainOrigin: RuntimeOrigin = cumulus_pallet_xcm::Origin::Relay.into();
+	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation =
 		[GlobalConsensus(RelayNetwork::get().unwrap()), Teyrchain(TeyrchainInfo::teyrchain_id().into())].into();
 	pub UniversalLocationNetworkId: NetworkId = UniversalLocation::get().global_consensus().unwrap();
@@ -256,7 +256,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	RelayChainAsNative<RelayChainOrigin, RuntimeOrigin>,
 	// Native converter for sibling Teyrchains; will convert to a `SiblingPara` origin when
 	// recognised.
-	SiblingTeyrchainAsNative<cumulus_pallet_xcm::Origin, RuntimeOrigin>,
+	SiblingTeyrchainAsNative<pezcumulus_pallet_xcm::Origin, RuntimeOrigin>,
 	// Superuser converter for the Relay-chain (Parent) location. This will allow it to issue a
 	// transaction from the Root origin.
 	ParentAsSuperuser<RuntimeOrigin>,
@@ -432,7 +432,7 @@ impl xcm_executor::Config for XcmConfig {
 			Balances,
 			ResolveTo<StakingPot, Balances>,
 		>,
-		cumulus_primitives_utility::SwapFirstAssetTrader<
+		pezcumulus_primitives_utility::SwapFirstAssetTrader<
 			ZagrosLocation,
 			crate::AssetConversion,
 			WeightToFee,
@@ -523,7 +523,7 @@ pub type PriceForParentDelivery =
 /// For routing XCM messages which do not cross local consensus boundary.
 type LocalXcmRouter = (
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<TeyrchainSystem, PezkuwiXcm, PriceForParentDelivery>,
+	pezcumulus_primitives_utility::ParentAsUmp<TeyrchainSystem, PezkuwiXcm, PriceForParentDelivery>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 );
@@ -594,7 +594,7 @@ impl pezpallet_xcm::Config for Runtime {
 	>;
 }
 
-impl cumulus_pallet_xcm::Config for Runtime {
+impl pezcumulus_pallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }

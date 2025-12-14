@@ -18,15 +18,15 @@
 use codec::Encode;
 use std::path::PathBuf;
 
-use cumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 
 use pezkuwi_node_primitives::{MaybeCompressedPoV, SubmitCollationParams};
 use pezkuwi_node_subsystem::messages::CollationGenerationMessage;
 use pezkuwi_overseer::Handle as OverseerHandle;
 use pezkuwi_primitives::{CollatorPair, Id as ParaId};
 
-use cumulus_primitives_core::relay_chain::BlockId;
+use pezcumulus_primitives_core::relay_chain::BlockId;
 use futures::prelude::*;
 
 use crate::export_pov_to_path;
@@ -84,7 +84,7 @@ pub async fn run_collation_task<Block, RClient, CS>(
 		return;
 	};
 
-	cumulus_client_collator::initialize_collator_subsystems(
+	pezcumulus_client_collator::initialize_collator_subsystems(
 		&mut overseer_handle,
 		collator_key,
 		para_id,

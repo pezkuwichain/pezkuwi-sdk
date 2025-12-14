@@ -6,7 +6,7 @@
 use anyhow::anyhow;
 use tokio::time::Duration;
 
-use cumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
@@ -73,7 +73,7 @@ async fn spam_statement_distribution_requests_test() -> Result<(), anyhow::Error
 		.with_teyrchain(|p| {
 			p.with_id(2000)
 				.with_default_command("undying-collator")
-				.cumulus_based(false)
+				.pezcumulus_based(false)
 				.with_default_image(
 					std::env::var("COL_IMAGE")
 						.unwrap_or("docker.io/paritypr/colander:latest".to_string())
@@ -85,7 +85,7 @@ async fn spam_statement_distribution_requests_test() -> Result<(), anyhow::Error
 		.with_teyrchain(|p| {
 			p.with_id(2001)
 				.with_default_command("undying-collator")
-				.cumulus_based(false)
+				.pezcumulus_based(false)
 				.with_default_image(
 					std::env::var("COL_IMAGE")
 						.unwrap_or("docker.io/paritypr/colander:latest".to_string())

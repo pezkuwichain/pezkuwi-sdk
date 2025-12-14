@@ -7,6 +7,7 @@ license.workspace = true
 description = "Runtime metric interface for the Pezkuwi node"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-runtime-metrics"
 
 [lints]
 workspace = true
@@ -22,14 +23,14 @@ bs58 = { features = ["alloc"], workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bs58/std",
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezkuwi-primitives/std",
-	"pezsp-tracing/std",
+  "bs58/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezkuwi-primitives/std",
+  "pezsp-tracing/std",
 ]
 runtime-metrics = ["pezframe-benchmarking", "pezsp-tracing/with-tracing"]
 runtime-benchmarks = [
-	"pezframe-benchmarking?/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+  "pezframe-benchmarking?/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
 ]

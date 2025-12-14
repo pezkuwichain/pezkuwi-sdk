@@ -4,13 +4,14 @@ name = "pezpallet-mixnet"
 version = "0.4.0"
 license = "Apache-2.0"
 authors = [
-	"Kurdistan Tech Institute <info@pezkuwichain.io>",
-	"Parity Technologies <admin@parity.io>",
+  "Kurdistan Tech Institute <info@pezkuwichain.io>",
+  "Parity Technologies <admin@parity.io>",
 ]
 edition.workspace = true
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-mixnet"
 
 [lints]
 workspace = true
@@ -30,16 +31,16 @@ pezsp-mixnet = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"frame/std",
-	"log/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-application-crypto/std",
-	"pezsp-mixnet/std",
+  "codec/std",
+  "frame/std",
+  "log/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-application-crypto/std",
+  "pezsp-mixnet/std",
 ]
 try-runtime = ["frame/try-runtime"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezsp-mixnet/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezsp-mixnet/runtime-benchmarks",
 ]

@@ -46,7 +46,7 @@ use xcm::latest::prelude::*;
 pub trait WithRemoteTeyrchainHelper {
 	/// This chain runtime.
 	type Runtime: BasicTeyrchainRuntime
-		+ cumulus_pallet_xcmp_queue::Config
+		+ pezcumulus_pallet_xcmp_queue::Config
 		+ BridgeGrandpaConfig<Self::GPI>
 		+ BridgeTeyrchainsConfig<Self::PPI>
 		+ BridgeMessagesConfig<
@@ -79,7 +79,7 @@ impl<Runtime, AllPalletsWithoutSystem, GPI, PPI, MPI, RPI> WithRemoteTeyrchainHe
 	for WithRemoteTeyrchainHelperAdapter<Runtime, AllPalletsWithoutSystem, GPI, PPI, MPI, RPI>
 where
 	Runtime: BasicTeyrchainRuntime
-		+ cumulus_pallet_xcmp_queue::Config
+		+ pezcumulus_pallet_xcmp_queue::Config
 		+ BridgeGrandpaConfig<GPI>
 		+ BridgeTeyrchainsConfig<PPI>
 		+ BridgeMessagesConfig<

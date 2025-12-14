@@ -6,6 +6,8 @@ authors.workspace = true
 edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
+documentation = "https://docs.rs/bp-bridge-hub-pezcumulus"
+homepage = { workspace = true }
 
 [package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true
@@ -32,23 +34,23 @@ pezkuwi-primitives = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bp-messages/std",
-	"bp-pezkuwi-core/std",
-	"bp-runtime/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezkuwi-primitives/std",
-	"pezsp-api/std",
-	"pezsp-std/std",
-	"teyrchains-common/std",
+  "bp-messages/std",
+  "bp-pezkuwi-core/std",
+  "bp-runtime/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezkuwi-primitives/std",
+  "pezsp-api/std",
+  "pezsp-std/std",
+  "teyrchains-common/std",
 ]
 runtime-benchmarks = [
-	"bp-messages/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "bp-pezkuwi-core/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
 ]

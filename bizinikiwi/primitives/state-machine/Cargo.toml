@@ -44,21 +44,21 @@ pezsp-runtime = { workspace = true, default-features = true }
 default = ["std"]
 fuzzing = ["arbitrary"]
 std = [
-	"codec/std",
-	"hash-db/std",
-	"log/std",
-	"parking_lot",
-	"rand",
-	"pezsp-core/std",
-	"pezsp-externalities/std",
-	"pezsp-panic-handler",
-	"pezsp-runtime/std",
-	"pezsp-trie/std",
-	"thiserror",
-	"tracing",
-	"trie-db/std",
+  "codec/std",
+  "hash-db/std",
+  "log/std",
+  "parking_lot",
+  "rand",
+  "pezsp-core/std",
+  "pezsp-externalities/std",
+  "pezsp-panic-handler",
+  "pezsp-runtime/std",
+  "pezsp-trie/std",
+  "thiserror",
+  "tracing",
+  "trie-db/std",
 ]
 runtime-benchmarks = [
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
 ]

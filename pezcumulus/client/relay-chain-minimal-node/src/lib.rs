@@ -17,9 +17,9 @@
 
 use collator_overseer::NewMinimalNode;
 
-use cumulus_client_bootnodes::bootnode_request_response_config;
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
-use cumulus_relay_chain_rpc_interface::{RelayChainRpcClient, RelayChainRpcInterface, Url};
+use pezcumulus_client_bootnodes::bootnode_request_response_config;
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
+use pezcumulus_relay_chain_rpc_interface::{RelayChainRpcClient, RelayChainRpcInterface, Url};
 use network::build_collator_network;
 use pezkuwi_network_bridge::{peer_sets_info, IsAuthority};
 use pezkuwi_node_network_protocol::{
@@ -143,7 +143,7 @@ pub async fn build_minimal_relay_chain_node_with_rpc(
 	Arc<dyn NetworkService>,
 	async_channel::Receiver<GenericIncomingRequest>,
 )> {
-	let client = cumulus_relay_chain_rpc_interface::create_client_and_start_worker(
+	let client = pezcumulus_relay_chain_rpc_interface::create_client_and_start_worker(
 		relay_chain_url,
 		task_manager,
 		teyrchain_prometheus_registry,

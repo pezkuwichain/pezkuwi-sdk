@@ -109,7 +109,7 @@ fn send_assets_from_penpal_zagros_through_zagros_ah_to_pezkuwichain_ah(
 						who: *who == TreasuryAccount::get(),
 					},
 					RuntimeEvent::XcmpQueue(
-						cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+						pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 					) => {},
 				]
 			);
@@ -699,7 +699,7 @@ fn send_wnds_from_zagros_relay_through_asset_hub_zagros_to_asset_hub_pezkuwichai
 							who: *who == sov_ahr_on_ahw.clone().into(),
 						},
 						RuntimeEvent::XcmpQueue(
-							cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+							pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 						) => {},
 					]
 				);
@@ -1008,7 +1008,7 @@ fn send_back_rocs_from_penpal_zagros_through_asset_hub_zagros_to_asset_hub_pezku
 							owner: owner == &sov_penpal_on_ahw,
 						},
 						RuntimeEvent::XcmpQueue(
-							cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+							pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 						) => {},
 						// message processed successfully
 						RuntimeEvent::MessageQueue(
@@ -1034,7 +1034,7 @@ fn send_back_rocs_from_penpal_zagros_through_asset_hub_zagros_to_asset_hub_pezku
 				},
 				// sent message to sibling Penpal
 				RuntimeEvent::XcmpQueue(
-					cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+					pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 				) => {},
 				// message processed successfully
 				RuntimeEvent::MessageQueue(
@@ -1206,7 +1206,7 @@ fn send_back_rocs_from_penpal_zagros_through_asset_hub_zagros_to_asset_hub_pezku
 							owner: owner == &sov_penpal_on_ahw,
 						},
 						RuntimeEvent::XcmpQueue(
-							cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+							pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 						) => {},
 						// message processed successfully
 						RuntimeEvent::MessageQueue(
@@ -1235,7 +1235,7 @@ fn send_back_rocs_from_penpal_zagros_through_asset_hub_zagros_to_asset_hub_pezku
 				},
 				// sent message to Pezkuwichain Relay
 				RuntimeEvent::TeyrchainSystem(
-					cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+					pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
 				) => {},
 				// message processed successfully
 				RuntimeEvent::MessageQueue(
@@ -1400,7 +1400,7 @@ fn do_send_pens_and_wnds_from_penpal_zagros_via_ahw_to_asset_hub_pezkuwichain(
 						who: *who == sov_ahr_on_ahw.clone().into(),
 					},
 					RuntimeEvent::XcmpQueue(
-						cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+						pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 					) => {},
 				]
 			);

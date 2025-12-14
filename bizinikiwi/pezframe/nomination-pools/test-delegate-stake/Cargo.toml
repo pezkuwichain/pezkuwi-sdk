@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME nomination pools pallet tests with the staking pallet"
 publish = false
+documentation = "https://docs.rs/pezpallet-nomination-pools-test-delegate-stake"
 
 [lints]
 workspace = true
@@ -18,7 +19,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dev-dependencies]
 codec = { features = ["derive"], workspace = true, default-features = true }
 scale-info = { features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 
 pezsp-core = { workspace = true, default-features = true }
@@ -28,7 +29,7 @@ pezsp-staking = { workspace = true, default-features = true }
 
 pezframe-election-provider-support = { workspace = true, default-features = true }
 pezframe-support = { features = [
-	"experimental",
+  "experimental",
 ], workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }
 
@@ -45,17 +46,17 @@ pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-election-provider-support/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-bags-list/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-delegated-staking/runtime-benchmarks",
-	"pezpallet-nomination-pools/runtime-benchmarks",
-	"pezpallet-staking-reward-curve/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-election-provider-support/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-bags-list/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-delegated-staking/runtime-benchmarks",
+  "pezpallet-nomination-pools/runtime-benchmarks",
+  "pezpallet-staking-reward-curve/runtime-benchmarks",
+  "pezpallet-staking/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

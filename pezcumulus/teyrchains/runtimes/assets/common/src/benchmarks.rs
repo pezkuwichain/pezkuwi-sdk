@@ -15,7 +15,7 @@
 
 use crate::local_and_foreign_assets::ForeignAssetReserveData;
 use core::{fmt::Debug, marker::PhantomData};
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezsp_runtime::traits::Get;
 use xcm::latest::prelude::*;
 

@@ -8,6 +8,7 @@ edition.workspace = true
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-offchain"
 
 [lints]
 workspace = true
@@ -23,14 +24,14 @@ futures = { workspace = true }
 futures-timer = { workspace = true }
 http-body-util = { workspace = true }
 hyper = { features = [
-	"http1",
-	"http2",
+  "http1",
+  "http2",
 ], workspace = true, default-features = true }
 hyper-rustls = { workspace = true }
 hyper-util = { features = [
-	"client-legacy",
-	"http1",
-	"http2",
+  "client-legacy",
+  "http1",
+  "http2",
 ], workspace = true }
 num_cpus = { workspace = true }
 once_cell = { workspace = true }
@@ -64,15 +65,15 @@ tokio = { workspace = true, default-features = true }
 [features]
 default = []
 runtime-benchmarks = [
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsc-transaction-pool/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-offchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-client-db/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsc-transaction-pool/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-offchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

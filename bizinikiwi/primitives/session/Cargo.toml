@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Primitives for sessions"
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-session"
 
 [lints]
 workspace = true
@@ -27,16 +28,16 @@ pezsp-staking = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"scale-info/std",
-	"pezsp-api/std",
-	"pezsp-core/std",
-	"pezsp-keystore/std",
-	"pezsp-runtime/std",
-	"pezsp-staking/std",
+  "codec/std",
+  "scale-info/std",
+  "pezsp-api/std",
+  "pezsp-core/std",
+  "pezsp-keystore/std",
+  "pezsp-runtime/std",
+  "pezsp-staking/std",
 ]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-runtime?/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-runtime?/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

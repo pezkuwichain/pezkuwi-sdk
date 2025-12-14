@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Paymaster"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-salary"
 
 [lints]
 workspace = true
@@ -25,14 +26,14 @@ scale-info = { features = ["derive"], workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"frame/std",
-	"log/std",
-	"pezpallet-ranked-collective/std",
-	"scale-info/std",
+  "codec/std",
+  "frame/std",
+  "log/std",
+  "pezpallet-ranked-collective/std",
+  "scale-info/std",
 ]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-ranked-collective/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-ranked-collective/runtime-benchmarks",
 ]
 try-runtime = ["frame/try-runtime", "pezpallet-ranked-collective?/try-runtime"]

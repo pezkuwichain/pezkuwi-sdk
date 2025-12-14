@@ -6,6 +6,8 @@ version = "0.1.0"
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-staking-async-rc-client"
+homepage = { workspace = true }
 
 [dependencies]
 codec = { workspace = true, features = ["derive"] }
@@ -22,25 +24,25 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
-	"pezsp-staking/std",
-	"xcm/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
+  "pezsp-staking/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

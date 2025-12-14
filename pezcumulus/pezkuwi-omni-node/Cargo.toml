@@ -8,6 +8,7 @@ description = "Generic binary that can run a teyrchain node with u32 block numbe
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-omni-node"
 
 [lints]
 workspace = true
@@ -17,8 +18,8 @@ color-eyre = { workspace = true }
 
 # Local
 pezkuwi-omni-node-lib = { workspace = true, features = [
-	"pezkuwichain-native",
-	"zagros-native",
+  "pezkuwichain-native",
+  "zagros-native",
 ] }
 
 [dev-dependencies]

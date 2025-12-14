@@ -16,13 +16,13 @@
 
 use crate::TeyrchainInherentData;
 use codec::Decode;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain,
 	relay_chain::{Slot, UpgradeGoAhead},
 	InboundDownwardMessage, InboundHrmpMessage, ParaId, PersistedValidationData,
 };
-use cumulus_primitives_teyrchain_inherent::MessageQueueChain;
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_primitives_teyrchain_inherent::MessageQueueChain;
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 use pezsc_client_api::{Backend, StorageProvider};
 use pezsp_crypto_hashing::twox_128;
 use pezsp_inherents::{InherentData, InherentDataProvider};
@@ -50,7 +50,7 @@ pub struct MockValidationDataInherentDataProvider<R = ()> {
 	/// The teyrchain ID of the teyrchain for that the inherent data is created.
 	pub para_id: ParaId,
 	/// The current block head data of the local block chain (the teyrchain).
-	pub current_para_block_head: Option<cumulus_primitives_core::relay_chain::HeadData>,
+	pub current_para_block_head: Option<pezcumulus_primitives_core::relay_chain::HeadData>,
 	/// The relay block in which this teyrchain appeared to start. This will be the relay block
 	/// number in para block #P1.
 	pub relay_offset: u32,

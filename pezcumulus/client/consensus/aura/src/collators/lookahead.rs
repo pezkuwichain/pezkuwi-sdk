@@ -33,12 +33,12 @@
 //! must be propagated to the next author before their turn.
 
 use codec::{Codec, Encode};
-use cumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
-use cumulus_client_consensus_common::{self as consensus_common, TeyrchainBlockImportMarker};
-use cumulus_client_consensus_proposer::ProposerInterface;
-use cumulus_primitives_aura::AuraUnincludedSegmentApi;
-use cumulus_primitives_core::{CollectCollationInfo, PersistedValidationData};
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
+use pezcumulus_client_consensus_common::{self as consensus_common, TeyrchainBlockImportMarker};
+use pezcumulus_client_consensus_proposer::ProposerInterface;
+use pezcumulus_primitives_aura::AuraUnincludedSegmentApi;
+use pezcumulus_primitives_core::{CollectCollationInfo, PersistedValidationData};
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 
 use pezkuwi_node_primitives::SubmitCollationParams;
 use pezkuwi_node_subsystem::messages::CollationGenerationMessage;
@@ -231,7 +231,7 @@ where
 	P::Signature: TryFrom<Vec<u8>> + Member + Codec,
 {
 	async move {
-		cumulus_client_collator::initialize_collator_subsystems(
+		pezcumulus_client_collator::initialize_collator_subsystems(
 			&mut params.overseer_handle,
 			params.collator_key,
 			params.para_id,

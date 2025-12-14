@@ -17,7 +17,7 @@
 //! Aura-related primitives for pezcumulus teyrchain collators.
 
 use codec::Codec;
-use cumulus_primitives_aura::AuraUnincludedSegmentApi;
+use pezcumulus_primitives_aura::AuraUnincludedSegmentApi;
 use pezsp_consensus_aura::AuraApi;
 use pezsp_runtime::{
 	app_crypto::{AppCrypto, AppPair, AppSignature, Pair},

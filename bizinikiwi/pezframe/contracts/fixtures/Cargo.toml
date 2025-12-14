@@ -6,6 +6,9 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Fixtures for testing contracts pallet."
+documentation = "https://docs.rs/pezpallet-contracts-fixtures"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -24,6 +27,6 @@ twox-hash = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

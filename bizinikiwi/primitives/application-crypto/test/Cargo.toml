@@ -8,6 +8,7 @@ license = "Apache-2.0"
 publish = false
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezsp-application-crypto-test"
 
 [lints]
 workspace = true
@@ -26,6 +27,6 @@ bizinikiwi-test-runtime-client = { workspace = true }
 [features]
 bls-experimental = ["bizinikiwi-test-runtime-client/bls-experimental"]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]

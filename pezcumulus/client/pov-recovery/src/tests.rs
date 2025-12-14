@@ -18,14 +18,14 @@
 use super::*;
 use assert_matches::assert_matches;
 use codec::{Decode, Encode};
-use cumulus_primitives_core::relay_chain::{
+use pezcumulus_primitives_core::relay_chain::{
 	BlockId, CandidateCommitments, CandidateDescriptorV2, CoreIndex, CoreState,
 };
-use cumulus_relay_chain_interface::{
+use pezcumulus_relay_chain_interface::{
 	InboundDownwardMessage, InboundHrmpMessage, OccupiedCoreAssumption, PHash, PHeader,
 	PersistedValidationData, RelayChainResult, StorageValue, ValidationCodeHash, ValidatorId,
 };
-use cumulus_test_client::runtime::{Block, Header};
+use pezcumulus_test_client::runtime::{Block, Header};
 use futures::{channel::mpsc, SinkExt, Stream};
 use pezkuwi_node_primitives::AvailableData;
 use pezkuwi_node_subsystem::{

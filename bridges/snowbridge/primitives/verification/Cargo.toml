@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-verification-primitives"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -25,14 +27,14 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"scale-info/std",
-	"snowbridge-beacon-primitives/std",
-	"pezsp-core/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-support/std",
+  "scale-info/std",
+  "snowbridge-beacon-primitives/std",
+  "pezsp-core/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"snowbridge-beacon-primitives/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "snowbridge-beacon-primitives/runtime-benchmarks",
 ]

@@ -71,7 +71,7 @@
 //! 2. Pass this constant to the `teyrchain-system` pallet.
 //!
 //! ```ignore
-//! impl cumulus_pallet_teyrchain_system::Config for Runtime {
+//! impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 //! 	// Other config items here
 //!     ...
 //! 	type RelayParentOffset = ConstU32<RELAY_PARENT_OFFSET>;
@@ -80,7 +80,7 @@
 //! 3. Implement the `RelayParentOffsetApi` runtime API for your runtime.
 //!
 //! ```ignore
-//! impl cumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
+//! impl pezcumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
 //!     fn relay_parent_offset() -> u32 {
 //! 		RELAY_PARENT_OFFSET
 //! 	}

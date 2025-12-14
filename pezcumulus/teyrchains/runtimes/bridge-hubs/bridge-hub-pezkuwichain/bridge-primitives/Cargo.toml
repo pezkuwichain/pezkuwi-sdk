@@ -6,6 +6,8 @@ authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
+documentation = "https://docs.rs/bp-bridge-hub-pezkuwichain"
+homepage = { workspace = true }
 
 [package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true
@@ -31,22 +33,22 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bp-bridge-hub-pezcumulus/std",
-	"bp-messages/std",
-	"bp-runtime/std",
-	"bp-xcm-bridge-hub/std",
-	"codec/std",
-	"pezframe-support/std",
-	"pezsp-api/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "bp-bridge-hub-pezcumulus/std",
+  "bp-messages/std",
+  "bp-runtime/std",
+  "bp-xcm-bridge-hub/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezsp-api/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"bp-bridge-hub-pezcumulus/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-xcm-bridge-hub/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "bp-bridge-hub-pezcumulus/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "bp-xcm-bridge-hub/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

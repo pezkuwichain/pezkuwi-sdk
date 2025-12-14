@@ -51,7 +51,7 @@ fn pay_salary_technical_fellowship() {
 		assert_expected_events!(
 			CollectivesZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -93,7 +93,7 @@ fn pay_salary_secretary() {
 		assert_expected_events!(
 			CollectivesZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});

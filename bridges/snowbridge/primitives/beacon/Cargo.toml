@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-beacon-primitives"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -20,7 +22,7 @@ hex = { workspace = true }
 rlp = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 
 pezframe-support = { workspace = true }
@@ -42,24 +44,24 @@ hex-literal = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"byte-slice-cast/std",
-	"codec/std",
-	"pezframe-support/std",
-	"hex/std",
-	"milagro-bls/std",
-	"rlp/std",
-	"scale-info/std",
-	"serde",
-	"snowbridge-ethereum/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"ssz_rs/std",
+  "byte-slice-cast/std",
+  "codec/std",
+  "pezframe-support/std",
+  "hex/std",
+  "milagro-bls/std",
+  "rlp/std",
+  "scale-info/std",
+  "serde",
+  "snowbridge-ethereum/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "ssz_rs/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"snowbridge-ethereum/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "snowbridge-ethereum/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

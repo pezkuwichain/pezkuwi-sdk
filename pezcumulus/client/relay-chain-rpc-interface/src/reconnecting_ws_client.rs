@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezcumulus. If not, see <https://www.gnu.org/licenses/>.
 
-use cumulus_primitives_core::relay_chain::{
+use pezcumulus_primitives_core::relay_chain::{
 	Block as RelayBlock, BlockNumber as RelayNumber, Hash as RelayHash, Header as RelayHeader,
 };
 use futures::{

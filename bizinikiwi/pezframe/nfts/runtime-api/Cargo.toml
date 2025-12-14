@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Runtime API for the FRAME NFTs pallet."
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-nfts-runtime-api"
 
 [lints]
 workspace = true

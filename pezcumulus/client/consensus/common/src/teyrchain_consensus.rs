@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezcumulus. If not, see <https://www.gnu.org/licenses/>.
 
-use cumulus_relay_chain_streams::{finalized_heads, new_best_heads};
+use pezcumulus_relay_chain_streams::{finalized_heads, new_best_heads};
 use pezsc_client_api::{
 	Backend, BlockBackend, BlockImportNotification, BlockchainEvents, Finalizer, UsageProvider,
 };
@@ -25,8 +25,8 @@ use pezsp_blockchain::Error as ClientError;
 use pezsp_consensus::{BlockOrigin, BlockStatus};
 use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT};
 
-use cumulus_client_pov_recovery::{RecoveryKind, RecoveryRequest};
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_client_pov_recovery::{RecoveryKind, RecoveryRequest};
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 
 use pezkuwi_primitives::Id as ParaId;
 

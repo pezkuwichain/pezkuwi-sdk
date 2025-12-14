@@ -20,9 +20,9 @@ use std::{
 	pin::Pin,
 };
 
-use cumulus_primitives_core::{InboundDownwardMessage, ParaId, PersistedValidationData};
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainResult};
-use cumulus_relay_chain_rpc_interface::RelayChainRpcClient;
+use pezcumulus_primitives_core::{InboundDownwardMessage, ParaId, PersistedValidationData};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainResult};
+use pezcumulus_relay_chain_rpc_interface::RelayChainRpcClient;
 use futures::{Stream, StreamExt};
 use pezkuwi_core_primitives::{Block, BlockNumber, Hash, Header};
 use pezkuwi_overseer::{ChainApiBackend, RuntimeApiSubsystemClient};
@@ -216,7 +216,7 @@ impl RuntimeApiSubsystemClient for BlockChainRpcClient {
 	async fn candidate_pending_availability(
 		&self,
 		at: Hash,
-		para_id: cumulus_primitives_core::ParaId,
+		para_id: pezcumulus_primitives_core::ParaId,
 	) -> Result<Option<pezkuwi_primitives::CommittedCandidateReceiptV2<Hash>>, pezsp_api::ApiError> {
 		Ok(self
 			.rpc_client
@@ -455,7 +455,7 @@ impl RuntimeApiSubsystemClient for BlockChainRpcClient {
 	async fn candidates_pending_availability(
 		&self,
 		at: Hash,
-		para_id: cumulus_primitives_core::ParaId,
+		para_id: pezcumulus_primitives_core::ParaId,
 	) -> Result<Vec<pezkuwi_primitives::CommittedCandidateReceiptV2<Hash>>, pezsp_api::ApiError> {
 		Ok(self
 			.rpc_client

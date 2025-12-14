@@ -9,6 +9,7 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
+documentation = "https://docs.rs/minimal-template-node"
 
 [lints]
 workspace = true
@@ -33,6 +34,6 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 default = ["std"]
 std = ["minimal-template-runtime/std", "pezkuwi-sdk/std"]
 runtime-benchmarks = [
-	"minimal-template-runtime/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks",
+  "minimal-template-runtime/runtime-benchmarks",
+  "pezkuwi-sdk/runtime-benchmarks",
 ]

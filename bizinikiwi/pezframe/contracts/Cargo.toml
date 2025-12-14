@@ -10,6 +10,7 @@ repository.workspace = true
 description = "FRAME pallet for WASM contracts"
 readme = "README.md"
 include = ["CHANGELOG.md", "README.md", "benchmarks/**", "build.rs", "src/**/*"]
+documentation = "https://docs.rs/pezpallet-contracts"
 
 [lints]
 workspace = true
@@ -24,7 +25,7 @@ log = { workspace = true }
 paste = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 smallvec = { features = ["const_generics"], workspace = true }
 wasmi = { workspace = true }
@@ -72,53 +73,53 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"environmental/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-balances?/std",
-	"pezpallet-insecure-randomness-collective-flip/std",
-	"pezpallet-proxy/std",
-	"pezpallet-timestamp/std",
-	"pezpallet-utility/std",
-	"rand/std",
-	"scale-info/std",
-	"serde",
-	"pezsp-api/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-keystore/std",
-	"pezsp-runtime/std",
-	"wasm-instrument/std",
-	"wasmi/std",
-	"xcm-builder/std",
-	"xcm/std",
+  "codec/std",
+  "environmental/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-balances?/std",
+  "pezpallet-insecure-randomness-collective-flip/std",
+  "pezpallet-proxy/std",
+  "pezpallet-timestamp/std",
+  "pezpallet-utility/std",
+  "rand/std",
+  "scale-info/std",
+  "serde",
+  "pezsp-api/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-keystore/std",
+  "pezsp-runtime/std",
+  "wasm-instrument/std",
+  "wasmi/std",
+  "xcm-builder/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-contracts-fixtures/runtime-benchmarks",
-	"pezpallet-insecure-randomness-collective-flip/runtime-benchmarks",
-	"pezpallet-proxy/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezpallet-utility/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-contracts-fixtures/runtime-benchmarks",
+  "pezpallet-insecure-randomness-collective-flip/runtime-benchmarks",
+  "pezpallet-proxy/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezpallet-utility/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-insecure-randomness-collective-flip/try-runtime",
-	"pezpallet-proxy/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezpallet-utility/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-insecure-randomness-collective-flip/try-runtime",
+  "pezpallet-proxy/try-runtime",
+  "pezpallet-timestamp/try-runtime",
+  "pezpallet-utility/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

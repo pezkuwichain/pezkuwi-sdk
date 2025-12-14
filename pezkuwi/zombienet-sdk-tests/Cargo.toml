@@ -6,6 +6,9 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 publish = false
+documentation = "https://docs.rs/pezkuwi-zombienet-sdk-tests"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [dependencies]
 anyhow = { workspace = true }
@@ -32,13 +35,13 @@ zombienet-sdk = { workspace = true }
 zombie-metadata = []
 zombie-ci = []
 runtime-benchmarks = [
-	"asset-hub-zagros-runtime/runtime-benchmarks",
-	"pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
-	"pezpallet-revive/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsc-runtime-utilities/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
+  "asset-hub-zagros-runtime/runtime-benchmarks",
+  "pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
+  "pezpallet-revive/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsc-runtime-utilities/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
 ]
 
 [build-dependencies]

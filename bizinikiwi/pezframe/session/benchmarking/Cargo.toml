@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME sessions pallet benchmarking"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-session-benchmarking"
 
 [lints]
 workspace = true
@@ -39,29 +40,29 @@ pezsp-staking = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"pezframe-benchmarking/std",
-	"pezframe-election-provider-support/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-session/std",
-	"pezpallet-staking/std",
-	"rand/std",
-	"pezsp-runtime/std",
-	"pezsp-session/std",
-	"pezsp-staking/std",
+  "pezframe-benchmarking/std",
+  "pezframe-election-provider-support/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-session/std",
+  "pezpallet-staking/std",
+  "rand/std",
+  "pezsp-runtime/std",
+  "pezsp-session/std",
+  "pezsp-staking/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-election-provider-support/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezpallet-staking-reward-curve/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-session/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-election-provider-support/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-session/runtime-benchmarks",
+  "pezpallet-staking-reward-curve/runtime-benchmarks",
+  "pezpallet-staking/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-session/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

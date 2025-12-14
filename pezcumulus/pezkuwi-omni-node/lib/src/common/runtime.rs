@@ -17,7 +17,7 @@
 //! Runtime parameters.
 
 use codec::Decode;
-use cumulus_client_service::TeyrchainHostFunctions;
+use pezcumulus_client_service::TeyrchainHostFunctions;
 use pezsc_chain_spec::ChainSpec;
 use pezsc_executor::WasmExecutor;
 use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
@@ -121,7 +121,7 @@ impl RuntimeResolver for DefaultRuntimeResolver {
 			},
 		};
 
-		if !metadata_inspector.pezpallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME) {
+		if !metadata_inspector.pallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME) {
 			log::warn!(
 				r#"⚠️  The teyrchain system pallet (https://docs.rs/crate/pezcumulus-pezpallet-parachain-system/latest) is
 			   missing from the runtime’s metadata. Please check Omni Node docs for runtime conventions:
@@ -141,11 +141,11 @@ impl MetadataInspector {
 	}
 
 	fn pezpallet_exists(&self, name: &str) -> bool {
-		self.0.pezpallet_by_name(name).is_some()
+		self.0.pallet_by_name(name).is_some()
 	}
 
 	fn block_number(&self) -> Option<BlockNumber> {
-		let pezpallet_metadata = self.0.pezpallet_by_name(DEFAULT_FRAME_SYSTEM_PALLET_NAME);
+		let pezpallet_metadata = self.0.pallet_by_name(DEFAULT_FRAME_SYSTEM_PALLET_NAME);
 		pezpallet_metadata
 			.and_then(|inner| inner.storage())
 			.and_then(|inner| inner.entry_by_name("Number"))
@@ -182,16 +182,16 @@ mod tests {
 		DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME,
 	};
 	use codec::Decode;
-	use cumulus_client_service::TeyrchainHostFunctions;
+	use pezcumulus_client_service::TeyrchainHostFunctions;
 	use pezsc_executor::WasmExecutor;
 	use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
 
-	fn cumulus_test_runtime_metadata() -> subxt_metadata::Metadata {
+	fn pezcumulus_test_runtime_metadata() -> subxt_metadata::Metadata {
 		let opaque_metadata = fetch_latest_metadata_from_code_blob(
 			&WasmExecutor::<TeyrchainHostFunctions>::builder()
 				.with_allow_missing_host_functions(true)
 				.build(),
-			pezsp_runtime::Cow::Borrowed(cumulus_test_runtime::WASM_BINARY.unwrap()),
+			pezsp_runtime::Cow::Borrowed(pezcumulus_test_runtime::WASM_BINARY.unwrap()),
 		)
 		.unwrap();
 
@@ -200,14 +200,14 @@ mod tests {
 
 	#[test]
 	fn test_pallet_exists() {
-		let metadata_inspector = MetadataInspector(cumulus_test_runtime_metadata());
-		assert!(metadata_inspector.pezpallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME));
-		assert!(metadata_inspector.pezpallet_exists(DEFAULT_FRAME_SYSTEM_PALLET_NAME));
+		let metadata_inspector = MetadataInspector(pezcumulus_test_runtime_metadata());
+		assert!(metadata_inspector.pallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME));
+		assert!(metadata_inspector.pallet_exists(DEFAULT_FRAME_SYSTEM_PALLET_NAME));
 	}
 
 	#[test]
 	fn test_runtime_block_number() {
-		let metadata_inspector = MetadataInspector(cumulus_test_runtime_metadata());
+		let metadata_inspector = MetadataInspector(pezcumulus_test_runtime_metadata());
 		assert_eq!(metadata_inspector.block_number().unwrap(), BlockNumber::U32);
 	}
 }

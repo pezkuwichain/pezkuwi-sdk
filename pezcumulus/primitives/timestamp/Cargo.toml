@@ -7,6 +7,7 @@ description = "Provides timestamp related functionality for teyrchains."
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-primitives-timestamp"
 
 [lints]
 workspace = true
@@ -21,9 +22,13 @@ pezcumulus-primitives-core = { workspace = true }
 
 [features]
 default = ["std"]
-std = ["pezcumulus-primitives-core/std", "pezsp-inherents/std", "pezsp-timestamp/std"]
+std = [
+  "pezcumulus-primitives-core/std",
+  "pezsp-inherents/std",
+  "pezsp-timestamp/std",
+]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
 ]

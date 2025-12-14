@@ -21,8 +21,8 @@ targets = ["x86_64-unknown-linux-gnu"]
 bytes = { workspace = true }
 codec = { features = ["bytes"], workspace = true }
 secp256k1 = { features = [
-	"global-context",
-	"recovery",
+  "global-context",
+  "recovery",
 ], optional = true, workspace = true, default-features = true }
 pezsp-core = { workspace = true }
 pezsp-crypto-hashing = { workspace = true }
@@ -41,11 +41,11 @@ pezsp-trie = { workspace = true, default-features = false }
 pezsp-state-machine = { workspace = true, default-features = false }
 log = { workspace = true, default-features = true }
 libsecp256k1 = { workspace = true, default-features = false, features = [
-	"static-context",
+  "static-context",
 ] }
 secp256k1 = { workspace = true, default-features = false, features = [
-	"alloc",
-	"recovery",
+  "alloc",
+  "recovery",
 ] }
 
 # Required for backwards compatibility reason, but only used for verifying when `UseDalekExt` is set.
@@ -62,23 +62,23 @@ rustversion = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bytes/std",
-	"codec/std",
-	"ed25519-dalek/std",
-	"libsecp256k1/std",
-	"log/std",
-	"secp256k1/global-context",
-	"secp256k1/std",
-	"pezsp-core/std",
-	"pezsp-crypto-hashing/std",
-	"pezsp-externalities/std",
-	"pezsp-keystore/std",
-	"pezsp-runtime-interface/std",
-	"pezsp-state-machine/std",
-	"pezsp-tracing/std",
-	"pezsp-trie/std",
-	"tracing-core/std",
-	"tracing/std",
+  "bytes/std",
+  "codec/std",
+  "ed25519-dalek/std",
+  "libsecp256k1/std",
+  "log/std",
+  "secp256k1/global-context",
+  "secp256k1/std",
+  "pezsp-core/std",
+  "pezsp-crypto-hashing/std",
+  "pezsp-externalities/std",
+  "pezsp-keystore/std",
+  "pezsp-runtime-interface/std",
+  "pezsp-state-machine/std",
+  "pezsp-tracing/std",
+  "pezsp-trie/std",
+  "tracing-core/std",
+  "tracing/std",
 ]
 
 with-tracing = ["pezsp-tracing/with-tracing"]
@@ -113,17 +113,20 @@ improved_panic_error_reporting = []
 # This feature adds BLS crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
-bls-experimental = ["pezsp-core/bls-experimental", "pezsp-keystore/bls-experimental"]
+bls-experimental = [
+  "pezsp-core/bls-experimental",
+  "pezsp-keystore/bls-experimental",
+]
 
 # This feature adds Bandersnatch crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
 bandersnatch-experimental = [
-	"pezsp-core/bandersnatch-experimental",
-	"pezsp-keystore/bandersnatch-experimental",
+  "pezsp-core/bandersnatch-experimental",
+  "pezsp-keystore/bandersnatch-experimental",
 ]
 runtime-benchmarks = [
-	"pezsp-runtime-interface/runtime-benchmarks",
-	"pezsp-state-machine?/runtime-benchmarks",
-	"pezsp-trie?/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
+  "pezsp-state-machine?/runtime-benchmarks",
+  "pezsp-trie?/runtime-benchmarks",
 ]

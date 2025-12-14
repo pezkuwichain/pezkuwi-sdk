@@ -6,6 +6,9 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 publish = false
+description = "Pezkuwi SDK component: node template release"
+documentation = "https://docs.rs/node-template-release"
+repository = { workspace = true }
 
 [lints]
 workspace = true

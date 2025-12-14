@@ -18,8 +18,8 @@
 //! Utility for caching [`RelayChainData`] for different relay blocks.
 
 use crate::collators::claim_queue_at;
-use cumulus_primitives_core::CoreSelector;
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_primitives_core::CoreSelector;
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 use pezkuwi_node_subsystem_util::runtime::ClaimQueueSnapshot;
 use pezkuwi_primitives::{
 	Hash as RelayHash, Header as RelayHeader, Id as ParaId, OccupiedCoreAssumption,

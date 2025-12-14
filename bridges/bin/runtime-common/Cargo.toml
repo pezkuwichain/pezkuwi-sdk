@@ -6,6 +6,8 @@ authors.workspace = true
 edition.workspace = true
 repository.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
+documentation = "https://docs.rs/bridge-runtime-common"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -47,64 +49,64 @@ xcm = { workspace = true }
 bp-test-utils = { workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 pezpallet-bridge-messages = { features = [
-	"std",
-	"test-helpers",
+  "std",
+  "test-helpers",
 ], workspace = true }
 pezsp-core = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-	"bp-header-chain/std",
-	"bp-messages/std",
-	"bp-pezkuwi-core/std",
-	"bp-relayers/std",
-	"bp-runtime/std",
-	"bp-test-utils/std",
-	"bp-teyrchains/std",
-	"codec/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-bridge-grandpa/std",
-	"pezpallet-bridge-messages/std",
-	"pezpallet-bridge-relayers/std",
-	"pezpallet-bridge-teyrchains/std",
-	"pezpallet-transaction-payment/std",
-	"pezpallet-utility/std",
-	"scale-info/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
-	"pezsp-trie/std",
-	"pezsp-weights/std",
-	"tracing/std",
-	"tuplex/std",
-	"xcm/std",
+  "bp-header-chain/std",
+  "bp-messages/std",
+  "bp-pezkuwi-core/std",
+  "bp-relayers/std",
+  "bp-runtime/std",
+  "bp-test-utils/std",
+  "bp-teyrchains/std",
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-bridge-grandpa/std",
+  "pezpallet-bridge-messages/std",
+  "pezpallet-bridge-relayers/std",
+  "pezpallet-bridge-teyrchains/std",
+  "pezpallet-transaction-payment/std",
+  "pezpallet-utility/std",
+  "scale-info/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "pezsp-trie/std",
+  "pezsp-weights/std",
+  "tracing/std",
+  "tuplex/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"bp-header-chain/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
-	"bp-relayers/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-runtime/test-helpers",
-	"bp-test-utils/runtime-benchmarks",
-	"bp-teyrchains/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-bridge-grandpa/runtime-benchmarks",
-	"pezpallet-bridge-messages/runtime-benchmarks",
-	"pezpallet-bridge-messages/test-helpers",
-	"pezpallet-bridge-relayers/runtime-benchmarks",
-	"pezpallet-bridge-teyrchains/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezpallet-utility/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-trie",
-	"pezsp-trie?/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "bp-header-chain/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "bp-pezkuwi-core/runtime-benchmarks",
+  "bp-relayers/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "bp-runtime/test-helpers",
+  "bp-test-utils/runtime-benchmarks",
+  "bp-teyrchains/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-bridge-grandpa/runtime-benchmarks",
+  "pezpallet-bridge-messages/runtime-benchmarks",
+  "pezpallet-bridge-messages/test-helpers",
+  "pezpallet-bridge-relayers/runtime-benchmarks",
+  "pezpallet-bridge-teyrchains/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezpallet-utility/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-trie",
+  "pezsp-trie?/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 integrity-test = ["static_assertions"]
 test-helpers = ["bp-runtime/test-helpers", "pezsp-trie"]

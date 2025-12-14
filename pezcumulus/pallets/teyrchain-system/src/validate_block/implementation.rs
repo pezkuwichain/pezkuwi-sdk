@@ -19,7 +19,7 @@
 use super::{trie_cache, trie_recorder, MemoryOptimizedValidationParams};
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{BlockNumber as RNumber, Hash as RHash, UMPSignal, UMP_SEPARATOR},
 	ClaimQueueOffset, CoreSelector, PersistedValidationData, TeyrchainBlockData,
 };
@@ -120,7 +120,7 @@ where
 			.replace_implementation(host_default_child_storage_next_key),
 		pezsp_io::offchain_index::host_set.replace_implementation(host_offchain_index_set),
 		pezsp_io::offchain_index::host_clear.replace_implementation(host_offchain_index_clear),
-		cumulus_primitives_proof_size_hostfunction::storage_proof_size::host_storage_proof_size
+		pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::host_storage_proof_size
 			.replace_implementation(host_storage_proof_size),
 	);
 

@@ -5,7 +5,7 @@ use anyhow::anyhow;
 
 use crate::utils::initialize_network;
 
-use cumulus_zombienet_sdk_helpers::{assert_finality_lag, assert_para_throughput, assign_cores};
+use pezcumulus_zombienet_sdk_helpers::{assert_finality_lag, assert_para_throughput, assign_cores};
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
 use zombienet_sdk::{

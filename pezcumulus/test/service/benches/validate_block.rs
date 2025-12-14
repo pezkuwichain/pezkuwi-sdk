@@ -18,16 +18,16 @@
 use codec::{Decode, Encode};
 use core::time::Duration;
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughput};
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::AccountId, ParaId, PersistedValidationData, ValidationParams,
 };
-use cumulus_test_client::{
+use pezcumulus_test_client::{
 	generate_extrinsic_with_pair, BuildTeyrchainBlockData, InitBlockBuilder, TestClientBuilder,
 	ValidationResult,
 };
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-use cumulus_test_runtime::{BalancesCall, Block, Header, UncheckedExtrinsic};
-use cumulus_test_service::bench_utils as utils;
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_test_runtime::{BalancesCall, Block, Header, UncheckedExtrinsic};
+use pezcumulus_test_service::bench_utils as utils;
 use pezkuwi_primitives::HeadData;
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_client_api::UsageProvider;
@@ -43,7 +43,7 @@ use pezsp_runtime::{
 };
 
 fn create_extrinsics(
-	client: &cumulus_test_client::Client,
+	client: &pezcumulus_test_client::Client,
 	src_accounts: &[sr25519::Pair],
 	dst_accounts: &[sr25519::Pair],
 ) -> (usize, Vec<UncheckedExtrinsic>) {
@@ -88,11 +88,11 @@ fn benchmark_block_validation(c: &mut Criterion) {
 	// Each account should only be included in one transfer.
 	let (src_accounts, dst_accounts, account_ids) = utils::create_benchmark_accounts();
 
-	let para_id = ParaId::from(cumulus_test_runtime::TEYRCHAIN_ID);
+	let para_id = ParaId::from(pezcumulus_test_runtime::TEYRCHAIN_ID);
 	let mut test_client_builder = TestClientBuilder::with_default_backend();
 	let genesis_init = test_client_builder.genesis_init_mut();
 	*genesis_init =
-		cumulus_test_client::GenesisParameters { endowed_accounts: account_ids, wasm: None };
+		pezcumulus_test_client::GenesisParameters { endowed_accounts: account_ids, wasm: None };
 	let client = test_client_builder.build_with_native_executor(None).0;
 
 	let (max_transfer_count, extrinsics) = create_extrinsics(&client, &src_accounts, &dst_accounts);
@@ -111,7 +111,7 @@ fn benchmark_block_validation(c: &mut Criterion) {
 		..Default::default()
 	};
 
-	let cumulus_test_client::BlockBuilderAndSupportData { mut block_builder, .. } =
+	let pezcumulus_test_client::BlockBuilderAndSupportData { mut block_builder, .. } =
 		client.init_block_builder(Some(validation_data), sproof_builder.clone());
 
 	for extrinsic in extrinsics {
@@ -125,7 +125,7 @@ fn benchmark_block_validation(c: &mut Criterion) {
 
 	let (relay_parent_storage_root, _) = sproof_builder.into_state_root_and_proof();
 	let encoded_params = ValidationParams {
-		block_data: cumulus_test_client::BlockData(teyrchain_block.encode()),
+		block_data: pezcumulus_test_client::BlockData(teyrchain_block.encode()),
 		parent_head: HeadData(parent_header.encode()),
 		relay_parent_number: 1,
 		relay_parent_storage_root,

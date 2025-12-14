@@ -6,7 +6,7 @@ use std::time::Duration;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use cumulus_zombienet_sdk_helpers::assign_cores;
+use pezcumulus_zombienet_sdk_helpers::assign_cores;
 use serde_json::json;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{NetworkConfig, NetworkConfigBuilder};

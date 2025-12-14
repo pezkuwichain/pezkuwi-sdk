@@ -7,6 +7,7 @@ license.workspace = true
 description = "CLI to generate voter bags for Pezkuwi runtimes"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-voter-bags"
 
 [lints]
 workspace = true
@@ -20,6 +21,6 @@ zagros-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"generate-bags/runtime-benchmarks",
-	"zagros-runtime/runtime-benchmarks",
+  "generate-bags/runtime-benchmarks",
+  "zagros-runtime/runtime-benchmarks",
 ]

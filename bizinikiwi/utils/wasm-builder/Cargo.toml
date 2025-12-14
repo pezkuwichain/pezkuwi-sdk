@@ -7,6 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
+documentation = "https://docs.rs/bizinikiwi-wasm-builder"
 
 [lints]
 workspace = true
@@ -33,8 +34,8 @@ wasm-opt = { workspace = true }
 array-bytes = { optional = true, workspace = true, default-features = true }
 codec = { optional = true, workspace = true, default-features = true }
 frame-metadata = { features = [
-	"current",
-	"unstable",
+  "current",
+  "unstable",
 ], optional = true, workspace = true, default-features = true }
 merkleized-metadata = { optional = true, workspace = true }
 pezsc-executor = { optional = true, workspace = true, default-features = true }
@@ -53,18 +54,18 @@ pezsp-version = { optional = true, workspace = true, default-features = true }
 #
 # This pulls in quite a lot of dependencies and thus, is disabled by default.
 metadata-hash = [
-	"array-bytes",
-	"codec",
-	"frame-metadata",
-	"merkleized-metadata",
-	"pezsc-executor",
-	"pezsp-core",
-	"pezsp-io",
-	"pezsp-tracing",
-	"pezsp-version",
+  "array-bytes",
+  "codec",
+  "frame-metadata",
+  "merkleized-metadata",
+  "pezsc-executor",
+  "pezsp-core",
+  "pezsp-io",
+  "pezsp-tracing",
+  "pezsp-version",
 ]
 runtime-benchmarks = [
-	"pezsc-executor?/runtime-benchmarks",
-	"pezsp-io?/runtime-benchmarks",
-	"pezsp-version?/runtime-benchmarks",
+  "pezsc-executor?/runtime-benchmarks",
+  "pezsp-io?/runtime-benchmarks",
+  "pezsp-version?/runtime-benchmarks",
 ]

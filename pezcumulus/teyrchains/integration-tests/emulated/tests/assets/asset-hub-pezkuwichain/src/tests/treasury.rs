@@ -159,7 +159,7 @@ fn spend_roc_on_asset_hub() {
 			AssetHubPezkuwichain,
 			vec![
 				RuntimeEvent::Balances(pezpallet_balances::Event::Transfer { .. }) => {},
-				RuntimeEvent::TeyrchainSystem(cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
+				RuntimeEvent::TeyrchainSystem(pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
 				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
 			]
 		);
@@ -240,7 +240,7 @@ fn create_and_claim_treasury_spend_in_usdt() {
 					to: to == &alice,
 					amount: amount == &SPEND_AMOUNT,
 				},
-				RuntimeEvent::TeyrchainSystem(cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
+				RuntimeEvent::TeyrchainSystem(pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
 				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
 			]
 		);

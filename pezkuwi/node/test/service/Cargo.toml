@@ -5,6 +5,10 @@ version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Pezkuwi SDK relay chain component: test service"
+documentation = "https://docs.rs/pezkuwi-test-service"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -58,34 +62,34 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 [features]
 runtime-metrics = ["pezkuwi-test-runtime/runtime-metrics"]
 runtime-benchmarks = [
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-runtime-common/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-service/runtime-benchmarks",
-	"pezkuwi-test-runtime/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsc-chain-spec/runtime-benchmarks",
-	"pezsc-cli/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus-grandpa/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsc-tracing/runtime-benchmarks",
-	"pezsp-authority-discovery/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"bizinikiwi-test-client/runtime-benchmarks",
-	"test-runtime-constants/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-staking/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-runtime-common/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-service/runtime-benchmarks",
+  "pezkuwi-test-runtime/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsc-chain-spec/runtime-benchmarks",
+  "pezsc-cli/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus-grandpa/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsc-tracing/runtime-benchmarks",
+  "pezsp-authority-discovery/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "bizinikiwi-test-client/runtime-benchmarks",
+  "test-runtime-constants/runtime-benchmarks",
 ]

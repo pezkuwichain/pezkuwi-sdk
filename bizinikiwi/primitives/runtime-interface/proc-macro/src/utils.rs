@@ -162,7 +162,7 @@ impl RuntimeInterface {
 
 /// Generates the include for the runtime-interface crate.
 pub fn generate_runtime_interface_include() -> TokenStream {
-	match crate_name("sp-runtime-interface") {
+	match crate_name("pezsp-runtime-interface") {
 		Ok(FoundCrate::Itself) => quote!(),
 		Ok(FoundCrate::Name(crate_name)) => {
 			let crate_name = Ident::new(&crate_name, Span::call_site());
@@ -178,9 +178,9 @@ pub fn generate_runtime_interface_include() -> TokenStream {
 	}
 }
 
-/// Generates the access to the `sp-runtime-interface` crate.
+/// Generates the access to the `pezsp-runtime-interface` crate.
 pub fn generate_crate_access() -> TokenStream {
-	if env::var("CARGO_PKG_NAME").unwrap() == "sp-runtime-interface" {
+	if env::var("CARGO_PKG_NAME").unwrap() == "pezsp-runtime-interface" {
 		quote!(pezsp_runtime_interface)
 	} else {
 		quote!(proc_macro_runtime_interface)

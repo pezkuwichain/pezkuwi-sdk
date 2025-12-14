@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi RPC primitives and utilities."
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-rpc"
 
 [lints]
 workspace = true

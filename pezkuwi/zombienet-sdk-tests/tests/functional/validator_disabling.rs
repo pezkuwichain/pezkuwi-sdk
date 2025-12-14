@@ -4,7 +4,7 @@
 // Test checks that misbehaving validators disabled.
 use anyhow::anyhow;
 use codec::Decode;
-use cumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::{
 	BlockNumber, CandidateHash, DisputeState, SessionIndex, ValidatorId, ValidatorIndex,
 };
@@ -69,7 +69,7 @@ async fn validator_disabling_test() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(1000)
 				.with_default_command("adder-collator")
-				.cumulus_based(false)
+				.pezcumulus_based(false)
 				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec!["-lteyrchain=debug".into()])
 				.with_collator(|n| n.with_name("alice"))

@@ -49,7 +49,7 @@ where
 		+ pezpallet_xcm::Config
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ pezpallet_timestamp::Config,
 	XcmConfig: xcm_executor::Config,
@@ -122,7 +122,7 @@ pub fn send_transfer_token_message_success<Runtime, XcmConfig>(
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
 		+ pezpallet_message_queue::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ snowbridge_pallet_system::Config
 		+ pezpallet_timestamp::Config,
@@ -222,7 +222,7 @@ pub fn ethereum_outbound_queue_processes_messages_before_message_queue_works<
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
 		+ pezpallet_message_queue::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ snowbridge_pallet_system::Config
 		+ pezpallet_timestamp::Config,
@@ -304,7 +304,7 @@ pub fn send_unpaid_transfer_token_message<Runtime, XcmConfig>(
 		+ pezpallet_xcm::Config
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ snowbridge_pallet_system::Config
 		+ pezpallet_timestamp::Config,
@@ -390,7 +390,7 @@ pub fn send_transfer_token_message_failure<Runtime, XcmConfig>(
 		+ pezpallet_xcm::Config
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ snowbridge_pallet_system::Config
 		+ pezpallet_timestamp::Config,
@@ -442,7 +442,7 @@ pub fn ethereum_extrinsic<Runtime>(
 		+ pezpallet_utility::Config
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ snowbridge_pallet_system::Config
 		+ snowbridge_pallet_ethereum_client::Config
@@ -581,7 +581,7 @@ pub fn ethereum_to_pezkuwi_message_extrinsics_work<Runtime>(
 		+ pezpallet_utility::Config
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ snowbridge_pallet_outbound_queue::Config
 		+ snowbridge_pallet_system::Config
 		+ snowbridge_pallet_ethereum_client::Config

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi test utilities"
 publish = false
+documentation = "https://docs.rs/bizinikiwi-test-utils"
 
 [lints]
 workspace = true

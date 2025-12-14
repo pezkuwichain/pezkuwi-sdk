@@ -5,7 +5,7 @@ use anyhow::anyhow;
 use tokio::time::Duration;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
-use cumulus_zombienet_sdk_helpers::submit_extrinsic_and_wait_for_finalization_success_with_timeout;
+use pezcumulus_zombienet_sdk_helpers::submit_extrinsic_and_wait_for_finalization_success_with_timeout;
 use zombienet_orchestrator::network::node::{LogLineCount, LogLineCountOptions};
 use zombienet_sdk::{
 	subxt::{self, dynamic::Value, OnlineClient, PolkadotConfig},

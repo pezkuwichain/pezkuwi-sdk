@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Asset Hub Pezkuwichain emulated chain"
 publish = false
+documentation = "https://docs.rs/asset-hub-pezkuwichain-emulated-chain"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -22,7 +25,7 @@ pezcumulus-primitives-core = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 pezkuwichain-emulated-chain = { workspace = true }
 testnet-teyrchains-constants = { features = [
-	"pezkuwichain",
+  "pezkuwichain",
 ], workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
 
@@ -35,15 +38,15 @@ bp-bridge-hub-pezkuwichain = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezkuwichain-emulated-chain/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "asset-hub-pezkuwichain-runtime/runtime-benchmarks",
+  "bp-bridge-hub-pezkuwichain/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezkuwichain-emulated-chain/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "testnet-teyrchains-constants/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

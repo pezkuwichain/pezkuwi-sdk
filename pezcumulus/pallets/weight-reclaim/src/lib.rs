@@ -28,7 +28,7 @@ extern crate alloc;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use cumulus_primitives_storage_weight_reclaim::get_proof_size;
+use pezcumulus_primitives_storage_weight_reclaim::get_proof_size;
 use derive_where::derive_where;
 use pezframe_support::{
 	dispatch::{DispatchInfo, PostDispatchInfo},

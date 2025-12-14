@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi runtime api primitives"
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-api"
 
 [lints]
 workspace = true
@@ -38,22 +39,22 @@ pezsp-test-primitives = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"hash-db",
-	"log/std",
-	"scale-info/std",
-	"pezsp-api-proc-macro/std",
-	"pezsp-core/std",
-	"pezsp-externalities",
-	"pezsp-externalities?/std",
-	"pezsp-metadata-ir?/std",
-	"pezsp-runtime-interface/std",
-	"pezsp-runtime/std",
-	"pezsp-state-machine/std",
-	"pezsp-test-primitives/std",
-	"pezsp-trie/std",
-	"pezsp-version/std",
-	"thiserror",
+  "codec/std",
+  "hash-db",
+  "log/std",
+  "scale-info/std",
+  "pezsp-api-proc-macro/std",
+  "pezsp-core/std",
+  "pezsp-externalities",
+  "pezsp-externalities?/std",
+  "pezsp-metadata-ir?/std",
+  "pezsp-runtime-interface/std",
+  "pezsp-runtime/std",
+  "pezsp-state-machine/std",
+  "pezsp-test-primitives/std",
+  "pezsp-trie/std",
+  "pezsp-version/std",
+  "thiserror",
 ]
 # Special feature to disable logging completely.
 #
@@ -67,10 +68,10 @@ disable-logging = ["log/max_level_off"]
 no-metadata-docs = ["pezsp-api-proc-macro/no-metadata-docs"]
 frame-metadata = ["pezsp-metadata-ir"]
 runtime-benchmarks = [
-	"pezsp-runtime-interface/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine?/runtime-benchmarks",
-	"pezsp-test-primitives/runtime-benchmarks",
-	"pezsp-trie?/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine?/runtime-benchmarks",
+  "pezsp-test-primitives/runtime-benchmarks",
+  "pezsp-trie?/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]

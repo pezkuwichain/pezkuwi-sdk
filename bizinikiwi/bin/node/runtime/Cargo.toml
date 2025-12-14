@@ -9,6 +9,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+documentation = "https://docs.rs/kitchensink-runtime"
 
 [lints]
 workspace = true
@@ -30,9 +31,9 @@ static_assertions = { workspace = true, default-features = true }
 
 # pezpallet-asset-conversion: turn on "num-traits" feature
 primitive-types = { features = [
-	"codec",
-	"num-traits",
-	"scale-info",
+  "codec",
+  "num-traits",
+  "scale-info",
 ], workspace = true }
 
 pezkuwi-sdk = { features = ["runtime-full", "tuples-96"], workspace = true }
@@ -51,32 +52,32 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 with-tracing = ["pezkuwi-sdk/with-tracing"]
 std = [
-	"codec/std",
-	"log/std",
-	"node-primitives/std",
-	"pezpallet-example-mbm/std",
-	"pezpallet-example-tasks/std",
-	"pezkuwi-sdk/std",
-	"primitive-types/std",
-	"rand?/std",
-	"scale-info/std",
-	"serde_json/std",
-	"pezsp-debug-derive/std",
-	"bizinikiwi-wasm-builder",
+  "codec/std",
+  "log/std",
+  "node-primitives/std",
+  "pezpallet-example-mbm/std",
+  "pezpallet-example-tasks/std",
+  "pezkuwi-sdk/std",
+  "primitive-types/std",
+  "rand?/std",
+  "scale-info/std",
+  "serde_json/std",
+  "pezsp-debug-derive/std",
+  "bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-	"node-primitives/runtime-benchmarks",
-	"pezpallet-example-mbm/runtime-benchmarks",
-	"pezpallet-example-tasks/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks",
-	"rand",
-	"rand_pcg",
-	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+  "node-primitives/runtime-benchmarks",
+  "pezpallet-example-mbm/runtime-benchmarks",
+  "pezpallet-example-tasks/runtime-benchmarks",
+  "pezkuwi-sdk/runtime-benchmarks",
+  "rand",
+  "rand_pcg",
+  "bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezpallet-example-mbm/try-runtime",
-	"pezpallet-example-tasks/try-runtime",
-	"pezkuwi-sdk/try-runtime",
+  "pezpallet-example-mbm/try-runtime",
+  "pezpallet-example-tasks/try-runtime",
+  "pezkuwi-sdk/try-runtime",
 ]
 experimental = ["pezpallet-example-tasks/experimental"]
 metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]

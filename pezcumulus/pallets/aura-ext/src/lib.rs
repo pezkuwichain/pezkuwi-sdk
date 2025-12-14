@@ -25,9 +25,9 @@
 //! ```
 //! # struct Runtime;
 //! # struct Executive;
-//! cumulus_pallet_teyrchain_system::register_validate_block! {
+//! pezcumulus_pallet_teyrchain_system::register_validate_block! {
 //!     Runtime = Runtime,
-//!     BlockExecutor = cumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+//!     BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 //! }
 //! ```
 

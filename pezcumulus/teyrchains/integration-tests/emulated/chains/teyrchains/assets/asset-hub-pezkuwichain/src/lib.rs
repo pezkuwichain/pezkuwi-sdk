@@ -43,7 +43,7 @@ decl_test_teyrchains! {
 			XcmpMessageHandler: asset_hub_pezkuwichain_runtime::XcmpQueue,
 			LocationToAccountId: asset_hub_pezkuwichain_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: asset_hub_pezkuwichain_runtime::TeyrchainInfo,
-			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
+			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 			AdditionalInherentCode: (),
 		},

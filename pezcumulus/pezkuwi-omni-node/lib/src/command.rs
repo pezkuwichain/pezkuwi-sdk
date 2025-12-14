@@ -32,7 +32,7 @@ use crate::{
 };
 use clap::{CommandFactory, FromArgMatches};
 #[cfg(feature = "runtime-benchmarks")]
-use cumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
+use pezcumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
 use pezframe_benchmarking_cli::{BenchmarkCmd, BIZINIKIWI_REFERENCE_HARDWARE};
 use log::info;
 use pezsc_cli::{Result, BizinikiwiCli};

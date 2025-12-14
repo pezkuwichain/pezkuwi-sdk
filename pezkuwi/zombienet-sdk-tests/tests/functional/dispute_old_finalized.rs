@@ -19,7 +19,7 @@
 
 use anyhow::anyhow;
 
-use cumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use serde_json::json;
 use tokio::time::Duration;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
@@ -84,7 +84,7 @@ async fn dispute_old_finalized() -> Result<(), anyhow::Error> {
 		})
 		.with_teyrchain(|p| {
 			p.with_id(2000)
-				.cumulus_based(false)
+				.pezcumulus_based(false)
 				.with_default_image(
 					std::env::var("COL_IMAGE")
 						.unwrap_or("docker.io/paritypr/colander:latest".to_string())

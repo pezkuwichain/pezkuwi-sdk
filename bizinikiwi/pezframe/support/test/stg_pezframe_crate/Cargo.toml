@@ -1,5 +1,5 @@
 [package]
-name = "pezframe-support-test-stg-frame-crate"
+name = "pezframe-support-test-stg-pezframe-crate"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -7,6 +7,8 @@ license = "Apache-2.0"
 publish = false
 homepage.workspace = true
 repository.workspace = true
+description = "Pezkuwi SDK FRAME support: support test stg pezframe crate"
+documentation = "https://docs.rs/pezframe-support-test-stg-pezframe-crate"
 
 [lints]
 workspace = true

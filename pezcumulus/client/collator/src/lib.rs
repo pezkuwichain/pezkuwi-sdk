@@ -39,7 +39,7 @@ pub mod relay_chain_driven {
 	use pezkuwi_overseer::Handle as OverseerHandle;
 	use pezkuwi_primitives::{CollatorPair, Id as ParaId};
 
-	use cumulus_primitives_core::{relay_chain::Hash as PHash, PersistedValidationData};
+	use pezcumulus_primitives_core::{relay_chain::Hash as PHash, PersistedValidationData};
 
 	/// A request to author a collation, based on the advancement of the relay chain.
 	///

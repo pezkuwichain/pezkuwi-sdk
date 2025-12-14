@@ -16,14 +16,14 @@
 use core::marker::PhantomData;
 
 use codec::{Decode, DecodeLimit};
-use cumulus_pallet_teyrchain_system::teyrchain_inherent::{
+use pezcumulus_pallet_teyrchain_system::teyrchain_inherent::{
 	deconstruct_teyrchain_inherent_data, InboundMessagesData,
 };
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::Slot, AbridgedHrmpChannel, ParaId, PersistedValidationData,
 };
-use cumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 use pezframe_support::{
 	dispatch::{DispatchResult, GetDispatchInfo, RawOrigin},
 	inherent::{InherentData, ProvideInherent},
@@ -135,7 +135,7 @@ pub trait BasicTeyrchainRuntime:
 	+ pezpallet_xcm::Config
 	+ teyrchain_info::Config
 	+ pezpallet_collator_selection::Config
-	+ cumulus_pallet_teyrchain_system::Config
+	+ pezcumulus_pallet_teyrchain_system::Config
 	+ pezpallet_timestamp::Config
 {
 }
@@ -148,7 +148,7 @@ where
 		+ pezpallet_xcm::Config
 		+ teyrchain_info::Config
 		+ pezpallet_collator_selection::Config
-		+ cumulus_pallet_teyrchain_system::Config
+		+ pezcumulus_pallet_teyrchain_system::Config
 		+ pezpallet_timestamp::Config,
 	ValidatorIdOf<T>: From<AccountIdOf<T>>,
 {
@@ -269,7 +269,7 @@ pub struct RuntimeHelper<Runtime, AllPalletsWithoutSystem>(
 /// Utility function that advances the chain to the desired block number.
 /// If an author is provided, that author information is injected to all the blocks in the meantime.
 impl<
-		Runtime: pezframe_system::Config + cumulus_pallet_teyrchain_system::Config + pezpallet_timestamp::Config,
+		Runtime: pezframe_system::Config + pezcumulus_pallet_teyrchain_system::Config + pezpallet_timestamp::Config,
 		AllPalletsWithoutSystem,
 	> RuntimeHelper<Runtime, AllPalletsWithoutSystem>
 where
@@ -356,7 +356,7 @@ where
 			let (inherent_data, downward_messages, horizontal_messages) =
 				deconstruct_teyrchain_inherent_data(inherent_data);
 
-			let _ = cumulus_pallet_teyrchain_system::Pallet::<Runtime>::set_validation_data(
+			let _ = pezcumulus_pallet_teyrchain_system::Pallet::<Runtime>::set_validation_data(
 				Runtime::RuntimeOrigin::none(),
 				inherent_data,
 				InboundMessagesData::new(
@@ -410,7 +410,7 @@ impl<XcmConfig: xcm_executor::Config, AllPalletsWithoutSystem>
 }
 
 impl<
-		Runtime: pezpallet_xcm::Config + cumulus_pallet_teyrchain_system::Config,
+		Runtime: pezpallet_xcm::Config + pezcumulus_pallet_teyrchain_system::Config,
 		AllPalletsWithoutSystem,
 	> RuntimeHelper<Runtime, AllPalletsWithoutSystem>
 {
@@ -426,7 +426,7 @@ impl<
 	) -> DispatchResult
 	where
 		HrmpChannelOpener: pezframe_support::inherent::ProvideInherent<
-			Call = cumulus_pallet_teyrchain_system::Call<Runtime>,
+			Call = pezcumulus_pallet_teyrchain_system::Call<Runtime>,
 		>,
 	{
 		// open hrmp (if needed)
@@ -453,7 +453,7 @@ impl<
 }
 
 impl<
-		Runtime: cumulus_pallet_teyrchain_system::Config + pezpallet_xcm::Config,
+		Runtime: pezcumulus_pallet_teyrchain_system::Config + pezpallet_xcm::Config,
 		AllPalletsWithoutSystem,
 	> RuntimeHelper<Runtime, AllPalletsWithoutSystem>
 {
@@ -577,7 +577,7 @@ pub enum XcmReceivedFrom {
 	Sibling,
 }
 
-impl<TeyrchainSystem: cumulus_pallet_teyrchain_system::Config, AllPalletsWithoutSystem>
+impl<TeyrchainSystem: pezcumulus_pallet_teyrchain_system::Config, AllPalletsWithoutSystem>
 	RuntimeHelper<TeyrchainSystem, AllPalletsWithoutSystem>
 {
 	pub fn xcm_max_weight(from: XcmReceivedFrom) -> Weight {
@@ -621,20 +621,20 @@ impl<Runtime: pezframe_system::Config + pezpallet_xcm::Config, AllPalletsWithout
 }
 
 impl<
-		Runtime: pezframe_system::Config + cumulus_pallet_xcmp_queue::Config,
+		Runtime: pezframe_system::Config + pezcumulus_pallet_xcmp_queue::Config,
 		AllPalletsWithoutSystem,
 	> RuntimeHelper<Runtime, AllPalletsWithoutSystem>
 {
 	pub fn xcmp_queue_message_sent(
 		unwrap_xcmp_queue_event: Box<
-			dyn Fn(Vec<u8>) -> Option<cumulus_pallet_xcmp_queue::Event<Runtime>>,
+			dyn Fn(Vec<u8>) -> Option<pezcumulus_pallet_xcmp_queue::Event<Runtime>>,
 		>,
 	) -> Option<XcmHash> {
 		<pezframe_system::Pallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_xcmp_queue_event(e.event.encode()))
 			.find_map(|e| match e {
-				cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { message_hash } =>
+				pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { message_hash } =>
 					Some(message_hash),
 				_ => None,
 			})
@@ -676,8 +676,8 @@ pub fn assert_total<Fungibles, AccountId>(
 /// AuRa consensus hook expects pallets to be initialized, before calling this function make sure to
 /// `run_to_block` at least once.
 pub fn mock_open_hrmp_channel<
-	C: cumulus_pallet_teyrchain_system::Config,
-	T: ProvideInherent<Call = cumulus_pallet_teyrchain_system::Call<C>>,
+	C: pezcumulus_pallet_teyrchain_system::Config,
+	T: ProvideInherent<Call = pezcumulus_pallet_teyrchain_system::Call<C>>,
 >(
 	sender: ParaId,
 	recipient: ParaId,
@@ -730,7 +730,7 @@ pub fn mock_open_hrmp_channel<
 		};
 		inherent_data
 			.put_data(
-				cumulus_primitives_teyrchain_inherent::INHERENT_IDENTIFIER,
+				pezcumulus_primitives_teyrchain_inherent::INHERENT_IDENTIFIER,
 				&system_inherent_data,
 			)
 			.expect("failed to put VFP inherent");
@@ -744,7 +744,7 @@ pub fn mock_open_hrmp_channel<
 		.expect("dispatch succeeded");
 }
 
-impl<HrmpChannelSource: cumulus_primitives_core::XcmpMessageSource, AllPalletsWithoutSystem>
+impl<HrmpChannelSource: pezcumulus_primitives_core::XcmpMessageSource, AllPalletsWithoutSystem>
 	RuntimeHelper<HrmpChannelSource, AllPalletsWithoutSystem>
 {
 	pub fn take_xcm(sent_to_para_id: ParaId) -> Option<VersionedXcm<()>> {

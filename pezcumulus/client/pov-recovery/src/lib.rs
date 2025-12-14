@@ -60,9 +60,9 @@ use pezkuwi_primitives::{
 	CommittedCandidateReceiptV2 as CommittedCandidateReceipt, Id as ParaId, SessionIndex,
 };
 
-use cumulus_primitives_core::TeyrchainBlockData;
-use cumulus_relay_chain_interface::RelayChainInterface;
-use cumulus_relay_chain_streams::pending_candidates;
+use pezcumulus_primitives_core::TeyrchainBlockData;
+use pezcumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_relay_chain_streams::pending_candidates;
 
 use codec::{Decode, DecodeAll};
 use futures::{

@@ -36,10 +36,10 @@ subxt = { workspace = true, features = ["native"] }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
-	"pezcumulus-test-runtime/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
+  "pezcumulus-test-runtime/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]

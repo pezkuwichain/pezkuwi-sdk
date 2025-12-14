@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-cli"
 
 [lints]
 workspace = true
@@ -51,9 +52,9 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tokio = { features = [
-	"parking_lot",
-	"rt-multi-thread",
-	"signal",
+  "parking_lot",
+  "rt-multi-thread",
+  "signal",
 ], workspace = true, default-features = true }
 
 [dev-dependencies]
@@ -65,15 +66,15 @@ tempfile = { workspace = true }
 default = ["rocksdb"]
 rocksdb = ["pezsc-client-db/rocksdb"]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks",
-	"pezsc-mixnet/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsc-tracing/runtime-benchmarks",
-	"pezsc-transaction-pool/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-client-db/runtime-benchmarks",
+  "pezsc-mixnet/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsc-tracing/runtime-benchmarks",
+  "pezsc-transaction-pool/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]

@@ -5,6 +5,10 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 publish = false
+description = "Pezkuwi SDK component: erasure coding fuzzer"
+documentation = "https://docs.rs/erasure_coding_fuzzer"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -25,7 +29,7 @@ path = "src/round_trip.rs"
 
 [features]
 runtime-benchmarks = [
-	"pezkuwi-erasure-coding/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-erasure-coding/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
 ]

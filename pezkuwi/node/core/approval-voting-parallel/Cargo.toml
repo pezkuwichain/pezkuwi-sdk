@@ -7,6 +7,7 @@ license.workspace = true
 description = "Approval Voting Subsystem running approval work in parallel"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-approval-voting-parallel"
 
 [lints]
 workspace = true
@@ -45,18 +46,18 @@ pezsp-tracing = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-approval-distribution/runtime-benchmarks",
-	"pezkuwi-node-core-approval-voting/runtime-benchmarks",
-	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-approval-distribution/runtime-benchmarks",
+  "pezkuwi-node-core-approval-voting/runtime-benchmarks",
+  "pezkuwi-node-metrics/runtime-benchmarks",
+  "pezkuwi-node-network-protocol/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
 ]

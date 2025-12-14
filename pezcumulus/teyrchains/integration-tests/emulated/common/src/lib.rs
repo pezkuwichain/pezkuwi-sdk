@@ -18,7 +18,7 @@ pub mod macros;
 pub mod xcm_helpers;
 
 use codec::Encode;
-use cumulus_primitives_core::relay_chain::Slot;
+use pezcumulus_primitives_core::relay_chain::Slot;
 pub use xcm_emulator;
 pub use xcm_simulator;
 

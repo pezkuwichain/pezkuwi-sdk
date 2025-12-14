@@ -18,13 +18,13 @@
 
 use alloc::{collections::btree_map::BTreeMap, vec, vec::Vec};
 use core::fmt::Debug;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{
 		ApprovedPeerId, BlockNumber as RelayChainBlockNumber, BlockNumber, Header as RelayHeader,
 	},
 	InboundDownwardMessage, InboundHrmpMessage, ParaId, PersistedValidationData,
 };
-use cumulus_primitives_teyrchain_inherent::{HashedMessage, TeyrchainInherentData};
+use pezcumulus_primitives_teyrchain_inherent::{HashedMessage, TeyrchainInherentData};
 use pezframe_support::{
 	defensive,
 	pezpallet_prelude::{Decode, DecodeWithMemTracking, Encode},

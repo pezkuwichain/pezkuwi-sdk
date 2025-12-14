@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi RuntimeGenesisConfig builder API"
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-genesis-builder"
 
 [lints]
 workspace = true
@@ -26,13 +27,13 @@ pezsp-runtime = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"scale-info/std",
-	"serde_json/std",
-	"pezsp-api/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "scale-info/std",
+  "serde_json/std",
+  "pezsp-api/std",
+  "pezsp-runtime/std",
 ]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

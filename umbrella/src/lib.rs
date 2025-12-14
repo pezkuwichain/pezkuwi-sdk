@@ -74,141 +74,141 @@ pub use bridge_runtime_common;
 
 /// Teyrchain bootnodes registration and discovery.
 #[cfg(feature = "pezcumulus-client-bootnodes")]
-pub use cumulus_client_bootnodes;
+pub use pezcumulus_client_bootnodes;
 
 /// Teyrchain node CLI utilities.
 #[cfg(feature = "pezcumulus-client-cli")]
-pub use cumulus_client_cli;
+pub use pezcumulus_client_cli;
 
 /// Common node-side functionality and glue code to collate teyrchain blocks.
 #[cfg(feature = "pezcumulus-client-collator")]
-pub use cumulus_client_collator;
+pub use pezcumulus_client_collator;
 
 /// AURA consensus algorithm for teyrchains.
 #[cfg(feature = "pezcumulus-client-consensus-aura")]
-pub use cumulus_client_consensus_aura;
+pub use pezcumulus_client_consensus_aura;
 
 /// Pezcumulus specific common consensus implementations.
 #[cfg(feature = "pezcumulus-client-consensus-common")]
-pub use cumulus_client_consensus_common;
+pub use pezcumulus_client_consensus_common;
 
 /// A Bizinikiwi `Proposer` for building teyrchain blocks.
 #[cfg(feature = "pezcumulus-client-consensus-proposer")]
-pub use cumulus_client_consensus_proposer;
+pub use pezcumulus_client_consensus_proposer;
 
 /// The relay-chain provided consensus algorithm.
 #[cfg(feature = "pezcumulus-client-consensus-relay-chain")]
-pub use cumulus_client_consensus_relay_chain;
+pub use pezcumulus_client_consensus_relay_chain;
 
 /// Pezcumulus-specific networking protocol.
 #[cfg(feature = "pezcumulus-client-network")]
-pub use cumulus_client_network;
+pub use pezcumulus_client_network;
 
 /// Teyrchain PoV recovery.
 #[cfg(feature = "pezcumulus-client-pov-recovery")]
-pub use cumulus_client_pov_recovery;
+pub use pezcumulus_client_pov_recovery;
 
 /// Common functions used to assemble the components of a teyrchain node.
 #[cfg(feature = "pezcumulus-client-service")]
-pub use cumulus_client_service;
+pub use pezcumulus_client_service;
 
 /// Inherent that needs to be present in every teyrchain block. Contains messages and a relay
 /// chain storage-proof.
 #[cfg(feature = "pezcumulus-client-teyrchain-inherent")]
-pub use cumulus_client_teyrchain_inherent;
+pub use pezcumulus_client_teyrchain_inherent;
 
 /// AURA consensus extension pallet for teyrchains.
 #[cfg(feature = "pezcumulus-pezpallet-aura-ext")]
-pub use cumulus_pallet_aura_ext;
+pub use pezcumulus_pallet_aura_ext;
 
 /// Migrates messages from the old DMP queue pallet.
 #[cfg(feature = "pezcumulus-pezpallet-dmp-queue")]
-pub use cumulus_pallet_dmp_queue;
+pub use pezcumulus_pallet_dmp_queue;
 
 /// FRAME sessions pallet benchmarking.
 #[cfg(feature = "pezcumulus-pezpallet-session-benchmarking")]
-pub use cumulus_pallet_session_benchmarking;
+pub use pezcumulus_pallet_session_benchmarking;
 
 /// Adds functionality to migrate from a Solo to a Teyrchain.
 #[cfg(feature = "pezcumulus-pezpallet-solo-to-para")]
-pub use cumulus_pallet_solo_to_para;
+pub use pezcumulus_pallet_solo_to_para;
 
 /// Base pallet for pezcumulus-based teyrchains.
 #[cfg(feature = "pezcumulus-pezpallet-teyrchain-system")]
-pub use cumulus_pallet_teyrchain_system;
+pub use pezcumulus_pallet_teyrchain_system;
 
 /// Proc macros provided by the teyrchain-system pallet.
 #[cfg(feature = "pezcumulus-pezpallet-teyrchain-system-proc-macro")]
-pub use cumulus_pallet_teyrchain_system_proc_macro;
+pub use pezcumulus_pallet_teyrchain_system_proc_macro;
 
 /// pallet and transaction extensions for accurate proof size reclaim.
 #[cfg(feature = "pezcumulus-pezpallet-weight-reclaim")]
-pub use cumulus_pallet_weight_reclaim;
+pub use pezcumulus_pallet_weight_reclaim;
 
 /// Pallet for stuff specific to teyrchains' usage of XCM.
 #[cfg(feature = "pezcumulus-pezpallet-xcm")]
-pub use cumulus_pallet_xcm;
+pub use pezcumulus_pallet_xcm;
 
 /// Pallet to queue outbound and inbound XCMP messages.
 #[cfg(feature = "pezcumulus-pezpallet-xcmp-queue")]
-pub use cumulus_pallet_xcmp_queue;
+pub use pezcumulus_pallet_xcmp_queue;
 
 /// Ping Pallet for Pezcumulus XCM/UMP testing.
 #[cfg(feature = "pezcumulus-ping")]
-pub use cumulus_ping;
+pub use pezcumulus_ping;
 
 /// Core primitives for Aura in Pezcumulus.
 #[cfg(feature = "pezcumulus-primitives-aura")]
-pub use cumulus_primitives_aura;
+pub use pezcumulus_primitives_aura;
 
 /// Pezcumulus related core primitive types and traits.
 #[cfg(feature = "pezcumulus-primitives-core")]
-pub use cumulus_primitives_core;
+pub use pezcumulus_primitives_core;
 
 /// Hostfunction exposing storage proof size to the runtime.
 #[cfg(feature = "pezcumulus-primitives-proof-size-hostfunction")]
-pub use cumulus_primitives_proof_size_hostfunction;
+pub use pezcumulus_primitives_proof_size_hostfunction;
 
 /// Utilities to reclaim storage weight.
 #[cfg(feature = "pezcumulus-primitives-storage-weight-reclaim")]
-pub use cumulus_primitives_storage_weight_reclaim;
+pub use pezcumulus_primitives_storage_weight_reclaim;
 
 /// Inherent that needs to be present in every teyrchain block. Contains messages and a relay
 /// chain storage-proof.
 #[cfg(feature = "pezcumulus-primitives-teyrchain-inherent")]
-pub use cumulus_primitives_teyrchain_inherent;
+pub use pezcumulus_primitives_teyrchain_inherent;
 
 /// Provides timestamp related functionality for teyrchains.
 #[cfg(feature = "pezcumulus-primitives-timestamp")]
-pub use cumulus_primitives_timestamp;
+pub use pezcumulus_primitives_timestamp;
 
 /// Helper datatypes for Pezcumulus.
 #[cfg(feature = "pezcumulus-primitives-utility")]
-pub use cumulus_primitives_utility;
+pub use pezcumulus_primitives_utility;
 
 /// Implementation of the RelayChainInterface trait for Pezkuwi full-nodes.
 #[cfg(feature = "pezcumulus-relay-chain-inprocess-interface")]
-pub use cumulus_relay_chain_inprocess_interface;
+pub use pezcumulus_relay_chain_inprocess_interface;
 
 /// Common interface for different relay chain datasources.
 #[cfg(feature = "pezcumulus-relay-chain-interface")]
-pub use cumulus_relay_chain_interface;
+pub use pezcumulus_relay_chain_interface;
 
 /// Minimal node implementation to be used in tandem with RPC or light-client mode.
 #[cfg(feature = "pezcumulus-relay-chain-minimal-node")]
-pub use cumulus_relay_chain_minimal_node;
+pub use pezcumulus_relay_chain_minimal_node;
 
 /// Implementation of the RelayChainInterface trait that connects to a remote RPC-node.
 #[cfg(feature = "pezcumulus-relay-chain-rpc-interface")]
-pub use cumulus_relay_chain_rpc_interface;
+pub use pezcumulus_relay_chain_rpc_interface;
 
 /// Pezcumulus client common relay chain streams.
 #[cfg(feature = "pezcumulus-relay-chain-streams")]
-pub use cumulus_relay_chain_streams;
+pub use pezcumulus_relay_chain_streams;
 
 /// Mocked relay state proof builder for testing Pezcumulus.
 #[cfg(feature = "pezcumulus-test-relay-sproof-builder")]
-pub use cumulus_test_relay_sproof_builder;
+pub use pezcumulus_test_relay_sproof_builder;
 
 /// Common resources for integration testing with xcm-emulator.
 #[cfg(feature = "emulated-integration-tests-common")]

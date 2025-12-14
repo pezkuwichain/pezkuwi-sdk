@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pallet for whitelisting calls, and dispatching from a specific origin"
+documentation = "https://docs.rs/pezpallet-whitelist"
 
 [lints]
 workspace = true
@@ -27,12 +28,12 @@ pezpallet-preimage = { workspace = true, default-features = true }
 default = ["std"]
 std = ["codec/std", "frame/std", "scale-info/std"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-preimage/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-preimage/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-preimage/try-runtime",
+  "frame/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-preimage/try-runtime",
 ]

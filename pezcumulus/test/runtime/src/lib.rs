@@ -82,7 +82,7 @@ use pezsp_runtime::{
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
 
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 
 // A few exports that help ease life for downstream crates.
 pub use pezframe_support::{
@@ -226,7 +226,7 @@ const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 /// We allow for 1 second of compute with a 6 second average block time.
 const MAXIMUM_BLOCK_WEIGHT: Weight = Weight::from_parts(
 	WEIGHT_REF_TIME_PER_SECOND,
-	cumulus_primitives_core::relay_chain::MAX_POV_SIZE as u64,
+	pezcumulus_primitives_core::relay_chain::MAX_POV_SIZE as u64,
 );
 
 parameter_types! {
@@ -275,12 +275,12 @@ impl pezframe_system::Config for Runtime {
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = SingleBlockMigrations;
 }
 
-impl cumulus_pallet_weight_reclaim::Config for Runtime {
+impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
 	type WeightInfo = ();
 }
 
@@ -294,7 +294,7 @@ parameter_types! {
 	pub const Offset: u32 = 0;
 }
 
-impl cumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pallet_aura_ext::Config for Runtime {}
 
 impl pezpallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
@@ -359,13 +359,13 @@ const RELAY_PARENT_OFFSET: u32 = 2;
 #[cfg(not(feature = "relay-parent-offset"))]
 const RELAY_PARENT_OFFSET: u32 = 0;
 
-type ConsensusHook = cumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
 	UNINCLUDED_SEGMENT_CAPACITY,
 >;
-impl cumulus_pallet_teyrchain_system::Config for Runtime {
+impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
@@ -377,7 +377,7 @@ impl cumulus_pallet_teyrchain_system::Config for Runtime {
 	type XcmpMessageHandler = ();
 	type ReservedXcmpWeight = ();
 	type CheckAssociatedRelayNumber =
-		cumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+		pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 	type ConsensusHook = ConsensusHook;
 	type RelayParentOffset = ConstU32<RELAY_PARENT_OFFSET>;
 }
@@ -401,7 +401,7 @@ construct_runtime! {
 	pub enum Runtime
 	{
 		System: pezframe_system,
-		TeyrchainSystem: cumulus_pallet_teyrchain_system,
+		TeyrchainSystem: pezcumulus_pallet_teyrchain_system,
 		Timestamp: pezpallet_timestamp,
 		TeyrchainInfo: teyrchain_info,
 		Balances: pezpallet_balances,
@@ -410,8 +410,8 @@ construct_runtime! {
 		TestPallet: test_pallet,
 		Glutton: pezpallet_glutton,
 		Aura: pezpallet_aura,
-		AuraExt: cumulus_pallet_aura_ext,
-		WeightReclaim: cumulus_pallet_weight_reclaim,
+		AuraExt: pezcumulus_pallet_aura_ext,
+		WeightReclaim: pezcumulus_pallet_weight_reclaim,
 	}
 }
 
@@ -442,7 +442,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 /// The extension to the basic transaction logic.
-pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		pezframe_system::AuthorizeCall<Runtime>,
@@ -505,16 +505,16 @@ impl_runtime_apis! {
 	}
 
 
-	impl cumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
+	impl pezcumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
 		fn can_build_upon(
 			included_hash: <Block as BlockT>::Hash,
-			slot: cumulus_primitives_aura::Slot,
+			slot: pezcumulus_primitives_aura::Slot,
 		) -> bool {
 			ConsensusHook::can_build_upon(included_hash, slot)
 		}
 	}
 
-	impl cumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
+	impl pezcumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
 		fn relay_parent_offset() -> u32 {
 			RELAY_PARENT_OFFSET
 		}
@@ -604,8 +604,8 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
-		fn collect_collation_info(header: &<Block as BlockT>::Header) -> cumulus_primitives_core::CollationInfo {
+	impl pezcumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
+		fn collect_collation_info(header: &<Block as BlockT>::Header) -> pezcumulus_primitives_core::CollationInfo {
 			TeyrchainSystem::collect_collation_info(header)
 		}
 	}
@@ -624,21 +624,21 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
+	impl pezcumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
 		fn teyrchain_id() -> ParaId {
 			TeyrchainInfo::teyrchain_id()
 		}
 
 	}
 
-	impl cumulus_primitives_core::TargetBlockRate<Block> for Runtime {
+	impl pezcumulus_primitives_core::TargetBlockRate<Block> for Runtime {
 		fn target_block_rate() -> u32 {
 			1
 		}
 	}
 }
 
-cumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = cumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

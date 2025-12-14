@@ -18,11 +18,11 @@
 use codec::Decode;
 use pezkuwi_primitives::Hash as RelayHash;
 
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{BlockId as RBlockId, OccupiedCoreAssumption},
 	ParaId,
 };
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
 
 use pezsc_client_api::{Backend, HeaderBackend};
 
@@ -360,10 +360,10 @@ pub fn search_child_branches_for_parents<Block: BlockT>(
 		// because they have already been posted on chain.
 		let is_potential = is_pending || is_included || {
 			let digest = entry.header.digest();
-			let is_hash_in_ancestry_check = cumulus_primitives_core::extract_relay_parent(digest)
+			let is_hash_in_ancestry_check = pezcumulus_primitives_core::extract_relay_parent(digest)
 				.map_or(false, is_hash_in_ancestry);
 			let is_root_in_ancestry_check =
-				cumulus_primitives_core::rpsr_digest::extract_relay_parent_storage_root(digest)
+				pezcumulus_primitives_core::rpsr_digest::extract_relay_parent_storage_root(digest)
 					.map(|(r, _n)| r)
 					.map_or(false, is_root_in_ancestry);
 

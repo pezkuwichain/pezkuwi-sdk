@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Client backend that uses RocksDB database as storage."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-client-db"
 
 [lints]
 workspace = true
@@ -59,12 +60,12 @@ tempfile = { workspace = true }
 default = []
 test-helpers = []
 runtime-benchmarks = [
-	"kitchensink-runtime/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "kitchensink-runtime/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
 ]
 rocksdb = ["kvdb-rocksdb"]

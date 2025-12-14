@@ -6,7 +6,7 @@ use std::{sync::Arc, time::Duration};
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use cumulus_zombienet_sdk_helpers::{
+use pezcumulus_zombienet_sdk_helpers::{
 	assert_para_is_registered, assert_para_throughput, assign_cores,
 };
 use pezkuwi_primitives::Id as ParaId;

@@ -8,6 +8,7 @@ edition.workspace = true
 license.workspace = true
 publish = false
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-trust"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
@@ -15,10 +16,10 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 codec = { workspace = true, default-features = false, features = ["derive"] }
 scale-info = { default-features = false, features = [
-	"derive",
+  "derive",
 ], workspace = true }
 serde = { version = "1.0", default-features = false, features = [
-	"derive",
+  "derive",
 ], optional = true }
 
 pezframe-support = { default-features = false, workspace = true }
@@ -54,53 +55,53 @@ pezsp-io = { workspace = true, default-features = false }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	# Diğer paletlerin std özellikleri
-	"pezpallet-balances/std",
-	"pezpallet-identity-kyc/std",
-	"pezpallet-perwerde/std",
-	"pezpallet-referral/std",
-	"pezpallet-staking-score/std",
-	"pezpallet-tiki/std",
-	"pezkuwi-primitives/std",
-	"scale-info/std",
-	"serde",                    # serde'yi doğrudan feature olarak ekliyoruz
-	"serde?/std",
-	"pezsp-core?/std",
-	"pezsp-io?/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  # Diğer paletlerin std özellikleri
+  "pezpallet-balances/std",
+  "pezpallet-identity-kyc/std",
+  "pezpallet-perwerde/std",
+  "pezpallet-referral/std",
+  "pezpallet-staking-score/std",
+  "pezpallet-tiki/std",
+  "pezkuwi-primitives/std",
+  "scale-info/std",
+  "serde",                       # serde'yi doğrudan feature olarak ekliyoruz
+  "serde?/std",
+  "pezsp-core?/std",
+  "pezsp-io?/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	# Diğer paletlerin runtime-benchmarks özellikleri
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-identity-kyc/runtime-benchmarks",
-	"pezpallet-perwerde/runtime-benchmarks",
-	"pezpallet-referral/runtime-benchmarks",
-	"pezpallet-staking-score/runtime-benchmarks",
-	"pezpallet-tiki/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-core",
-	"pezsp-io",
-	"pezsp-io?/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  # Diğer paletlerin runtime-benchmarks özellikleri
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-identity-kyc/runtime-benchmarks",
+  "pezpallet-perwerde/runtime-benchmarks",
+  "pezpallet-referral/runtime-benchmarks",
+  "pezpallet-staking-score/runtime-benchmarks",
+  "pezpallet-tiki/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-core",
+  "pezsp-io",
+  "pezsp-io?/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	# Diğer paletlerin try-runtime özellikleri
-	"pezpallet-balances/try-runtime",
-	"pezpallet-identity-kyc/try-runtime",
-	"pezpallet-perwerde/try-runtime",
-	"pezpallet-referral/try-runtime",
-	"pezpallet-staking-score/try-runtime",
-	"pezpallet-tiki/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  # Diğer paletlerin try-runtime özellikleri
+  "pezpallet-balances/try-runtime",
+  "pezpallet-identity-kyc/try-runtime",
+  "pezpallet-perwerde/try-runtime",
+  "pezpallet-referral/try-runtime",
+  "pezpallet-staking-score/try-runtime",
+  "pezpallet-tiki/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

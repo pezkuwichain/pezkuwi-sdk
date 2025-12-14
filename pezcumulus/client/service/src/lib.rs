@@ -19,14 +19,14 @@
 //!
 //! Provides functions for starting a collator node or a normal full node.
 
-use cumulus_client_cli::CollatorOptions;
-use cumulus_client_network::{AssumeSybilResistance, RequireSecondedInBlockAnnounce};
-use cumulus_client_pov_recovery::{PoVRecovery, RecoveryDelayRange, RecoveryHandle};
-use cumulus_primitives_core::{CollectCollationInfo, ParaId};
-pub use cumulus_primitives_proof_size_hostfunction::storage_proof_size;
-use cumulus_relay_chain_inprocess_interface::build_inprocess_relay_chain;
-use cumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
-use cumulus_relay_chain_minimal_node::build_minimal_relay_chain_node_with_rpc;
+use pezcumulus_client_cli::CollatorOptions;
+use pezcumulus_client_network::{AssumeSybilResistance, RequireSecondedInBlockAnnounce};
+use pezcumulus_client_pov_recovery::{PoVRecovery, RecoveryDelayRange, RecoveryHandle};
+use pezcumulus_primitives_core::{CollectCollationInfo, ParaId};
+pub use pezcumulus_primitives_proof_size_hostfunction::storage_proof_size;
+use pezcumulus_relay_chain_inprocess_interface::build_inprocess_relay_chain;
+use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
+use pezcumulus_relay_chain_minimal_node::build_minimal_relay_chain_node_with_rpc;
 use futures::{channel::mpsc, StreamExt};
 use pezkuwi_primitives::{CandidateEvent, CollatorPair, OccupiedCoreAssumption};
 use prometheus::{Histogram, HistogramOpts, Registry};
@@ -65,7 +65,7 @@ use std::{
 /// Contains the standard bizinikiwi host functions, as well as a
 /// host function to enable PoV-reclaim on teyrchain nodes.
 pub type TeyrchainHostFunctions = (
-	cumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
+	pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::HostFunctions,
 	pezsp_io::BizinikiwiHostFunctions,
 );
 
@@ -142,7 +142,7 @@ where
 {
 	let (recovery_chan_tx, recovery_chan_rx) = mpsc::channel(RECOVERY_CHAN_SIZE);
 
-	cumulus_client_consensus_common::spawn_teyrchain_consensus_tasks(
+	pezcumulus_client_consensus_common::spawn_teyrchain_consensus_tasks(
 		para_id,
 		client.clone(),
 		relay_chain_interface.clone(),
@@ -235,14 +235,14 @@ pub async fn build_relay_chain_interface(
 	async_channel::Receiver<IncomingRequest>,
 )> {
 	match collator_options.relay_chain_mode {
-		cumulus_client_cli::RelayChainMode::Embedded => build_inprocess_relay_chain(
+		pezcumulus_client_cli::RelayChainMode::Embedded => build_inprocess_relay_chain(
 			relay_chain_config,
 			teyrchain_config,
 			telemetry_worker_handle,
 			task_manager,
 			hwbench,
 		),
-		cumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) =>
+		pezcumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) =>
 			build_minimal_relay_chain_node_with_rpc(
 				relay_chain_config,
 				teyrchain_config.prometheus_registry(),

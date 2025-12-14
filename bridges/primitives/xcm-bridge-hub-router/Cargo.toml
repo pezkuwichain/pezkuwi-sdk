@@ -6,6 +6,8 @@ authors.workspace = true
 edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
+documentation = "https://docs.rs/bp-xcm-bridge-hub-router"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -24,10 +26,13 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
-	"xcm/std",
+  "codec/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
+  "xcm/std",
 ]
-runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks", "xcm/runtime-benchmarks"]
+runtime-benchmarks = [
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
+]

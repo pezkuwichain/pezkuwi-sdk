@@ -24,9 +24,9 @@
 //! To reclaim excess storage weight, a teyrchain runtime needs the
 //! ability to fetch the size of the storage proof from the node. The reclaim
 //! mechanism uses the
-//! [`storage_proof_size`](cumulus_primitives_proof_size_hostfunction::storage_proof_size)
+//! [`storage_proof_size`](pezcumulus_primitives_proof_size_hostfunction::storage_proof_size)
 //! host function for this purpose. For convenience, pezcumulus provides
-//! [`TeyrchainHostFunctions`](cumulus_client_service::TeyrchainHostFunctions), a set of
+//! [`TeyrchainHostFunctions`](pezcumulus_client_service::TeyrchainHostFunctions), a set of
 //! host functions typically used by pezcumulus-based teyrchains. In the binary crate of your
 //! teyrchain, find the instantiation of the [`WasmExecutor`](pezsc_executor::WasmExecutor) and set the
 //! correct generic type.
@@ -62,7 +62,7 @@
 //!
 //! In your runtime, you will find a list of TransactionExtensions.
 //! To enable the reclaiming,
-//! set [`StorageWeightReclaim`](cumulus_pallet_weight_reclaim::StorageWeightReclaim)
+//! set [`StorageWeightReclaim`](pezcumulus_pallet_weight_reclaim::StorageWeightReclaim)
 //! as a warpper of that list.
 //! It is necessary that this extension wraps all the other transaction extensions in order to catch
 //! the whole PoV size of the transactions.

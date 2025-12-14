@@ -8,6 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-transaction-storage-proof"
 
 [lints]
 workspace = true
@@ -27,16 +28,16 @@ pezsp-trie = { optional = true, workspace = true }
 [features]
 default = ["std"]
 std = [
-	"async-trait",
-	"codec/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-inherents/std",
-	"pezsp-runtime/std",
-	"pezsp-trie/std",
+  "async-trait",
+  "codec/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-inherents/std",
+  "pezsp-runtime/std",
+  "pezsp-trie/std",
 ]
 runtime-benchmarks = [
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-trie?/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-trie?/runtime-benchmarks",
 ]

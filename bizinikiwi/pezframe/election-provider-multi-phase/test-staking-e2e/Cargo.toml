@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME election provider multi phase pallet tests with staking pallet, bags-list and session pallets"
 publish = false
+documentation = "https://docs.rs/pezpallet-election-provider-e2e-test"
 
 [lints]
 workspace = true
@@ -20,7 +21,7 @@ codec = { features = ["derive"], workspace = true, default-features = true }
 log = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
 scale-info = { features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 
 pezsp-core = { workspace = true, default-features = true }
@@ -45,33 +46,33 @@ pezpallet-timestamp = { workspace = true, default-features = true }
 
 [features]
 try-runtime = [
-	"pezframe-election-provider-support/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-bags-list/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-delegated-staking/try-runtime",
-	"pezpallet-election-provider-multi-phase/try-runtime",
-	"pezpallet-nomination-pools/try-runtime",
-	"pezpallet-session/try-runtime",
-	"pezpallet-staking/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-election-provider-support/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-bags-list/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-delegated-staking/try-runtime",
+  "pezpallet-election-provider-multi-phase/try-runtime",
+  "pezpallet-nomination-pools/try-runtime",
+  "pezpallet-session/try-runtime",
+  "pezpallet-staking/try-runtime",
+  "pezpallet-timestamp/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezframe-election-provider-support/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-bags-list/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-delegated-staking/runtime-benchmarks",
-	"pezpallet-election-provider-multi-phase/runtime-benchmarks",
-	"pezpallet-nomination-pools/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-npos-elections/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-election-provider-support/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-bags-list/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-delegated-staking/runtime-benchmarks",
+  "pezpallet-election-provider-multi-phase/runtime-benchmarks",
+  "pezpallet-nomination-pools/runtime-benchmarks",
+  "pezpallet-session/runtime-benchmarks",
+  "pezpallet-staking/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-npos-elections/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

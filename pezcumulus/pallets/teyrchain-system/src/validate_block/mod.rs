@@ -65,6 +65,6 @@ pub use pezsp_std;
 pub struct MemoryOptimizedValidationParams {
 	pub parent_head: bytes::Bytes,
 	pub block_data: bytes::Bytes,
-	pub relay_parent_number: cumulus_primitives_core::relay_chain::BlockNumber,
-	pub relay_parent_storage_root: cumulus_primitives_core::relay_chain::Hash,
+	pub relay_parent_number: pezcumulus_primitives_core::relay_chain::BlockNumber,
+	pub relay_parent_storage_root: pezcumulus_primitives_core::relay_chain::Hash,
 }

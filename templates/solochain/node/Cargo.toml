@@ -10,6 +10,7 @@ edition.workspace = true
 publish = false
 
 build = "build.rs"
+documentation = "https://docs.rs/solochain-template-node"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
@@ -71,41 +72,41 @@ default = ["std"]
 std = ["solochain-template-runtime/std"]
 # Dependencies that are only required if runtime benchmarking should be build.
 runtime-benchmarks = [
-	"pezframe-benchmarking-cli/runtime-benchmarks",
-	"pezframe-metadata-hash-extension/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-transaction-payment-rpc/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezsc-basic-authorship/runtime-benchmarks",
-	"pezsc-cli/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus-aura/runtime-benchmarks",
-	"pezsc-consensus-grandpa/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-offchain/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsc-transaction-pool/runtime-benchmarks",
-	"solochain-template-runtime/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-block-builder/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus-aura/runtime-benchmarks",
-	"pezsp-genesis-builder/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
-	"bizinikiwi-frame-rpc-system/runtime-benchmarks",
+  "pezframe-benchmarking-cli/runtime-benchmarks",
+  "pezframe-metadata-hash-extension/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-transaction-payment-rpc/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezsc-basic-authorship/runtime-benchmarks",
+  "pezsc-cli/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus-aura/runtime-benchmarks",
+  "pezsc-consensus-grandpa/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-offchain/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsc-transaction-pool/runtime-benchmarks",
+  "solochain-template-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-block-builder/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus-aura/runtime-benchmarks",
+  "pezsp-genesis-builder/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
+  "bizinikiwi-frame-rpc-system/runtime-benchmarks",
 ]
 # Enable features that allow the runtime to be tried and debugged. Name might be subject to change
 # in the near future.
 try-runtime = [
-	"pezframe-system/try-runtime",
-	"pezpallet-transaction-payment/try-runtime",
-	"solochain-template-runtime/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-transaction-payment/try-runtime",
+  "solochain-template-runtime/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

@@ -7,6 +7,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/xcm-emulator"
 
 [lints]
 workspace = true
@@ -50,24 +51,24 @@ xcm-simulator = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
-	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-aura/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezsp-consensus-aura/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-simulator/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+  "pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-aura/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-consensus-aura/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

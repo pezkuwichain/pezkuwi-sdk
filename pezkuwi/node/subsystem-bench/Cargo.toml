@@ -7,6 +7,9 @@ edition.workspace = true
 license.workspace = true
 readme = "README.md"
 publish = false
+documentation = "https://docs.rs/pezkuwi-subsystem-bench"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lib]
 name = "pezkuwi_subsystem_bench"
@@ -33,7 +36,7 @@ kvdb-memorydb = { workspace = true }
 pezkuwi-availability-bitfield-distribution = { workspace = true, default-features = true }
 pezkuwi-availability-distribution = { workspace = true, default-features = true }
 pezkuwi-availability-recovery = { features = [
-	"subsystem-benchmarks",
+  "subsystem-benchmarks",
 ], workspace = true, default-features = true }
 pezkuwi-dispute-distribution = { workspace = true, default-features = true }
 pezkuwi-node-core-av-store = { workspace = true, default-features = true }
@@ -55,13 +58,13 @@ pezsp-core = { workspace = true, default-features = true }
 pezsp-keystore = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true }
 tikv-jemallocator = { features = [
-	"profiling",
-	"unprefixed_malloc_on_supported_platforms",
+  "profiling",
+  "unprefixed_malloc_on_supported_platforms",
 ], workspace = true, optional = true }
 
 codec = { features = [
-	"derive",
-	"std",
+  "derive",
+  "std",
 ], workspace = true, default-features = true }
 itertools = { workspace = true }
 pezkuwi-node-metrics = { workspace = true, default-features = true }
@@ -79,8 +82,8 @@ pezsp-application-crypto = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 tokio = { features = [
-	"parking_lot",
-	"rt-multi-thread",
+  "parking_lot",
+  "rt-multi-thread",
 ], workspace = true, default-features = true }
 
 pezkuwi-approval-distribution = { workspace = true, default-features = true }
@@ -101,32 +104,32 @@ strum = { features = ["derive"], workspace = true, default-features = true }
 default = []
 memprofile = ["dep:tikv-jemallocator"]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-approval-distribution/runtime-benchmarks",
-	"pezkuwi-availability-bitfield-distribution/runtime-benchmarks",
-	"pezkuwi-availability-distribution/runtime-benchmarks",
-	"pezkuwi-availability-recovery/runtime-benchmarks",
-	"pezkuwi-dispute-distribution/runtime-benchmarks",
-	"pezkuwi-node-core-approval-voting-parallel/runtime-benchmarks",
-	"pezkuwi-node-core-approval-voting/runtime-benchmarks",
-	"pezkuwi-node-core-av-store/runtime-benchmarks",
-	"pezkuwi-node-core-dispute-coordinator/runtime-benchmarks",
-	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-types/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-statement-distribution/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-approval-distribution/runtime-benchmarks",
+  "pezkuwi-availability-bitfield-distribution/runtime-benchmarks",
+  "pezkuwi-availability-distribution/runtime-benchmarks",
+  "pezkuwi-availability-recovery/runtime-benchmarks",
+  "pezkuwi-dispute-distribution/runtime-benchmarks",
+  "pezkuwi-node-core-approval-voting-parallel/runtime-benchmarks",
+  "pezkuwi-node-core-approval-voting/runtime-benchmarks",
+  "pezkuwi-node-core-av-store/runtime-benchmarks",
+  "pezkuwi-node-core-dispute-coordinator/runtime-benchmarks",
+  "pezkuwi-node-metrics/runtime-benchmarks",
+  "pezkuwi-node-network-protocol/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-types/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-statement-distribution/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
 ]

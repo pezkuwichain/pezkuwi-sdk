@@ -23,11 +23,11 @@ use super::*;
 use alloc::collections::vec_deque::VecDeque;
 use codec::Encode;
 use core::num::NonZeroU32;
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::BlockNumber as RelayBlockNumber, AggregateMessageOrigin, InboundDownwardMessage,
 	InboundHrmpMessage, PersistedValidationData,
 };
-use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 use pezframe_support::{
 	derive_impl,
 	inherent::{InherentData, ProvideInherent},
@@ -431,7 +431,7 @@ impl BlockTests {
 				}
 				inherent_data
 					.put_data(
-						cumulus_primitives_teyrchain_inherent::INHERENT_IDENTIFIER,
+						pezcumulus_primitives_teyrchain_inherent::INHERENT_IDENTIFIER,
 						&system_inherent_data,
 					)
 					.expect("failed to put VFP inherent");

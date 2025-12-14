@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME atomic swap pallet"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-atomic-swap"
 
 [lints]
 workspace = true
@@ -28,6 +29,6 @@ default = ["std"]
 std = ["codec/std", "frame/std", "pezpallet-balances/std", "scale-info/std"]
 try-runtime = ["frame/try-runtime", "pezpallet-balances/try-runtime"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
 ]

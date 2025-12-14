@@ -2,9 +2,9 @@
 name = "pezpallet-oracle"
 version = "1.0.0"
 authors = [
-	"Acala Developers",
-	"Kurdistan Tech Institute <info@pezkuwichain.io>",
-	"Parity Technologies <admin@parity.io>",
+  "Acala Developers",
+  "Kurdistan Tech Institute <info@pezkuwichain.io>",
+  "Parity Technologies <admin@parity.io>",
 ]
 edition.workspace = true
 license = "Apache-2.0"
@@ -12,6 +12,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME oracle pallet for off-chain data"
 readme = "README.md"
+documentation = "https://docs.rs/pezpallet-oracle"
 
 [lints]
 workspace = true
@@ -36,26 +37,26 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-application-crypto/std",
-	"pezsp-io/std",
-	"pezsp-runtime/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-application-crypto/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

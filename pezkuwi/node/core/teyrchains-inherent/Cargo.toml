@@ -7,6 +7,7 @@ license.workspace = true
 description = "Teyrchains inherent data provider for Pezkuwi node"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-teyrchains-inherent"
 
 [lints]
 workspace = true
@@ -25,10 +26,10 @@ thiserror = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-overseer/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-overseer/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
 ]

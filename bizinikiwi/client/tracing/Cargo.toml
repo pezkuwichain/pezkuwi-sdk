@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Instrumentation implementation for bizinikiwi."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-tracing"
 
 [lints]
 workspace = true
@@ -53,8 +54,8 @@ thiserror = { workspace = true }
 tracing = { workspace = true, default-features = true }
 tracing-log = { workspace = true, features = ["interest-cache"] }
 tracing-subscriber = { workspace = true, features = [
-	"env-filter",
-	"parking_lot",
+  "env-filter",
+  "parking_lot",
 ] }
 
 [dev-dependencies]
@@ -64,8 +65,8 @@ tracing-subscriber = { workspace = true, features = ["chrono", "parking_lot"] }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

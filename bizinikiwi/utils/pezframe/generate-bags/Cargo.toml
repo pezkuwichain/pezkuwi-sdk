@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Bag threshold generation script for pezpallet-bag-list"
+documentation = "https://docs.rs/generate-bags"
 
 [lints]
 workspace = true
@@ -25,9 +26,9 @@ num-format = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-election-provider-support/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-election-provider-support/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-staking/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

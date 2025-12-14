@@ -9,6 +9,7 @@ homepage.workspace = true
 repository.workspace = true
 publish = true
 description = "Utility for building chain-specification files for Bizinikiwi-based runtimes based on `pezsp-genesis-builder`"
+documentation = "https://docs.rs/pezstaging-chain-spec-builder"
 
 [lints]
 workspace = true
@@ -31,7 +32,7 @@ doctest = false
 clap = { features = ["derive"], workspace = true }
 docify = { workspace = true }
 pezsc-chain-spec = { features = [
-	"clap",
+  "clap",
 ], workspace = true, default-features = true }
 serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
@@ -46,6 +47,6 @@ bizinikiwi-test-runtime = { workspace = true }
 # `cargo build --feature=generate-readme` updates the `README.md` file.
 generate-readme = []
 runtime-benchmarks = [
-	"pezsc-chain-spec/runtime-benchmarks",
-	"bizinikiwi-test-runtime/runtime-benchmarks",
+  "pezsc-chain-spec/runtime-benchmarks",
+  "bizinikiwi-test-runtime/runtime-benchmarks",
 ]

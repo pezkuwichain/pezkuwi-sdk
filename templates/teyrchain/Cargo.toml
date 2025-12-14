@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
 publish = false
+documentation = "https://docs.rs/teyrchain-template"
 
 [dependencies]
 docify = { workspace = true }

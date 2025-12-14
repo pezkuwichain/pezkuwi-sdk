@@ -8,6 +8,8 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+description = "Pezkuwi SDK primitive: runtime interface test wasm"
+documentation = "https://docs.rs/pezsp-runtime-interface-test-wasm"
 
 [lints]
 workspace = true
@@ -27,9 +29,9 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-	"bytes/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-runtime-interface/std",
-	"bizinikiwi-wasm-builder",
+  "bytes/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime-interface/std",
+  "bizinikiwi-wasm-builder",
 ]

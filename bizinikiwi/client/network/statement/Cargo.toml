@@ -36,10 +36,10 @@ async-trait = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-network-common/runtime-benchmarks",
-	"pezsc-network-sync/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-statement-store/runtime-benchmarks",
+  "pezsc-network-common/runtime-benchmarks",
+  "pezsc-network-sync/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-statement-store/runtime-benchmarks",
 ]

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Macro for benchmarking a FRAME runtime."
 readme = "README.md"
+documentation = "https://docs.rs/pezframe-benchmarking"
 
 [lints]
 workspace = true
@@ -45,33 +46,33 @@ pezsp-state-machine = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support-procedural/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"linregress",
-	"log/std",
-	"scale-info/std",
-	"serde",
-	"pezsp-api/std",
-	"pezsp-application-crypto/std",
-	"pezsp-core/std",
-	"pezsp-externalities/std",
-	"pezsp-io/std",
-	"pezsp-keystore/std",
-	"pezsp-runtime-interface/std",
-	"pezsp-runtime/std",
-	"pezsp-state-machine/std",
-	"pezsp-storage/std",
+  "codec/std",
+  "pezframe-support-procedural/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "linregress",
+  "log/std",
+  "scale-info/std",
+  "serde",
+  "pezsp-api/std",
+  "pezsp-application-crypto/std",
+  "pezsp-core/std",
+  "pezsp-externalities/std",
+  "pezsp-io/std",
+  "pezsp-keystore/std",
+  "pezsp-runtime-interface/std",
+  "pezsp-runtime/std",
+  "pezsp-state-machine/std",
+  "pezsp-storage/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support-procedural/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime-interface/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
+  "pezframe-support-procedural/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsc-client-db/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
 ]

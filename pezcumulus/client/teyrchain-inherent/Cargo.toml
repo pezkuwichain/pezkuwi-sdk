@@ -7,6 +7,7 @@ description = "Inherent that needs to be present in every teyrchain block. Conta
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-client-teyrchain-inherent"
 
 [dependencies]
 async-trait = { workspace = true }
@@ -31,13 +32,13 @@ pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = tr
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
-	"pezcumulus-relay-chain-interface/runtime-benchmarks",
-	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus-babe/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+  "pezcumulus-relay-chain-interface/runtime-benchmarks",
+  "pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus-babe/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
 ]

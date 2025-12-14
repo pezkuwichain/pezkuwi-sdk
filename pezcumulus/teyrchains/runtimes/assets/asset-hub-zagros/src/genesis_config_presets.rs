@@ -20,7 +20,7 @@ use crate::{
 	*,
 };
 use alloc::{vec, vec::Vec};
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::build_struct_json_patch;
 use hex_literal::hex;
 use pezsp_core::crypto::UncheckedInto;

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "An Ethereum JSON-RPC server for pezpallet-revive."
 default-run = "eth-rpc"
+documentation = "https://docs.rs/pezpallet-revive-eth-rpc"
 
 [lints]
 workspace = true
@@ -35,8 +36,8 @@ pezsc-rpc = { workspace = true, default-features = true }
 pezsc-rpc-api = { workspace = true, default-features = true }
 pezsc-service = { workspace = true, default-features = true }
 serde = { workspace = true, default-features = true, features = [
-	"alloc",
-	"derive",
+  "alloc",
+  "derive",
 ] }
 serde_json = { workspace = true }
 pezsp-arithmetic = { workspace = true, default-features = true }
@@ -48,7 +49,7 @@ pezsp-timestamp = { workspace = true }
 pezsp-weights = { workspace = true, default-features = true }
 sqlx = { workspace = true, features = ["macros", "runtime-tokio", "sqlite"] }
 subxt = { workspace = true, default-features = true, features = [
-	"reconnecting-rpc-client",
+  "reconnecting-rpc-client",
 ] }
 subxt-signer = { workspace = true, features = ["unstable-eth"] }
 thiserror = { workspace = true }
@@ -69,14 +70,14 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezpallet-revive/runtime-benchmarks",
-	"revive-dev-node/runtime-benchmarks",
-	"revive-dev-runtime/runtime-benchmarks",
-	"pezsc-cli/runtime-benchmarks",
-	"pezsc-rpc-api/runtime-benchmarks",
-	"pezsc-rpc/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
+  "pezpallet-revive/runtime-benchmarks",
+  "revive-dev-node/runtime-benchmarks",
+  "revive-dev-runtime/runtime-benchmarks",
+  "pezsc-cli/runtime-benchmarks",
+  "pezsc-rpc-api/runtime-benchmarks",
+  "pezsc-rpc/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
 ]

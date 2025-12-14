@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "e2e unit tests for staking in AHM"
 publish = false
+documentation = "https://docs.rs/pezpallet-ahm-test"
 
 [lints]
 workspace = true
@@ -21,7 +22,7 @@ frame = { workspace = true, default-features = true }
 pezframe-support = { workspace = true, default-features = true }
 log = { workspace = true }
 scale-info = { features = [
-	"derive",
+  "derive",
 ], workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-session = { workspace = true, default-features = true }
@@ -50,39 +51,39 @@ pezpallet-staking = { workspace = true, default-features = true }
 [features]
 std = ["log/std"]
 try-runtime = [
-	"pezpallet-balances/try-runtime",
+  "pezpallet-balances/try-runtime",
 
-	"pezpallet-staking/try-runtime",
+  "pezpallet-staking/try-runtime",
 
-	"pezpallet-staking-async-rc-client/try-runtime",
-	"pezpallet-staking-async/try-runtime",
+  "pezpallet-staking-async-rc-client/try-runtime",
+  "pezpallet-staking-async/try-runtime",
 
-	"pezframe-election-provider-support/try-runtime",
-	"pezframe-support/try-runtime",
-	"frame/try-runtime",
-	"pezpallet-authorship/try-runtime",
-	"pezpallet-election-provider-multi-block/try-runtime",
-	"pezpallet-offences/try-runtime",
-	"pezpallet-root-offences/try-runtime",
-	"pezpallet-session/try-runtime",
-	"pezpallet-staking-async-ah-client/try-runtime",
-	"pezpallet-timestamp/try-runtime",
+  "pezframe-election-provider-support/try-runtime",
+  "pezframe-support/try-runtime",
+  "frame/try-runtime",
+  "pezpallet-authorship/try-runtime",
+  "pezpallet-election-provider-multi-block/try-runtime",
+  "pezpallet-offences/try-runtime",
+  "pezpallet-root-offences/try-runtime",
+  "pezpallet-session/try-runtime",
+  "pezpallet-staking-async-ah-client/try-runtime",
+  "pezpallet-timestamp/try-runtime",
 ]
 runtime-benchmarks = [
-	"pezframe-election-provider-support/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"frame/runtime-benchmarks",
-	"pezpallet-authorship/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-election-provider-multi-block/runtime-benchmarks",
-	"pezpallet-offences/runtime-benchmarks",
-	"pezpallet-root-offences/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezpallet-staking-async-ah-client/runtime-benchmarks",
-	"pezpallet-staking-async-rc-client/runtime-benchmarks",
-	"pezpallet-staking-async/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-session/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-election-provider-support/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "frame/runtime-benchmarks",
+  "pezpallet-authorship/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-election-provider-multi-block/runtime-benchmarks",
+  "pezpallet-offences/runtime-benchmarks",
+  "pezpallet-root-offences/runtime-benchmarks",
+  "pezpallet-session/runtime-benchmarks",
+  "pezpallet-staking-async-ah-client/runtime-benchmarks",
+  "pezpallet-staking-async-rc-client/runtime-benchmarks",
+  "pezpallet-staking-async/runtime-benchmarks",
+  "pezpallet-staking/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezsp-session/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]

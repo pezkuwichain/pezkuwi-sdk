@@ -9,6 +9,7 @@ repository.workspace = true
 description = "FRAME pallet for PolkaVM contracts."
 readme = "README.md"
 include = ["CHANGELOG.md", "README.md", "build.rs", "src/**/*"]
+documentation = "https://docs.rs/pezpallet-revive"
 
 [lints]
 workspace = true
@@ -36,7 +37,7 @@ num-traits = { workspace = true }
 paste = { workspace = true }
 polkavm = { version = "0.29.1", default-features = false }
 polkavm-common = { version = "0.29.0", default-features = false, features = [
-	"alloc",
+  "alloc",
 ] }
 rand = { workspace = true }
 rand_pcg = { workspace = true }
@@ -54,8 +55,8 @@ pezframe-system = { workspace = true }
 pezpallet-revive-fixtures = { workspace = true, optional = true }
 pezpallet-revive-proc-macro = { workspace = true }
 pezpallet-revive-uapi = { workspace = true, features = [
-	"precompiles-sol-interfaces",
-	"scale",
+  "precompiles-sol-interfaces",
+  "scale",
 ] }
 pezpallet-transaction-payment = { workspace = true }
 ripemd = { workspace = true }
@@ -69,7 +70,7 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-version = { workspace = true }
 subxt-signer = { workspace = true, optional = true, features = [
-	"unstable-eth",
+  "unstable-eth",
 ] }
 
 [dev-dependencies]
@@ -95,80 +96,80 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"alloy-consensus/serde",
-	"alloy-consensus/std",
-	"alloy-core/std",
-	"alloy-trie/std",
-	"codec/std",
-	"environmental/std",
-	"ethereum-types/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"humantime-serde",
-	"k256?/std",
-	"log/std",
-	"num-bigint/std",
-	"num-integer/std",
-	"num-traits/std",
-	"pezpallet-proxy/std",
-	"pezpallet-revive-fixtures?/std",
-	"pezpallet-timestamp/std",
-	"pezpallet-transaction-payment/std",
-	"pezpallet-utility/std",
-	"polkavm-common/std",
-	"polkavm/std",
-	"rand/std",
-	"revm/std",
-	"ripemd/std",
-	"rlp/std",
-	"scale-info/std",
-	"secp256k1/std",
-	"serde/std",
-	"serde_json/std",
-	"pezsp-api/std",
-	"pezsp-arithmetic/std",
-	"pezsp-consensus-aura/std",
-	"pezsp-consensus-babe/std",
-	"pezsp-consensus-slots/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-keystore/std",
-	"pezsp-runtime/std",
-	"pezsp-state-machine/std",
-	"pezsp-version/std",
-	"subxt-signer",
+  "alloy-consensus/serde",
+  "alloy-consensus/std",
+  "alloy-core/std",
+  "alloy-trie/std",
+  "codec/std",
+  "environmental/std",
+  "ethereum-types/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "humantime-serde",
+  "k256?/std",
+  "log/std",
+  "num-bigint/std",
+  "num-integer/std",
+  "num-traits/std",
+  "pezpallet-proxy/std",
+  "pezpallet-revive-fixtures?/std",
+  "pezpallet-timestamp/std",
+  "pezpallet-transaction-payment/std",
+  "pezpallet-utility/std",
+  "polkavm-common/std",
+  "polkavm/std",
+  "rand/std",
+  "revm/std",
+  "ripemd/std",
+  "rlp/std",
+  "scale-info/std",
+  "secp256k1/std",
+  "serde/std",
+  "serde_json/std",
+  "pezsp-api/std",
+  "pezsp-arithmetic/std",
+  "pezsp-consensus-aura/std",
+  "pezsp-consensus-babe/std",
+  "pezsp-consensus-slots/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-keystore/std",
+  "pezsp-runtime/std",
+  "pezsp-state-machine/std",
+  "pezsp-version/std",
+  "subxt-signer",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"k256",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-proxy/runtime-benchmarks",
-	"pezpallet-revive-fixtures",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezpallet-utility/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-consensus-aura",
-	"pezsp-consensus-aura?/runtime-benchmarks",
-	"pezsp-consensus-babe",
-	"pezsp-consensus-babe?/runtime-benchmarks",
-	"pezsp-consensus-slots",
-	"pezsp-consensus-slots?/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "k256",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-proxy/runtime-benchmarks",
+  "pezpallet-revive-fixtures",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezpallet-utility/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-consensus-aura",
+  "pezsp-consensus-aura?/runtime-benchmarks",
+  "pezsp-consensus-babe",
+  "pezsp-consensus-babe?/runtime-benchmarks",
+  "pezsp-consensus-slots",
+  "pezsp-consensus-slots?/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-proxy/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezpallet-transaction-payment/try-runtime",
-	"pezpallet-utility/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-proxy/try-runtime",
+  "pezpallet-timestamp/try-runtime",
+  "pezpallet-transaction-payment/try-runtime",
+  "pezpallet-utility/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

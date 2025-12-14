@@ -121,12 +121,12 @@ async fn para_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 
 		for event in block.events().await.unwrap().iter() {
 			let event = event.unwrap();
-			log::debug!("Got event: {} :: {}", event.pezpallet_name(), event.variant_name());
+			log::debug!("Got event: {} :: {}", event.pallet_name(), event.variant_name());
 			{
 				events.write().await.push((block.number().into(), event.clone()));
 			}
 
-			if event.pezpallet_name() == "Broker" {
+			if event.pallet_name() == "Broker" {
 				trace_event!(event: broker_events =>
 					Purchased, SaleInitialized, HistoryInitialized, CoreAssigned, Pooled,
 					ClaimsReady, RevenueClaimBegun,	RevenueClaimItem, RevenueClaimPaid
@@ -151,12 +151,12 @@ async fn relay_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 
 		for event in block.events().await.unwrap().iter() {
 			let event = event.unwrap();
-			log::debug!("Got event: {} :: {}", event.pezpallet_name(), event.variant_name());
+			log::debug!("Got event: {} :: {}", event.pallet_name(), event.variant_name());
 			{
 				events.write().await.push((block.number().into(), event.clone()));
 			}
 
-			if event.pezpallet_name() == "OnDemandAssignmentProvider" {
+			if event.pallet_name() == "OnDemandAssignmentProvider" {
 				trace_event!(event: on_demand_events =>
 					AccountCredited, SpotPriceSet, OnDemandOrderPlaced
 				);
@@ -178,7 +178,7 @@ async fn wait_for_event<
 	loop {
 		let mut events = events.write().await;
 		if let Some(entry) = events.iter().find(|&e| {
-			e.1.pezpallet_name() == pallet &&
+			e.1.pallet_name() == pallet &&
 				e.1.variant_name() == variant &&
 				predicate(&e.1.as_event::<E>().unwrap().unwrap())
 		}) {

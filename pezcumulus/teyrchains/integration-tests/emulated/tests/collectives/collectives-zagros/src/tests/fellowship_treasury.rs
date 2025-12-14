@@ -160,7 +160,7 @@ fn fellowship_treasury_spend() {
 			AssetHubZagros,
 			vec![
 				RuntimeEvent::Balances(pezpallet_balances::Event::Transfer { .. }) => {},
-				RuntimeEvent::TeyrchainSystem(cumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
+				RuntimeEvent::TeyrchainSystem(pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
 				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
 			]
 		);
@@ -234,7 +234,7 @@ fn fellowship_treasury_spend() {
 			AssetHubZagros,
 			vec![
 				RuntimeEvent::Balances(pezpallet_balances::Event::Transfer { .. }) => {},
-				RuntimeEvent::XcmpQueue(cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
 			]
 		);

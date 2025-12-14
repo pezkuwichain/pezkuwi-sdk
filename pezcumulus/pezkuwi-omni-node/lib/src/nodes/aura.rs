@@ -31,28 +31,28 @@ use crate::{
 	},
 };
 use codec::Encode;
-use cumulus_client_collator::service::{
+use pezcumulus_client_collator::service::{
 	CollatorService, ServiceInterface as CollatorServiceInterface,
 };
 #[docify::export(slot_based_colator_import)]
-use cumulus_client_consensus_aura::collators::slot_based::{
+use pezcumulus_client_consensus_aura::collators::slot_based::{
 	self as slot_based, Params as SlotBasedParams,
 };
-use cumulus_client_consensus_aura::{
+use pezcumulus_client_consensus_aura::{
 	collators::{
 		lookahead::{self as aura, Params as AuraParams},
 		slot_based::{SlotBasedBlockImport, SlotBasedBlockImportHandle},
 	},
 	equivocation_import_queue::Verifier as EquivocationVerifier,
 };
-use cumulus_client_consensus_proposer::ProposerInterface;
-use cumulus_client_consensus_relay_chain::Verifier as RelayChainVerifier;
-use cumulus_client_service::CollatorSybilResistance;
-use cumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
-use cumulus_primitives_core::{
+use pezcumulus_client_consensus_proposer::ProposerInterface;
+use pezcumulus_client_consensus_relay_chain::Verifier as RelayChainVerifier;
+use pezcumulus_client_service::CollatorSybilResistance;
+use pezcumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
+use pezcumulus_primitives_core::{
 	relay_chain::ValidationCode, CollectCollationInfo, GetTeyrchainInfo, ParaId,
 };
-use cumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
+use pezcumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
 use futures::{prelude::*, FutureExt};
 use pezkuwi_primitives::{CollatorPair, UpgradeGoAhead};
 use prometheus_endpoint::Registry;
@@ -520,7 +520,7 @@ where
 	) where
 		CIDP: CreateInherentDataProviders<Block, ()> + 'static,
 		CIDP::InherentDataProviders: Send,
-		CHP: cumulus_client_consensus_common::ValidationCodeHashProvider<Hash> + Send + 'static,
+		CHP: pezcumulus_client_consensus_common::ValidationCodeHashProvider<Hash> + Send + 'static,
 		Proposer: ProposerInterface<Block> + Send + Sync + 'static,
 		CS: CollatorServiceInterface<Block> + Send + Sync + Clone + 'static,
 		Spawner: SpawnEssentialNamed + Clone + 'static,

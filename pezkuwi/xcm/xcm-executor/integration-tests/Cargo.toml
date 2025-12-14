@@ -6,6 +6,9 @@ edition.workspace = true
 license.workspace = true
 version = "1.0.0"
 publish = false
+documentation = "https://docs.rs/xcm-executor-integration-tests"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -33,27 +36,27 @@ xcm-executor = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"pezpallet-sudo/std",
-	"pezkuwi-runtime-teyrchains/std",
-	"pezsp-runtime/std",
-	"xcm/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-sudo/std",
+  "pezkuwi-runtime-teyrchains/std",
+  "pezsp-runtime/std",
+  "xcm/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-sudo/runtime-benchmarks",
-	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
-	"pezkuwi-test-client/runtime-benchmarks",
-	"pezkuwi-test-runtime/runtime-benchmarks",
-	"pezkuwi-test-service/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-sudo/runtime-benchmarks",
+  "pezpallet-transaction-payment/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-test-client/runtime-benchmarks",
+  "pezkuwi-test-runtime/runtime-benchmarks",
+  "pezkuwi-test-service/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

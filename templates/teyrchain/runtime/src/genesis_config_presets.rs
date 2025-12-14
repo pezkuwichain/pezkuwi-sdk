@@ -7,7 +7,7 @@ use alloc::{vec, vec::Vec};
 
 use pezkuwi_sdk::{pezstaging_xcm as xcm, *};
 
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::build_struct_json_patch;
 use serde_json::Value;
 use pezsp_genesis_builder::PresetId;

@@ -16,9 +16,9 @@
 
 #![allow(missing_docs)]
 
-use cumulus_client_service::TeyrchainHostFunctions;
-use cumulus_primitives_core::ParaId;
-use cumulus_test_runtime::AccountId;
+use pezcumulus_client_service::TeyrchainHostFunctions;
+use pezcumulus_primitives_core::ParaId;
+use pezcumulus_test_runtime::AccountId;
 use pezsc_chain_spec::GenesisConfigBuilderRuntimeCaller;
 use pezsc_service::{ChainType, GenericChainSpec};
 use serde_json::json;
@@ -82,7 +82,7 @@ pub fn get_chain_spec(id: Option<ParaId>) -> GenericChainSpec {
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+		pezcumulus_test_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
 	)
 }
 
@@ -91,7 +91,7 @@ pub fn get_elastic_scaling_chain_spec(id: Option<ParaId>) -> GenericChainSpec {
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::elastic_scaling::WASM_BINARY
+		pezcumulus_test_runtime::elastic_scaling::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }
@@ -100,7 +100,7 @@ pub fn get_relay_parent_offset_chain_spec(id: Option<ParaId>) -> GenericChainSpe
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::relay_parent_offset::WASM_BINARY
+		pezcumulus_test_runtime::relay_parent_offset::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }
@@ -110,7 +110,7 @@ pub fn get_elastic_scaling_500ms_chain_spec(id: Option<ParaId>) -> GenericChainS
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::elastic_scaling_500ms::WASM_BINARY
+		pezcumulus_test_runtime::elastic_scaling_500ms::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }
@@ -120,7 +120,7 @@ pub fn get_elastic_scaling_mvp_chain_spec(id: Option<ParaId>) -> GenericChainSpe
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::elastic_scaling_mvp::WASM_BINARY
+		pezcumulus_test_runtime::elastic_scaling_mvp::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }
@@ -129,7 +129,7 @@ pub fn get_elastic_scaling_multi_block_slot_chain_spec(id: Option<ParaId>) -> Ge
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::elastic_scaling_multi_block_slot::WASM_BINARY
+		pezcumulus_test_runtime::elastic_scaling_multi_block_slot::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }
@@ -138,7 +138,7 @@ pub fn get_sync_backing_chain_spec(id: Option<ParaId>) -> GenericChainSpec {
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::sync_backing::WASM_BINARY
+		pezcumulus_test_runtime::sync_backing::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }
@@ -147,7 +147,7 @@ pub fn get_async_backing_chain_spec(id: Option<ParaId>) -> GenericChainSpec {
 	get_chain_spec_with_extra_endowed(
 		id,
 		Default::default(),
-		cumulus_test_runtime::async_backing::WASM_BINARY
+		pezcumulus_test_runtime::async_backing::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }

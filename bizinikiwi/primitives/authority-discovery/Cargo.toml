@@ -8,6 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-authority-discovery"
 
 [lints]
 workspace = true
@@ -25,14 +26,18 @@ pezsp-runtime = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"scale-info/std",
-	"pezsp-api/std",
-	"pezsp-application-crypto/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "scale-info/std",
+  "pezsp-api/std",
+  "pezsp-application-crypto/std",
+  "pezsp-runtime/std",
 ]
-serde = ["scale-info/serde", "pezsp-application-crypto/serde", "pezsp-runtime/serde"]
+serde = [
+  "scale-info/serde",
+  "pezsp-application-crypto/serde",
+  "pezsp-runtime/serde",
+]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

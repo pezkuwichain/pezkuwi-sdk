@@ -8,6 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-consensus-babe"
 
 [lints]
 workspace = true
@@ -31,32 +32,32 @@ pezsp-timestamp = { optional = true, workspace = true }
 [features]
 default = ["std"]
 std = [
-	"async-trait",
-	"codec/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-api/std",
-	"pezsp-application-crypto/std",
-	"pezsp-consensus-slots/std",
-	"pezsp-core/std",
-	"pezsp-inherents/std",
-	"pezsp-runtime/std",
-	"pezsp-timestamp/std",
+  "async-trait",
+  "codec/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-api/std",
+  "pezsp-application-crypto/std",
+  "pezsp-consensus-slots/std",
+  "pezsp-core/std",
+  "pezsp-inherents/std",
+  "pezsp-runtime/std",
+  "pezsp-timestamp/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-	"dep:serde",
-	"scale-info/serde",
-	"pezsp-application-crypto/serde",
-	"pezsp-consensus-slots/serde",
-	"pezsp-core/serde",
-	"pezsp-runtime/serde",
+  "dep:serde",
+  "scale-info/serde",
+  "pezsp-application-crypto/serde",
+  "pezsp-consensus-slots/serde",
+  "pezsp-core/serde",
+  "pezsp-runtime/serde",
 ]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-consensus-slots/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-timestamp?/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-consensus-slots/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-timestamp?/runtime-benchmarks",
 ]

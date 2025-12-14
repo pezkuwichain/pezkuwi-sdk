@@ -7,6 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Merkle Mountain Range primitives."
+documentation = "https://docs.rs/pezsp-mmr-primitives"
 
 [lints]
 workspace = true
@@ -32,21 +33,26 @@ array-bytes = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"dep:thiserror",
-	"log/std",
-	"mmr-lib/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-api/std",
-	"pezsp-core/std",
-	"pezsp-debug-derive/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "dep:thiserror",
+  "log/std",
+  "mmr-lib/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-api/std",
+  "pezsp-core/std",
+  "pezsp-debug-derive/std",
+  "pezsp-runtime/std",
 ]
 
 # Serde support without relying on std features.
-serde = ["dep:serde", "scale-info/serde", "pezsp-core/serde", "pezsp-runtime/serde"]
+serde = [
+  "dep:serde",
+  "scale-info/serde",
+  "pezsp-core/serde",
+  "pezsp-runtime/serde",
+]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

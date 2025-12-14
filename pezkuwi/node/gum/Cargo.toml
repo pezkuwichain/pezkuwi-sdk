@@ -7,6 +7,7 @@ license.workspace = true
 description = "Stick logs together with the TraceID as provided by tempo"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/tracing-gum"
 
 [lints]
 workspace = true
@@ -15,7 +16,7 @@ workspace = true
 coarsetime = { workspace = true }
 gum-proc-macro = { workspace = true, default-features = true }
 pezkuwi-primitives = { features = [
-	"std",
+  "std",
 ], workspace = true, default-features = true }
 tracing = { workspace = true, default-features = true }
 

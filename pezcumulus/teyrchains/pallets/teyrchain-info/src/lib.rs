@@ -22,7 +22,7 @@ pub use pallet::*;
 
 #[pezframe_support::pallet]
 pub mod pallet {
-	use cumulus_primitives_core::ParaId;
+	use pezcumulus_primitives_core::ParaId;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 

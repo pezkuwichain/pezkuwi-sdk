@@ -8,6 +8,7 @@ edition.workspace = true
 publish = false
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezsc-network-test"
 
 [lints]
 workspace = true
@@ -45,17 +46,17 @@ tokio = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-network-common/runtime-benchmarks",
-	"pezsc-network-light/runtime-benchmarks",
-	"pezsc-network-sync/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
-	"bizinikiwi-test-runtime/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-network-common/runtime-benchmarks",
+  "pezsc-network-light/runtime-benchmarks",
+  "pezsc-network-sync/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+  "bizinikiwi-test-runtime/runtime-benchmarks",
 ]

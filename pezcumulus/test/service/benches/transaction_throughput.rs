@@ -17,15 +17,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughput};
-use cumulus_client_cli::get_raw_genesis_header;
-use cumulus_test_runtime::{AccountId, BalancesCall, ExistentialDeposit, SudoCall};
+use pezcumulus_client_cli::get_raw_genesis_header;
+use pezcumulus_test_runtime::{AccountId, BalancesCall, ExistentialDeposit, SudoCall};
 use futures::{future, StreamExt};
 use pezsc_transaction_pool_api::{TransactionPool as _, TransactionSource, TransactionStatus};
 use pezsp_core::{crypto::Pair, sr25519};
 use pezsp_runtime::OpaqueExtrinsic;
 
-use cumulus_primitives_core::ParaId;
-use cumulus_test_service::{construct_extrinsic, fetch_nonce, Client, Keyring::*, TransactionPool};
+use pezcumulus_primitives_core::ParaId;
+use pezcumulus_test_service::{construct_extrinsic, fetch_nonce, Client, Keyring::*, TransactionPool};
 use pezkuwi_primitives::HeadData;
 
 fn create_accounts(num: usize) -> Vec<sr25519::Pair> {
@@ -142,7 +142,7 @@ fn transaction_throughput_benchmarks(c: &mut Criterion) {
 	let tokio_handle = runtime.handle();
 
 	// Start alice
-	let alice = cumulus_test_service::run_relay_chain_validator_node(
+	let alice = pezcumulus_test_service::run_relay_chain_validator_node(
 		tokio_handle.clone(),
 		Alice,
 		|| {},
@@ -151,7 +151,7 @@ fn transaction_throughput_benchmarks(c: &mut Criterion) {
 	);
 
 	// Start bob
-	let bob = cumulus_test_service::run_relay_chain_validator_node(
+	let bob = pezcumulus_test_service::run_relay_chain_validator_node(
 		tokio_handle.clone(),
 		Bob,
 		|| {},
@@ -161,7 +161,7 @@ fn transaction_throughput_benchmarks(c: &mut Criterion) {
 
 	// Run charlie as teyrchain collator
 	let charlie = runtime.block_on(
-		cumulus_test_service::TestNodeBuilder::new(para_id, tokio_handle.clone(), Charlie)
+		pezcumulus_test_service::TestNodeBuilder::new(para_id, tokio_handle.clone(), Charlie)
 			.enable_collator()
 			.connect_to_relay_chain_nodes(vec![&alice, &bob])
 			.build(),
@@ -171,7 +171,7 @@ fn transaction_throughput_benchmarks(c: &mut Criterion) {
 		.block_on(
 			alice.register_teyrchain(
 				para_id,
-				cumulus_test_service::runtime::WASM_BINARY
+				pezcumulus_test_service::runtime::WASM_BINARY
 					.expect("You need to build the WASM binary to run this test!")
 					.to_vec(),
 				HeadData(
@@ -184,7 +184,7 @@ fn transaction_throughput_benchmarks(c: &mut Criterion) {
 
 	// Run dave as teyrchain collator
 	let dave = runtime.block_on(
-		cumulus_test_service::TestNodeBuilder::new(para_id, tokio_handle.clone(), Dave)
+		pezcumulus_test_service::TestNodeBuilder::new(para_id, tokio_handle.clone(), Dave)
 			.enable_collator()
 			.connect_to_teyrchain_node(&charlie)
 			.connect_to_relay_chain_nodes(vec![&alice, &bob])

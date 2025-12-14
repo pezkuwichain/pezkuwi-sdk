@@ -18,7 +18,7 @@
 //! Teyrchain specific wrapper for the AuRa import queue.
 
 use codec::Codec;
-use cumulus_client_consensus_common::TeyrchainBlockImportMarker;
+use pezcumulus_client_consensus_common::TeyrchainBlockImportMarker;
 use prometheus_endpoint::Registry;
 use pezsc_client_api::{backend::AuxStore, BlockOf, UsageProvider};
 use pezsc_consensus::{import_queue::DefaultImportQueue, BlockImport};

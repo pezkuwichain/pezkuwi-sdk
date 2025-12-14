@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "The block builder runtime api."
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-block-builder"
 
 [lints]
 workspace = true
@@ -24,7 +25,7 @@ pezsp-runtime = { workspace = true }
 default = ["std"]
 std = ["pezsp-api/std", "pezsp-inherents/std", "pezsp-runtime/std"]
 runtime-benchmarks = [
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

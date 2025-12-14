@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Basic metrics for block production."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-proposer-metrics"
 
 [lints]
 workspace = true

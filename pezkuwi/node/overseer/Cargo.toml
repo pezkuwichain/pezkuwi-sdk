@@ -7,6 +7,7 @@ license.workspace = true
 description = "System overseer of the Pezkuwi node"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-overseer"
 
 [lints]
 workspace = true
@@ -43,13 +44,13 @@ expand = ["orchestra/expand"]
 futures_channel = ["metered/futures_channel", "orchestra/futures_channel"]
 jemalloc-allocator = ["dep:tikv-jemalloc-ctl"]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-	"pezkuwi-node-subsystem-types/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-metrics/runtime-benchmarks",
+  "pezkuwi-node-network-protocol/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+  "pezkuwi-node-subsystem-types/runtime-benchmarks",
+  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
 ]

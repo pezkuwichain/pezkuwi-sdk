@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "I/O for Bizinikiwi runtimes"
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-utils"
 
 [lints]
 workspace = true

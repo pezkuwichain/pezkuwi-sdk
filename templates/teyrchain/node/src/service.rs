@@ -10,26 +10,26 @@ use teyrchain_template_runtime::{
 };
 
 use codec::Encode;
-use pezkuwi_sdk::{cumulus_client_service::TeyrchainTracingExecuteBlock, *};
+use pezkuwi_sdk::{pezcumulus_client_service::TeyrchainTracingExecuteBlock, *};
 
 // Pezcumulus Imports
-use cumulus_client_bootnodes::{start_bootnode_tasks, StartBootnodeTasksParams};
-use cumulus_client_cli::CollatorOptions;
-use cumulus_client_collator::service::CollatorService;
+use pezcumulus_client_bootnodes::{start_bootnode_tasks, StartBootnodeTasksParams};
+use pezcumulus_client_cli::CollatorOptions;
+use pezcumulus_client_collator::service::CollatorService;
 #[docify::export(lookahead_collator)]
-use cumulus_client_consensus_aura::collators::lookahead::{self as aura, Params as AuraParams};
-use cumulus_client_consensus_common::TeyrchainBlockImport as TTeyrchainBlockImport;
-use cumulus_client_service::{
+use pezcumulus_client_consensus_aura::collators::lookahead::{self as aura, Params as AuraParams};
+use pezcumulus_client_consensus_common::TeyrchainBlockImport as TTeyrchainBlockImport;
+use pezcumulus_client_service::{
 	build_network, build_relay_chain_interface, prepare_node_config, start_relay_chain_tasks,
 	BuildNetworkParams, CollatorSybilResistance, DARecoveryProfile, StartRelayChainTasksParams,
 	TeyrchainHostFunctions,
 };
-#[docify::export(cumulus_primitives)]
-use cumulus_primitives_core::{
+#[docify::export(pezcumulus_primitives)]
+use pezcumulus_primitives_core::{
 	relay_chain::{CollatorPair, ValidationCode},
 	GetTeyrchainInfo, ParaId,
 };
-use cumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
+use pezcumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
 
 // Bizinikiwi Imports
 use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
@@ -151,7 +151,7 @@ fn build_import_queue(
 	telemetry: Option<TelemetryHandle>,
 	task_manager: &TaskManager,
 ) -> pezsc_consensus::DefaultImportQueue<Block> {
-	cumulus_client_consensus_aura::equivocation_import_queue::fully_verifying_import_queue::<
+	pezcumulus_client_consensus_aura::equivocation_import_queue::fully_verifying_import_queue::<
 		pezsp_consensus_aura::sr25519::AuthorityPair,
 		_,
 		_,
@@ -281,7 +281,7 @@ pub async fn start_teyrchain_node(
 	let para_id = client
 		.runtime_api()
 		.teyrchain_id(best_hash)
-		.map_err(|_| "Failed to retrieve teyrchain id from runtime. Make sure you implement `cumulus_primitives_core::GetParachaiNidentity` runtime API.")?;
+		.map_err(|_| "Failed to retrieve teyrchain id from runtime. Make sure you implement `pezcumulus_primitives_core::GetParachaiNidentity` runtime API.")?;
 
 	// NOTE: because we use Aura here explicitly, we can use `CollatorSybilResistance::Resistant`
 	// when starting the network.

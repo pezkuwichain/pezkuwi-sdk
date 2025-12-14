@@ -6,6 +6,9 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
 publish = false
+description = "Pezkuwi SDK component: messages relay"
+documentation = "https://docs.rs/messages-relay"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -31,7 +34,7 @@ pezsp-core = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-messages/runtime-benchmarks",
-	"finality-relay/runtime-benchmarks",
-	"relay-utils/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "finality-relay/runtime-benchmarks",
+  "relay-utils/runtime-benchmarks",
 ]

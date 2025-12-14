@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "PolkaVM executor for Bizinikiwi"
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-executor-polkavm"
 
 [lints]
 workspace = true

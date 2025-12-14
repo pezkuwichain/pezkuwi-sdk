@@ -7,6 +7,7 @@ documentation = "https://docs.rs/bizinikiwi-bip39"
 authors.workspace = true
 edition.workspace = true
 repository.workspace = true
+homepage = { workspace = true }
 
 [dependencies]
 hmac = { workspace = true }
@@ -22,10 +23,10 @@ rustc-hex = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"hmac/std",
-	"pbkdf2/std",
-	"schnorrkel/std",
-	"sha2/std",
-	"zeroize/alloc",
-	"zeroize/std",
+  "hmac/std",
+  "pbkdf2/std",
+  "schnorrkel/std",
+  "sha2/std",
+  "zeroize/alloc",
+  "zeroize/std",
 ]

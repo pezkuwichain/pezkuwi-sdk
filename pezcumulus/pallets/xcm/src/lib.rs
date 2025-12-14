@@ -21,7 +21,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use codec::{Decode, Encode};
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 pub use pallet::*;
 use scale_info::TypeInfo;
 use pezsp_runtime::{traits::BadOrigin, RuntimeDebug};

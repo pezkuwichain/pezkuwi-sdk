@@ -5,7 +5,7 @@
 // can achieve full throughput of 3 candidates per block.
 
 use anyhow::anyhow;
-use cumulus_zombienet_sdk_helpers::{assert_para_throughput, create_assign_core_call};
+use pezcumulus_zombienet_sdk_helpers::{assert_para_throughput, create_assign_core_call};
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
 use zombienet_sdk::{
@@ -48,7 +48,7 @@ async fn basic_3cores_test() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(2000)
 				.with_default_command("adder-collator")
-				.cumulus_based(false)
+				.pezcumulus_based(false)
 				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_collator(|n| n.with_name("adder-2000"))
@@ -56,7 +56,7 @@ async fn basic_3cores_test() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(2001)
 				.with_default_command("adder-collator")
-				.cumulus_based(false)
+				.pezcumulus_based(false)
 				.with_default_image(images.pezcumulus.as_str())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_collator(|n| n.with_name("adder-2001"))

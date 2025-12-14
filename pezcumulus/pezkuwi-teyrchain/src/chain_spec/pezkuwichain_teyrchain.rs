@@ -16,7 +16,7 @@
 
 //! ChainSpecs dedicated to Pezkuwichain teyrchain setups (for testing and example purposes)
 
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use hex_literal::hex;
 use pezkuwi_omni_node_lib::chain_spec::{Extensions, GenericChainSpec};
 use pezkuwichain_teyrchain_runtime::AuraId;

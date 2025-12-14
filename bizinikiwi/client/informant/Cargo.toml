@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-informant"
 
 [lints]
 workspace = true
@@ -28,9 +29,9 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-network-sync/runtime-benchmarks",
-	"pezsc-network/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-network-sync/runtime-benchmarks",
+  "pezsc-network/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

@@ -7,6 +7,8 @@ license = "Apache-2.0"
 publish = false
 homepage.workspace = true
 repository.workspace = true
+description = "Pezkuwi SDK primitive: runtime interface test"
+documentation = "https://docs.rs/pezsp-runtime-interface-test"
 
 [lints]
 workspace = true
@@ -28,9 +30,9 @@ tracing-core = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-executor/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime-interface/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime-interface/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
 ]

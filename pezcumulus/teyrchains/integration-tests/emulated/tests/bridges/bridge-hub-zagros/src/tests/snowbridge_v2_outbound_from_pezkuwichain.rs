@@ -129,7 +129,7 @@ pub(crate) fn assert_bridge_hub_zagros_message_received() {
 			vec![
 				// message sent to destination
 				RuntimeEvent::XcmpQueue(
-					cumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+					pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
 				) => {},
 			]
 		);

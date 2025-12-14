@@ -81,7 +81,7 @@
 //!     /// Build with an offset of 1 behind the relay chain best block.
 //!     const RELAY_PARENT_OFFSET: u32 = 1;
 //!
-//!     impl cumulus_pallet_teyrchain_system::Config for Runtime {
+//!     impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 //!         // ...
 //!         type RelayParentOffset = ConstU32<RELAY_PARENT_OFFSET>;
 //!     }
@@ -89,7 +89,7 @@
 //!
 //! Implement the runtime API to retrieve the offset on the client side.
 //! ```ignore
-//!     impl cumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
+//!     impl pezcumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
 //!         fn relay_parent_offset() -> u32 {
 //!             RELAY_PARENT_OFFSET
 //!         }
@@ -117,7 +117,7 @@
 //!     /// Relay chain slot duration, in milliseconds.
 //!     const RELAY_CHAIN_SLOT_DURATION_MILLIS: u32 = 6000;
 //!
-//!     type ConsensusHook = cumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+//!     type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
 //!         Runtime,
 //!         RELAY_CHAIN_SLOT_DURATION_MILLIS,
 //!         BLOCK_PROCESSING_VELOCITY,

@@ -6,7 +6,7 @@ use tokio::time::Duration;
 
 use crate::utils::initialize_network;
 
-use cumulus_zombienet_sdk_helpers::wait_for_nth_session_change;
+use pezcumulus_zombienet_sdk_helpers::wait_for_nth_session_change;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{
 	subxt::{OnlineClient, PolkadotConfig},

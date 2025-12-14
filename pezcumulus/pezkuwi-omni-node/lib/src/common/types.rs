@@ -14,8 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use cumulus_client_consensus_common::TeyrchainBlockImport as TTeyrchainBlockImport;
-use cumulus_primitives_core::relay_chain::UncheckedExtrinsic;
+use pezcumulus_client_consensus_common::TeyrchainBlockImport as TTeyrchainBlockImport;
+use pezcumulus_primitives_core::relay_chain::UncheckedExtrinsic;
 use pezsc_consensus::DefaultImportQueue;
 use pezsc_executor::WasmExecutor;
 use pezsc_service::{PartialComponents, TFullBackend, TFullClient};
@@ -30,12 +30,12 @@ pub type Block<BlockNumber> = generic::Block<Header<BlockNumber>, UncheckedExtri
 
 #[cfg(not(feature = "runtime-benchmarks"))]
 pub type TeyrchainHostFunctions = (
-	cumulus_client_service::TeyrchainHostFunctions,
+	pezcumulus_client_service::TeyrchainHostFunctions,
 	pezsp_statement_store::runtime_api::HostFunctions,
 );
 #[cfg(feature = "runtime-benchmarks")]
 pub type TeyrchainHostFunctions = (
-	cumulus_client_service::TeyrchainHostFunctions,
+	pezcumulus_client_service::TeyrchainHostFunctions,
 	pezsp_statement_store::runtime_api::HostFunctions,
 	pezframe_benchmarking::benchmarking::HostFunctions,
 );

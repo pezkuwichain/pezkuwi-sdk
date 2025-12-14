@@ -38,7 +38,7 @@ decl_test_teyrchains! {
 			XcmpMessageHandler: coretime_pezkuwichain_runtime::XcmpQueue,
 			LocationToAccountId: coretime_pezkuwichain_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: coretime_pezkuwichain_runtime::TeyrchainInfo,
-			MessageOrigin: cumulus_primitives_core::AggregateMessageOrigin,
+			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {

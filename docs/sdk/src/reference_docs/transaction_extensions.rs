@@ -50,7 +50,7 @@
 //! - [`WeightReclaim`](pezframe_system::WeightReclaim): A transaction extension for the relay chain
 //!   that reclaims unused weight after executing a transaction.
 //!
-//! - [`StorageWeightReclaim`](cumulus_pallet_weight_reclaim::StorageWeightReclaim): A transaction
+//! - [`StorageWeightReclaim`](pezcumulus_pallet_weight_reclaim::StorageWeightReclaim): A transaction
 //!   extension for teyrchains that reclaims unused storage weight after executing a transaction.
 //!
 //! For more information about these extensions, follow the link to the type documentation.

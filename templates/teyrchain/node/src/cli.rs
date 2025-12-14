@@ -32,16 +32,16 @@ pub enum Subcommand {
 	Revert(pezsc_cli::RevertCmd),
 
 	/// Remove the whole chain.
-	PurgeChain(cumulus_client_cli::PurgeChainCmd),
+	PurgeChain(pezcumulus_client_cli::PurgeChainCmd),
 
 	/// Export the genesis head data of the teyrchain.
 	///
 	/// Head data is the encoded block header.
 	#[command(alias = "export-genesis-state")]
-	ExportGenesisHead(cumulus_client_cli::ExportGenesisHeadCommand),
+	ExportGenesisHead(pezcumulus_client_cli::ExportGenesisHeadCommand),
 
 	/// Export the genesis wasm of the teyrchain.
-	ExportGenesisWasm(cumulus_client_cli::ExportGenesisWasmCommand),
+	ExportGenesisWasm(pezcumulus_client_cli::ExportGenesisWasmCommand),
 
 	/// Sub-commands concerned with benchmarking.
 	/// The pallet benchmarking moved to the `pallet` sub-command.
@@ -73,7 +73,7 @@ pub struct Cli {
 	pub subcommand: Option<Subcommand>,
 
 	#[command(flatten)]
-	pub run: cumulus_client_cli::RunCmd,
+	pub run: pezcumulus_client_cli::RunCmd,
 
 	/// Disable automatic hardware benchmarks.
 	///

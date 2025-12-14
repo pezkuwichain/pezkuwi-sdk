@@ -17,7 +17,7 @@
 
 use crate::*;
 use alloc::vec::Vec;
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::build_struct_json_patch;
 use pezsp_genesis_builder::PresetId;
 use pezsp_keyring::Sr25519Keyring;

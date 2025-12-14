@@ -18,7 +18,7 @@
 
 use crate::*;
 use alloc::vec::Vec;
-use cumulus_primitives_core::ListChannelInfos;
+use pezcumulus_primitives_core::ListChannelInfos;
 use pezframe_support::{pezpallet_prelude::*, traits::UncheckedOnRuntimeUpgrade};
 
 /// Configs needed to run the V5 migration.

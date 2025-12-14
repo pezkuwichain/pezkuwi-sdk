@@ -8,7 +8,7 @@ use std::time::Duration;
 
 use anyhow::anyhow;
 
-use cumulus_zombienet_sdk_helpers::{
+use pezcumulus_zombienet_sdk_helpers::{
 	assert_finality_lag, assert_para_throughput, create_assign_core_call,
 };
 use pezkuwi_primitives::Id as ParaId;

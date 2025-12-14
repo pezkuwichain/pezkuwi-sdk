@@ -30,13 +30,13 @@ pub use std::{
 };
 pub use tracing;
 
-pub use cumulus_primitives_core::relay_chain::Slot;
+pub use pezcumulus_primitives_core::relay_chain::Slot;
 pub use pezsp_consensus_aura::AURA_ENGINE_ID;
 pub use pezsp_runtime::DigestItem;
 // Bizinikiwi
 pub use alloc::collections::vec_deque::VecDeque;
 pub use core::{cell::RefCell, fmt::Debug};
-pub use cumulus_primitives_core::AggregateMessageOrigin as CumulusAggregateMessageOrigin;
+pub use pezcumulus_primitives_core::AggregateMessageOrigin as CumulusAggregateMessageOrigin;
 pub use pezframe_support::{
 	assert_ok,
 	pezsp_runtime::{
@@ -66,16 +66,16 @@ pub use pezsp_runtime::BoundedSlice;
 pub use pezsp_tracing;
 
 // Pezcumulus
-pub use cumulus_pallet_teyrchain_system::{
+pub use pezcumulus_pallet_teyrchain_system::{
 	teyrchain_inherent::{deconstruct_teyrchain_inherent_data, InboundMessagesData},
 	Call as TeyrchainSystemCall, Pallet as TeyrchainSystemPallet,
 };
-pub use cumulus_primitives_core::{
+pub use pezcumulus_primitives_core::{
 	relay_chain::{BlockNumber as RelayBlockNumber, HeadData, HrmpChannelId},
 	AbridgedHrmpChannel, DmpMessageHandler, ParaId, PersistedValidationData, XcmpMessageHandler,
 };
-pub use cumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
-pub use cumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
+pub use pezcumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
+pub use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 pub use pezpallet_aura;
 pub use pezpallet_message_queue::{Config as MessageQueueConfig, Pallet as MessageQueuePallet};
 pub use pezkuwi_primitives;
@@ -731,7 +731,7 @@ macro_rules! decl_test_teyrchains {
 						timestamp_set.dispatch(<Self as Chain>::RuntimeOrigin::none())
 					);
 
-					// 2. inherent: cumulus_pallet_teyrchain_system::Call::set_validation_data
+					// 2. inherent: pezcumulus_pallet_teyrchain_system::Call::set_validation_data
 						let data = N::hrmp_channel_teyrchain_inherent_data(para_id, relay_block_number, parent_head_data);
 						let (data, mut downward_messages, mut horizontal_messages) =
 							$crate::deconstruct_teyrchain_inherent_data(data);

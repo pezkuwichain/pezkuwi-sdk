@@ -17,7 +17,7 @@
 #![cfg(test)]
 
 use super::*;
-use cumulus_primitives_proof_size_hostfunction::PROOF_RECORDING_DISABLED;
+use pezcumulus_primitives_proof_size_hostfunction::PROOF_RECORDING_DISABLED;
 use pezframe_support::{
 	assert_ok, derive_impl, dispatch::GetDispatchInfo, pezpallet_prelude::DispatchClass,
 };

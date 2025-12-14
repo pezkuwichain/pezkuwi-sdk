@@ -7,6 +7,8 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-outbound-queue-runtime-api"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -29,18 +31,18 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-support/std",
-	"snowbridge-core/std",
-	"snowbridge-merkle-tree/std",
-	"snowbridge-outbound-queue-primitives/std",
-	"pezsp-api/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-support/std",
+  "snowbridge-core/std",
+  "snowbridge-merkle-tree/std",
+  "snowbridge-outbound-queue-primitives/std",
+  "pezsp-api/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"snowbridge-core/runtime-benchmarks",
-	"snowbridge-merkle-tree/runtime-benchmarks",
-	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "snowbridge-core/runtime-benchmarks",
+  "snowbridge-merkle-tree/runtime-benchmarks",
+  "snowbridge-outbound-queue-primitives/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
 ]

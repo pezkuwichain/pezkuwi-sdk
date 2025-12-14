@@ -18,8 +18,8 @@
 //! The Pezcumulus [`CollatorService`] is a utility struct for performing common
 //! operations used in teyrchain consensus/authoring.
 
-use cumulus_client_network::WaitToAnnounce;
-use cumulus_primitives_core::{CollationInfo, CollectCollationInfo, TeyrchainBlockData};
+use pezcumulus_client_network::WaitToAnnounce;
+use pezcumulus_primitives_core::{CollationInfo, CollectCollationInfo, TeyrchainBlockData};
 
 use pezsc_client_api::BlockBackend;
 use pezsp_api::{ApiExt, ProvideRuntimeApi};
@@ -27,7 +27,7 @@ use pezsp_consensus::BlockStatus;
 use pezsp_core::traits::SpawnNamed;
 use pezsp_runtime::traits::{Block as BlockT, HashingFor, Header as HeaderT, Zero};
 
-use cumulus_client_consensus_common::TeyrchainCandidate;
+use pezcumulus_client_consensus_common::TeyrchainCandidate;
 use pezkuwi_node_primitives::{
 	BlockData, Collation, CollationSecondedSignal, MaybeCompressedPoV, PoV,
 };

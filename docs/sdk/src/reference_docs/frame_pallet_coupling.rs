@@ -269,7 +269,7 @@ impl<AccountId> AuthorProvider<AccountId> for () {
 
 pub mod runtime {
 	use super::*;
-	use cumulus_pallet_aura_ext::pallet;
+	use pezcumulus_pallet_aura_ext::pallet;
 	use frame::{runtime::prelude::*, testing_prelude::*};
 
 	construct_runtime!(

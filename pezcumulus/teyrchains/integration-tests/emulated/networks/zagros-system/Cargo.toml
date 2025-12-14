@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Zagros System emulated network"
 publish = false
+documentation = "https://docs.rs/zagros-system-emulated-network"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -23,12 +26,12 @@ zagros-emulated-chain = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"asset-hub-zagros-emulated-chain/runtime-benchmarks",
-	"bridge-hub-zagros-emulated-chain/runtime-benchmarks",
-	"collectives-zagros-emulated-chain/runtime-benchmarks",
-	"coretime-zagros-emulated-chain/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"penpal-emulated-chain/runtime-benchmarks",
-	"people-zagros-emulated-chain/runtime-benchmarks",
-	"zagros-emulated-chain/runtime-benchmarks",
+  "asset-hub-zagros-emulated-chain/runtime-benchmarks",
+  "bridge-hub-zagros-emulated-chain/runtime-benchmarks",
+  "collectives-zagros-emulated-chain/runtime-benchmarks",
+  "coretime-zagros-emulated-chain/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "penpal-emulated-chain/runtime-benchmarks",
+  "people-zagros-emulated-chain/runtime-benchmarks",
+  "zagros-emulated-chain/runtime-benchmarks",
 ]

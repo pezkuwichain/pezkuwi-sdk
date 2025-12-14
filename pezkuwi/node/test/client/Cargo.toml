@@ -5,6 +5,10 @@ version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Pezkuwi SDK relay chain component: test client"
+documentation = "https://docs.rs/pezkuwi-test-client"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -39,22 +43,22 @@ pezsp-keyring = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-test-runtime/runtime-benchmarks",
-	"pezkuwi-test-service/runtime-benchmarks",
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus-babe/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
-	"bizinikiwi-test-client/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-test-runtime/runtime-benchmarks",
+  "pezkuwi-test-service/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus-babe/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
+  "bizinikiwi-test-client/runtime-benchmarks",
 ]

@@ -8,17 +8,18 @@ edition.workspace = true
 license.workspace = true
 publish = false
 repository.workspace = true
+documentation = "https://docs.rs/pezpallet-validator-pool"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { package = "parity-scale-codec", version = "3.6.12", default-features = false, features = [
-	"derive",
-	"max-encoded-len",
+  "derive",
+  "max-encoded-len",
 ] }
 scale-info = { default-features = false, features = [
-	"derive",
+  "derive",
 ], workspace = true }
 serde = { workspace = true, features = ["derive"] }
 
@@ -44,40 +45,40 @@ pezsp-staking = { workspace = true, default-features = false }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking?/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"pezpallet-balances/std",
-	"pezpallet-session/std",
-	"pezpallet-timestamp/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-core?/std",
-	"pezsp-io?/std",
-	"pezsp-runtime/std",
-	"pezsp-staking/std",
-	"pezsp-std/std",
+  "codec/std",
+  "pezframe-benchmarking?/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "pezpallet-balances/std",
+  "pezpallet-session/std",
+  "pezpallet-timestamp/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-core?/std",
+  "pezsp-io?/std",
+  "pezsp-runtime/std",
+  "pezsp-staking/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-core",
-	"pezsp-io",
-	"pezsp-io?/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-session/runtime-benchmarks",
+  "pezpallet-timestamp/runtime-benchmarks",
+  "pezsp-core",
+  "pezsp-io",
+  "pezsp-io?/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-staking/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezpallet-balances/try-runtime",
-	"pezpallet-session/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-balances/try-runtime",
+  "pezpallet-session/try-runtime",
+  "pezpallet-timestamp/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

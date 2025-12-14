@@ -20,7 +20,7 @@ pub mod v5;
 
 use crate::{Config, OverweightIndex, Pallet, QueueConfig, QueueConfigData, DEFAULT_POV_SIZE};
 use alloc::vec::Vec;
-use cumulus_primitives_core::XcmpMessageFormat;
+use pezcumulus_primitives_core::XcmpMessageFormat;
 use pezframe_support::{
 	pezpallet_prelude::*,
 	traits::{EnqueueMessage, StorageVersion, UncheckedOnRuntimeUpgrade},

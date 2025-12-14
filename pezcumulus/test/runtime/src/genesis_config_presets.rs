@@ -20,12 +20,12 @@ use super::{
 };
 use alloc::{vec, vec::Vec};
 
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use pezframe_support::build_struct_json_patch;
 use pezsp_genesis_builder::PresetId;
 use pezsp_keyring::Sr25519Keyring;
 
-fn cumulus_test_runtime(
+fn pezcumulus_test_runtime(
 	invulnerables: Vec<AuraId>,
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
@@ -45,7 +45,7 @@ fn testnet_genesis_with_default_endowed(self_para_id: ParaId) -> serde_json::Val
 
 	let invulnerables =
 		Sr25519Keyring::invulnerable().map(|x| x.public().into()).collect::<Vec<_>>();
-	cumulus_test_runtime(invulnerables, endowed, self_para_id)
+	pezcumulus_test_runtime(invulnerables, endowed, self_para_id)
 }
 
 /// List of supported presets.

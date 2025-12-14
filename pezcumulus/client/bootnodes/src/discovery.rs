@@ -34,8 +34,8 @@
 
 use crate::{config::MAX_ADDRESSES, schema::Response};
 use codec::{CompactRef, Decode, Encode};
-use cumulus_primitives_core::{relay_chain::Hash as RelayHash, ParaId};
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
+use pezcumulus_primitives_core::{relay_chain::Hash as RelayHash, ParaId};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use futures::{
 	channel::oneshot,
 	future::{BoxFuture, Fuse, FusedFuture},

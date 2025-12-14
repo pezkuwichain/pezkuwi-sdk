@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi RPC interfaces."
 readme = "README.md"
+documentation = "https://docs.rs/pezsc-rpc-api"
 
 [lints]
 workspace = true
@@ -18,9 +19,9 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 codec = { workspace = true, default-features = true }
 jsonrpsee = { features = [
-	"client-core",
-	"macros",
-	"server-core",
+  "client-core",
+  "macros",
+  "server-core",
 ], workspace = true }
 pezsc-chain-spec = { workspace = true, default-features = true }
 pezsc-mixnet = { workspace = true, default-features = true }
@@ -36,9 +37,9 @@ thiserror = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsc-chain-spec/runtime-benchmarks",
-	"pezsc-mixnet/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezsc-chain-spec/runtime-benchmarks",
+  "pezsc-mixnet/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]

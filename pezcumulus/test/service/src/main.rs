@@ -19,8 +19,8 @@ mod cli;
 use std::sync::Arc;
 
 use cli::{AuthoringPolicy, RelayChainCli, Subcommand, TestCollatorCli};
-use cumulus_primitives_core::relay_chain::CollatorPair;
-use cumulus_test_service::{new_partial, AnnounceBlockFn};
+use pezcumulus_primitives_core::relay_chain::CollatorPair;
+use pezcumulus_test_service::{new_partial, AnnounceBlockFn};
 use pezsc_cli::{CliConfiguration, BizinikiwiCli};
 use pezsp_core::Pair;
 
@@ -101,7 +101,7 @@ fn main() -> Result<(), pezsc_cli::Error> {
 				.block_on(async move {
 					match relay_chain_config.network.network_backend {
 						pezsc_network::config::NetworkBackendType::Libp2p =>
-							cumulus_test_service::start_node_impl::<
+							pezcumulus_test_service::start_node_impl::<
 								_,
 								pezsc_network::NetworkWorker<_, _>,
 							>(
@@ -117,7 +117,7 @@ fn main() -> Result<(), pezsc_cli::Error> {
 							)
 							.await,
 						pezsc_network::config::NetworkBackendType::Litep2p =>
-							cumulus_test_service::start_node_impl::<
+							pezcumulus_test_service::start_node_impl::<
 								_,
 								pezsc_network::Litep2pNetworkBackend,
 							>(

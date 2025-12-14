@@ -7,6 +7,7 @@ license = "Apache-2.0"
 repository.workspace = true
 description = "A no-std/Bizinikiwi compatible library to construct binary merkle tree."
 homepage.workspace = true
+documentation = "https://docs.rs/binary-merkle-tree"
 
 [lints]
 workspace = true
@@ -26,4 +27,10 @@ pezsp-runtime = { workspace = true, default-features = true }
 debug = ["array-bytes", "log"]
 default = ["debug", "std"]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
-std = ["codec/std", "hash-db/std", "log/std", "pezsp-core/std", "pezsp-runtime/std"]
+std = [
+  "codec/std",
+  "hash-db/std",
+  "log/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
+]

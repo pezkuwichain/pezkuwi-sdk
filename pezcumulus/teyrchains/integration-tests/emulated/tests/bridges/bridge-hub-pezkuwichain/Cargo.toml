@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Bridge Hub Pezkuwichain runtime integration tests with xcm-emulator"
 publish = false
+documentation = "https://docs.rs/bridge-hub-pezkuwichain-integration-tests"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -41,8 +44,8 @@ emulated-integration-tests-common = { workspace = true }
 pezkuwichain-system-emulated-network = { workspace = true }
 pezkuwichain-zagros-system-emulated-network = { workspace = true }
 testnet-teyrchains-constants = { features = [
-	"pezkuwichain",
-	"zagros",
+  "pezkuwichain",
+  "zagros",
 ], workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
 
@@ -55,28 +58,28 @@ snowbridge-pezpallet-system = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"bp-asset-hub-pezkuwichain/runtime-benchmarks",
-	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezpallet-asset-conversion/runtime-benchmarks",
-	"pezpallet-assets/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-bridge-messages/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwichain-system-emulated-network/runtime-benchmarks",
-	"pezkuwichain-zagros-system-emulated-network/runtime-benchmarks",
-	"snowbridge-inbound-queue-primitives/runtime-benchmarks",
-	"snowbridge-outbound-queue-primitives/runtime-benchmarks",
-	"snowbridge-pezpallet-inbound-queue-fixtures/runtime-benchmarks",
-	"snowbridge-pezpallet-outbound-queue/runtime-benchmarks",
-	"snowbridge-pezpallet-system/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "asset-hub-pezkuwichain-runtime/runtime-benchmarks",
+  "bp-asset-hub-pezkuwichain/runtime-benchmarks",
+  "pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezpallet-asset-conversion/runtime-benchmarks",
+  "pezpallet-assets/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-bridge-messages/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwichain-system-emulated-network/runtime-benchmarks",
+  "pezkuwichain-zagros-system-emulated-network/runtime-benchmarks",
+  "snowbridge-inbound-queue-primitives/runtime-benchmarks",
+  "snowbridge-outbound-queue-primitives/runtime-benchmarks",
+  "snowbridge-pezpallet-inbound-queue-fixtures/runtime-benchmarks",
+  "snowbridge-pezpallet-outbound-queue/runtime-benchmarks",
+  "snowbridge-pezpallet-system/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "testnet-teyrchains-constants/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

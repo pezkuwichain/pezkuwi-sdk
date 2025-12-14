@@ -15,7 +15,7 @@
 // limitations under the License.
 
 pub(crate) mod imports {
-	pub use cumulus_primitives_core::ParaId;
+	pub use pezcumulus_primitives_core::ParaId;
 	pub use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
 	pub use pezsp_runtime::{
 		traits::Block as BlockT,
@@ -59,7 +59,7 @@ macro_rules! impl_node_runtime_apis {
 				}
 			}
 
-			impl cumulus_primitives_core::RelayParentOffsetApi<$block> for $runtime {
+			impl pezcumulus_primitives_core::RelayParentOffsetApi<$block> for $runtime {
 				fn relay_parent_offset() -> u32 {
 					unimplemented!()
 				}
@@ -75,10 +75,10 @@ macro_rules! impl_node_runtime_apis {
 				}
 			}
 
-			impl cumulus_primitives_aura::AuraUnincludedSegmentApi<$block> for $runtime {
+			impl pezcumulus_primitives_aura::AuraUnincludedSegmentApi<$block> for $runtime {
 				fn can_build_upon(
 					_: <$block as BlockT>::Hash,
-					_: cumulus_primitives_aura::Slot,
+					_: pezcumulus_primitives_aura::Slot,
 				) -> bool {
 					unimplemented!()
 				}
@@ -161,15 +161,15 @@ macro_rules! impl_node_runtime_apis {
 				}
 			}
 
-			impl cumulus_primitives_core::CollectCollationInfo<$block> for $runtime {
+			impl pezcumulus_primitives_core::CollectCollationInfo<$block> for $runtime {
 				fn collect_collation_info(
 					_: &<$block as BlockT>::Header
-				) -> cumulus_primitives_core::CollationInfo {
+				) -> pezcumulus_primitives_core::CollationInfo {
 					unimplemented!()
 				}
 			}
 
-			impl cumulus_primitives_core::GetTeyrchainInfo<$block> for $runtime {
+			impl pezcumulus_primitives_core::GetTeyrchainInfo<$block> for $runtime {
 				fn teyrchain_id() -> ParaId {
 					unimplemented!()
 				}
@@ -242,7 +242,7 @@ macro_rules! impl_node_runtime_apis {
 				}
 			}
 
-			impl cumulus_primitives_core::TargetBlockRate<$block> for $runtime {
+			impl pezcumulus_primitives_core::TargetBlockRate<$block> for $runtime {
 				fn target_block_rate() -> u32 {
 					unimplemented!()
 				}

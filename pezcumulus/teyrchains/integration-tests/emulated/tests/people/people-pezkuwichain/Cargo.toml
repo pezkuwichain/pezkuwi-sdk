@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "People Pezkuwichain runtime integration tests with xcm-emulator"
 publish = false
+documentation = "https://docs.rs/people-pezkuwichain-integration-tests"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -28,13 +31,13 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"asset-test-utils/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezkuwichain-system-emulated-network/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "asset-test-utils/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezkuwichain-system-emulated-network/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]

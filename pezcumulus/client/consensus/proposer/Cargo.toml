@@ -7,6 +7,7 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezcumulus-client-consensus-proposer"
 
 [lints]
 workspace = true
@@ -32,14 +33,14 @@ pezcumulus-primitives-teyrchain-inherent = { workspace = true, default-features 
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
-	"pezsc-basic-authorship/runtime-benchmarks",
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-transaction-pool-api/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-state-machine/runtime-benchmarks",
+  "pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
+  "pezsc-basic-authorship/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-transaction-pool-api/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-state-machine/runtime-benchmarks",
 ]

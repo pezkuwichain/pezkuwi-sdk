@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME System benchmarking"
 readme = "README.md"
+documentation = "https://docs.rs/pezframe-system-benchmarking"
 
 [lints]
 workspace = true
@@ -32,20 +33,20 @@ pezsp-version = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezframe-benchmarking/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "pezframe-benchmarking/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
 ]
 
 runtime-benchmarks = [
-	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-version/runtime-benchmarks",
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-version/runtime-benchmarks",
 ]

@@ -19,11 +19,11 @@
 
 use crate::config::MAX_ADDRESSES;
 use codec::{Compact, CompactRef, Decode, Encode};
-use cumulus_primitives_core::{
+use pezcumulus_primitives_core::{
 	relay_chain::{Hash as RelayHash, Header as RelayHeader},
 	ParaId,
 };
-use cumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
+use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
 use futures::{future::Fuse, pin_mut, FutureExt, StreamExt};
 use ip_network::IpNetwork;
 use log::{debug, error, trace, warn};

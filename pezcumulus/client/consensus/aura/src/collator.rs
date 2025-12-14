@@ -26,16 +26,16 @@
 //! aura-based collators.
 
 use codec::Codec;
-use cumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
-use cumulus_client_consensus_common::{
+use pezcumulus_client_collator::service::ServiceInterface as CollatorServiceInterface;
+use pezcumulus_client_consensus_common::{
 	self as consensus_common, TeyrchainBlockImportMarker, TeyrchainCandidate,
 };
-use cumulus_client_consensus_proposer::ProposerInterface;
-use cumulus_client_teyrchain_inherent::{TeyrchainInherentData, TeyrchainInherentDataProvider};
-use cumulus_primitives_core::{
+use pezcumulus_client_consensus_proposer::ProposerInterface;
+use pezcumulus_client_teyrchain_inherent::{TeyrchainInherentData, TeyrchainInherentDataProvider};
+use pezcumulus_primitives_core::{
 	relay_chain::Hash as PHash, DigestItem, PersistedValidationData, TeyrchainBlockData,
 };
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 
 use pezkuwi_node_primitives::{Collation, MaybeCompressedPoV};
 use pezkuwi_primitives::{Header as PHeader, Id as ParaId};

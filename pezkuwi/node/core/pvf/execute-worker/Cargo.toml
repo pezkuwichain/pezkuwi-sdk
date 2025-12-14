@@ -7,6 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-core-pvf-execute-worker"
 
 [lints]
 workspace = true
@@ -30,9 +31,9 @@ pezsp-maybe-compressed-blob = { workspace = true, default-features = true }
 [features]
 builder = []
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-node-core-pvf-common/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
 ]

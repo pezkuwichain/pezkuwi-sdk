@@ -21,19 +21,19 @@ use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_client_api::UsageProvider;
 
 use core::time::Duration;
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 
 use pezsp_api::{Core, ProvideRuntimeApi};
 use pezsp_keyring::Sr25519Keyring::{Alice, Bob};
 
-use cumulus_test_service::bench_utils as utils;
+use pezcumulus_test_service::bench_utils as utils;
 
 fn benchmark_block_import(c: &mut Criterion) {
 	pezsp_tracing::try_init_simple();
 
 	let runtime = tokio::runtime::Runtime::new().expect("creating tokio runtime doesn't fail; qed");
 
-	let para_id = ParaId::from(cumulus_test_runtime::TEYRCHAIN_ID);
+	let para_id = ParaId::from(pezcumulus_test_runtime::TEYRCHAIN_ID);
 	let tokio_handle = runtime.handle();
 
 	// Create enough accounts to fill the block with transactions.
@@ -42,7 +42,7 @@ fn benchmark_block_import(c: &mut Criterion) {
 
 	for bench_parameters in &[(true, Alice), (false, Bob)] {
 		let node = runtime.block_on(
-			cumulus_test_service::TestNodeBuilder::new(
+			pezcumulus_test_service::TestNodeBuilder::new(
 				para_id,
 				tokio_handle.clone(),
 				bench_parameters.1,

@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "NPoS election algorithm primitives"
 readme = "README.md"
+documentation = "https://docs.rs/pezsp-npos-elections"
 
 [lints]
 workspace = true
@@ -30,20 +31,20 @@ bizinikiwi-test-utils = { workspace = true }
 default = ["std"]
 bench = []
 std = [
-	"codec/std",
-	"scale-info/std",
-	"serde/std",
-	"pezsp-arithmetic/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-arithmetic/std",
+  "pezsp-core/std",
+  "pezsp-runtime/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-	"dep:serde",
-	"scale-info/serde",
-	"pezsp-arithmetic/serde",
-	"pezsp-core/serde",
-	"pezsp-runtime/serde",
+  "dep:serde",
+  "scale-info/serde",
+  "pezsp-arithmetic/serde",
+  "pezsp-core/serde",
+  "pezsp-runtime/serde",
 ]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

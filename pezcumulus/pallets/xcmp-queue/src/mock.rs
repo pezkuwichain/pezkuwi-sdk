@@ -17,8 +17,8 @@ use super::*;
 use crate as xcmp_queue;
 use alloc::collections::BTreeMap;
 use core::marker::PhantomData;
-use cumulus_pallet_teyrchain_system::AnyRelayNumber;
-use cumulus_primitives_core::{ChannelInfo, IsSystem, ParaId};
+use pezcumulus_pallet_teyrchain_system::AnyRelayNumber;
+use pezcumulus_primitives_core::{ChannelInfo, IsSystem, ParaId};
 use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::{BatchesFootprints, ConstU32, Everything, OriginTrait},
@@ -41,7 +41,7 @@ pezframe_support::construct_runtime!(
 	{
 		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
 		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
-		TeyrchainSystem: cumulus_pallet_teyrchain_system::{
+		TeyrchainSystem: pezcumulus_pallet_teyrchain_system::{
 			Pallet, Call, Config<T>, Storage, Inherent, Event<T>,
 		},
 		XcmpQueue: xcmp_queue::{Pallet, Call, Storage, Event<T>},
@@ -76,7 +76,7 @@ impl pezframe_system::Config for Test {
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Test>;
+	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Test>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
@@ -92,7 +92,7 @@ impl pezpallet_balances::Config for Test {
 	type AccountStore = System;
 }
 
-impl cumulus_pallet_teyrchain_system::Config for Test {
+impl pezcumulus_pallet_teyrchain_system::Config for Test {
 	type WeightInfo = ();
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
@@ -104,7 +104,7 @@ impl cumulus_pallet_teyrchain_system::Config for Test {
 	type XcmpMessageHandler = XcmpQueue;
 	type ReservedXcmpWeight = ();
 	type CheckAssociatedRelayNumber = AnyRelayNumber;
-	type ConsensusHook = cumulus_pallet_teyrchain_system::consensus_hook::ExpectParentIncluded;
+	type ConsensusHook = pezcumulus_pallet_teyrchain_system::consensus_hook::ExpectParentIncluded;
 	type RelayParentOffset = ConstU32<0>;
 }
 

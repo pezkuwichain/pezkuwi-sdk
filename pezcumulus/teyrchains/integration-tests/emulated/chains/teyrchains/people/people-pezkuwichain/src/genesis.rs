@@ -17,7 +17,7 @@
 use pezsp_core::storage::Storage;
 
 // Pezcumulus
-use cumulus_primitives_core::ParaId;
+use pezcumulus_primitives_core::ParaId;
 use emulated_integration_tests_common::{
 	accounts, build_genesis_storage, collators, SAFE_XCM_VERSION,
 };

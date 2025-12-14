@@ -29,7 +29,7 @@ pub mod types;
 
 use crate::cli::AuthoringPolicy;
 
-use cumulus_primitives_core::{CollectCollationInfo, GetTeyrchainInfo, RelayParentOffsetApi};
+use pezcumulus_primitives_core::{CollectCollationInfo, GetTeyrchainInfo, RelayParentOffsetApi};
 use pezsc_client_db::DbHash;
 use pezsc_offchain::OffchainWorkerApi;
 use serde::de::DeserializeOwned;

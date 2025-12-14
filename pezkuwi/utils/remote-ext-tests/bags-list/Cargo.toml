@@ -5,6 +5,10 @@ version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Pezkuwi SDK component: remote ext tests bags list"
+documentation = "https://docs.rs/remote-ext-tests-bags-list"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -24,8 +28,8 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-bags-list-remote-tests/runtime-benchmarks",
-	"zagros-runtime-constants/runtime-benchmarks",
-	"zagros-runtime/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-bags-list-remote-tests/runtime-benchmarks",
+  "zagros-runtime-constants/runtime-benchmarks",
+  "zagros-runtime/runtime-benchmarks",
 ]

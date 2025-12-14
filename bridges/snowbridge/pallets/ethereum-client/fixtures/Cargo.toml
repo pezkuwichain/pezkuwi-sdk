@@ -7,6 +7,9 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/snowbridge-pezpallet-ethereum-client-fixtures"
+homepage = { workspace = true }
+publish = false
 
 [lints]
 workspace = true
@@ -27,12 +30,12 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"snowbridge-beacon-primitives/std",
-	"snowbridge-verification-primitives/std",
-	"pezsp-core/std",
-	"pezsp-std/std",
+  "snowbridge-beacon-primitives/std",
+  "snowbridge-verification-primitives/std",
+  "pezsp-core/std",
+  "pezsp-std/std",
 ]
 runtime-benchmarks = [
-	"snowbridge-beacon-primitives/runtime-benchmarks",
-	"snowbridge-verification-primitives/runtime-benchmarks",
+  "snowbridge-beacon-primitives/runtime-benchmarks",
+  "snowbridge-verification-primitives/runtime-benchmarks",
 ]

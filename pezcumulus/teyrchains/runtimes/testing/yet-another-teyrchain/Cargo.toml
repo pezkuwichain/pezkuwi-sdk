@@ -7,6 +7,7 @@ description = "Simple runtime used by the testing teyrchain(s)"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/yet-another-teyrchain-runtime"
 
 [lints]
 workspace = true
@@ -17,37 +18,37 @@ scale-info = { features = ["derive"], workspace = true }
 serde_json = { features = ["alloc"], workspace = true }
 
 pezkuwi-sdk = { workspace = true, default-features = false, features = [
-	"pezpallet-aura",
-	"pezpallet-authorship",
-	"pezpallet-balances",
-	"pezpallet-message-queue",
-	"pezpallet-session",
-	"pezpallet-sudo",
-	"pezpallet-timestamp",
-	"pezpallet-transaction-payment",
-	"pezpallet-transaction-payment-rpc-runtime-api",
-	"pezpallet-utility",
-	"pezpallet-verify-signature",
+  "pezpallet-aura",
+  "pezpallet-authorship",
+  "pezpallet-balances",
+  "pezpallet-message-queue",
+  "pezpallet-session",
+  "pezpallet-sudo",
+  "pezpallet-timestamp",
+  "pezpallet-transaction-payment",
+  "pezpallet-transaction-payment-rpc-runtime-api",
+  "pezpallet-utility",
+  "pezpallet-verify-signature",
 
-	"pezpallet-xcm",
-	"pezkuwi-runtime-common",
-	"pezkuwi-teyrchain-primitives",
-	"pezstaging-xcm",
-	"pezstaging-xcm-builder",
-	"pezstaging-xcm-executor",
+  "pezpallet-xcm",
+  "pezkuwi-runtime-common",
+  "pezkuwi-teyrchain-primitives",
+  "pezstaging-xcm",
+  "pezstaging-xcm-builder",
+  "pezstaging-xcm-executor",
 
-	"pezcumulus-pezpallet-aura-ext",
-	"pezcumulus-pezpallet-weight-reclaim",
-	"pezcumulus-pezpallet-xcm",
-	"pezcumulus-pezpallet-xcmp-queue",
-	"pezcumulus-primitives-aura",
-	"pezcumulus-primitives-core",
-	"pezcumulus-primitives-utility",
-	"pezpallet-collator-selection",
-	"pezstaging-teyrchain-info",
-	"teyrchains-common",
+  "pezcumulus-pezpallet-aura-ext",
+  "pezcumulus-pezpallet-weight-reclaim",
+  "pezcumulus-pezpallet-xcm",
+  "pezcumulus-pezpallet-xcmp-queue",
+  "pezcumulus-primitives-aura",
+  "pezcumulus-primitives-core",
+  "pezcumulus-primitives-utility",
+  "pezpallet-collator-selection",
+  "pezstaging-teyrchain-info",
+  "teyrchains-common",
 
-	"runtime",
+  "runtime",
 ] }
 
 # Pezcumulus
@@ -59,17 +60,17 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"pezcumulus-pezpallet-teyrchain-system/std",
-	"pezkuwi-sdk/std",
-	"scale-info/std",
-	"serde_json/std",
-	"bizinikiwi-wasm-builder",
+  "codec/std",
+  "pezcumulus-pezpallet-teyrchain-system/std",
+  "pezkuwi-sdk/std",
+  "scale-info/std",
+  "serde_json/std",
+  "bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks",
-	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+  "pezkuwi-sdk/runtime-benchmarks",
+  "bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]
 
 # A feature that should be enabled when the runtime should be built for on-chain

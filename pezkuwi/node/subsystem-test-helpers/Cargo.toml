@@ -6,6 +6,9 @@ version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
+documentation = "https://docs.rs/pezkuwi-node-subsystem-test-helpers"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -30,11 +33,11 @@ pezsp-keystore = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezkuwi-erasure-coding/runtime-benchmarks",
-	"pezkuwi-node-primitives/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util/runtime-benchmarks",
-	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
+  "pezkuwi-erasure-coding/runtime-benchmarks",
+  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-node-subsystem-util/runtime-benchmarks",
+  "pezkuwi-node-subsystem/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
 ]

@@ -17,7 +17,7 @@
 
 ///! Staking, and election related pallet configurations.
 use super::*;
-use cumulus_primitives_core::relay_chain::SessionIndex;
+use pezcumulus_primitives_core::relay_chain::SessionIndex;
 use pezframe_election_provider_support::{ElectionDataProvider, SequentialPhragmen};
 use pezframe_support::traits::{ConstU128, EitherOf};
 use pezpallet_election_provider_multi_block::{self as multi_block, SolutionAccuracyOf};

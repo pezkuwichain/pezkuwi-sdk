@@ -199,9 +199,9 @@ fn set_default_ss58_version(spec: &Box<dyn pezkuwi_service::ChainSpec>) {
 	let ss58_version = if spec.is_kusama() {
 		Ss58AddressFormatRegistry::KusamaAccount
 	} else if spec.is_zagros() {
-		Ss58AddressFormatRegistry::BizinikiwiAccount
+		Ss58AddressFormatRegistry::PezkuwichainAccount
 	} else {
-		Ss58AddressFormatRegistry::PezkuwiAccount
+		Ss58AddressFormatRegistry::PezkuwichainAccount
 	}
 	.into();
 

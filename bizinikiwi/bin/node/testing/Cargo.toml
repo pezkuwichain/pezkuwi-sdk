@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
+documentation = "https://docs.rs/node-testing"
 
 [lints]
 workspace = true
@@ -32,12 +33,12 @@ pezpallet-skip-feeless-payment = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-client-db = { features = [
-	"rocksdb",
+  "rocksdb",
 ], workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsc-executor = { workspace = true, default-features = true }
 pezsc-service = { features = [
-	"rocksdb",
+  "rocksdb",
 ], workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-block-builder = { workspace = true, default-features = true }
@@ -54,28 +55,28 @@ tempfile = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe-metadata-hash-extension/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"kitchensink-runtime/runtime-benchmarks",
-	"node-cli/runtime-benchmarks",
-	"node-primitives/runtime-benchmarks",
-	"pezpallet-asset-conversion-tx-payment/runtime-benchmarks",
-	"pezpallet-asset-conversion/runtime-benchmarks",
-	"pezpallet-revive/runtime-benchmarks",
-	"pezpallet-skip-feeless-payment/runtime-benchmarks",
-	"pezsc-block-builder/runtime-benchmarks",
-	"pezsc-client-api/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks",
-	"pezsc-consensus/runtime-benchmarks",
-	"pezsc-executor/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
-	"pezsp-block-builder/runtime-benchmarks",
-	"pezsp-blockchain/runtime-benchmarks",
-	"pezsp-consensus/runtime-benchmarks",
-	"pezsp-inherents/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
-	"bizinikiwi-test-client/runtime-benchmarks",
+  "pezframe-metadata-hash-extension/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "kitchensink-runtime/runtime-benchmarks",
+  "node-cli/runtime-benchmarks",
+  "node-primitives/runtime-benchmarks",
+  "pezpallet-asset-conversion-tx-payment/runtime-benchmarks",
+  "pezpallet-asset-conversion/runtime-benchmarks",
+  "pezpallet-revive/runtime-benchmarks",
+  "pezpallet-skip-feeless-payment/runtime-benchmarks",
+  "pezsc-block-builder/runtime-benchmarks",
+  "pezsc-client-api/runtime-benchmarks",
+  "pezsc-client-db/runtime-benchmarks",
+  "pezsc-consensus/runtime-benchmarks",
+  "pezsc-executor/runtime-benchmarks",
+  "pezsc-service/runtime-benchmarks",
+  "pezsp-api/runtime-benchmarks",
+  "pezsp-block-builder/runtime-benchmarks",
+  "pezsp-blockchain/runtime-benchmarks",
+  "pezsp-consensus/runtime-benchmarks",
+  "pezsp-inherents/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-timestamp/runtime-benchmarks",
+  "bizinikiwi-test-client/runtime-benchmarks",
 ]

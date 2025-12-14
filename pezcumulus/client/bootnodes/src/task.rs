@@ -22,8 +22,8 @@ use crate::{
 	config::paranode_protocol_name,
 	discovery::{BootnodeDiscovery, BootnodeDiscoveryParams},
 };
-use cumulus_primitives_core::{relay_chain::BlockId, ParaId};
-use cumulus_relay_chain_interface::RelayChainInterface;
+use pezcumulus_primitives_core::{relay_chain::BlockId, ParaId};
+use pezcumulus_relay_chain_interface::RelayChainInterface;
 use log::{debug, error};
 use num_traits::Zero;
 use pezsc_network::{request_responses::IncomingRequest, service::traits::NetworkService, Multiaddr};

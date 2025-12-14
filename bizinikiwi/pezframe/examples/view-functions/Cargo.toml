@@ -7,6 +7,8 @@ license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 description = "Pallet to demonstrate the usage of view functions to query pallet state"
+documentation = "https://docs.rs/pezpallet-example-view-functions"
+publish = false
 
 [lints]
 workspace = true
@@ -19,7 +21,7 @@ codec = { default-features = false, workspace = true }
 frame-metadata = { features = ["current"], workspace = true }
 log = { workspace = true }
 scale-info = { default-features = false, features = [
-	"derive",
+  "derive",
 ], workspace = true }
 
 pezframe-support = { default-features = false, workspace = true }
@@ -36,25 +38,25 @@ pretty_assertions = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"codec/std",
-	"frame-metadata/std",
-	"pezframe-support/std",
-	"pezframe-system/std",
-	"log/std",
-	"scale-info/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-metadata-ir/std",
-	"pezsp-runtime/std",
+  "codec/std",
+  "frame-metadata/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "log/std",
+  "scale-info/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-metadata-ir/std",
+  "pezsp-runtime/std",
 ]
 runtime-benchmarks = [
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]

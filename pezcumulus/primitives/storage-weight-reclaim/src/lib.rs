@@ -19,8 +19,8 @@
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::marker::PhantomData;
-use cumulus_primitives_core::Weight;
-use cumulus_primitives_proof_size_hostfunction::{
+use pezcumulus_primitives_core::Weight;
+use pezcumulus_primitives_proof_size_hostfunction::{
 	storage_proof_size::storage_proof_size, PROOF_RECORDING_DISABLED,
 };
 use pezframe_support::{

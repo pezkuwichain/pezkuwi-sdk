@@ -7,6 +7,7 @@ license.workspace = true
 description = "Stores messages other authorities issue about candidates in Pezkuwi."
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/pezkuwi-statement-table"
 
 [lints]
 workspace = true
@@ -18,6 +19,6 @@ pezkuwi-primitives = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"gum/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
+  "gum/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
 ]

@@ -15,7 +15,7 @@
 // along with Pezcumulus.  If not, see <http://www.gnu.org/licenses/>.
 
 use clap::ValueEnum;
-use cumulus_client_cli::{ExportGenesisHeadCommand, ExportGenesisWasmCommand};
+use pezcumulus_client_cli::{ExportGenesisHeadCommand, ExportGenesisWasmCommand};
 use pezkuwi_service::{ChainSpec, ParaId, PrometheusConfig};
 use pezsc_cli::{
 	CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams, NetworkParams,
@@ -39,7 +39,7 @@ pub struct TestCollatorCli {
 	pub subcommand: Option<Subcommand>,
 
 	#[command(flatten)]
-	pub run: cumulus_client_cli::RunCmd,
+	pub run: pezcumulus_client_cli::RunCmd,
 
 	/// Relay chain arguments
 	#[arg(raw = true)]
@@ -286,46 +286,46 @@ impl BizinikiwiCli for TestCollatorCli {
 		Ok(match id {
 			"" => {
 				tracing::info!("Using default test service chain spec.");
-				Box::new(cumulus_test_service::get_chain_spec(Some(ParaId::from(2000)))) as Box<_>
+				Box::new(pezcumulus_test_service::get_chain_spec(Some(ParaId::from(2000)))) as Box<_>
 			},
 			"elastic-scaling-mvp" => {
 				tracing::info!("Using elastic-scaling mvp chain spec.");
-				Box::new(cumulus_test_service::get_elastic_scaling_mvp_chain_spec(Some(
+				Box::new(pezcumulus_test_service::get_elastic_scaling_mvp_chain_spec(Some(
 					ParaId::from(2100),
 				))) as Box<_>
 			},
 			"elastic-scaling" => {
 				tracing::info!("Using elastic-scaling chain spec.");
-				Box::new(cumulus_test_service::get_elastic_scaling_chain_spec(Some(ParaId::from(
+				Box::new(pezcumulus_test_service::get_elastic_scaling_chain_spec(Some(ParaId::from(
 					2200,
 				)))) as Box<_>
 			},
 			"elastic-scaling-500ms" => {
 				tracing::info!("Using elastic-scaling 500ms chain spec.");
-				Box::new(cumulus_test_service::get_elastic_scaling_500ms_chain_spec(Some(
+				Box::new(pezcumulus_test_service::get_elastic_scaling_500ms_chain_spec(Some(
 					ParaId::from(2300),
 				))) as Box<_>
 			},
 			"elastic-scaling-multi-block-slot" => {
 				tracing::info!("Using elastic-scaling multi-block-slot chain spec.");
-				Box::new(cumulus_test_service::get_elastic_scaling_multi_block_slot_chain_spec(
+				Box::new(pezcumulus_test_service::get_elastic_scaling_multi_block_slot_chain_spec(
 					Some(ParaId::from(2400)),
 				)) as Box<_>
 			},
 			"sync-backing" => {
 				tracing::info!("Using sync backing chain spec.");
-				Box::new(cumulus_test_service::get_sync_backing_chain_spec(Some(ParaId::from(
+				Box::new(pezcumulus_test_service::get_sync_backing_chain_spec(Some(ParaId::from(
 					2500,
 				)))) as Box<_>
 			},
 			"async-backing" => {
 				tracing::info!("Using async backing chain spec.");
-				Box::new(cumulus_test_service::get_async_backing_chain_spec(Some(ParaId::from(
+				Box::new(pezcumulus_test_service::get_async_backing_chain_spec(Some(ParaId::from(
 					2500,
 				)))) as Box<_>
 			},
 			"relay-parent-offset" => Box::new(
-				cumulus_test_service::get_relay_parent_offset_chain_spec(Some(ParaId::from(2600))),
+				pezcumulus_test_service::get_relay_parent_offset_chain_spec(Some(ParaId::from(2600))),
 			) as Box<_>,
 			path => {
 				let chain_spec: pezsc_chain_spec::GenericChainSpec =

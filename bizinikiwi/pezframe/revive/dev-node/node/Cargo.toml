@@ -8,6 +8,8 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
+documentation = "https://docs.rs/revive-dev-node"
+license = { workspace = true }
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
@@ -32,6 +34,6 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 default = ["std"]
 std = ["pezkuwi-sdk/std", "revive-dev-runtime/std"]
 runtime-benchmarks = [
-	"pezkuwi-sdk/runtime-benchmarks",
-	"revive-dev-runtime/runtime-benchmarks",
+  "pezkuwi-sdk/runtime-benchmarks",
+  "revive-dev-runtime/runtime-benchmarks",
 ]

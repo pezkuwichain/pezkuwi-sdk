@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Asset Hub Zagros emulated chain"
 publish = false
+documentation = "https://docs.rs/asset-hub-zagros-emulated-chain"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -21,7 +24,7 @@ asset-hub-zagros-runtime = { workspace = true, default-features = true }
 pezcumulus-primitives-core = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 testnet-teyrchains-constants = { features = [
-	"zagros",
+  "zagros",
 ], workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
 zagros-emulated-chain = { workspace = true, default-features = true }
@@ -35,15 +38,15 @@ bp-bridge-hub-zagros = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"asset-hub-zagros-runtime/runtime-benchmarks",
-	"bp-bridge-hub-zagros/runtime-benchmarks",
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"testnet-teyrchains-constants/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"zagros-emulated-chain/runtime-benchmarks",
+  "asset-hub-zagros-runtime/runtime-benchmarks",
+  "bp-bridge-hub-zagros/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "testnet-teyrchains-constants/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
+  "zagros-emulated-chain/runtime-benchmarks",
 ]

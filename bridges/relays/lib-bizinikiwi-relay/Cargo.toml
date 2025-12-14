@@ -6,6 +6,9 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
 publish = false
+description = "Bizinikiwi utility: relay helper"
+documentation = "https://docs.rs/bizinikiwi-relay-helper"
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -60,26 +63,26 @@ scale-info = { features = ["derive"], workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-header-chain/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
-	"bp-relayers/runtime-benchmarks",
-	"bp-runtime/runtime-benchmarks",
-	"bp-teyrchains/runtime-benchmarks",
-	"equivocation-detector/runtime-benchmarks",
-	"finality-relay/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"messages-relay/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-bridge-grandpa/runtime-benchmarks",
-	"pezpallet-bridge-messages/runtime-benchmarks",
-	"pezpallet-bridge-teyrchains/runtime-benchmarks",
-	"pezpallet-grandpa/runtime-benchmarks",
-	"relay-bizinikiwi-client/runtime-benchmarks",
-	"relay-utils/runtime-benchmarks",
-	"pezsp-consensus-grandpa/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-trie/runtime-benchmarks",
-	"teyrchains-relay/runtime-benchmarks",
+  "bp-header-chain/runtime-benchmarks",
+  "bp-messages/runtime-benchmarks",
+  "bp-pezkuwi-core/runtime-benchmarks",
+  "bp-relayers/runtime-benchmarks",
+  "bp-runtime/runtime-benchmarks",
+  "bp-teyrchains/runtime-benchmarks",
+  "equivocation-detector/runtime-benchmarks",
+  "finality-relay/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "messages-relay/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-bridge-grandpa/runtime-benchmarks",
+  "pezpallet-bridge-messages/runtime-benchmarks",
+  "pezpallet-bridge-teyrchains/runtime-benchmarks",
+  "pezpallet-grandpa/runtime-benchmarks",
+  "relay-bizinikiwi-client/runtime-benchmarks",
+  "relay-utils/runtime-benchmarks",
+  "pezsp-consensus-grandpa/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "pezsp-trie/runtime-benchmarks",
+  "teyrchains-relay/runtime-benchmarks",
 ]

@@ -44,8 +44,8 @@ use assets_common::{
 	AssetIdForPoolAssets, AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use cumulus_pallet_teyrchain_system::{RelayNumberMonotonicallyIncreases, RelaychainDataProvider};
-use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
+use pezcumulus_pallet_teyrchain_system::{RelayNumberMonotonicallyIncreases, RelaychainDataProvider};
+use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	construct_runtime, derive_impl,
 	dispatch::DispatchClass,
@@ -185,14 +185,14 @@ impl pezframe_system::Config for Runtime {
 	type SystemWeightInfo = weights::pezframe_system::WeightInfo<Runtime>;
 	type ExtensionsWeightInfo = weights::pezframe_system_extensions::WeightInfo<Runtime>;
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = cumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type MultiBlockMigrator = MultiBlockMigrations;
 	type SingleBlockMigrations = Migrations;
 }
 
-impl cumulus_pallet_weight_reclaim::Config for Runtime {
-	type WeightInfo = weights::cumulus_pallet_weight_reclaim::WeightInfo<Runtime>;
+impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
+	type WeightInfo = weights::pezcumulus_pallet_weight_reclaim::WeightInfo<Runtime>;
 }
 
 impl pezpallet_timestamp::Config for Runtime {
@@ -801,8 +801,8 @@ parameter_types! {
 	pub const ReservedDmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT.saturating_div(4);
 }
 
-impl cumulus_pallet_teyrchain_system::Config for Runtime {
-	type WeightInfo = weights::cumulus_pallet_teyrchain_system::WeightInfo<Runtime>;
+impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+	type WeightInfo = weights::pezcumulus_pallet_teyrchain_system::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
@@ -816,7 +816,7 @@ impl cumulus_pallet_teyrchain_system::Config for Runtime {
 	type RelayParentOffset = ConstU32<0>;
 }
 
-type ConsensusHook = cumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
@@ -837,7 +837,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type WeightInfo = weights::pezpallet_message_queue::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type MessageProcessor = pezpallet_message_queue::mock_helpers::NoopMessageProcessor<
-		cumulus_primitives_core::AggregateMessageOrigin,
+		pezcumulus_primitives_core::AggregateMessageOrigin,
 	>;
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type MessageProcessor = xcm_builder::ProcessXcmMessage<
@@ -855,7 +855,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type IdleMaxServiceWeight = MessageQueueServiceWeight;
 }
 
-impl cumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
 	/// The asset ID for the asset that we use to pay for message delivery fees.
@@ -871,7 +871,7 @@ pub type PriceForSiblingTeyrchainDelivery = pezkuwi_runtime_common::xcm_sender::
 	XcmpQueue,
 >;
 
-impl cumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = PezkuwiXcm;
@@ -884,11 +884,11 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type MaxPageSize = ConstU32<{ 103 * 1024 }>;
 	type ControllerOrigin = EnsureRoot<AccountId>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
-	type WeightInfo = weights::cumulus_pallet_xcmp_queue::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezcumulus_pallet_xcmp_queue::WeightInfo<Runtime>;
 	type PriceForSiblingDelivery = PriceForSiblingTeyrchainDelivery;
 }
 
-impl cumulus_pallet_xcmp_queue::migration::v5::V5Config for Runtime {
+impl pezcumulus_pallet_xcmp_queue::migration::v5::V5Config for Runtime {
 	// This must be the same as the `ChannelInfo` from the `Config`:
 	type ChannelList = TeyrchainSystem;
 }
@@ -1083,7 +1083,7 @@ impl pezpallet_xcm_bridge_hub_router::Config<ToPezkuwichainXcmRouterInstance> fo
 	>;
 	type ToBridgeHubSender = XcmpQueue;
 	type LocalXcmChannelManager =
-		cumulus_pallet_xcmp_queue::bridging::InAndOutXcmpChannelStatusProvider<Runtime>;
+		pezcumulus_pallet_xcmp_queue::bridging::InAndOutXcmpChannelStatusProvider<Runtime>;
 
 	type ByteFee = xcm_config::bridging::XcmBridgeHubRouterByteFee;
 	type FeeAsset = xcm_config::bridging::XcmBridgeHubRouterFeeAssetId;
@@ -1122,11 +1122,11 @@ construct_runtime!(
 	{
 		// System support stuff.
 		System: pezframe_system = 0,
-		TeyrchainSystem: cumulus_pallet_teyrchain_system = 1,
+		TeyrchainSystem: pezcumulus_pallet_teyrchain_system = 1,
 		// RandomnessCollectiveFlip = 2 removed
 		Timestamp: pezpallet_timestamp = 3,
 		TeyrchainInfo: teyrchain_info = 4,
-		WeightReclaim: cumulus_pallet_weight_reclaim = 5,
+		WeightReclaim: pezcumulus_pallet_weight_reclaim = 5,
 		MultiBlockMigrations: pezpallet_migrations = 6,
 
 		// Monetary stuff.
@@ -1140,12 +1140,12 @@ construct_runtime!(
 		CollatorSelection: pezpallet_collator_selection = 21,
 		Session: pezpallet_session = 22,
 		Aura: pezpallet_aura = 23,
-		AuraExt: cumulus_pallet_aura_ext = 24,
+		AuraExt: pezcumulus_pallet_aura_ext = 24,
 
 		// XCM helpers.
-		XcmpQueue: cumulus_pallet_xcmp_queue = 30,
+		XcmpQueue: pezcumulus_pallet_xcmp_queue = 30,
 		PezkuwiXcm: pezpallet_xcm = 31,
-		CumulusXcm: cumulus_pallet_xcm = 32,
+		CumulusXcm: pezcumulus_pallet_xcm = 32,
 		// Bridge utilities.
 		ToPezkuwichainXcmRouter: pezpallet_xcm_bridge_hub_router::<Instance1> = 34,
 		MessageQueue: pezpallet_message_queue = 35,
@@ -1218,7 +1218,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 /// The extension to the basic transaction logic.
-pub type TxExtension = cumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		pezframe_system::CheckNonZeroSender<Runtime>,
@@ -1258,26 +1258,26 @@ pub struct AssetConversionTxHelper;
 impl
 	pezpallet_asset_conversion_tx_payment::BenchmarkHelperTrait<
 		AccountId,
-		cumulus_primitives_core::Location,
-		cumulus_primitives_core::Location,
+		pezcumulus_primitives_core::Location,
+		pezcumulus_primitives_core::Location,
 	> for AssetConversionTxHelper
 {
 	fn create_asset_id_parameter(
 		seed: u32,
-	) -> (cumulus_primitives_core::Location, cumulus_primitives_core::Location) {
+	) -> (pezcumulus_primitives_core::Location, pezcumulus_primitives_core::Location) {
 		// Use a different teyrchain' foreign assets pallet so that the asset is indeed foreign.
-		let asset_id = cumulus_primitives_core::Location::new(
+		let asset_id = pezcumulus_primitives_core::Location::new(
 			1,
 			[
-				cumulus_primitives_core::Junction::Teyrchain(3000),
-				cumulus_primitives_core::Junction::PalletInstance(53),
-				cumulus_primitives_core::Junction::GeneralIndex(seed.into()),
+				pezcumulus_primitives_core::Junction::Teyrchain(3000),
+				pezcumulus_primitives_core::Junction::PalletInstance(53),
+				pezcumulus_primitives_core::Junction::GeneralIndex(seed.into()),
 			],
 		);
 		(asset_id.clone(), asset_id)
 	}
 
-	fn setup_balances_and_pool(asset_id: cumulus_primitives_core::Location, account: AccountId) {
+	fn setup_balances_and_pool(asset_id: pezcumulus_primitives_core::Location, account: AccountId) {
 		use pezframe_support::{assert_ok, traits::fungibles::Mutate};
 		assert_ok!(ForeignAssets::force_create(
 			RuntimeOrigin::root(),
@@ -1296,9 +1296,9 @@ impl
 			u64::MAX.into()
 		));
 
-		let token_native = alloc::boxed::Box::new(cumulus_primitives_core::Location::new(
+		let token_native = alloc::boxed::Box::new(pezcumulus_primitives_core::Location::new(
 			1,
-			cumulus_primitives_core::Junctions::Here,
+			pezcumulus_primitives_core::Junctions::Here,
 		));
 		let token_second = alloc::boxed::Box::new(asset_id);
 
@@ -1356,8 +1356,8 @@ mod benches {
 		[pezpallet_timestamp, Timestamp]
 		[pezpallet_transaction_payment, TransactionPayment]
 		[pezpallet_collator_selection, CollatorSelection]
-		[cumulus_pallet_teyrchain_system, TeyrchainSystem]
-		[cumulus_pallet_xcmp_queue, XcmpQueue]
+		[pezcumulus_pallet_teyrchain_system, TeyrchainSystem]
+		[pezcumulus_pallet_xcmp_queue, XcmpQueue]
 		[pezpallet_treasury, Treasury]
 		[pezpallet_vesting, Vesting]
 		[pezpallet_whitelist, Whitelist]
@@ -1368,7 +1368,7 @@ mod benches {
 		// NOTE: Make sure you point to the individual modules below.
 		[pezpallet_xcm_benchmarks::fungible, XcmBalances]
 		[pezpallet_xcm_benchmarks::generic, XcmGeneric]
-		[cumulus_pallet_weight_reclaim, WeightReclaim]
+		[pezcumulus_pallet_weight_reclaim, WeightReclaim]
 	);
 }
 
@@ -1383,16 +1383,16 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
+	impl pezcumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
 		fn relay_parent_offset() -> u32 {
 			0
 		}
 	}
 
-	impl cumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
+	impl pezcumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
 		fn can_build_upon(
 			included_hash: <Block as BlockT>::Hash,
-			slot: cumulus_primitives_aura::Slot,
+			slot: pezcumulus_primitives_aura::Slot,
 		) -> bool {
 			ConsensusHook::can_build_upon(included_hash, slot)
 		}
@@ -1703,8 +1703,8 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
-		fn collect_collation_info(header: &<Block as BlockT>::Header) -> cumulus_primitives_core::CollationInfo {
+	impl pezcumulus_primitives_core::CollectCollationInfo<Block> for Runtime {
+		fn collect_collation_info(header: &<Block as BlockT>::Header) -> pezcumulus_primitives_core::CollationInfo {
 			TeyrchainSystem::collect_collation_info(header)
 		}
 	}
@@ -1805,7 +1805,7 @@ impl_runtime_apis! {
 			use pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pallet as SystemBench;
 			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
 			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 			use pezpallet_xcm_bridge_hub_router::benchmarking::Pallet as XcmBridgeHubRouterBench;
 
@@ -1865,12 +1865,12 @@ impl_runtime_apis! {
 				}
 
 				fn verify_set_code() {
-					System::assert_last_event(cumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
+					System::assert_last_event(pezcumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
 				}
 			}
 
-			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
-			impl cumulus_pallet_session_benchmarking::Config for Runtime {}
+			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			impl pezcumulus_pallet_session_benchmarking::Config for Runtime {}
 
 			parameter_types! {
 				pub ExistentialDepositAsset: Option<Asset> = Some((
@@ -1883,7 +1883,7 @@ impl_runtime_apis! {
 			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 			impl pezpallet_xcm::benchmarking::Config for Runtime {
 				type DeliveryHelper = (
-					cumulus_primitives_utility::ToParentDeliveryHelper<
+					pezcumulus_primitives_utility::ToParentDeliveryHelper<
 						xcm_config::XcmConfig,
 						ExistentialDepositAsset,
 						xcm_config::PriceForParentDelivery,
@@ -1986,7 +1986,7 @@ impl_runtime_apis! {
 
 			impl XcmBridgeHubRouterConfig<ToPezkuwichainXcmRouterInstance> for Runtime {
 				fn make_congested() {
-					cumulus_pallet_xcmp_queue::bridging::suspend_channel_for_benchmarks::<Runtime>(
+					pezcumulus_pallet_xcmp_queue::bridging::suspend_channel_for_benchmarks::<Runtime>(
 						xcm_config::bridging::SiblingBridgeHubParaId::get().into()
 					);
 				}
@@ -2019,7 +2019,7 @@ impl_runtime_apis! {
 			impl pezpallet_xcm_benchmarks::Config for Runtime {
 				type XcmConfig = xcm_config::XcmConfig;
 				type AccountIdConverter = xcm_config::LocationToAccountId;
-				type DeliveryHelper = cumulus_primitives_utility::ToParentDeliveryHelper<
+				type DeliveryHelper = pezcumulus_primitives_utility::ToParentDeliveryHelper<
 					xcm_config::XcmConfig,
 					ExistentialDepositAsset,
 					xcm_config::PriceForParentDelivery,
@@ -2211,16 +2211,16 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl cumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
+	impl pezcumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
 		fn teyrchain_id() -> ParaId {
 			TeyrchainInfo::teyrchain_id()
 		}
 	}
 }
 
-cumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = cumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }
 
 parameter_types! {

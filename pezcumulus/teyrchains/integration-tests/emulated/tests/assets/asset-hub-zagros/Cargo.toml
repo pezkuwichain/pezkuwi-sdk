@@ -6,6 +6,9 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Asset Hub Zagros runtime integration tests with xcm-emulator"
 publish = false
+documentation = "https://docs.rs/asset-hub-zagros-integration-tests"
+repository = { workspace = true }
+homepage = { workspace = true }
 
 [lints]
 workspace = true
@@ -47,25 +50,25 @@ pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"asset-test-utils/runtime-benchmarks",
-	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezpallet-asset-conversion/runtime-benchmarks",
-	"pezpallet-asset-rewards/runtime-benchmarks",
-	"pezpallet-assets/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-message-queue/runtime-benchmarks",
-	"pezpallet-treasury/runtime-benchmarks",
-	"pezpallet-xcm/runtime-benchmarks",
-	"pezkuwi-runtime-common/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"xcm-runtime-apis/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
-	"zagros-system-emulated-network/runtime-benchmarks",
+  "asset-test-utils/runtime-benchmarks",
+  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+  "pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-asset-conversion/runtime-benchmarks",
+  "pezpallet-asset-rewards/runtime-benchmarks",
+  "pezpallet-assets/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-treasury/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-runtime-common/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
+  "zagros-system-emulated-network/runtime-benchmarks",
 ]

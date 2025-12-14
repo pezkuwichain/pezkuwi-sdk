@@ -36,14 +36,14 @@ path = "src/phragmen_pjr.rs"
 clap = { features = ["derive"], workspace = true }
 honggfuzz = { workspace = true }
 rand = { features = [
-	"small_rng",
-	"std",
+  "small_rng",
+  "std",
 ], workspace = true, default-features = true }
 pezsp-npos-elections = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"pezsp-npos-elections/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "pezsp-npos-elections/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]

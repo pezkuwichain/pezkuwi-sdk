@@ -8,6 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Runtime API definition required by System RPC extensions."
 readme = "README.md"
+documentation = "https://docs.rs/pezframe-system-rpc-runtime-api"
 
 [lints]
 workspace = true
