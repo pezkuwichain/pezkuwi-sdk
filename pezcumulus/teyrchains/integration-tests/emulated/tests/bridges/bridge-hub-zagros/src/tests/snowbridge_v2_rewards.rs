@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use crate::tests::snowbridge_common::{eth_location, set_up_eth_and_hez_pool};
-use bridge_hub_zagros_runtime::bridge_common_config::{BridgeReward, BridgeRewardBeneficiaries};
+use pezbridge_hub_zagros_runtime::bridge_common_config::{BridgeReward, BridgeRewardBeneficiaries};
 use emulated_integration_tests_common::snowbridge::ETHER_MIN_BALANCE;
 use pezpallet_bridge_relayers::{Error::FailedToPayReward, RewardLedger};
 

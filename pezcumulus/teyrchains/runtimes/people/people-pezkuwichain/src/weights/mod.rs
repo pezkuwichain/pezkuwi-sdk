@@ -16,9 +16,9 @@
 //! Expose the auto generated weight files.
 
 pub mod block_weights;
-pub mod pezcumulus_pallet_teyrchain_system;
-pub mod pezcumulus_pallet_weight_reclaim;
-pub mod pezcumulus_pallet_xcmp_queue;
+pub mod pezcumulus_pezpallet_teyrchain_system;
+pub mod pezcumulus_pezpallet_weight_reclaim;
+pub mod pezcumulus_pezpallet_xcmp_queue;
 pub mod extrinsic_weights;
 pub mod pezframe_system;
 pub mod pezframe_system_extensions;

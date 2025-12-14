@@ -16,7 +16,7 @@
 
 //! Implements the Chain Selection Subsystem.
 
-use pezkuwi_node_primitives::BlockWeight;
+use pezkuwi_pez_node_primitives::BlockWeight;
 use pezkuwi_node_subsystem::{
 	errors::ChainApiError,
 	messages::{ChainApiMessage, ChainSelectionMessage},

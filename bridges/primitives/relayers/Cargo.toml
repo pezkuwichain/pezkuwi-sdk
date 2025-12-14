@@ -17,9 +17,9 @@ codec = { features = ["bit-vec", "derive"], workspace = true }
 scale-info = { features = ["bit-vec", "derive"], workspace = true }
 
 # Bridge Dependencies
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-messages = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 bp-teyrchains = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -35,9 +35,9 @@ hex-literal = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-messages/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-teyrchains/std",
   "codec/std",
   "pezframe-support/std",
@@ -48,9 +48,9 @@ std = [
   "pezsp-std/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-teyrchains/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",

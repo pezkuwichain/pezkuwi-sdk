@@ -16,7 +16,7 @@
 
 //! Utilities used by different relays.
 
-pub use bp_runtime::HeaderId;
+pub use pezbp_runtime::HeaderId;
 pub use error::Error;
 pub use relay_loop::{relay_loop, relay_metrics};
 pub use pezsp_runtime::traits::{UniqueSaturatedFrom, UniqueSaturatedInto};

@@ -21,10 +21,10 @@ use crate::{
 	EthereumOutboundQueue, EthereumSystem, MessageQueue, Runtime, RuntimeEvent, TransactionByteFee,
 	TreasuryAccount,
 };
-use snowbridge_beacon_primitives::{Fork, ForkVersions};
-use snowbridge_core::{gwei, meth, AllowSiblingsOnly, PricingParameters, Rewards};
-use snowbridge_inbound_queue_primitives::v1::MessageToXcm;
-use snowbridge_outbound_queue_primitives::v1::EthereumBlobExporter;
+use pezsnowbridge_beacon_primitives::{Fork, ForkVersions};
+use pezsnowbridge_core::{gwei, meth, AllowSiblingsOnly, PricingParameters, Rewards};
+use pezsnowbridge_inbound_queue_primitives::v1::MessageToXcm;
+use pezsnowbridge_outbound_queue_primitives::v1::EthereumBlobExporter;
 use teyrchains_common::{AccountId, Balance};
 
 use pezsp_core::H160;
@@ -51,8 +51,8 @@ use xcm::prelude::{GlobalConsensus, InteriorLocation, Location, Teyrchain};
 pub type SnowbridgeExporter = EthereumBlobExporter<
 	UniversalLocation,
 	EthereumNetwork,
-	snowbridge_pallet_outbound_queue::Pallet<Runtime>,
-	snowbridge_core::AgentIdOf,
+	snowbridge_pezpallet_outbound_queue::Pallet<Runtime>,
+	pezsnowbridge_core::AgentIdOf,
 	EthereumSystem,
 >;
 
@@ -73,9 +73,9 @@ parameter_types! {
 	pub EthereumUniversalLocation: InteriorLocation = [GlobalConsensus(EthereumNetwork::get())].into();
 }
 
-impl snowbridge_pallet_inbound_queue::Config for Runtime {
+impl snowbridge_pezpallet_inbound_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type Verifier = snowbridge_pallet_ethereum_client::Pallet<Runtime>;
+	type Verifier = snowbridge_pezpallet_ethereum_client::Pallet<Runtime>;
 	type Token = Balances;
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type XcmSender = XcmRouter;
@@ -98,12 +98,12 @@ impl snowbridge_pallet_inbound_queue::Config for Runtime {
 	type WeightToFee = WeightToFee;
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type MaxMessageSize = ConstU32<2048>;
-	type WeightInfo = crate::weights::snowbridge_pallet_inbound_queue::WeightInfo<Runtime>;
+	type WeightInfo = crate::weights::snowbridge_pezpallet_inbound_queue::WeightInfo<Runtime>;
 	type PricingParameters = EthereumSystem;
 	type AssetTransactor = <xcm_config::XcmConfig as xcm_executor::Config>::AssetTransactor;
 }
 
-impl snowbridge_pallet_outbound_queue::Config for Runtime {
+impl snowbridge_pezpallet_outbound_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Hashing = Keccak256;
 	type MessageQueue = MessageQueue;
@@ -113,7 +113,7 @@ impl snowbridge_pallet_outbound_queue::Config for Runtime {
 	type GasMeter = crate::ConstantGasMeter;
 	type Balance = Balance;
 	type WeightToFee = WeightToFee;
-	type WeightInfo = crate::weights::snowbridge_pallet_outbound_queue::WeightInfo<Runtime>;
+	type WeightInfo = crate::weights::snowbridge_pezpallet_outbound_queue::WeightInfo<Runtime>;
 	type PricingParameters = EthereumSystem;
 	type Channels = EthereumSystem;
 }
@@ -186,24 +186,24 @@ parameter_types! {
 	};
 }
 
-pub const SLOTS_PER_EPOCH: u32 = snowbridge_pallet_ethereum_client::config::SLOTS_PER_EPOCH as u32;
+pub const SLOTS_PER_EPOCH: u32 = snowbridge_pezpallet_ethereum_client::config::SLOTS_PER_EPOCH as u32;
 
-impl snowbridge_pallet_ethereum_client::Config for Runtime {
+impl snowbridge_pezpallet_ethereum_client::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ForkVersions = ChainForkVersions;
 	// Free consensus update every epoch. Works out to be 225 updates per day.
 	type FreeHeadersInterval = ConstU32<SLOTS_PER_EPOCH>;
-	type WeightInfo = crate::weights::snowbridge_pallet_ethereum_client::WeightInfo<Runtime>;
+	type WeightInfo = crate::weights::snowbridge_pezpallet_ethereum_client::WeightInfo<Runtime>;
 }
 
-impl snowbridge_pallet_system::Config for Runtime {
+impl snowbridge_pezpallet_system::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OutboundQueue = EthereumOutboundQueue;
 	type SiblingOrigin = EnsureXcm<AllowSiblingsOnly>;
-	type AgentIdOf = snowbridge_core::AgentIdOf;
+	type AgentIdOf = pezsnowbridge_core::AgentIdOf;
 	type TreasuryAccount = TreasuryAccount;
 	type Token = Balances;
-	type WeightInfo = crate::weights::snowbridge_pallet_system::WeightInfo<Runtime>;
+	type WeightInfo = crate::weights::snowbridge_pezpallet_system::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
 	type DefaultPricingParameters = Parameters;
@@ -216,12 +216,12 @@ impl snowbridge_pallet_system::Config for Runtime {
 pub mod benchmark_helpers {
 	use crate::{EthereumBeaconClient, Runtime, RuntimeOrigin};
 	use codec::Encode;
-	use snowbridge_inbound_queue_primitives::EventFixture;
-	use snowbridge_pallet_inbound_queue::BenchmarkHelper;
-	use snowbridge_pallet_inbound_queue_fixtures::register_token::make_register_token_message;
+	use pezsnowbridge_inbound_queue_primitives::EventFixture;
+	use snowbridge_pezpallet_inbound_queue::BenchmarkHelper;
+	use snowbridge_pezpallet_inbound_queue_fixtures::register_token::make_register_token_message;
 	use xcm::latest::{Assets, Location, SendError, SendResult, SendXcm, Xcm, XcmHash};
 
-	impl<T: snowbridge_pallet_ethereum_client::Config> BenchmarkHelper<T> for Runtime {
+	impl<T: snowbridge_pezpallet_ethereum_client::Config> BenchmarkHelper<T> for Runtime {
 		fn initialize_storage() -> EventFixture {
 			let message = make_register_token_message();
 			EthereumBeaconClient::store_finalized_header(
@@ -249,7 +249,7 @@ pub mod benchmark_helpers {
 		}
 	}
 
-	impl snowbridge_pallet_system::BenchmarkHelper<RuntimeOrigin> for () {
+	impl snowbridge_pezpallet_system::BenchmarkHelper<RuntimeOrigin> for () {
 		fn make_xcm_origin(location: Location) -> RuntimeOrigin {
 			RuntimeOrigin::from(pezpallet_xcm::Origin::Xcm(location))
 		}

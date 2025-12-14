@@ -22,16 +22,16 @@ mod imports {
 	pub(crate) use xcm::{latest::ZAGROS_GENESIS_HASH, prelude::*};
 
 	// Pezcumulus
-	pub(crate) use emulated_integration_tests_common::xcm_emulator::{
+	pub(crate) use emulated_integration_tests_common::xcm_pez_emulator::{
 		assert_expected_events, bx, Chain, TestExt, Teyrchain as Para,
 	};
 	pub(crate) use zagros_system_emulated_network::{
 		self,
 		asset_hub_zagros_emulated_chain::AssetHubZagrosParaPallet as AssetHubZagrosPallet,
-		bridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
+		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		collectives_zagros_emulated_chain::CollectivesZagrosParaPallet as CollectivesZagrosPallet,
 		coretime_zagros_emulated_chain::CoretimeZagrosParaPallet as CoretimeZagrosPallet,
-		penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
+		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
 		people_zagros_emulated_chain::{
 			people_zagros_runtime::{
 				self, xcm_config::XcmConfig as PeopleZagrosXcmConfig,

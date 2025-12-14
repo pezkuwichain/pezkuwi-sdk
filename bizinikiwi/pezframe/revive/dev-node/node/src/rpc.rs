@@ -29,7 +29,7 @@ use pezkuwi_sdk::{
 	pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata},
 	*,
 };
-use revive_dev_runtime::{AccountId, Nonce, OpaqueBlock};
+use pez_revive_dev_runtime::{AccountId, Nonce, OpaqueBlock};
 use std::sync::Arc;
 
 /// Full client dependencies.

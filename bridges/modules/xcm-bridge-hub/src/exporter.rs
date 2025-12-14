@@ -371,7 +371,7 @@ mod tests {
 	use super::*;
 	use crate::{mock::*, Bridges, LaneToBridge, LanesManagerOf};
 
-	use bp_runtime::RangeInclusiveExt;
+	use pezbp_runtime::RangeInclusiveExt;
 	use bp_xcm_bridge_hub::{Bridge, BridgeLocations, BridgeState};
 	use pezframe_support::{assert_ok, traits::EnsureOrigin};
 	use pezpallet_bridge_messages::InboundLaneStorage;

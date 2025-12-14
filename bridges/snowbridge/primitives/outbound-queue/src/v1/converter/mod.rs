@@ -11,7 +11,7 @@ use codec::{Decode, Encode};
 
 use super::message::{Command, Message, SendMessage};
 use pezframe_support::{ensure, traits::Get};
-use snowbridge_core::{AgentId, ChannelId, ParaId, TokenId, TokenIdOf};
+use pezsnowbridge_core::{AgentId, ChannelId, ParaId, TokenId, TokenIdOf};
 use pezsp_core::{H160, H256};
 use pezsp_runtime::traits::MaybeConvert;
 use pezsp_std::{iter::Peekable, marker::PhantomData, prelude::*};

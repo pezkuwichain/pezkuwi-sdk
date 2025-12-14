@@ -22,13 +22,13 @@ use pezframe_support::{
 	traits::Currency,
 	weights::{constants::ExtrinsicBaseWeight, IdentityFee, WeightToFee},
 };
-use kitchensink_runtime::{
+use pez_kitchensink_runtime::{
 	constants::{currency::*, time::SLOT_DURATION},
 	Balances, CheckedExtrinsic, Multiplier, Runtime, RuntimeCall, TransactionByteFee,
 	TransactionPayment,
 };
-use node_primitives::Balance;
-use node_testing::keyring::*;
+use pez_node_primitives::Balance;
+use pez_node_testing::keyring::*;
 use pezkuwi_sdk::*;
 use pezsp_runtime::{traits::One, Perbill};
 

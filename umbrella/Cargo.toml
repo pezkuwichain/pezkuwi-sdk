@@ -8,21 +8,21 @@ documentation = "https://docs.rs/pezkuwi-sdk"
 [features]
 default = ["std"]
 std = [
-  "asset-test-utils?/std",
+  "asset-test-pezutils?/std",
   "assets-common?/std",
   "binary-merkle-tree?/std",
-  "bp-header-chain?/std",
+  "bp-header-pez-chain?/std",
   "bp-messages?/std",
   "bp-pezkuwi-core?/std",
   "bp-relayers?/std",
-  "bp-runtime?/std",
+  "pezbp-runtime?/std",
   "bp-test-utils?/std",
   "bp-teyrchains?/std",
   "bp-xcm-bridge-hub-router?/std",
   "bp-xcm-bridge-hub?/std",
   "bridge-hub-common?/std",
-  "bridge-hub-test-utils?/std",
-  "bridge-runtime-common?/std",
+  "pezbridge-hub-test-utils?/std",
+  "pezbridge-runtime-common?/std",
   "pezcumulus-pezpallet-aura-ext?/std",
   "pezcumulus-pezpallet-dmp-queue?/std",
   "pezcumulus-pezpallet-session-benchmarking?/std",
@@ -180,7 +180,7 @@ std = [
   "pezkuwi-sdk-frame?/std",
   "pezkuwi-teyrchain-primitives?/std",
   "pezsc-executor?/std",
-  "slot-range-helper?/std",
+  "pez-slot-range-helper?/std",
   "pezsp-api-proc-macro?/std",
   "pezsp-api?/std",
   "pezsp-application-crypto?/std",
@@ -233,24 +233,24 @@ std = [
   "testnet-teyrchains-constants?/std",
   "teyrchains-common?/std",
   "teyrchains-runtimes-test-utils?/std",
-  "xcm-runtime-apis?/std",
+  "xcm-runtime-pezapis?/std",
 ]
 runtime-benchmarks = [
-  "asset-test-utils?/runtime-benchmarks",
+  "asset-test-pezutils?/runtime-benchmarks",
   "assets-common?/runtime-benchmarks",
   "binary-merkle-tree?/runtime-benchmarks",
-  "bp-header-chain?/runtime-benchmarks",
+  "bp-header-pez-chain?/runtime-benchmarks",
   "bp-messages?/runtime-benchmarks",
   "bp-pezkuwi-core?/runtime-benchmarks",
   "bp-relayers?/runtime-benchmarks",
-  "bp-runtime?/runtime-benchmarks",
+  "pezbp-runtime?/runtime-benchmarks",
   "bp-test-utils?/runtime-benchmarks",
   "bp-teyrchains?/runtime-benchmarks",
   "bp-xcm-bridge-hub-router?/runtime-benchmarks",
   "bp-xcm-bridge-hub?/runtime-benchmarks",
   "bridge-hub-common?/runtime-benchmarks",
-  "bridge-hub-test-utils?/runtime-benchmarks",
-  "bridge-runtime-common?/runtime-benchmarks",
+  "pezbridge-hub-test-utils?/runtime-benchmarks",
+  "pezbridge-runtime-common?/runtime-benchmarks",
   "pezcumulus-client-bootnodes?/runtime-benchmarks",
   "pezcumulus-client-cli?/runtime-benchmarks",
   "pezcumulus-client-collator?/runtime-benchmarks",
@@ -299,9 +299,9 @@ runtime-benchmarks = [
   "pezframe-system-rpc-runtime-api?/runtime-benchmarks",
   "pezframe-system?/runtime-benchmarks",
   "pezframe-try-runtime?/runtime-benchmarks",
-  "generate-bags?/runtime-benchmarks",
-  "mmr-gadget?/runtime-benchmarks",
-  "mmr-rpc?/runtime-benchmarks",
+  "pez-generate-bags?/runtime-benchmarks",
+  "pezmmr-gadget?/runtime-benchmarks",
+  "pezmmr-rpc?/runtime-benchmarks",
   "pezpallet-alliance?/runtime-benchmarks",
   "pezpallet-asset-conversion-ops?/runtime-benchmarks",
   "pezpallet-asset-conversion-tx-payment?/runtime-benchmarks",
@@ -454,7 +454,7 @@ runtime-benchmarks = [
   "pezkuwi-node-core-teyrchains-inherent?/runtime-benchmarks",
   "pezkuwi-node-metrics?/runtime-benchmarks",
   "pezkuwi-node-network-protocol?/runtime-benchmarks",
-  "pezkuwi-node-primitives?/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives?/runtime-benchmarks",
   "pezkuwi-node-subsystem-types?/runtime-benchmarks",
   "pezkuwi-node-subsystem-util?/runtime-benchmarks",
   "pezkuwi-node-subsystem?/runtime-benchmarks",
@@ -514,7 +514,7 @@ runtime-benchmarks = [
   "pezsc-tracing?/runtime-benchmarks",
   "pezsc-transaction-pool-api?/runtime-benchmarks",
   "pezsc-transaction-pool?/runtime-benchmarks",
-  "slot-range-helper?/runtime-benchmarks",
+  "pez-slot-range-helper?/runtime-benchmarks",
   "pezsp-api?/runtime-benchmarks",
   "pezsp-authority-discovery?/runtime-benchmarks",
   "pezsp-block-builder?/runtime-benchmarks",
@@ -552,7 +552,7 @@ runtime-benchmarks = [
   "pezstaging-xcm-builder?/runtime-benchmarks",
   "pezstaging-xcm-executor?/runtime-benchmarks",
   "pezstaging-xcm?/runtime-benchmarks",
-  "subkey?/runtime-benchmarks",
+  "pez-subkey?/runtime-benchmarks",
   "bizinikiwi-frame-rpc-support?/runtime-benchmarks",
   "bizinikiwi-frame-rpc-system?/runtime-benchmarks",
   "bizinikiwi-rpc-client?/runtime-benchmarks",
@@ -561,14 +561,14 @@ runtime-benchmarks = [
   "testnet-teyrchains-constants?/runtime-benchmarks",
   "teyrchains-common?/runtime-benchmarks",
   "teyrchains-runtimes-test-utils?/runtime-benchmarks",
-  "tracing-gum?/runtime-benchmarks",
-  "xcm-emulator?/runtime-benchmarks",
-  "xcm-procedural?/runtime-benchmarks",
-  "xcm-runtime-apis?/runtime-benchmarks",
-  "xcm-simulator?/runtime-benchmarks",
+  "pez-tracing-gum?/runtime-benchmarks",
+  "xcm-pez-emulator?/runtime-benchmarks",
+  "xcm-pez-procedural?/runtime-benchmarks",
+  "xcm-runtime-pezapis?/runtime-benchmarks",
+  "xcm-pez-simulator?/runtime-benchmarks",
 ]
 try-runtime = [
-  "asset-test-utils?/try-runtime",
+  "asset-test-pezutils?/try-runtime",
   "assets-common?/try-runtime",
   "pezcumulus-pezpallet-aura-ext?/try-runtime",
   "pezcumulus-pezpallet-dmp-queue?/try-runtime",
@@ -753,17 +753,17 @@ with-tracing = [
 runtime-full = [
   "assets-common",
   "binary-merkle-tree",
-  "bp-header-chain",
+  "bp-header-pez-chain",
   "bp-messages",
   "bp-pezkuwi-core",
   "bp-relayers",
-  "bp-runtime",
+  "pezbp-runtime",
   "bp-test-utils",
   "bp-teyrchains",
   "bp-xcm-bridge-hub",
   "bp-xcm-bridge-hub-router",
   "bridge-hub-common",
-  "bridge-runtime-common",
+  "pezbridge-runtime-common",
   "pezcumulus-pezpallet-aura-ext",
   "pezcumulus-pezpallet-dmp-queue",
   "pezcumulus-pezpallet-session-benchmarking",
@@ -781,7 +781,7 @@ runtime-full = [
   "pezcumulus-primitives-teyrchain-inherent",
   "pezcumulus-primitives-timestamp",
   "pezcumulus-primitives-utility",
-  "ethereum-standards",
+  "pez-ethereum-standards",
   "pezframe-benchmarking",
   "pezframe-benchmarking-pezpallet-pov",
   "pezframe-election-provider-solution-type",
@@ -928,7 +928,7 @@ runtime-full = [
   "pezkuwi-teyrchain-primitives",
   "pezsc-chain-spec-derive",
   "pezsc-tracing-proc-macro",
-  "slot-range-helper",
+  "pez-slot-range-helper",
   "pezsp-api",
   "pezsp-api-proc-macro",
   "pezsp-application-crypto",
@@ -982,9 +982,9 @@ runtime-full = [
   "bizinikiwi-bip39",
   "testnet-teyrchains-constants",
   "teyrchains-common",
-  "tracing-gum-proc-macro",
-  "xcm-procedural",
-  "xcm-runtime-apis",
+  "pez-tracing-gum-proc-macro",
+  "xcm-pez-procedural",
+  "xcm-runtime-pezapis",
 ]
 runtime = [
   "pezframe-benchmarking",
@@ -1050,8 +1050,8 @@ runtime = [
   "pezsp-weights",
 ]
 node = [
-  "asset-test-utils",
-  "bridge-hub-test-utils",
+  "asset-test-pezutils",
+  "pezbridge-hub-test-utils",
   "pezcumulus-client-bootnodes",
   "pezcumulus-client-cli",
   "pezcumulus-client-collator",
@@ -1070,13 +1070,13 @@ node = [
   "pezcumulus-relay-chain-streams",
   "pezcumulus-test-relay-sproof-builder",
   "emulated-integration-tests-common",
-  "fork-tree",
+  "pez-fork-tree",
   "pezframe-benchmarking-cli",
   "frame-remote-externalities",
   "pezframe-support-procedural-tools",
-  "generate-bags",
-  "mmr-gadget",
-  "mmr-rpc",
+  "pez-generate-bags",
+  "pezmmr-gadget",
+  "pezmmr-rpc",
   "pezpallet-contracts-mock-network",
   "pezpallet-transaction-payment-rpc",
   "pezkuwi-approval-distribution",
@@ -1110,7 +1110,7 @@ node = [
   "pezkuwi-node-core-teyrchains-inherent",
   "pezkuwi-node-metrics",
   "pezkuwi-node-network-protocol",
-  "pezkuwi-node-primitives",
+  "pezkuwi-pez-node-primitives",
   "pezkuwi-node-subsystem",
   "pezkuwi-node-subsystem-types",
   "pezkuwi-node-subsystem-util",
@@ -1186,7 +1186,7 @@ node = [
   "pezstaging-node-inspect",
   "pezstaging-tracking-allocator",
   "std",
-  "subkey",
+  "pez-subkey",
   "bizinikiwi-build-script-utils",
   "bizinikiwi-frame-rpc-support",
   "bizinikiwi-frame-rpc-system",
@@ -1195,9 +1195,9 @@ node = [
   "bizinikiwi-state-trie-migration-rpc",
   "bizinikiwi-wasm-builder",
   "teyrchains-runtimes-test-utils",
-  "tracing-gum",
-  "xcm-emulator",
-  "xcm-simulator",
+  "pez-tracing-gum",
+  "xcm-pez-emulator",
+  "xcm-pez-simulator",
 ]
 tuples-96 = [
   "pezframe-support-procedural?/tuples-96",
@@ -1226,7 +1226,7 @@ default-features = false
 optional = true
 path = "../bizinikiwi/utils/binary-merkle-tree"
 
-[dependencies.bp-header-chain]
+[dependencies.bp-header-pez-chain]
 default-features = false
 optional = true
 path = "../bridges/primitives/header-chain"
@@ -1246,7 +1246,7 @@ default-features = false
 optional = true
 path = "../bridges/primitives/relayers"
 
-[dependencies.bp-runtime]
+[dependencies.pezbp-runtime]
 default-features = false
 optional = true
 path = "../bridges/primitives/runtime"
@@ -1276,7 +1276,7 @@ default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/common"
 
-[dependencies.bridge-runtime-common]
+[dependencies.pezbridge-runtime-common]
 default-features = false
 optional = true
 path = "../bridges/bin/runtime-common"
@@ -1284,52 +1284,52 @@ path = "../bridges/bin/runtime-common"
 [dependencies.pezcumulus-pezpallet-aura-ext]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/aura-ext"
+path = "../pezcumulus/pezpallets/aura-ext"
 
 [dependencies.pezcumulus-pezpallet-dmp-queue]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/dmp-queue"
+path = "../pezcumulus/pezpallets/dmp-queue"
 
 [dependencies.pezcumulus-pezpallet-session-benchmarking]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/session-benchmarking"
+path = "../pezcumulus/pezpallets/session-benchmarking"
 
 [dependencies.pezcumulus-pezpallet-solo-to-para]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/solo-to-para"
+path = "../pezcumulus/pezpallets/solo-to-para"
 
 [dependencies.pezcumulus-pezpallet-teyrchain-system]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/teyrchain-system"
+path = "../pezcumulus/pezpallets/teyrchain-system"
 
 [dependencies.pezcumulus-pezpallet-teyrchain-system-proc-macro]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/teyrchain-system/proc-macro"
+path = "../pezcumulus/pezpallets/teyrchain-system/proc-macro"
 
 [dependencies.pezcumulus-pezpallet-weight-reclaim]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/weight-reclaim"
+path = "../pezcumulus/pezpallets/weight-reclaim"
 
 [dependencies.pezcumulus-pezpallet-xcm]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/xcm"
+path = "../pezcumulus/pezpallets/xcm"
 
 [dependencies.pezcumulus-pezpallet-xcmp-queue]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/xcmp-queue"
+path = "../pezcumulus/pezpallets/xcmp-queue"
 
 [dependencies.pezcumulus-ping]
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/pallets/ping"
+path = "../pezcumulus/teyrchains/pezpallets/ping"
 
 [dependencies.pezcumulus-primitives-aura]
 default-features = false
@@ -1366,10 +1366,10 @@ default-features = false
 optional = true
 path = "../pezcumulus/primitives/utility"
 
-[dependencies.ethereum-standards]
+[dependencies.pez-ethereum-standards]
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/ethereum-standards"
+path = "../bizinikiwi/primitives/pez-ethereum-standards"
 
 [dependencies.pezframe-benchmarking]
 default-features = false
@@ -1574,7 +1574,7 @@ path = "../bizinikiwi/pezframe/child-bounties"
 [dependencies.pezpallet-collator-selection]
 default-features = false
 optional = true
-path = "../pezcumulus/pallets/collator-selection"
+path = "../pezcumulus/pezpallets/collator-selection"
 
 [dependencies.pezpallet-collective]
 default-features = false
@@ -1584,7 +1584,7 @@ path = "../bizinikiwi/pezframe/collective"
 [dependencies.pezpallet-collective-content]
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/pallets/collective-content"
+path = "../pezcumulus/teyrchains/pezpallets/collective-content"
 
 [dependencies.pezpallet-contracts]
 default-features = false
@@ -2101,10 +2101,10 @@ default-features = false
 optional = true
 path = "../bizinikiwi/client/tracing/proc-macro"
 
-[dependencies.slot-range-helper]
+[dependencies.pez-slot-range-helper]
 default-features = false
 optional = true
-path = "../pezkuwi/runtime/common/slot_range_helper"
+path = "../pezkuwi/runtime/common/pez-slot-range-helper"
 
 [dependencies.pezsp-api]
 default-features = false
@@ -2339,7 +2339,7 @@ path = "../bizinikiwi/primitives/weights"
 [dependencies.pezstaging-teyrchain-info]
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/pallets/teyrchain-info"
+path = "../pezcumulus/teyrchains/pezpallets/teyrchain-info"
 
 [dependencies.pezstaging-xcm]
 default-features = false
@@ -2371,27 +2371,27 @@ default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/common"
 
-[dependencies.tracing-gum-proc-macro]
+[dependencies.pez-tracing-gum-proc-macro]
 default-features = false
 optional = true
 path = "../pezkuwi/node/gum/proc-macro"
 
-[dependencies.xcm-procedural]
+[dependencies.xcm-pez-procedural]
 default-features = false
 optional = true
 path = "../pezkuwi/xcm/procedural"
 
-[dependencies.xcm-runtime-apis]
+[dependencies.xcm-runtime-pezapis]
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/xcm-runtime-apis"
+path = "../pezkuwi/xcm/xcm-runtime-pezapis"
 
-[dependencies.asset-test-utils]
+[dependencies.asset-test-pezutils]
 default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/runtimes/assets/test-utils"
 
-[dependencies.bridge-hub-test-utils]
+[dependencies.pezbridge-hub-test-utils]
 default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils"
@@ -2486,10 +2486,10 @@ default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/integration-tests/emulated/common"
 
-[dependencies.fork-tree]
+[dependencies.pez-fork-tree]
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/fork-tree"
+path = "../bizinikiwi/utils/pez-fork-tree"
 
 [dependencies.pezframe-benchmarking-cli]
 default-features = false
@@ -2506,17 +2506,17 @@ default-features = false
 optional = true
 path = "../bizinikiwi/pezframe/support/procedural/tools"
 
-[dependencies.generate-bags]
+[dependencies.pez-generate-bags]
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/generate-bags"
+path = "../bizinikiwi/utils/pezframe/pez-generate-bags"
 
-[dependencies.mmr-gadget]
+[dependencies.pezmmr-gadget]
 default-features = false
 optional = true
 path = "../bizinikiwi/client/merkle-mountain-range"
 
-[dependencies.mmr-rpc]
+[dependencies.pezmmr-rpc]
 default-features = false
 optional = true
 path = "../bizinikiwi/client/merkle-mountain-range/rpc"
@@ -2686,7 +2686,7 @@ default-features = false
 optional = true
 path = "../pezkuwi/node/network/protocol"
 
-[dependencies.pezkuwi-node-primitives]
+[dependencies.pezkuwi-pez-node-primitives]
 default-features = false
 optional = true
 path = "../pezkuwi/node/primitives"
@@ -3061,10 +3061,10 @@ default-features = false
 optional = true
 path = "../pezkuwi/node/tracking-allocator"
 
-[dependencies.subkey]
+[dependencies.pez-subkey]
 default-features = false
 optional = true
-path = "../bizinikiwi/bin/utils/subkey"
+path = "../bizinikiwi/bin/utils/pez-subkey"
 
 [dependencies.bizinikiwi-build-script-utils]
 default-features = false
@@ -3106,20 +3106,20 @@ default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/runtimes/test-utils"
 
-[dependencies.tracing-gum]
+[dependencies.pez-tracing-gum]
 default-features = false
 optional = true
 path = "../pezkuwi/node/gum"
 
-[dependencies.xcm-emulator]
+[dependencies.xcm-pez-emulator]
 default-features = false
 optional = true
-path = "../pezcumulus/xcm/xcm-emulator"
+path = "../pezcumulus/xcm/xcm-pez-emulator"
 
-[dependencies.xcm-simulator]
+[dependencies.xcm-pez-simulator]
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/xcm-simulator"
+path = "../pezkuwi/xcm/xcm-pez-simulator"
 
 [package.metadata.docs.rs]
 features = ["node", "runtime-full"]

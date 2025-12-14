@@ -57,7 +57,7 @@ pezpallet-timestamp = { workspace = true }
 pezpallet-transaction-payment = { workspace = true }
 pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 pezpallet-vesting = { workspace = true }
-test-runtime-constants = { workspace = true }
+peztest-runtime-constants = { workspace = true }
 
 pezpallet-xcm = { workspace = true }
 pezkuwi-primitives = { workspace = true }
@@ -122,7 +122,7 @@ std = [
   "pezsp-staking/std",
   "pezsp-transaction-pool/std",
   "pezsp-version/std",
-  "test-runtime-constants/std",
+  "peztest-runtime-constants/std",
   "xcm-builder/std",
   "xcm-executor/std",
   "xcm/std",
@@ -168,7 +168,7 @@ runtime-benchmarks = [
   "pezsp-transaction-pool/runtime-benchmarks",
   "pezsp-version/runtime-benchmarks",
   "bizinikiwi-wasm-builder/runtime-benchmarks",
-  "test-runtime-constants/runtime-benchmarks",
+  "peztest-runtime-constants/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
   "xcm/runtime-benchmarks",

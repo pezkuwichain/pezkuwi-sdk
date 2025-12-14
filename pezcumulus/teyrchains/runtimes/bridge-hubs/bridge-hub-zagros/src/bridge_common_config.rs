@@ -120,7 +120,7 @@ impl bp_relayers::PaymentProcedure<AccountId, BridgeReward, u128> for BridgeRewa
 					BridgeRewardBeneficiaries::AssetHubLocation(account_location) => {
 						let account_location = Location::try_from(account_location)
 							.map_err(|_| Self::Error::Other("`AssetHubLocation` beneficiary location version is not supported for `Snowbridge` rewards!"))?;
-						snowbridge_core::reward::PayAccountOnLocation::<
+						pezsnowbridge_core::reward::PayAccountOnLocation::<
 							AccountId,
 							u128,
 							EthereumNetwork,

@@ -114,7 +114,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 	spawner.wait_for_block("dave", BlockSubscriptionType::Best).await.unwrap();
 
 	// Create txs executor.
-	let ws = spawner.node_rpc_uri("dave").unwrap();
+	let ws = spawner.pez_node_rpc_uri("dave").unwrap();
 	let executor = {
 		let shared_params = ScenarioBuilderSharedParams::default();
 		ScenarioBuilder::new()

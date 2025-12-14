@@ -146,7 +146,7 @@ pub mod pezkuwichain {
 		modify_props(&mut properties);
 
 		GenericChainSpec::builder(
-			bridge_hub_pezkuwichain_runtime::WASM_BINARY
+			pezbridge_hub_pezkuwichain_runtime::WASM_BINARY
 				.expect("WASM binary was not built, please build it!"),
 			Extensions::new_with_relay_chain(relay_chain.to_string()),
 		)
@@ -189,7 +189,7 @@ pub mod zagros {
 		properties.insert("tokenDecimals".into(), 12.into());
 
 		GenericChainSpec::builder(
-			bridge_hub_zagros_runtime::WASM_BINARY
+			pezbridge_hub_zagros_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!"),
 			Extensions::new_with_relay_chain(relay_chain.to_string()),
 		)

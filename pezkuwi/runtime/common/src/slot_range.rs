@@ -17,7 +17,7 @@
 //! The `SlotRange` struct which succinctly handles the 36 values that
 //! represent all sub ranges between 0 and 7 inclusive.
 
-slot_range_helper::generate_slot_range!(
+pez_slot_range_helper::generate_slot_range!(
 	Zero(0),
 	One(1),
 	Two(2),

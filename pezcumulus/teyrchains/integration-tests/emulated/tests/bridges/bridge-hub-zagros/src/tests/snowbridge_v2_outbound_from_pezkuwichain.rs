@@ -129,7 +129,7 @@ pub(crate) fn assert_bridge_hub_zagros_message_received() {
 			vec![
 				// message sent to destination
 				RuntimeEvent::XcmpQueue(
-					pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+					pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }
 				) => {},
 			]
 		);
@@ -270,7 +270,7 @@ fn send_roc_from_asset_hub_pezkuwichain_to_ethereum() {
 		// Check that the Ethereum message was queue in the Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }
@@ -366,7 +366,7 @@ fn register_pezkuwichain_asset_on_ethereum_from_rah() {
 		// Check that the Ethereum message was queue in the Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }

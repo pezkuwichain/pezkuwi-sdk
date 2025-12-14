@@ -29,13 +29,13 @@ use pezsp_runtime::{
 	traits::Hash as HashT, transaction_validity::InvalidTransaction, ApplyExtrinsicResult,
 };
 
-use kitchensink_runtime::{
+use pez_kitchensink_runtime::{
 	constants::{currency::*, time::SLOT_DURATION},
 	Balances, CheckedExtrinsic, Header, Runtime, RuntimeCall, RuntimeEvent, System,
 	TransactionPayment, Treasury, UncheckedExtrinsic,
 };
-use node_primitives::{Balance, Hash};
-use node_testing::keyring::*;
+use pez_node_primitives::{Balance, Hash};
+use pez_node_testing::keyring::*;
 use pretty_assertions::assert_eq;
 use wat;
 
@@ -48,7 +48,7 @@ use self::common::{sign, *};
 /// have to execute provided wasm code instead of the native equivalent. This trick is used to
 /// test code paths that differ between native and wasm versions.
 pub fn bloaty_code_unwrap() -> &'static [u8] {
-	kitchensink_runtime::WASM_BINARY_BLOATY.expect(
+	pez_kitchensink_runtime::WASM_BINARY_BLOATY.expect(
 		"Development wasm binary is not available. \
 											 Testing is only supported with the flag disabled.",
 	)
@@ -857,14 +857,14 @@ fn successful_execution_gives_ok() {
 
 #[test]
 fn should_import_block_with_test_client() {
-	use node_testing::client::{
+	use pez_node_testing::client::{
 		pezsp_consensus::BlockOrigin, ClientBlockImportExt, TestClientBuilder, TestClientBuilderExt,
 	};
 
 	let client = TestClientBuilder::new().build();
 	let block1 = changes_trie_block();
 	let block_data = block1.0;
-	let block = node_primitives::Block::decode(&mut &block_data[..]).unwrap();
+	let block = pez_node_primitives::Block::decode(&mut &block_data[..]).unwrap();
 
 	futures::executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
 }

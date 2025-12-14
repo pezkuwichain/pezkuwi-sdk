@@ -22,7 +22,7 @@ use crate::{
 };
 
 use bp_relayers::{BatchCallUnpacker, ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
-use bp_runtime::{Chain, StaticStrProvider};
+use pezbp_runtime::{Chain, StaticStrProvider};
 use core::marker::PhantomData;
 use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
 use pezframe_system::Config as SystemConfig;

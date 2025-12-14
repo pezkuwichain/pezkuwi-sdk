@@ -18,7 +18,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true, default-features = true }
-fork-tree = { workspace = true, default-features = true }
+pez-fork-tree = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }

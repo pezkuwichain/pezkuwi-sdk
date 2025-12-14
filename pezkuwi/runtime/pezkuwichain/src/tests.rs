@@ -23,7 +23,7 @@ use crate::xcm_config::LocationConverter;
 use pezframe_support::traits::WhitelistedStorageKeys;
 use pezsp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
 use pezsp_keyring::Sr25519Keyring::Alice;
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 #[test]
 fn check_whitelist() {

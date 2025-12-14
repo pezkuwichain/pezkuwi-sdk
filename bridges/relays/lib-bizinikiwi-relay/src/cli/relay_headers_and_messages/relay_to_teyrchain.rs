@@ -63,7 +63,7 @@ pub struct RelayToTeyrchainBridge<
 macro_rules! declare_relay_to_teyrchain_bridge_schema {
 	// chain, teyrchain, relay-chain-of-teyrchain
 	($left_chain:ident, $right_teyrchain:ident, $right_chain:ident) => {
-		bp_runtime::paste::item! {
+		pezbp_runtime::paste::item! {
 			#[doc = $left_chain ", " $right_teyrchain " and " $right_chain " headers+teyrchains+messages relay params."]
 			#[derive(Debug, PartialEq, Parser)]
 			pub struct [<$left_chain $right_teyrchain HeadersAndMessages>] {

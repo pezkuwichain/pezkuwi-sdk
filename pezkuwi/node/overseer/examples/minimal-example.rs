@@ -23,7 +23,7 @@ use futures_timer::Delay;
 use orchestra::async_trait;
 use std::time::Duration;
 
-use pezkuwi_node_primitives::{BlockData, PoV};
+use pezkuwi_pez_node_primitives::{BlockData, PoV};
 use pezkuwi_node_subsystem_types::messages::{CandidateValidationMessage, PvfExecKind};
 use pezkuwi_overseer::{
 	self as overseer,

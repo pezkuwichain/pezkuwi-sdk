@@ -24,7 +24,7 @@ use codec::{Decode, Encode};
 use finality_grandpa::round::State as RoundState;
 use log::{info, warn};
 
-use fork_tree::ForkTree;
+use pez_fork_tree::ForkTree;
 use pezsc_client_api::backend::AuxStore;
 use pezsp_blockchain::{Error as ClientError, Result as ClientResult};
 use pezsp_consensus_grandpa::{AuthorityList, RoundNumber, SetId};

@@ -32,7 +32,7 @@ schnellru = { workspace = true }
 schnorrkel = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-overseer = { workspace = true, default-features = true }
@@ -67,7 +67,7 @@ pezkuwi-subsystem-bench = { workspace = true }
 subsystem-benchmarks = []
 runtime-benchmarks = [
   "gum/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
   "pezkuwi-node-subsystem-util/runtime-benchmarks",
   "pezkuwi-node-subsystem/runtime-benchmarks",

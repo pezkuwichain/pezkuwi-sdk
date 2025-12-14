@@ -45,7 +45,7 @@ const IN_MEMORY_DB: &str = "sqlite::memory:";
 pub struct CliCommand {
 	/// The node url to connect to
 	#[clap(long, default_value = "ws://127.0.0.1:9944")]
-	pub node_rpc_url: String,
+	pub pez_node_rpc_url: String,
 
 	/// The maximum number of blocks to cache in memory.
 	#[clap(long, default_value = "256")]
@@ -103,12 +103,12 @@ fn build_client(
 	tokio_handle: &tokio::runtime::Handle,
 	cache_size: usize,
 	earliest_receipt_block: Option<BizinikiwiBlockNumber>,
-	node_rpc_url: &str,
+	pez_node_rpc_url: &str,
 	database_url: &str,
 	abort_signal: Signals,
 ) -> anyhow::Result<Client> {
 	let fut = async {
-		let (api, rpc_client, rpc) = connect(node_rpc_url).await?;
+		let (api, rpc_client, rpc) = connect(pez_node_rpc_url).await?;
 		let block_provider = SubxtBlockInfoProvider::new( api.clone(), rpc.clone()).await?;
 
 		let (pool, keep_latest_n_blocks) = if database_url == IN_MEMORY_DB {
@@ -158,7 +158,7 @@ pub fn run(cmd: CliCommand) -> anyhow::Result<()> {
 	let CliCommand {
 		rpc_params,
 		prometheus_params,
-		node_rpc_url,
+		pez_node_rpc_url,
 		cache_size,
 		database_url,
 		earliest_receipt_block,
@@ -204,7 +204,7 @@ pub fn run(cmd: CliCommand) -> anyhow::Result<()> {
 		tokio_handle,
 		cache_size,
 		earliest_receipt_block,
-		&node_rpc_url,
+		&pez_node_rpc_url,
 		&database_url,
 		tokio_runtime.block_on(async { Signals::capture() })?,
 	)?;

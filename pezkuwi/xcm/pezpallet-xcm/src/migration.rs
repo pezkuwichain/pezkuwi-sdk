@@ -456,7 +456,7 @@ pub mod v1 {
 }
 
 /// When adding a new XCM version, we need to run this migration for `pezpallet_xcm` to ensure that all
-/// previously stored data with subkey prefix `XCM_VERSION-1` (and below) are migrated to the
+/// previously stored data with pez_subkey prefix `XCM_VERSION-1` (and below) are migrated to the
 /// `XCM_VERSION`.
 ///
 /// NOTE: This migration can be permanently added to the runtime migrations.

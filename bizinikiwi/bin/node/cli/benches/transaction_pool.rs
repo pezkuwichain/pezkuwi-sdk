@@ -18,9 +18,9 @@
 
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughput};
 use futures::{future, StreamExt};
-use kitchensink_runtime::{constants::currency::*, BalancesCall, SudoCall};
+use pez_kitchensink_runtime::{constants::currency::*, BalancesCall, SudoCall};
 use node_cli::service::{create_extrinsic, fetch_nonce, FullClient, TransactionPool};
-use node_primitives::AccountId;
+use pez_node_primitives::AccountId;
 use pezkuwi_sdk::{
 	pezsc_service::config::{ExecutorConfiguration, RpcConfiguration},
 	pezsc_transaction_pool_api::TransactionPool as _,

@@ -16,7 +16,7 @@
 
 //! Tests for Grandpa strict justification verifier code.
 
-use bp_header_chain::justification::{
+use bp_header_pez_chain::justification::{
 	required_justification_precommits, verify_justification, JustificationVerificationContext,
 	JustificationVerificationError, PrecommitError,
 };

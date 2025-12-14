@@ -32,7 +32,7 @@ pezkuwi-service = { optional = true, workspace = true }
 
 pezframe-benchmarking-cli = { optional = true, workspace = true, default-features = true }
 pezkuwi-node-metrics = { workspace = true, default-features = true }
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezsc-cli = { optional = true, workspace = true, default-features = true }
 pezsc-network-types = { workspace = true, default-features = true }
 pezsc-service = { optional = true, workspace = true, default-features = true }
@@ -62,7 +62,7 @@ cli = [
 runtime-benchmarks = [
   "pezframe-benchmarking-cli?/runtime-benchmarks",
   "pezkuwi-node-metrics/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-service?/runtime-benchmarks",
   "pezsc-cli?/runtime-benchmarks",
   "pezsc-service?/runtime-benchmarks",

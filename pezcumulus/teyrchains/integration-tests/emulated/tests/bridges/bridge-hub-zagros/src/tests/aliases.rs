@@ -16,7 +16,7 @@
 //! Tests related to XCM aliasing.
 
 use crate::imports::*;
-use bridge_hub_zagros_runtime::xcm_config::XcmConfig;
+use pezbridge_hub_zagros_runtime::xcm_config::XcmConfig;
 use emulated_integration_tests_common::{macros::AccountId, test_cross_chain_alias};
 use pezframe_support::traits::ContainsPair;
 use xcm::latest::Junctions::*;

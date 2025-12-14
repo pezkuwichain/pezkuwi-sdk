@@ -21,8 +21,8 @@
 
 - [Starting a Minimal Template Chain](#starting-a-minimal-template-chain)
 
-  - [Minimal Template Node](#minimal-template-node)
-  - [Zombienet with Minimal Template Node](#zombienet-with-minimal-template-node)
+  - [Minimal Template Node](#pez-minimal-template-node)
+  - [Zombienet with Minimal Template Node](#zombienet-with-pez-minimal-template-node)
   - [Connect with the PezkuwiChain-JS Apps Front-End](#connect-with-the-pezkuwi-js-apps-front-end)
   - [Takeaways](#takeaways)
 
@@ -85,19 +85,19 @@ and has as entry point the node binary:
 docker build . -t pezkuwi-sdk-minimal-template
 ```
 
-#### Start the `minimal-template-node`
+#### Start the `pez-minimal-template-node`
 
-The `minimal-template-node` has dependency on the `minimal-template-runtime`. It will use
-the `minimal_template_runtime::WASM_BINARY` constant (which holds the WASM blob as a byte
+The `pez-minimal-template-node` has dependency on the `pez-minimal-template-runtime`. It will use
+the `pez_minimal_template_runtime::WASM_BINARY` constant (which holds the WASM blob as a byte
 array) for chain spec building, while starting.
 
 ```sh
-<target/release/path/to/minimal-template-node> --tmp --consensus manual-seal-3000
+<target/release/path/to/pez-minimal-template-node> --tmp --consensus manual-seal-3000
 # or via docker
 docker run --rm pezkuwi-sdk-minimal-template
 ```
 
-#### Zombienet with `minimal-template-node`
+#### Zombienet with `pez-minimal-template-node`
 
 For this one we just need to have `zombienet` installed and run:
 

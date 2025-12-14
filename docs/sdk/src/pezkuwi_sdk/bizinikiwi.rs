@@ -92,7 +92,7 @@
 //!
 //! ### Anatomy of a Binary Crate
 //!
-//! From the above, [`node_cli`]/[`kitchensink_runtime`] and `node-template` are essentially
+//! From the above, [`node_cli`]/[`pez_kitchensink_runtime`] and `node-template` are essentially
 //! blueprints of a Bizinikiwi-based project, as the name of the latter is implying. Each
 //! Bizinikiwi-based project typically contains the following:
 //!

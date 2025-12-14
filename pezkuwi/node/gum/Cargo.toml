@@ -1,5 +1,5 @@
 [package]
-name = "tracing-gum"
+name = "pez-tracing-gum"
 version = "7.0.0"
 authors.workspace = true
 edition.workspace = true
@@ -7,7 +7,7 @@ license.workspace = true
 description = "Stick logs together with the TraceID as provided by tempo"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/tracing-gum"
+documentation = "https://docs.rs/pez-tracing-gum"
 
 [lints]
 workspace = true

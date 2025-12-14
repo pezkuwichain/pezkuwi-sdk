@@ -19,7 +19,7 @@
 use std::{collections::HashMap, sync::Arc};
 
 use kvdb::KeyValueDB;
-use node_primitives::Hash;
+use pez_node_primitives::Hash;
 use pezsp_trie::{trie_types::TrieDBMutBuilderV1, TrieMut};
 
 use crate::simple_trie::SimpleTrie;

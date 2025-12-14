@@ -5,7 +5,7 @@ use crate::{
 };
 use pezframe_support::{parameter_types, BoundedVec};
 use hex_literal::hex;
-use snowbridge_core::{AgentIdOf, TokenIdOf};
+use pezsnowbridge_core::{AgentIdOf, TokenIdOf};
 use pezsp_core::H256;
 use pezsp_std::default::Default;
 use xcm::{latest::ZAGROS_GENESIS_HASH, prelude::SendError as XcmSendError};

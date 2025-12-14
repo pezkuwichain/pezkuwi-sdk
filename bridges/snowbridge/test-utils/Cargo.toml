@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-test-utils"
+name = "pezsnowbridge-test-utils"
 description = "Snowbridge test utilities"
 version = "0.1.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowbridge-test-utils"
+documentation = "https://docs.rs/pezsnowbridge-test-utils"
 homepage = { workspace = true }
 
 [lints]
@@ -26,8 +26,8 @@ pezpallet-asset-conversion = { workspace = true, default-features = true }
 scale-info = { features = [
   "derive",
 ], workspace = true, default-features = true }
-snowbridge-core = { workspace = true, default-features = true }
-snowbridge-outbound-queue-primitives = { workspace = true, default-features = true }
+pezsnowbridge-core = { workspace = true, default-features = true }
+pezsnowbridge-outbound-queue-primitives = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 xcm = { workspace = true, default-features = true }
 xcm-builder = { workspace = true, default-features = true }
@@ -40,8 +40,8 @@ runtime-benchmarks = [
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "pezpallet-asset-conversion/runtime-benchmarks",
-  "snowbridge-core/runtime-benchmarks",
-  "snowbridge-outbound-queue-primitives/runtime-benchmarks",
+  "pezsnowbridge-core/runtime-benchmarks",
+  "pezsnowbridge-outbound-queue-primitives/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
   "xcm/runtime-benchmarks",

@@ -34,7 +34,7 @@ use asset_hub_zagros_runtime::{
 	ToPezkuwichainXcmRouterInstance, TrustBackedAssetsInstance, Uniques, WeightToFee, XcmpQueue,
 };
 pub use asset_hub_zagros_runtime::{AssetConversion, AssetDeposit, CollatorSelection, System};
-use asset_test_utils::{
+use asset_test_pezutils::{
 	test_cases_over_bridge::TestBridgingConfig, CollatorSessionKey, CollatorSessionKeys,
 	ExtBuilder, GovernanceOrigin, SlotDurations,
 };
@@ -80,7 +80,7 @@ use xcm_builder::{
 	NonFungiblesAdapter as OldNftAdapter, WithLatestLocationConverter,
 };
 use xcm_executor::traits::{ConvertLocation, JustTry, TransactAsset, WeightTrader};
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 const ALICE: [u8; 32] = [1u8; 32];
 const BOB: [u8; 32] = [2u8; 32];
@@ -103,7 +103,7 @@ parameter_types! {
 type AssetIdForTrustBackedAssetsConvert =
 	assets_common::AssetIdForTrustBackedAssetsConvert<TrustBackedAssetsPalletLocation>;
 
-type RuntimeHelper = asset_test_utils::RuntimeHelper<Runtime, AllPalletsWithoutSystem>;
+type RuntimeHelper = asset_test_pezutils::RuntimeHelper<Runtime, AllPalletsWithoutSystem>;
 
 fn collator_session_key(account: [u8; 32]) -> CollatorSessionKey<Runtime> {
 	CollatorSessionKey::new(
@@ -888,7 +888,7 @@ fn authorized_aliases_work() {
 		})
 }
 
-asset_test_utils::include_teleports_for_native_asset_works!(
+asset_test_pezutils::include_teleports_for_native_asset_works!(
 	Runtime,
 	AllPalletsWithoutSystem,
 	XcmConfig,
@@ -907,7 +907,7 @@ asset_test_utils::include_teleports_for_native_asset_works!(
 	1000
 );
 
-asset_test_utils::include_teleports_for_foreign_assets_works!(
+asset_test_pezutils::include_teleports_for_foreign_assets_works!(
 	Runtime,
 	AllPalletsWithoutSystem,
 	XcmConfig,
@@ -933,7 +933,7 @@ asset_test_utils::include_teleports_for_foreign_assets_works!(
 	})
 );
 
-asset_test_utils::include_asset_transactor_transfer_with_local_consensus_currency_works!(
+asset_test_pezutils::include_asset_transactor_transfer_with_local_consensus_currency_works!(
 	Runtime,
 	XcmConfig,
 	collator_session_keys(),
@@ -948,7 +948,7 @@ asset_test_utils::include_asset_transactor_transfer_with_local_consensus_currenc
 	})
 );
 
-asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
+asset_test_pezutils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
 	asset_transactor_transfer_with_trust_backed_assets_works,
 	Runtime,
 	XcmConfig,
@@ -966,7 +966,7 @@ asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_
 	})
 );
 
-asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
+asset_test_pezutils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
 	asset_transactor_transfer_with_foreign_assets_works,
 	Runtime,
 	XcmConfig,
@@ -988,7 +988,7 @@ asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_
 	})
 );
 
-asset_test_utils::include_create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_works!(
+asset_test_pezutils::include_create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_works!(
 	Runtime,
 	XcmConfig,
 	WeightToFee,
@@ -1035,7 +1035,7 @@ fn bridging_to_asset_hub_pezkuwichain() -> TestBridgingConfig {
 
 #[test]
 fn limited_reserve_transfer_assets_for_native_asset_to_asset_hub_pezkuwichain_works() {
-	asset_test_utils::test_cases_over_bridge::limited_reserve_transfer_assets_for_native_asset_works::<
+	asset_test_pezutils::test_cases_over_bridge::limited_reserve_transfer_assets_for_native_asset_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
@@ -1090,7 +1090,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 	let pool_params =
 		(foreign_asset_owner, foreign_asset_id_location.clone(), foreign_asset_id_minimum_balance);
 
-	asset_test_utils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
+	asset_test_pezutils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -1105,7 +1105,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 			1000000000000,
 			|| {
 				// setup pool for paying fees to touch `SwapFirstAssetTrader`
-				asset_test_utils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
+				asset_test_pezutils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
 				// staking pot account for collecting local native fees from `BuyExecution`
 				let _ = Balances::force_set_balance(RuntimeOrigin::root(), StakingPot::get().into(), ExistentialDeposit::get());
 				// prepare bridge configuration
@@ -1170,7 +1170,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 	let pool_params =
 		(foreign_asset_owner, foreign_asset_id_location.clone(), foreign_asset_id_minimum_balance);
 
-	asset_test_utils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
+	asset_test_pezutils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
@@ -1184,7 +1184,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 		foreign_asset_create_params,
 		1000000000000,
 		|| {
-			asset_test_utils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
+			asset_test_pezutils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
 			bridging_to_asset_hub_pezkuwichain()
 		},
 		(
@@ -1219,7 +1219,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 
 #[test]
 fn report_bridge_status_from_xcm_bridge_router_for_pezkuwichain_works() {
-	asset_test_utils::test_cases_over_bridge::report_bridge_status_from_xcm_bridge_router_works::<
+	asset_test_pezutils::test_cases_over_bridge::report_bridge_status_from_xcm_bridge_router_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
@@ -1271,7 +1271,7 @@ fn check_sane_weight_report_bridge_status() {
 
 #[test]
 fn change_xcm_bridge_hub_router_byte_fee_by_governance_works() {
-	asset_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	asset_test_pezutils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		bridging::XcmBridgeHubRouterByteFee,
 		Balance,
@@ -1297,7 +1297,7 @@ fn change_xcm_bridge_hub_router_byte_fee_by_governance_works() {
 
 #[test]
 fn change_xcm_bridge_hub_router_base_fee_by_governance_works() {
-	asset_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	asset_test_pezutils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		bridging::XcmBridgeHubRouterBaseFee,
 		Balance,
@@ -1329,7 +1329,7 @@ fn change_xcm_bridge_hub_router_base_fee_by_governance_works() {
 
 #[test]
 fn reserve_transfer_native_asset_to_non_teleport_para_works() {
-	asset_test_utils::test_cases::reserve_transfer_native_asset_to_non_teleport_para_works::<
+	asset_test_pezutils::test_cases::reserve_transfer_native_asset_to_non_teleport_para_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
@@ -1597,7 +1597,7 @@ fn xcm_payment_api_works() {
 		Block,
 		WeightToFee,
 	>();
-	asset_test_utils::test_cases::xcm_payment_api_with_pools_works::<
+	asset_test_pezutils::test_cases::xcm_payment_api_with_pools_works::<
 		Runtime,
 		RuntimeCall,
 		RuntimeOrigin,
@@ -1605,7 +1605,7 @@ fn xcm_payment_api_works() {
 		WeightToFee,
 	>();
 
-	asset_test_utils::test_cases::xcm_payment_api_foreign_asset_pool_works::<
+	asset_test_pezutils::test_cases::xcm_payment_api_foreign_asset_pool_works::<
 		Runtime,
 		RuntimeCall,
 		RuntimeOrigin,
@@ -1662,7 +1662,7 @@ fn governance_authorize_upgrade_works() {
 #[test]
 fn weight_of_message_increases_when_dealing_with_erc20s() {
 	use xcm::VersionedXcm;
-	use xcm_runtime_apis::fees::runtime_decl_for_xcm_payment_api::XcmPaymentApiV2;
+	use xcm_runtime_pezapis::fees::runtime_decl_for_xcm_payment_api::XcmPaymentApiV2;
 	let message = Xcm::<()>::builder_unsafe().withdraw_asset((Parent, 100u128)).build();
 	let versioned = VersionedXcm::<()>::V5(message);
 	let regular_asset_weight = Runtime::query_xcm_weight(versioned).unwrap();

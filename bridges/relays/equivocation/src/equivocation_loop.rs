@@ -20,7 +20,7 @@ use crate::{
 };
 
 use crate::block_checker::BlockChecker;
-use finality_relay::{FinalityProofsBuf, FinalityProofsStream};
+use pez_finality_relay::{FinalityProofsBuf, FinalityProofsStream};
 use futures::{select_biased, FutureExt};
 use num_traits::Saturating;
 use relay_utils::{metrics::MetricsParams, FailedClient};

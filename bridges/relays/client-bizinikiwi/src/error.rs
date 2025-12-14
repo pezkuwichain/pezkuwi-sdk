@@ -17,7 +17,7 @@
 //! Bizinikiwi node RPC errors.
 
 use crate::{BlockNumberOf, Chain, HashOf, SimpleRuntimeVersion};
-use bp_header_chain::SubmitFinalityProofCallExtras;
+use bp_header_pez_chain::SubmitFinalityProofCallExtras;
 use bp_pezkuwi_core::teyrchains::ParaId;
 use jsonrpsee::core::ClientError as RpcError;
 use relay_utils::MaybeConnectionError;

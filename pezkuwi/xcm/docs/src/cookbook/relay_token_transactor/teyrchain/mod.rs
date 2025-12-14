@@ -19,7 +19,7 @@
 
 use frame::{deps::pezframe_system, runtime::prelude::*, traits::IdentityLookup};
 use xcm_executor::XcmExecutor;
-use xcm_simulator::mock_message_queue;
+use xcm_pez_simulator::mock_message_queue;
 
 mod xcm_config;
 use xcm_config::XcmConfig;

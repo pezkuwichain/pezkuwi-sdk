@@ -27,7 +27,7 @@ use clap::Parser;
 use pezsp_core::Pair;
 
 use bp_messages::MessageNonce;
-use bp_runtime::HeaderIdProvider;
+use pezbp_runtime::HeaderIdProvider;
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, BalanceOf, Chain, ChainWithRuntimeVersion,
 	ChainWithTransactions, Client,

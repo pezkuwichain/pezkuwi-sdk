@@ -209,7 +209,7 @@ impl NetworkSpawner {
 	}
 
 	/// Get a certain node rpc uri.
-	pub fn node_rpc_uri(&self, node_name: &str) -> Result<String> {
+	pub fn pez_node_rpc_uri(&self, node_name: &str) -> Result<String> {
 		self.network
 			.get_node(node_name)
 			.and_then(|node| Ok(node.ws_uri().to_string()))

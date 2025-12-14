@@ -28,7 +28,7 @@ use bp_pezkuwi_core::{
 	teyrchains::{ParaHash, ParaHeadsProof, ParaId},
 	BlockNumber as RelayBlockNumber,
 };
-use bp_runtime::{
+use pezbp_runtime::{
 	Chain as ChainBase, HeaderId, HeaderIdProvider, StorageDoubleMapKeyProvider,
 	StorageMapKeyProvider,
 };

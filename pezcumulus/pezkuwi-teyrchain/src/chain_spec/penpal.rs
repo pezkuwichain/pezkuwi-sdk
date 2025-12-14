@@ -26,7 +26,7 @@ pub fn get_penpal_chain_spec(id: ParaId, relay_chain: &str) -> GenericChainSpec 
 	properties.insert("ss58Format".into(), 42u32.into());
 
 	GenericChainSpec::builder(
-		penpal_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+		pez_penpal_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
 		Extensions::new_with_relay_chain(relay_chain.into()),
 	)
 	.with_name("Penpal Teyrchain")

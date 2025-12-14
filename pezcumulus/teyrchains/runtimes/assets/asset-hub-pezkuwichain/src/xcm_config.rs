@@ -73,7 +73,7 @@ parameter_types! {
 	pub const TokenLocation: Location = Location::parent();
 	pub const RelayNetwork: NetworkId = NetworkId::ByGenesis(PEZKUWICHAIN_GENESIS_HASH);
 	pub const AssetHubParaId: crate::ParaId = crate::ParaId::new(ASSET_HUB_ID);
-	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pallet_xcm::Origin::Relay.into();
+	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pezpallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation =
 		[GlobalConsensus(RelayNetwork::get()), Teyrchain(TeyrchainInfo::teyrchain_id().into())].into();
 	pub UniversalLocationNetworkId: NetworkId = UniversalLocation::get().global_consensus().unwrap();
@@ -235,7 +235,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	RelayChainAsNative<RelayChainOrigin, RuntimeOrigin>,
 	// Native converter for sibling Teyrchains; will convert to a `SiblingPara` origin when
 	// recognised.
-	SiblingTeyrchainAsNative<pezcumulus_pallet_xcm::Origin, RuntimeOrigin>,
+	SiblingTeyrchainAsNative<pezcumulus_pezpallet_xcm::Origin, RuntimeOrigin>,
 	// Superuser converter for the Relay-chain (Parent) location. This will allow it to issue a
 	// transaction from the Root origin.
 	ParentAsSuperuser<RuntimeOrigin>,
@@ -490,7 +490,7 @@ impl pezpallet_xcm::Config for Runtime {
 	>;
 }
 
-impl pezcumulus_pallet_xcm::Config for Runtime {
+impl pezcumulus_pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }

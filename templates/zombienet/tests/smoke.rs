@@ -22,7 +22,7 @@
 //! templates.
 //!
 //! To start all tests here we should run:
-//! `cargo test -p template-zombienet-tests --features zombienet`
+//! `cargo test -p pez-template-zombienet-tests --features zombienet`
 
 #[cfg(feature = "zombienet")]
 mod smoke {
@@ -121,7 +121,7 @@ mod smoke {
 		);
 
 		let config = get_config(NetworkSpec {
-			relaychain_cmd: "solochain-template-node",
+			relaychain_cmd: "pez-solochain-template-node",
 			..Default::default()
 		})?;
 
@@ -144,7 +144,7 @@ mod smoke {
 		);
 
 		let config = get_config(NetworkSpec {
-			relaychain_cmd: "minimal-template-node",
+			relaychain_cmd: "pez-minimal-template-node",
 			..Default::default()
 		})?;
 

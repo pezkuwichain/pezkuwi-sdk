@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
 	use pezframe_support::traits::Contains;
-	use snowbridge_core::AllowSiblingsOnly;
+	use pezsnowbridge_core::AllowSiblingsOnly;
 	use xcm::prelude::{Junction::Teyrchain, Location};
 
 	#[test]

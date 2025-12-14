@@ -37,7 +37,7 @@
 
 use super::{HeaderProvider, HeaderProviderProvider};
 use futures::channel::oneshot;
-use pezkuwi_node_primitives::MAX_FINALITY_LAG as PRIMITIVES_MAX_FINALITY_LAG;
+use pezkuwi_pez_node_primitives::MAX_FINALITY_LAG as PRIMITIVES_MAX_FINALITY_LAG;
 use pezkuwi_node_subsystem::messages::{
 	ApprovalVotingParallelMessage, ChainSelectionMessage, DisputeCoordinatorMessage,
 	HighestApprovedAncestorBlock,

@@ -34,13 +34,13 @@ mod imports {
 	pub(crate) use xcm_executor::traits::TransferType;
 
 	// Pezcumulus
-	pub(crate) use asset_test_utils::xcm_helpers;
+	pub(crate) use asset_test_pezutils::xcm_helpers;
 	pub(crate) use emulated_integration_tests_common::{
 		accounts::DUMMY_EMPTY,
 		test_relay_is_trusted_teleporter, test_teyrchain_is_trusted_teleporter,
 		test_teyrchain_is_trusted_teleporter_for_relay,
 		test_xcm_fee_querying_apis_work_for_asset_hub,
-		xcm_emulator::{
+		xcm_pez_emulator::{
 			assert_expected_events, bx, Chain, RelayChain as Relay, Test, TestArgs, TestContext,
 			TestExt, Teyrchain as Para,
 		},
@@ -48,7 +48,7 @@ mod imports {
 			fee_asset, find_mq_processed_id, find_xcm_sent_message_id,
 			get_amount_from_versioned_assets, non_fee_asset, xcm_transact_paid_execution,
 		},
-		xcm_simulator::helpers::TopicIdTracker,
+		xcm_pez_simulator::helpers::TopicIdTracker,
 		PenpalATeleportableAssetLocation, ASSETS_PALLET_ID, RESERVABLE_ASSET_ID, USDT_ID, XCM_V3,
 	};
 	pub(crate) use teyrchains_common::{AccountId, Balance};
@@ -67,14 +67,14 @@ mod imports {
 			genesis::{AssetHubZagrosAssetOwner, ED as ASSET_HUB_ZAGROS_ED},
 			AssetHubZagrosParaPallet as AssetHubZagrosPallet,
 		},
-		bridge_hub_zagros_emulated_chain::{
-			bridge_hub_zagros_runtime::xcm_config::{self as bhw_xcm_config},
+		pezbridge_hub_zagros_emulated_chain::{
+			pezbridge_hub_zagros_runtime::xcm_config::{self as bhw_xcm_config},
 			BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		},
 		collectives_zagros_emulated_chain::CollectivesZagrosParaPallet as CollectivesZagrosPallet,
 		coretime_zagros_emulated_chain::CoretimeZagrosParaPallet as CoretimeZagrosPallet,
-		penpal_emulated_chain::{
-			penpal_runtime::xcm_config::{
+		pez_penpal_emulated_chain::{
+			pez_penpal_runtime::xcm_config::{
 				CustomizableAssetFromSystemAssetHub as PenpalCustomizableAssetFromSystemAssetHub,
 				LocalReservableFromAssetHub as PenpalLocalReservableFromAssetHub,
 				LocalTeleportableToAssetHub as PenpalLocalTeleportableToAssetHub,

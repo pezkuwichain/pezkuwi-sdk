@@ -4,7 +4,7 @@ version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
-description = "Asset Hub Pezkuwichain runtime integration tests with xcm-emulator"
+description = "Asset Hub Pezkuwichain runtime integration tests with xcm-pez-emulator"
 publish = false
 documentation = "https://docs.rs/asset-hub-pezkuwichain-integration-tests"
 repository = { workspace = true }
@@ -36,10 +36,10 @@ pezkuwi-runtime-common = { workspace = true, default-features = true }
 pezkuwichain-runtime-constants = { workspace = true, default-features = true }
 xcm = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true, default-features = true }
+xcm-runtime-pezapis = { workspace = true, default-features = true }
 
 # Pezcumulus
-asset-test-utils = { workspace = true, default-features = true }
+asset-test-pezutils = { workspace = true, default-features = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 pezkuwichain-system-emulated-network = { workspace = true }
@@ -47,7 +47,7 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "asset-test-utils/runtime-benchmarks",
+  "asset-test-pezutils/runtime-benchmarks",
   "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
   "emulated-integration-tests-common/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
@@ -66,6 +66,6 @@ runtime-benchmarks = [
   "pezsp-runtime/runtime-benchmarks",
   "teyrchains-common/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

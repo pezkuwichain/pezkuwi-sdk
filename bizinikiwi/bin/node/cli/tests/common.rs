@@ -36,12 +36,12 @@ use pezsp_runtime::{
 };
 use pezsp_state_machine::TestExternalities as CoreTestExternalities;
 
-use kitchensink_runtime::{
+use pez_kitchensink_runtime::{
 	constants::currency::*, Block, BuildStorage, CheckedExtrinsic, Header, Runtime,
 	UncheckedExtrinsic,
 };
-use node_primitives::{BlockNumber, Hash};
-use node_testing::keyring::*;
+use pez_node_primitives::{BlockNumber, Hash};
+use pez_node_testing::keyring::*;
 use pezsp_externalities::Externalities;
 use pezstaging_node_cli::service::RuntimeExecutor;
 
@@ -70,7 +70,7 @@ impl AppCrypto<MultiSigner, MultiSignature> for TestAuthorityId {
 /// making the binary slimmer. There is a convention to use compact version of the runtime
 /// as canonical.
 pub fn compact_code_unwrap() -> &'static [u8] {
-	kitchensink_runtime::WASM_BINARY.expect(
+	pez_kitchensink_runtime::WASM_BINARY.expect(
 		"Development wasm binary is not available. Testing is only supported with the flag \
 		 disabled.",
 	)
@@ -78,14 +78,14 @@ pub fn compact_code_unwrap() -> &'static [u8] {
 
 pub const GENESIS_HASH: [u8; 32] = [69u8; 32];
 
-pub const SPEC_VERSION: u32 = kitchensink_runtime::VERSION.spec_version;
+pub const SPEC_VERSION: u32 = pez_kitchensink_runtime::VERSION.spec_version;
 
-pub const TRANSACTION_VERSION: u32 = kitchensink_runtime::VERSION.transaction_version;
+pub const TRANSACTION_VERSION: u32 = pez_kitchensink_runtime::VERSION.transaction_version;
 
 pub type TestExternalities<H> = CoreTestExternalities<H>;
 
 pub fn sign(xt: CheckedExtrinsic) -> UncheckedExtrinsic {
-	node_testing::keyring::sign(xt, SPEC_VERSION, TRANSACTION_VERSION, GENESIS_HASH, None)
+	pez_node_testing::keyring::sign(xt, SPEC_VERSION, TRANSACTION_VERSION, GENESIS_HASH, None)
 }
 
 pub fn default_transfer_call() -> pezpallet_balances::Call<Runtime> {
@@ -125,7 +125,7 @@ pub fn new_test_ext(code: &[u8]) -> TestExternalities<BlakeTwo256> {
 	pezsp_tracing::try_init_simple();
 	let ext = TestExternalities::new_with_code(
 		code,
-		node_testing::genesis::config().build_storage().unwrap(),
+		pez_node_testing::genesis::config().build_storage().unwrap(),
 	);
 	ext
 }

@@ -37,7 +37,7 @@ use pezkuwi_node_network_protocol::{
 	v1 as protocol_v1, v2 as protocol_v2, CollationProtocols, OurView, PeerId,
 	UnifiedReputationChange as Rep, View,
 };
-use pezkuwi_node_primitives::{SignedFullStatement, Statement};
+use pezkuwi_pez_node_primitives::{SignedFullStatement, Statement};
 use pezkuwi_node_subsystem::{
 	messages::{
 		CanSecondRequest, CandidateBackingMessage, CollatorProtocolMessage, IfDisconnected,

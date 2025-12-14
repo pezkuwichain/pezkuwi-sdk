@@ -18,7 +18,7 @@
 
 use super::TestHost;
 use codec::{Decode, Encode};
-use pezkuwi_node_primitives::PoV;
+use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_primitives::PersistedValidationData;
 use pezkuwi_teyrchain_primitives::primitives::{
 	BlockData as GenericBlockData, HeadData as GenericHeadData,

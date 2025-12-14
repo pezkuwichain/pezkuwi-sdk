@@ -21,7 +21,7 @@ codec = { features = ["derive"], workspace = true }
 # Bridge Dependencies
 bp-bridge-hub-pezcumulus = { workspace = true }
 bp-messages = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 bp-xcm-bridge-hub = { workspace = true }
 
 # Bizinikiwi Based Dependencies
@@ -35,7 +35,7 @@ default = ["std"]
 std = [
   "bp-bridge-hub-pezcumulus/std",
   "bp-messages/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-xcm-bridge-hub/std",
   "codec/std",
   "pezframe-support/std",
@@ -46,7 +46,7 @@ std = [
 runtime-benchmarks = [
   "bp-bridge-hub-pezcumulus/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-xcm-bridge-hub/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",

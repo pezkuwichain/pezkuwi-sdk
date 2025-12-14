@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-use bp_header_chain::ChainWithGrandpa;
+use bp_header_pez_chain::ChainWithGrandpa;
 use bp_pezkuwi_core::teyrchains::ParaId;
-use bp_runtime::{Chain, ChainId, Teyrchain};
+use pezbp_runtime::{Chain, ChainId, Teyrchain};
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types, traits::ConstU32, weights::Weight,
 };
@@ -231,7 +231,7 @@ impl pezpallet_bridge_teyrchains::benchmarking::Config<()> for TestRuntime {
 	fn prepare_teyrchain_heads_proof(
 		teyrchains: &[ParaId],
 		_teyrchain_head_size: u32,
-		_proof_params: bp_runtime::UnverifiedStorageProofParams,
+		_proof_params: pezbp_runtime::UnverifiedStorageProofParams,
 	) -> (
 		crate::RelayBlockNumber,
 		crate::RelayBlockHash,

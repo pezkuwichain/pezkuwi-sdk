@@ -427,30 +427,30 @@ pezsp_api::impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::fees::XcmPaymentApi<Block> for Runtime {
-		fn query_acceptable_payment_assets(_: xcm::Version) -> Result<Vec<VersionedAssetId>, xcm_runtime_apis::fees::Error> {
+	impl xcm_runtime_pezapis::fees::XcmPaymentApi<Block> for Runtime {
+		fn query_acceptable_payment_assets(_: xcm::Version) -> Result<Vec<VersionedAssetId>, xcm_runtime_pezapis::fees::Error> {
 			unimplemented!()
 		}
 
-		fn query_weight_to_asset_fee(_: Weight, _: VersionedAssetId) -> Result<u128, xcm_runtime_apis::fees::Error> {
+		fn query_weight_to_asset_fee(_: Weight, _: VersionedAssetId) -> Result<u128, xcm_runtime_pezapis::fees::Error> {
 			unimplemented!()
 		}
 
-		fn query_xcm_weight(_: VersionedXcm<()>) -> Result<Weight, xcm_runtime_apis::fees::Error> {
+		fn query_xcm_weight(_: VersionedXcm<()>) -> Result<Weight, xcm_runtime_pezapis::fees::Error> {
 			unimplemented!()
 		}
 
-		fn query_delivery_fees(_: VersionedLocation, _: VersionedXcm<()>, _: VersionedAssetId) -> Result<VersionedAssets, xcm_runtime_apis::fees::Error> {
+		fn query_delivery_fees(_: VersionedLocation, _: VersionedXcm<()>, _: VersionedAssetId) -> Result<VersionedAssets, xcm_runtime_pezapis::fees::Error> {
 			unimplemented!()
 		}
 	}
 
-	impl xcm_runtime_apis::dry_run::DryRunApi<Block, (), (), ()> for Runtime {
-		fn dry_run_call(_: (), _: (), _: XcmVersion) -> Result<xcm_runtime_apis::dry_run::CallDryRunEffects<()>, xcm_runtime_apis::dry_run::Error> {
+	impl xcm_runtime_pezapis::dry_run::DryRunApi<Block, (), (), ()> for Runtime {
+		fn dry_run_call(_: (), _: (), _: XcmVersion) -> Result<xcm_runtime_pezapis::dry_run::CallDryRunEffects<()>, xcm_runtime_pezapis::dry_run::Error> {
 			unimplemented!()
 		}
 
-		fn dry_run_xcm(_: VersionedLocation, _: VersionedXcm<()>) -> Result<xcm_runtime_apis::dry_run::XcmDryRunEffects<()>, xcm_runtime_apis::dry_run::Error> {
+		fn dry_run_xcm(_: VersionedLocation, _: VersionedXcm<()>) -> Result<xcm_runtime_pezapis::dry_run::XcmDryRunEffects<()>, xcm_runtime_pezapis::dry_run::Error> {
 			unimplemented!()
 		}
 	}

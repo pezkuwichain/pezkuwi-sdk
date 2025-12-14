@@ -1,12 +1,12 @@
 [package]
-name = "bridge-runtime-common"
+name = "pezbridge-runtime-common"
 version = "0.7.0"
 description = "Common types and functions that may be used by bizinikiwi-based runtimes of all bridged chains"
 authors.workspace = true
 edition.workspace = true
 repository.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
-documentation = "https://docs.rs/bridge-runtime-common"
+documentation = "https://docs.rs/pezbridge-runtime-common"
 homepage = { workspace = true }
 
 [lints]
@@ -20,11 +20,11 @@ tracing = { workspace = true }
 tuplex = { workspace = true }
 
 # Bridge dependencies
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-messages = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
 bp-relayers = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 bp-teyrchains = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
@@ -57,11 +57,11 @@ pezsp-core = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-messages/std",
   "bp-pezkuwi-core/std",
   "bp-relayers/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-test-utils/std",
   "bp-teyrchains/std",
   "codec/std",
@@ -84,12 +84,12 @@ std = [
   "xcm/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
   "bp-relayers/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
-  "bp-runtime/test-helpers",
+  "pezbp-runtime/runtime-benchmarks",
+  "pezbp-runtime/test-helpers",
   "bp-test-utils/runtime-benchmarks",
   "bp-teyrchains/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
@@ -109,4 +109,4 @@ runtime-benchmarks = [
   "xcm/runtime-benchmarks",
 ]
 integrity-test = ["static_assertions"]
-test-helpers = ["bp-runtime/test-helpers", "pezsp-trie"]
+test-helpers = ["pezbp-runtime/test-helpers", "pezsp-trie"]

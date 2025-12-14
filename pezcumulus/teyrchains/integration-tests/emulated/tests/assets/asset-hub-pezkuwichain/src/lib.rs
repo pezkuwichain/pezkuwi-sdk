@@ -33,13 +33,13 @@ mod imports {
 	pub(crate) use xcm_executor::traits::TransferType;
 
 	// Pezcumulus
-	pub(crate) use asset_test_utils::xcm_helpers;
+	pub(crate) use asset_test_pezutils::xcm_helpers;
 	pub(crate) use emulated_integration_tests_common::{
 		accounts::DUMMY_EMPTY,
 		test_relay_is_trusted_teleporter, test_teyrchain_is_trusted_teleporter,
 		test_teyrchain_is_trusted_teleporter_for_relay,
 		test_xcm_fee_querying_apis_work_for_asset_hub,
-		xcm_emulator::{
+		xcm_pez_emulator::{
 			assert_expected_events, bx, Chain, RelayChain as Relay, Test, TestArgs, TestContext,
 			TestExt, Teyrchain as Para,
 		},
@@ -62,8 +62,8 @@ mod imports {
 			genesis::{AssetHubPezkuwichainAssetOwner, ED as ASSET_HUB_PEZKUWICHAIN_ED},
 			AssetHubPezkuwichainParaPallet as AssetHubPezkuwichainPallet,
 		},
-		penpal_emulated_chain::{
-			penpal_runtime::xcm_config::{
+		pez_penpal_emulated_chain::{
+			pez_penpal_runtime::xcm_config::{
 				CustomizableAssetFromSystemAssetHub as PenpalCustomizableAssetFromSystemAssetHub,
 				LocalReservableFromAssetHub as PenpalLocalReservableFromAssetHub,
 				LocalTeleportableToAssetHub as PenpalLocalTeleportableToAssetHub,

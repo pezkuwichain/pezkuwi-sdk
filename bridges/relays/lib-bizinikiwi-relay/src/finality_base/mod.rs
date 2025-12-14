@@ -22,7 +22,7 @@ pub mod engine;
 use crate::finality_base::engine::Engine;
 
 use async_trait::async_trait;
-use bp_runtime::{HashOf, HeaderIdOf};
+use pezbp_runtime::{HashOf, HeaderIdOf};
 use codec::Decode;
 use futures::{stream::unfold, Stream, StreamExt};
 use relay_bizinikiwi_client::{Chain, Client, Error};

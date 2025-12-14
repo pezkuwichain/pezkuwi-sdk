@@ -262,7 +262,7 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezkuwi_sdk::pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
 			use super::*;
 
 			let mut list = Vec::<BenchmarkList>::new();
@@ -287,12 +287,12 @@ impl_runtime_apis! {
 				}
 
 				fn verify_set_code() {
-					System::assert_last_event(pezcumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
+					System::assert_last_event(pezcumulus_pezpallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
 				}
 			}
 
-			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
-			impl pezcumulus_pallet_session_benchmarking::Config for Runtime {}
+			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			use pezkuwi_sdk::pezframe_support::traits::WhitelistedStorageKeys;
 			let whitelist = AllPalletsWithSystem::whitelisted_storage_keys();

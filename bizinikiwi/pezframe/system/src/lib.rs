@@ -785,20 +785,20 @@ pub mod pallet {
 
 		/// Kill all storage items with a key that starts with the given prefix.
 		///
-		/// **NOTE:** We rely on the Root origin to provide us the number of subkeys under
+		/// **NOTE:** We rely on the Root origin to provide us the number of pez_subkeys under
 		/// the prefix we are removing to accurately calculate the weight of this function.
 		#[pallet::call_index(6)]
 		#[pallet::weight((
-			T::SystemWeightInfo::kill_prefix(subkeys.saturating_add(1)),
+			T::SystemWeightInfo::kill_prefix(pez_subkeys.saturating_add(1)),
 			DispatchClass::Operational,
 		))]
 		pub fn kill_prefix(
 			origin: OriginFor<T>,
 			prefix: Key,
-			subkeys: u32,
+			pez_subkeys: u32,
 		) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
-			let _ = storage::unhashed::clear_prefix(&prefix, Some(subkeys), None);
+			let _ = storage::unhashed::clear_prefix(&prefix, Some(pez_subkeys), None);
 			Ok(().into())
 		}
 

@@ -28,7 +28,7 @@ use asset_hub_pezkuwichain_runtime::{
 	MetadataDepositBase, MetadataDepositPerByte, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
 	SessionKeys, TeyrchainSystem, ToZagrosXcmRouterInstance, TrustBackedAssetsInstance, XcmpQueue,
 };
-use asset_test_utils::{
+use asset_test_pezutils::{
 	test_cases_over_bridge::TestBridgingConfig, CollatorSessionKey, CollatorSessionKeys,
 	ExtBuilder, GovernanceOrigin, SlotDurations,
 };
@@ -56,7 +56,7 @@ use xcm::latest::{
 };
 use xcm_builder::WithLatestLocationConverter;
 use xcm_executor::traits::{JustTry, WeightTrader};
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 const ALICE: [u8; 32] = [1u8; 32];
 const SOME_ASSET_ADMIN: [u8; 32] = [5u8; 32];
@@ -68,7 +68,7 @@ parameter_types! {
 type AssetIdForTrustBackedAssetsConvert =
 	assets_common::AssetIdForTrustBackedAssetsConvert<TrustBackedAssetsPalletLocation>;
 
-type RuntimeHelper = asset_test_utils::RuntimeHelper<Runtime, AllPalletsWithoutSystem>;
+type RuntimeHelper = asset_test_pezutils::RuntimeHelper<Runtime, AllPalletsWithoutSystem>;
 
 fn collator_session_key(account: [u8; 32]) -> CollatorSessionKey<Runtime> {
 	CollatorSessionKey::new(
@@ -574,7 +574,7 @@ fn test_assets_balances_api_works() {
 		});
 }
 
-asset_test_utils::include_teleports_for_native_asset_works!(
+asset_test_pezutils::include_teleports_for_native_asset_works!(
 	Runtime,
 	AllPalletsWithoutSystem,
 	XcmConfig,
@@ -593,7 +593,7 @@ asset_test_utils::include_teleports_for_native_asset_works!(
 	1000
 );
 
-asset_test_utils::include_teleports_for_foreign_assets_works!(
+asset_test_pezutils::include_teleports_for_foreign_assets_works!(
 	Runtime,
 	AllPalletsWithoutSystem,
 	XcmConfig,
@@ -619,7 +619,7 @@ asset_test_utils::include_teleports_for_foreign_assets_works!(
 	})
 );
 
-asset_test_utils::include_asset_transactor_transfer_with_local_consensus_currency_works!(
+asset_test_pezutils::include_asset_transactor_transfer_with_local_consensus_currency_works!(
 	Runtime,
 	XcmConfig,
 	collator_session_keys(),
@@ -634,7 +634,7 @@ asset_test_utils::include_asset_transactor_transfer_with_local_consensus_currenc
 	})
 );
 
-asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
+asset_test_pezutils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
 	asset_transactor_transfer_with_trust_backed_assets_works,
 	Runtime,
 	XcmConfig,
@@ -652,7 +652,7 @@ asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_
 	})
 );
 
-asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
+asset_test_pezutils::include_asset_transactor_transfer_with_pallet_assets_instance_works!(
 	asset_transactor_transfer_with_foreign_assets_works,
 	Runtime,
 	XcmConfig,
@@ -670,7 +670,7 @@ asset_test_utils::include_asset_transactor_transfer_with_pallet_assets_instance_
 	})
 );
 
-asset_test_utils::include_create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_works!(
+asset_test_pezutils::include_create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_works!(
 	Runtime,
 	XcmConfig,
 	WeightToFee,
@@ -703,7 +703,7 @@ asset_test_utils::include_create_and_manage_foreign_assets_for_local_consensus_t
 fn limited_reserve_transfer_assets_for_native_asset_over_bridge_works(
 	bridging_configuration: fn() -> TestBridgingConfig,
 ) {
-	asset_test_utils::test_cases_over_bridge::limited_reserve_transfer_assets_for_native_asset_works::<
+	asset_test_pezutils::test_cases_over_bridge::limited_reserve_transfer_assets_for_native_asset_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
@@ -790,7 +790,7 @@ mod asset_hub_pezkuwichain_tests {
 			foreign_asset_id_minimum_balance,
 		);
 
-		asset_test_utils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
+		asset_test_pezutils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -805,7 +805,7 @@ mod asset_hub_pezkuwichain_tests {
 			1000000000000,
 			|| {
 				// setup pool for paying fees to touch `SwapFirstAssetTrader`
-				asset_test_utils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
+				asset_test_pezutils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
 				// staking pot account for collecting local native fees from `BuyExecution`
 				let _ = Balances::force_set_balance(RuntimeOrigin::root(), StakingPot::get().into(), ExistentialDeposit::get());
 				// prepare bridge configuration
@@ -874,7 +874,7 @@ mod asset_hub_pezkuwichain_tests {
 			foreign_asset_id_minimum_balance,
 		);
 
-		asset_test_utils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
+		asset_test_pezutils::test_cases_over_bridge::receive_reserve_asset_deposited_from_different_consensus_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -888,7 +888,7 @@ mod asset_hub_pezkuwichain_tests {
 			foreign_asset_create_params,
 			1000000000000,
 			|| {
-				asset_test_utils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
+				asset_test_pezutils::test_cases::setup_pool_for_paying_fees_with_foreign_assets::<Runtime, RuntimeOrigin>(ExistentialDeposit::get(), pool_params);
 				bridging_to_asset_hub_zagros()
 			},
 			(
@@ -923,7 +923,7 @@ mod asset_hub_pezkuwichain_tests {
 
 	#[test]
 	fn report_bridge_status_from_xcm_bridge_router_for_zagros_works() {
-		asset_test_utils::test_cases_over_bridge::report_bridge_status_from_xcm_bridge_router_works::<
+		asset_test_pezutils::test_cases_over_bridge::report_bridge_status_from_xcm_bridge_router_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -978,7 +978,7 @@ mod asset_hub_pezkuwichain_tests {
 
 	#[test]
 	fn reserve_transfer_native_asset_to_non_teleport_para_works() {
-		asset_test_utils::test_cases::reserve_transfer_native_asset_to_non_teleport_para_works::<
+		asset_test_pezutils::test_cases::reserve_transfer_native_asset_to_non_teleport_para_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -1009,7 +1009,7 @@ mod asset_hub_pezkuwichain_tests {
 
 #[test]
 fn change_xcm_bridge_hub_router_byte_fee_by_governance_works() {
-	asset_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	asset_test_pezutils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		bridging::XcmBridgeHubRouterByteFee,
 		Balance,
@@ -1035,7 +1035,7 @@ fn change_xcm_bridge_hub_router_byte_fee_by_governance_works() {
 
 #[test]
 fn change_xcm_bridge_hub_router_base_fee_by_governance_works() {
-	asset_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	asset_test_pezutils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		bridging::XcmBridgeHubRouterBaseFee,
 		Balance,
@@ -1067,7 +1067,7 @@ fn change_xcm_bridge_hub_router_base_fee_by_governance_works() {
 
 #[test]
 fn change_xcm_bridge_hub_ethereum_base_fee_by_governance_works() {
-	asset_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	asset_test_pezutils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		bridging::to_ethereum::BridgeHubEthereumBaseFee,
 		Balance,
@@ -1338,7 +1338,7 @@ fn xcm_payment_api_works() {
 		Block,
 		WeightToFee,
 	>();
-	asset_test_utils::test_cases::xcm_payment_api_with_pools_works::<
+	asset_test_pezutils::test_cases::xcm_payment_api_with_pools_works::<
 		Runtime,
 		RuntimeCall,
 		RuntimeOrigin,
@@ -1346,7 +1346,7 @@ fn xcm_payment_api_works() {
 		WeightToFee,
 	>();
 
-	asset_test_utils::test_cases::xcm_payment_api_foreign_asset_pool_works::<
+	asset_test_pezutils::test_cases::xcm_payment_api_foreign_asset_pool_works::<
 		Runtime,
 		RuntimeCall,
 		RuntimeOrigin,

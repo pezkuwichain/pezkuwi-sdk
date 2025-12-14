@@ -237,7 +237,7 @@ image: "paritytech/tools:latest"
 # DEĞİŞTİR: https://github.com/paritytech/polkadot-sdk/pull/XXX (veya kaldır)
 
 # Satır 204: Docker image
-paritytech/node-bench-regression-guard:latest
+paritytech/pez-node-bench-regression-guard:latest
 # NOT: Bu image paritytech'e ait. Fork veya alternatif gerekli.
 
 # Satır 248: Yorum
@@ -386,7 +386,7 @@ Bu bağımlılıklar Parity ekosisteminin parçası ve fork edilmesi pratik değ
 | Tool | Öncelik | Sebep |
 | --- | --- | --- |
 | `paritytech/tools` Docker image | YÜKSEK | CI container'ı |
-| `paritytech/node-bench-regression-guard` | ORTA | Benchmark regresyon kontrolü |
+| `paritytech/pez-node-bench-regression-guard` | ORTA | Benchmark regresyon kontrolü |
 | `@paritytech/license-scanner` | DÜŞÜK | Lisans taraması |
 | `pezkuwichain/psvm` | DÜŞÜK | Version yönetimi |
 

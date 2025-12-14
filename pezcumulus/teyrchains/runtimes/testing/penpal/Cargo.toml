@@ -1,5 +1,5 @@
 [package]
-name = "penpal-runtime"
+name = "pez-penpal-runtime"
 version = "0.14.0"
 authors = ["Anonymous"]
 description = "A teyrchain for communication back and forth with XCM of assets and uniques."
@@ -7,7 +7,7 @@ license = "Unlicense"
 homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
-documentation = "https://docs.rs/penpal-runtime"
+documentation = "https://docs.rs/pez-penpal-runtime"
 publish = false
 
 [lints]
@@ -68,7 +68,7 @@ pezkuwi-teyrchain-primitives = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true }
+xcm-runtime-pezapis = { workspace = true }
 
 # Pezcumulus
 assets-common = { workspace = true }
@@ -158,7 +158,7 @@ std = [
   "tracing/std",
   "xcm-builder/std",
   "xcm-executor/std",
-  "xcm-runtime-apis/std",
+  "xcm-runtime-pezapis/std",
   "xcm/std",
 ]
 
@@ -217,7 +217,7 @@ runtime-benchmarks = [
   "teyrchains-common/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]
 

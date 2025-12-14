@@ -17,7 +17,7 @@
 use super::{relay_chain_selection::*, *};
 
 use futures::channel::oneshot::Receiver;
-use pezkuwi_node_primitives::approval::v2::VrfSignature;
+use pezkuwi_pez_node_primitives::approval::v2::VrfSignature;
 use pezkuwi_node_subsystem::messages::{AllMessages, BlockDescription};
 use pezkuwi_node_subsystem_util::TimeoutExt;
 use pezkuwi_overseer::{HighPriority, PriorityLevel};

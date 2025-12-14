@@ -31,7 +31,7 @@ use crate::{
 };
 use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use gum::info;
-use mmr_gadget::MmrGadget;
+use pezmmr_gadget::MmrGadget;
 use pezkuwi_availability_recovery::FETCH_CHUNKS_THRESHOLD;
 use pezkuwi_node_core_approval_voting::Config as ApprovalVotingConfig;
 use pezkuwi_node_core_av_store::Config as AvailabilityConfig;
@@ -780,7 +780,7 @@ where
 		// When offchain indexing is enabled, MMR gadget should also run.
 		if is_offchain_indexing_enabled {
 			task_manager.spawn_essential_handle().spawn_blocking(
-				"mmr-gadget",
+				"pezmmr-gadget",
 				None,
 				MmrGadget::start(
 					client.clone(),

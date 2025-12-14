@@ -29,7 +29,7 @@
 // benchmark
 // pallet
 // --extrinsic=all
-// --runtime=target/production/wbuild/kitchensink-runtime/kitchensink_runtime.wasm
+// --runtime=target/production/wbuild/pez-kitchensink-runtime/pez_kitchensink_runtime.wasm
 // --pallet=pezpallet_oracle
 // --header=bizinikiwi/HEADER-APACHE2
 // --output=bizinikiwi/pezframe/honzon/oracle/src/weights.rs

@@ -21,7 +21,7 @@ assert_cmd = { workspace = true }
 futures = { workspace = true }
 nix = { features = ["signal"], workspace = true }
 node-cli = { workspace = true }
-node-primitives = { workspace = true, default-features = true }
+pez-node-primitives = { workspace = true, default-features = true }
 regex = { workspace = true }
 pezsc-cli = { workspace = true, default-features = false }
 pezsc-service = { workspace = true, default-features = false }
@@ -33,7 +33,7 @@ tokio = { features = ["full"], workspace = true, default-features = true }
 try-runtime = ["node-cli/try-runtime"]
 runtime-benchmarks = [
   "node-cli/runtime-benchmarks",
-  "node-primitives/runtime-benchmarks",
+  "pez-node-primitives/runtime-benchmarks",
   "pezsc-cli/runtime-benchmarks",
   "pezsc-service/runtime-benchmarks",
   "bizinikiwi-rpc-client/runtime-benchmarks",

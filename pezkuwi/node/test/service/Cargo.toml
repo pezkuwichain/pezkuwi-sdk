@@ -20,7 +20,7 @@ serde_json = { workspace = true, default-features = true }
 tokio = { workspace = true, default-features = true }
 
 # Pezkuwi dependencies
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-overseer = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
@@ -29,7 +29,7 @@ pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
 pezkuwi-service = { workspace = true, default-features = true }
 pezkuwi-test-runtime = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
-test-runtime-constants = { workspace = true, default-features = true }
+peztest-runtime-constants = { workspace = true, default-features = true }
 
 # Bizinikiwi dependencies
 pezframe-system = { workspace = true, default-features = true }
@@ -66,7 +66,7 @@ runtime-benchmarks = [
   "pezpallet-balances/runtime-benchmarks",
   "pezpallet-staking/runtime-benchmarks",
   "pezpallet-transaction-payment/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-node-subsystem/runtime-benchmarks",
   "pezkuwi-overseer/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",
@@ -91,5 +91,5 @@ runtime-benchmarks = [
   "pezsp-runtime/runtime-benchmarks",
   "pezsp-state-machine/runtime-benchmarks",
   "bizinikiwi-test-client/runtime-benchmarks",
-  "test-runtime-constants/runtime-benchmarks",
+  "peztest-runtime-constants/runtime-benchmarks",
 ]

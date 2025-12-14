@@ -27,8 +27,8 @@
 use std::{borrow::Cow, collections::HashMap, pin::Pin, sync::Arc};
 
 use async_trait::async_trait;
-use node_primitives::Block;
-use node_testing::bench::{BenchDb, BlockType, DatabaseType, KeyTypes};
+use pez_node_primitives::Block;
+use pez_node_testing::bench::{BenchDb, BlockType, DatabaseType, KeyTypes};
 use pezsc_transaction_pool_api::{
 	ImportNotificationStream, PoolStatus, ReadyTransactions, TransactionFor, TransactionSource,
 	TransactionStatusStreamFor, TxHash, TxInvalidityReportMap,
@@ -167,18 +167,18 @@ impl core::Benchmark for ConstructionBenchmark {
 #[derive(Clone, Debug)]
 pub struct PoolTransaction {
 	data: Arc<OpaqueExtrinsic>,
-	hash: node_primitives::Hash,
+	hash: pez_node_primitives::Hash,
 }
 
 impl From<OpaqueExtrinsic> for PoolTransaction {
 	fn from(e: OpaqueExtrinsic) -> Self {
-		PoolTransaction { data: Arc::from(e), hash: node_primitives::Hash::zero() }
+		PoolTransaction { data: Arc::from(e), hash: pez_node_primitives::Hash::zero() }
 	}
 }
 
 impl pezsc_transaction_pool_api::InPoolTransaction for PoolTransaction {
 	type Transaction = Arc<OpaqueExtrinsic>;
-	type Hash = node_primitives::Hash;
+	type Hash = pez_node_primitives::Hash;
 
 	fn data(&self) -> &Self::Transaction {
 		&self.data
@@ -228,7 +228,7 @@ impl ReadyTransactions for TransactionsIterator {
 #[async_trait]
 impl pezsc_transaction_pool_api::TransactionPool for Transactions {
 	type Block = Block;
-	type Hash = node_primitives::Hash;
+	type Hash = pez_node_primitives::Hash;
 	type InPoolTransaction = PoolTransaction;
 	type Error = pezsc_transaction_pool_api::error::Error;
 
@@ -238,7 +238,7 @@ impl pezsc_transaction_pool_api::TransactionPool for Transactions {
 		_at: Self::Hash,
 		_source: TransactionSource,
 		_xts: Vec<TransactionFor<Self>>,
-	) -> Result<Vec<Result<node_primitives::Hash, Self::Error>>, Self::Error> {
+	) -> Result<Vec<Result<pez_node_primitives::Hash, Self::Error>>, Self::Error> {
 		unimplemented!()
 	}
 

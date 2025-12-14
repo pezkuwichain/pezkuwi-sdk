@@ -30,7 +30,7 @@ pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 pub mod v0 {
 	use crate::{Config, Pallet};
 	use bp_relayers::RewardsAccountOwner;
-	use bp_runtime::{ChainId, StorageDoubleMapKeyProvider};
+	use pezbp_runtime::{ChainId, StorageDoubleMapKeyProvider};
 	use codec::{Codec, Decode, Encode, EncodeLike, MaxEncodedLen};
 	use core::marker::PhantomData;
 	use pezframe_support::{pezpallet_prelude::OptionQuery, Blake2_128Concat, Identity};
@@ -122,7 +122,7 @@ pub mod v1 {
 	use crate::{Config, Pallet};
 	use bp_messages::LaneIdType;
 	use bp_relayers::RewardsAccountParams;
-	use bp_runtime::StorageDoubleMapKeyProvider;
+	use pezbp_runtime::StorageDoubleMapKeyProvider;
 	use codec::{Codec, EncodeLike};
 	use core::marker::PhantomData;
 	use pezframe_support::{

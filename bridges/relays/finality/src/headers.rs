@@ -19,7 +19,7 @@ use crate::{
 	HeadersToRelay, SourceClient, SourceHeader, TargetClient,
 };
 
-use bp_header_chain::FinalityProof;
+use bp_header_pez_chain::FinalityProof;
 use num_traits::Saturating;
 use std::cmp::Ordering;
 

@@ -19,11 +19,11 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use bp_header_chain::StoredHeaderData;
+pub use bp_header_pez_chain::StoredHeaderData;
 pub use call_info::{BridgeTeyrchainCall, SubmitTeyrchainHeadsInfo};
 
 use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaId};
-use bp_runtime::{
+use pezbp_runtime::{
 	BlockNumberOf, Chain, HashOf, HeaderOf, StorageDoubleMapKeyProvider, StorageMapKeyProvider,
 	Teyrchain,
 };
@@ -75,7 +75,7 @@ pub fn teyrchain_head_storage_key_at_source(
 	paras_pallet_name: &str,
 	para_id: ParaId,
 ) -> StorageKey {
-	bp_runtime::storage_map_final_key::<Twox64Concat>(paras_pallet_name, "Heads", &para_id.encode())
+	pezbp_runtime::storage_map_final_key::<Twox64Concat>(paras_pallet_name, "Heads", &para_id.encode())
 }
 
 /// Can be use to access the runtime storage key of the teyrchains info at the target chain.
@@ -105,10 +105,10 @@ impl StorageDoubleMapKeyProvider for ImportedParaHeadsKeyProvider {
 }
 
 /// Stored data of the teyrchain head. It is encoded version of the
-/// `bp_runtime::StoredHeaderData` structure.
+/// `pezbp_runtime::StoredHeaderData` structure.
 ///
 /// We do not know exact structure of the teyrchain head, so we always store encoded version
-/// of the `bp_runtime::StoredHeaderData`. It is only decoded when we talk about specific teyrchain.
+/// of the `pezbp_runtime::StoredHeaderData`. It is only decoded when we talk about specific teyrchain.
 #[derive(Clone, Decode, Encode, PartialEq, RuntimeDebug, TypeInfo)]
 pub struct ParaStoredHeaderData(pub Vec<u8>);
 

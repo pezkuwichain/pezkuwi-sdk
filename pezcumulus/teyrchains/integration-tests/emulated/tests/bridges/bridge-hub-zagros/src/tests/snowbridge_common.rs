@@ -21,11 +21,11 @@ use emulated_integration_tests_common::{
 };
 use pezframe_support::traits::fungibles::Mutate;
 use hex_literal::hex;
-use pezkuwichain_zagros_system_emulated_network::penpal_emulated_chain::{
-	penpal_runtime::xcm_config::{CheckingAccount, TELEPORTABLE_ASSET_ID},
+use pezkuwichain_zagros_system_emulated_network::pez_penpal_emulated_chain::{
+	pez_penpal_runtime::xcm_config::{CheckingAccount, TELEPORTABLE_ASSET_ID},
 	PenpalAssetOwner,
 };
-use snowbridge_core::AssetMetadata;
+use pezsnowbridge_core::AssetMetadata;
 use pezsp_core::H160;
 use testnet_teyrchains_constants::zagros::snowbridge::EthereumNetwork;
 use xcm_builder::ExternalConsensusLocationsConverterFor;
@@ -75,7 +75,7 @@ pub fn register_relay_token_on_bh() {
 		));
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumSystem(snowbridge_pallet_system::Event::RegisterToken { .. }) => {},]
+			vec![RuntimeEvent::EthereumSystem(snowbridge_pezpallet_system::Event::RegisterToken { .. }) => {},]
 		);
 	});
 }
@@ -157,7 +157,7 @@ pub fn register_pal_on_ah() {
 
 pub fn penpal_root_sovereign() -> pezsp_runtime::AccountId32 {
 	let penpal_root_sovereign: AccountId = PenpalB::execute_with(|| {
-		use pezkuwichain_zagros_system_emulated_network::penpal_emulated_chain::penpal_runtime::xcm_config;
+		use pezkuwichain_zagros_system_emulated_network::pez_penpal_emulated_chain::pez_penpal_runtime::xcm_config;
 		xcm_config::LocationToAccountId::convert_location(&xcm_config::RootLocation::get())
 			.unwrap()
 			.into()
@@ -390,7 +390,7 @@ pub fn register_pal_on_bh() {
 		));
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumSystem(snowbridge_pallet_system::Event::RegisterToken { .. }) => {},]
+			vec![RuntimeEvent::EthereumSystem(snowbridge_pezpallet_system::Event::RegisterToken { .. }) => {},]
 		);
 	});
 }
@@ -519,7 +519,7 @@ pub fn register_roc_on_bh() {
 		));
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumSystem(snowbridge_pallet_system::Event::RegisterToken { .. }) => {},]
+			vec![RuntimeEvent::EthereumSystem(snowbridge_pezpallet_system::Event::RegisterToken { .. }) => {},]
 		);
 	});
 }

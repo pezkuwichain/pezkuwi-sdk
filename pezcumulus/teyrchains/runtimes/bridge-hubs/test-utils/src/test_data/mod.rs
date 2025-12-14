@@ -29,7 +29,7 @@ use pezpallet_bridge_grandpa::BridgedHeader;
 use xcm::latest::prelude::*;
 
 use bp_messages::MessageNonce;
-use bp_runtime::BasicOperatingMode;
+use pezbp_runtime::BasicOperatingMode;
 use bp_test_utils::authority_list;
 use xcm::GetVersion;
 use xcm_builder::{BridgeMessage, HaulBlob, HaulBlobError, HaulBlobExporter};
@@ -53,8 +53,8 @@ pub fn initialization_data<
 	GrandpaPalletInstance: 'static,
 >(
 	block_number: u32,
-) -> bp_header_chain::InitializationData<BridgedHeader<Runtime, GrandpaPalletInstance>> {
-	bp_header_chain::InitializationData {
+) -> bp_header_pez_chain::InitializationData<BridgedHeader<Runtime, GrandpaPalletInstance>> {
+	bp_header_pez_chain::InitializationData {
 		header: Box::new(bp_test_utils::test_header(block_number.into())),
 		authority_list: authority_list(),
 		set_id: 1,

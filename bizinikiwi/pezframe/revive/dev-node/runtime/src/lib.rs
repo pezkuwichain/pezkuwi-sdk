@@ -136,8 +136,8 @@ pub mod genesis_config_presets {
 /// The runtime version.
 #[runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: alloc::borrow::Cow::Borrowed("revive-dev-runtime"),
-	impl_name: alloc::borrow::Cow::Borrowed("revive-dev-runtime"),
+	spec_name: alloc::borrow::Cow::Borrowed("pez-revive-dev-runtime"),
+	impl_name: alloc::borrow::Cow::Borrowed("pez-revive-dev-runtime"),
 	authoring_version: 1,
 	spec_version: 0,
 	impl_version: 1,

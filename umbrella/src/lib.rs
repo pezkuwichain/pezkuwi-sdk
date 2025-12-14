@@ -12,8 +12,8 @@
 // exactly the way that the CI expects it.
 
 /// Test utils for Asset Hub runtimes.
-#[cfg(feature = "asset-test-utils")]
-pub use asset_test_utils;
+#[cfg(feature = "asset-test-pezutils")]
+pub use asset_test_pezutils;
 
 /// Assets common utilities.
 #[cfg(feature = "assets-common")]
@@ -24,8 +24,8 @@ pub use assets_common;
 pub use binary_merkle_tree;
 
 /// A common interface for describing what a bridge pallet should be able to do.
-#[cfg(feature = "bp-header-chain")]
-pub use bp_header_chain;
+#[cfg(feature = "bp-header-pez-chain")]
+pub use bp_header_pez_chain;
 
 /// Primitives of messages module.
 #[cfg(feature = "bp-messages")]
@@ -40,8 +40,8 @@ pub use bp_pezkuwi_core;
 pub use bp_relayers;
 
 /// Primitives that may be used at (bridges) runtime level.
-#[cfg(feature = "bp-runtime")]
-pub use bp_runtime;
+#[cfg(feature = "pezbp-runtime")]
+pub use pezbp_runtime;
 
 /// Utilities for testing bizinikiwi-based runtime bridge code.
 #[cfg(feature = "bp-test-utils")]
@@ -64,13 +64,13 @@ pub use bp_xcm_bridge_hub_router;
 pub use bridge_hub_common;
 
 /// Utils for BridgeHub testing.
-#[cfg(feature = "bridge-hub-test-utils")]
-pub use bridge_hub_test_utils;
+#[cfg(feature = "pezbridge-hub-test-utils")]
+pub use pezbridge_hub_test_utils;
 
 /// Common types and functions that may be used by bizinikiwi-based runtimes of all bridged
 /// chains.
-#[cfg(feature = "bridge-runtime-common")]
-pub use bridge_runtime_common;
+#[cfg(feature = "pezbridge-runtime-common")]
+pub use pezbridge_runtime_common;
 
 /// Teyrchain bootnodes registration and discovery.
 #[cfg(feature = "pezcumulus-client-bootnodes")]
@@ -119,39 +119,39 @@ pub use pezcumulus_client_teyrchain_inherent;
 
 /// AURA consensus extension pallet for teyrchains.
 #[cfg(feature = "pezcumulus-pezpallet-aura-ext")]
-pub use pezcumulus_pallet_aura_ext;
+pub use pezcumulus_pezpallet_aura_ext;
 
 /// Migrates messages from the old DMP queue pallet.
 #[cfg(feature = "pezcumulus-pezpallet-dmp-queue")]
-pub use pezcumulus_pallet_dmp_queue;
+pub use pezcumulus_pezpallet_dmp_queue;
 
 /// FRAME sessions pallet benchmarking.
 #[cfg(feature = "pezcumulus-pezpallet-session-benchmarking")]
-pub use pezcumulus_pallet_session_benchmarking;
+pub use pezcumulus_pezpallet_session_benchmarking;
 
 /// Adds functionality to migrate from a Solo to a Teyrchain.
 #[cfg(feature = "pezcumulus-pezpallet-solo-to-para")]
-pub use pezcumulus_pallet_solo_to_para;
+pub use pezcumulus_pezpallet_solo_to_para;
 
 /// Base pallet for pezcumulus-based teyrchains.
 #[cfg(feature = "pezcumulus-pezpallet-teyrchain-system")]
-pub use pezcumulus_pallet_teyrchain_system;
+pub use pezcumulus_pezpallet_teyrchain_system;
 
 /// Proc macros provided by the teyrchain-system pallet.
 #[cfg(feature = "pezcumulus-pezpallet-teyrchain-system-proc-macro")]
-pub use pezcumulus_pallet_teyrchain_system_proc_macro;
+pub use pezcumulus_pezpallet_teyrchain_system_proc_macro;
 
 /// pallet and transaction extensions for accurate proof size reclaim.
 #[cfg(feature = "pezcumulus-pezpallet-weight-reclaim")]
-pub use pezcumulus_pallet_weight_reclaim;
+pub use pezcumulus_pezpallet_weight_reclaim;
 
 /// Pallet for stuff specific to teyrchains' usage of XCM.
 #[cfg(feature = "pezcumulus-pezpallet-xcm")]
-pub use pezcumulus_pallet_xcm;
+pub use pezcumulus_pezpallet_xcm;
 
 /// Pallet to queue outbound and inbound XCMP messages.
 #[cfg(feature = "pezcumulus-pezpallet-xcmp-queue")]
-pub use pezcumulus_pallet_xcmp_queue;
+pub use pezcumulus_pezpallet_xcmp_queue;
 
 /// Ping Pallet for Pezcumulus XCM/UMP testing.
 #[cfg(feature = "pezcumulus-ping")]
@@ -210,18 +210,18 @@ pub use pezcumulus_relay_chain_streams;
 #[cfg(feature = "pezcumulus-test-relay-sproof-builder")]
 pub use pezcumulus_test_relay_sproof_builder;
 
-/// Common resources for integration testing with xcm-emulator.
+/// Common resources for integration testing with xcm-pez-emulator.
 #[cfg(feature = "emulated-integration-tests-common")]
 pub use emulated_integration_tests_common;
 
 /// Interfaces for Ethereum standards.
-#[cfg(feature = "ethereum-standards")]
-pub use ethereum_standards;
+#[cfg(feature = "pez-ethereum-standards")]
+pub use pez_ethereum_standards;
 
 /// Utility library for managing tree-like ordered data with logic for pruning the tree while
 /// finalizing nodes.
-#[cfg(feature = "fork-tree")]
-pub use fork_tree;
+#[cfg(feature = "pez-fork-tree")]
+pub use pez_fork_tree;
 
 /// Macro for benchmarking a FRAME runtime.
 #[cfg(feature = "pezframe-benchmarking")]
@@ -289,16 +289,16 @@ pub use pezframe_system_rpc_runtime_api;
 pub use pezframe_try_runtime;
 
 /// Bag threshold generation script for pezpallet-bag-list.
-#[cfg(feature = "generate-bags")]
-pub use generate_bags;
+#[cfg(feature = "pez-generate-bags")]
+pub use pez_generate_bags;
 
 /// MMR Client gadget for bizinikiwi.
-#[cfg(feature = "mmr-gadget")]
-pub use mmr_gadget;
+#[cfg(feature = "pezmmr-gadget")]
+pub use pezmmr_gadget;
 
 /// Node-specific RPC methods for interaction with Merkle Mountain Range pallet.
-#[cfg(feature = "mmr-rpc")]
-pub use mmr_rpc;
+#[cfg(feature = "pezmmr-rpc")]
+pub use pezmmr_rpc;
 
 /// The Alliance pallet provides a collective for standard-setting industry collaboration.
 #[cfg(feature = "pezpallet-alliance")]
@@ -956,8 +956,8 @@ pub use pezkuwi_node_metrics;
 pub use pezkuwi_node_network_protocol;
 
 /// Primitives types for the Node-side.
-#[cfg(feature = "pezkuwi-node-primitives")]
-pub use pezkuwi_node_primitives;
+#[cfg(feature = "pezkuwi-pez-node-primitives")]
+pub use pezkuwi_pez_node_primitives;
 
 /// Subsystem traits and message definitions and the generated overseer.
 #[cfg(feature = "pezkuwi-node-subsystem")]
@@ -1245,8 +1245,8 @@ pub use pezsc_transaction_pool_api;
 pub use pezsc_utils;
 
 /// Helper crate for generating slot ranges for the Pezkuwi runtime.
-#[cfg(feature = "slot-range-helper")]
-pub use slot_range_helper;
+#[cfg(feature = "pez-slot-range-helper")]
+pub use pez_slot_range_helper;
 
 /// Bizinikiwi runtime api primitives.
 #[cfg(feature = "sp-api")]
@@ -1500,8 +1500,8 @@ pub use pezstaging_xcm_executor;
 
 /// Generate and restore keys for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing
 /// number of teyrchains and Bizinikiwi based projects.
-#[cfg(feature = "subkey")]
-pub use subkey;
+#[cfg(feature = "pez_subkey")]
+pub use pez_subkey;
 
 /// Converting BIP39 entropy to valid Bizinikiwi (sr25519) SecretKeys.
 #[cfg(feature = "bizinikiwi-bip39")]
@@ -1548,26 +1548,26 @@ pub use teyrchains_common;
 pub use teyrchains_runtimes_test_utils;
 
 /// Stick logs together with the TraceID as provided by tempo.
-#[cfg(feature = "tracing-gum")]
-pub use tracing_gum;
+#[cfg(feature = "pez-tracing-gum")]
+pub use pez_tracing_gum;
 
 /// Generate an overseer including builder pattern and message wrapper from a single annotated
 /// struct definition.
-#[cfg(feature = "tracing-gum-proc-macro")]
-pub use tracing_gum_proc_macro;
+#[cfg(feature = "pez-tracing-gum-proc-macro")]
+pub use pez_tracing_gum_proc_macro;
 
 /// Test kit to emulate XCM program execution.
-#[cfg(feature = "xcm-emulator")]
-pub use xcm_emulator;
+#[cfg(feature = "xcm-pez-emulator")]
+pub use xcm_pez_emulator;
 
 /// Procedural macros for XCM.
-#[cfg(feature = "xcm-procedural")]
-pub use xcm_procedural;
+#[cfg(feature = "xcm-pez-procedural")]
+pub use xcm_pez_procedural;
 
 /// XCM runtime APIs.
-#[cfg(feature = "xcm-runtime-apis")]
-pub use xcm_runtime_apis;
+#[cfg(feature = "xcm-runtime-pezapis")]
+pub use xcm_runtime_pezapis;
 
 /// Test kit to simulate cross-chain message passing and XCM execution.
-#[cfg(feature = "xcm-simulator")]
-pub use xcm_simulator;
+#[cfg(feature = "xcm-pez-simulator")]
+pub use xcm_pez_simulator;

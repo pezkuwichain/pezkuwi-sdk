@@ -29,7 +29,7 @@ use bp_relayers::{
 	ExplicitOrAccountParams, ExtensionCallData, ExtensionCallInfo, ExtensionConfig,
 	RewardsAccountOwner, RewardsAccountParams,
 };
-use bp_runtime::{Chain, RangeInclusiveExt, StaticStrProvider};
+use pezbp_runtime::{Chain, RangeInclusiveExt, StaticStrProvider};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::{fmt::Debug, marker::PhantomData};
 use pezframe_support::{
@@ -86,7 +86,7 @@ impl<AccountId, RemoteGrandpaChainBlockNumber: Debug, LaneId: Clone + Copy + Deb
 	#[cfg(test)]
 	pub fn submit_finality_proof_info_mut(
 		&mut self,
-	) -> Option<&mut bp_header_chain::SubmitFinalityProofInfo<RemoteGrandpaChainBlockNumber>> {
+	) -> Option<&mut bp_header_pez_chain::SubmitFinalityProofInfo<RemoteGrandpaChainBlockNumber>> {
 		match self.call_info {
 			ExtensionCallInfo::AllFinalityAndMsgs(ref mut info, _, _) => Some(info),
 			ExtensionCallInfo::RelayFinalityAndMsgs(ref mut info, _) => Some(info),
@@ -454,7 +454,7 @@ mod tests {
 	use super::*;
 	use crate::mock::*;
 
-	use bp_header_chain::{StoredHeaderDataBuilder, SubmitFinalityProofInfo};
+	use bp_header_pez_chain::{StoredHeaderDataBuilder, SubmitFinalityProofInfo};
 	use bp_messages::{
 		source_chain::FromBridgedChainMessagesDeliveryProof,
 		target_chain::FromBridgedChainMessagesProof, BaseMessagesProofInfo, DeliveredMessages,
@@ -464,7 +464,7 @@ mod tests {
 	};
 	use bp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
 	use bp_relayers::RuntimeWithUtilityPallet;
-	use bp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
+	use pezbp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use bp_teyrchains::{BestParaHeadHash, ParaInfo, SubmitTeyrchainHeadsInfo};
 	use pezframe_support::{
@@ -499,9 +499,9 @@ mod tests {
 		);
 	}
 
-	bp_runtime::generate_static_str_provider!(TestGrandpaExtension);
-	bp_runtime::generate_static_str_provider!(TestExtension);
-	bp_runtime::generate_static_str_provider!(TestMessagesExtension);
+	pezbp_runtime::generate_static_str_provider!(TestGrandpaExtension);
+	pezbp_runtime::generate_static_str_provider!(TestExtension);
+	pezbp_runtime::generate_static_str_provider!(TestMessagesExtension);
 
 	type TestGrandpaExtensionConfig = grandpa_adapter::WithGrandpaChainExtensionConfig<
 		StrTestGrandpaExtension,

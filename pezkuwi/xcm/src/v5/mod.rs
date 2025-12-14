@@ -381,8 +381,8 @@ impl XcmContext {
 	Decode,
 	DecodeWithMemTracking,
 	TypeInfo,
-	xcm_procedural::XcmWeightInfoTrait,
-	xcm_procedural::Builder,
+	xcm_pez_procedural::XcmWeightInfoTrait,
+	xcm_pez_procedural::Builder,
 )]
 #[derive_where(Clone, Eq, PartialEq, Debug)]
 #[codec(encode_bound())]
@@ -1150,7 +1150,7 @@ pub enum Instruction<Call> {
 	PartialEq,
 	Eq,
 	Clone,
-	xcm_procedural::NumVariants,
+	xcm_pez_procedural::NumVariants,
 )]
 pub enum Hint {
 	/// Set asset claimer for all the trapped assets during the execution.

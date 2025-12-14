@@ -31,7 +31,7 @@ pezkuwi_sdk::pezframe_benchmarking::define_benchmarks!(
 	[pezpallet_message_queue, MessageQueue]
 	[pezpallet_sudo, Sudo]
 	[pezpallet_collator_selection, CollatorSelection]
-	[pezcumulus_pallet_teyrchain_system, TeyrchainSystem]
-	[pezcumulus_pallet_xcmp_queue, XcmpQueue]
-	[pezcumulus_pallet_weight_reclaim, WeightReclaim]
+	[pezcumulus_pezpallet_teyrchain_system, TeyrchainSystem]
+	[pezcumulus_pezpallet_xcmp_queue, XcmpQueue]
+	[pezcumulus_pezpallet_weight_reclaim, WeightReclaim]
 );

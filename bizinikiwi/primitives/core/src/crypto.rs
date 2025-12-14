@@ -737,7 +737,7 @@ mod dummy {
 /// The `SURI` can be parsed from a string. The string is interpreted in the following way:
 ///
 /// - If `string` is a possibly `0x` prefixed 64-digit hex string, then it will be interpreted
-/// directly as a `MiniSecretKey` (aka "seed" in `subkey`).
+/// directly as a `MiniSecretKey` (aka "seed" in `pez_subkey`).
 /// - If `string` is a valid BIP-39 key phrase of 12, 15, 18, 21 or 24 words, then the key will
 /// be derived from it. In this case:
 ///   - the phrase may be followed by one or more items delimited by `/` characters.
@@ -928,7 +928,7 @@ pub trait Pair: CryptoType + Sized {
 	/// junction iterator.
 	///
 	/// - If `s` is a possibly `0x` prefixed 64-digit hex string, then it will be interpreted
-	/// directly as a `MiniSecretKey` (aka "seed" in `subkey`).
+	/// directly as a `MiniSecretKey` (aka "seed" in `pez_subkey`).
 	/// - If `s` is a valid BIP-39 key phrase of 12, 15, 18, 21 or 24 words, then the key will
 	/// be derived from it. In this case:
 	///   - the phrase may be followed by one or more items delimited by `/` characters.

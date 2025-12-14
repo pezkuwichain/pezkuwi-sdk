@@ -18,11 +18,11 @@ use crate::{
 	weights::WeightInfo, BestFinalized, BridgedBlockNumber, BridgedHeader, Config,
 	CurrentAuthoritySet, Error, FreeHeadersRemaining, Pallet,
 };
-use bp_header_chain::{
+use bp_header_pez_chain::{
 	justification::GrandpaJustification, submit_finality_proof_limits_extras,
 	SubmitFinalityProofInfo,
 };
-use bp_runtime::{BlockNumberOf, Chain, OwnedBridgeModule};
+use pezbp_runtime::{BlockNumberOf, Chain, OwnedBridgeModule};
 use pezframe_support::{
 	dispatch::CallableCallFor,
 	traits::{Get, IsSubType},
@@ -307,8 +307,8 @@ mod tests {
 		BestFinalized, Config, CurrentAuthoritySet, FreeHeadersRemaining, PalletOperatingMode,
 		StoredAuthoritySet, WeightInfo,
 	};
-	use bp_header_chain::{ChainWithGrandpa, SubmitFinalityProofInfo};
-	use bp_runtime::{BasicOperatingMode, HeaderId};
+	use bp_header_pez_chain::{ChainWithGrandpa, SubmitFinalityProofInfo};
+	use pezbp_runtime::{BasicOperatingMode, HeaderId};
 	use bp_test_utils::{
 		make_default_justification, make_justification_for_header, JustificationGeneratorParams,
 		TEST_GRANDPA_SET_ID,

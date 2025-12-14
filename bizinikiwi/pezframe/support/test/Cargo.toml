@@ -38,7 +38,7 @@ pezsp-version = { workspace = true }
 static_assertions = { workspace = true, default-features = true }
 trybuild = { features = ["diff"], workspace = true }
 # The "std" feature for this pallet is never activated on purpose, in order to test construct_runtime error message
-test-pallet = { workspace = true }
+test-pezpallet = { workspace = true }
 
 [features]
 default = ["std"]
@@ -59,7 +59,7 @@ std = [
   "pezsp-runtime/std",
   "pezsp-state-machine/std",
   "pezsp-version/std",
-  "test-pallet/std",
+  "test-pezpallet/std",
 ]
 experimental = ["pezframe-support/experimental", "pezframe-system/experimental"]
 runtime-benchmarks = [
@@ -72,7 +72,7 @@ runtime-benchmarks = [
   "pezsp-runtime/runtime-benchmarks",
   "pezsp-state-machine?/runtime-benchmarks",
   "pezsp-version/runtime-benchmarks",
-  "test-pallet/runtime-benchmarks",
+  "test-pezpallet/runtime-benchmarks",
 ]
 try-runtime = [
   "pezframe-executive/try-runtime",

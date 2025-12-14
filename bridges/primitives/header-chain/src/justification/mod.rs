@@ -30,7 +30,7 @@ pub use verification::{
 	PrecommitError,
 };
 
-use bp_runtime::{BlockNumberOf, Chain, HashOf, HeaderId};
+use pezbp_runtime::{BlockNumberOf, Chain, HashOf, HeaderId};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature};

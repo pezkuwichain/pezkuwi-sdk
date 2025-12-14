@@ -24,7 +24,7 @@ use pezframe_support::{assert_ok, pezsp_runtime::traits::Dispatchable};
 use xcm_executor::traits::ConvertLocation;
 use zagros_system_emulated_network::{
 	asset_hub_zagros_emulated_chain::asset_hub_zagros_runtime::RuntimeOrigin as AssetHubRuntimeOrigin,
-	bridge_hub_zagros_emulated_chain::bridge_hub_zagros_runtime::RuntimeOrigin as BridgeHubRuntimeOrigin,
+	pezbridge_hub_zagros_emulated_chain::pezbridge_hub_zagros_runtime::RuntimeOrigin as BridgeHubRuntimeOrigin,
 };
 
 #[test]

@@ -1,5 +1,5 @@
 [package]
-name = "kitchensink-runtime"
+name = "pez-kitchensink-runtime"
 version = "3.0.0-dev"
 authors.workspace = true
 description = "Bizinikiwi node kitchensink runtime."
@@ -9,7 +9,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/kitchensink-runtime"
+documentation = "https://docs.rs/pez-kitchensink-runtime"
 
 [lints]
 workspace = true
@@ -39,7 +39,7 @@ primitive-types = { features = [
 pezkuwi-sdk = { features = ["runtime-full", "tuples-96"], workspace = true }
 
 # shared code between runtime and node
-node-primitives = { workspace = true }
+pez-node-primitives = { workspace = true }
 
 # Example pallets that are not published:
 pezpallet-example-mbm = { workspace = true }
@@ -54,7 +54,7 @@ with-tracing = ["pezkuwi-sdk/with-tracing"]
 std = [
   "codec/std",
   "log/std",
-  "node-primitives/std",
+  "pez-node-primitives/std",
   "pezpallet-example-mbm/std",
   "pezpallet-example-tasks/std",
   "pezkuwi-sdk/std",
@@ -66,7 +66,7 @@ std = [
   "bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-  "node-primitives/runtime-benchmarks",
+  "pez-node-primitives/runtime-benchmarks",
   "pezpallet-example-mbm/runtime-benchmarks",
   "pezpallet-example-tasks/runtime-benchmarks",
   "pezkuwi-sdk/runtime-benchmarks",

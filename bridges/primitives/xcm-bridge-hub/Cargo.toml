@@ -19,7 +19,7 @@ serde = { features = ["alloc", "derive"], workspace = true }
 
 # Bridge Dependencies
 bp-messages = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
 pezframe-support = { workspace = true }
@@ -34,7 +34,7 @@ xcm = { workspace = true }
 default = ["std"]
 std = [
   "bp-messages/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "codec/std",
   "pezframe-support/std",
   "scale-info/std",
@@ -46,7 +46,7 @@ std = [
 ]
 runtime-benchmarks = [
   "bp-messages/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",
   "xcm/runtime-benchmarks",

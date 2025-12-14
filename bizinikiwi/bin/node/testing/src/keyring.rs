@@ -19,8 +19,8 @@
 //! Test accounts.
 
 use codec::Encode;
-use kitchensink_runtime::{CheckedExtrinsic, SessionKeys, TxExtension, UncheckedExtrinsic};
-use node_primitives::{AccountId, Balance, Nonce};
+use pez_kitchensink_runtime::{CheckedExtrinsic, SessionKeys, TxExtension, UncheckedExtrinsic};
+use pez_node_primitives::{AccountId, Balance, Nonce};
 use pezsp_core::{crypto::get_public_from_string_or_panic, ecdsa, ed25519, sr25519};
 use pezsp_crypto_hashing::blake2_256;
 use pezsp_keyring::Sr25519Keyring;

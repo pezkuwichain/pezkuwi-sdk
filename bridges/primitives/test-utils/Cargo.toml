@@ -13,9 +13,9 @@ homepage = { workspace = true }
 workspace = true
 
 [dependencies]
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
-bp-runtime = { features = ["test-helpers"], workspace = true }
+pezbp-runtime = { features = ["test-helpers"], workspace = true }
 bp-teyrchains = { workspace = true }
 codec = { workspace = true }
 ed25519-dalek = { workspace = true }
@@ -30,9 +30,9 @@ pezsp-trie = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-pezkuwi-core/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-teyrchains/std",
   "codec/std",
   "ed25519-dalek/std",
@@ -45,9 +45,9 @@ std = [
   "pezsp-trie/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-teyrchains/runtime-benchmarks",
   "pezsp-consensus-grandpa/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",

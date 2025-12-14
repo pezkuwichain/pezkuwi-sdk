@@ -34,11 +34,11 @@ use crate::{
 };
 use codec::{Decode, Encode};
 use futures::executor;
-use kitchensink_runtime::{
+use pez_kitchensink_runtime::{
 	constants::currency::DOLLARS, AccountId, BalancesCall, CheckedExtrinsic, MinimumPeriod,
 	RuntimeCall, Signature, SystemCall, UncheckedExtrinsic,
 };
-use node_primitives::Block;
+use pez_node_primitives::Block;
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_client_api::{execution_extensions::ExecutionExtensions, UsageProvider};
 use pezsc_client_db::PruningMode;
@@ -267,7 +267,7 @@ pub struct BlockContentIterator<'a> {
 	iteration: usize,
 	content: BlockContent,
 	runtime_version: pezsc_executor::RuntimeVersion,
-	genesis_hash: node_primitives::Hash,
+	genesis_hash: pez_node_primitives::Hash,
 	keyring: &'a BenchKeyring,
 }
 
@@ -301,13 +301,13 @@ impl<'a> Iterator for BlockContentIterator<'a> {
 			CheckedExtrinsic {
 				format: ExtrinsicFormat::Signed(
 					sender,
-					tx_ext(0, kitchensink_runtime::ExistentialDeposit::get() + 1),
+					tx_ext(0, pez_kitchensink_runtime::ExistentialDeposit::get() + 1),
 				),
 				function: match self.content.block_type {
 					BlockType::RandomTransfersKeepAlive =>
 						RuntimeCall::Balances(BalancesCall::transfer_keep_alive {
 							dest: pezsp_runtime::MultiAddress::Id(receiver),
-							value: kitchensink_runtime::ExistentialDeposit::get() + 1,
+							value: pez_kitchensink_runtime::ExistentialDeposit::get() + 1,
 						}),
 					BlockType::RandomTransfersReaping => {
 						RuntimeCall::Balances(BalancesCall::transfer_allow_death {
@@ -315,7 +315,7 @@ impl<'a> Iterator for BlockContentIterator<'a> {
 							// Transfer so that ending balance would be 1 less than existential
 							// deposit so that we kill the sender account.
 							value: 100 * DOLLARS -
-								(kitchensink_runtime::ExistentialDeposit::get() - 1),
+								(pez_kitchensink_runtime::ExistentialDeposit::get() - 1),
 						})
 					},
 					BlockType::Noop =>
@@ -610,7 +610,7 @@ impl BenchKeyring {
 	}
 
 	/// Generate genesis with accounts from this keyring endowed with some balance and
-	/// kitchensink_runtime code blob.
+	/// pez_kitchensink_runtime code blob.
 	pub fn as_storage_builder(&self) -> &dyn pezsp_runtime::BuildStorage {
 		self
 	}
@@ -620,7 +620,7 @@ impl pezsp_runtime::BuildStorage for BenchKeyring {
 	fn assimilate_storage(&self, storage: &mut pezsp_core::storage::Storage) -> Result<(), String> {
 		storage.top.insert(
 			pezsp_core::storage::well_known_keys::CODE.to_vec(),
-			kitchensink_runtime::wasm_binary_unwrap().into(),
+			pez_kitchensink_runtime::wasm_binary_unwrap().into(),
 		);
 		crate::genesis::config_endowed(self.collect_account_ids()).assimilate_storage(storage)
 	}

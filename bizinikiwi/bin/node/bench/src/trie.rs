@@ -29,7 +29,7 @@ use std::{
 	sync::{Arc, LazyLock},
 };
 
-use node_primitives::Hash;
+use pez_node_primitives::Hash;
 
 use crate::{
 	core::{self, Mode, Path},

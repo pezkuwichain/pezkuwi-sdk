@@ -37,7 +37,7 @@ use pezcumulus_primitives_core::{
 };
 use pezcumulus_relay_chain_interface::RelayChainInterface;
 
-use pezkuwi_node_primitives::{Collation, MaybeCompressedPoV};
+use pezkuwi_pez_node_primitives::{Collation, MaybeCompressedPoV};
 use pezkuwi_primitives::{Header as PHeader, Id as ParaId};
 
 use crate::collators::RelayParentData;

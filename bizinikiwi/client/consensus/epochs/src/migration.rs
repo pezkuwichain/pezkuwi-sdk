@@ -20,7 +20,7 @@
 
 use crate::{Epoch, EpochChanges, PersistedEpoch, PersistedEpochHeader};
 use codec::{Decode, Encode};
-use fork_tree::ForkTree;
+use pez_fork_tree::ForkTree;
 use pezsp_runtime::traits::{Block as BlockT, NumberFor};
 use std::collections::BTreeMap;
 

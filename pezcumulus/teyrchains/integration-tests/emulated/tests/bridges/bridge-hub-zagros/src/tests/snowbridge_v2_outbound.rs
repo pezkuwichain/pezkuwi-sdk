@@ -17,16 +17,16 @@ use crate::{
 	imports::*,
 	tests::{snowbridge_common::*, usdt_at_ah_zagros},
 };
-use bridge_hub_zagros_runtime::{
+use pezbridge_hub_zagros_runtime::{
 	bridge_to_ethereum_config::EthereumGatewayAddress, EthereumOutboundQueueV2,
 };
 use emulated_integration_tests_common::{impls::Decode, PenpalBTeleportableAssetLocation};
 use pezframe_support::{assert_err_ignore_postinfo, pezpallet_prelude::TypeInfo};
-use pezkuwichain_zagros_system_emulated_network::penpal_emulated_chain::penpal_runtime::xcm_config::LocalTeleportableToAssetHub;
-use snowbridge_core::{reward::MessageId, AssetMetadata, BasicOperatingMode};
-use snowbridge_outbound_queue_primitives::v2::{ContractCall, DeliveryReceipt};
-use snowbridge_pallet_outbound_queue_v2::Error;
-use snowbridge_pallet_system_v2::LostTips;
+use pezkuwichain_zagros_system_emulated_network::pez_penpal_emulated_chain::pez_penpal_runtime::xcm_config::LocalTeleportableToAssetHub;
+use pezsnowbridge_core::{reward::MessageId, AssetMetadata, BasicOperatingMode};
+use pezsnowbridge_outbound_queue_primitives::v2::{ContractCall, DeliveryReceipt};
+use snowbridge_pezpallet_outbound_queue_v2::Error;
+use snowbridge_pezpallet_system_v2::LostTips;
 use pezsp_core::H256;
 use xcm::v5::AssetTransferFilter;
 
@@ -98,7 +98,7 @@ fn send_weth_from_asset_hub_to_ethereum() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},
+				RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},
 			]
 		);
 
@@ -152,7 +152,7 @@ pub fn register_relay_token_from_asset_hub_with_sudo() {
 		type RuntimeEvent = <BridgeHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }
@@ -192,7 +192,7 @@ pub fn register_usdt_from_owner_on_asset_hub() {
 		type RuntimeEvent = <BridgeHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }
@@ -268,7 +268,7 @@ pub fn add_tip_from_asset_hub_user_origin() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::EthereumSystemV2(snowbridge_pallet_system_v2::Event::TipProcessed { sender, message_id, success, ..})
+				RuntimeEvent::EthereumSystemV2(snowbridge_pezpallet_system_v2::Event::TipProcessed { sender, message_id, success, ..})
 					if *sender == relayer && *message_id == tip_message_id.clone() && *success, // expect success
 			)),
 			"tip added event found"
@@ -307,13 +307,13 @@ pub fn tip_to_invalid_nonce_is_added_to_lost_tips() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::EthereumSystemV2(snowbridge_pallet_system_v2::Event::TipProcessed { sender, message_id, success, ..})
+				RuntimeEvent::EthereumSystemV2(snowbridge_pezpallet_system_v2::Event::TipProcessed { sender, message_id, success, ..})
 					if *sender == relayer && *message_id == tip_message_id.clone() && !(*success), // expect a failure
 			)),
 			"tip added event found"
 		);
 
-		let relayer_lost_tip = LostTips::<bridge_hub_zagros_runtime::Runtime>::get::<
+		let relayer_lost_tip = LostTips::<pezbridge_hub_zagros_runtime::Runtime>::get::<
 			pezsp_runtime::AccountId32,
 		>(relayer.into());
 		// Assert a tip was added to storage.
@@ -403,7 +403,7 @@ fn transfer_relay_token_from_ah() {
 		// Check that the Ethereum message was queue in the Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 
 		let relayer = BridgeHubZagrosSender::get();
@@ -490,7 +490,7 @@ fn send_weth_and_hez_from_asset_hub_to_ethereum() {
 		// Check that Ethereum message was queue in the Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 
 		let relayer = BridgeHubZagrosSender::get();
@@ -586,7 +586,7 @@ fn transact_with_agent_from_asset_hub() {
 		// Check that Ethereum message was queue in the Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 
 		let relayer = BridgeHubZagrosSender::get();
@@ -670,7 +670,7 @@ fn transact_with_agent_from_asset_hub_without_any_asset_transfer() {
 		// Check that Ethereum message was queue in the Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 
 		let relayer = BridgeHubZagrosSender::get();
@@ -789,7 +789,7 @@ fn register_token_from_penpal() {
 		type RuntimeEvent = <BridgeHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 
 		let relayer = BridgeHubZagrosSender::get();
@@ -808,7 +808,7 @@ fn register_token_from_penpal() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageDelivered { .. }) => {},
+				RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageDelivered { .. }) => {},
 			]
 		);
 	});
@@ -937,7 +937,7 @@ fn send_message_from_penpal_to_ethereum(sudo: bool) {
 		type RuntimeEvent = <BridgeHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueueV2(snowbridge_pezpallet_outbound_queue_v2::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }

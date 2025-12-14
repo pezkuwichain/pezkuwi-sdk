@@ -52,7 +52,7 @@ mod integrity_tests {
 	use super::{compute_priority_boost, ItemCount};
 
 	use bp_messages::MessageNonce;
-	use bp_runtime::PreComputedSize;
+	use pezbp_runtime::PreComputedSize;
 	use pezframe_support::{
 		dispatch::{DispatchClass, DispatchInfo, Pays, PostDispatchInfo},
 		traits::Get,
@@ -142,7 +142,7 @@ mod integrity_tests {
 	pub mod per_relay_header {
 		use super::*;
 
-		use bp_header_chain::{
+		use bp_header_pez_chain::{
 			max_expected_submit_finality_proof_arguments_size, ChainWithGrandpa,
 		};
 		use pezpallet_bridge_grandpa::WeightInfoExt;
@@ -231,7 +231,7 @@ mod integrity_tests {
 	pub mod per_teyrchain_header {
 		use super::*;
 
-		use bp_runtime::Teyrchain;
+		use pezbp_runtime::Teyrchain;
 		use pezpallet_bridge_teyrchains::WeightInfoExt;
 
 		/// Ensures that the value of `PriorityBoostPerHeader` matches the value of

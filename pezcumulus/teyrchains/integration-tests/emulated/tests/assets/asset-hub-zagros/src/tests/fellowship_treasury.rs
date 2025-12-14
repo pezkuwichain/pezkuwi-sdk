@@ -96,7 +96,7 @@ fn create_and_claim_treasury_spend() {
 					to: to == &alice,
 					amount: amount == &SPEND_AMOUNT,
 				},
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
 			]
 		);

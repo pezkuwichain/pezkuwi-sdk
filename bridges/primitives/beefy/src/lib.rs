@@ -35,7 +35,7 @@ pub use pezsp_consensus_beefy::{
 	ValidatorSetId, BEEFY_ENGINE_ID,
 };
 
-use bp_runtime::{BasicOperatingMode, BlockNumberOf, Chain, HashOf};
+use pezbp_runtime::{BasicOperatingMode, BlockNumberOf, Chain, HashOf};
 use codec::{Decode, Encode};
 use pezframe_support::Parameter;
 use scale_info::TypeInfo;

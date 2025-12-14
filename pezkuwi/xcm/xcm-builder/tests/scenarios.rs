@@ -24,7 +24,7 @@ use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
 use pezsp_runtime::traits::AccountIdConversion;
 use xcm::latest::{prelude::*, Error::UntrustedTeleportLocation};
 use xcm_executor::XcmExecutor;
-use xcm_simulator::fake_message_hash;
+use xcm_pez_simulator::fake_message_hash;
 
 pub const ALICE: AccountId = AccountId::new([0u8; 32]);
 pub const PARA_ID: u32 = 2000;

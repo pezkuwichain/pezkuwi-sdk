@@ -22,7 +22,7 @@ use pezsp_keyring::Sr25519Keyring as Keyring;
 use emulated_integration_tests_common::{
 	accounts, build_genesis_storage, collators,
 	snowbridge::{ETHER_MIN_BALANCE, WETH},
-	xcm_emulator::ConvertLocation,
+	xcm_pez_emulator::ConvertLocation,
 	PenpalALocation, PenpalASiblingSovereignAccount, PenpalATeleportableAssetLocation,
 	PenpalBLocation, PenpalBSiblingSovereignAccount, PenpalBTeleportableAssetLocation,
 	RESERVABLE_ASSET_ID, SAFE_XCM_VERSION, USDT_ID,

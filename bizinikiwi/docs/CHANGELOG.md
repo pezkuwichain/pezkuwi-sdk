@@ -366,7 +366,7 @@ Patch release with backports to fix broken nightly builds. Namely contains backp
 * Fix peerset not filtering incoming connections in reserved-only (#6249)
 * Use Subscription Manager from `jsonrpc-pubsub` (#6208)
 * Add a Bizinikiwi networking Grafana dashboard template (#6171)
-* Add subkey inspect-node-key (#6153)
+* Add pez_subkey inspect-node-key (#6153)
 
 ## 2.0.0-rc1 -> 2.0.0-rc2
 
@@ -434,7 +434,7 @@ PR](https://github.com/pezkuwichain/kurdistan-sdk/issues/56).
 * enum Pays for PaysFee (#5733)
 * Migrate away from `SimpleDispatchInfo` (#5686)
 * Child trie api changes BREAKING (#4857)
-* subkey: compute and inspect a moduleid (#5676)
+* pez_subkey: compute and inspect a moduleid (#5676)
 * Listen on ipv6 by default as well (#5677)
 * Adjustments to Kademlia-related metrics (#5660)
 * client/authority-discovery: Allow to be run by sentry node (#5568)

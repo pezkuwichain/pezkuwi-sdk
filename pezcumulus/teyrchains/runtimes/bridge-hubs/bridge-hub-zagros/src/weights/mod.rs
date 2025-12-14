@@ -23,9 +23,9 @@ use ::pezpallet_bridge_relayers::WeightInfo as _;
 use ::pezpallet_bridge_teyrchains::WeightInfoExt as TeyrchainsWeightInfoExt;
 
 pub mod block_weights;
-pub mod pezcumulus_pallet_teyrchain_system;
-pub mod pezcumulus_pallet_weight_reclaim;
-pub mod pezcumulus_pallet_xcmp_queue;
+pub mod pezcumulus_pezpallet_teyrchain_system;
+pub mod pezcumulus_pezpallet_weight_reclaim;
+pub mod pezcumulus_pezpallet_xcmp_queue;
 pub mod extrinsic_weights;
 pub mod pezframe_system;
 pub mod pezframe_system_extensions;
@@ -46,13 +46,13 @@ pub mod paritydb_weights;
 pub mod rocksdb_weights;
 pub mod xcm;
 
-pub mod snowbridge_pallet_ethereum_client;
-pub mod snowbridge_pallet_inbound_queue;
-pub mod snowbridge_pallet_inbound_queue_v2;
-pub mod snowbridge_pallet_outbound_queue;
-pub mod snowbridge_pallet_outbound_queue_v2;
-pub mod snowbridge_pallet_system;
-pub mod snowbridge_pallet_system_v2;
+pub mod snowbridge_pezpallet_ethereum_client;
+pub mod snowbridge_pezpallet_inbound_queue;
+pub mod snowbridge_pezpallet_inbound_queue_v2;
+pub mod snowbridge_pezpallet_outbound_queue;
+pub mod snowbridge_pezpallet_outbound_queue_v2;
+pub mod snowbridge_pezpallet_system;
+pub mod snowbridge_pezpallet_system_v2;
 
 pub use block_weights::constants::BlockExecutionWeight;
 pub use extrinsic_weights::constants::ExtrinsicBaseWeight;

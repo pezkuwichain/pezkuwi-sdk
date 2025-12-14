@@ -23,7 +23,7 @@ use bp_messages::{
 	ChainWithMessages, DeliveredMessages, InboundLaneData, LaneState, MessageKey, MessageNonce,
 	OutboundLaneData, ReceptionResult, UnrewardedRelayer,
 };
-use bp_runtime::AccountIdOf;
+use pezbp_runtime::AccountIdOf;
 use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
 use scale_info::{Type, TypeInfo};
 use pezsp_runtime::RuntimeDebug;

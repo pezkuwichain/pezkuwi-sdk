@@ -32,8 +32,8 @@
 
 use std::borrow::Cow;
 
-use node_primitives::Block;
-use node_testing::bench::{BenchDb, BlockType, DatabaseType, KeyTypes};
+use pez_node_primitives::Block;
+use pez_node_testing::bench::{BenchDb, BlockType, DatabaseType, KeyTypes};
 use pezsc_client_api::backend::Backend;
 
 use crate::{

@@ -1,5 +1,5 @@
 [package]
-name = "solochain-template-node"
+name = "pez-solochain-template-node"
 description = "A solochain node template built with Bizinikiwi, part of Pezkuwi Sdk."
 version = "0.0.0"
 license = "Unlicense"
@@ -10,7 +10,7 @@ edition.workspace = true
 publish = false
 
 build = "build.rs"
-documentation = "https://docs.rs/solochain-template-node"
+documentation = "https://docs.rs/pez-solochain-template-node"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
@@ -62,14 +62,14 @@ bizinikiwi-frame-rpc-system = { workspace = true, default-features = true }
 pezframe-benchmarking-cli = { workspace = true, default-features = true }
 
 # Local Dependencies
-solochain-template-runtime = { workspace = true }
+pez-solochain-template-runtime = { workspace = true }
 
 [build-dependencies]
 bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
-std = ["solochain-template-runtime/std"]
+std = ["pez-solochain-template-runtime/std"]
 # Dependencies that are only required if runtime benchmarking should be build.
 runtime-benchmarks = [
   "pezframe-benchmarking-cli/runtime-benchmarks",
@@ -89,7 +89,7 @@ runtime-benchmarks = [
   "pezsc-service/runtime-benchmarks",
   "pezsc-transaction-pool-api/runtime-benchmarks",
   "pezsc-transaction-pool/runtime-benchmarks",
-  "solochain-template-runtime/runtime-benchmarks",
+  "pez-solochain-template-runtime/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",
   "pezsp-block-builder/runtime-benchmarks",
   "pezsp-blockchain/runtime-benchmarks",
@@ -107,6 +107,6 @@ runtime-benchmarks = [
 try-runtime = [
   "pezframe-system/try-runtime",
   "pezpallet-transaction-payment/try-runtime",
-  "solochain-template-runtime/try-runtime",
+  "pez-solochain-template-runtime/try-runtime",
   "pezsp-runtime/try-runtime",
 ]

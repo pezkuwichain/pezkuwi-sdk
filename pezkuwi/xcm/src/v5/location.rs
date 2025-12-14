@@ -541,7 +541,7 @@ impl From<pezsp_runtime::AccountId32> for Location {
 	}
 }
 
-xcm_procedural::impl_conversion_functions_for_location_v5!();
+xcm_pez_procedural::impl_conversion_functions_for_location_v5!();
 
 #[cfg(test)]
 mod tests {

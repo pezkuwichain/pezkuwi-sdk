@@ -25,8 +25,8 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use bp_runtime::BlockNumberOf;
-use finality_relay::TargetClient;
+use pezbp_runtime::BlockNumberOf;
+use pez_finality_relay::TargetClient;
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, Chain, Client, Error, HeaderIdOf, HeaderOf, SyncHeader,
 	TransactionEra, TransactionTracker, UnsignedTransaction,

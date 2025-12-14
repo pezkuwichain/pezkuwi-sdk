@@ -26,7 +26,7 @@ use crate::{
 use assets_common::{matching::FromSiblingTeyrchain, AssetIdForTrustBackedAssetsConvert};
 use pezframe_support::{parameter_types, traits::EitherOf};
 use pezframe_system::EnsureRootWithSuccess;
-use snowbridge_runtime_common::{ForeignAssetOwner, LocalAssetOwner};
+use snowpezbridge_runtime_common::{ForeignAssetOwner, LocalAssetOwner};
 use testnet_teyrchains_constants::zagros::snowbridge::{EthereumNetwork, FRONTEND_PALLET_INDEX};
 use teyrchains_common::AssetIdForTrustBackedAssets;
 use xcm::prelude::{InteriorLocation, Location, PalletInstance};
@@ -42,9 +42,9 @@ parameter_types! {
 	pub SystemFrontendPalletLocation: InteriorLocation = [PalletInstance(FRONTEND_PALLET_INDEX)].into();
 }
 
-impl snowbridge_pallet_system_frontend::Config for Runtime {
+impl snowbridge_pezpallet_system_frontend::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::snowbridge_pallet_system_frontend::WeightInfo<Runtime>;
+	type WeightInfo = weights::snowbridge_pezpallet_system_frontend::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
 	type RegisterTokenOrigin = EitherOf<
@@ -80,7 +80,7 @@ impl snowbridge_pallet_system_frontend::Config for Runtime {
 	type UniversalLocation = UniversalLocation;
 	type PalletLocation = SystemFrontendPalletLocation;
 	type Swap = AssetConversion;
-	type BackendWeightInfo = weights::snowbridge_pallet_system_backend::WeightInfo<Runtime>;
+	type BackendWeightInfo = weights::snowbridge_pezpallet_system_backend::WeightInfo<Runtime>;
 	type AccountIdConverter = xcm_config::LocationToAccountId;
 }
 
@@ -125,7 +125,7 @@ pub mod benchmark_helpers {
 		}
 	}
 
-	impl snowbridge_pallet_system_frontend::BenchmarkHelper<RuntimeOrigin, AccountId> for () {
+	impl snowbridge_pezpallet_system_frontend::BenchmarkHelper<RuntimeOrigin, AccountId> for () {
 		fn make_xcm_origin(location: Location) -> RuntimeOrigin {
 			RuntimeOrigin::from(pezpallet_xcm::Origin::Xcm(location))
 		}

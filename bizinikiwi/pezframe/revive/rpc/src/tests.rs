@@ -70,9 +70,9 @@ struct SharedResources {
 
 impl SharedResources {
 	fn start() -> Self {
-		// Start revive-dev-node
+		// Start pez-revive-dev-node
 		let _node_handle = thread::spawn(move || {
-			if let Err(e) = revive_dev_node::command::run_with_args(vec![
+			if let Err(e) = pez_revive_dev_node::command::run_with_args(vec![
 				"--dev".to_string(),
 				"--rpc-port=45789".to_string(),
 				"-lerror,pezsc_rpc_server=info,runtime::revive=debug".to_string(),
@@ -85,7 +85,7 @@ impl SharedResources {
 		let args = CliCommand::parse_from([
 			"--dev",
 			"--rpc-port=45788",
-			"--node-rpc-url=ws://localhost:45789",
+			"--pez-node-rpc-url=ws://localhost:45789",
 			"--no-prometheus",
 			"-linfo,eth-rpc=debug",
 		]);
@@ -103,7 +103,7 @@ impl SharedResources {
 		ws_client_with_retry("ws://localhost:45788").await
 	}
 
-	fn node_rpc_url() -> &'static str {
+	fn pez_node_rpc_url() -> &'static str {
 		"ws://localhost:45789"
 	}
 }
@@ -464,10 +464,10 @@ async fn test_invalid_transaction(client: Arc<WsClient>) -> anyhow::Result<()> {
 
 async fn get_evm_block_from_storage(
 	node_client: &OnlineClient<SrcChainConfig>,
-	node_rpc_client: &RpcClient,
+	pez_node_rpc_client: &RpcClient,
 	block_number: U256,
 ) -> anyhow::Result<Block> {
-	let block_hash: H256 = node_rpc_client
+	let block_hash: H256 = pez_node_rpc_client
 		.request("chain_getBlockHash", rpc_params![block_number])
 		.await
 		.unwrap();
@@ -480,8 +480,8 @@ async fn get_evm_block_from_storage(
 }
 
 async fn test_evm_blocks_should_match(client: Arc<WsClient>) -> anyhow::Result<()> {
-	let (node_client, node_rpc_client, _) =
-		client::connect(SharedResources::node_rpc_url()).await.unwrap();
+	let (node_client, pez_node_rpc_client, _) =
+		client::connect(SharedResources::pez_node_rpc_url()).await.unwrap();
 
 	// Deploy a contract to have some interesting blocks
 	let (bytes, _) = pezpallet_revive_fixtures::compile_module("dummy")?;
@@ -499,7 +499,7 @@ async fn test_evm_blocks_should_match(client: Arc<WsClient>) -> anyhow::Result<(
 	log::trace!(target: LOG_TARGET, "tx hash = {:?}", tx.hash());
 
 	let evm_block_from_storage =
-		get_evm_block_from_storage(&node_client, &node_rpc_client, block_number).await?;
+		get_evm_block_from_storage(&node_client, &pez_node_rpc_client, block_number).await?;
 
 	// Fetch the block immediately (should come from storage EthereumBlock)
 	let evm_block_from_rpc_by_number = client
@@ -700,7 +700,7 @@ async fn test_mixed_evm_bizinikiwi_transactions(client: Arc<WsClient>) -> anyhow
 	// Prepare bizinikiwi transactions (simple remarks)
 	log::trace!(target: LOG_TARGET, "Creating {num_bizinikiwi_txs} bizinikiwi remark transactions");
 	let alice_signer = subxt_signer::sr25519::dev::alice();
-	let (node_client, _, _) = client::connect(SharedResources::node_rpc_url()).await.unwrap();
+	let (node_client, _, _) = client::connect(SharedResources::pez_node_rpc_url()).await.unwrap();
 
 	let bizinikiwi_txs =
 		prepare_bizinikiwi_transactions(&node_client, &alice_signer, num_bizinikiwi_txs).await?;
@@ -730,15 +730,15 @@ async fn test_mixed_evm_bizinikiwi_transactions(client: Arc<WsClient>) -> anyhow
 }
 
 async fn test_runtime_pallets_address_upload_code(client: Arc<WsClient>) -> anyhow::Result<()> {
-	let (node_client, node_rpc_client, _) =
-		client::connect(SharedResources::node_rpc_url()).await?;
+	let (node_client, pez_node_rpc_client, _) =
+		client::connect(SharedResources::pez_node_rpc_url()).await?;
 
 	let (bytecode, _) = pezpallet_revive_fixtures::compile_module("dummy")?;
 	let signer = Account::default();
 
 	// Helper function to get bizinikiwi block hash from EVM block number
 	let get_bizinikiwi_block_hash = |block_number: U256| {
-		let rpc_client = node_rpc_client.clone();
+		let rpc_client = pez_node_rpc_client.clone();
 		async move {
 			rpc_client
 				.request::<pezsp_core::H256>("chain_getBlockHash", rpc_params![block_number])

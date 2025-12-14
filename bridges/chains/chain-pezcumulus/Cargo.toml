@@ -19,7 +19,7 @@ workspace = true
 # Bridge Dependencies
 bp-messages = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Based Dependencies
 pezframe-support = { workspace = true }
@@ -36,7 +36,7 @@ default = ["std"]
 std = [
   "bp-messages/std",
   "bp-pezkuwi-core/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "pezframe-support/std",
   "pezframe-system/std",
   "pezkuwi-primitives/std",
@@ -47,7 +47,7 @@ std = [
 runtime-benchmarks = [
   "bp-messages/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",

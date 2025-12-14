@@ -37,7 +37,7 @@ pezsp-tracing = { workspace = true, default-features = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true, default-features = true }
 xcm-executor = { workspace = true }
-xcm-simulator = { workspace = true, default-features = true }
+xcm-pez-simulator = { workspace = true, default-features = true }
 
 [dev-dependencies]
 pezpallet-contracts-fixtures = { workspace = true }
@@ -80,6 +80,6 @@ runtime-benchmarks = [
   "pezsp-runtime/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-simulator/runtime-benchmarks",
+  "xcm-pez-simulator/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

@@ -16,7 +16,7 @@ use crate::{common::*, imports::*};
 use emulated_integration_tests_common::{
 	assert_whitelisted,
 	impls::RelayChain,
-	xcm_emulator::{Chain, TestExt, Teyrchain},
+	xcm_pez_emulator::{Chain, TestExt, Teyrchain},
 };
 use zagros_runtime::governance::pezpallet_custom_origins::Origin;
 use zagros_system_emulated_network::{

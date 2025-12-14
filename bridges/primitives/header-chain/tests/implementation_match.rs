@@ -21,7 +21,7 @@
 //! Some of tests in this module may partially duplicate tests from `justification.rs`,
 //! but their purpose is different.
 
-use bp_header_chain::justification::{
+use bp_header_pez_chain::justification::{
 	verify_justification, GrandpaJustification, JustificationVerificationContext,
 	JustificationVerificationError, PrecommitError,
 };
@@ -38,11 +38,11 @@ type TestHash = <TestHeader as HeaderT>::Hash;
 type TestNumber = <TestHeader as HeaderT>::Number;
 
 /// Implementation of `finality_grandpa::Chain` that is used in tests.
-struct AncestryChain(bp_header_chain::justification::AncestryChain<TestHeader>);
+struct AncestryChain(bp_header_pez_chain::justification::AncestryChain<TestHeader>);
 
 impl AncestryChain {
 	fn new(justification: &GrandpaJustification<TestHeader>) -> Self {
-		Self(bp_header_chain::justification::AncestryChain::new(justification).0)
+		Self(bp_header_pez_chain::justification::AncestryChain::new(justification).0)
 	}
 }
 

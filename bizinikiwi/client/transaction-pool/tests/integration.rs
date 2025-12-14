@@ -45,7 +45,7 @@ async fn send_future_and_ready_from_many_accounts_to_teyrchain() {
 	net.wait_for_block("charlie", BlockSubscriptionType::Best).await.unwrap();
 
 	// Create future & ready txs executors.
-	let ws = net.node_rpc_uri("charlie").unwrap();
+	let ws = net.pez_node_rpc_uri("charlie").unwrap();
 	let future_scenario_executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws.clone())
 		.with_start_id(0)
@@ -97,7 +97,7 @@ async fn send_future_and_ready_from_many_accounts_to_relaychain() {
 	net.wait_for_block("alice", BlockSubscriptionType::Best).await.unwrap();
 
 	// Create future & ready txs executors.
-	let ws = net.node_rpc_uri("alice").unwrap();
+	let ws = net.pez_node_rpc_uri("alice").unwrap();
 	let future_scenario_executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws.clone())
 		.with_start_id(0)
@@ -154,7 +154,7 @@ async fn send_future_mortal_txs() {
 	net.wait_for_block("alice", BlockSubscriptionType::Finalized).await.unwrap();
 
 	// Create txs executors.
-	let ws = net.node_rpc_uri("alice").unwrap();
+	let ws = net.pez_node_rpc_uri("alice").unwrap();
 	let ready_scenario_executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws.clone())
 		.with_start_id(0)
@@ -228,7 +228,7 @@ async fn send_lower_priority_mortal_txs() {
 	net.wait_for_block("alice", BlockSubscriptionType::Finalized).await.unwrap();
 
 	// Create txs executors.
-	let ws = net.node_rpc_uri("alice").unwrap();
+	let ws = net.pez_node_rpc_uri("alice").unwrap();
 	let ready_scenario_executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws.clone())
 		.with_start_id(0)
@@ -313,7 +313,7 @@ async fn send_5m_from_many_accounts_to_teyrchain() {
 	net.wait_for_block("charlie", BlockSubscriptionType::Best).await.unwrap();
 
 	// Create txs executor.
-	let ws = net.node_rpc_uri("charlie").unwrap();
+	let ws = net.pez_node_rpc_uri("charlie").unwrap();
 	let executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws)
 		.with_start_id(0)
@@ -343,7 +343,7 @@ async fn send_5m_from_many_accounts_to_relaychain() {
 	net.wait_for_block("alice", BlockSubscriptionType::Best).await.unwrap();
 
 	// Create txs executor.
-	let ws = net.node_rpc_uri("alice").unwrap();
+	let ws = net.pez_node_rpc_uri("alice").unwrap();
 	let executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws.clone())
 		.with_start_id(0)
@@ -375,7 +375,7 @@ async fn gossiping() {
 	net.wait_for_block("a00", BlockSubscriptionType::Best).await.unwrap();
 
 	// Create the txs executor.
-	let ws = net.node_rpc_uri("a00").unwrap();
+	let ws = net.pez_node_rpc_uri("a00").unwrap();
 	let executor = default_zn_scenario_builder(&net)
 		.with_rpc_uri(ws)
 		.with_start_id(0)
@@ -402,7 +402,7 @@ async fn send_batch(
 	to: u32,
 	prio: u32,
 ) -> ScenarioExecutor {
-	let ws = net.node_rpc_uri(node_name).unwrap();
+	let ws = net.pez_node_rpc_uri(node_name).unwrap();
 	info!(from, to, prio, "send_batch");
 	default_zn_scenario_builder(net)
 		.with_rpc_uri(ws)

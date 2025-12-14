@@ -354,7 +354,7 @@ pub enum Error<B: BlockT> {
 	RuntimeApi(pezsp_api::ApiError),
 	/// Fork tree error
 	#[error(transparent)]
-	ForkTree(Box<fork_tree::Error<pezsp_blockchain::Error>>),
+	ForkTree(Box<pez_fork_tree::Error<pezsp_blockchain::Error>>),
 }
 
 impl<B: BlockT> From<Error<B>> for String {

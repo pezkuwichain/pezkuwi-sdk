@@ -18,7 +18,7 @@
 
 use crate::{Config, Error};
 
-use bp_header_chain::{AuthoritySet, ChainWithGrandpa};
+use bp_header_pez_chain::{AuthoritySet, ChainWithGrandpa};
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::{traits::Get, BoundedVec, CloneNoBound, RuntimeDebugNoBound};
 use scale_info::TypeInfo;

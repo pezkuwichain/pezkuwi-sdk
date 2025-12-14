@@ -22,7 +22,7 @@ fatality = { workspace = true }
 futures = { workspace = true }
 gum = { workspace = true, default-features = true }
 hex = { workspace = true, default-features = true }
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 pezsc-authority-discovery = { workspace = true, default-features = true }
@@ -38,7 +38,7 @@ rand_chacha = { workspace = true, default-features = true }
 [features]
 runtime-benchmarks = [
   "gum/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",
   "pezsc-authority-discovery/runtime-benchmarks",
   "pezsc-network/runtime-benchmarks",

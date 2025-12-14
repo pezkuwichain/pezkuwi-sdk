@@ -38,7 +38,7 @@ xcm-executor = { workspace = true }
 
 # Pezcumulus
 pezcumulus-primitives-core = { workspace = true }
-ethereum-standards = { workspace = true }
+pez-ethereum-standards = { workspace = true }
 teyrchains-common = { workspace = true }
 
 [features]

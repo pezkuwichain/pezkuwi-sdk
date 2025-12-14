@@ -1,12 +1,12 @@
 [package]
-name = "xcm-executor-integration-tests"
+name = "xcm-pez-executor-integration-tests"
 description = "Integration tests for the XCM Executor"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
 version = "1.0.0"
 publish = false
-documentation = "https://docs.rs/xcm-executor-integration-tests"
+documentation = "https://docs.rs/xcm-pez-executor-integration-tests"
 repository = { workspace = true }
 homepage = { workspace = true }
 

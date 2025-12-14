@@ -241,7 +241,7 @@
 - **CumulusXcm** (32) - cumulus_pallet_xcm
 - **ToPezkuwichainXcmRouter** (34) - pallet_xcm_bridge_hub_router::<Instance1>
 - **MessageQueue** (35) - pallet_message_queue
-- **SnowbridgeSystemFrontend** (36) - snowbridge_pallet_system_frontend
+- **SnowbridgeSystemFrontend** (36) - snowbridge_pezpallet_system_frontend
 
 #### Utilities (Index 40-43)
 - **Utility** (40) - pallet_utility
@@ -525,67 +525,67 @@
 ## Custom Pallets Details
 
 ### 1. **pezpallet-pez-treasury** 💰
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/pez-treasury`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/pez-treasury`
 - **Runtime:** Asset Hub PezkuwiChain
 - **Purpose:** PEZ token treasury management and distribution
 - **Benchmarks:** ✅ Yes
 
 ### 2. **pezpallet-presale** 🎫
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/presale`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/presale`
 - **Runtime:** Asset Hub PezkuwiChain
 - **Purpose:** Token presale management
 - **Benchmarks:** ✅ Yes
 
 ### 3. **pezpallet-token-wrapper** 🔄
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/token-wrapper`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/token-wrapper`
 - **Runtime:** Asset Hub PezkuwiChain
 - **Purpose:** Token wrapping/unwrapping functionality
 - **Benchmarks:** ✅ Yes
 
 ### 4. **pezpallet-identity-kyc** 🆔
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/identity-kyc`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/identity-kyc`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Enhanced identity with KYC capabilities
 - **Benchmarks:** ✅ Yes
 
 ### 5. **pezpallet-referral** 🤝
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/referral`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/referral`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Referral program management
 - **Benchmarks:** ✅ Yes
 
 ### 6. **pezpallet-perwerde** 📚
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/perwerde`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/perwerde`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Educational credentials and achievements
 - **Benchmarks:** ✅ Yes
 
 ### 7. **pezpallet-tiki** 🎖️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/tiki`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/tiki`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Role-based NFT badges system
 - **Benchmarks:** ✅ Yes
 
 ### 8. **pezpallet-welati** 🏛️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/welati`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/welati`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** PezkuwiChain governance (Serok, Parlement, Diwan)
 - **Benchmarks:** ✅ Yes
 
 ### 9. **pezpallet-staking-score** 📊
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/staking-score`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/staking-score`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Trust and participation scoring
 - **Benchmarks:** ✅ Yes
 
 ### 10. **pezpallet-trust** 🛡️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/trust`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/trust`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** Trust-based interactions and reputation
 - **Benchmarks:** ✅ Yes
 
 ### 11. **pezpallet-pez-rewards** 🎁
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/pez-rewards`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/pez-rewards`
 - **Runtime:** People PezkuwiChain
 - **Purpose:** PEZ token rewards distribution
 - **Benchmarks:** ✅ Yes
@@ -597,13 +597,13 @@
 - **Benchmarks:** ❌ No
 
 ### 13. **pezpallet-collective-content** 📝
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/collective-content`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/collective-content`
 - **Runtime:** None (not integrated yet)
 - **Purpose:** Content management for collectives
 - **Benchmarks:** ❌ No
 
 ### 14. **teyrchain-info** ℹ️
-- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pallets/teyrchain-info`
+- **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/teyrchain-info`
 - **Runtime:** All teyrchain runtimes
 - **Purpose:** Provides teyrchain ID information
 - **Benchmarks:** ❌ No (infrastructure pallet)

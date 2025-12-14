@@ -1,5 +1,5 @@
 [package]
-name = "node-rpc"
+name = "pez-node-rpc"
 version = "3.0.0-dev"
 authors.workspace = true
 description = "Bizinikiwi node rpc methods."
@@ -8,7 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/node-rpc"
+documentation = "https://docs.rs/pez-node-rpc"
 
 [lints]
 workspace = true
@@ -18,8 +18,8 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 jsonrpsee = { features = ["server"], workspace = true }
-mmr-rpc = { workspace = true, default-features = true }
-node-primitives = { workspace = true, default-features = true }
+pezmmr-rpc = { workspace = true, default-features = true }
+pez-node-primitives = { workspace = true, default-features = true }
 pezpallet-transaction-payment-rpc = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
@@ -48,8 +48,8 @@ bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = tru
 
 [features]
 runtime-benchmarks = [
-  "mmr-rpc/runtime-benchmarks",
-  "node-primitives/runtime-benchmarks",
+  "pezmmr-rpc/runtime-benchmarks",
+  "pez-node-primitives/runtime-benchmarks",
   "pezpallet-transaction-payment-rpc/runtime-benchmarks",
   "pezsc-chain-spec/runtime-benchmarks",
   "pezsc-client-api/runtime-benchmarks",

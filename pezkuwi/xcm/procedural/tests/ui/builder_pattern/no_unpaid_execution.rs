@@ -16,7 +16,7 @@
 
 //! Test error when there's no `UnpaidExecution` instruction.
 
-use xcm_procedural::Builder;
+use xcm_pez_procedural::Builder;
 
 struct Xcm<Call>(pub Vec<Instruction<Call>>);
 

@@ -89,9 +89,9 @@
 //!  `benchmark` subcommand that does the same.
 //! * [`chain_spec_builder`]: Utility to build chain-specs Nodes  typically contain a `build-spec`
 //!   subcommand that does the same.
-//! * [`subkey`]: Bizinikiwi's key management utility.
+//! * [`pez_subkey`]: Bizinikiwi's key management utility.
 //! * [`bizinikiwi-node`](node_cli) is an extensive bizinikiwi node that contains the superset of all
-//!   runtime and node side features. The corresponding runtime, called [`kitchensink_runtime`]
+//!   runtime and node side features. The corresponding runtime, called [`pez_kitchensink_runtime`]
 //!   contains all of the modules that are provided with `FRAME`. This node and runtime is only used
 //!   for testing and demonstration.
 //!

@@ -19,9 +19,9 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use bp_header_chain::ChainWithGrandpa;
+use bp_header_pez_chain::ChainWithGrandpa;
 use bp_messages::{ChainWithMessages, MessageNonce};
-use bp_runtime::{
+use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis,
 	extensions::{
 		CheckEra, CheckGenesis, CheckNonZeroSender, CheckNonce, CheckSpecVersion, CheckTxVersion,

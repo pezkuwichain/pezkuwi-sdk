@@ -42,10 +42,10 @@ pub use xcm::{
 pub use xcm_executor::traits::{DropAssets, TransferType};
 
 // Pezcumulus
-pub use asset_test_utils;
-pub use pezcumulus_pallet_xcmp_queue;
+pub use asset_test_pezutils;
+pub use pezcumulus_pezpallet_xcmp_queue;
 pub use teyrchains_common::AccountId;
-pub use xcm_emulator::{
+pub use xcm_pez_emulator::{
 	assert_expected_events, Chain, RelayChain, TestArgs, TestContext, TestExt, Teyrchain as Para,
 };
 
@@ -53,7 +53,7 @@ pub use pezframe_support::{
 	dispatch::{GetDispatchInfo, RawOrigin},
 	BoundedVec,
 };
-pub use xcm_runtime_apis::{
+pub use xcm_runtime_pezapis::{
 	dry_run::runtime_decl_for_dry_run_api::DryRunApiV2,
 	fees::{runtime_decl_for_xcm_payment_api::XcmPaymentApiV2, Error as XcmPaymentApiError},
 };
@@ -162,7 +162,7 @@ macro_rules! test_teyrchain_is_trusted_teleporter {
 									$crate::macros::pezpallet_xcm::Event::Attempted { outcome: $crate::macros::Outcome::Complete { .. } }
 								) => {},
 								RuntimeEvent::XcmpQueue(
-									$crate::macros::pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+									$crate::macros::pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }
 								) => {},
 								RuntimeEvent::Balances(
 									$crate::macros::pezpallet_balances::Event::Burned { who: sender, amount }
@@ -662,7 +662,7 @@ macro_rules! test_can_estimate_and_pay_exact_fees {
 			let asset_owner = [<$owner_prefix AssetOwner>]::get();
 
 			// Fund teyrchain's sender account.
-			// TODO: consider mint_foreign_asset to be part of xcm_emulator::Chain trait
+			// TODO: consider mint_foreign_asset to be part of xcm_pez_emulator::Chain trait
 			$sender_para::mint_foreign_asset(
 				<$sender_para as $crate::macros::Chain>::RuntimeOrigin::signed(asset_owner.clone()),
 				$asset_id.clone().into(),
@@ -671,7 +671,7 @@ macro_rules! test_can_estimate_and_pay_exact_fees {
 			);
 
 			// Fund the teyrchain origin's SA on Asset Hub with the native tokens.
-			// TODO: consider fund_accounts to be part of xcm_emulator::Chain trait
+			// TODO: consider fund_accounts to be part of xcm_pez_emulator::Chain trait
 			$asset_hub::fund_accounts(vec![(sov_of_sender_on_ah.clone(), $amount * 2)]);
 
 			let beneficiary_id = [<$receiver_para Receiver>]::get();

@@ -21,7 +21,7 @@ use std::{collections::HashMap, sync::atomic, task::Poll};
 use pezkuwi_node_network_protocol::{
 	peer_set::ValidationVersion, ObservedRole, PeerId, UnifiedReputationChange,
 };
-use pezkuwi_node_primitives::{
+use pezkuwi_pez_node_primitives::{
 	BlockData, CollationGenerationConfig, CollationResult, DisputeMessage, InvalidDisputeVote, PoV,
 	UncheckedDisputeMessage, ValidDisputeVote,
 };
@@ -283,7 +283,7 @@ fn extract_metrics(registry: &prometheus::Registry) -> HashMap<&'static str, u64
 
 	let activated = extract("pezkuwi_teyrchain_activated_heads_total");
 	let deactivated = extract("pezkuwi_teyrchain_deactivated_heads_total");
-	let relayed = extract("pezkuwi_teyrchain_messages_relayed_total");
+	let relayed = extract("pezkuwi_teyrchain_pez_messages_relayed_total");
 	let mut result = HashMap::new();
 	result.insert("activated", activated);
 	result.insert("deactivated", deactivated);

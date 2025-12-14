@@ -17,8 +17,8 @@
 // From construct_runtime macro
 #![allow(clippy::from_over_into)]
 
-use bp_header_chain::ChainWithGrandpa;
-use bp_runtime::{Chain, ChainId};
+use bp_header_pez_chain::ChainWithGrandpa;
+use pezbp_runtime::{Chain, ChainId};
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types, pezsp_runtime::StateVersion, traits::Hooks,
 	weights::Weight,

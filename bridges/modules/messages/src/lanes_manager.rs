@@ -24,7 +24,7 @@ use bp_messages::{
 	target_chain::MessageDispatch, ChainWithMessages, InboundLaneData, LaneState, MessageKey,
 	MessageNonce, OutboundLaneData,
 };
-use bp_runtime::AccountIdOf;
+use pezbp_runtime::AccountIdOf;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezframe_support::{ensure, pezsp_runtime::RuntimeDebug, PalletError};
 use scale_info::TypeInfo;

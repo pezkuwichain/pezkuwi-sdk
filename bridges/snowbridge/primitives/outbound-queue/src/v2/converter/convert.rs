@@ -5,7 +5,7 @@
 use codec::DecodeAll;
 use core::slice::Iter;
 use pezframe_support::{ensure, BoundedVec};
-use snowbridge_core::{AgentIdOf, TokenId, TokenIdOf};
+use pezsnowbridge_core::{AgentIdOf, TokenId, TokenIdOf};
 
 use crate::v2::{
 	message::{Command, Message},

@@ -31,7 +31,7 @@ use futures::{
 
 use pezkuwi_node_subsystem_util::database::Database;
 
-use pezkuwi_node_primitives::{
+use pezkuwi_pez_node_primitives::{
 	DisputeMessage, DisputeStatus, SignedDisputeStatement, SignedFullStatement, Statement,
 	DISPUTE_WINDOW,
 };
@@ -51,7 +51,7 @@ use pezsp_core::{sr25519::Pair, testing::TaskExecutor, Pair as PairT};
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_keystore::{Keystore, KeystorePtr};
 
-use pezkuwi_node_primitives::{Timestamp, ACTIVE_DURATION_SECS};
+use pezkuwi_pez_node_primitives::{Timestamp, ACTIVE_DURATION_SECS};
 use pezkuwi_node_subsystem::{
 	messages::{AllMessages, BlockDescription, RuntimeApiMessage, RuntimeApiRequest},
 	ActiveLeavesUpdate,

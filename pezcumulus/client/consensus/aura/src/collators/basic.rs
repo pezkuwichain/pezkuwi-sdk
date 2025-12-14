@@ -32,7 +32,7 @@ use pezcumulus_client_consensus_proposer::ProposerInterface;
 use pezcumulus_primitives_core::{relay_chain::BlockId as RBlockId, CollectCollationInfo};
 use pezcumulus_relay_chain_interface::RelayChainInterface;
 
-use pezkuwi_node_primitives::CollationResult;
+use pezkuwi_pez_node_primitives::CollationResult;
 use pezkuwi_overseer::Handle as OverseerHandle;
 use pezkuwi_primitives::{CollatorPair, Id as ParaId, ValidationCode};
 

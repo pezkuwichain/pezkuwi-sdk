@@ -340,11 +340,11 @@ the `PublicKey`, but note that it's not the case for BEEFY. As a consequence of 
 **not** convert the `AccountId` raw bytes into a BEEFY `PublicKey`.
 
 The easiest way to generate or view hex-encoded or SS58-encoded BEEFY Public Key is by using the
-[Subkey](https://bizinikiwi.dev/docs/en/knowledgebase/integrate/subkey) tool. Generate a BEEFY key
+[Subkey](https://bizinikiwi.dev/docs/en/knowledgebase/integrate/pez_subkey) tool. Generate a BEEFY key
 using the following command
 
 ```sh
-subkey generate --scheme ecdsa
+pez_subkey generate --scheme ecdsa
 ```
 
 The output will look something like

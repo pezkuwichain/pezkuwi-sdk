@@ -279,14 +279,14 @@ where
 
 #[cfg(test)]
 mod tests {
-	use crate::test_utils::{run_test_with_mmr_gadget, run_test_with_mmr_gadget_pre_post};
+	use crate::test_utils::{run_test_with_pezmmr_gadget, run_test_with_pezmmr_gadget_pre_post};
 	use parking_lot::Mutex;
 	use pezsp_runtime::generic::BlockId;
 	use std::{sync::Arc, time::Duration};
 
 	#[test]
 	fn canonicalize_and_prune_works_correctly() {
-		run_test_with_mmr_gadget(|client| async move {
+		run_test_with_pezmmr_gadget(|client| async move {
 			//                     -> D4 -> D5
 			// G -> A1 -> A2 -> A3 -> A4
 			//   -> B1 -> B2 -> B3
@@ -325,7 +325,7 @@ mod tests {
 
 	#[test]
 	fn canonicalize_and_prune_handles_pallet_reset() {
-		run_test_with_mmr_gadget(|client| async move {
+		run_test_with_pezmmr_gadget(|client| async move {
 			// G -> A1 -> A2 -> A3 -> A4 -> A5
 			//      |           |
 			//      |           | -> pallet reset
@@ -357,7 +357,7 @@ mod tests {
 	fn canonicalize_catchup_works_correctly() {
 		let mmr_blocks = Arc::new(Mutex::new(vec![]));
 		let mmr_blocks_ref = mmr_blocks.clone();
-		run_test_with_mmr_gadget_pre_post(
+		run_test_with_pezmmr_gadget_pre_post(
 			|client| async move {
 				// G -> A1 -> A2
 				//      |     |
@@ -402,7 +402,7 @@ mod tests {
 	fn canonicalize_catchup_works_correctly_with_pallet_reset() {
 		let mmr_blocks = Arc::new(Mutex::new(vec![]));
 		let mmr_blocks_ref = mmr_blocks.clone();
-		run_test_with_mmr_gadget_pre_post(
+		run_test_with_pezmmr_gadget_pre_post(
 			|client| async move {
 				// G -> A1 -> A2
 				//      |     |

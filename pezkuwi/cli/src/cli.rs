@@ -16,7 +16,7 @@
 
 //! Pezkuwi CLI library.
 
-pub use pezkuwi_node_primitives::NODE_VERSION;
+pub use pezkuwi_pez_node_primitives::NODE_VERSION;
 
 use clap::Parser;
 use std::path::PathBuf;

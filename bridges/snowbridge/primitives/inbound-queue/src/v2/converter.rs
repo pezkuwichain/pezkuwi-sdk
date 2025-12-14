@@ -7,7 +7,7 @@ use crate::{v2::LOG_TARGET, CallIndex};
 use codec::{Decode, DecodeLimit, Encode};
 use core::marker::PhantomData;
 use pezframe_support::ensure;
-use snowbridge_core::{ParaId, TokenId};
+use pezsnowbridge_core::{ParaId, TokenId};
 use pezsp_core::{Get, RuntimeDebug, H160};
 use pezsp_io::hashing::blake2_256;
 use pezsp_runtime::{traits::MaybeConvert, MultiAddress};
@@ -427,8 +427,8 @@ mod tests {
 	use codec::Encode;
 	use pezframe_support::{assert_err, assert_ok, parameter_types};
 	use hex_literal::hex;
-	use snowbridge_core::TokenId;
-	use snowbridge_test_utils::mock_converter::{
+	use pezsnowbridge_core::TokenId;
+	use pezsnowbridge_test_utils::mock_converter::{
 		add_location_override, reanchor_to_ethereum, LocationIdConvert,
 	};
 	use pezsp_core::{H160, H256};

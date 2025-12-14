@@ -29,47 +29,47 @@ pub const PARA_ID: u32 = 1002;
 pub const ED: Balance = testnet_teyrchains_constants::pezkuwichain::currency::EXISTENTIAL_DEPOSIT;
 
 pub fn genesis() -> Storage {
-	let genesis_config = bridge_hub_pezkuwichain_runtime::RuntimeGenesisConfig {
-		system: bridge_hub_pezkuwichain_runtime::SystemConfig::default(),
-		balances: bridge_hub_pezkuwichain_runtime::BalancesConfig {
+	let genesis_config = pezbridge_hub_pezkuwichain_runtime::RuntimeGenesisConfig {
+		system: pezbridge_hub_pezkuwichain_runtime::SystemConfig::default(),
+		balances: pezbridge_hub_pezkuwichain_runtime::BalancesConfig {
 			balances: accounts::init_balances().iter().cloned().map(|k| (k, ED * 4096)).collect(),
 			..Default::default()
 		},
-		teyrchain_info: bridge_hub_pezkuwichain_runtime::TeyrchainInfoConfig {
+		teyrchain_info: pezbridge_hub_pezkuwichain_runtime::TeyrchainInfoConfig {
 			teyrchain_id: PARA_ID.into(),
 			..Default::default()
 		},
-		collator_selection: bridge_hub_pezkuwichain_runtime::CollatorSelectionConfig {
+		collator_selection: pezbridge_hub_pezkuwichain_runtime::CollatorSelectionConfig {
 			invulnerables: collators::invulnerables().iter().cloned().map(|(acc, _)| acc).collect(),
 			candidacy_bond: ED * 16,
 			..Default::default()
 		},
-		session: bridge_hub_pezkuwichain_runtime::SessionConfig {
+		session: pezbridge_hub_pezkuwichain_runtime::SessionConfig {
 			keys: collators::invulnerables()
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
 						acc.clone(),                                           // account id
 						acc,                                                   // validator id
-						bridge_hub_pezkuwichain_runtime::SessionKeys { aura }, // session keys
+						pezbridge_hub_pezkuwichain_runtime::SessionKeys { aura }, // session keys
 					)
 				})
 				.collect(),
 			..Default::default()
 		},
-		pezkuwi_xcm: bridge_hub_pezkuwichain_runtime::PezkuwiXcmConfig {
+		pezkuwi_xcm: pezbridge_hub_pezkuwichain_runtime::PezkuwiXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},
-		bridge_zagros_grandpa: bridge_hub_pezkuwichain_runtime::BridgeZagrosGrandpaConfig {
+		bridge_zagros_grandpa: pezbridge_hub_pezkuwichain_runtime::BridgeZagrosGrandpaConfig {
 			owner: Some(Keyring::Bob.to_account_id()),
 			..Default::default()
 		},
-		bridge_zagros_messages: bridge_hub_pezkuwichain_runtime::BridgeZagrosMessagesConfig {
+		bridge_zagros_messages: pezbridge_hub_pezkuwichain_runtime::BridgeZagrosMessagesConfig {
 			owner: Some(Keyring::Bob.to_account_id()),
 			..Default::default()
 		},
-		xcm_over_bridge_hub_zagros: bridge_hub_pezkuwichain_runtime::XcmOverBridgeHubZagrosConfig {
+		xcm_over_bridge_hub_zagros: pezbridge_hub_pezkuwichain_runtime::XcmOverBridgeHubZagrosConfig {
 			opened_bridges: vec![
 				// open AHR -> AHW bridge
 				(
@@ -80,7 +80,7 @@ pub fn genesis() -> Storage {
 			],
 			..Default::default()
 		},
-		ethereum_system: bridge_hub_pezkuwichain_runtime::EthereumSystemConfig {
+		ethereum_system: pezbridge_hub_pezkuwichain_runtime::EthereumSystemConfig {
 			para_id: PARA_ID.into(),
 			asset_hub_para_id: ASSETHUB_PARA_ID.into(),
 			..Default::default()
@@ -90,7 +90,7 @@ pub fn genesis() -> Storage {
 
 	build_genesis_storage(
 		&genesis_config,
-		bridge_hub_pezkuwichain_runtime::WASM_BINARY
+		pezbridge_hub_pezkuwichain_runtime::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
 	)
 }

@@ -38,7 +38,7 @@ const TIMEOUT_MS: u64 = 3000;
 /// - Execution time (min/avg/max) across all participants
 /// - Retry attempts (min/avg/max) needed for statement propagation
 #[tokio::test(flavor = "multi_thread")]
-async fn statement_store_one_node_bench() -> Result<(), anyhow::Error> {
+async fn statement_store_one_pez_node_bench() -> Result<(), anyhow::Error> {
 	let _ = env_logger::try_init_from_env(
 		env_logger::Env::default().filter_or(env_logger::DEFAULT_FILTER_ENV, "info"),
 	);

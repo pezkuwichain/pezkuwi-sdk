@@ -24,7 +24,7 @@ use crate::{
 };
 
 use alloc::{boxed::Box, vec};
-use bp_header_chain::ChainWithGrandpa;
+use bp_header_pez_chain::ChainWithGrandpa;
 use bp_messages::UnrewardedRelayersState;
 use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use pezframe_support::traits::{OnFinalize, OnInitialize};
@@ -44,7 +44,7 @@ use xcm::latest::prelude::*;
 pub trait WithRemoteGrandpaChainHelper {
 	/// This chain runtime.
 	type Runtime: BasicTeyrchainRuntime
-		+ pezcumulus_pallet_xcmp_queue::Config
+		+ pezcumulus_pezpallet_xcmp_queue::Config
 		+ BridgeGrandpaConfig<Self::GPI, BridgedChain = BridgedChainOf<Self::Runtime, Self::MPI>>
 		+ BridgeMessagesConfig<
 			Self::MPI,
@@ -74,7 +74,7 @@ impl<Runtime, AllPalletsWithoutSystem, GPI, MPI, RPI> WithRemoteGrandpaChainHelp
 	for WithRemoteGrandpaChainHelperAdapter<Runtime, AllPalletsWithoutSystem, GPI, MPI, RPI>
 where
 	Runtime: BasicTeyrchainRuntime
-		+ pezcumulus_pallet_xcmp_queue::Config
+		+ pezcumulus_pezpallet_xcmp_queue::Config
 		+ BridgeGrandpaConfig<GPI, BridgedChain = BridgedChainOf<Runtime, MPI>>
 		+ BridgeMessagesConfig<
 			MPI,
@@ -515,7 +515,7 @@ where
 	RuntimeHelper::Runtime:
 		pezpallet_utility::Config<RuntimeCall = RuntimeCallOf<RuntimeHelper::Runtime>>,
 	ThisChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>:
-		bp_runtime::Chain<AccountId = AccountIdOf<RuntimeHelper::Runtime>>,
+		pezbp_runtime::Chain<AccountId = AccountIdOf<RuntimeHelper::Runtime>>,
 	RuntimeCallOf<RuntimeHelper::Runtime>: From<BridgeGrandpaCall<RuntimeHelper::Runtime, RuntimeHelper::GPI>>
 		+ From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: ChainWithGrandpa,
@@ -617,7 +617,7 @@ where
 	RuntimeHelper: WithRemoteGrandpaChainHelper,
 	AccountIdOf<RuntimeHelper::Runtime>: From<AccountId32>,
 	ThisChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>:
-		bp_runtime::Chain<AccountId = AccountIdOf<RuntimeHelper::Runtime>>,
+		pezbp_runtime::Chain<AccountId = AccountIdOf<RuntimeHelper::Runtime>>,
 	RuntimeCallOf<RuntimeHelper::Runtime>:
 		From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: ChainWithGrandpa,

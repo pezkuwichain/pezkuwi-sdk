@@ -429,8 +429,8 @@ impl XcmContext {
 	Decode,
 	DecodeWithMemTracking,
 	TypeInfo,
-	xcm_procedural::XcmWeightInfoTrait,
-	xcm_procedural::Builder,
+	xcm_pez_procedural::XcmWeightInfoTrait,
+	xcm_pez_procedural::Builder,
 )]
 #[derive_where(Clone, Eq, PartialEq, Debug)]
 #[codec(encode_bound())]

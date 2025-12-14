@@ -15,8 +15,8 @@
 
 pub mod genesis;
 
-pub use bridge_hub_pezkuwichain_runtime::{
-	self as bridge_hub_pezkuwichain_runtime,
+pub use pezbridge_hub_pezkuwichain_runtime::{
+	self as pezbridge_hub_pezkuwichain_runtime,
 	xcm_config::XcmConfig as BridgeHubPezkuwichainXcmConfig, EthereumBeaconClient,
 	EthereumInboundQueue, ExistentialDeposit as BridgeHubPezkuwichainExistentialDeposit,
 	RuntimeOrigin as BridgeHubPezkuwichainRuntimeOrigin,
@@ -28,7 +28,7 @@ use pezframe_support::traits::OnInitialize;
 // Pezcumulus
 use emulated_integration_tests_common::{
 	impl_accounts_helpers_for_teyrchain, impl_assert_events_helpers_for_teyrchain,
-	impl_xcm_helpers_for_teyrchain, impls::Teyrchain, xcm_emulator::decl_test_teyrchains,
+	impl_xcm_helpers_for_teyrchain, impls::Teyrchain, xcm_pez_emulator::decl_test_teyrchains,
 	AuraDigestProvider,
 };
 
@@ -37,22 +37,22 @@ decl_test_teyrchains! {
 	pub struct BridgeHubPezkuwichain {
 		genesis = genesis::genesis(),
 		on_init = {
-			bridge_hub_pezkuwichain_runtime::AuraExt::on_initialize(1);
+			pezbridge_hub_pezkuwichain_runtime::AuraExt::on_initialize(1);
 		},
-		runtime = bridge_hub_pezkuwichain_runtime,
+		runtime = pezbridge_hub_pezkuwichain_runtime,
 		core = {
-			XcmpMessageHandler: bridge_hub_pezkuwichain_runtime::XcmpQueue,
-			LocationToAccountId: bridge_hub_pezkuwichain_runtime::xcm_config::LocationToAccountId,
-			TeyrchainInfo: bridge_hub_pezkuwichain_runtime::TeyrchainInfo,
+			XcmpMessageHandler: pezbridge_hub_pezkuwichain_runtime::XcmpQueue,
+			LocationToAccountId: pezbridge_hub_pezkuwichain_runtime::xcm_config::LocationToAccountId,
+			TeyrchainInfo: pezbridge_hub_pezkuwichain_runtime::TeyrchainInfo,
 			MessageOrigin: bridge_hub_common::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {
-			PezkuwiXcm: bridge_hub_pezkuwichain_runtime::PezkuwiXcm,
-			Balances: bridge_hub_pezkuwichain_runtime::Balances,
-			EthereumSystem: bridge_hub_pezkuwichain_runtime::EthereumSystem,
-			EthereumInboundQueue: bridge_hub_pezkuwichain_runtime::EthereumInboundQueue,
-			EthereumOutboundQueue: bridge_hub_pezkuwichain_runtime::EthereumOutboundQueue,
+			PezkuwiXcm: pezbridge_hub_pezkuwichain_runtime::PezkuwiXcm,
+			Balances: pezbridge_hub_pezkuwichain_runtime::Balances,
+			EthereumSystem: pezbridge_hub_pezkuwichain_runtime::EthereumSystem,
+			EthereumInboundQueue: pezbridge_hub_pezkuwichain_runtime::EthereumInboundQueue,
+			EthereumOutboundQueue: pezbridge_hub_pezkuwichain_runtime::EthereumOutboundQueue,
 		}
 	},
 }

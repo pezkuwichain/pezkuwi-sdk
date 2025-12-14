@@ -21,7 +21,7 @@ use crate::{
 	},
 };
 use asset_hub_zagros_runtime::ForeignAssets;
-use bridge_hub_zagros_runtime::{
+use pezbridge_hub_zagros_runtime::{
 	bridge_common_config::BridgeReward,
 	bridge_to_ethereum_config::{
 		CreateAssetCallIndex, EthereumGatewayAddress, SetReservesCallIndex,
@@ -34,9 +34,9 @@ use emulated_integration_tests_common::{
 	RESERVABLE_ASSET_ID,
 };
 use hex_literal::hex;
-use pezkuwichain_zagros_system_emulated_network::penpal_emulated_chain::PARA_ID_B;
-use snowbridge_core::{reward::MessageId, AssetMetadata, TokenIdOf};
-use snowbridge_inbound_queue_primitives::v2::{
+use pezkuwichain_zagros_system_emulated_network::pez_penpal_emulated_chain::PARA_ID_B;
+use pezsnowbridge_core::{reward::MessageId, AssetMetadata, TokenIdOf};
+use pezsnowbridge_inbound_queue_primitives::v2::{
 	EthereumAsset::{ForeignTokenERC20, NativeTokenERC20},
 	Message, Network, XcmPayload,
 };
@@ -92,7 +92,7 @@ fn register_token_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -203,14 +203,14 @@ fn send_token_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
 					reward_kind: *reward_kind == BridgeReward::Snowbridge,
 					reward_balance: *reward_balance == relayer_reward,
 				},
-				RuntimeEvent::EthereumInboundQueueV2(snowbridge_pallet_inbound_queue_v2::Event::MessageReceived { message_id, .. }) => {
+				RuntimeEvent::EthereumInboundQueueV2(snowbridge_pezpallet_inbound_queue_v2::Event::MessageReceived { message_id, .. }) => {
 					message_id: *message_id == topic_id,
 				},
 			]
@@ -312,7 +312,7 @@ fn send_weth_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -469,7 +469,7 @@ fn register_and_send_token_in_one_transaction_fails() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -622,7 +622,7 @@ fn send_token_to_penpal_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -658,7 +658,7 @@ fn send_token_to_penpal_v2() {
 					asset_id: *asset_id == token_location,
 					owner: *owner == penpal_sov_on_ah,
 				},
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 
@@ -806,7 +806,7 @@ fn send_foreign_erc20_token_back_to_pezkuwi() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -902,7 +902,7 @@ fn invalid_xcm_traps_funds_on_ah() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -970,7 +970,7 @@ fn invalid_claimer_does_not_fail_the_message() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -1059,7 +1059,7 @@ pub fn add_tip_from_asset_hub_user_origin() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::EthereumSystemV2(snowbridge_pallet_system_v2::Event::TipProcessed { sender, message_id, success, ..})
+				RuntimeEvent::EthereumSystemV2(snowbridge_pezpallet_system_v2::Event::TipProcessed { sender, message_id, success, ..})
 					if *sender == relayer &&*message_id == tip_message_id.clone() && *success, // expect success
 			)),
 			"tip added event found"

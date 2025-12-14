@@ -39,7 +39,7 @@ use bp_messages::{
 	ChainWithMessages as _, LaneState, MessageNonce, UnrewardedRelayer, UnrewardedRelayersState,
 };
 use codec::Decode;
-use messages_relay::{
+use pez_messages_relay::{
 	message_lane::{MessageLane, SourceHeaderIdOf, TargetHeaderIdOf},
 	message_lane_loop::{NoncesSubmitArtifacts, TargetClient, TargetClientState},
 };

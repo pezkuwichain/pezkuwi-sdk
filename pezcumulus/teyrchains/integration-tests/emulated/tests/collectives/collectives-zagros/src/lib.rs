@@ -22,14 +22,14 @@ mod imports {
 	pub(crate) use emulated_integration_tests_common::{
 		accounts::ALICE,
 		test_teyrchain_is_trusted_teleporter,
-		xcm_emulator::{assert_expected_events, bx, Chain, TestExt, Teyrchain},
+		xcm_pez_emulator::{assert_expected_events, bx, Chain, TestExt, Teyrchain},
 	};
 	pub(crate) use zagros_system_emulated_network::{
 		asset_hub_zagros_emulated_chain::{
 			asset_hub_zagros_runtime::xcm_config::LocationToAccountId as AssetHubLocationToAccountId,
 			genesis::ED as ASSET_HUB_ZAGROS_ED, AssetHubZagrosParaPallet as AssetHubZagrosPallet,
 		},
-		bridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
+		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		collectives_zagros_emulated_chain::{
 			collectives_zagros_runtime::{
 				fellowship as collectives_fellowship,
@@ -39,7 +39,7 @@ mod imports {
 			CollectivesZagrosParaPallet as CollectivesZagrosPallet,
 		},
 		coretime_zagros_emulated_chain::CoretimeZagrosParaPallet as CoretimeZagrosPallet,
-		penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
+		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
 		people_zagros_emulated_chain::PeopleZagrosParaPallet as PeopleZagrosPallet,
 		zagros_emulated_chain::{
 			genesis::ED as ZAGROS_ED,

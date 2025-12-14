@@ -19,7 +19,7 @@ scale-info = { features = ["bit-vec", "derive"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 
 # Bridge Dependencies
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
 binary-merkle-tree = { workspace = true }
@@ -34,7 +34,7 @@ pezsp-std = { workspace = true }
 default = ["std"]
 std = [
   "binary-merkle-tree/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "codec/std",
   "pezframe-support/std",
   "pezpallet-beefy-mmr/std",
@@ -47,7 +47,7 @@ std = [
 ]
 runtime-benchmarks = [
   "binary-merkle-tree/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezpallet-beefy-mmr/runtime-benchmarks",
   "pezpallet-mmr/runtime-benchmarks",

@@ -20,7 +20,7 @@ use bp_messages::{
 	storage_keys, ChainWithMessages, InboundLaneData, MessageKey, MessageNonce, MessagePayload,
 	OutboundLaneData,
 };
-use bp_runtime::{
+use pezbp_runtime::{
 	grow_storage_value, record_all_trie_keys, AccountIdOf, Chain, HashOf, HasherOf,
 	RawStorageProof, UnverifiedStorageProofParams,
 };

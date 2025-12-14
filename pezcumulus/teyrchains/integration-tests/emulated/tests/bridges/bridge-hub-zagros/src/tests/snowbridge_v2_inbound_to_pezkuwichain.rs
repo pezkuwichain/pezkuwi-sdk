@@ -26,14 +26,14 @@ use crate::{
 	},
 };
 use asset_hub_zagros_runtime::ForeignAssets;
-use bridge_hub_zagros_runtime::{
+use pezbridge_hub_zagros_runtime::{
 	bridge_common_config::BridgeReward, bridge_to_ethereum_config::EthereumGatewayAddress,
 	EthereumInboundQueueV2,
 };
 use codec::Encode;
 use hex_literal::hex;
-use snowbridge_core::TokenIdOf;
-use snowbridge_inbound_queue_primitives::v2::{
+use pezsnowbridge_core::TokenIdOf;
+use pezsnowbridge_inbound_queue_primitives::v2::{
 	EthereumAsset::{ForeignTokenERC20, NativeTokenERC20},
 	Message, XcmPayload,
 };
@@ -168,7 +168,7 @@ fn send_token_to_pezkuwichain_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -189,7 +189,7 @@ fn send_token_to_pezkuwichain_v2() {
 				RuntimeEvent::MessageQueue(
 					pezpallet_message_queue::Event::Processed { success: true, .. }
 				) => {},
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 
@@ -333,7 +333,7 @@ fn send_ether_to_pezkuwichain_v2() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,
@@ -354,7 +354,7 @@ fn send_ether_to_pezkuwichain_v2() {
 				RuntimeEvent::MessageQueue(
 					pezpallet_message_queue::Event::Processed { success: true, .. }
 				) => {},
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 
@@ -536,7 +536,7 @@ fn send_roc_from_ethereum_to_pezkuwichain() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 				// Check that the relayer reward was registered.
 				RuntimeEvent::BridgeRelayers(pezpallet_bridge_relayers::Event::RewardRegistered { relayer, reward_kind, reward_balance }) => {
 					relayer: *relayer == relayer_account,

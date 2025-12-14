@@ -1,4 +1,4 @@
-# tracing-gum
+# pez-tracing-gum
 
 "gum" to make `tracing::{warn,info,..}` and `mick-jaeger` stick together, to be
 cross referenced in grafana with zero additional loc in the source code.

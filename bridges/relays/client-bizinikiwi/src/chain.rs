@@ -17,9 +17,9 @@
 use crate::calls::UtilityCall;
 
 use crate::SimpleRuntimeVersion;
-use bp_header_chain::ChainWithGrandpa as ChainWithGrandpaBase;
+use bp_header_pez_chain::ChainWithGrandpa as ChainWithGrandpaBase;
 use bp_messages::ChainWithMessages as ChainWithMessagesBase;
-use bp_runtime::{
+use pezbp_runtime::{
 	Chain as ChainBase, EncodedOrDecodedCall, HashOf, Teyrchain as TeyrchainBase, TransactionEra,
 	TransactionEraOf, UnderlyingChainProvider,
 };

@@ -22,7 +22,7 @@
 //! teyrchains. Having pallets that are referencing pezkuwi, would mean that there may
 //! be two versions of pezkuwi crates included in the runtime. Which is bad.
 
-use bp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
+use pezbp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
 use codec::{CompactAs, Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use pezsp_core::Hasher;

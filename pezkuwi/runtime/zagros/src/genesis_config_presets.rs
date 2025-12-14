@@ -221,7 +221,7 @@ fn zagros_staging_testnet_config_genesis() -> serde_json::Value {
 	// DO NOT use them in production chains as the secret seed is public.
 	//
 	// SECRET_SEED="slow awkward present example safe bundle science ocean cradle word tennis earn"
-	// subkey inspect -n pezkuwi "$SECRET_SEED"
+	// pez_subkey inspect -n pezkuwi "$SECRET_SEED"
 	let endowed_accounts: Vec<AccountId> = vec![
 		// 15S75FkhCWEowEGfxWwVfrW3LQuy8w8PNhVmrzfsVhCMjUh1
 		hex!["c416837e232d9603e83162ef4bda08e61580eeefe60fe92fc044aa508559ae42"].into(),

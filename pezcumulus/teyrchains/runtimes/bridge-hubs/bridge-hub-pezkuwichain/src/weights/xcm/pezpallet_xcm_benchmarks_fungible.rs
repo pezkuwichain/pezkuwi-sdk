@@ -27,7 +27,7 @@
 // benchmark
 // pallet
 // --extrinsic=*
-// --runtime=target/production/wbuild/bridge-hub-pezkuwichain-runtime/bridge_hub_pezkuwichain_runtime.wasm
+// --runtime=target/production/wbuild/pezbridge-hub-pezkuwichain-runtime/pezbridge_hub_pezkuwichain_runtime.wasm
 // --pallet=pezpallet_xcm_benchmarks::fungible
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezcumulus/file_header.txt
 // --output=./pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/src/weights/xcm

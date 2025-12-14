@@ -25,8 +25,8 @@ use crate::{
 	Cli, Subcommand,
 };
 use pezframe_benchmarking_cli::*;
-use kitchensink_runtime::{ExistentialDeposit, RuntimeApi};
-use node_primitives::Block;
+use pez_kitchensink_runtime::{ExistentialDeposit, RuntimeApi};
+use pez_node_primitives::Block;
 use pezsc_cli::{Result, BizinikiwiCli};
 use pezsc_service::PartialComponents;
 use pezsp_keyring::Sr25519Keyring;

@@ -23,7 +23,7 @@ use crate::{
 	cli::{bridge::CliBridgeBase, chain_schema::*},
 	finality_base::engine::Engine,
 };
-use bp_runtime::Chain as ChainBase;
+use pezbp_runtime::Chain as ChainBase;
 use clap::Parser;
 use relay_bizinikiwi_client::{AccountKeyPairOf, Chain, UnsignedTransaction};
 use pezsp_core::Pair;

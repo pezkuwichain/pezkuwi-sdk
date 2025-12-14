@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
-use snowbridge_ethereum::{mpt, Decodable, ReceiptEnvelope};
+use pezsnowbridge_ethereum::{mpt, Decodable, ReceiptEnvelope};
 use pezsp_core::H256;
 use pezsp_io::hashing::keccak_256;
 use pezsp_std::prelude::*;

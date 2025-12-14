@@ -38,7 +38,7 @@
 //! - [`xcm_executor`]: An implementation of the virtual machine to execute instructions.
 //! - [`pezpallet_xcm`]: A FRAME pallet for interacting with the executor.
 //! - [`xcm_builder`]: A collection of types to configure the executor.
-//! - [`xcm_simulator`]: A playground for trying out different XCM programs and executor
+//! - [`xcm_pez_simulator`]: A playground for trying out different XCM programs and executor
 //!   configurations.
 //!
 //! ## Example
@@ -49,7 +49,7 @@
 //!
 //! ## Get started
 //!
-//! To learn how it works and to get started, go to the [XCM docs](xcm_docs).
+//! To learn how it works and to get started, go to the [XCM docs](xcm_pez_docs).
 
 #[cfg(test)]
 mod tests {

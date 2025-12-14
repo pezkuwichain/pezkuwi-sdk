@@ -22,7 +22,7 @@ use nix::{
 	sys::signal::{kill, Signal, Signal::SIGINT},
 	unistd::Pid,
 };
-use node_primitives::{Hash, Header};
+use pez_node_primitives::{Hash, Header};
 use regex::Regex;
 use pezsp_rpc::{list::ListOrValue, number::NumberOrHex};
 use std::{

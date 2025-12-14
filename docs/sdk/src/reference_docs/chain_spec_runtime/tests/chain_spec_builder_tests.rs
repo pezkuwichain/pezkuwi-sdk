@@ -3,8 +3,8 @@ use serde_json::{json, Value};
 use std::str;
 
 fn wasm_file_path() -> &'static str {
-	chain_spec_guide_runtime::runtime::WASM_BINARY_PATH
-		.expect("chain_spec_guide_runtime wasm should exist. qed")
+	pez_chain_spec_guide_runtime::runtime::WASM_BINARY_PATH
+		.expect("pez_chain_spec_guide_runtime wasm should exist. qed")
 }
 
 const CHAIN_SPEC_BUILDER_PATH: &str = "../../../../../target/release/chain-spec-builder";
@@ -189,7 +189,7 @@ fn generate_para_chain_spec() {
 #[docify::export_content]
 fn preset_4_json() {
 	assert_eq!(
-		chain_spec_guide_runtime::presets::preset_4(),
+		pez_chain_spec_guide_runtime::presets::preset_4(),
 		json!({
 			"foo": {
 				"someEnum": {

@@ -208,16 +208,16 @@ async fn get_automine(rpc_client: &RpcClient) -> bool {
 /// Connect to a node at the given URL, and return the underlying API, RPC client, and legacy RPC
 /// clients.
 pub async fn connect(
-	node_rpc_url: &str,
+	pez_node_rpc_url: &str,
 ) -> Result<(OnlineClient<SrcChainConfig>, RpcClient, LegacyRpcMethods<SrcChainConfig>), ClientError>
 {
-	log::info!(target: LOG_TARGET, "🌐 Connecting to node at: {node_rpc_url} ...");
+	log::info!(target: LOG_TARGET, "🌐 Connecting to node at: {pez_node_rpc_url} ...");
 	let rpc_client = ReconnectingRpcClient::builder()
 		.retry_policy(ExponentialBackoff::from_millis(100).max_delay(Duration::from_secs(10)))
-		.build(node_rpc_url.to_string())
+		.build(pez_node_rpc_url.to_string())
 		.await?;
 	let rpc_client = RpcClient::new(rpc_client);
-	log::info!(target: LOG_TARGET, "🌟 Connected to node at: {node_rpc_url}");
+	log::info!(target: LOG_TARGET, "🌟 Connected to node at: {pez_node_rpc_url}");
 
 	let api = OnlineClient::<SrcChainConfig>::from_rpc_client(rpc_client.clone()).await?;
 	let rpc = LegacyRpcMethods::<SrcChainConfig>::new(rpc_client.clone());

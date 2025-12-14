@@ -9,7 +9,7 @@ use std::sync::Arc;
 
 use jsonrpsee::RpcModule;
 use pezsc_transaction_pool_api::TransactionPool;
-use solochain_template_runtime::{opaque::Block, AccountId, Balance, Nonce};
+use pez_solochain_template_runtime::{opaque::Block, AccountId, Balance, Nonce};
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_block_builder::BlockBuilder;
 use pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};

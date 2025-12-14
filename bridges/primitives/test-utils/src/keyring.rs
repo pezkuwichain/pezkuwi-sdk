@@ -16,7 +16,7 @@
 
 //! Utilities for working with test accounts.
 
-use bp_header_chain::{justification::JustificationVerificationContext, AuthoritySet};
+use bp_header_pez_chain::{justification::JustificationVerificationContext, AuthoritySet};
 use codec::Encode;
 use ed25519_dalek::{Signature, SigningKey, VerifyingKey};
 use finality_grandpa::voter_set::VoterSet;

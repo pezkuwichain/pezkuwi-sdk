@@ -85,7 +85,7 @@ where
 	P::SourceRelayChain: Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>,
 	R: BridgeTeyrchainsConfig<I> + Send + Sync,
 	I: 'static + Send + Sync,
-	R::BridgedChain: bp_runtime::Chain<
+	R::BridgedChain: pezbp_runtime::Chain<
 		BlockNumber = RelayBlockNumber,
 		Hash = RelayBlockHash,
 		Hasher = RelayBlockHasher,

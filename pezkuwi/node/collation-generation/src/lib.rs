@@ -34,7 +34,7 @@
 use codec::Encode;
 use error::{Error, Result};
 use futures::{channel::oneshot, future::FutureExt, select};
-use pezkuwi_node_primitives::{
+use pezkuwi_pez_node_primitives::{
 	AvailableData, Collation, CollationGenerationConfig, CollationSecondedSignal, PoV,
 	SubmitCollationParams,
 };

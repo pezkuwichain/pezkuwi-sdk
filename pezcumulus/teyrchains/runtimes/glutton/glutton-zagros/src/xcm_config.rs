@@ -100,7 +100,7 @@ impl xcm_executor::Config for XcmConfig {
 	type XcmRecorder = ();
 }
 
-impl pezcumulus_pallet_xcm::Config for Runtime {
+impl pezcumulus_pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = xcm_executor::XcmExecutor<XcmConfig>;
 }

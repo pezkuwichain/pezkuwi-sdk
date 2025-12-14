@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use core::marker::PhantomData;
-use snowbridge_core::operating_mode::ExportPausedQuery;
+use pezsnowbridge_core::operating_mode::ExportPausedQuery;
 use pezsp_std::vec::Vec;
 use xcm::{
 	prelude::{Location, SendError, SendResult, SendXcm, Xcm, XcmHash},

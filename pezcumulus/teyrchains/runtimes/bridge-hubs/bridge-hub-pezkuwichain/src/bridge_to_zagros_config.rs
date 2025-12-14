@@ -66,7 +66,7 @@ parameter_types! {
 		2,
 		[
 			GlobalConsensus(ZagrosGlobalConsensusNetwork::get()),
-			Teyrchain(<bp_bridge_hub_zagros::BridgeHubZagros as bp_runtime::Teyrchain>::TEYRCHAIN_ID)
+			Teyrchain(<bp_bridge_hub_zagros::BridgeHubZagros as pezbp_runtime::Teyrchain>::TEYRCHAIN_ID)
 		]
 	);
 
@@ -99,7 +99,7 @@ pub type OnBridgeHubPezkuwichainRefundBridgeHubZagrosMessages = BridgeRelayersTr
 		PriorityBoostPerMessage,
 	>,
 >;
-bp_runtime::generate_static_str_provider!(OnBridgeHubPezkuwichainRefundBridgeHubZagrosMessages);
+pezbp_runtime::generate_static_str_provider!(OnBridgeHubPezkuwichainRefundBridgeHubZagrosMessages);
 
 /// Add XCM messages support for BridgeHubPezkuwichain to support Pezkuwichain->Zagros XCM messages
 pub type WithBridgeHubZagrosMessagesInstance = pezpallet_bridge_messages::Instance3;
@@ -172,7 +172,7 @@ impl pezpallet_xcm_bridge_hub::LocalXcmChannelManager for CongestionManager {
 		// dispatched and sent to the sibling teyrchain. Therefore, checking outbound `XcmpQueue`
 		// is sufficient here.
 		use bp_xcm_bridge_hub_router::XcmChannelStatusProvider;
-		pezcumulus_pallet_xcmp_queue::bridging::OutXcmpChannelStatusProvider::<Runtime>::is_congested(
+		pezcumulus_pezpallet_xcmp_queue::bridging::OutXcmpChannelStatusProvider::<Runtime>::is_congested(
 			with,
 		)
 	}
@@ -207,7 +207,7 @@ where
 	R: pezpallet_xcm_bridge_hub::Config<XBHI>,
 	XBHI: 'static,
 	C: xcm_executor::traits::ConvertLocation<
-		bp_runtime::AccountIdOf<pezpallet_xcm_bridge_hub::ThisChainOf<R, XBHI>>,
+		pezbp_runtime::AccountIdOf<pezpallet_xcm_bridge_hub::ThisChainOf<R, XBHI>>,
 	>,
 {
 	use pezpallet_xcm_bridge_hub::{Bridge, BridgeId, BridgeState};
@@ -251,7 +251,7 @@ where
 mod tests {
 	use super::*;
 	use crate::bridge_common_config::BridgeGrandpaZagrosInstance;
-	use bridge_runtime_common::{
+	use pezbridge_runtime_common::{
 		assert_complete_bridge_types,
 		integrity::{
 			assert_complete_with_teyrchain_bridge_constants, check_message_lane_weights,
@@ -363,7 +363,7 @@ pub mod migration {
 
 	mod v1_wrong {
 		use bp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
-		use bp_runtime::AccountIdOf;
+		use pezbp_runtime::AccountIdOf;
 		use codec::{Decode, Encode};
 		use pezpallet_bridge_messages::BridgedChainOf;
 		use pezsp_std::collections::vec_deque::VecDeque;

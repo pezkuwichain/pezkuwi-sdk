@@ -23,7 +23,7 @@
 
 use std::borrow::Cow;
 
-use node_testing::bench::{BenchDb, BlockType, DatabaseType, KeyTypes};
+use pez_node_testing::bench::{BenchDb, BlockType, DatabaseType, KeyTypes};
 
 use pezsc_transaction_pool::BasicPool;
 use pezsc_transaction_pool_api::{TransactionPool, TransactionSource};

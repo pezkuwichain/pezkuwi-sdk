@@ -14,7 +14,7 @@ workspace = true
 
 [dependencies]
 jsonrpsee = { features = ["server"], workspace = true }
-mmr-rpc = { workspace = true, default-features = true }
+pezmmr-rpc = { workspace = true, default-features = true }
 pezpallet-transaction-payment-rpc = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true, default-features = true }
@@ -42,7 +42,7 @@ bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = tru
 
 [features]
 runtime-benchmarks = [
-  "mmr-rpc/runtime-benchmarks",
+  "pezmmr-rpc/runtime-benchmarks",
   "pezpallet-transaction-payment-rpc/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",
   "pezsc-chain-spec/runtime-benchmarks",

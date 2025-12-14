@@ -21,11 +21,11 @@
 use pezframe_support::{traits::Get, weights::Weight};
 use core::marker::PhantomData;
 
-/// Weight functions for `snowbridge_pallet_system_frontend::BackendWeightInfo`.
+/// Weight functions for `snowbridge_pezpallet_system_frontend::BackendWeightInfo`.
 /// Copy the weight generated for `fn register_token() -> Weight` from
-/// ../../../../bridge-hubs/bridge-hub-zagros/src/weights/snowbridge_pallet_system_v2.rs
+/// ../../../../bridge-hubs/bridge-hub-zagros/src/weights/snowbridge_pezpallet_system_v2.rs
 pub struct WeightInfo<T>(PhantomData<T>);
-impl<T: pezframe_system::Config> snowbridge_pallet_system_frontend::BackendWeightInfo for WeightInfo<T> {
+impl<T: pezframe_system::Config> snowbridge_pezpallet_system_frontend::BackendWeightInfo for WeightInfo<T> {
 	fn transact_register_token() -> Weight {
 		Weight::from_parts(45_000_000, 6044)
 			.saturating_add(T::DbWeight::get().reads(5_u64))

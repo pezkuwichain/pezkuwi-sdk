@@ -22,12 +22,12 @@ use pezsp_keyring::Sr25519Keyring as Keyring;
 use emulated_integration_tests_common::{
 	accounts, build_genesis_storage, collators, SAFE_XCM_VERSION,
 };
-use penpal_runtime::xcm_config::{LocalReservableFromAssetHub, RelayLocation, UsdtFromAssetHub};
+use pez_penpal_runtime::xcm_config::{LocalReservableFromAssetHub, RelayLocation, UsdtFromAssetHub};
 use teyrchains_common::{AccountId, Balance};
 // Penpal
 pub const PARA_ID_A: u32 = 2000;
 pub const PARA_ID_B: u32 = 2001;
-pub const ED: Balance = penpal_runtime::EXISTENTIAL_DEPOSIT;
+pub const ED: Balance = pez_penpal_runtime::EXISTENTIAL_DEPOSIT;
 pub const USDT_ED: Balance = 70_000;
 
 parameter_types! {
@@ -36,49 +36,49 @@ parameter_types! {
 }
 
 pub fn genesis(para_id: u32) -> Storage {
-	let genesis_config = penpal_runtime::RuntimeGenesisConfig {
-		system: penpal_runtime::SystemConfig::default(),
-		balances: penpal_runtime::BalancesConfig {
+	let genesis_config = pez_penpal_runtime::RuntimeGenesisConfig {
+		system: pez_penpal_runtime::SystemConfig::default(),
+		balances: pez_penpal_runtime::BalancesConfig {
 			balances: accounts::init_balances().iter().cloned().map(|k| (k, ED * 4096)).collect(),
 			..Default::default()
 		},
-		teyrchain_info: penpal_runtime::TeyrchainInfoConfig {
+		teyrchain_info: pez_penpal_runtime::TeyrchainInfoConfig {
 			teyrchain_id: para_id.into(),
 			..Default::default()
 		},
-		collator_selection: penpal_runtime::CollatorSelectionConfig {
+		collator_selection: pez_penpal_runtime::CollatorSelectionConfig {
 			invulnerables: collators::invulnerables().iter().cloned().map(|(acc, _)| acc).collect(),
 			candidacy_bond: ED * 16,
 			..Default::default()
 		},
-		session: penpal_runtime::SessionConfig {
+		session: pez_penpal_runtime::SessionConfig {
 			keys: collators::invulnerables()
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
 						acc.clone(),                          // account id
 						acc,                                  // validator id
-						penpal_runtime::SessionKeys { aura }, // session keys
+						pez_penpal_runtime::SessionKeys { aura }, // session keys
 					)
 				})
 				.collect(),
 			..Default::default()
 		},
-		pezkuwi_xcm: penpal_runtime::PezkuwiXcmConfig {
+		pezkuwi_xcm: pez_penpal_runtime::PezkuwiXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},
-		sudo: penpal_runtime::SudoConfig { key: Some(PenpalSudoAccount::get()) },
-		assets: penpal_runtime::AssetsConfig {
+		sudo: pez_penpal_runtime::SudoConfig { key: Some(PenpalSudoAccount::get()) },
+		assets: pez_penpal_runtime::AssetsConfig {
 			assets: vec![(
-				penpal_runtime::xcm_config::TELEPORTABLE_ASSET_ID,
+				pez_penpal_runtime::xcm_config::TELEPORTABLE_ASSET_ID,
 				PenpalAssetOwner::get(),
 				false,
 				ED,
 			)],
 			..Default::default()
 		},
-		foreign_assets: penpal_runtime::ForeignAssetsConfig {
+		foreign_assets: pez_penpal_runtime::ForeignAssetsConfig {
 			assets: vec![
 				// Relay Native asset representation
 				(RelayLocation::get(), PenpalAssetOwner::get(), true, ED),
@@ -94,6 +94,6 @@ pub fn genesis(para_id: u32) -> Storage {
 
 	build_genesis_storage(
 		&genesis_config,
-		penpal_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+		pez_penpal_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
 	)
 }

@@ -32,7 +32,7 @@ pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 pezsp-keyring = { workspace = true }
 
 # local pallet templates
-first-pallet = { workspace = true }
+first-pezpallet = { workspace = true }
 
 docify = { workspace = true }
 
@@ -54,13 +54,13 @@ std = [
   "pezpallet-transaction-payment-rpc-runtime-api/std",
   "pezpallet-transaction-payment/std",
 
-  "first-pallet/std",
+  "first-pezpallet/std",
   "pezsp-keyring/std",
 
   "bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-  "first-pallet/runtime-benchmarks",
+  "first-pezpallet/runtime-benchmarks",
   "frame/runtime-benchmarks",
   "pezpallet-balances/runtime-benchmarks",
   "pezpallet-sudo/runtime-benchmarks",

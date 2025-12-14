@@ -20,7 +20,7 @@ array-bytes = { workspace = true, default-features = true }
 async-channel = { workspace = true }
 async-trait = { workspace = true }
 codec = { features = ["derive"], workspace = true, default-features = true }
-fork-tree = { workspace = true, default-features = true }
+pez-fork-tree = { workspace = true, default-features = true }
 futures = { workspace = true }
 log = { workspace = true, default-features = true }
 mockall = { workspace = true }

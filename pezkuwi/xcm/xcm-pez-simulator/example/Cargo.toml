@@ -1,0 +1,61 @@
+[package]
+name = "xcm-pez-simulator-example"
+description = "Examples of xcm-pez-simulator usage."
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+version = "7.0.0"
+homepage.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/xcm-pez-simulator-example"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+codec = { workspace = true, default-features = true }
+scale-info = { features = [
+  "derive",
+], workspace = true, default-features = true }
+tracing = { workspace = true }
+
+pezframe-support = { workspace = true, default-features = true }
+pezframe-system = { workspace = true, default-features = true }
+pezpallet-balances = { workspace = true, default-features = true }
+pezpallet-message-queue = { workspace = true, default-features = true }
+pezpallet-uniques = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-io = { workspace = true, default-features = true }
+pezsp-runtime = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
+
+pezpallet-xcm = { workspace = true, default-features = true }
+pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
+pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
+xcm = { workspace = true, default-features = true }
+xcm-builder = { workspace = true, default-features = true }
+xcm-executor = { workspace = true, default-features = true }
+xcm-pez-simulator = { workspace = true, default-features = true }
+
+[dev-dependencies]
+pezsp-tracing = { workspace = true }
+
+[features]
+default = []
+runtime-benchmarks = [
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezpallet-balances/runtime-benchmarks",
+  "pezpallet-message-queue/runtime-benchmarks",
+  "pezpallet-uniques/runtime-benchmarks",
+  "pezpallet-xcm/runtime-benchmarks",
+  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
+  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
+  "pezsp-io/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+  "xcm-builder/runtime-benchmarks",
+  "xcm-executor/runtime-benchmarks",
+  "xcm-pez-simulator/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
+]

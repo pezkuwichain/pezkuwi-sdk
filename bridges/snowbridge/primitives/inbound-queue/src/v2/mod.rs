@@ -10,4 +10,4 @@ pub use converter::*;
 pub use message::*;
 pub use traits::*;
 
-const LOG_TARGET: &str = "snowbridge-inbound-queue-primitives";
+const LOG_TARGET: &str = "pezsnowbridge-inbound-queue-primitives";

@@ -116,7 +116,7 @@ pub fn run() -> pezsc_cli::Result<()> {
 		Some(Subcommand::ChainInfo(cmd)) => {
 			let runner = cli.create_runner(cmd)?;
 			runner.sync_run(|config| {
-				cmd.run::<minimal_template_runtime::interface::OpaqueBlock>(&config)
+				cmd.run::<pez_minimal_template_runtime::interface::OpaqueBlock>(&config)
 			})
 		},
 		None => {

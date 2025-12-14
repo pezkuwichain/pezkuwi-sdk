@@ -49,7 +49,7 @@ pub use xcm_executor::{
 	},
 	AssetsInHolding, Config,
 };
-pub use xcm_simulator::helpers::derive_topic_id;
+pub use xcm_pez_simulator::helpers::derive_topic_id;
 
 #[derive(Debug)]
 pub enum TestOrigin {

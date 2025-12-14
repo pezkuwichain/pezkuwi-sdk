@@ -46,7 +46,7 @@ use xcm_executor::XcmExecutor;
 parameter_types! {
 	pub const RelayLocation: Location = Location::parent();
 	pub const RelayNetwork: Option<NetworkId> = None;
-	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pallet_xcm::Origin::Relay.into();
+	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pezpallet_xcm::Origin::Relay.into();
 	// For the real deployment, it is recommended to set `RelayNetwork` according to the relay chain
 	// and prepend `UniversalLocation` with `GlobalConsensus(RelayNetwork::get())`.
 	pub UniversalLocation: InteriorLocation = Teyrchain(TeyrchainInfo::teyrchain_id().into()).into();
@@ -91,7 +91,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	RelayChainAsNative<RelayChainOrigin, RuntimeOrigin>,
 	// Native converter for sibling Teyrchains; will convert to a `SiblingPara` origin when
 	// recognized.
-	SiblingTeyrchainAsNative<pezcumulus_pallet_xcm::Origin, RuntimeOrigin>,
+	SiblingTeyrchainAsNative<pezcumulus_pezpallet_xcm::Origin, RuntimeOrigin>,
 	// Native signed account converter; this just converts an `AccountId32` origin into a normal
 	// `RuntimeOrigin::Signed` origin of the same 32-byte value.
 	SignedAccountId32AsNative<RelayNetwork, RuntimeOrigin>,
@@ -210,7 +210,7 @@ impl pezpallet_xcm::Config for Runtime {
 	type AuthorizedAliasConsideration = ();
 }
 
-impl pezcumulus_pallet_xcm::Config for Runtime {
+impl pezcumulus_pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }

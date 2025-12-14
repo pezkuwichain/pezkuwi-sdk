@@ -23,7 +23,7 @@
 #![warn(missing_docs)]
 
 use jsonrpsee::RpcModule;
-use minimal_template_runtime::interface::{AccountId, Nonce, OpaqueBlock};
+use pez_minimal_template_runtime::interface::{AccountId, Nonce, OpaqueBlock};
 use pezkuwi_sdk::{
 	pezsc_transaction_pool_api::TransactionPool,
 	pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata},

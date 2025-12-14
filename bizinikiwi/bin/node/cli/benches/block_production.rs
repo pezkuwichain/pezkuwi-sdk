@@ -20,7 +20,7 @@ use pezkuwi_sdk::*;
 
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughput};
 
-use kitchensink_runtime::{constants::currency::*, BalancesCall};
+use pez_kitchensink_runtime::{constants::currency::*, BalancesCall};
 use node_cli::service::{create_extrinsic, FullClient};
 use pezkuwi_sdk::pezsc_service::config::{ExecutorConfiguration, RpcConfiguration};
 use pezsc_block_builder::{BlockBuilderBuilder, BuiltBlock};
@@ -123,14 +123,14 @@ fn new_node(tokio_handle: Handle) -> node_cli::service::NewFullBase {
 }
 
 fn extrinsic_set_time(now: u64) -> OpaqueExtrinsic {
-	let utx: kitchensink_runtime::UncheckedExtrinsic = generic::UncheckedExtrinsic::new_bare(
-		kitchensink_runtime::RuntimeCall::Timestamp(pezpallet_timestamp::Call::set { now }),
+	let utx: pez_kitchensink_runtime::UncheckedExtrinsic = generic::UncheckedExtrinsic::new_bare(
+		pez_kitchensink_runtime::RuntimeCall::Timestamp(pezpallet_timestamp::Call::set { now }),
 	)
 	.into();
 	utx.into()
 }
 
-fn import_block(client: &FullClient, built: BuiltBlock<node_primitives::Block>) {
+fn import_block(client: &FullClient, built: BuiltBlock<pez_node_primitives::Block>) {
 	let mut params = BlockImportParams::new(BlockOrigin::File, built.block.header);
 	params.state_action =
 		StateAction::ApplyChanges(pezsc_consensus::StorageChanges::Changes(built.storage_changes));

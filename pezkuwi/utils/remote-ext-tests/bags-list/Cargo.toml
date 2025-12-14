@@ -1,12 +1,12 @@
 [package]
-name = "remote-ext-tests-bags-list"
+name = "pez-remote-ext-tests-bags-list"
 publish = false
 version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Pezkuwi SDK component: remote ext tests bags list"
-documentation = "https://docs.rs/remote-ext-tests-bags-list"
+documentation = "https://docs.rs/pez-remote-ext-tests-bags-list"
 repository = { workspace = true }
 homepage = { workspace = true }
 

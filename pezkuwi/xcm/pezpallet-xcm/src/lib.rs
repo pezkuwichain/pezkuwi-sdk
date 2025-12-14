@@ -72,7 +72,7 @@ use xcm_executor::{
 	},
 	AssetsInHolding,
 };
-use xcm_runtime_apis::{
+use xcm_runtime_pezapis::{
 	authorized_aliases::{Error as AuthorizedAliasersApiError, OriginAliaser},
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
 	fees::Error as XcmPaymentApiError,
@@ -3063,7 +3063,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Returns not only the call result and events, but also the local XCM, if any,
 	/// and any XCMs forwarded to other locations.
-	/// Meant to be used in the `xcm_runtime_apis::dry_run::DryRunApi` runtime API.
+	/// Meant to be used in the `xcm_runtime_pezapis::dry_run::DryRunApi` runtime API.
 	pub fn dry_run_call<Runtime, Router, OriginCaller, RuntimeCall>(
 		origin: OriginCaller,
 		call: RuntimeCall,
@@ -3119,7 +3119,7 @@ impl<T: Config> Pallet<T> {
 	/// Dry-runs `xcm` with the given `origin_location`.
 	///
 	/// Returns execution result, events, and any forwarded XCMs to other locations.
-	/// Meant to be used in the `xcm_runtime_apis::dry_run::DryRunApi` runtime API.
+	/// Meant to be used in the `xcm_runtime_pezapis::dry_run::DryRunApi` runtime API.
 	pub fn dry_run_xcm<Router>(
 		origin_location: VersionedLocation,
 		xcm: VersionedXcm<<T as Config>::RuntimeCall>,
@@ -3326,7 +3326,7 @@ impl<T: Config> Pallet<T> {
 
 		let asset_id = versioned_asset_id.clone().try_into().map_err(|()| {
 			tracing::trace!(
-				target: "xcm::xcm_runtime_apis::query_delivery_fees",
+				target: "xcm::xcm_runtime_pezapis::query_delivery_fees",
 				"Failed to convert asset id: {versioned_asset_id:?}!"
 			);
 			XcmPaymentApiError::VersionedConversionFailed

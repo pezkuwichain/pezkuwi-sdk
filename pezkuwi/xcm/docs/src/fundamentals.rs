@@ -47,7 +47,7 @@
 //!   configurable.
 //! - [`Builder`](xcm_builder): A collection of types used to configure the executor.
 //! - [`XCM Pallet`](pezpallet_xcm): A FRAME pallet for interacting with the executor.
-//! - [`Simulator`](xcm_simulator): A playground to tinker with different XCM programs and executor
+//! - [`Simulator`](xcm_pez_simulator): A playground to tinker with different XCM programs and executor
 //!   configurations.
 //!
 //! XCM programs are composed of Instructions, which reference Locations and Assets.

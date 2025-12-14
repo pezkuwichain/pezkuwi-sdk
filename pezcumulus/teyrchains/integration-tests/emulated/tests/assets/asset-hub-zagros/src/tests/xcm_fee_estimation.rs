@@ -19,7 +19,7 @@ use crate::{create_pool_with_wnd_on, imports::*};
 
 use emulated_integration_tests_common::test_can_estimate_and_pay_exact_fees;
 use pezframe_support::dispatch::RawOrigin;
-use xcm_runtime_apis::{
+use xcm_runtime_pezapis::{
 	dry_run::runtime_decl_for_dry_run_api::DryRunApiV2,
 	fees::runtime_decl_for_xcm_payment_api::XcmPaymentApiV2,
 };

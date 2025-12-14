@@ -23,7 +23,7 @@ mod imports {
 	pub(crate) use xcm::{latest::PEZKUWICHAIN_GENESIS_HASH, prelude::*};
 
 	// Pezcumulus
-	pub(crate) use emulated_integration_tests_common::xcm_emulator::{
+	pub(crate) use emulated_integration_tests_common::xcm_pez_emulator::{
 		assert_expected_events, Chain, TestExt, Teyrchain,
 	};
 	pub(crate) use pezkuwichain_system_emulated_network::{

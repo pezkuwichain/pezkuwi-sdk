@@ -253,7 +253,7 @@ fn pezkuwichain_staging_testnet_config_genesis() -> serde_json::Value {
 	use hex_literal::hex;
 	use pezsp_core::crypto::UncheckedInto;
 
-	// subkey inspect "$SECRET"
+	// pez_subkey inspect "$SECRET"
 	let endowed_accounts = Vec::from([
 		// 5DwBmEFPXRESyEam5SsQF1zbWSCn2kCjyLW51hJHXe9vW4xs
 		hex!["52bc71c1eca5353749542dfdf0af97bf764f9c2f44e860cd485f1cd86400f649"].into(),

@@ -27,7 +27,7 @@ use testnet_teyrchains_constants::zagros::fee::WeightToFee;
 use teyrchains_common::AccountId;
 use teyrchains_runtimes_test_utils::GovernanceOrigin;
 use xcm::latest::prelude::*;
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 const ALICE: [u8; 32] = [1u8; 32];
 

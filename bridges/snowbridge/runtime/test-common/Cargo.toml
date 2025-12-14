@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-runtime-test-common"
+name = "pezsnowbridge-runtime-test-common"
 description = "Snowbridge Runtime Tests"
 version = "0.2.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -8,7 +8,7 @@ license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/snowbridge-runtime-test-common"
+documentation = "https://docs.rs/pezsnowbridge-runtime-test-common"
 
 [lints]
 workspace = true
@@ -44,7 +44,7 @@ teyrchain-info = { workspace = true }
 teyrchains-runtimes-test-utils = { workspace = true }
 
 # Ethereum Bridge (Snowbridge)
-snowbridge-core = { workspace = true }
+pezsnowbridge-core = { workspace = true }
 snowbridge-pezpallet-ethereum-client = { workspace = true }
 snowbridge-pezpallet-ethereum-client-fixtures = { workspace = true }
 snowbridge-pezpallet-outbound-queue = { workspace = true }
@@ -64,7 +64,7 @@ std = [
   "pezpallet-timestamp/std",
   "pezpallet-utility/std",
   "pezpallet-xcm/std",
-  "snowbridge-core/std",
+  "pezsnowbridge-core/std",
   "snowbridge-pezpallet-ethereum-client-fixtures/std",
   "snowbridge-pezpallet-ethereum-client/std",
   "snowbridge-pezpallet-outbound-queue/std",
@@ -90,7 +90,7 @@ runtime-benchmarks = [
   "pezpallet-timestamp/runtime-benchmarks",
   "pezpallet-utility/runtime-benchmarks",
   "pezpallet-xcm/runtime-benchmarks",
-  "snowbridge-core/runtime-benchmarks",
+  "pezsnowbridge-core/runtime-benchmarks",
   "snowbridge-pezpallet-ethereum-client-fixtures/runtime-benchmarks",
   "snowbridge-pezpallet-ethereum-client/runtime-benchmarks",
   "snowbridge-pezpallet-outbound-queue/runtime-benchmarks",

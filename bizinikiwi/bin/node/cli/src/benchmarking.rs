@@ -24,8 +24,8 @@ use crate::service::{create_extrinsic, FullClient};
 
 use pezkuwi_sdk::*;
 
-use kitchensink_runtime::{BalancesCall, SystemCall};
-use node_primitives::{AccountId, Balance};
+use pez_kitchensink_runtime::{BalancesCall, SystemCall};
+use pez_node_primitives::{AccountId, Balance};
 use pezsc_cli::Result;
 use pezsp_inherents::{InherentData, InherentDataProvider};
 use pezsp_keyring::Sr25519Keyring;

@@ -20,13 +20,13 @@ use crate::finality::SubmitFinalityProofCallBuilder;
 
 use async_std::sync::{Arc, Mutex};
 use async_trait::async_trait;
-use bp_header_chain::ConsensusLogReader;
-use bp_runtime::HeaderIdProvider;
+use bp_header_pez_chain::ConsensusLogReader;
+use pezbp_runtime::HeaderIdProvider;
 use futures::{select, FutureExt};
 use num_traits::{One, Saturating, Zero};
 use pezsp_runtime::traits::Header;
 
-use finality_relay::{FinalitySyncParams, HeadersToRelay, TargetClient as FinalityTargetClient};
+use pez_finality_relay::{FinalitySyncParams, HeadersToRelay, TargetClient as FinalityTargetClient};
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, BlockNumberOf, CallOf, Chain, Client, Error as BizinikiwiError,
 	HeaderIdOf,
@@ -225,13 +225,13 @@ async fn background_task<P: BizinikiwiFinalitySyncPipeline>(
 	let mut latest_non_mandatory_at_source = Zero::zero();
 
 	let mut restart_relay = true;
-	let finality_relay_task = futures::future::Fuse::terminated();
-	futures::pin_mut!(finality_relay_task);
+	let pez_finality_relay_task = futures::future::Fuse::terminated();
+	futures::pin_mut!(pez_finality_relay_task);
 
 	loop {
 		select! {
 			_ = async_std::task::sleep(P::TargetChain::AVERAGE_BLOCK_INTERVAL).fuse() => {},
-			_ = finality_relay_task => {
+			_ = pez_finality_relay_task => {
 				// this should never happen in practice given the current code
 				restart_relay = true;
 			},
@@ -358,8 +358,8 @@ async fn background_task<P: BizinikiwiFinalitySyncPipeline>(
 				"Starting on-demand headers relay task"
 			);
 
-			finality_relay_task.set(
-				finality_relay::run(
+			pez_finality_relay_task.set(
+				pez_finality_relay::run(
 					finality_source.clone(),
 					finality_target.clone(),
 					FinalitySyncParams {

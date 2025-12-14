@@ -23,7 +23,7 @@ use pezframe_support::traits::OnInitialize;
 // Pezcumulus
 use emulated_integration_tests_common::{
 	impl_accounts_helpers_for_teyrchain, impl_assert_events_helpers_for_teyrchain,
-	impls::Teyrchain, xcm_emulator::decl_test_teyrchains, AuraDigestProvider,
+	impls::Teyrchain, xcm_pez_emulator::decl_test_teyrchains, AuraDigestProvider,
 };
 
 // CoretimePezkuwichain Teyrchain declaration

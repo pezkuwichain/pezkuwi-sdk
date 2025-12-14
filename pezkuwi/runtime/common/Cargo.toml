@@ -57,7 +57,7 @@ libsecp256k1 = { workspace = true }
 pezkuwi-primitives = { workspace = true }
 pezkuwi-runtime-teyrchains = { workspace = true }
 
-slot-range-helper = { workspace = true }
+pez-slot-range-helper = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { optional = true, workspace = true }
@@ -105,7 +105,7 @@ std = [
   "rustc-hex/std",
   "scale-info/std",
   "serde/std",
-  "slot-range-helper/std",
+  "pez-slot-range-helper/std",
   "pezsp-api/std",
   "pezsp-core/std",
   "pezsp-inherents/std",
@@ -143,7 +143,7 @@ runtime-benchmarks = [
   "pezkuwi-primitives-test-helpers/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",
   "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "slot-range-helper/runtime-benchmarks",
+  "pez-slot-range-helper/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",
   "pezsp-inherents/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",

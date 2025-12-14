@@ -17,7 +17,7 @@
 #![cfg(test)]
 
 use bp_pezkuwi_core::Signature;
-use bridge_hub_pezkuwichain_runtime::{
+use pezbridge_hub_pezkuwichain_runtime::{
 	bridge_to_zagros_config::OnBridgeHubPezkuwichainRefundBridgeHubZagrosMessages,
 	xcm_config::XcmConfig, AllPalletsWithoutSystem, BridgeRejectObsoleteHeadersAndMessages,
 	Executive, MessageQueueServiceWeight, Runtime, RuntimeCall, RuntimeEvent, SessionKeys,
@@ -26,7 +26,7 @@ use bridge_hub_pezkuwichain_runtime::{
 use codec::{Decode, Encode};
 use pezcumulus_primitives_core::XcmError::FailedToTransactAsset;
 use pezframe_support::parameter_types;
-use snowbridge_pallet_ethereum_client::WeightInfo;
+use snowbridge_pezpallet_ethereum_client::WeightInfo;
 use pezsp_core::H160;
 use pezsp_keyring::Sr25519Keyring::Alice;
 use pezsp_runtime::{
@@ -39,8 +39,8 @@ parameter_types! {
 		pub const DefaultBridgeHubEthereumBaseFee: Balance = 3_833_568_200_000;
 }
 
-fn collator_session_keys() -> bridge_hub_test_utils::CollatorSessionKeys<Runtime> {
-	bridge_hub_test_utils::CollatorSessionKeys::new(
+fn collator_session_keys() -> pezbridge_hub_test_utils::CollatorSessionKeys<Runtime> {
+	pezbridge_hub_test_utils::CollatorSessionKeys::new(
 		AccountId::from(Alice),
 		AccountId::from(Alice),
 		SessionKeys { aura: AuraId::from(Alice.public()) },
@@ -49,7 +49,7 @@ fn collator_session_keys() -> bridge_hub_test_utils::CollatorSessionKeys<Runtime
 
 #[test]
 pub fn transfer_token_to_ethereum_works() {
-	snowbridge_runtime_test_common::send_transfer_token_message_success::<Runtime, XcmConfig>(
+	pezsnowbridge_runtime_test_common::send_transfer_token_message_success::<Runtime, XcmConfig>(
 		11155111,
 		collator_session_keys(),
 		1002,
@@ -68,7 +68,7 @@ pub fn transfer_token_to_ethereum_works() {
 
 #[test]
 pub fn unpaid_transfer_token_to_ethereum_should_work() {
-	snowbridge_runtime_test_common::send_unpaid_transfer_token_message::<Runtime, XcmConfig>(
+	pezsnowbridge_runtime_test_common::send_unpaid_transfer_token_message::<Runtime, XcmConfig>(
 		11155111,
 		collator_session_keys(),
 		1002,
@@ -80,7 +80,7 @@ pub fn unpaid_transfer_token_to_ethereum_should_work() {
 
 #[test]
 pub fn transfer_token_to_ethereum_insufficient_fund() {
-	snowbridge_runtime_test_common::send_transfer_token_message_failure::<Runtime, XcmConfig>(
+	pezsnowbridge_runtime_test_common::send_transfer_token_message_failure::<Runtime, XcmConfig>(
 		11155111,
 		collator_session_keys(),
 		1002,
@@ -97,16 +97,16 @@ pub fn transfer_token_to_ethereum_insufficient_fund() {
 fn max_message_queue_service_weight_is_more_than_beacon_extrinsic_weights() {
 	let max_message_queue_weight = MessageQueueServiceWeight::get();
 	let force_checkpoint =
-		<Runtime as snowbridge_pallet_ethereum_client::Config>::WeightInfo::force_checkpoint();
+		<Runtime as snowbridge_pezpallet_ethereum_client::Config>::WeightInfo::force_checkpoint();
 	let submit_checkpoint =
-		<Runtime as snowbridge_pallet_ethereum_client::Config>::WeightInfo::submit();
+		<Runtime as snowbridge_pezpallet_ethereum_client::Config>::WeightInfo::submit();
 	max_message_queue_weight.all_gt(force_checkpoint);
 	max_message_queue_weight.all_gt(submit_checkpoint);
 }
 
 #[test]
 fn ethereum_client_consensus_extrinsics_work() {
-	snowbridge_runtime_test_common::ethereum_extrinsic(
+	pezsnowbridge_runtime_test_common::ethereum_extrinsic(
 		collator_session_keys(),
 		1002,
 		construct_and_apply_extrinsic,
@@ -115,7 +115,7 @@ fn ethereum_client_consensus_extrinsics_work() {
 
 #[test]
 fn ethereum_to_pezkuwi_message_extrinsics_work() {
-	snowbridge_runtime_test_common::ethereum_to_pezkuwi_message_extrinsics_work(
+	pezsnowbridge_runtime_test_common::ethereum_to_pezkuwi_message_extrinsics_work(
 		collator_session_keys(),
 		1002,
 		construct_and_apply_extrinsic,
@@ -128,7 +128,7 @@ fn ethereum_to_pezkuwi_message_extrinsics_work() {
 /// will fail.
 #[test]
 pub fn ethereum_outbound_queue_processes_messages_before_message_queue_works() {
-	snowbridge_runtime_test_common::ethereum_outbound_queue_processes_messages_before_message_queue_works::<
+	pezsnowbridge_runtime_test_common::ethereum_outbound_queue_processes_messages_before_message_queue_works::<
 		Runtime,
 		XcmConfig,
 		AllPalletsWithoutSystem,

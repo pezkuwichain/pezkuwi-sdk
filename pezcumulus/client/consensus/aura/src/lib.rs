@@ -33,7 +33,7 @@ use std::{fs, fs::File, path::PathBuf};
 mod import_queue;
 
 pub use import_queue::{build_verifier, import_queue, BuildVerifierParams, ImportQueueParams};
-use pezkuwi_node_primitives::PoV;
+use pezkuwi_pez_node_primitives::PoV;
 pub use pezsc_consensus_aura::{
 	slot_duration, standalone::slot_duration_at, AuraVerifier, BuildAuraWorkerParams,
 	SlotProportion,

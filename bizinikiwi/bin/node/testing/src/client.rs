@@ -16,24 +16,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-//! Utilities to build a `TestClient` for `kitchensink-runtime`.
+//! Utilities to build a `TestClient` for `pez-kitchensink-runtime`.
 
 use pezsp_runtime::BuildStorage;
 /// Re-export test-client utilities.
 pub use bizinikiwi_test_client::*;
 
-/// Call executor for `kitchensink-runtime` `TestClient`.
+/// Call executor for `pez-kitchensink-runtime` `TestClient`.
 use node_cli::service::RuntimeExecutor;
 
 /// Default backend type.
-pub type Backend = pezsc_client_db::Backend<node_primitives::Block>;
+pub type Backend = pezsc_client_db::Backend<pez_node_primitives::Block>;
 
 /// Test client type.
 pub type Client = client::Client<
 	Backend,
-	client::LocalCallExecutor<node_primitives::Block, Backend, RuntimeExecutor>,
-	node_primitives::Block,
-	kitchensink_runtime::RuntimeApi,
+	client::LocalCallExecutor<pez_node_primitives::Block, Backend, RuntimeExecutor>,
+	pez_node_primitives::Block,
+	pez_kitchensink_runtime::RuntimeApi,
 >;
 
 /// Genesis configuration parameters for `TestClient`.
@@ -45,7 +45,7 @@ impl bizinikiwi_test_client::GenesisInit for GenesisParameters {
 		let mut storage = crate::genesis::config().build_storage().unwrap();
 		storage.top.insert(
 			pezsp_core::storage::well_known_keys::CODE.to_vec(),
-			kitchensink_runtime::wasm_binary_unwrap().into(),
+			pez_kitchensink_runtime::wasm_binary_unwrap().into(),
 		);
 		storage
 	}
@@ -62,8 +62,8 @@ pub trait TestClientBuilderExt: Sized {
 
 impl TestClientBuilderExt
 	for bizinikiwi_test_client::TestClientBuilder<
-		node_primitives::Block,
-		client::LocalCallExecutor<node_primitives::Block, Backend, RuntimeExecutor>,
+		pez_node_primitives::Block,
+		client::LocalCallExecutor<pez_node_primitives::Block, Backend, RuntimeExecutor>,
 		Backend,
 		GenesisParameters,
 	>

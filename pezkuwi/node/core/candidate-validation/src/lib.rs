@@ -27,7 +27,7 @@ use pezkuwi_node_core_pvf::{
 	InternalValidationError, InvalidCandidate as WasmInvalidCandidate, PossiblyInvalidError,
 	PrepareError, PrepareJobKind, PvfPrepData, ValidationError, ValidationHost,
 };
-use pezkuwi_node_primitives::{InvalidCandidate, PoV, ValidationResult};
+use pezkuwi_pez_node_primitives::{InvalidCandidate, PoV, ValidationResult};
 use pezkuwi_node_subsystem::{
 	errors::RuntimeApiError,
 	messages::{

@@ -1,5 +1,5 @@
 [package]
-name = "minimal-template-node"
+name = "pez-minimal-template-node"
 description = "A minimal Bizinikiwi-based Bizinikiwi node, ready for hacking."
 version = "0.0.0"
 license = "Unlicense"
@@ -9,7 +9,7 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
-documentation = "https://docs.rs/minimal-template-node"
+documentation = "https://docs.rs/pez-minimal-template-node"
 
 [lints]
 workspace = true
@@ -24,7 +24,7 @@ futures = { features = ["thread-pool"], workspace = true }
 futures-timer = { workspace = true }
 jsonrpsee = { features = ["server"], workspace = true }
 
-minimal-template-runtime = { workspace = true }
+pez-minimal-template-runtime = { workspace = true }
 pezkuwi-sdk = { workspace = true, features = ["experimental", "node"] }
 
 [build-dependencies]
@@ -32,8 +32,8 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]
-std = ["minimal-template-runtime/std", "pezkuwi-sdk/std"]
+std = ["pez-minimal-template-runtime/std", "pezkuwi-sdk/std"]
 runtime-benchmarks = [
-  "minimal-template-runtime/runtime-benchmarks",
+  "pez-minimal-template-runtime/runtime-benchmarks",
   "pezkuwi-sdk/runtime-benchmarks",
 ]

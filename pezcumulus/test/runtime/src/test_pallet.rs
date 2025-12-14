@@ -32,7 +32,7 @@ pub mod pallet {
 	pub struct Pallet<T>(_);
 
 	#[pallet::config]
-	pub trait Config: pezframe_system::Config + pezcumulus_pallet_teyrchain_system::Config {}
+	pub trait Config: pezframe_system::Config + pezcumulus_pezpallet_teyrchain_system::Config {}
 
 	/// A simple storage map for testing purposes.
 	#[pallet::storage]
@@ -49,7 +49,7 @@ pub mod pallet {
 			_: OriginFor<T>,
 			custom_header: alloc::vec::Vec<u8>,
 		) -> DispatchResult {
-			pezcumulus_pallet_teyrchain_system::Pallet::<T>::set_custom_validation_head_data(
+			pezcumulus_pezpallet_teyrchain_system::Pallet::<T>::set_custom_validation_head_data(
 				custom_header,
 			);
 			Ok(())

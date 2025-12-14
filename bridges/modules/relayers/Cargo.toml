@@ -18,10 +18,10 @@ scale-info = { features = ["derive"], workspace = true }
 tracing = { workspace = true }
 
 # Bridge dependencies
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-messages = { workspace = true }
 bp-relayers = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
 pezpallet-bridge-teyrchains = { workspace = true }
@@ -46,11 +46,11 @@ pezsp-io = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-messages/std",
   "bp-pezkuwi-core/std",
   "bp-relayers/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-test-utils/std",
   "bp-teyrchains/std",
   "codec/std",
@@ -70,11 +70,11 @@ std = [
   "tracing/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
   "bp-relayers/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-test-utils/runtime-benchmarks",
   "bp-teyrchains/runtime-benchmarks",
   "pezframe-benchmarking/runtime-benchmarks",

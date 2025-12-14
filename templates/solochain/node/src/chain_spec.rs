@@ -1,5 +1,5 @@
 use pezsc_service::ChainType;
-use solochain_template_runtime::WASM_BINARY;
+use pez_solochain_template_runtime::WASM_BINARY;
 
 /// Specialized `ChainSpec`. This is a specialization of the general Bizinikiwi ChainSpec type.
 pub type ChainSpec = pezsc_service::GenericChainSpec;

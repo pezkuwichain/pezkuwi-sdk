@@ -596,7 +596,7 @@ impl From<()> for Junctions {
 	}
 }
 
-xcm_procedural::impl_conversion_functions_for_junctions_v4!();
+xcm_pez_procedural::impl_conversion_functions_for_junctions_v4!();
 
 #[cfg(test)]
 mod tests {

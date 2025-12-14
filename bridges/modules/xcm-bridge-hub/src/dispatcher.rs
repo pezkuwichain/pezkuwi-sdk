@@ -24,7 +24,7 @@
 use crate::{Config, Pallet, LOG_TARGET};
 
 use bp_messages::target_chain::{DispatchMessage, MessageDispatch};
-use bp_runtime::messages::MessageDispatchResult;
+use pezbp_runtime::messages::MessageDispatchResult;
 use bp_xcm_bridge_hub::{LocalXcmChannelManager, XcmAsPlainPayload};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{weights::Weight, CloneNoBound, EqNoBound, PartialEqNoBound};

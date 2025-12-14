@@ -15,17 +15,17 @@
 
 pub use asset_hub_pezkuwichain_emulated_chain;
 pub use asset_hub_zagros_emulated_chain;
-pub use bridge_hub_pezkuwichain_emulated_chain;
-pub use bridge_hub_zagros_emulated_chain;
-pub use penpal_emulated_chain;
+pub use pezbridge_hub_pezkuwichain_emulated_chain;
+pub use pezbridge_hub_zagros_emulated_chain;
+pub use pez_penpal_emulated_chain;
 pub use pezkuwichain_emulated_chain;
 pub use zagros_emulated_chain;
 
 use asset_hub_pezkuwichain_emulated_chain::AssetHubPezkuwichain;
 use asset_hub_zagros_emulated_chain::AssetHubZagros;
-use bridge_hub_pezkuwichain_emulated_chain::BridgeHubPezkuwichain;
-use bridge_hub_zagros_emulated_chain::BridgeHubZagros;
-use penpal_emulated_chain::{PenpalA, PenpalB};
+use pezbridge_hub_pezkuwichain_emulated_chain::BridgeHubPezkuwichain;
+use pezbridge_hub_zagros_emulated_chain::BridgeHubZagros;
+use pez_penpal_emulated_chain::{PenpalA, PenpalB};
 use pezkuwichain_emulated_chain::Pezkuwichain;
 use zagros_emulated_chain::Zagros;
 
@@ -33,7 +33,7 @@ use zagros_emulated_chain::Zagros;
 use emulated_integration_tests_common::{
 	accounts::{ALICE, BOB},
 	impls::{BridgeHubMessageHandler, BridgeMessagesInstance1, BridgeMessagesInstance3},
-	xcm_emulator::{
+	xcm_pez_emulator::{
 		decl_test_bridges, decl_test_networks, decl_test_sender_receiver_accounts_parameter_types,
 		Chain,
 	},

@@ -32,7 +32,7 @@ use pezkuwi_node_core_pvf_common::{
 	execute::{Handshake, WorkerError, WorkerResponse},
 	worker_dir, ArtifactChecksum, SecurityStatus,
 };
-use pezkuwi_node_primitives::PoV;
+use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_primitives::{ExecutorParams, PersistedValidationData};
 use std::{path::Path, sync::Arc, time::Duration};
 use tokio::{io, net::UnixStream};

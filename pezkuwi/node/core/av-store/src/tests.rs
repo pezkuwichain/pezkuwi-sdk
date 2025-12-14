@@ -22,7 +22,7 @@ use util::availability_chunks::availability_chunk_index;
 
 use self::test_helpers::mock::new_leaf;
 use parking_lot::Mutex;
-use pezkuwi_node_primitives::{AvailableData, BlockData, PoV, Proof};
+use pezkuwi_pez_node_primitives::{AvailableData, BlockData, PoV, Proof};
 use pezkuwi_node_subsystem::{
 	errors::RuntimeApiError,
 	messages::{AllMessages, RuntimeApiMessage, RuntimeApiRequest},

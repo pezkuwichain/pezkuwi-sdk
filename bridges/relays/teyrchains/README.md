@@ -9,7 +9,7 @@ The relay is configured to submit heads of one or several teyrchains. It pokes s
 teyrchain heads that are known to the source relay chain to heads at the target chain. If there are new heads,
 the relay submits them to the target chain.
 
-More: [Teyrchains Finality Relay Sequence Diagram](../../docs/teyrchains-finality-relay.html).
+More: [Teyrchains Finality Relay Sequence Diagram](../../docs/teyrchains-pez-finality-relay.html).
 
 ## How to Use the Teyrchains Finality Relay
 

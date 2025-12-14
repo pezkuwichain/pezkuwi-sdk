@@ -37,7 +37,7 @@ mod imports {
 		impls::Inspect,
 		test_dry_run_transfer_across_pk_bridge, test_relay_is_trusted_teleporter,
 		test_teyrchain_is_trusted_teleporter, test_teyrchain_is_trusted_teleporter_for_relay,
-		xcm_emulator::{
+		xcm_pez_emulator::{
 			assert_expected_events, bx, Chain, RelayChain as Relay, TestExt, Teyrchain as Para,
 		},
 		xcm_helpers::xcm_transact_paid_execution,
@@ -55,14 +55,14 @@ mod imports {
 			genesis::{AssetHubZagrosAssetOwner, ED as ASSET_HUB_ZAGROS_ED},
 			AssetHubZagrosParaPallet as AssetHubZagrosPallet,
 		},
-		bridge_hub_zagros_emulated_chain::{
-			bridge_hub_zagros_runtime, genesis::ED as BRIDGE_HUB_ZAGROS_ED,
+		pezbridge_hub_zagros_emulated_chain::{
+			pezbridge_hub_zagros_runtime, genesis::ED as BRIDGE_HUB_ZAGROS_ED,
 			BridgeHubZagrosExistentialDeposit, BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 			BridgeHubZagrosRuntimeOrigin,
 		},
-		penpal_emulated_chain::{
+		pez_penpal_emulated_chain::{
 			self,
-			penpal_runtime::xcm_config::{
+			pez_penpal_runtime::xcm_config::{
 				CustomizableAssetFromSystemAssetHub as PenpalCustomizableAssetFromSystemAssetHub,
 				LocalTeleportableToAssetHub as PenpalLocalTeleportableToAssetHub,
 				UniversalLocation as PenpalUniversalLocation,

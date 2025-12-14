@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-beacon-primitives"
+name = "pezsnowbridge-beacon-primitives"
 description = "Snowbridge Beacon Primitives"
 version = "0.2.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowbridge-beacon-primitives"
+documentation = "https://docs.rs/pezsnowbridge-beacon-primitives"
 homepage = { workspace = true }
 
 [lints]
@@ -36,7 +36,7 @@ ssz_rs = { workspace = true }
 ssz_rs_derive = { workspace = true }
 
 milagro-bls = { workspace = true }
-snowbridge-ethereum = { workspace = true }
+pezsnowbridge-ethereum = { workspace = true }
 
 [dev-dependencies]
 hex-literal = { workspace = true, default-features = true }
@@ -52,7 +52,7 @@ std = [
   "rlp/std",
   "scale-info/std",
   "serde",
-  "snowbridge-ethereum/std",
+  "pezsnowbridge-ethereum/std",
   "pezsp-core/std",
   "pezsp-io/std",
   "pezsp-runtime/std",
@@ -61,7 +61,7 @@ std = [
 ]
 runtime-benchmarks = [
   "pezframe-support/runtime-benchmarks",
-  "snowbridge-ethereum/runtime-benchmarks",
+  "pezsnowbridge-ethereum/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
 ]

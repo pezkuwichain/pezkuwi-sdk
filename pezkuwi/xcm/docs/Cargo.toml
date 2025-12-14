@@ -1,5 +1,5 @@
 [package]
-name = "xcm-docs"
+name = "xcm-pez-docs"
 description = "Documentation and guides for XCM"
 version = "0.1.0"
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
@@ -7,7 +7,7 @@ repository.workspace = true
 authors.workspace = true
 edition.workspace = true
 publish = false
-documentation = "https://docs.rs/xcm-docs"
+documentation = "https://docs.rs/xcm-pez-docs"
 homepage = { workspace = true }
 
 [dependencies]
@@ -16,7 +16,7 @@ pezpallet-xcm = { workspace = true, default-features = true }
 xcm = { workspace = true, default-features = true }
 xcm-builder = { workspace = true, default-features = true }
 xcm-executor = { workspace = true, default-features = true }
-xcm-simulator = { workspace = true, default-features = true }
+xcm-pez-simulator = { workspace = true, default-features = true }
 
 # For building FRAME runtimes
 codec = { workspace = true, default-features = true }
@@ -48,6 +48,6 @@ runtime-benchmarks = [
   "pezsp-runtime/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-simulator/runtime-benchmarks",
+  "xcm-pez-simulator/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

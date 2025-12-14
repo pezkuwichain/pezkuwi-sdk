@@ -3,7 +3,7 @@
 
 [relaychain]
 chain = "dev"
-default_command = "minimal-template-node"
+default_command = "pez-minimal-template-node"
 
 [[relaychain.nodes]]
 name = "alice"

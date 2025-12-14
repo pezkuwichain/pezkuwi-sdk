@@ -15,7 +15,7 @@
 
 pub mod genesis;
 
-pub use bridge_hub_zagros_runtime::{
+pub use pezbridge_hub_zagros_runtime::{
 	self, xcm_config::XcmConfig as BridgeHubZagrosXcmConfig,
 	ExistentialDeposit as BridgeHubZagrosExistentialDeposit,
 	RuntimeOrigin as BridgeHubZagrosRuntimeOrigin,
@@ -27,7 +27,7 @@ use pezframe_support::traits::OnInitialize;
 // Pezcumulus
 use emulated_integration_tests_common::{
 	impl_accounts_helpers_for_teyrchain, impl_assert_events_helpers_for_teyrchain,
-	impl_xcm_helpers_for_teyrchain, impls::Teyrchain, xcm_emulator::decl_test_teyrchains,
+	impl_xcm_helpers_for_teyrchain, impls::Teyrchain, xcm_pez_emulator::decl_test_teyrchains,
 	AuraDigestProvider,
 };
 
@@ -36,24 +36,24 @@ decl_test_teyrchains! {
 	pub struct BridgeHubZagros {
 		genesis = genesis::genesis(),
 		on_init = {
-			bridge_hub_zagros_runtime::AuraExt::on_initialize(1);
+			pezbridge_hub_zagros_runtime::AuraExt::on_initialize(1);
 		},
-		runtime = bridge_hub_zagros_runtime,
+		runtime = pezbridge_hub_zagros_runtime,
 		core = {
-			XcmpMessageHandler: bridge_hub_zagros_runtime::XcmpQueue,
-			LocationToAccountId: bridge_hub_zagros_runtime::xcm_config::LocationToAccountId,
-			TeyrchainInfo: bridge_hub_zagros_runtime::TeyrchainInfo,
+			XcmpMessageHandler: pezbridge_hub_zagros_runtime::XcmpQueue,
+			LocationToAccountId: pezbridge_hub_zagros_runtime::xcm_config::LocationToAccountId,
+			TeyrchainInfo: pezbridge_hub_zagros_runtime::TeyrchainInfo,
 			MessageOrigin: bridge_hub_common::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {
-			PezkuwiXcm: bridge_hub_zagros_runtime::PezkuwiXcm,
-			Balances: bridge_hub_zagros_runtime::Balances,
-			EthereumSystem: bridge_hub_zagros_runtime::EthereumSystem,
-			EthereumInboundQueue: bridge_hub_zagros_runtime::EthereumInboundQueue,
-			EthereumOutboundQueue: bridge_hub_zagros_runtime::EthereumOutboundQueue,
-			EthereumSystemV2: bridge_hub_zagros_runtime::EthereumSystemV2,
-			BridgeRelayers: bridge_hub_zagros_runtime::BridgeRelayers,
+			PezkuwiXcm: pezbridge_hub_zagros_runtime::PezkuwiXcm,
+			Balances: pezbridge_hub_zagros_runtime::Balances,
+			EthereumSystem: pezbridge_hub_zagros_runtime::EthereumSystem,
+			EthereumInboundQueue: pezbridge_hub_zagros_runtime::EthereumInboundQueue,
+			EthereumOutboundQueue: pezbridge_hub_zagros_runtime::EthereumOutboundQueue,
+			EthereumSystemV2: pezbridge_hub_zagros_runtime::EthereumSystemV2,
+			BridgeRelayers: pezbridge_hub_zagros_runtime::BridgeRelayers,
 		}
 	},
 }

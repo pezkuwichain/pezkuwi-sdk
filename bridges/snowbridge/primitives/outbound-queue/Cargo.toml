@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-outbound-queue-primitives"
+name = "pezsnowbridge-outbound-queue-primitives"
 description = "Snowbridge Outbound Queue Primitives"
 version = "0.2.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowbridge-outbound-queue-primitives"
+documentation = "https://docs.rs/pezsnowbridge-outbound-queue-primitives"
 homepage = { workspace = true }
 
 [lints]
@@ -38,8 +38,8 @@ pezsp-std = { workspace = true }
 alloy-core = { workspace = true, features = ["sol-types"] }
 ethabi = { workspace = true }
 
-snowbridge-core = { workspace = true }
-snowbridge-verification-primitives = { workspace = true }
+pezsnowbridge-core = { workspace = true }
+pezsnowbridge-verification-primitives = { workspace = true }
 
 [features]
 default = ["std"]
@@ -51,8 +51,8 @@ std = [
   "pezframe-system/std",
   "pezkuwi-teyrchain-primitives/std",
   "scale-info/std",
-  "snowbridge-core/std",
-  "snowbridge-verification-primitives/std",
+  "pezsnowbridge-core/std",
+  "pezsnowbridge-verification-primitives/std",
   "pezsp-arithmetic/std",
   "pezsp-core/std",
   "pezsp-io/std",
@@ -67,8 +67,8 @@ runtime-benchmarks = [
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "snowbridge-core/runtime-benchmarks",
-  "snowbridge-verification-primitives/runtime-benchmarks",
+  "pezsnowbridge-core/runtime-benchmarks",
+  "pezsnowbridge-verification-primitives/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",

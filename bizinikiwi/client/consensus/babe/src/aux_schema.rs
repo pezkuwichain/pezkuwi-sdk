@@ -139,7 +139,7 @@ pub fn load_block_weight<H: Encode, B: AuxStore>(
 mod test {
 	use super::*;
 	use crate::migration::EpochV0;
-	use fork_tree::ForkTree;
+	use pez_fork_tree::ForkTree;
 	use pezsc_consensus_epochs::{EpochHeader, PersistedEpoch, PersistedEpochHeader};
 	use pezsc_network_test::Block as TestBlock;
 	use pezsp_consensus::Error as ConsensusError;

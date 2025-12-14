@@ -17,9 +17,9 @@
 //! Tools for teyrchain head proof verification.
 
 use crate::{Config, GrandpaPalletOf, RelayBlockHash, RelayBlockHasher};
-use bp_header_chain::{HeaderChain, HeaderChainError};
+use bp_header_pez_chain::{HeaderChain, HeaderChainError};
 use bp_pezkuwi_core::teyrchains::{ParaHead, ParaId};
-use bp_runtime::{RawStorageProof, StorageProofChecker, StorageProofError};
+use pezbp_runtime::{RawStorageProof, StorageProofChecker, StorageProofError};
 use bp_teyrchains::teyrchain_head_storage_key_at_source;
 use codec::Decode;
 use pezframe_support::traits::Get;

@@ -22,8 +22,8 @@ use relay_bizinikiwi_client::{Chain, ChainWithUtilityPallet, UtilityPallet};
 
 use std::marker::PhantomData;
 
-// to avoid `finality_relay` dependency in other crates
-pub use finality_relay::HeadersToRelay;
+// to avoid `pez_finality_relay` dependency in other crates
+pub use pez_finality_relay::HeadersToRelay;
 
 pub mod cli;
 pub mod equivocation;
@@ -130,7 +130,7 @@ impl<Call> BatchCallBuilder<Call> for () {
 
 /// Module for handling storage proofs compatibility.
 pub mod proofs {
-	use bp_runtime::{HashOf, RawStorageProof};
+	use pezbp_runtime::{HashOf, RawStorageProof};
 	use relay_bizinikiwi_client::Chain;
 	use pezsp_trie::StorageProof;
 

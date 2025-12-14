@@ -42,8 +42,8 @@
 
 use crate::*;
 
-use bp_header_chain::justification::required_justification_precommits;
-use bp_runtime::BasicOperatingMode;
+use bp_header_pez_chain::justification::required_justification_precommits;
+use pezbp_runtime::BasicOperatingMode;
 use bp_test_utils::{
 	accounts, make_justification_for_header, JustificationGeneratorParams, TEST_GRANDPA_ROUND,
 	TEST_GRANDPA_SET_ID,

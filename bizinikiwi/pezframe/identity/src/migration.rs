@@ -30,7 +30,7 @@ use codec::{Decode, Encode};
 #[cfg(feature = "try-runtime")]
 use pezsp_runtime::TryRuntimeError;
 
-pub const PALLET_MIGRATIONS_ID: &[u8; 15] = b"pezpallet-identity";
+pub const PALLET_MIGRATIONS_ID: &[u8; 18] = b"pezpallet-identity";
 
 pub mod versioned {
 	use super::*;
@@ -233,7 +233,7 @@ pub mod v2 {
 	pub struct LazyMigrationV1ToV2<T: Config>(PhantomData<T>);
 	impl<T: Config> SteppedMigration for LazyMigrationV1ToV2<T> {
 		type Cursor = MigrationState<T::AccountId, Username<T>, Suffix<T>>;
-		type Identifier = MigrationId<15>;
+		type Identifier = MigrationId<18>;
 
 		fn id() -> Self::Identifier {
 			MigrationId { pezpallet_id: *PALLET_MIGRATIONS_ID, version_from: 1, version_to: 2 }

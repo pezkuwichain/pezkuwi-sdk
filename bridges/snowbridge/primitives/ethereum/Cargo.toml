@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-ethereum"
+name = "pezsnowbridge-ethereum"
 description = "Snowbridge Ethereum"
 version = "0.3.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowbridge-ethereum"
+documentation = "https://docs.rs/pezsnowbridge-ethereum"
 homepage = { workspace = true }
 
 [lints]

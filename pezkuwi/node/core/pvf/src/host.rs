@@ -38,7 +38,7 @@ use pezkuwi_node_core_pvf_common::{
 	prepare::PrepareSuccess,
 	pvf::PvfPrepData,
 };
-use pezkuwi_node_primitives::PoV;
+use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_node_subsystem::{
 	messages::PvfExecKind, ActiveLeavesUpdate, SubsystemError, SubsystemResult,
 };
@@ -1054,7 +1054,7 @@ pub(crate) mod tests {
 	use crate::{artifacts::generate_artifact_path, testing::artifact_id, PossiblyInvalidError};
 	use assert_matches::assert_matches;
 	use futures::future::BoxFuture;
-	use pezkuwi_node_primitives::BlockData;
+	use pezkuwi_pez_node_primitives::BlockData;
 	use pezsp_core::H256;
 
 	const TEST_EXECUTION_TIMEOUT: Duration = Duration::from_secs(3);

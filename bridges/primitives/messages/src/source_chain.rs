@@ -18,7 +18,7 @@
 
 use crate::{MessageNonce, UnrewardedRelayer};
 
-use bp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
+use pezbp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use scale_info::TypeInfo;
 use pezsp_core::RuntimeDebug;
@@ -74,7 +74,7 @@ pub trait DeliveryConfirmationPayments<AccountId, LaneId> {
 	/// Returns number of actually rewarded relayers.
 	fn pay_reward(
 		lane_id: LaneId,
-		messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
+		pez_messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
 		confirmation_relayer: &AccountId,
 		received_range: &RangeInclusive<MessageNonce>,
 	) -> MessageNonce;
@@ -85,7 +85,7 @@ impl<AccountId, LaneId> DeliveryConfirmationPayments<AccountId, LaneId> for () {
 
 	fn pay_reward(
 		_lane_id: LaneId,
-		_messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
+		_pez_messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
 		_confirmation_relayer: &AccountId,
 		_received_range: &RangeInclusive<MessageNonce>,
 	) -> MessageNonce {
@@ -148,7 +148,7 @@ impl<AccountId, LaneId> DeliveryConfirmationPayments<AccountId, LaneId> for Forb
 
 	fn pay_reward(
 		_lane_id: LaneId,
-		_messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
+		_pez_messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
 		_confirmation_relayer: &AccountId,
 		_received_range: &RangeInclusive<MessageNonce>,
 	) -> MessageNonce {

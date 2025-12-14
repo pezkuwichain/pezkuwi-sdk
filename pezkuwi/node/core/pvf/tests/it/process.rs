@@ -23,7 +23,7 @@ use codec::Encode;
 use pezkuwi_node_core_pvf::{
 	InvalidCandidate, PossiblyInvalidError, PrepareError, ValidationError,
 };
-use pezkuwi_node_primitives::PoV;
+use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_primitives::PersistedValidationData;
 use pezkuwi_teyrchain_primitives::primitives::{
 	BlockData as GenericBlockData, HeadData as GenericHeadData,

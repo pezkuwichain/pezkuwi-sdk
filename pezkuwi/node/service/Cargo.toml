@@ -15,7 +15,7 @@ workspace = true
 
 [dependencies]
 # Bizinikiwi Client
-mmr-gadget = { workspace = true, default-features = true }
+pezmmr-gadget = { workspace = true, default-features = true }
 pezsc-authority-discovery = { workspace = true, default-features = true }
 pezsc-basic-authorship = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true, default-features = true }
@@ -91,7 +91,7 @@ thiserror = { workspace = true }
 pezkuwi-core-primitives = { workspace = true, default-features = true }
 pezkuwi-node-core-teyrchains-inherent = { workspace = true, default-features = true }
 pezkuwi-node-network-protocol = { workspace = true, default-features = true }
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-types = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
@@ -135,7 +135,7 @@ pezkuwi-node-core-runtime-api = { optional = true, workspace = true, default-fea
 pezkuwi-statement-distribution = { optional = true, workspace = true, default-features = true }
 
 xcm = { workspace = true, default-features = true }
-xcm-runtime-apis = { workspace = true, default-features = true }
+xcm-runtime-pezapis = { workspace = true, default-features = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
@@ -203,7 +203,7 @@ runtime-benchmarks = [
   "pezframe-system-rpc-runtime-api/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "gum/runtime-benchmarks",
-  "mmr-gadget/runtime-benchmarks",
+  "pezmmr-gadget/runtime-benchmarks",
   "pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
   "pezpallet-transaction-payment/runtime-benchmarks",
   "pezkuwi-approval-distribution?/runtime-benchmarks",
@@ -232,7 +232,7 @@ runtime-benchmarks = [
   "pezkuwi-node-core-runtime-api?/runtime-benchmarks",
   "pezkuwi-node-core-teyrchains-inherent/runtime-benchmarks",
   "pezkuwi-node-network-protocol/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
   "pezkuwi-node-subsystem-types/runtime-benchmarks",
   "pezkuwi-node-subsystem-util/runtime-benchmarks",
@@ -283,7 +283,7 @@ runtime-benchmarks = [
   "pezsp-timestamp/runtime-benchmarks",
   "pezsp-transaction-pool/runtime-benchmarks",
   "pezsp-version/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
   "zagros-runtime-constants?/runtime-benchmarks",
   "zagros-runtime?/runtime-benchmarks",

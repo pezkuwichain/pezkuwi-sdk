@@ -54,7 +54,7 @@ pub fn yet_another_teyrchain_config(
 	chain_type: ChainType,
 	para_id: u32,
 ) -> GenericChainSpec {
-	// 	> subkey inspect --network kusama --public \
+	// 	> pez_subkey inspect --network kusama --public \
 	// 6205a2a2aecb71c13d8ad3197e12c10bcdcaa0c9f176997bc236c6b39143aa15
 	//
 	// Network ID/Version: kusama

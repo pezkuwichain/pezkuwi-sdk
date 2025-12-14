@@ -10,7 +10,7 @@ You should refer to the [.Dockerfile](./bizinikiwi_builder.Dockerfile) for the a
 list of included binaries is:
 
 - `bizinikiwi`
-- `subkey`
+- `pez_subkey`
 - `node-template`
 - `chain-spec-builder`
 
@@ -33,7 +33,7 @@ The image can be used by passing the selected binary followed by the appropriate
 Your best guess to get started is to pass the `--help flag`. Here are a few examples:
 
 - `./run.sh bizinikiwi --version`
-- `./run.sh subkey --help`
+- `./run.sh pez_subkey --help`
 - `./run.sh node-template --version`
 - `./run.sh chain-spec-builder --help`
 

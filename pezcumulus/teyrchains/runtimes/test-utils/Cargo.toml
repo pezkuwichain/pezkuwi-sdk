@@ -42,7 +42,7 @@ pezpallet-xcm = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true }
 xcm = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true }
+xcm-runtime-pezapis = { workspace = true }
 
 [features]
 default = ["std"]
@@ -68,7 +68,7 @@ std = [
   "teyrchain-info/std",
   "teyrchains-common/std",
   "xcm-executor/std",
-  "xcm-runtime-apis/std",
+  "xcm-runtime-pezapis/std",
   "xcm/std",
 ]
 runtime-benchmarks = [
@@ -91,6 +91,6 @@ runtime-benchmarks = [
   "teyrchain-info/runtime-benchmarks",
   "teyrchains-common/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

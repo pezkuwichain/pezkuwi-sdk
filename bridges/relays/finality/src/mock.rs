@@ -25,7 +25,7 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use bp_header_chain::{FinalityProof, GrandpaConsensusLogReader};
+use bp_header_pez_chain::{FinalityProof, GrandpaConsensusLogReader};
 use futures::{Stream, StreamExt};
 use parking_lot::Mutex;
 use relay_utils::{

@@ -21,12 +21,12 @@ use pezkuwi_sdk::*;
 use codec::{Decode, Encode};
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion};
 use pezframe_support::Hashable;
-use kitchensink_runtime::{
+use pez_kitchensink_runtime::{
 	constants::currency::*, Block, BuildStorage, CheckedExtrinsic, Header, RuntimeCall,
 	RuntimeGenesisConfig, UncheckedExtrinsic,
 };
-use node_primitives::{BlockNumber, Hash};
-use node_testing::keyring::*;
+use pez_node_primitives::{BlockNumber, Hash};
+use pez_node_testing::keyring::*;
 use pezsc_executor::{Externalities, RuntimeVersionOf};
 use pezsp_core::{
 	storage::well_known_keys,
@@ -41,7 +41,7 @@ criterion_main!(benches);
 
 /// The wasm runtime code.
 pub fn compact_code_unwrap() -> &'static [u8] {
-	kitchensink_runtime::WASM_BINARY.expect(
+	pez_kitchensink_runtime::WASM_BINARY.expect(
 		"Development wasm binary is not available. Testing is only supported with the flag \
 		 disabled.",
 	)
@@ -49,16 +49,16 @@ pub fn compact_code_unwrap() -> &'static [u8] {
 
 const GENESIS_HASH: [u8; 32] = [69u8; 32];
 
-const TRANSACTION_VERSION: u32 = kitchensink_runtime::VERSION.transaction_version;
+const TRANSACTION_VERSION: u32 = pez_kitchensink_runtime::VERSION.transaction_version;
 
-const SPEC_VERSION: u32 = kitchensink_runtime::VERSION.spec_version;
+const SPEC_VERSION: u32 = pez_kitchensink_runtime::VERSION.spec_version;
 
 const HEAP_PAGES: u64 = 20;
 
 type TestExternalities<H> = CoreTestExternalities<H>;
 
 fn sign(xt: CheckedExtrinsic) -> UncheckedExtrinsic {
-	node_testing::keyring::sign(xt, SPEC_VERSION, TRANSACTION_VERSION, GENESIS_HASH, None)
+	pez_node_testing::keyring::sign(xt, SPEC_VERSION, TRANSACTION_VERSION, GENESIS_HASH, None)
 }
 
 fn new_test_ext(genesis_config: &RuntimeGenesisConfig) -> TestExternalities<BlakeTwo256> {
@@ -167,7 +167,7 @@ fn bench_execute_block(c: &mut Criterion) {
 	let mut group = c.benchmark_group("execute blocks");
 
 	group.bench_function("wasm", |b| {
-		let genesis_config = node_testing::genesis::config();
+		let genesis_config = pez_node_testing::genesis::config();
 
 		let executor = RuntimeExecutor::builder().build();
 		let runtime_code = RuntimeCode {

@@ -101,7 +101,7 @@ pezkuwichain-runtime-constants = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true }
+xcm-runtime-pezapis = { workspace = true }
 
 # Pezcumulus
 assets-common = { workspace = true }
@@ -127,7 +127,7 @@ bp-bridge-hub-zagros = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
 
 [dev-dependencies]
-asset-test-utils = { workspace = true, default-features = true }
+asset-test-pezutils = { workspace = true, default-features = true }
 teyrchains-runtimes-test-utils = { workspace = true, default-features = true }
 
 [build-dependencies]
@@ -137,7 +137,7 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 fast-runtime = []
 runtime-benchmarks = [
-  "asset-test-utils/runtime-benchmarks",
+  "asset-test-pezutils/runtime-benchmarks",
   "assets-common/runtime-benchmarks",
   "bp-asset-hub-pezkuwichain/runtime-benchmarks",
   "bp-asset-hub-zagros/runtime-benchmarks",
@@ -225,11 +225,11 @@ runtime-benchmarks = [
   "teyrchains-runtimes-test-utils/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]
 try-runtime = [
-  "asset-test-utils/try-runtime",
+  "asset-test-pezutils/try-runtime",
   "assets-common/try-runtime",
   "pezcumulus-pezpallet-aura-ext/try-runtime",
   "pezcumulus-pezpallet-teyrchain-system/try-runtime",
@@ -379,7 +379,7 @@ std = [
   "tracing/std",
   "xcm-builder/std",
   "xcm-executor/std",
-  "xcm-runtime-apis/std",
+  "xcm-runtime-pezapis/std",
   "xcm/std",
 ]
 

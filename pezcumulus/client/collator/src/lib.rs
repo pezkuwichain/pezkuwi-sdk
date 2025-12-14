@@ -17,7 +17,7 @@
 
 //! Pezcumulus Collator implementation for Bizinikiwi.
 
-use pezkuwi_node_primitives::CollationGenerationConfig;
+use pezkuwi_pez_node_primitives::CollationGenerationConfig;
 use pezkuwi_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
 use pezkuwi_overseer::Handle as OverseerHandle;
 use pezkuwi_primitives::{CollatorPair, Id as ParaId};
@@ -34,7 +34,7 @@ pub mod relay_chain_driven {
 		channel::{mpsc, oneshot},
 		prelude::*,
 	};
-	use pezkuwi_node_primitives::{CollationGenerationConfig, CollationResult};
+	use pezkuwi_pez_node_primitives::{CollationGenerationConfig, CollationResult};
 	use pezkuwi_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
 	use pezkuwi_overseer::Handle as OverseerHandle;
 	use pezkuwi_primitives::{CollatorPair, Id as ParaId};

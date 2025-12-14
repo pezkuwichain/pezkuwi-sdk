@@ -27,7 +27,7 @@
 // benchmark
 // pallet
 // --extrinsic=*
-// --runtime=target/production/wbuild/bridge-hub-zagros-runtime/bridge_hub_zagros_runtime.wasm
+// --runtime=target/production/wbuild/pezbridge-hub-zagros-runtime/pezbridge_hub_zagros_runtime.wasm
 // --pallet=pezpallet_bridge_teyrchains
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezcumulus/file_header.txt
 // --output=./pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros/src/weights

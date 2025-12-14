@@ -29,7 +29,7 @@ use bp_messages::{
 	InboundLaneData, LaneState, MessageNonce, OutboundLaneData, UnrewardedRelayer,
 	UnrewardedRelayersState,
 };
-use bp_runtime::{AccountIdOf, HashOf, UnverifiedStorageProofParams};
+use pezbp_runtime::{AccountIdOf, HashOf, UnverifiedStorageProofParams};
 use codec::Decode;
 use pezframe_benchmarking::{account, v2::*};
 use pezframe_support::weights::Weight;

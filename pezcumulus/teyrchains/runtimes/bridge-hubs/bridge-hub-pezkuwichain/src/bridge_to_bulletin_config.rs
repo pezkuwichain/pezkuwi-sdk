@@ -105,7 +105,7 @@ pub type OnBridgeHubPezkuwichainRefundPezkuwichainBulletinMessages =
 			PriorityBoostPerMessage,
 		>,
 	>;
-bp_runtime::generate_static_str_provider!(
+pezbp_runtime::generate_static_str_provider!(
 	OnBridgeHubPezkuwichainRefundPezkuwichainBulletinMessages
 );
 
@@ -165,7 +165,7 @@ impl pezpallet_xcm_bridge_hub::Config<XcmOverPezkuwiBulletinInstance> for Runtim
 mod tests {
 	use super::*;
 	use crate::bridge_common_config::BridgeGrandpaPezkuwichainBulletinInstance;
-	use bridge_runtime_common::{
+	use pezbridge_runtime_common::{
 		assert_complete_bridge_types, integrity::check_message_lane_weights,
 	};
 	use testnet_teyrchains_constants::pezkuwichain;
@@ -243,7 +243,7 @@ where
 	R: pezpallet_xcm_bridge_hub::Config<XBHI>,
 	XBHI: 'static,
 	C: xcm_executor::traits::ConvertLocation<
-		bp_runtime::AccountIdOf<pezpallet_xcm_bridge_hub::ThisChainOf<R, XBHI>>,
+		pezbp_runtime::AccountIdOf<pezpallet_xcm_bridge_hub::ThisChainOf<R, XBHI>>,
 	>,
 {
 	use pezpallet_xcm_bridge_hub::{Bridge, BridgeId, BridgeState};

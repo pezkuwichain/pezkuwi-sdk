@@ -18,7 +18,7 @@
 
 use crate::{justification, InitializationData};
 
-use bp_runtime::HeaderOf;
+use pezbp_runtime::HeaderOf;
 use codec::{Decode, Encode};
 use pezframe_support::{weights::Weight, RuntimeDebugNoBound};
 use scale_info::TypeInfo;

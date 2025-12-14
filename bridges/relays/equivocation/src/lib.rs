@@ -20,8 +20,8 @@ mod mock;
 mod reporter;
 
 use async_trait::async_trait;
-use bp_header_chain::{FinalityProof, FindEquivocations};
-use finality_relay::{FinalityPipeline, SourceClientBase};
+use bp_header_pez_chain::{FinalityProof, FindEquivocations};
+use pez_finality_relay::{FinalityPipeline, SourceClientBase};
 use relay_utils::{relay_loop::Client as RelayClient, MaybeConnectionError, TransactionTracker};
 use std::{fmt::Debug, time::Duration};
 
@@ -47,7 +47,7 @@ pub trait EquivocationDetectionPipeline: FinalityPipeline {
 	>;
 }
 
-type HeaderFinalityInfo<P> = bp_header_chain::HeaderFinalityInfo<
+type HeaderFinalityInfo<P> = bp_header_pez_chain::HeaderFinalityInfo<
 	<P as FinalityPipeline>::FinalityProof,
 	<P as EquivocationDetectionPipeline>::FinalityVerificationContext,
 >;

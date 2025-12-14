@@ -22,7 +22,7 @@ use crate::{
 };
 
 use bp_messages::{HashedLaneId, LegacyLaneId, MessageNonce};
-use finality_relay::SyncLoopMetrics;
+use pez_finality_relay::SyncLoopMetrics;
 use relay_utils::metrics::{
 	metric_name, register, GaugeVec, Metric, Opts, PrometheusError, Registry, U64,
 };

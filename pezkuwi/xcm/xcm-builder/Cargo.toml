@@ -47,7 +47,7 @@ primitive-types = { features = [
   "scale-info",
 ], workspace = true }
 pezsp-tracing = { workspace = true, default-features = true }
-xcm-simulator = { workspace = true, default-features = true }
+xcm-pez-simulator = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
@@ -67,7 +67,7 @@ runtime-benchmarks = [
   "pezsp-io/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-simulator/runtime-benchmarks",
+  "xcm-pez-simulator/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]
 std = [

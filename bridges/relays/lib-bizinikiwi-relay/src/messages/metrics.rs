@@ -21,7 +21,7 @@ use crate::TaggedAccount;
 use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use codec::{Decode, EncodeLike};
 use pezframe_system::AccountInfo;
-use messages_relay::Labeled;
+use pez_messages_relay::Labeled;
 use pezpallet_balances::AccountData;
 use relay_bizinikiwi_client::{
 	metrics::{FixedU128OrOne, FloatStorageValue, FloatStorageValueMetric},

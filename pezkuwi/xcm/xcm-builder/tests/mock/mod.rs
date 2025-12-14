@@ -38,7 +38,7 @@ use xcm_builder::{
 	IsChildSystemTeyrchain, IsConcrete, MintLocation, RespectSuspension, SignedAccountId32AsNative,
 	SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
 };
-use xcm_simulator::helpers::derive_topic_id;
+use xcm_pez_simulator::helpers::derive_topic_id;
 
 pub type AccountId = AccountId32;
 pub type Balance = u128;

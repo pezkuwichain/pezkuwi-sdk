@@ -16,7 +16,7 @@ workspace = true
 anyhow = { workspace = true }
 clap = { workspace = true, features = ["derive"] }
 codec = { workspace = true }
-pezkuwi-node-primitives = { workspace = true }
+pezkuwi-pez-node-primitives = { workspace = true }
 pezkuwi-primitives = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true }
 pezsc-executor = { workspace = true }
@@ -28,7 +28,7 @@ tracing-subscriber = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",
   "pezkuwi-teyrchain-primitives/runtime-benchmarks",
   "pezsc-executor/runtime-benchmarks",

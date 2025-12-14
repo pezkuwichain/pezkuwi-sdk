@@ -28,7 +28,7 @@ use std::{
 	path::PathBuf,
 };
 
-/// Common arguments accross all generate key commands, subkey and node.
+/// Common arguments accross all generate key commands, pez_subkey and node.
 #[derive(Debug, Args, Clone)]
 pub struct GenerateKeyCmdCommon {
 	/// Name of file to save secret key to.

@@ -24,7 +24,7 @@ use crate::{
 	strategy::chain_sync::{PeerSync, PeerSyncState},
 	LOG_TARGET,
 };
-use fork_tree::ForkTree;
+use pez_fork_tree::ForkTree;
 use log::{debug, trace, warn};
 use prometheus_endpoint::{
 	prometheus::core::GenericGauge, register, GaugeVec, Opts, PrometheusError, Registry, U64,
@@ -154,7 +154,7 @@ impl<B: BlockT> ExtraRequests<B> {
 					metrics.pending.inc();
 				}
 			},
-			Err(fork_tree::Error::Revert) => {
+			Err(pez_fork_tree::Error::Revert) => {
 				// we have finalized further than the given request, presumably
 				// by some other part of the system (not sync). we can safely
 				// ignore the `Revert` error.
@@ -230,7 +230,7 @@ impl<B: BlockT> ExtraRequests<B> {
 		best_finalized_hash: &B::Hash,
 		best_finalized_number: NumberFor<B>,
 		is_descendent_of: F,
-	) -> Result<(), fork_tree::Error<ClientError>>
+	) -> Result<(), pez_fork_tree::Error<ClientError>>
 	where
 		F: Fn(&B::Hash, &B::Hash) -> Result<bool, ClientError>,
 	{
@@ -247,7 +247,7 @@ impl<B: BlockT> ExtraRequests<B> {
 				best_finalized_number,
 				&is_descendent_of,
 			) {
-				Err(fork_tree::Error::Revert) => {
+				Err(pez_fork_tree::Error::Revert) => {
 					// we might have finalized further already in which case we
 					// will get a `Revert` error which we can safely ignore.
 				},

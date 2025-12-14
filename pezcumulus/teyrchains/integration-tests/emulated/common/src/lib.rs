@@ -19,8 +19,8 @@ pub mod xcm_helpers;
 
 use codec::Encode;
 use pezcumulus_primitives_core::relay_chain::Slot;
-pub use xcm_emulator;
-pub use xcm_simulator;
+pub use xcm_pez_emulator;
+pub use xcm_pez_simulator;
 
 // Bizinikiwi
 use pezframe_support::parameter_types;
@@ -41,7 +41,7 @@ use teyrchains_common::BlockNumber;
 use pezkuwi_primitives::{AssignmentId, ValidatorId};
 use pezsp_runtime::traits::Convert;
 use teyrchains_common::{AccountId, AuraId};
-use xcm_emulator::{RelayBlockNumber, AURA_ENGINE_ID};
+use xcm_pez_emulator::{RelayBlockNumber, AURA_ENGINE_ID};
 
 pub const XCM_V2: u32 = 2;
 pub const XCM_V3: u32 = 3;

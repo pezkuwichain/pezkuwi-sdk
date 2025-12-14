@@ -23,7 +23,7 @@ use crate::{
 };
 use emulated_integration_tests_common::snowbridge::{SEPOLIA_ID, WETH};
 use pezframe_support::assert_noop;
-use snowbridge_core::AssetMetadata;
+use pezsnowbridge_core::AssetMetadata;
 use pezsp_runtime::DispatchError::BadOrigin;
 use xcm::v5::AssetTransferFilter;
 

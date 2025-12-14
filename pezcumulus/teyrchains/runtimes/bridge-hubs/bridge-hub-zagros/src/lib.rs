@@ -37,10 +37,10 @@ pub mod xcm_config;
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-use bridge_runtime_common::extensions::{
+use pezbridge_runtime_common::extensions::{
 	CheckAndBoostBridgeGrandpaTransactions, CheckAndBoostBridgeTeyrchainsTransactions,
 };
-use pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezcumulus_primitives_core::ParaId;
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -75,12 +75,12 @@ pub use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
 pub use pezsp_runtime::{MultiAddress, Perbill, Permill};
 use xcm_config::{XcmConfig, XcmOriginToTransactDispatchOrigin, XcmRouter};
 
-use xcm_runtime_apis::{
+use xcm_runtime_pezapis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
 	fees::Error as XcmPaymentApiError,
 };
 
-use bp_runtime::HeaderId;
+use pezbp_runtime::HeaderId;
 use pezpallet_bridge_messages::LaneIdOf;
 #[cfg(any(feature = "std", test))]
 pub use pezsp_runtime::BuildStorage;
@@ -93,8 +93,8 @@ use xcm::prelude::*;
 
 use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 
-use snowbridge_core::{AgentId, PricingParameters};
-use snowbridge_outbound_queue_primitives::v1::{Command, Fee};
+use pezsnowbridge_core::{AgentId, PricingParameters};
+use pezsnowbridge_outbound_queue_primitives::v1::{Command, Fee};
 use testnet_teyrchains_constants::zagros::{consensus::*, currency::*, fee::WeightToFee, time::*};
 use teyrchains_common::{
 	impls::DealWithFees, AccountId, Balance, BlockNumber, Hash, Header, Nonce, Signature,
@@ -117,7 +117,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 
 /// The TransactionExtension to the basic transaction logic.
-pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		(
@@ -147,8 +147,8 @@ pub type Migrations = (
 	pezpallet_multisig::migrations::v1::MigrateToV1<Runtime>,
 	InitStorageVersions,
 	// unreleased
-	pezcumulus_pallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
-	pezcumulus_pallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
+	pezcumulus_pezpallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
+	pezcumulus_pezpallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
 	pezpallet_bridge_messages::migration::v1::MigrationToV1<
 		Runtime,
 		bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance,
@@ -172,12 +172,12 @@ pub type Migrations = (
 		bridge_common_config::BridgeRelayersInstance,
 		bp_messages::LegacyLaneId,
 	>,
-	snowbridge_pallet_system::migration::v0::InitializeOnUpgrade<
+	snowbridge_pezpallet_system::migration::v0::InitializeOnUpgrade<
 		Runtime,
 		ConstU32<BRIDGE_HUB_ID>,
 		ConstU32<ASSET_HUB_ID>,
 	>,
-	snowbridge_pallet_system::migration::FeePerGasMigrationV0ToV1<Runtime>,
+	snowbridge_pezpallet_system::migration::FeePerGasMigrationV0ToV1<Runtime>,
 	bridge_to_ethereum_config::migrations::MigrationForXcmV5<Runtime>,
 	pezpallet_session::migrations::v1::MigrateV0ToV1<
 		Runtime,
@@ -185,7 +185,7 @@ pub type Migrations = (
 	>,
 	// permanent
 	pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
-	pezcumulus_pallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
+	pezcumulus_pezpallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
 );
 
 parameter_types! {
@@ -311,13 +311,13 @@ impl pezframe_system::Config for Runtime {
 	/// This is used as an identifier of the chain. 42 is the generic bizinikiwi prefix.
 	type SS58Prefix = SS58Prefix;
 	/// The action to take on a Runtime Upgrade
-	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = Migrations;
 }
 
-impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
-	type WeightInfo = weights::pezcumulus_pallet_weight_reclaim::WeightInfo<Runtime>;
+impl pezcumulus_pezpallet_weight_reclaim::Config for Runtime {
+	type WeightInfo = weights::pezcumulus_pezpallet_weight_reclaim::WeightInfo<Runtime>;
 }
 
 impl pezpallet_timestamp::Config for Runtime {
@@ -377,8 +377,8 @@ parameter_types! {
 	pub const ReservedDmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT.saturating_div(4);
 }
 
-impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
-	type WeightInfo = weights::pezcumulus_pallet_teyrchain_system::WeightInfo<Runtime>;
+impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
+	type WeightInfo = weights::pezcumulus_pezpallet_teyrchain_system::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
@@ -392,7 +392,7 @@ impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type RelayParentOffset = ConstU32<0>;
 }
 
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
@@ -435,7 +435,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type IdleMaxServiceWeight = MessageQueueServiceWeight;
 }
 
-impl pezcumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
 	/// The asset ID for the asset that we use to pay for message delivery fees.
@@ -451,7 +451,7 @@ pub type PriceForSiblingTeyrchainDelivery = pezkuwi_runtime_common::xcm_sender::
 	XcmpQueue,
 >;
 
-impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pezpallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = PezkuwiXcm;
@@ -463,11 +463,11 @@ impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 	type MaxPageSize = ConstU32<{ 103 * 1024 }>;
 	type ControllerOrigin = EnsureRoot<AccountId>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
-	type WeightInfo = weights::pezcumulus_pallet_xcmp_queue::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezcumulus_pezpallet_xcmp_queue::WeightInfo<Runtime>;
 	type PriceForSiblingDelivery = PriceForSiblingTeyrchainDelivery;
 }
 
-impl pezcumulus_pallet_xcmp_queue::migration::v5::V5Config for Runtime {
+impl pezcumulus_pezpallet_xcmp_queue::migration::v5::V5Config for Runtime {
 	// This must be the same as the `ChannelInfo` from the `Config`:
 	type ChannelList = TeyrchainSystem;
 }
@@ -558,10 +558,10 @@ construct_runtime!(
 	{
 		// System support stuff.
 		System: pezframe_system = 0,
-		TeyrchainSystem: pezcumulus_pallet_teyrchain_system = 1,
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system = 1,
 		Timestamp: pezpallet_timestamp = 2,
 		TeyrchainInfo: teyrchain_info = 3,
-		WeightReclaim: pezcumulus_pallet_weight_reclaim = 4,
+		WeightReclaim: pezcumulus_pezpallet_weight_reclaim = 4,
 
 		// Monetary stuff.
 		Balances: pezpallet_balances = 10,
@@ -572,12 +572,12 @@ construct_runtime!(
 		CollatorSelection: pezpallet_collator_selection = 21,
 		Session: pezpallet_session = 22,
 		Aura: pezpallet_aura = 23,
-		AuraExt: pezcumulus_pallet_aura_ext = 24,
+		AuraExt: pezcumulus_pezpallet_aura_ext = 24,
 
 		// XCM helpers.
-		XcmpQueue: pezcumulus_pallet_xcmp_queue = 30,
+		XcmpQueue: pezcumulus_pezpallet_xcmp_queue = 30,
 		PezkuwiXcm: pezpallet_xcm = 31,
-		CumulusXcm: pezcumulus_pallet_xcm = 32,
+		CumulusXcm: pezcumulus_pezpallet_xcm = 32,
 
 		// Handy utilities.
 		Utility: pezpallet_utility = 40,
@@ -590,14 +590,14 @@ construct_runtime!(
 		BridgePezkuwichainMessages: pezpallet_bridge_messages::<Instance1> = 44,
 		XcmOverBridgeHubPezkuwichain: pezpallet_xcm_bridge_hub::<Instance1> = 45,
 
-		EthereumInboundQueue: snowbridge_pallet_inbound_queue = 80,
-		EthereumOutboundQueue: snowbridge_pallet_outbound_queue = 81,
-		EthereumBeaconClient: snowbridge_pallet_ethereum_client = 82,
-		EthereumSystem: snowbridge_pallet_system = 83,
+		EthereumInboundQueue: snowbridge_pezpallet_inbound_queue = 80,
+		EthereumOutboundQueue: snowbridge_pezpallet_outbound_queue = 81,
+		EthereumBeaconClient: snowbridge_pezpallet_ethereum_client = 82,
+		EthereumSystem: snowbridge_pezpallet_system = 83,
 
-		EthereumSystemV2: snowbridge_pallet_system_v2 = 90,
-		EthereumInboundQueueV2: snowbridge_pallet_inbound_queue_v2 = 91,
-		EthereumOutboundQueueV2: snowbridge_pallet_outbound_queue_v2 = 92,
+		EthereumSystemV2: snowbridge_pezpallet_system_v2 = 90,
+		EthereumInboundQueueV2: snowbridge_pezpallet_inbound_queue_v2 = 91,
+		EthereumOutboundQueueV2: snowbridge_pezpallet_outbound_queue_v2 = 92,
 
 		// Message Queue. Importantly, is registered last so that messages are processed after
 		// the `on_initialize` hooks of bridging pallets.
@@ -605,7 +605,7 @@ construct_runtime!(
 	}
 );
 
-bridge_runtime_common::generate_bridge_reject_obsolete_headers_and_messages! {
+pezbridge_runtime_common::generate_bridge_reject_obsolete_headers_and_messages! {
 	RuntimeCall, AccountId,
 	// Grandpa
 	CheckAndBoostBridgeGrandpaTransactions<
@@ -639,8 +639,8 @@ mod benches {
 		[pezpallet_timestamp, Timestamp]
 		[pezpallet_transaction_payment, TransactionPayment]
 		[pezpallet_collator_selection, CollatorSelection]
-		[pezcumulus_pallet_teyrchain_system, TeyrchainSystem]
-		[pezcumulus_pallet_xcmp_queue, XcmpQueue]
+		[pezcumulus_pezpallet_teyrchain_system, TeyrchainSystem]
+		[pezcumulus_pezpallet_xcmp_queue, XcmpQueue]
 		// XCM
 		[pezpallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		// NOTE: Make sure you point to the individual modules below.
@@ -652,16 +652,16 @@ mod benches {
 		[pezpallet_bridge_teyrchains, WithinPezkuwichain]
 		[pezpallet_bridge_messages, ZagrosToPezkuwichain]
 		// Ethereum Bridge V1
-		[snowbridge_pallet_system, EthereumSystem]
-		[snowbridge_pallet_ethereum_client, EthereumBeaconClient]
-		[snowbridge_pallet_inbound_queue, EthereumInboundQueue]
-		[snowbridge_pallet_outbound_queue, EthereumOutboundQueue]
+		[snowbridge_pezpallet_system, EthereumSystem]
+		[snowbridge_pezpallet_ethereum_client, EthereumBeaconClient]
+		[snowbridge_pezpallet_inbound_queue, EthereumInboundQueue]
+		[snowbridge_pezpallet_outbound_queue, EthereumOutboundQueue]
 		// Ethereum Bridge V2
-		[snowbridge_pallet_system_v2, EthereumSystemV2]
-		[snowbridge_pallet_inbound_queue_v2, EthereumInboundQueueV2]
-		[snowbridge_pallet_outbound_queue_v2, EthereumOutboundQueueV2]
+		[snowbridge_pezpallet_system_v2, EthereumSystemV2]
+		[snowbridge_pezpallet_inbound_queue_v2, EthereumInboundQueueV2]
+		[snowbridge_pezpallet_outbound_queue_v2, EthereumOutboundQueueV2]
 
-		[pezcumulus_pallet_weight_reclaim, WeightReclaim]
+		[pezcumulus_pezpallet_weight_reclaim, WeightReclaim]
 	);
 }
 
@@ -818,7 +818,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::fees::XcmPaymentApi<Block> for Runtime {
+	impl xcm_runtime_pezapis::fees::XcmPaymentApi<Block> for Runtime {
 		fn query_acceptable_payment_assets(xcm_version: xcm::Version) -> Result<Vec<VersionedAssetId>, XcmPaymentApiError> {
 			let acceptable_assets = vec![AssetId(xcm_config::ZagrosLocation::get())];
 			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
@@ -839,7 +839,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
+	impl xcm_runtime_pezapis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
 		fn dry_run_call(origin: OriginCaller, call: RuntimeCall, result_xcms_version: XcmVersion) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
 			PezkuwiXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
@@ -849,37 +849,37 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::conversions::LocationToAccountApi<Block, AccountId> for Runtime {
+	impl xcm_runtime_pezapis::conversions::LocationToAccountApi<Block, AccountId> for Runtime {
 		fn convert_location(location: VersionedLocation) -> Result<
 			AccountId,
-			xcm_runtime_apis::conversions::Error
+			xcm_runtime_pezapis::conversions::Error
 		> {
-			xcm_runtime_apis::conversions::LocationToAccountHelper::<
+			xcm_runtime_pezapis::conversions::LocationToAccountHelper::<
 				AccountId,
 				xcm_config::LocationToAccountId,
 			>::convert_location(location)
 		}
 	}
 
-	impl xcm_runtime_apis::trusted_query::TrustedQueryApi<Block> for Runtime {
-		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
+	impl xcm_runtime_pezapis::trusted_query::TrustedQueryApi<Block> for Runtime {
+		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_pezapis::trusted_query::XcmTrustedQueryResult {
 			PezkuwiXcm::is_trusted_reserve(asset, location)
 		}
-		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
+		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_pezapis::trusted_query::XcmTrustedQueryResult {
 			PezkuwiXcm::is_trusted_teleporter(asset, location)
 		}
 	}
 
-	impl xcm_runtime_apis::authorized_aliases::AuthorizedAliasersApi<Block> for Runtime {
+	impl xcm_runtime_pezapis::authorized_aliases::AuthorizedAliasersApi<Block> for Runtime {
 		fn authorized_aliasers(target: VersionedLocation) -> Result<
-			Vec<xcm_runtime_apis::authorized_aliases::OriginAliaser>,
-			xcm_runtime_apis::authorized_aliases::Error
+			Vec<xcm_runtime_pezapis::authorized_aliases::OriginAliaser>,
+			xcm_runtime_pezapis::authorized_aliases::Error
 		> {
 			PezkuwiXcm::authorized_aliasers(target)
 		}
 		fn is_authorized_alias(origin: VersionedLocation, target: VersionedLocation) -> Result<
 			bool,
-			xcm_runtime_apis::authorized_aliases::Error
+			xcm_runtime_pezapis::authorized_aliases::Error
 		> {
 			PezkuwiXcm::is_authorized_alias(origin, target)
 		}
@@ -901,7 +901,7 @@ impl_runtime_apis! {
 			>>::FreeHeadersInterval::get()
 		}
 		fn synced_headers_grandpa_info(
-		) -> Vec<bp_header_chain::StoredHeaderGrandpaInfo<bp_pezkuwichain::Header>> {
+		) -> Vec<bp_header_pez_chain::StoredHeaderGrandpaInfo<bp_pezkuwichain::Header>> {
 			BridgePezkuwichainGrandpa::synced_headers_grandpa_info()
 		}
 	}
@@ -923,7 +923,7 @@ impl_runtime_apis! {
 			lane: LaneIdOf<Runtime, bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance>,
 			messages: Vec<(bp_messages::MessagePayload, bp_messages::OutboundMessageDetails)>,
 		) -> Vec<bp_messages::InboundMessageDetails> {
-			bridge_runtime_common::messages_api::inbound_message_details::<
+			pezbridge_runtime_common::messages_api::inbound_message_details::<
 				Runtime,
 				bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance,
 			>(lane, messages)
@@ -936,38 +936,38 @@ impl_runtime_apis! {
 			begin: bp_messages::MessageNonce,
 			end: bp_messages::MessageNonce,
 		) -> Vec<bp_messages::OutboundMessageDetails> {
-			bridge_runtime_common::messages_api::outbound_message_details::<
+			pezbridge_runtime_common::messages_api::outbound_message_details::<
 				Runtime,
 				bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance,
 			>(lane, begin, end)
 		}
 	}
 
-	impl snowbridge_outbound_queue_runtime_api::OutboundQueueApi<Block, Balance> for Runtime {
-		fn prove_message(leaf_index: u64) -> Option<snowbridge_merkle_tree::MerkleProof> {
-			snowbridge_pallet_outbound_queue::api::prove_message::<Runtime>(leaf_index)
+	impl pezsnowbridge_outbound_queue_runtime_api::OutboundQueueApi<Block, Balance> for Runtime {
+		fn prove_message(leaf_index: u64) -> Option<pezsnowbridge_merkle_tree::MerkleProof> {
+			snowbridge_pezpallet_outbound_queue::api::prove_message::<Runtime>(leaf_index)
 		}
 
 		fn calculate_fee(command: Command, parameters: Option<PricingParameters<Balance>>) -> Fee<Balance> {
-			snowbridge_pallet_outbound_queue::api::calculate_fee::<Runtime>(command, parameters)
+			snowbridge_pezpallet_outbound_queue::api::calculate_fee::<Runtime>(command, parameters)
 		}
 	}
 
-	impl snowbridge_outbound_queue_v2_runtime_api::OutboundQueueV2Api<Block, Balance> for Runtime {
-		fn prove_message(leaf_index: u64) -> Option<snowbridge_merkle_tree::MerkleProof> {
-			snowbridge_pallet_outbound_queue_v2::api::prove_message::<Runtime>(leaf_index)
+	impl pezsnowbridge_outbound_queue_v2_runtime_api::OutboundQueueV2Api<Block, Balance> for Runtime {
+		fn prove_message(leaf_index: u64) -> Option<pezsnowbridge_merkle_tree::MerkleProof> {
+			snowbridge_pezpallet_outbound_queue_v2::api::prove_message::<Runtime>(leaf_index)
 		}
 	}
 
-	impl snowbridge_system_runtime_api::ControlApi<Block> for Runtime {
+	impl pezsnowbridge_system_runtime_api::ControlApi<Block> for Runtime {
 		fn agent_id(location: VersionedLocation) -> Option<AgentId> {
-			snowbridge_pallet_system::api::agent_id::<Runtime>(location)
+			snowbridge_pezpallet_system::api::agent_id::<Runtime>(location)
 		}
 	}
 
-	impl snowbridge_system_v2_runtime_api::ControlV2Api<Block> for Runtime {
+	impl pezsnowbridge_system_v2_runtime_api::ControlV2Api<Block> for Runtime {
 		fn agent_id(location: VersionedLocation) -> Option<AgentId> {
-			snowbridge_pallet_system_v2::api::agent_id::<Runtime>(location)
+			snowbridge_pezpallet_system_v2::api::agent_id::<Runtime>(location)
 		}
 	}
 
@@ -1000,7 +1000,7 @@ impl_runtime_apis! {
 			use pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pallet as SystemBench;
 			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
 			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 
 			// This is defined once again in dispatch_benchmark, because list_benchmarks!
@@ -1038,12 +1038,12 @@ impl_runtime_apis! {
 				}
 
 				fn verify_set_code() {
-					System::assert_last_event(pezcumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
+					System::assert_last_event(pezcumulus_pezpallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
 				}
 			}
 
-			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
-			impl pezcumulus_pallet_session_benchmarking::Config for Runtime {}
+			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			use xcm::latest::prelude::*;
 			use xcm_config::ZagrosLocation;
@@ -1277,7 +1277,7 @@ impl_runtime_apis! {
 			type WithinPezkuwichain = pezpallet_bridge_teyrchains::benchmarking::Pallet::<Runtime, bridge_to_pezkuwichain_config::BridgeTeyrchainPezkuwichainInstance>;
 			type ZagrosToPezkuwichain = pezpallet_bridge_messages::benchmarking::Pallet ::<Runtime, bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance>;
 
-			use bridge_runtime_common::messages_benchmarking::{
+			use pezbridge_runtime_common::messages_benchmarking::{
 				prepare_message_delivery_proof_from_teyrchain,
 				prepare_message_proof_from_teyrchain,
 				generate_xcm_builder_bridge_message_sample,
@@ -1291,7 +1291,7 @@ impl_runtime_apis! {
 			impl BridgeMessagesConfig<bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance> for Runtime {
 				fn is_relayer_rewarded(relayer: &Self::AccountId) -> bool {
 					let bench_lane_id = <Self as BridgeMessagesConfig<bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance>>::bench_lane_id();
-					use bp_runtime::Chain;
+					use pezbp_runtime::Chain;
 					let bridged_chain_id =<Self as pezpallet_bridge_messages::Config<bridge_to_pezkuwichain_config::WithBridgeHubPezkuwichainMessagesInstance>>::BridgedChain::ID;
 					pezpallet_bridge_relayers::Pallet::<Runtime, bridge_common_config::BridgeRelayersInstance>::relayer_reward(
 						relayer,
@@ -1344,7 +1344,7 @@ impl_runtime_apis! {
 				}
 			}
 
-			use bridge_runtime_common::teyrchains_benchmarking::prepare_teyrchain_heads_proof;
+			use pezbridge_runtime_common::teyrchains_benchmarking::prepare_teyrchain_heads_proof;
 			use pezpallet_bridge_teyrchains::benchmarking::Config as BridgeTeyrchainsConfig;
 			use pezpallet_bridge_relayers::benchmarking::{
 				Pallet as BridgeRelayersBench,
@@ -1353,14 +1353,14 @@ impl_runtime_apis! {
 
 			impl BridgeTeyrchainsConfig<bridge_to_pezkuwichain_config::BridgeTeyrchainPezkuwichainInstance> for Runtime {
 				fn teyrchains() -> Vec<bp_pezkuwi_core::teyrchains::ParaId> {
-					use bp_runtime::Teyrchain;
+					use pezbp_runtime::Teyrchain;
 					vec![bp_pezkuwi_core::teyrchains::ParaId(bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain::TEYRCHAIN_ID)]
 				}
 
 				fn prepare_teyrchain_heads_proof(
 					teyrchains: &[bp_pezkuwi_core::teyrchains::ParaId],
 					teyrchain_head_size: u32,
-					proof_params: bp_runtime::UnverifiedStorageProofParams,
+					proof_params: pezbp_runtime::UnverifiedStorageProofParams,
 				) -> (
 					bp_teyrchains::RelayBlockNumber,
 					bp_teyrchains::RelayBlockHash,
@@ -1446,9 +1446,9 @@ impl_runtime_apis! {
 	}
 }
 
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }
 
 #[cfg(test)]
@@ -1489,7 +1489,7 @@ mod tests {
 				let bh_indirect_payload = bp_bridge_hub_zagros::TransactionExtension::from_params(
 					VERSION.spec_version,
 					VERSION.transaction_version,
-					bp_runtime::TransactionEra::Immortal,
+					pezbp_runtime::TransactionEra::Immortal,
 					System::block_hash(BlockNumber::zero()),
 					10,
 					10,

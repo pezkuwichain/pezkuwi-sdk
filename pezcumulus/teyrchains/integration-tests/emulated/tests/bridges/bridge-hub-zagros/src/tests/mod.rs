@@ -233,7 +233,7 @@ pub(crate) fn assert_bridge_hub_pezkuwichain_message_received() {
 			vec![
 				// message sent to destination
 				RuntimeEvent::XcmpQueue(
-					pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+					pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }
 				) => {},
 			]
 		);

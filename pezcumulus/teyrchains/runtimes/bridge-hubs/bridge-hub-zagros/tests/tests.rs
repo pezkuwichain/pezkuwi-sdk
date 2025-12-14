@@ -21,11 +21,11 @@ use bp_messages::LegacyLaneId;
 use bp_pezkuwi_core::Signature;
 use bp_relayers::{PayRewardFromAccount, RewardsAccountOwner, RewardsAccountParams};
 use bridge_common_config::{BridgeRelayersInstance, BridgeReward, RequiredStakeForStakeAndSlash};
-use bridge_hub_test_utils::{
+use pezbridge_hub_test_utils::{
 	test_cases::{from_teyrchain, run_test},
 	GovernanceOrigin, SlotDurations,
 };
-use bridge_hub_zagros_runtime::{
+use pezbridge_hub_zagros_runtime::{
 	bridge_common_config, bridge_to_pezkuwichain_config,
 	bridge_to_pezkuwichain_config::PezkuwichainGlobalConsensusNetwork,
 	xcm_config::{
@@ -67,7 +67,7 @@ use xcm::{
 	latest::{prelude::*, PEZKUWICHAIN_GENESIS_HASH, ZAGROS_GENESIS_HASH},
 	VersionedLocation,
 };
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 // Random para id of sibling chain used in tests.
 pub const SIBLING_TEYRCHAIN_ID: u32 = 2053;
@@ -137,8 +137,8 @@ fn construct_and_estimate_extrinsic_fee(call: RuntimeCall) -> Balance {
 	TransactionPayment::compute_fee(xt.encoded_size() as _, &info, 0)
 }
 
-fn collator_session_keys() -> bridge_hub_test_utils::CollatorSessionKeys<Runtime> {
-	bridge_hub_test_utils::CollatorSessionKeys::new(
+fn collator_session_keys() -> pezbridge_hub_test_utils::CollatorSessionKeys<Runtime> {
+	pezbridge_hub_test_utils::CollatorSessionKeys::new(
 		AccountId::from(Alice),
 		AccountId::from(Alice),
 		SessionKeys { aura: AuraId::from(Alice.public()) },
@@ -152,7 +152,7 @@ fn slot_durations() -> SlotDurations {
 	}
 }
 
-bridge_hub_test_utils::test_cases::include_teleports_for_native_asset_works!(
+pezbridge_hub_test_utils::test_cases::include_teleports_for_native_asset_works!(
 	Runtime,
 	AllPalletsWithoutSystem,
 	XcmConfig,
@@ -173,7 +173,7 @@ bridge_hub_test_utils::test_cases::include_teleports_for_native_asset_works!(
 
 #[test]
 fn initialize_bridge_by_governance_works() {
-	bridge_hub_test_utils::test_cases::initialize_bridge_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::initialize_bridge_by_governance_works::<
 		Runtime,
 		BridgeGrandpaPezkuwichainInstance,
 	>(
@@ -185,7 +185,7 @@ fn initialize_bridge_by_governance_works() {
 
 #[test]
 fn change_bridge_grandpa_pallet_mode_by_governance_works() {
-	bridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
 		Runtime,
 		BridgeGrandpaPezkuwichainInstance,
 	>(
@@ -197,7 +197,7 @@ fn change_bridge_grandpa_pallet_mode_by_governance_works() {
 
 #[test]
 fn change_bridge_teyrchains_pallet_mode_by_governance_works() {
-	bridge_hub_test_utils::test_cases::change_bridge_teyrchains_pallet_mode_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::change_bridge_teyrchains_pallet_mode_by_governance_works::<
 		Runtime,
 		BridgeTeyrchainPezkuwichainInstance,
 	>(
@@ -209,7 +209,7 @@ fn change_bridge_teyrchains_pallet_mode_by_governance_works() {
 
 #[test]
 fn change_bridge_messages_pallet_mode_by_governance_works() {
-	bridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
 		Runtime,
 		WithBridgeHubPezkuwichainMessagesInstance,
 	>(
@@ -221,7 +221,7 @@ fn change_bridge_messages_pallet_mode_by_governance_works() {
 
 #[test]
 fn change_delivery_reward_by_governance_works() {
-	bridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		DeliveryRewardInBalance,
 		u64,
@@ -236,7 +236,7 @@ fn change_delivery_reward_by_governance_works() {
 
 #[test]
 fn change_required_stake_by_governance_works() {
-	bridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		RequiredStakeForStakeAndSlash,
 		Balance,
@@ -251,7 +251,7 @@ fn change_required_stake_by_governance_works() {
 
 #[test]
 fn handle_export_message_from_system_teyrchain_add_to_outbound_queue_works() {
-	bridge_hub_test_utils::test_cases::handle_export_message_from_system_teyrchain_to_outbound_queue_works::<
+	pezbridge_hub_test_utils::test_cases::handle_export_message_from_system_teyrchain_to_outbound_queue_works::<
 			Runtime,
 			XcmConfig,
 			WithBridgeHubPezkuwichainMessagesInstance,
@@ -273,7 +273,7 @@ fn handle_export_message_from_system_teyrchain_add_to_outbound_queue_works() {
 				PezkuwiXcm::force_xcm_version(RuntimeOrigin::root(), Box::new(BridgeHubPezkuwichainLocation::get()), XCM_VERSION).expect("version saved!");
 
 				// we need to create lane between sibling teyrchain and remote destination
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverBridgeHubPezkuwichainInstance,
 					LocationToAccountId,
@@ -283,7 +283,7 @@ fn handle_export_message_from_system_teyrchain_add_to_outbound_queue_works() {
 					BridgedUniversalLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime, XcmOverBridgeHubPezkuwichainInstance
 						>(locations, LegacyLaneId([0, 0, 0, 1]))
 					}
@@ -294,7 +294,7 @@ fn handle_export_message_from_system_teyrchain_add_to_outbound_queue_works() {
 
 #[test]
 fn message_dispatch_routing_works() {
-	bridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
+	pezbridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
 		Runtime,
 		AllPalletsWithoutSystem,
 		XcmConfig,
@@ -335,7 +335,7 @@ fn relayed_incoming_message_works() {
 		ByGenesis(ZAGROS_GENESIS_HASH),
 		|| {
 			// we need to create lane between sibling teyrchain and remote destination
-			bridge_hub_test_utils::ensure_opened_bridge::<
+			pezbridge_hub_test_utils::ensure_opened_bridge::<
 				Runtime,
 				XcmOverBridgeHubPezkuwichainInstance,
 				LocationToAccountId,
@@ -345,7 +345,7 @@ fn relayed_incoming_message_works() {
 				BridgedUniversalLocation::get(),
 				false,
 				|locations, _fee| {
-					bridge_hub_test_utils::open_bridge_with_storage::<
+					pezbridge_hub_test_utils::open_bridge_with_storage::<
 						Runtime,
 						XcmOverBridgeHubPezkuwichainInstance,
 					>(locations, LegacyLaneId([0, 0, 0, 1]))
@@ -370,7 +370,7 @@ fn free_relay_extrinsic_works() {
 		ByGenesis(ZAGROS_GENESIS_HASH),
 		|| {
 			// we need to create lane between sibling teyrchain and remote destination
-			bridge_hub_test_utils::ensure_opened_bridge::<
+			pezbridge_hub_test_utils::ensure_opened_bridge::<
 				Runtime,
 				XcmOverBridgeHubPezkuwichainInstance,
 				LocationToAccountId,
@@ -380,7 +380,7 @@ fn free_relay_extrinsic_works() {
 				BridgedUniversalLocation::get(),
 				false,
 				|locations, _fee| {
-					bridge_hub_test_utils::open_bridge_with_storage::<
+					pezbridge_hub_test_utils::open_bridge_with_storage::<
 						Runtime,
 						XcmOverBridgeHubPezkuwichainInstance,
 					>(locations, LegacyLaneId([0, 0, 0, 1]))
@@ -395,11 +395,11 @@ fn free_relay_extrinsic_works() {
 
 #[test]
 pub fn can_calculate_weight_for_paid_export_message_with_reserve_transfer() {
-	bridge_hub_test_utils::check_sane_fees_values(
+	pezbridge_hub_test_utils::check_sane_fees_values(
 		"bp_bridge_hub_zagros::BridgeHubZagrosBaseXcmFeeInWnds",
 		bp_bridge_hub_zagros::BridgeHubZagrosBaseXcmFeeInWnds::get(),
 		|| {
-			bridge_hub_test_utils::test_cases::can_calculate_weight_for_paid_export_message_with_reserve_transfer::<
+			pezbridge_hub_test_utils::test_cases::can_calculate_weight_for_paid_export_message_with_reserve_transfer::<
 			Runtime,
 			XcmConfig,
 			WeightToFee,
@@ -416,7 +416,7 @@ pub fn can_calculate_weight_for_paid_export_message_with_reserve_transfer() {
 
 #[test]
 pub fn can_calculate_fee_for_standalone_message_delivery_transaction() {
-	bridge_hub_test_utils::check_sane_fees_values(
+	pezbridge_hub_test_utils::check_sane_fees_values(
 		"bp_bridge_hub_zagros::BridgeHubZagrosBaseDeliveryFeeInWnds",
 		bp_bridge_hub_zagros::BridgeHubZagrosBaseDeliveryFeeInWnds::get(),
 		|| {
@@ -435,7 +435,7 @@ pub fn can_calculate_fee_for_standalone_message_delivery_transaction() {
 
 #[test]
 pub fn can_calculate_fee_for_standalone_message_confirmation_transaction() {
-	bridge_hub_test_utils::check_sane_fees_values(
+	pezbridge_hub_test_utils::check_sane_fees_values(
 		"bp_bridge_hub_zagros::BridgeHubZagrosBaseConfirmationFeeInWnds",
 		bp_bridge_hub_zagros::BridgeHubZagrosBaseConfirmationFeeInWnds::get(),
 		|| {

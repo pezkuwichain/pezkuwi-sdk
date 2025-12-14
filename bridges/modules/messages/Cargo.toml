@@ -18,9 +18,9 @@ scale-info = { features = ["derive"], workspace = true }
 tracing = { workspace = true }
 
 # Bridge dependencies
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-messages = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
 pezframe-benchmarking = { optional = true, workspace = true }
@@ -31,7 +31,7 @@ pezsp-std = { workspace = true }
 pezsp-trie = { optional = true, workspace = true }
 
 [dev-dependencies]
-bp-runtime = { features = ["test-helpers"], workspace = true }
+pezbp-runtime = { features = ["test-helpers"], workspace = true }
 bp-test-utils = { workspace = true }
 pezpallet-balances = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
@@ -41,9 +41,9 @@ pezsp-io = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-messages/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-test-utils/std",
   "codec/std",
   "pezframe-benchmarking/std",
@@ -60,10 +60,10 @@ std = [
   "tracing/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
-  "bp-runtime/test-helpers",
+  "pezbp-runtime/runtime-benchmarks",
+  "pezbp-runtime/test-helpers",
   "bp-test-utils/runtime-benchmarks",
   "pezframe-benchmarking/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
@@ -81,4 +81,4 @@ try-runtime = [
   "pezpallet-bridge-grandpa/try-runtime",
   "pezsp-runtime/try-runtime",
 ]
-test-helpers = ["bp-runtime/test-helpers", "pezsp-trie"]
+test-helpers = ["pezbp-runtime/test-helpers", "pezsp-trie"]

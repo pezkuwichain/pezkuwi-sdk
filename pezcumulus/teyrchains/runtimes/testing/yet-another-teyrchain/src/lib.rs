@@ -38,7 +38,7 @@ use pezkuwi_runtime_common::{prod_or_fast, xcm_sender::NoPriceForMessageDelivery
 use teyrchains_common::message_queue::{NarrowOriginToSibling, ParaIdToSibling};
 
 use alloc::{borrow::Cow, vec, vec::Vec};
-use pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezframe_support::weights::{constants, FixedFee, RuntimeDbWeight};
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::OpaqueMetadata;
@@ -218,12 +218,12 @@ impl pezframe_system::Config for Runtime {
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = RemoveCollectiveFlip;
 }
 
-impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
+impl pezcumulus_pezpallet_weight_reclaim::Config for Runtime {
 	type WeightInfo = ();
 }
 
@@ -331,7 +331,7 @@ parameter_types! {
 	pub const RelayOrigin: AggregateMessageOrigin = AggregateMessageOrigin::Parent;
 }
 
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
@@ -353,8 +353,8 @@ impl HandleMessage for DmpSink {
 	}
 }
 
-impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
-	type WeightInfo = pezcumulus_pallet_teyrchain_system::weights::BizinikiwiWeight<Self>;
+impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
+	type WeightInfo = pezcumulus_pezpallet_teyrchain_system::weights::BizinikiwiWeight<Self>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
@@ -415,7 +415,7 @@ impl WeightToFeePolynomial for WeightToFee {
 	}
 }
 
-impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pezpallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = ();
@@ -432,7 +432,7 @@ impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 
 impl teyrchain_info::Config for Runtime {}
 
-impl pezcumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 impl pezpallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
@@ -499,10 +499,10 @@ mod runtime {
 	#[runtime::pezpallet_index(3)]
 	pub type TransactionPayment = pezpallet_transaction_payment;
 	#[runtime::pezpallet_index(4)]
-	pub type WeightReclaim = pezcumulus_pallet_weight_reclaim;
+	pub type WeightReclaim = pezcumulus_pezpallet_weight_reclaim;
 
 	#[runtime::pezpallet_index(20)]
-	pub type TeyrchainSystem = pezcumulus_pallet_teyrchain_system;
+	pub type TeyrchainSystem = pezcumulus_pezpallet_teyrchain_system;
 	#[runtime::pezpallet_index(21)]
 	pub type TeyrchainInfo = teyrchain_info;
 
@@ -519,7 +519,7 @@ mod runtime {
 	#[runtime::pezpallet_index(31)]
 	pub type Aura = pezpallet_aura;
 	#[runtime::pezpallet_index(32)]
-	pub type AuraExt = pezcumulus_pallet_aura_ext;
+	pub type AuraExt = pezcumulus_pezpallet_aura_ext;
 
 	#[runtime::pezpallet_index(40)]
 	pub type Utility = pezpallet_utility;
@@ -527,11 +527,11 @@ mod runtime {
 	pub type VerifySignature = pezpallet_verify_signature;
 
 	#[runtime::pezpallet_index(51)]
-	pub type XcmpQueue = pezcumulus_pallet_xcmp_queue;
+	pub type XcmpQueue = pezcumulus_pezpallet_xcmp_queue;
 	#[runtime::pezpallet_index(52)]
 	pub type PezkuwiXcm = pezpallet_xcm;
 	#[runtime::pezpallet_index(53)]
-	pub type CumulusXcm = pezcumulus_pallet_xcm;
+	pub type CumulusXcm = pezcumulus_pezpallet_xcm;
 	#[runtime::pezpallet_index(54)]
 	pub type MessageQueue = pezpallet_message_queue;
 }
@@ -555,7 +555,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 /// The TransactionExtension to the basic transaction logic.
-pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		// Uncomment this to enable running signed transactions using v5 extrinsics.
@@ -772,7 +772,7 @@ impl_runtime_apis! {
 	}
 }
 
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

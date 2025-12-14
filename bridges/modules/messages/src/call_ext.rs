@@ -23,7 +23,7 @@ use bp_messages::{
 	MessageNonce, MessagesCallInfo, ReceiveMessagesDeliveryProofInfo, ReceiveMessagesProofInfo,
 	UnrewardedRelayerOccupation,
 };
-use bp_runtime::{AccountIdOf, OwnedBridgeModule};
+use pezbp_runtime::{AccountIdOf, OwnedBridgeModule};
 use pezframe_support::{dispatch::CallableCallFor, traits::IsSubType};
 use pezsp_runtime::transaction_validity::TransactionValidity;
 

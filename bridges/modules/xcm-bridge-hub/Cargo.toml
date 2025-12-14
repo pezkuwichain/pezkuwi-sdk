@@ -19,7 +19,7 @@ tracing = { workspace = true }
 
 # Bridge Dependencies
 bp-messages = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 bp-xcm-bridge-hub = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
 
@@ -36,7 +36,7 @@ xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 
 [dev-dependencies]
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-xcm-bridge-hub-router = { workspace = true }
 pezpallet-balances = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
@@ -46,9 +46,9 @@ pezsp-io = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-messages/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "bp-xcm-bridge-hub-router/std",
   "bp-xcm-bridge-hub/std",
   "codec/std",
@@ -69,9 +69,9 @@ std = [
   "xcm/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-xcm-bridge-hub-router/runtime-benchmarks",
   "bp-xcm-bridge-hub/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",

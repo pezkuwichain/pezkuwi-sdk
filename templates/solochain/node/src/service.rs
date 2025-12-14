@@ -7,7 +7,7 @@ use pezsc_consensus_grandpa::SharedVoterState;
 use pezsc_service::{error::Error as ServiceError, Configuration, TaskManager, WarpSyncConfig};
 use pezsc_telemetry::{Telemetry, TelemetryWorker};
 use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
-use solochain_template_runtime::{self, apis::RuntimeApi, opaque::Block};
+use pez_solochain_template_runtime::{self, apis::RuntimeApi, opaque::Block};
 use pezsp_consensus_aura::sr25519::AuthorityPair as AuraPair;
 use std::{sync::Arc, time::Duration};
 

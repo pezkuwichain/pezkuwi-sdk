@@ -55,7 +55,7 @@ pezcumulus-primitives-core = { workspace = true, default-features = true }
 pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
 
 # Pezkuwi
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
 pezkuwi-overseer = { workspace = true, default-features = true }
@@ -80,7 +80,7 @@ runtime-benchmarks = [
   "pezcumulus-relay-chain-interface/runtime-benchmarks",
   "pezcumulus-test-client/runtime-benchmarks",
   "pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-node-subsystem-util/runtime-benchmarks",
   "pezkuwi-node-subsystem/runtime-benchmarks",
   "pezkuwi-overseer/runtime-benchmarks",

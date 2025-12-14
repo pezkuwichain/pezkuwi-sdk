@@ -86,7 +86,7 @@ The versioning of the Pezkuwi node is done most of the time by only incrementing
 version is only bumped for special releases and the `patch` is used for a patch release that happens every month and
 fixes found issues. The node version is not following SemVer. This means that the version doesn't express if there are
 any breaking changes in the CLI interface or similar. The node version is declared
-in the [`NODE_VERSION`](https://docs.pezkuwichain.io/sdk/master/polkadot_node_primitives/constant.NODE_VERSION.html)
+in the [`NODE_VERSION`](https://docs.pezkuwichain.io/sdk/master/polkadot_pez_node_primitives/constant.NODE_VERSION.html)
 variable.
 
 ## Zagros

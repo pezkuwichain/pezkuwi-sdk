@@ -334,15 +334,15 @@ pezsp_api::mock_impl_runtime_apis! {
 	}
 }
 
-pub(crate) fn run_test_with_mmr_gadget<F, Fut>(post_gadget: F)
+pub(crate) fn run_test_with_pezmmr_gadget<F, Fut>(post_gadget: F)
 where
 	F: FnOnce(Arc<MockClient>) -> Fut + 'static,
 	Fut: Future<Output = ()>,
 {
-	run_test_with_mmr_gadget_pre_post(|_| async {}, post_gadget);
+	run_test_with_pezmmr_gadget_pre_post(|_| async {}, post_gadget);
 }
 
-pub(crate) fn run_test_with_mmr_gadget_pre_post<F, G, RetF, RetG>(pre_gadget: F, post_gadget: G)
+pub(crate) fn run_test_with_pezmmr_gadget_pre_post<F, G, RetF, RetG>(pre_gadget: F, post_gadget: G)
 where
 	F: FnOnce(Arc<MockClient>) -> RetF + 'static,
 	G: FnOnce(Arc<MockClient>) -> RetG + 'static,
@@ -350,10 +350,10 @@ where
 	RetG: Future<Output = ()>,
 {
 	let client = Arc::new(MockClient::new());
-	run_test_with_mmr_gadget_pre_post_using_client(client, pre_gadget, post_gadget)
+	run_test_with_pezmmr_gadget_pre_post_using_client(client, pre_gadget, post_gadget)
 }
 
-pub(crate) fn run_test_with_mmr_gadget_pre_post_using_client<F, G, RetF, RetG>(
+pub(crate) fn run_test_with_pezmmr_gadget_pre_post_using_client<F, G, RetF, RetG>(
 	client: Arc<MockClient>,
 	pre_gadget: F,
 	post_gadget: G,

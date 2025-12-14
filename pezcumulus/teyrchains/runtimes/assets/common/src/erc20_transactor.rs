@@ -17,7 +17,7 @@
 //! The ERC20 Asset Transactor.
 
 use core::marker::PhantomData;
-use ethereum_standards::IERC20;
+use pez_ethereum_standards::IERC20;
 use pezframe_support::traits::{fungible::Inspect, OriginTrait};
 use pezframe_system::pezpallet_prelude::OriginFor;
 use pezpallet_revive::{

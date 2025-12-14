@@ -23,7 +23,7 @@ use crate::{
 use asset_hub_zagros_runtime::{
 	xcm_config::ZagrosLocation, Balances, ForeignAssets, PezkuwiXcm, RuntimeOrigin,
 };
-use emulated_integration_tests_common::{accounts::ALICE, xcm_emulator::TestExt};
+use emulated_integration_tests_common::{accounts::ALICE, xcm_pez_emulator::TestExt};
 use pezframe_support::{
 	assert_err_ignore_postinfo, assert_ok,
 	traits::fungible::{Inspect, Mutate},

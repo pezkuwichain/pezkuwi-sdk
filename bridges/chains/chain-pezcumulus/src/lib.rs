@@ -32,7 +32,7 @@ pub use teyrchains_common::{
 
 use bp_messages::*;
 use bp_pezkuwi_core::SuffixedCommonTransactionExtension;
-use bp_runtime::extensions::{
+use pezbp_runtime::extensions::{
 	BridgeRejectObsoleteHeadersAndMessages, RefundBridgedTeyrchainMessagesSchema,
 };
 use pezframe_support::{

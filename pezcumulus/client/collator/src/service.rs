@@ -28,7 +28,7 @@ use pezsp_core::traits::SpawnNamed;
 use pezsp_runtime::traits::{Block as BlockT, HashingFor, Header as HeaderT, Zero};
 
 use pezcumulus_client_consensus_common::TeyrchainCandidate;
-use pezkuwi_node_primitives::{
+use pezkuwi_pez_node_primitives::{
 	BlockData, Collation, CollationSecondedSignal, MaybeCompressedPoV, PoV,
 };
 
@@ -263,7 +263,7 @@ where
 
 		let block_data = TeyrchainBlockData::<Block>::new(vec![block], compact_proof);
 
-		let pov = pezkuwi_node_primitives::maybe_compress_pov(PoV {
+		let pov = pezkuwi_pez_node_primitives::maybe_compress_pov(PoV {
 			block_data: BlockData(if api_version >= 3 {
 				block_data.encode()
 			} else {

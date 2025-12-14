@@ -27,9 +27,9 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use bp_runtime::{AccountIdOf, BlockNumberOf, HashOf};
-use equivocation_detector::EquivocationDetectionPipeline;
-use finality_relay::FinalityPipeline;
+use pezbp_runtime::{AccountIdOf, BlockNumberOf, HashOf};
+use pez_equivocation_detector::EquivocationDetectionPipeline;
+use pez_finality_relay::FinalityPipeline;
 use pezpallet_grandpa::{Call as GrandpaCall, Config as GrandpaConfig};
 use relay_bizinikiwi_client::{AccountKeyPairOf, CallOf, Chain, ChainWithTransactions, Client};
 use relay_utils::metrics::MetricsParams;
@@ -186,7 +186,7 @@ macro_rules! generate_report_equivocation_call_builder {
 			) -> relay_bizinikiwi_client::CallOf<
 				<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::SourceChain
 			> {
-				bp_runtime::paste::item! {
+				pezbp_runtime::paste::item! {
 					$grandpa($report_equivocation {
 						equivocation_proof: Box::new(equivocation_proof),
 						key_owner_proof: key_owner_proof
@@ -211,7 +211,7 @@ pub async fn run<P: BizinikiwiEquivocationDetectionPipeline>(
 		"Starting equivocations detection loop"
 	);
 
-	equivocation_detector::run(
+	pez_equivocation_detector::run(
 		BizinikiwiEquivocationSource::<P, _>::new(source_client, source_transaction_params),
 		BizinikiwiEquivocationTarget::<P, _>::new(target_client),
 		P::TargetChain::AVERAGE_BLOCK_INTERVAL,

@@ -31,7 +31,7 @@ pub mod v0 {
 	use super::Config;
 	use crate::BridgedChainOf;
 	use bp_messages::{MessageNonce, UnrewardedRelayer};
-	use bp_runtime::AccountIdOf;
+	use pezbp_runtime::AccountIdOf;
 	use codec::{Decode, Encode};
 	use pezsp_std::collections::vec_deque::VecDeque;
 

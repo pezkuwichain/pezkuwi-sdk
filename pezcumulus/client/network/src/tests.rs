@@ -25,7 +25,7 @@ use pezcumulus_relay_chain_interface::{
 use pezcumulus_test_service::runtime::{Block, Hash, Header};
 use futures::{executor::block_on, poll, task::Poll, FutureExt, Stream, StreamExt};
 use parking_lot::Mutex;
-use pezkuwi_node_primitives::{SignedFullStatement, Statement};
+use pezkuwi_pez_node_primitives::{SignedFullStatement, Statement};
 use pezkuwi_primitives::{
 	BlockNumber, CandidateCommitments, CandidateDescriptorV2, CandidateEvent, CollatorPair,
 	CommittedCandidateReceiptV2, CoreState, Hash as PHash, HeadData, InboundDownwardMessage,

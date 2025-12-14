@@ -116,7 +116,7 @@ pezpallet-validator-pool = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true }
+xcm-runtime-pezapis = { workspace = true }
 
 [dev-dependencies]
 remote-externalities = { workspace = true, default-features = true }
@@ -222,7 +222,7 @@ std = [
   "bizinikiwi-wasm-builder",
   "xcm-builder/std",
   "xcm-executor/std",
-  "xcm-runtime-apis/std",
+  "xcm-runtime-pezapis/std",
   "xcm/std",
 ]
 runtime-benchmarks = [
@@ -307,7 +307,7 @@ runtime-benchmarks = [
   "bizinikiwi-wasm-builder?/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]
 try-runtime = [

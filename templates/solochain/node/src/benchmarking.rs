@@ -7,7 +7,7 @@ use crate::service::FullClient;
 use runtime::{AccountId, Balance, BalancesCall, SystemCall};
 use pezsc_cli::Result;
 use pezsc_client_api::BlockBackend;
-use solochain_template_runtime as runtime;
+use pez_solochain_template_runtime as runtime;
 use pezsp_core::{Encode, Pair};
 use pezsp_inherents::{InherentData, InherentDataProvider};
 use pezsp_keyring::Sr25519Keyring;

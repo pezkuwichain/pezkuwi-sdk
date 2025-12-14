@@ -76,8 +76,8 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot, EnsureRootWithSuccess, EnsureSigned, EnsureSignedBy, EnsureWithSuccess,
 };
-pub use node_primitives::{AccountId, Signature};
-use node_primitives::{AccountIndex, Balance, BlockNumber, Hash, Moment, Nonce};
+pub use pez_node_primitives::{AccountId, Signature};
+use pez_node_primitives::{AccountIndex, Balance, BlockNumber, Hash, Moment, Nonce};
 use pezpallet_asset_conversion::{AccountIdConverter, Ascending, Chain, WithFirstAsset};
 use pezpallet_asset_conversion_tx_payment::SwapAssetAdapter;
 use pezpallet_assets_precompiles::{InlineIdConfig, ERC20};

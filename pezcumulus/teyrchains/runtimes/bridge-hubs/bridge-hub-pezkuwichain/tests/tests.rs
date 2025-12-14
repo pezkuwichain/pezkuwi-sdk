@@ -17,18 +17,18 @@
 #![cfg(test)]
 
 use bp_pezkuwi_core::Signature;
-use bridge_hub_pezkuwichain_runtime::{
+use pezbridge_hub_pezkuwichain_runtime::{
 	bridge_common_config, bridge_to_bulletin_config, bridge_to_zagros_config,
 	xcm_config::{RelayNetwork, TokenLocation, XcmConfig},
 	AllPalletsWithoutSystem, Block, BridgeRejectObsoleteHeadersAndMessages, Executive,
 	ExistentialDeposit, PezkuwiXcm, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, SessionKeys,
 	TeyrchainSystem, TransactionPayment, TxExtension, UncheckedExtrinsic,
 };
-use bridge_hub_test_utils::{GovernanceOrigin, SlotDurations};
+use pezbridge_hub_test_utils::{GovernanceOrigin, SlotDurations};
 use codec::{Decode, Encode};
 use pezframe_support::{dispatch::GetDispatchInfo, parameter_types, traits::ConstU8};
 use hex_literal::hex;
-use snowbridge_core::ChannelId;
+use pezsnowbridge_core::ChannelId;
 use pezsp_consensus_aura::SlotDuration;
 use pezsp_core::{crypto::Ss58Codec, H160};
 use pezsp_keyring::Sr25519Keyring::Alice;
@@ -40,7 +40,7 @@ use testnet_teyrchains_constants::pezkuwichain::{consensus::*, fee::WeightToFee}
 use teyrchains_common::{AccountId, AuraId, Balance};
 use teyrchains_runtimes_test_utils::ExtBuilder;
 use xcm::latest::{prelude::*, PEZKUWICHAIN_GENESIS_HASH, ZAGROS_GENESIS_HASH};
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 parameter_types! {
 	pub Governance: GovernanceOrigin<RuntimeOrigin> = GovernanceOrigin::Location(Location::parent());
@@ -90,8 +90,8 @@ fn construct_and_estimate_extrinsic_fee(call: RuntimeCall) -> Balance {
 	TransactionPayment::compute_fee(xt.encoded_size() as _, &info, 0)
 }
 
-fn collator_session_keys() -> bridge_hub_test_utils::CollatorSessionKeys<Runtime> {
-	bridge_hub_test_utils::CollatorSessionKeys::new(
+fn collator_session_keys() -> pezbridge_hub_test_utils::CollatorSessionKeys<Runtime> {
+	pezbridge_hub_test_utils::CollatorSessionKeys::new(
 		AccountId::from(Alice),
 		AccountId::from(Alice),
 		SessionKeys { aura: AuraId::from(Alice.public()) },
@@ -105,7 +105,7 @@ fn slot_durations() -> SlotDurations {
 	}
 }
 
-bridge_hub_test_utils::test_cases::include_teleports_for_native_asset_works!(
+pezbridge_hub_test_utils::test_cases::include_teleports_for_native_asset_works!(
 	Runtime,
 	AllPalletsWithoutSystem,
 	XcmConfig,
@@ -131,10 +131,10 @@ mod bridge_hub_zagros_tests {
 		BridgeGrandpaZagrosInstance, BridgeTeyrchainZagrosInstance, DeliveryRewardInBalance,
 		RelayersForLegacyLaneIdsMessagesInstance,
 	};
-	use bridge_hub_pezkuwichain_runtime::{
+	use pezbridge_hub_pezkuwichain_runtime::{
 		bridge_to_ethereum_config::EthereumGatewayAddress, xcm_config::LocationToAccountId,
 	};
-	use bridge_hub_test_utils::test_cases::from_teyrchain;
+	use pezbridge_hub_test_utils::test_cases::from_teyrchain;
 	use bridge_to_zagros_config::{
 		BridgeHubZagrosLocation, WithBridgeHubZagrosMessagesInstance,
 		XcmOverBridgeHubZagrosInstance, ZagrosGlobalConsensusNetwork,
@@ -164,7 +164,7 @@ mod bridge_hub_zagros_tests {
 	#[test]
 	fn initialize_bridge_by_governance_works() {
 		// for PezkuwichainBulletin finality
-		bridge_hub_test_utils::test_cases::initialize_bridge_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::initialize_bridge_by_governance_works::<
 			Runtime,
 			BridgeGrandpaZagrosInstance,
 		>(
@@ -177,7 +177,7 @@ mod bridge_hub_zagros_tests {
 	#[test]
 	fn change_bridge_grandpa_pallet_mode_by_governance_works() {
 		// for Zagros finality
-		bridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
 			Runtime,
 			BridgeGrandpaZagrosInstance,
 		>(
@@ -190,7 +190,7 @@ mod bridge_hub_zagros_tests {
 	#[test]
 	fn change_bridge_teyrchains_pallet_mode_by_governance_works() {
 		// for Zagros finality
-		bridge_hub_test_utils::test_cases::change_bridge_teyrchains_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_teyrchains_pallet_mode_by_governance_works::<
 			Runtime,
 			BridgeTeyrchainZagrosInstance,
 		>(
@@ -203,7 +203,7 @@ mod bridge_hub_zagros_tests {
 	#[test]
 	fn change_bridge_messages_pallet_mode_by_governance_works() {
 		// for Zagros finality
-		bridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
 			Runtime,
 			WithBridgeHubZagrosMessagesInstance,
 		>(
@@ -215,7 +215,7 @@ mod bridge_hub_zagros_tests {
 
 	#[test]
 	fn change_ethereum_gateway_by_governance_works() {
-		bridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
 			Runtime,
 			EthereumGatewayAddress,
 			H160,
@@ -235,37 +235,37 @@ mod bridge_hub_zagros_tests {
 		let nonce = 42;
 
 		// Reset a single inbound channel
-		bridge_hub_test_utils::test_cases::set_storage_keys_by_governance_works::<Runtime>(
+		pezbridge_hub_test_utils::test_cases::set_storage_keys_by_governance_works::<Runtime>(
 			collator_session_keys(),
 			bp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID,
 			Governance::get(),
 			vec![
-				(snowbridge_pallet_outbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
+				(snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
 					channel_id_one,
 				)
 				.to_vec(), 0u64.encode()),
-				(snowbridge_pallet_inbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
+				(snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
 					channel_id_one,
 				)
 				.to_vec(), 0u64.encode()),
 			],
 			|| {
 				// Outbound
-				snowbridge_pallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_one,
 					nonce,
 				);
-				snowbridge_pallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_two,
 					nonce,
 				);
 
 				// Inbound
-				snowbridge_pallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_one,
 					nonce,
 				);
-				snowbridge_pallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_two,
 					nonce,
 				);
@@ -273,21 +273,21 @@ mod bridge_hub_zagros_tests {
 			|| {
 				// Outbound
 				assert_eq!(
-					snowbridge_pallet_outbound_queue::Nonce::<Runtime>::get(channel_id_one),
+					snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::get(channel_id_one),
 					0
 				);
 				assert_eq!(
-					snowbridge_pallet_outbound_queue::Nonce::<Runtime>::get(channel_id_two),
+					snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::get(channel_id_two),
 					nonce
 				);
 
 				// Inbound
 				assert_eq!(
-					snowbridge_pallet_inbound_queue::Nonce::<Runtime>::get(channel_id_one),
+					snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::get(channel_id_one),
 					0
 				);
 				assert_eq!(
-					snowbridge_pallet_inbound_queue::Nonce::<Runtime>::get(channel_id_two),
+					snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::get(channel_id_two),
 					nonce
 				);
 			},
@@ -296,7 +296,7 @@ mod bridge_hub_zagros_tests {
 
 	#[test]
 	fn change_delivery_reward_by_governance_works() {
-		bridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
 			Runtime,
 			DeliveryRewardInBalance,
 			u64,
@@ -312,7 +312,7 @@ mod bridge_hub_zagros_tests {
 	#[test]
 	fn handle_export_message_from_system_teyrchain_add_to_outbound_queue_works() {
 		// for Zagros
-		bridge_hub_test_utils::test_cases::handle_export_message_from_system_teyrchain_to_outbound_queue_works::<
+		pezbridge_hub_test_utils::test_cases::handle_export_message_from_system_teyrchain_to_outbound_queue_works::<
 			Runtime,
 			XcmConfig,
 			WithBridgeHubZagrosMessagesInstance,
@@ -334,7 +334,7 @@ mod bridge_hub_zagros_tests {
 				PezkuwiXcm::force_xcm_version(RuntimeOrigin::root(), Box::new(BridgeHubZagrosLocation::get()), XCM_VERSION).expect("version saved!");
 
 				// we need to create lane between sibling teyrchain and remote destination
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverBridgeHubZagrosInstance,
 					LocationToAccountId,
@@ -344,7 +344,7 @@ mod bridge_hub_zagros_tests {
 					BridgedUniversalLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime,
 							XcmOverBridgeHubZagrosInstance
 						>(locations, LegacyLaneId([0, 0, 0, 1]))
@@ -357,7 +357,7 @@ mod bridge_hub_zagros_tests {
 	#[test]
 	fn message_dispatch_routing_works() {
 		// from Zagros
-		bridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
+		pezbridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -399,7 +399,7 @@ mod bridge_hub_zagros_tests {
 			ByGenesis(PEZKUWICHAIN_GENESIS_HASH),
 			|| {
 				// we need to create lane between sibling teyrchain and remote destination
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverBridgeHubZagrosInstance,
 					LocationToAccountId,
@@ -409,7 +409,7 @@ mod bridge_hub_zagros_tests {
 					BridgedUniversalLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime,
 							XcmOverBridgeHubZagrosInstance,
 						>(locations, LegacyLaneId([0, 0, 0, 1]))
@@ -434,7 +434,7 @@ mod bridge_hub_zagros_tests {
 			ByGenesis(PEZKUWICHAIN_GENESIS_HASH),
 			|| {
 				// we need to create lane between sibling teyrchain and remote destination
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverBridgeHubZagrosInstance,
 					LocationToAccountId,
@@ -444,7 +444,7 @@ mod bridge_hub_zagros_tests {
 					BridgedUniversalLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime,
 							XcmOverBridgeHubZagrosInstance,
 						>(locations, LegacyLaneId([0, 0, 0, 1]))
@@ -459,11 +459,11 @@ mod bridge_hub_zagros_tests {
 
 	#[test]
 	pub fn can_calculate_weight_for_paid_export_message_with_reserve_transfer() {
-		bridge_hub_test_utils::check_sane_fees_values(
+		pezbridge_hub_test_utils::check_sane_fees_values(
 			"bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseXcmFeeInRocs",
 			bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseXcmFeeInRocs::get(),
 			|| {
-				bridge_hub_test_utils::test_cases::can_calculate_weight_for_paid_export_message_with_reserve_transfer::<
+				pezbridge_hub_test_utils::test_cases::can_calculate_weight_for_paid_export_message_with_reserve_transfer::<
 					Runtime,
 					XcmConfig,
 					WeightToFee,
@@ -480,7 +480,7 @@ mod bridge_hub_zagros_tests {
 
 	#[test]
 	fn can_calculate_fee_for_standalone_message_delivery_transaction() {
-		bridge_hub_test_utils::check_sane_fees_values(
+		pezbridge_hub_test_utils::check_sane_fees_values(
 			"bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseDeliveryFeeInRocs",
 			bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseDeliveryFeeInRocs::get(),
 			|| {
@@ -499,7 +499,7 @@ mod bridge_hub_zagros_tests {
 
 	#[test]
 	fn can_calculate_fee_for_standalone_message_confirmation_transaction() {
-		bridge_hub_test_utils::check_sane_fees_values(
+		pezbridge_hub_test_utils::check_sane_fees_values(
 			"bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseConfirmationFeeInRocs",
 			bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseConfirmationFeeInRocs::get(),
 			|| {
@@ -521,11 +521,11 @@ mod bridge_hub_bulletin_tests {
 	use super::*;
 	use bp_messages::LegacyLaneId;
 	use bridge_common_config::BridgeGrandpaPezkuwichainBulletinInstance;
-	use bridge_hub_pezkuwichain_runtime::{
+	use pezbridge_hub_pezkuwichain_runtime::{
 		bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance,
 		xcm_config::LocationToAccountId,
 	};
-	use bridge_hub_test_utils::test_cases::from_grandpa_chain;
+	use pezbridge_hub_test_utils::test_cases::from_grandpa_chain;
 	use bridge_to_bulletin_config::{
 		PezkuwichainBulletinGlobalConsensusNetwork,
 		PezkuwichainBulletinGlobalConsensusNetworkLocation,
@@ -554,7 +554,7 @@ mod bridge_hub_bulletin_tests {
 	#[test]
 	fn initialize_bridge_by_governance_works() {
 		// for Bulletin finality
-		bridge_hub_test_utils::test_cases::initialize_bridge_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::initialize_bridge_by_governance_works::<
 			Runtime,
 			BridgeGrandpaPezkuwichainBulletinInstance,
 		>(
@@ -567,7 +567,7 @@ mod bridge_hub_bulletin_tests {
 	#[test]
 	fn change_bridge_grandpa_pallet_mode_by_governance_works() {
 		// for Bulletin finality
-		bridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
 			Runtime,
 			BridgeGrandpaPezkuwichainBulletinInstance,
 		>(
@@ -580,7 +580,7 @@ mod bridge_hub_bulletin_tests {
 	#[test]
 	fn change_bridge_messages_pallet_mode_by_governance_works() {
 		// for Bulletin finality
-		bridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
 			Runtime,
 			WithPezkuwichainBulletinMessagesInstance,
 		>(
@@ -593,7 +593,7 @@ mod bridge_hub_bulletin_tests {
 	#[test]
 	fn handle_export_message_from_system_teyrchain_add_to_outbound_queue_works() {
 		// for Bulletin
-		bridge_hub_test_utils::test_cases::handle_export_message_from_system_teyrchain_to_outbound_queue_works::<
+		pezbridge_hub_test_utils::test_cases::handle_export_message_from_system_teyrchain_to_outbound_queue_works::<
 			Runtime,
 			XcmConfig,
 			WithPezkuwichainBulletinMessagesInstance,
@@ -618,7 +618,7 @@ mod bridge_hub_bulletin_tests {
 				PezkuwiXcm::force_xcm_version(RuntimeOrigin::root(), Box::new(PezkuwichainBulletinGlobalConsensusNetworkLocation::get()), XCM_VERSION).expect("version saved!");
 
 				// we need to create lane between PezkuwichainPeople and PezkuwichainBulletin
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverPezkuwiBulletinInstance,
 					LocationToAccountId,
@@ -628,7 +628,7 @@ mod bridge_hub_bulletin_tests {
 					BridgedBulletinLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime,
 							XcmOverPezkuwiBulletinInstance
 						>(locations, LegacyLaneId([0, 0, 0, 0]))
@@ -641,7 +641,7 @@ mod bridge_hub_bulletin_tests {
 	#[test]
 	fn message_dispatch_routing_works() {
 		// from Bulletin
-		bridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
+		pezbridge_hub_test_utils::test_cases::message_dispatch_routing_works::<
 			Runtime,
 			AllPalletsWithoutSystem,
 			XcmConfig,
@@ -682,7 +682,7 @@ mod bridge_hub_bulletin_tests {
 			ByGenesis(PEZKUWICHAIN_GENESIS_HASH),
 			|| {
 				// we need to create lane between PezkuwichainPeople and PezkuwichainBulletin
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverPezkuwiBulletinInstance,
 					LocationToAccountId,
@@ -692,7 +692,7 @@ mod bridge_hub_bulletin_tests {
 					BridgedBulletinLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime,
 							XcmOverPezkuwiBulletinInstance,
 						>(locations, LegacyLaneId([0, 0, 0, 0]))
@@ -716,7 +716,7 @@ mod bridge_hub_bulletin_tests {
 			ByGenesis(PEZKUWICHAIN_GENESIS_HASH),
 			|| {
 				// we need to create lane between PezkuwichainPeople and PezkuwichainBulletin
-				bridge_hub_test_utils::ensure_opened_bridge::<
+				pezbridge_hub_test_utils::ensure_opened_bridge::<
 					Runtime,
 					XcmOverPezkuwiBulletinInstance,
 					LocationToAccountId,
@@ -726,7 +726,7 @@ mod bridge_hub_bulletin_tests {
 					BridgedBulletinLocation::get(),
 					false,
 					|locations, _fee| {
-						bridge_hub_test_utils::open_bridge_with_storage::<
+						pezbridge_hub_test_utils::open_bridge_with_storage::<
 							Runtime,
 							XcmOverPezkuwiBulletinInstance,
 						>(locations, LegacyLaneId([0, 0, 0, 0]))
@@ -742,7 +742,7 @@ mod bridge_hub_bulletin_tests {
 
 #[test]
 fn change_required_stake_by_governance_works() {
-	bridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
+	pezbridge_hub_test_utils::test_cases::change_storage_constant_by_governance_works::<
 		Runtime,
 		bridge_common_config::RequiredStakeForStakeAndSlash,
 		Balance,
@@ -984,7 +984,7 @@ fn location_conversion_works() {
 
 				let got = LocationToAccountHelper::<
 					AccountId,
-					bridge_hub_pezkuwichain_runtime::xcm_config::LocationToAccountId,
+					pezbridge_hub_pezkuwichain_runtime::xcm_config::LocationToAccountId,
 				>::convert_location(tc.location.into())
 				.unwrap();
 

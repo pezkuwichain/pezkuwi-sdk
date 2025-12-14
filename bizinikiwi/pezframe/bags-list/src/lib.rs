@@ -217,7 +217,7 @@ pub mod pallet {
 		/// there exists some constant ratio such that `threshold[k + 1] == (threshold[k] *
 		/// constant_ratio).max(threshold[k] + 1)` for all `k`.
 		///
-		/// The helpers in the `/utils/pezframe/generate-bags` module can simplify this calculation.
+		/// The helpers in the `/utils/pezframe/pez-generate-bags` module can simplify this calculation.
 		///
 		/// # Examples
 		///

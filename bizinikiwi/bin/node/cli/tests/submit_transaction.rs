@@ -18,7 +18,7 @@
 
 use codec::Decode;
 use pezframe_system::offchain::{SendSignedTransaction, Signer, SubmitTransaction};
-use kitchensink_runtime::{Executive, ExistentialDeposit, Indices, Runtime, UncheckedExtrinsic};
+use pez_kitchensink_runtime::{Executive, ExistentialDeposit, Indices, Runtime, UncheckedExtrinsic};
 use pezkuwi_sdk::*;
 use pezsp_application_crypto::AppCrypto;
 use pezsp_core::offchain::{testing::TestTransactionPoolExt, TransactionPoolExt};

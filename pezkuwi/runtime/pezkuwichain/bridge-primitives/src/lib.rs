@@ -20,8 +20,8 @@
 
 pub use bp_pezkuwi_core::*;
 
-use bp_header_chain::ChainWithGrandpa;
-use bp_runtime::{decl_bridge_finality_runtime_apis, Chain, ChainId};
+use bp_header_pez_chain::ChainWithGrandpa;
+use pezbp_runtime::{decl_bridge_finality_runtime_apis, Chain, ChainId};
 use pezframe_support::{pezsp_runtime::StateVersion, weights::Weight};
 
 /// Pezkuwichain Chain

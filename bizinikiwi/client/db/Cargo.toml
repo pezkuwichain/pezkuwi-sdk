@@ -49,7 +49,7 @@ sysinfo = { workspace = true }
 [dev-dependencies]
 array-bytes = { workspace = true, default-features = true }
 criterion = { workspace = true, default-features = true }
-kitchensink-runtime = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
 kvdb-rocksdb = { workspace = true }
 rand = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
@@ -60,7 +60,7 @@ tempfile = { workspace = true }
 default = []
 test-helpers = []
 runtime-benchmarks = [
-  "kitchensink-runtime/runtime-benchmarks",
+  "pez-kitchensink-runtime/runtime-benchmarks",
   "pezsc-client-api/runtime-benchmarks",
   "pezsp-blockchain/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",

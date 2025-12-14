@@ -1,5 +1,5 @@
 [package]
-name = "asset-test-utils"
+name = "asset-test-pezutils"
 version = "7.0.0"
 authors.workspace = true
 edition.workspace = true
@@ -7,7 +7,7 @@ description = "Test utils for Asset Hub runtimes."
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/asset-test-utils"
+documentation = "https://docs.rs/asset-test-pezutils"
 
 [lints]
 workspace = true
@@ -41,7 +41,7 @@ pezpallet-xcm = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true }
+xcm-runtime-pezapis = { workspace = true }
 
 # Bridges
 pezpallet-xcm-bridge-hub-router = { workspace = true }
@@ -71,7 +71,7 @@ std = [
   "teyrchains-runtimes-test-utils/std",
   "xcm-builder/std",
   "xcm-executor/std",
-  "xcm-runtime-apis/std",
+  "xcm-runtime-pezapis/std",
   "xcm/std",
 ]
 try-runtime = [
@@ -114,6 +114,6 @@ runtime-benchmarks = [
   "teyrchains-runtimes-test-utils/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

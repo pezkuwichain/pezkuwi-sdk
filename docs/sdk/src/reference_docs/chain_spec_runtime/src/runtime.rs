@@ -39,8 +39,8 @@ use pezsp_genesis_builder::PresetId;
 /// The runtime version.
 #[runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: alloc::borrow::Cow::Borrowed("minimal-template-runtime"),
-	impl_name: alloc::borrow::Cow::Borrowed("minimal-template-runtime"),
+	spec_name: alloc::borrow::Cow::Borrowed("pez-minimal-template-runtime"),
+	impl_name: alloc::borrow::Cow::Borrowed("pez-minimal-template-runtime"),
 	authoring_version: 1,
 	spec_version: 0,
 	impl_version: 1,

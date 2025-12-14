@@ -41,7 +41,7 @@ use pezframe_system::EnsureRoot;
 use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
-use snowbridge_outbound_queue_primitives::v2::exporter::PausableExporter;
+use pezsnowbridge_outbound_queue_primitives::v2::exporter::PausableExporter;
 use pezsp_runtime::traits::{AccountIdConversion, TryConvertInto};
 use testnet_teyrchains_constants::zagros::locations::AssetHubParaId;
 use teyrchains_common::xcm_config::{
@@ -72,7 +72,7 @@ parameter_types! {
 	pub const RootLocation: Location = Location::here();
 	pub const ZagrosLocation: Location = Location::parent();
 	pub const RelayNetwork: Option<NetworkId> = Some(NetworkId::ByGenesis(ZAGROS_GENESIS_HASH));
-	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pallet_xcm::Origin::Relay.into();
+	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pezpallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation =
 		[GlobalConsensus(RelayNetwork::get().unwrap()), Teyrchain(TeyrchainInfo::teyrchain_id().into())].into();
 	pub UniversalLocationNetworkId: NetworkId = UniversalLocation::get().global_consensus().unwrap();
@@ -256,7 +256,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	RelayChainAsNative<RelayChainOrigin, RuntimeOrigin>,
 	// Native converter for sibling Teyrchains; will convert to a `SiblingPara` origin when
 	// recognised.
-	SiblingTeyrchainAsNative<pezcumulus_pallet_xcm::Origin, RuntimeOrigin>,
+	SiblingTeyrchainAsNative<pezcumulus_pezpallet_xcm::Origin, RuntimeOrigin>,
 	// Superuser converter for the Relay-chain (Parent) location. This will allow it to issue a
 	// transaction from the Root origin.
 	ParentAsSuperuser<RuntimeOrigin>,
@@ -594,7 +594,7 @@ impl pezpallet_xcm::Config for Runtime {
 	>;
 }
 
-impl pezcumulus_pallet_xcm::Config for Runtime {
+impl pezcumulus_pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }
@@ -767,9 +767,9 @@ pub mod bridging {
 			xcm_builder::NetworkExportTable<EthereumBridgeTableV1>;
 
 		pub type EthereumNetworkExportTableV2 =
-			snowbridge_outbound_queue_primitives::v2::XcmFilterExporter<
+			pezsnowbridge_outbound_queue_primitives::v2::XcmFilterExporter<
 				xcm_builder::NetworkExportTable<EthereumBridgeTableV2>,
-				snowbridge_outbound_queue_primitives::v2::XcmForSnowbridgeV2,
+				pezsnowbridge_outbound_queue_primitives::v2::XcmForSnowbridgeV2,
 			>;
 
 		pub type EthereumAssetFromEthereum =

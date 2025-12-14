@@ -46,7 +46,7 @@
 // benchmark
 // pallet
 // --extrinsic=*
-// --runtime=target/production/wbuild/kitchensink-runtime/kitchensink_runtime.wasm
+// --runtime=target/production/wbuild/pez-kitchensink-runtime/pez_kitchensink_runtime.wasm
 // --pallet=pezpallet_whitelist
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/bizinikiwi/HEADER-APACHE2
 // --output=/__w/pezkuwi-sdk/pezkuwi-sdk/bizinikiwi/pezframe/whitelist/src/weights.rs

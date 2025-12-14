@@ -33,11 +33,11 @@ tokio = { features = [
 tracing = { workspace = true }
 
 # Bridge dependencies
-bp-header-chain = { workspace = true, default-features = true }
+bp-header-pez-chain = { workspace = true, default-features = true }
 bp-messages = { workspace = true, default-features = true }
 bp-pezkuwi-core = { workspace = true, default-features = true }
-bp-runtime = { workspace = true, default-features = true }
-finality-relay = { workspace = true }
+pezbp-runtime = { workspace = true, default-features = true }
+pez-finality-relay = { workspace = true }
 relay-utils = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -63,11 +63,11 @@ xcm = { workspace = true, default-features = true }
 default = []
 test-helpers = []
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
-  "finality-relay/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
+  "pez-finality-relay/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
   "pezpallet-transaction-payment/runtime-benchmarks",

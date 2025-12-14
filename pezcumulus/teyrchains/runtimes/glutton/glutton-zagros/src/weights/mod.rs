@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod pezcumulus_pallet_teyrchain_system;
+pub mod pezcumulus_pezpallet_teyrchain_system;
 pub mod pezpallet_glutton;
 pub mod pezpallet_message_queue;
 pub mod pezpallet_timestamp;

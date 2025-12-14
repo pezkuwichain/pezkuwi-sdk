@@ -27,7 +27,7 @@ mod genesis_config_presets;
 extern crate alloc;
 
 use alloc::vec::Vec;
-use pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezkuwi_runtime_common::xcm_sender::NoPriceForMessageDelivery;
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::OpaqueMetadata;
@@ -224,12 +224,12 @@ impl pezframe_system::Config for Runtime {
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = RemoveCollectiveFlip;
 }
 
-impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
+impl pezcumulus_pezpallet_weight_reclaim::Config for Runtime {
 	type WeightInfo = ();
 }
 
@@ -289,14 +289,14 @@ parameter_types! {
 	pub const RelayOrigin: AggregateMessageOrigin = AggregateMessageOrigin::Parent;
 }
 
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
 	UNINCLUDED_SEGMENT_CAPACITY,
 >;
 
-impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
@@ -335,12 +335,12 @@ impl pezpallet_message_queue::Config for Runtime {
 	type IdleMaxServiceWeight = ();
 }
 
-impl pezcumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
 	pub const RocLocation: Location = Location::parent();
 	pub const PezkuwichainNetwork: NetworkId = NetworkId::ByGenesis(PEZKUWICHAIN_GENESIS_HASH);
-	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pallet_xcm::Origin::Relay.into();
+	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pezpallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation = [GlobalConsensus(PezkuwichainNetwork::get()), Teyrchain(TeyrchainInfo::teyrchain_id().into())].into();
 	pub CheckingAccount: AccountId = PezkuwiXcm::check_account();
 }
@@ -412,7 +412,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	RelayChainAsNative<RelayChainOrigin, RuntimeOrigin>,
 	// Native converter for sibling Teyrchains; will convert to a `SiblingPara` origin when
 	// recognised.
-	SiblingTeyrchainAsNative<pezcumulus_pallet_xcm::Origin, RuntimeOrigin>,
+	SiblingTeyrchainAsNative<pezcumulus_pezpallet_xcm::Origin, RuntimeOrigin>,
 	// Superuser converter for the Relay-chain (Parent) location. This will allow it to issue a
 	// transaction from the Root origin.
 	ParentAsSuperuser<RuntimeOrigin>,
@@ -547,12 +547,12 @@ impl pezpallet_xcm::Config for Runtime {
 	type AuthorizedAliasConsideration = Disabled;
 }
 
-impl pezcumulus_pallet_xcm::Config for Runtime {
+impl pezcumulus_pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }
 
-impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pezpallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = ();
@@ -565,7 +565,7 @@ impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 	type MaxPageSize = ConstU32<{ 103 * 1024 }>;
 	type ControllerOrigin = EnsureRoot<AccountId>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
-	type WeightInfo = pezcumulus_pallet_xcmp_queue::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = pezcumulus_pezpallet_xcmp_queue::weights::BizinikiwiWeight<Runtime>;
 	type PriceForSiblingDelivery = NoPriceForMessageDelivery<ParaId>;
 }
 
@@ -630,21 +630,21 @@ construct_runtime! {
 		Timestamp: pezpallet_timestamp,
 		Sudo: pezpallet_sudo,
 		TransactionPayment: pezpallet_transaction_payment,
-		WeightReclaim: pezcumulus_pallet_weight_reclaim,
+		WeightReclaim: pezcumulus_pezpallet_weight_reclaim,
 
-		TeyrchainSystem: pezcumulus_pallet_teyrchain_system = 20,
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system = 20,
 		TeyrchainInfo: teyrchain_info = 21,
 
 		Balances: pezpallet_balances = 30,
 		Assets: pezpallet_assets = 31,
 
 		Aura: pezpallet_aura,
-		AuraExt: pezcumulus_pallet_aura_ext,
+		AuraExt: pezcumulus_pezpallet_aura_ext,
 
 		// XCM helpers.
-		XcmpQueue: pezcumulus_pallet_xcmp_queue = 50,
+		XcmpQueue: pezcumulus_pezpallet_xcmp_queue = 50,
 		PezkuwiXcm: pezpallet_xcm = 51,
-		CumulusXcm: pezcumulus_pallet_xcm = 52,
+		CumulusXcm: pezcumulus_pezpallet_xcm = 52,
 		// RIP DmpQueue 53
 		MessageQueue: pezpallet_message_queue = 54,
 
@@ -671,7 +671,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 /// The extension to the basic transaction logic.
-pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		pezframe_system::AuthorizeCall<Runtime>,
@@ -888,7 +888,7 @@ impl_runtime_apis! {
 	}
 }
 
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-verification-primitives"
+name = "pezsnowbridge-verification-primitives"
 description = "Snowbridge Verification Primitives"
 version = "0.2.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowbridge-verification-primitives"
+documentation = "https://docs.rs/pezsnowbridge-verification-primitives"
 homepage = { workspace = true }
 
 [lints]
@@ -20,7 +20,7 @@ exclude-from-umbrella = true
 codec = { workspace = true }
 pezframe-support = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
-snowbridge-beacon-primitives = { workspace = true }
+pezsnowbridge-beacon-primitives = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-std = { workspace = true }
 
@@ -30,11 +30,11 @@ std = [
   "codec/std",
   "pezframe-support/std",
   "scale-info/std",
-  "snowbridge-beacon-primitives/std",
+  "pezsnowbridge-beacon-primitives/std",
   "pezsp-core/std",
   "pezsp-std/std",
 ]
 runtime-benchmarks = [
   "pezframe-support/runtime-benchmarks",
-  "snowbridge-beacon-primitives/runtime-benchmarks",
+  "pezsnowbridge-beacon-primitives/runtime-benchmarks",
 ]

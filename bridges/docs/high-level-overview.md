@@ -115,7 +115,7 @@ stream and submits every new justification it sees to the target chain GRANDPA l
 searching for mandatory headers and submits their justifications - without that the pallet will be unable to move
 forward.
 
-More: [GRANDPA Finality Relay Sequence Diagram](./grandpa-finality-relay.html), [pallet level documentation and
+More: [GRANDPA Finality Relay Sequence Diagram](./grandpa-pez-finality-relay.html), [pallet level documentation and
 code](../relays/finality/).
 
 ### Teyrchains Finality Relay
@@ -134,7 +134,7 @@ As its on-chain component (which requires bridge GRANDPA pallet to be deployed n
 requires GRANDPA finality relay to be running in parallel. Without it, the header `B` or any of its children's finality
 at source won't be relayed at target, and target chain won't be able to verify generated storage proof.
 
-More: [Teyrchains Finality Relay Sequence Diagram](./teyrchains-finality-relay.html), [code](../relays/teyrchains/).
+More: [Teyrchains Finality Relay Sequence Diagram](./teyrchains-pez-finality-relay.html), [code](../relays/teyrchains/).
 
 ### Messages Relay
 
@@ -160,7 +160,7 @@ submits transactions to both source and target chains, it requires both _source-
 finality relays. They can be GRANDPA finality relays or GRANDPA+teyrchains finality relays, depending on the type of
 connected chain.
 
-More: [Messages Relay Sequence Diagram](./messages-relay.html), [pallet level documentation and
+More: [Messages Relay Sequence Diagram](./pez-messages-relay.html), [pallet level documentation and
 code](../relays/messages/).
 
 ### Complex Relay

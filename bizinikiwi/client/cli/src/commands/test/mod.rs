@@ -16,6 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-//! Integration tests for subkey commands.
+//! Integration tests for pez_subkey commands.
 
 mod sig_verify;

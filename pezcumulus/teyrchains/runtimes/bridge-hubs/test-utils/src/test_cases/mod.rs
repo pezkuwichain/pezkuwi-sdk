@@ -26,12 +26,12 @@ pub(crate) mod helpers;
 
 use crate::{test_cases::bridges_prelude::*, test_data};
 
-use asset_test_utils::BasicTeyrchainRuntime;
+use asset_test_pezutils::BasicTeyrchainRuntime;
 use bp_messages::{
 	target_chain::{DispatchMessage, DispatchMessageData, MessageDispatch},
 	LaneState, MessageKey, MessagesOperatingMode, OutboundLaneData,
 };
-use bp_runtime::BasicOperatingMode;
+use pezbp_runtime::BasicOperatingMode;
 use codec::Encode;
 use pezframe_support::{
 	assert_ok,
@@ -68,7 +68,7 @@ pub(crate) mod bridges_prelude {
 pub use for_pallet_xcm_bridge_hub::open_and_close_bridge_works;
 
 // Re-export test_case from assets
-pub use asset_test_utils::include_teleports_for_native_asset_works;
+pub use asset_test_pezutils::include_teleports_for_native_asset_works;
 use pezpallet_bridge_messages::LaneIdOf;
 
 pub type RuntimeHelper<Runtime, AllPalletsWithoutSystem = ()> =
@@ -432,16 +432,16 @@ pub fn message_dispatch_routing_works<
 	slot_durations: SlotDurations,
 	runtime_para_id: u32,
 	sibling_teyrchain_id: u32,
-	unwrap_pezcumulus_pallet_teyrchain_system_event: Box<
-		dyn Fn(Vec<u8>) -> Option<pezcumulus_pallet_teyrchain_system::Event<Runtime>>,
+	unwrap_pezcumulus_pezpallet_teyrchain_system_event: Box<
+		dyn Fn(Vec<u8>) -> Option<pezcumulus_pezpallet_teyrchain_system::Event<Runtime>>,
 	>,
-	unwrap_pezcumulus_pallet_xcmp_queue_event: Box<
-		dyn Fn(Vec<u8>) -> Option<pezcumulus_pallet_xcmp_queue::Event<Runtime>>,
+	unwrap_pezcumulus_pezpallet_xcmp_queue_event: Box<
+		dyn Fn(Vec<u8>) -> Option<pezcumulus_pezpallet_xcmp_queue::Event<Runtime>>,
 	>,
 	prepare_configuration: impl Fn(),
 ) where
 	Runtime: BasicTeyrchainRuntime
-		+ pezcumulus_pallet_xcmp_queue::Config
+		+ pezcumulus_pezpallet_xcmp_queue::Config
 		+ BridgeMessagesConfig<MessagesPalletInstance, InboundPayload = test_data::XcmAsPlainPayload>,
 	AllPalletsWithoutSystem:
 		OnInitialize<BlockNumberFor<Runtime>> + OnFinalize<BlockNumberFor<Runtime>>,
@@ -450,7 +450,7 @@ pub fn message_dispatch_routing_works<
 	XcmConfig: xcm_executor::Config,
 	MessagesPalletInstance: 'static,
 	HrmpChannelOpener: pezframe_support::inherent::ProvideInherent<
-		Call = pezcumulus_pallet_teyrchain_system::Call<Runtime>,
+		Call = pezcumulus_pezpallet_teyrchain_system::Call<Runtime>,
 	>,
 	RuntimeNetwork: Get<NetworkId>,
 	BridgedNetwork: Get<NetworkId>,
@@ -501,10 +501,10 @@ pub fn message_dispatch_routing_works<
 		// check events - UpwardMessageSent
 		let mut events = <pezframe_system::Pallet<Runtime>>::events()
 			.into_iter()
-			.filter_map(|e| unwrap_pezcumulus_pallet_teyrchain_system_event(e.event.encode()));
+			.filter_map(|e| unwrap_pezcumulus_pezpallet_teyrchain_system_event(e.event.encode()));
 		assert!(events.any(|e| matches!(
 			e,
-			pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+			pezcumulus_pezpallet_teyrchain_system::Event::UpwardMessageSent { .. }
 		)));
 
 		// 2. this message is sent from other global consensus with destination of this Runtime
@@ -536,7 +536,7 @@ pub fn message_dispatch_routing_works<
 		assert_eq!(
 			<pezframe_system::Pallet<Runtime>>::events()
 				.into_iter()
-				.filter_map(|e| unwrap_pezcumulus_pallet_xcmp_queue_event(e.event.encode()))
+				.filter_map(|e| unwrap_pezcumulus_pezpallet_xcmp_queue_event(e.event.encode()))
 				.count(),
 			0
 		);
@@ -564,9 +564,9 @@ pub fn message_dispatch_routing_works<
 		// check events - XcmpMessageSent
 		let mut events = <pezframe_system::Pallet<Runtime>>::events()
 			.into_iter()
-			.filter_map(|e| unwrap_pezcumulus_pallet_xcmp_queue_event(e.event.encode()));
+			.filter_map(|e| unwrap_pezcumulus_pezpallet_xcmp_queue_event(e.event.encode()));
 		assert!(
-			events.any(|e| matches!(e, pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }))
+			events.any(|e| matches!(e, pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }))
 		);
 	})
 }
@@ -681,9 +681,9 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 		Runtime: BasicTeyrchainRuntime + BridgeXcmOverBridgeConfig<XcmOverBridgePalletInstance>,
 		XcmOverBridgePalletInstance: 'static,
 		<Runtime as pezframe_system::Config>::RuntimeCall: GetDispatchInfo + From<BridgeXcmOverBridgeCall<Runtime, XcmOverBridgePalletInstance>>,
-		<Runtime as pezpallet_balances::Config>::Balance: From<<<Runtime as pezpallet_bridge_messages::Config<<Runtime as pezpallet_xcm_bridge_hub::Config<XcmOverBridgePalletInstance>>::BridgeMessagesPalletInstance>>::ThisChain as bp_runtime::Chain>::Balance>,
+		<Runtime as pezpallet_balances::Config>::Balance: From<<<Runtime as pezpallet_bridge_messages::Config<<Runtime as pezpallet_xcm_bridge_hub::Config<XcmOverBridgePalletInstance>>::BridgeMessagesPalletInstance>>::ThisChain as pezbp_runtime::Chain>::Balance>,
 		<Runtime as pezpallet_balances::Config>::Balance: From<u128>,
-		<<Runtime as pezpallet_bridge_messages::Config<<Runtime as pezpallet_xcm_bridge_hub::Config<XcmOverBridgePalletInstance>>::BridgeMessagesPalletInstance>>::ThisChain as bp_runtime::Chain>::AccountId: From<<Runtime as pezframe_system::Config>::AccountId>,
+		<<Runtime as pezpallet_bridge_messages::Config<<Runtime as pezpallet_xcm_bridge_hub::Config<XcmOverBridgePalletInstance>>::BridgeMessagesPalletInstance>>::ThisChain as pezbp_runtime::Chain>::AccountId: From<<Runtime as pezframe_system::Config>::AccountId>,
 		LocationToAccountId: ConvertLocation<AccountIdOf<Runtime>>,
 		TokenLocation: Get<Location>,
 	{

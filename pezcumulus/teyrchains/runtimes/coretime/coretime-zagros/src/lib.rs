@@ -38,7 +38,7 @@ extern crate alloc;
 
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	construct_runtime, derive_impl,
@@ -83,7 +83,7 @@ use xcm_config::{
 	FellowshipLocation, GovernanceLocation, TokenRelayLocation, XcmConfig,
 	XcmOriginToTransactDispatchOrigin,
 };
-use xcm_runtime_apis::{
+use xcm_runtime_pezapis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
 	fees::Error as XcmPaymentApiError,
 };
@@ -101,7 +101,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 pub type BlockId = generic::BlockId<Block>;
 
 /// The TransactionExtension to the basic transaction logic.
-pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		pezframe_system::AuthorizeCall<Runtime>,
@@ -124,8 +124,8 @@ pub type UncheckedExtrinsic =
 /// Migrations to apply on runtime upgrade.
 pub type Migrations = (
 	pezpallet_collator_selection::migration::v2::MigrationToV2<Runtime>,
-	pezcumulus_pallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
-	pezcumulus_pallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
+	pezcumulus_pezpallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
+	pezcumulus_pezpallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
 	pezpallet_broker::migration::MigrateV0ToV1<Runtime>,
 	pezpallet_broker::migration::MigrateV1ToV2<Runtime>,
 	pezpallet_broker::migration::MigrateV2ToV3<Runtime>,
@@ -136,7 +136,7 @@ pub type Migrations = (
 	>,
 	// permanent
 	pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
-	pezcumulus_pallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
+	pezcumulus_pezpallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
 );
 
 /// Executive: handles dispatch to the various modules.
@@ -226,13 +226,13 @@ impl pezframe_system::Config for Runtime {
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
 	/// The action to take on a Runtime Upgrade
-	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = ConstU32<16>;
 	type SingleBlockMigrations = Migrations;
 }
 
-impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
-	type WeightInfo = weights::pezcumulus_pallet_weight_reclaim::WeightInfo<Runtime>;
+impl pezcumulus_pezpallet_weight_reclaim::Config for Runtime {
+	type WeightInfo = weights::pezcumulus_pezpallet_weight_reclaim::WeightInfo<Runtime>;
 }
 
 impl pezpallet_timestamp::Config for Runtime {
@@ -291,8 +291,8 @@ parameter_types! {
 	pub const RelayOrigin: AggregateMessageOrigin = AggregateMessageOrigin::Parent;
 }
 
-impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
-	type WeightInfo = weights::pezcumulus_pallet_teyrchain_system::WeightInfo<Runtime>;
+impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
+	type WeightInfo = weights::pezcumulus_pezpallet_teyrchain_system::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
@@ -306,7 +306,7 @@ impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type RelayParentOffset = ConstU32<0>;
 }
 
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
@@ -342,7 +342,7 @@ impl pezpallet_message_queue::Config for Runtime {
 
 impl teyrchain_info::Config for Runtime {}
 
-impl pezcumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
 	/// Fellows pluralistic body.
@@ -369,7 +369,7 @@ pub type PriceForSiblingTeyrchainDelivery = pezkuwi_runtime_common::xcm_sender::
 	XcmpQueue,
 >;
 
-impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
+impl pezcumulus_pezpallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = TeyrchainSystem;
 	type VersionWrapper = PezkuwiXcm;
@@ -381,11 +381,11 @@ impl pezcumulus_pallet_xcmp_queue::Config for Runtime {
 	type MaxPageSize = ConstU32<{ 103 * 1024 }>;
 	type ControllerOrigin = RootOrFellows;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
-	type WeightInfo = weights::pezcumulus_pallet_xcmp_queue::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezcumulus_pezpallet_xcmp_queue::WeightInfo<Runtime>;
 	type PriceForSiblingDelivery = PriceForSiblingTeyrchainDelivery;
 }
 
-impl pezcumulus_pallet_xcmp_queue::migration::v5::V5Config for Runtime {
+impl pezcumulus_pezpallet_xcmp_queue::migration::v5::V5Config for Runtime {
 	// This must be the same as the `ChannelInfo` from the `Config`:
 	type ChannelList = TeyrchainSystem;
 }
@@ -637,10 +637,10 @@ construct_runtime!(
 	{
 		// System support stuff.
 		System: pezframe_system = 0,
-		TeyrchainSystem: pezcumulus_pallet_teyrchain_system = 1,
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system = 1,
 		Timestamp: pezpallet_timestamp = 3,
 		TeyrchainInfo: teyrchain_info = 4,
-		WeightReclaim: pezcumulus_pallet_weight_reclaim = 5,
+		WeightReclaim: pezcumulus_pezpallet_weight_reclaim = 5,
 
 		// Monetary stuff.
 		Balances: pezpallet_balances = 10,
@@ -651,12 +651,12 @@ construct_runtime!(
 		CollatorSelection: pezpallet_collator_selection = 21,
 		Session: pezpallet_session = 22,
 		Aura: pezpallet_aura = 23,
-		AuraExt: pezcumulus_pallet_aura_ext = 24,
+		AuraExt: pezcumulus_pezpallet_aura_ext = 24,
 
 		// XCM & related
-		XcmpQueue: pezcumulus_pallet_xcmp_queue = 30,
+		XcmpQueue: pezcumulus_pezpallet_xcmp_queue = 30,
 		PezkuwiXcm: pezpallet_xcm = 31,
-		CumulusXcm: pezcumulus_pallet_xcm = 32,
+		CumulusXcm: pezcumulus_pezpallet_xcm = 32,
 		MessageQueue: pezpallet_message_queue = 34,
 
 		// Handy utilities.
@@ -676,13 +676,13 @@ construct_runtime!(
 mod benches {
 	pezframe_benchmarking::define_benchmarks!(
 		[pezframe_system, SystemBench::<Runtime>]
-		[pezcumulus_pallet_teyrchain_system, TeyrchainSystem]
+		[pezcumulus_pezpallet_teyrchain_system, TeyrchainSystem]
 		[pezpallet_timestamp, Timestamp]
 		[pezpallet_balances, Balances]
 		[pezpallet_broker, Broker]
 		[pezpallet_collator_selection, CollatorSelection]
 		[pezpallet_session, SessionBench::<Runtime>]
-		[pezcumulus_pallet_xcmp_queue, XcmpQueue]
+		[pezcumulus_pezpallet_xcmp_queue, XcmpQueue]
 		[pezpallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pezpallet_message_queue, MessageQueue]
 		[pezpallet_multisig, Multisig]
@@ -691,7 +691,7 @@ mod benches {
 		// NOTE: Make sure you point to the individual modules below.
 		[pezpallet_xcm_benchmarks::fungible, XcmBalances]
 		[pezpallet_xcm_benchmarks::generic, XcmGeneric]
-		[pezcumulus_pallet_weight_reclaim, WeightReclaim]
+		[pezcumulus_pezpallet_weight_reclaim, WeightReclaim]
 	);
 }
 
@@ -854,7 +854,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::fees::XcmPaymentApi<Block> for Runtime {
+	impl xcm_runtime_pezapis::fees::XcmPaymentApi<Block> for Runtime {
 		fn query_acceptable_payment_assets(xcm_version: xcm::Version) -> Result<Vec<VersionedAssetId>, XcmPaymentApiError> {
 			let acceptable_assets = vec![AssetId(xcm_config::TokenRelayLocation::get())];
 			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
@@ -875,7 +875,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
+	impl xcm_runtime_pezapis::dry_run::DryRunApi<Block, RuntimeCall, RuntimeEvent, OriginCaller> for Runtime {
 		fn dry_run_call(origin: OriginCaller, call: RuntimeCall, result_xcms_version: XcmVersion) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
 			PezkuwiXcm::dry_run_call::<Runtime, xcm_config::XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
@@ -885,37 +885,37 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl xcm_runtime_apis::conversions::LocationToAccountApi<Block, AccountId> for Runtime {
+	impl xcm_runtime_pezapis::conversions::LocationToAccountApi<Block, AccountId> for Runtime {
 		fn convert_location(location: VersionedLocation) -> Result<
 			AccountId,
-			xcm_runtime_apis::conversions::Error
+			xcm_runtime_pezapis::conversions::Error
 		> {
-			xcm_runtime_apis::conversions::LocationToAccountHelper::<
+			xcm_runtime_pezapis::conversions::LocationToAccountHelper::<
 				AccountId,
 				xcm_config::LocationToAccountId,
 			>::convert_location(location)
 		}
 	}
 
-	impl xcm_runtime_apis::trusted_query::TrustedQueryApi<Block> for Runtime {
-		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
+	impl xcm_runtime_pezapis::trusted_query::TrustedQueryApi<Block> for Runtime {
+		fn is_trusted_reserve(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_pezapis::trusted_query::XcmTrustedQueryResult {
 			PezkuwiXcm::is_trusted_reserve(asset, location)
 		}
-		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_apis::trusted_query::XcmTrustedQueryResult {
+		fn is_trusted_teleporter(asset: VersionedAsset, location: VersionedLocation) -> xcm_runtime_pezapis::trusted_query::XcmTrustedQueryResult {
 			PezkuwiXcm::is_trusted_teleporter(asset, location)
 		}
 	}
 
-	impl xcm_runtime_apis::authorized_aliases::AuthorizedAliasersApi<Block> for Runtime {
+	impl xcm_runtime_pezapis::authorized_aliases::AuthorizedAliasersApi<Block> for Runtime {
 		fn authorized_aliasers(target: VersionedLocation) -> Result<
-			Vec<xcm_runtime_apis::authorized_aliases::OriginAliaser>,
-			xcm_runtime_apis::authorized_aliases::Error
+			Vec<xcm_runtime_pezapis::authorized_aliases::OriginAliaser>,
+			xcm_runtime_pezapis::authorized_aliases::Error
 		> {
 			PezkuwiXcm::authorized_aliasers(target)
 		}
 		fn is_authorized_alias(origin: VersionedLocation, target: VersionedLocation) -> Result<
 			bool,
-			xcm_runtime_apis::authorized_aliases::Error
+			xcm_runtime_pezapis::authorized_aliases::Error
 		> {
 			PezkuwiXcm::is_authorized_alias(origin, target)
 		}
@@ -955,7 +955,7 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
 			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 
 			// This is defined once again in dispatch_benchmark, because list_benchmarks!
@@ -986,12 +986,12 @@ impl_runtime_apis! {
 				}
 
 				fn verify_set_code() {
-					System::assert_last_event(pezcumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
+					System::assert_last_event(pezcumulus_pezpallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
 				}
 			}
 
-			use pezcumulus_pallet_session_benchmarking::Pallet as SessionBench;
-			impl pezcumulus_pallet_session_benchmarking::Config for Runtime {}
+			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			use xcm::latest::prelude::*;
 			use xcm_config::TokenRelayLocation;
@@ -1211,7 +1211,7 @@ impl_runtime_apis! {
 	}
 }
 
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

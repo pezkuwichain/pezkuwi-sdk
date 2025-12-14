@@ -1,5 +1,5 @@
 [package]
-name = "node-bench"
+name = "pez-node-bench"
 version = "0.9.0-dev"
 authors.workspace = true
 description = "Bizinikiwi node integration benchmarks."
@@ -8,7 +8,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/node-bench"
+documentation = "https://docs.rs/pez-node-bench"
 
 [lints]
 workspace = true
@@ -23,12 +23,12 @@ derive_more = { features = ["display"], workspace = true }
 fs_extra = { workspace = true }
 futures = { features = ["thread-pool"], workspace = true }
 hash-db = { workspace = true, default-features = true }
-kitchensink-runtime = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
 kvdb = { workspace = true }
 kvdb-rocksdb = { workspace = true }
 log = { workspace = true, default-features = true }
-node-primitives = { workspace = true, default-features = true }
-node-testing = { workspace = true }
+pez-node-primitives = { workspace = true, default-features = true }
+pez-node-testing = { workspace = true }
 parity-db = { workspace = true }
 rand = { features = ["small_rng"], workspace = true, default-features = true }
 pezsc-basic-authorship = { workspace = true, default-features = true }
@@ -49,9 +49,9 @@ tempfile = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "kitchensink-runtime/runtime-benchmarks",
-  "node-primitives/runtime-benchmarks",
-  "node-testing/runtime-benchmarks",
+  "pez-kitchensink-runtime/runtime-benchmarks",
+  "pez-node-primitives/runtime-benchmarks",
+  "pez-node-testing/runtime-benchmarks",
   "pezsc-basic-authorship/runtime-benchmarks",
   "pezsc-client-api/runtime-benchmarks",
   "pezsc-transaction-pool-api/runtime-benchmarks",

@@ -22,7 +22,7 @@ use pezframe_support::{
 };
 use pezpallet_message_queue::OnQueueChanged;
 use scale_info::TypeInfo;
-use snowbridge_core::ChannelId;
+use pezsnowbridge_core::ChannelId;
 use pezsp_core::H256;
 use xcm::latest::prelude::{Junction, Location};
 

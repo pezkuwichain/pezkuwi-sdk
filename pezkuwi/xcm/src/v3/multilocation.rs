@@ -518,7 +518,7 @@ impl<Interior: Into<Junctions>> From<AncestorThen<Interior>> for MultiLocation {
 	}
 }
 
-xcm_procedural::impl_conversion_functions_for_multilocation_v3!();
+xcm_pez_procedural::impl_conversion_functions_for_multilocation_v3!();
 
 #[cfg(test)]
 mod tests {

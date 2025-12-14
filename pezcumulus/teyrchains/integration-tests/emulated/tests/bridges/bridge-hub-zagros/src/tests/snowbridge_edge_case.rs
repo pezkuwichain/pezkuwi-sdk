@@ -14,10 +14,10 @@
 // limitations under the License.
 
 use crate::{imports::*, tests::snowbridge_common::*};
-use bridge_hub_zagros_runtime::xcm_config::LocationToAccountId;
+use pezbridge_hub_zagros_runtime::xcm_config::LocationToAccountId;
 use emulated_integration_tests_common::snowbridge::{SEPOLIA_ID, WETH};
-use snowbridge_core::AssetMetadata;
-use snowbridge_pallet_system::Error;
+use pezsnowbridge_core::AssetMetadata;
+use snowbridge_pezpallet_system::Error;
 use testnet_teyrchains_constants::zagros::snowbridge::EthereumNetwork;
 use xcm_executor::traits::ConvertLocation;
 

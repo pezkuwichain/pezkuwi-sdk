@@ -4,7 +4,7 @@ version = "0.0.0"
 authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
-description = "Coretime Zagros runtime integration tests with xcm-emulator"
+description = "Coretime Zagros runtime integration tests with xcm-pez-emulator"
 publish = false
 documentation = "https://docs.rs/coretime-zagros-integration-tests"
 repository = { workspace = true }

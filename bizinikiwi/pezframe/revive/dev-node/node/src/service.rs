@@ -24,7 +24,7 @@ use pezkuwi_sdk::{
 	pezsp_runtime::traits::Block as BlockT,
 	*,
 };
-use revive_dev_runtime::{OpaqueBlock as Block, Runtime, RuntimeApi};
+use pez_revive_dev_runtime::{OpaqueBlock as Block, Runtime, RuntimeApi};
 use std::sync::Arc;
 
 type HostFunctions = pezsp_io::BizinikiwiHostFunctions;

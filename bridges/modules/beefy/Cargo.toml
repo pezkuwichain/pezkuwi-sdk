@@ -21,7 +21,7 @@ tracing = { workspace = true }
 
 # Bridge Dependencies
 bp-beefy = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
 pezframe-support = { workspace = true }
@@ -43,7 +43,7 @@ pezsp-io = { workspace = true, default-features = true }
 default = ["std"]
 std = [
   "bp-beefy/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "codec/std",
   "pezframe-support/std",
   "pezframe-system/std",
@@ -63,7 +63,7 @@ try-runtime = [
 ]
 runtime-benchmarks = [
   "bp-beefy/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-test-utils/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",

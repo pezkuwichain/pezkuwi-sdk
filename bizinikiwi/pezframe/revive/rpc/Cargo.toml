@@ -59,20 +59,20 @@ tokio = { workspace = true, features = ["full"] }
 env_logger = { workspace = true }
 pezpallet-revive-fixtures = { workspace = true, default-features = true }
 pretty_assertions = { workspace = true }
-revive-dev-node = { workspace = true }
+pez-revive-dev-node = { workspace = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [build-dependencies]
 git2 = { workspace = true }
-revive-dev-runtime = { workspace = true, default-features = true }
+pez-revive-dev-runtime = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
   "pezpallet-revive/runtime-benchmarks",
-  "revive-dev-node/runtime-benchmarks",
-  "revive-dev-runtime/runtime-benchmarks",
+  "pez-revive-dev-node/runtime-benchmarks",
+  "pez-revive-dev-runtime/runtime-benchmarks",
   "pezsc-cli/runtime-benchmarks",
   "pezsc-rpc-api/runtime-benchmarks",
   "pezsc-rpc/runtime-benchmarks",

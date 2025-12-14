@@ -29,10 +29,10 @@ use async_std::sync::Arc;
 use bp_messages::{
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages as _, MessageNonce,
 };
-use bp_runtime::{AccountIdOf, EncodedOrDecodedCall, HeaderIdOf, TransactionEra, WeightExtraOps};
+use pezbp_runtime::{AccountIdOf, EncodedOrDecodedCall, HeaderIdOf, TransactionEra, WeightExtraOps};
 use codec::{Codec, Encode, EncodeLike};
 use pezframe_support::{dispatch::GetDispatchInfo, weights::Weight};
-use messages_relay::{message_lane::MessageLane, message_lane_loop::BatchTransaction, Labeled};
+use pez_messages_relay::{message_lane::MessageLane, message_lane_loop::BatchTransaction, Labeled};
 use pezpallet_bridge_messages::{Call as BridgeMessagesCall, Config as BridgeMessagesConfig};
 use relay_bizinikiwi_client::{
 	transaction_stall_timeout, AccountKeyPairOf, BalanceOf, BlockNumberOf, CallOf, Chain,
@@ -250,13 +250,13 @@ where
 		"Starting source -> target messages relay."
 	);
 
-	messages_relay::message_lane_loop::run(
-		messages_relay::message_lane_loop::Params {
+	pez_messages_relay::message_lane_loop::run(
+		pez_messages_relay::message_lane_loop::Params {
 			lane: params.lane_id,
 			source_tick: P::SourceChain::AVERAGE_BLOCK_INTERVAL,
 			target_tick: P::TargetChain::AVERAGE_BLOCK_INTERVAL,
 			reconnect_delay: relay_utils::relay_loop::RECONNECT_DELAY,
-			delivery_params: messages_relay::message_lane_loop::MessageDeliveryParams {
+			delivery_params: pez_messages_relay::message_lane_loop::MessageDeliveryParams {
 				max_unrewarded_relayer_entries_at_target:
 					P::SourceChain::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
 				max_unconfirmed_nonces_at_target:
@@ -310,7 +310,7 @@ where
 {
 	let relayer_id_at_source: AccountIdOf<P::SourceChain> =
 		source_transaction_params.signer.public().into();
-	messages_relay::relay_messages_range(
+	pez_messages_relay::relay_messages_range(
 		BizinikiwiMessagesSource::<P, _, _>::new(
 			source_client.clone(),
 			target_client.clone(),
@@ -350,7 +350,7 @@ where
 {
 	let relayer_id_at_source: AccountIdOf<P::SourceChain> =
 		source_transaction_params.signer.public().into();
-	messages_relay::relay_messages_delivery_confirmation(
+	pez_messages_relay::relay_messages_delivery_confirmation(
 		BizinikiwiMessagesSource::<P, _, _>::new(
 			source_client.clone(),
 			target_client.clone(),
@@ -397,7 +397,7 @@ where
 	R: BridgeMessagesConfig<I, LaneId = P::LaneId>,
 	I: 'static,
 	R::BridgedChain:
-		bp_runtime::Chain<AccountId = AccountIdOf<P::SourceChain>, Hash = HashOf<P::SourceChain>>,
+		pezbp_runtime::Chain<AccountId = AccountIdOf<P::SourceChain>, Hash = HashOf<P::SourceChain>>,
 	CallOf<P::TargetChain>: From<BridgeMessagesCall<R, I>> + GetDispatchInfo,
 {
 	fn build_receive_messages_proof_call(
@@ -459,7 +459,7 @@ macro_rules! generate_receive_message_proof_call_builder {
 			) -> relay_bizinikiwi_client::CallOf<
 				<$pipeline as $crate::messages::BizinikiwiMessageLane>::TargetChain
 			> {
-				bp_runtime::paste::item! {
+				pezbp_runtime::paste::item! {
 					$bridge_messages($receive_messages_proof {
 						relayer_id_at_bridged_chain: relayer_id_at_source,
 						proof: proof.1.into(),
@@ -494,7 +494,7 @@ where
 	P: BizinikiwiMessageLane,
 	R: BridgeMessagesConfig<I, LaneId = P::LaneId>,
 	I: 'static,
-	R::BridgedChain: bp_runtime::Chain<Hash = HashOf<P::TargetChain>>,
+	R::BridgedChain: pezbp_runtime::Chain<Hash = HashOf<P::TargetChain>>,
 	CallOf<P::SourceChain>: From<BridgeMessagesCall<R, I>> + GetDispatchInfo,
 {
 	fn build_receive_messages_delivery_proof_call(
@@ -547,7 +547,7 @@ macro_rules! generate_receive_message_delivery_proof_call_builder {
 			) -> relay_bizinikiwi_client::CallOf<
 				<$pipeline as $crate::messages::BizinikiwiMessageLane>::SourceChain
 			> {
-				bp_runtime::paste::item! {
+				pezbp_runtime::paste::item! {
 					$bridge_messages($receive_messages_delivery_proof {
 						proof: proof.1,
 						relayers_state: proof.0
@@ -820,7 +820,7 @@ mod tests {
 	mod mock {
 		use super::super::*;
 		use bp_messages::{target_chain::ForbidInboundMessages, HashedLaneId};
-		use bp_runtime::ChainId;
+		use pezbp_runtime::ChainId;
 		use pezframe_support::derive_impl;
 		use pezsp_core::H256;
 		use pezsp_runtime::{
@@ -863,7 +863,7 @@ mod tests {
 
 		pub struct ThisUnderlyingChain;
 
-		impl bp_runtime::Chain for ThisUnderlyingChain {
+		impl pezbp_runtime::Chain for ThisUnderlyingChain {
 			const ID: ChainId = *b"tuch";
 			type BlockNumber = u64;
 			type Hash = H256;
@@ -893,7 +893,7 @@ mod tests {
 		pub type BridgedHeaderHash = H256;
 		pub type BridgedChainHeader = BizinikiwiHeader;
 
-		impl bp_runtime::Chain for BridgedUnderlyingChain {
+		impl pezbp_runtime::Chain for BridgedUnderlyingChain {
 			const ID: ChainId = *b"bgdc";
 			type BlockNumber = u64;
 			type Hash = BridgedHeaderHash;
@@ -920,7 +920,7 @@ mod tests {
 
 		pub struct BridgedHeaderChain;
 
-		impl bp_header_chain::HeaderChain<BridgedUnderlyingChain> for BridgedHeaderChain {
+		impl bp_header_pez_chain::HeaderChain<BridgedUnderlyingChain> for BridgedHeaderChain {
 			fn finalized_header_state_root(
 				_hash: HashOf<BridgedUnderlyingChain>,
 			) -> Option<HashOf<BridgedUnderlyingChain>> {
@@ -939,7 +939,7 @@ mod tests {
 			},
 			UtilityPalletBatchCallBuilder,
 		};
-		use bp_runtime::UnderlyingChainProvider;
+		use pezbp_runtime::UnderlyingChainProvider;
 		use relay_bizinikiwi_client::{MockedRuntimeUtilityPallet, SignParam, UnsignedTransaction};
 		use std::time::Duration;
 

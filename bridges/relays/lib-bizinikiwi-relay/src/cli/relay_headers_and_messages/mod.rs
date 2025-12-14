@@ -45,7 +45,7 @@ use crate::{
 	on_demand::OnDemandRelay,
 	HeadersToRelay, TaggedAccount, TransactionParams,
 };
-use bp_runtime::BalanceOf;
+use pezbp_runtime::BalanceOf;
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, Chain, ChainWithBalances, ChainWithMessages,
 	ChainWithRuntimeVersion, ChainWithTransactions,
@@ -162,7 +162,7 @@ where
 	}
 
 	/// Returns message relay parameters.
-	fn messages_relay_params(
+	fn pez_messages_relay_params(
 		&self,
 		source_to_target_headers_relay: Arc<dyn OnDemandRelay<Source, Target>>,
 		target_to_source_headers_relay: Arc<dyn OnDemandRelay<Target, Source>>,
@@ -336,7 +336,7 @@ where
 		for lane in lanes_l2r {
 			let left_to_right_messages =
 				crate::messages::run::<<Self::L2R as MessagesCliBridge>::MessagesLane, _, _>(
-					self.left_to_right().messages_relay_params(
+					self.left_to_right().pez_messages_relay_params(
 						left_to_right_on_demand_headers.clone(),
 						right_to_left_on_demand_headers.clone(),
 						lane,
@@ -350,7 +350,7 @@ where
 		for lane in lanes_r2l {
 			let right_to_left_messages =
 				crate::messages::run::<<Self::R2L as MessagesCliBridge>::MessagesLane, _, _>(
-					self.right_to_left().messages_relay_params(
+					self.right_to_left().pez_messages_relay_params(
 						right_to_left_on_demand_headers.clone(),
 						left_to_right_on_demand_headers.clone(),
 						lane,

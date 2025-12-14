@@ -39,7 +39,7 @@ pezframe-executive = { workspace = true }
 pezframe-metadata-hash-extension = { workspace = true, default-features = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-kitchensink-runtime = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
 log = { workspace = true, default-features = true }
 node-cli = { workspace = true }
 pezpallet-example-authorization-tx-extension = { workspace = true, default-features = true }
@@ -47,7 +47,7 @@ pezpallet-example-single-block-migrations = { workspace = true, default-features
 pezkuwi-sdk = { features = [
   "runtime-full",
 ], workspace = true, default-features = true }
-subkey = { workspace = true, default-features = true }
+pez-subkey = { workspace = true, default-features = true }
 
 # Bizinikiwi Client
 pezsc-chain-spec = { workspace = true, default-features = true }
@@ -116,16 +116,16 @@ pezsp-weights = { workspace = true, default-features = true }
 pezpallet-xcm = { workspace = true }
 xcm = { workspace = true, default-features = true }
 xcm-builder = { workspace = true }
-xcm-docs = { workspace = true }
+xcm-pez-docs = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-simulator = { workspace = true }
+xcm-pez-simulator = { workspace = true }
 
 # Runtime guides
-chain-spec-guide-runtime = { workspace = true, default-features = true }
+pez-chain-spec-guide-runtime = { workspace = true, default-features = true }
 
 # Templates
-minimal-template-runtime = { workspace = true, default-features = true }
-solochain-template-runtime = { workspace = true, default-features = true }
+pez-minimal-template-runtime = { workspace = true, default-features = true }
+pez-solochain-template-runtime = { workspace = true, default-features = true }
 
 # local packages
 first-runtime = { workspace = true, default-features = true }
@@ -139,7 +139,7 @@ tokio = { workspace = true }
 [features]
 runtime-benchmarks = [
   "chain-spec-builder/runtime-benchmarks",
-  "chain-spec-guide-runtime/runtime-benchmarks",
+  "pez-chain-spec-guide-runtime/runtime-benchmarks",
   "pezcumulus-client-service/runtime-benchmarks",
   "pezcumulus-pezpallet-aura-ext/runtime-benchmarks",
   "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
@@ -152,8 +152,8 @@ runtime-benchmarks = [
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "frame/runtime-benchmarks",
-  "kitchensink-runtime/runtime-benchmarks",
-  "minimal-template-runtime/runtime-benchmarks",
+  "pez-kitchensink-runtime/runtime-benchmarks",
+  "pez-minimal-template-runtime/runtime-benchmarks",
   "node-cli/runtime-benchmarks",
   "pezpallet-asset-conversion-tx-payment/runtime-benchmarks",
   "pezpallet-asset-tx-payment/runtime-benchmarks",
@@ -194,7 +194,7 @@ runtime-benchmarks = [
   "pezsc-rpc-api/runtime-benchmarks",
   "pezsc-rpc/runtime-benchmarks",
   "pezsc-service/runtime-benchmarks",
-  "solochain-template-runtime/runtime-benchmarks",
+  "pez-solochain-template-runtime/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",
   "pezsp-genesis-builder/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",
@@ -203,12 +203,12 @@ runtime-benchmarks = [
   "pezsp-runtime-interface/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
   "pezsp-version/runtime-benchmarks",
-  "subkey/runtime-benchmarks",
+  "pez-subkey/runtime-benchmarks",
   "bizinikiwi-wasm-builder/runtime-benchmarks",
   "teyrchain-info/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
-  "xcm-docs/runtime-benchmarks",
+  "xcm-pez-docs/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-simulator/runtime-benchmarks",
+  "xcm-pez-simulator/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

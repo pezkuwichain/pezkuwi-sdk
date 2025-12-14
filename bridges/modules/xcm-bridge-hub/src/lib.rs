@@ -144,7 +144,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use bp_messages::{LaneState, MessageNonce};
-use bp_runtime::{AccountIdOf, BalanceOf, RangeInclusiveExt};
+use pezbp_runtime::{AccountIdOf, BalanceOf, RangeInclusiveExt};
 use bp_xcm_bridge_hub::BridgeLocationsError;
 pub use bp_xcm_bridge_hub::{
 	Bridge, BridgeId, BridgeLocations, BridgeState, LocalXcmChannelManager,

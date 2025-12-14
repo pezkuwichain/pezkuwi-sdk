@@ -486,7 +486,7 @@ where
 				let authority_set = AuthoritySet::new(
 					authorities.clone(),
 					set_id,
-					fork_tree::ForkTree::new(),
+					pez_fork_tree::ForkTree::new(),
 					Vec::new(),
 					AuthoritySetChanges::empty(),
 				)

@@ -1,12 +1,12 @@
 [package]
-name = "test-runtime-constants"
+name = "peztest-runtime-constants"
 publish = false
 version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Pezkuwi SDK component: test runtime constants"
-documentation = "https://docs.rs/test-runtime-constants"
+documentation = "https://docs.rs/peztest-runtime-constants"
 repository = { workspace = true }
 homepage = { workspace = true }
 

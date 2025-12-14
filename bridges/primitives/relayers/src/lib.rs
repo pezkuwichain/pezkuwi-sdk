@@ -25,7 +25,7 @@ pub use extension::{
 };
 pub use registration::{ExplicitOrAccountParams, Registration, StakeAndSlash};
 
-use bp_runtime::{ChainId, StorageDoubleMapKeyProvider};
+use pezbp_runtime::{ChainId, StorageDoubleMapKeyProvider};
 use pezframe_support::{traits::tokens::Preservation, Blake2_128Concat, Identity};
 use scale_info::TypeInfo;
 use pezsp_runtime::{

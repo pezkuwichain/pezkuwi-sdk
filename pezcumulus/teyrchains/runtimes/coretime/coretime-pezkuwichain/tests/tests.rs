@@ -23,7 +23,7 @@ use pezsp_core::crypto::Ss58Codec;
 use testnet_teyrchains_constants::pezkuwichain::fee::WeightToFee;
 use teyrchains_common::AccountId;
 use xcm::latest::prelude::*;
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 const ALICE: [u8; 32] = [1u8; 32];
 

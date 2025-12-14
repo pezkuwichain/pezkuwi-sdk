@@ -63,13 +63,13 @@ subxt-signer = { workspace = true, features = ["unstable-eth"] }
 
 # The Pezkuwi-SDK:
 pezkuwi-sdk = { features = [
-  "fork-tree",
+  "pez-fork-tree",
   "pezframe-benchmarking-cli",
   "frame-remote-externalities",
   "pezframe-support-procedural-tools",
-  "generate-bags",
-  "mmr-gadget",
-  "mmr-rpc",
+  "pez-generate-bags",
+  "pezmmr-gadget",
+  "pezmmr-rpc",
   "pezpallet-transaction-payment-rpc",
   "pezsc-allocator",
   "pezsc-authority-discovery",
@@ -135,7 +135,7 @@ pezkuwi-sdk = { features = [
   "pezstaging-node-inspect",
   "pezstaging-tracking-allocator",
   "std",
-  "subkey",
+  "pez-subkey",
   "bizinikiwi-build-script-utils",
   "bizinikiwi-frame-rpc-support",
   "bizinikiwi-frame-rpc-system",
@@ -143,14 +143,14 @@ pezkuwi-sdk = { features = [
   "bizinikiwi-rpc-client",
   "bizinikiwi-state-trie-migration-rpc",
   "bizinikiwi-wasm-builder",
-  "tracing-gum",
+  "pez-tracing-gum",
 ], workspace = true, default-features = true }
 
 # Shared code between the staging node and kitchensink runtime:
-kitchensink-runtime = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
 node-inspect = { optional = true, workspace = true, default-features = true }
-node-primitives = { workspace = true, default-features = true }
-node-rpc = { workspace = true }
+pez-node-primitives = { workspace = true, default-features = true }
+pez-node-rpc = { workspace = true }
 
 [dev-dependencies]
 assert_cmd = { workspace = true }
@@ -176,7 +176,7 @@ tokio-util = { features = ["compat"], workspace = true }
 wat = { workspace = true }
 
 # These testing-only dependencies are not exported by the Pezkuwi-SDK crate:
-node-testing = { workspace = true }
+pez-node-testing = { workspace = true }
 pezsc-service-test = { workspace = true }
 bizinikiwi-cli-test-utils = { workspace = true }
 
@@ -197,18 +197,18 @@ pezkuwi-sdk = { features = [
 default = ["cli"]
 cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
 runtime-benchmarks = [
-  "kitchensink-runtime/runtime-benchmarks",
+  "pez-kitchensink-runtime/runtime-benchmarks",
   "node-inspect?/runtime-benchmarks",
-  "node-primitives/runtime-benchmarks",
-  "node-rpc/runtime-benchmarks",
-  "node-testing/runtime-benchmarks",
+  "pez-node-primitives/runtime-benchmarks",
+  "pez-node-rpc/runtime-benchmarks",
+  "pez-node-testing/runtime-benchmarks",
   "pezkuwi-sdk/runtime-benchmarks",
   "pezsc-service-test/runtime-benchmarks",
   "pezsp-keyring/runtime-benchmarks",
   "bizinikiwi-cli-test-utils/runtime-benchmarks",
 ]
 try-runtime = [
-  "kitchensink-runtime/try-runtime",
+  "pez-kitchensink-runtime/try-runtime",
   "pezkuwi-sdk/try-runtime",
   "bizinikiwi-cli-test-utils/try-runtime",
 ]

@@ -100,7 +100,7 @@ fn send_assets_from_penpal_pezkuwichain_through_pezkuwichain_ah_to_zagros_ah(
 						who: *who == TreasuryAccount::get(),
 					},
 					RuntimeEvent::XcmpQueue(
-						pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+						pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }
 					) => {},
 				]
 			);

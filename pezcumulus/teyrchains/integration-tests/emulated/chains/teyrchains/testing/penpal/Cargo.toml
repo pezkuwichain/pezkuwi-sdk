@@ -1,12 +1,12 @@
 [package]
-name = "penpal-emulated-chain"
+name = "pez-penpal-emulated-chain"
 version = "0.0.0"
 authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 description = "Penpal emulated chain"
 publish = false
-documentation = "https://docs.rs/penpal-emulated-chain"
+documentation = "https://docs.rs/pez-penpal-emulated-chain"
 repository = { workspace = true }
 homepage = { workspace = true }
 
@@ -25,7 +25,7 @@ xcm = { workspace = true }
 # Pezcumulus
 pezcumulus-primitives-core = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
-penpal-runtime = { workspace = true }
+pez-penpal-runtime = { workspace = true }
 teyrchains-common = { workspace = true, default-features = true }
 
 [features]
@@ -33,7 +33,7 @@ runtime-benchmarks = [
   "pezcumulus-primitives-core/runtime-benchmarks",
   "emulated-integration-tests-common/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
-  "penpal-runtime/runtime-benchmarks",
+  "pez-penpal-runtime/runtime-benchmarks",
   "pezsp-keyring/runtime-benchmarks",
   "teyrchains-common/runtime-benchmarks",
   "xcm/runtime-benchmarks",

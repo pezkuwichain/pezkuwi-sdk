@@ -22,7 +22,7 @@ use bp_messages::{
 	target_chain::{DispatchMessage, MessageDispatch},
 	ChainWithMessages, HashedLaneId, MessageNonce,
 };
-use bp_runtime::{messages::MessageDispatchResult, Chain, ChainId, HashOf};
+use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, HashOf};
 use bp_xcm_bridge_hub::{BridgeId, LocalXcmChannelManager};
 use codec::{Decode, Encode};
 use pezframe_support::{
@@ -620,7 +620,7 @@ impl ChainWithMessages for BridgedUnderlyingChain {
 }
 
 pub struct BridgedHeaderChain;
-impl bp_header_chain::HeaderChain<BridgedUnderlyingChain> for BridgedHeaderChain {
+impl bp_header_pez_chain::HeaderChain<BridgedUnderlyingChain> for BridgedHeaderChain {
 	fn finalized_header_state_root(
 		_hash: HashOf<BridgedUnderlyingChain>,
 	) -> Option<HashOf<BridgedUnderlyingChain>> {

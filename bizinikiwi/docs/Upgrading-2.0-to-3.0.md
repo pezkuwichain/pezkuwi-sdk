@@ -367,7 +367,7 @@ A few minor things have changed in the `cli` (compared to 2.0.1):
 3. we [don't fallback to `--chain flaming-fir`
    anymore](https://github.com/pezkuwichain/kurdistan-sdk/commit/13cdf1c8cd2ee62d411f82b64dc7eba860c9c6c6), if no chain is
    given our `bizinikiwi-node` will error.
-4. [the `subkey`-integration has seen a fix to the
+4. [the `pez_subkey`-integration has seen a fix to the
    `insert`-command](https://github.com/pezkuwichain/kurdistan-sdk/commit/54bde60cfd2c544c54e9e8623b6b8725b99557f8) that
    requires you to now add the `&cli` as a param.
     ```diff=
@@ -518,7 +518,7 @@ This has most visible changes for the rpc, where we are switching from the previ
  use std::sync::Arc;
 
 +use sp_keystore::SyncCryptoStorePtr;
- use node_primitives::{Block, BlockNumber, AccountId, Index, Balance, Hash};
+ use pez_node_primitives::{Block, BlockNumber, AccountId, Index, Balance, Hash};
  use sc_consensus_babe::{Config, Epoch};
  use sc_consensus_babe_rpc::BabeRpcHandler;
 @@ -40,7 +41,6 @@ use sc_finality_grandpa::{
@@ -578,7 +578,7 @@ modified your chain you should probably try to apply these patches:
  use std::sync::Arc;
  use sc_consensus_babe;
 -use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
- use node_primitives::Block;
+ use pez_node_primitives::Block;
  use node_runtime::RuntimeApi;
  use sc_service::{
 -	config::{Role, Configuration}, error::{Error as ServiceError},
@@ -645,13 +645,13 @@ modified your chain you should probably try to apply these patches:
 +		let chain_spec = config.chain_spec.cloned_box();
 
  		let rpc_extensions_builder = move |deny_unsafe, subscription_executor| {
- 			let deps = node_rpc::FullDeps {
+ 			let deps = pez_node_rpc::FullDeps {
  				client: client.clone(),
  				pool: pool.clone(),
  				select_chain: select_chain.clone(),
 +				chain_spec: chain_spec.cloned_box(),
  				deny_unsafe,
- 				babe: node_rpc::BabeDeps {
+ 				babe: pez_node_rpc::BabeDeps {
  					babe_config: babe_config.clone(),
 @@ -151,9 +150,15 @@ pub fn new_partial(config: &Configuration) -> Result<sc_service::PartialComponen
  	};
@@ -941,7 +941,7 @@ modified your chain you should probably try to apply these patches:
 
 @@ -433,32 +432,39 @@ pub fn new_light_base(config: Configuration) -> Result<(
 
- 	let rpc_extensions = node_rpc::create_light(light_deps);
+ 	let rpc_extensions = pez_node_rpc::create_light(light_deps);
 
 -	let rpc_handlers =
 +	let (rpc_handlers, telemetry_connection_notifier) =

@@ -20,7 +20,7 @@ use std::{collections::HashMap, sync::Arc};
 
 use hash_db::{AsHashDB, HashDB, Hasher as _, Prefix};
 use kvdb::KeyValueDB;
-use node_primitives::Hash;
+use pez_node_primitives::Hash;
 use pezsp_trie::DBValue;
 
 pub type Hasher = pezsp_core::Blake2Hasher;

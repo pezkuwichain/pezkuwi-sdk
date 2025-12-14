@@ -121,7 +121,7 @@ pezkuwi-teyrchain-primitives = { workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
-xcm-runtime-apis = { workspace = true }
+xcm-runtime-pezapis = { workspace = true }
 
 [dev-dependencies]
 approx = { workspace = true }
@@ -234,7 +234,7 @@ std = [
   "pezsp-version/std",
   "xcm-builder/std",
   "xcm-executor/std",
-  "xcm-runtime-apis/std",
+  "xcm-runtime-pezapis/std",
   "xcm/std",
   "zagros-runtime-constants/std",
 ]
@@ -326,7 +326,7 @@ runtime-benchmarks = [
   "bizinikiwi-wasm-builder/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
   "xcm/runtime-benchmarks",
   "zagros-runtime-constants/runtime-benchmarks",
 ]

@@ -19,7 +19,7 @@ mod imports {
 	pub(crate) use codec::Encode;
 	pub(crate) use emulated_integration_tests_common::{
 		impls::{assert_expected_events, bx, TestExt},
-		xcm_emulator::Chain,
+		xcm_pez_emulator::Chain,
 		xcm_helpers::{
 			build_xcm_send_authorize_upgrade_call, call_hash_of,
 			dispatch_whitelisted_call_with_preimage,

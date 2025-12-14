@@ -5,7 +5,7 @@ use crate::{
 };
 use pezframe_support::parameter_types;
 use hex_literal::hex;
-use snowbridge_core::AgentIdOf;
+use pezsnowbridge_core::AgentIdOf;
 use pezsp_std::default::Default;
 use xcm::{
 	latest::{PEZKUWICHAIN_GENESIS_HASH, ZAGROS_GENESIS_HASH},

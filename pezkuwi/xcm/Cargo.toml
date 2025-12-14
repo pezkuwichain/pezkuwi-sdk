@@ -27,7 +27,7 @@ serde = { features = ["alloc", "derive", "rc"], workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-weights = { features = ["serde"], workspace = true }
 tracing = { workspace = true }
-xcm-procedural = { workspace = true, default-features = true }
+xcm-pez-procedural = { workspace = true, default-features = true }
 
 [dev-dependencies]
 pezsp-io = { workspace = true, default-features = true }
@@ -55,5 +55,5 @@ runtime-benchmarks = [
   "pezframe-support/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
-  "xcm-procedural/runtime-benchmarks",
+  "xcm-pez-procedural/runtime-benchmarks",
 ]

@@ -71,7 +71,7 @@
 //! 2. Pass this constant to the `teyrchain-system` pallet.
 //!
 //! ```ignore
-//! impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+//! impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 //! 	// Other config items here
 //!     ...
 //! 	type RelayParentOffset = ConstU32<RELAY_PARENT_OFFSET>;

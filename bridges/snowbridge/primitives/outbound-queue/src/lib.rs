@@ -13,7 +13,7 @@ use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned};
 use pezsp_core::RuntimeDebug;
 
-pub use snowbridge_verification_primitives::*;
+pub use pezsnowbridge_verification_primitives::*;
 
 /// The operating mode of Channels and Gateway contract on Ethereum.
 #[derive(

@@ -18,7 +18,7 @@ pezcumulus-primitives-core = { workspace = true }
 pezframe-support = { workspace = true }
 pezpallet-message-queue = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
-snowbridge-core = { workspace = true }
+pezsnowbridge-core = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
@@ -34,7 +34,7 @@ std = [
   "pezframe-support/std",
   "pezpallet-message-queue/std",
   "scale-info/std",
-  "snowbridge-core/std",
+  "pezsnowbridge-core/std",
   "pezsp-core/std",
   "pezsp-runtime/std",
   "pezsp-std/std",
@@ -46,7 +46,7 @@ runtime-benchmarks = [
   "pezcumulus-primitives-core/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezpallet-message-queue/runtime-benchmarks",
-  "snowbridge-core/runtime-benchmarks",
+  "pezsnowbridge-core/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",

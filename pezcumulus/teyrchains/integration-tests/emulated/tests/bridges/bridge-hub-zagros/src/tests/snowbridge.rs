@@ -14,7 +14,7 @@
 // limitations under the License.
 use crate::{
 	imports::{
-		penpal_emulated_chain::penpal_runtime::xcm_config::{
+		pez_penpal_emulated_chain::pez_penpal_runtime::xcm_config::{
 			CheckingAccount, TELEPORTABLE_ASSET_ID,
 		},
 		*,
@@ -24,7 +24,7 @@ use crate::{
 		asset_hub_pezkuwichain_location, asset_hub_zagros_global_location,
 		bridged_roc_at_ah_zagros, bridged_wnd_at_ah_pezkuwichain,
 		create_foreign_on_ah_pezkuwichain, create_foreign_on_ah_zagros,
-		penpal_emulated_chain::penpal_runtime,
+		pez_penpal_emulated_chain::pez_penpal_runtime,
 		snowbridge_common::{bridge_hub, ethereum, register_roc_on_bh, snowbridge_sovereign},
 	},
 };
@@ -32,7 +32,7 @@ use asset_hub_zagros_runtime::xcm_config::{
 	bridging::to_ethereum::DefaultBridgeHubEthereumBaseFee,
 	UniversalLocation as AssetHubZagrosUniversalLocation,
 };
-use bridge_hub_zagros_runtime::{
+use pezbridge_hub_zagros_runtime::{
 	bridge_to_ethereum_config::EthereumGatewayAddress, EthereumBeaconClient, EthereumInboundQueue,
 };
 use codec::Encode;
@@ -44,14 +44,14 @@ use pezframe_support::traits::fungibles::Mutate;
 use hex_literal::hex;
 use pezkuwichain_zagros_system_emulated_network::{
 	asset_hub_zagros_emulated_chain::genesis::AssetHubZagrosAssetOwner,
-	penpal_emulated_chain::PARA_ID_B, zagros_emulated_chain::zagros_runtime::Dmp,
+	pez_penpal_emulated_chain::PARA_ID_B, zagros_emulated_chain::zagros_runtime::Dmp,
 };
-use snowbridge_core::{AssetMetadata, TokenIdOf};
-use snowbridge_inbound_queue_primitives::{
+use pezsnowbridge_core::{AssetMetadata, TokenIdOf};
+use pezsnowbridge_inbound_queue_primitives::{
 	v1::{Command, Destination, MessageV1, VersionedMessage},
 	EventFixture,
 };
-use snowbridge_pallet_inbound_queue_fixtures::send_native_eth::make_send_native_eth_message;
+use snowbridge_pezpallet_inbound_queue_fixtures::send_native_eth::make_send_native_eth_message;
 use pezsp_core::{H160, H256};
 use testnet_teyrchains_constants::zagros::snowbridge::EthereumNetwork;
 use xcm_builder::ExternalConsensusLocationsConverterFor;
@@ -98,7 +98,7 @@ fn register_token_from_ethereum_to_asset_hub() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -147,7 +147,7 @@ fn send_weth_token_from_ethereum_to_asset_hub() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -186,7 +186,7 @@ fn send_weth_from_ethereum_to_penpal() {
 		<PenpalB as Chain>::RuntimeOrigin::signed(PenpalAssetOwner::get()),
 		native_id,
 		receiver,
-		penpal_runtime::EXISTENTIAL_DEPOSIT,
+		pez_penpal_runtime::EXISTENTIAL_DEPOSIT,
 	);
 
 	PenpalB::execute_with(|| {
@@ -251,7 +251,7 @@ fn send_weth_from_ethereum_to_penpal() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -262,7 +262,7 @@ fn send_weth_from_ethereum_to_penpal() {
 			AssetHubZagros,
 			vec![
 				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -324,7 +324,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -403,8 +403,8 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageAccepted {..}) => {},
-				RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued {..}) => {},
+				RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageAccepted {..}) => {},
+				RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued {..}) => {},
 			]
 		);
 	});
@@ -433,7 +433,7 @@ fn register_weth_token_in_asset_hub_fail_for_insufficient_fee() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -481,7 +481,7 @@ fn send_weth_from_ethereum_to_asset_hub_with_fee(account_id: [u8; 32], fee: u128
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -590,7 +590,7 @@ fn send_token_from_ethereum_to_asset_hub() {
 		// Check that the message was sent
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -634,7 +634,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 		// Check that the send token message was sent using xcm
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
 		);
 	});
 
@@ -703,7 +703,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 		// Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }
@@ -778,7 +778,7 @@ fn send_token_from_ethereum_to_penpal() {
 		// Check that the send token message was sent using xcm
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>{},]
 		);
 	});
 
@@ -789,7 +789,7 @@ fn send_token_from_ethereum_to_penpal() {
 			AssetHubZagros,
 			vec![
 				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -844,7 +844,7 @@ fn transfer_relay_token() {
 		// Check that a message was sent to Ethereum to create the agent
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumSystem(snowbridge_pallet_system::Event::RegisterToken { .. }) => {},]
+			vec![RuntimeEvent::EthereumSystem(snowbridge_pezpallet_system::Event::RegisterToken { .. }) => {},]
 		);
 	});
 
@@ -901,7 +901,7 @@ fn transfer_relay_token() {
 		// Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 
 		// Send relay token back to AH
@@ -922,7 +922,7 @@ fn transfer_relay_token() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -1068,7 +1068,7 @@ fn transfer_ah_token() {
 		// Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 
 		let message = VersionedMessage::V1(MessageV1 {
@@ -1087,7 +1087,7 @@ fn transfer_ah_token() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -1192,7 +1192,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![
-				RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
+				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
 	});
@@ -1333,7 +1333,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 			vec![
 				// message sent to destination
 				RuntimeEvent::XcmpQueue(
-					pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }
+					pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }
 				) => {},
 			]
 		);
@@ -1426,7 +1426,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 		// Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }
@@ -1558,7 +1558,7 @@ fn transfer_penpal_native_asset() {
 		type RuntimeEvent = <BridgeHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 
@@ -1582,7 +1582,7 @@ fn transfer_penpal_native_asset() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -1771,7 +1771,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		type RuntimeEvent = <BridgeHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 
@@ -1795,7 +1795,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) =>
 	{},]
 		);
 	});
@@ -2125,7 +2125,7 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 		// Outbound Queue
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 
@@ -2148,7 +2148,7 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 		let _ = EthereumInboundQueue::send_xcm(xcm, AssetHubZagros::para_id().into()).unwrap();
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::XcmpQueue(pezcumulus_pallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
+			vec![RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},]
 		);
 	});
 
@@ -2222,7 +2222,7 @@ fn register_pna_in_v5_while_transfer_in_v4_should_work() {
 		// Check that a message was sent to Ethereum to create the agent
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumSystem(snowbridge_pallet_system::Event::RegisterToken { .. }) => {},]
+			vec![RuntimeEvent::EthereumSystem(snowbridge_pezpallet_system::Event::RegisterToken { .. }) => {},]
 		);
 	});
 
@@ -2288,7 +2288,7 @@ fn register_pna_in_v5_while_transfer_in_v4_should_work() {
 
 		assert_expected_events!(
 			BridgeHubZagros,
-			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
+			vec![RuntimeEvent::EthereumOutboundQueue(snowbridge_pezpallet_outbound_queue::Event::MessageQueued{ .. }) => {},]
 		);
 	});
 }

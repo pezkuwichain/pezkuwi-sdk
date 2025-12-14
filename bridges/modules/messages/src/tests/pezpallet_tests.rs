@@ -34,7 +34,7 @@ use bp_messages::{
 	OutboundLaneData, OutboundMessageDetails, UnrewardedRelayer, UnrewardedRelayersState,
 	VerificationError,
 };
-use bp_runtime::{BasicOperatingMode, PreComputedSize, RangeInclusiveExt, Size};
+use pezbp_runtime::{BasicOperatingMode, PreComputedSize, RangeInclusiveExt, Size};
 use bp_test_utils::generate_owned_bridge_module_tests;
 use codec::Encode;
 use pezframe_support::{
@@ -140,7 +140,7 @@ fn pezpallet_rejects_transactions_if_halted() {
 				1,
 				REGULAR_PAYLOAD.declared_weight,
 			),
-			Error::<TestRuntime, ()>::BridgeModule(bp_runtime::OwnedBridgeModuleError::Halted),
+			Error::<TestRuntime, ()>::BridgeModule(pezbp_runtime::OwnedBridgeModuleError::Halted),
 		);
 
 		let delivery_proof = prepare_messages_delivery_proof(
@@ -162,7 +162,7 @@ fn pezpallet_rejects_transactions_if_halted() {
 					last_delivered_nonce: 1,
 				},
 			),
-			Error::<TestRuntime, ()>::BridgeModule(bp_runtime::OwnedBridgeModuleError::Halted),
+			Error::<TestRuntime, ()>::BridgeModule(pezbp_runtime::OwnedBridgeModuleError::Halted),
 		);
 		assert_ok!(Pallet::<TestRuntime>::do_try_state());
 	});

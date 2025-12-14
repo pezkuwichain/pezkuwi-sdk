@@ -1,5 +1,5 @@
 [package]
-name = "solochain-template-runtime"
+name = "pez-solochain-template-runtime"
 description = "A solochain runtime template built with Bizinikiwi, part of Pezkuwi Sdk."
 version = "0.0.0"
 license = "Unlicense"
@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
 publish = false
-documentation = "https://docs.rs/solochain-template-runtime"
+documentation = "https://docs.rs/pez-solochain-template-runtime"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]

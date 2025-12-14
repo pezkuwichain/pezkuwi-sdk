@@ -28,14 +28,14 @@ thiserror = { workspace = true }
 tracing = { workspace = true }
 
 # Bridge dependencies
-bp-header-chain = { workspace = true, default-features = true }
+bp-header-pez-chain = { workspace = true, default-features = true }
 bp-pezkuwi-core = { workspace = true, default-features = true }
 bp-relayers = { workspace = true, default-features = true }
 bp-teyrchains = { workspace = true, default-features = true }
 
-equivocation-detector = { workspace = true }
-finality-relay = { workspace = true }
-messages-relay = { workspace = true }
+pez-equivocation-detector = { workspace = true }
+pez-finality-relay = { workspace = true }
+pez-messages-relay = { workspace = true }
 relay-bizinikiwi-client = { workspace = true }
 relay-utils = { workspace = true }
 teyrchains-relay = { workspace = true }
@@ -45,7 +45,7 @@ pezpallet-bridge-messages = { workspace = true, default-features = true }
 pezpallet-bridge-teyrchains = { workspace = true, default-features = true }
 
 bp-messages = { workspace = true, default-features = true }
-bp-runtime = { workspace = true, default-features = true }
+pezbp-runtime = { workspace = true, default-features = true }
 
 # Bizinikiwi Dependencies
 pezframe-support = { workspace = true, default-features = true }
@@ -63,17 +63,17 @@ scale-info = { features = ["derive"], workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
   "bp-relayers/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "bp-teyrchains/runtime-benchmarks",
-  "equivocation-detector/runtime-benchmarks",
-  "finality-relay/runtime-benchmarks",
+  "pez-equivocation-detector/runtime-benchmarks",
+  "pez-finality-relay/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
-  "messages-relay/runtime-benchmarks",
+  "pez-messages-relay/runtime-benchmarks",
   "pezpallet-balances/runtime-benchmarks",
   "pezpallet-bridge-grandpa/runtime-benchmarks",
   "pezpallet-bridge-messages/runtime-benchmarks",

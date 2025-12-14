@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use minimal_template_runtime::WASM_BINARY;
+use pez_minimal_template_runtime::WASM_BINARY;
 use pezkuwi_sdk::{
 	pezsc_service::{ChainType, Properties},
 	*,

@@ -6,7 +6,7 @@ use crate::{OperatingMode, SendError, SendMessageFeeProvider};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use ethabi::Token;
 use scale_info::TypeInfo;
-use snowbridge_core::{pricing::UD60x18, ChannelId};
+use pezsnowbridge_core::{pricing::UD60x18, ChannelId};
 use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned};
 use pezsp_core::{RuntimeDebug, H160, H256, U256};
 use pezsp_std::{borrow::ToOwned, vec, vec::Vec};

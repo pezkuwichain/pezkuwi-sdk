@@ -17,7 +17,7 @@
 
 use crate::cli::Consensus;
 use futures::FutureExt;
-use minimal_template_runtime::{interface::OpaqueBlock as Block, RuntimeApi};
+use pez_minimal_template_runtime::{interface::OpaqueBlock as Block, RuntimeApi};
 use pezkuwi_sdk::{
 	pezsc_client_api::backend::Backend,
 	pezsc_executor::WasmExecutor,

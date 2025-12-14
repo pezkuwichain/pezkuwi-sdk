@@ -24,7 +24,7 @@ use pezframe_support::traits::WhitelistedStorageKeys;
 use pezpallet_staking::EraPayout;
 use pezsp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
 use pezsp_keyring::Sr25519Keyring::Alice;
-use xcm_runtime_apis::conversions::LocationToAccountHelper;
+use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
 
 const MILLISECONDS_PER_HOUR: u64 = 60 * 60 * 1000;
 

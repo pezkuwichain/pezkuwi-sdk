@@ -25,7 +25,7 @@ use crate::{
 	Config, StoredMessagePayload,
 };
 
-use bp_header_chain::{ChainWithGrandpa, StoredHeaderData};
+use bp_header_pez_chain::{ChainWithGrandpa, StoredHeaderData};
 use bp_messages::{
 	calc_relayers_rewards,
 	source_chain::{
@@ -39,7 +39,7 @@ use bp_messages::{
 	Message, MessageKey, MessageNonce, OutboundLaneData, UnrewardedRelayer,
 	UnrewardedRelayersState,
 };
-use bp_runtime::{
+use pezbp_runtime::{
 	messages::MessageDispatchResult, Chain, ChainId, Size, UnverifiedStorageProofParams,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode};
@@ -215,7 +215,7 @@ impl crate::benchmarking::Config<()> for TestRuntime {
 	fn prepare_message_proof(
 		params: crate::benchmarking::MessageProofParams<Self::LaneId>,
 	) -> (FromBridgedChainMessagesProof<BridgedHeaderHash, Self::LaneId>, Weight) {
-		use bp_runtime::RangeInclusiveExt;
+		use pezbp_runtime::RangeInclusiveExt;
 
 		let dispatch_weight =
 			REGULAR_PAYLOAD.declared_weight * params.message_nonces.saturating_len();
@@ -324,11 +324,11 @@ impl DeliveryConfirmationPayments<AccountId, TestLaneIdType> for TestDeliveryCon
 
 	fn pay_reward(
 		_lane_id: TestLaneIdType,
-		messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
+		pez_messages_relayers: VecDeque<UnrewardedRelayer<AccountId>>,
 		_confirmation_relayer: &AccountId,
 		received_range: &RangeInclusive<MessageNonce>,
 	) -> MessageNonce {
-		let relayers_rewards = calc_relayers_rewards(messages_relayers, received_range);
+		let relayers_rewards = calc_relayers_rewards(pez_messages_relayers, received_range);
 		let rewarded_relayers = relayers_rewards.len();
 		for (relayer, reward) in &relayers_rewards {
 			let key = (b":relayer-reward:", relayer, reward).encode();

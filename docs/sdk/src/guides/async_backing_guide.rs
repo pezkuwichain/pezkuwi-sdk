@@ -61,13 +61,13 @@
 //! pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
 //! ```
 //!
-//! 4. Configure `pezcumulus_pallet_teyrchain_system` in the runtime.
+//! 4. Configure `pezcumulus_pezpallet_teyrchain_system` in the runtime.
 //!
 //! - Define a `FixedVelocityConsensusHook` using our capacity, velocity, and relay slot duration
 //! constants. Use this to set the teyrchain system `ConsensusHook` property.
 #![doc = docify::embed!("../../templates/teyrchain/runtime/src/lib.rs", ConsensusHook)]
 //! ```ignore
-//! impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+//! impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 //!     ..
 //!     type ConsensusHook = ConsensusHook;
 //!     ..
@@ -76,7 +76,7 @@
 //! - Set the teyrchain system property `CheckAssociatedRelayNumber` to
 //! `RelayNumberMonotonicallyIncreases`
 //! ```ignore
-//! impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+//! impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 //! 	..
 //! 	type CheckAssociatedRelayNumber = RelayNumberMonotonicallyIncreases;
 //! 	..

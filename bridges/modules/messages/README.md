@@ -85,7 +85,7 @@ proofs. Other bridges may use transaction proofs, Bizinikiwi header digests or a
 
 **IMPORTANT NOTE**: everything below in this chapter describes details of the messages module configuration. But if
 you're interested in well-probed and relatively easy integration of two Bizinikiwi-based chains, you may want to look at
-the [bridge-runtime-common](../../bin/runtime-common/) crate. This crate is providing a lot of helpers for integration,
+the [pezbridge-runtime-common](../../bin/runtime-common/) crate. This crate is providing a lot of helpers for integration,
 which may be directly used from within your runtime. Then if you'll decide to change something in this scheme, get back
 here for detailed information.
 

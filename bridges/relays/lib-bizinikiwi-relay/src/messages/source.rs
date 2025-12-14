@@ -37,10 +37,10 @@ use bp_messages::{
 	ChainWithMessages as _, InboundMessageDetails, MessageNonce, MessagePayload,
 	MessagesOperatingMode, OutboundMessageDetails,
 };
-use bp_runtime::{BasicOperatingMode, HeaderIdProvider, RangeInclusiveExt};
+use pezbp_runtime::{BasicOperatingMode, HeaderIdProvider, RangeInclusiveExt};
 use codec::{Decode, Encode};
 use pezframe_support::weights::Weight;
-use messages_relay::{
+use pez_messages_relay::{
 	message_lane::{MessageLane, SourceHeaderIdOf, TargetHeaderIdOf},
 	message_lane_loop::{
 		ClientState, MessageDetails, MessageDetailsMap, MessageProofParameters, SourceClient,

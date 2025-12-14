@@ -27,7 +27,7 @@ use pezcumulus_relay_chain_interface::{
 };
 use pezcumulus_test_client::runtime::{Block, Header};
 use futures::{channel::mpsc, SinkExt, Stream};
-use pezkuwi_node_primitives::AvailableData;
+use pezkuwi_pez_node_primitives::AvailableData;
 use pezkuwi_node_subsystem::{
 	messages::{AvailabilityRecoveryMessage, RuntimeApiRequest},
 	RecoveryError, TimeoutExt,

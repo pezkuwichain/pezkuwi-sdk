@@ -123,8 +123,8 @@
 //! consensus engine to work, and that particular runtime-api is implemented by a pallet
 //! corresponding to that consensus engine.
 //!
-//! For example, taking a snippet from [`solochain_template_runtime`], the runtime has to provide
-//! this additional runtime-api (compared to [`minimal_template_runtime`]), if the node software is
+//! For example, taking a snippet from [`pez_solochain_template_runtime`], the runtime has to provide
+//! this additional runtime-api (compared to [`pez_minimal_template_runtime`]), if the node software is
 //! configured to use the Aura consensus engine:
 //!
 //! ```text
@@ -196,6 +196,6 @@
 //! [`--dev-block-time`]: pezkuwi_omni_node_lib::cli::Cli::dev_block_time
 //! [`pezkuwi-omni-node`]: https://crates.io/crates/polkadot-omni-node
 //! [`chain-spec-builder`]: https://crates.io/crates/pezstaging-chain-spec-builder
-//! [`pezcumulus-pezpallet-teyrchain-system`]: https://docs.rs/pezcumulus-pezpallet-parachain-system/latest/pezcumulus_pallet_parachain_system/
+//! [`pezcumulus-pezpallet-teyrchain-system`]: https://docs.rs/pezcumulus-pezpallet-parachain-system/latest/pezcumulus_pezpallet_parachain_system/
 //! [`pezframe-system`]: https://docs.rs/pezframe-system/latest/pezframe_system/
 //! [`block number`]: https://docs.rs/pezframe-system/latest/pezframe_system/pallet/storage_types/struct.Number.html

@@ -4,7 +4,7 @@ version = "3.0.0"
 authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
-description = "Common resources for integration testing with xcm-emulator"
+description = "Common resources for integration testing with xcm-pez-emulator"
 homepage.workspace = true
 repository.workspace = true
 documentation = "https://docs.rs/emulated-integration-tests-common"
@@ -44,16 +44,16 @@ pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 xcm = { workspace = true, default-features = true }
 xcm-builder = { workspace = true, default-features = true }
 xcm-executor = { workspace = true, default-features = true }
-xcm-runtime-apis = { workspace = true, default-features = true }
-xcm-simulator = { workspace = true, default-features = true }
+xcm-runtime-pezapis = { workspace = true, default-features = true }
+xcm-pez-simulator = { workspace = true, default-features = true }
 
 # Pezcumulus
-asset-test-utils = { workspace = true, default-features = true }
+asset-test-pezutils = { workspace = true, default-features = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true, default-features = true }
 pezcumulus-pezpallet-xcmp-queue = { workspace = true, default-features = true }
 pezcumulus-primitives-core = { workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
-xcm-emulator = { workspace = true, default-features = true }
+xcm-pez-emulator = { workspace = true, default-features = true }
 
 # Bridges
 bp-messages = { workspace = true, default-features = true }
@@ -63,7 +63,7 @@ pezpallet-xcm-bridge-hub = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "asset-test-utils/runtime-benchmarks",
+  "asset-test-pezutils/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
   "bp-xcm-bridge-hub/runtime-benchmarks",
   "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
@@ -90,9 +90,9 @@ runtime-benchmarks = [
   "pezsp-runtime/runtime-benchmarks",
   "teyrchains-common/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",
-  "xcm-emulator/runtime-benchmarks",
+  "xcm-pez-emulator/runtime-benchmarks",
   "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-apis/runtime-benchmarks",
-  "xcm-simulator/runtime-benchmarks",
+  "xcm-runtime-pezapis/runtime-benchmarks",
+  "xcm-pez-simulator/runtime-benchmarks",
   "xcm/runtime-benchmarks",
 ]

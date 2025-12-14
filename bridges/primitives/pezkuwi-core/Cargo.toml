@@ -21,7 +21,7 @@ serde = { optional = true, features = [
 
 # Bridge Dependencies
 bp-messages = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Based Dependencies
 pezframe-support = { workspace = true }
@@ -37,7 +37,7 @@ hex = { workspace = true, default-features = true }
 default = ["std"]
 std = [
   "bp-messages/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "codec/std",
   "pezframe-support/std",
   "pezframe-system/std",
@@ -49,7 +49,7 @@ std = [
 ]
 runtime-benchmarks = [
   "bp-messages/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",

@@ -104,10 +104,10 @@ pub use pezsp_runtime::BuildStorage;
 pub use teyrchains_paras::Call as ParasCall;
 
 /// Constant values used within the runtime.
-use test_runtime_constants::{currency::*, fee::*, time::*};
+use peztest_runtime_constants::{currency::*, fee::*, time::*};
 pub mod xcm_config;
 
-impl_runtime_weights!(test_runtime_constants);
+impl_runtime_weights!(peztest_runtime_constants);
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]

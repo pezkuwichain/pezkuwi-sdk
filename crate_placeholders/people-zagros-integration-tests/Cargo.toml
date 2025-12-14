@@ -11,4 +11,6 @@ authors = ["Kurdistan Tech Institute <info@pezkuwichain.io>"]
 keywords = ["pezkuwichain", "blockchain", "sdk"]
 categories = ["cryptography::cryptocurrencies"]
 
+[workspace]
+
 [dependencies]

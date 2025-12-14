@@ -1,0 +1,41 @@
+[package]
+name = "pezframe-support-test-pezpallet"
+version = "4.0.0-dev"
+authors.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+publish = false
+homepage.workspace = true
+repository.workspace = true
+description = "Pezkuwi SDK FRAME support: support test pallet"
+documentation = "https://docs.rs/pezframe-support-test-pezpallet"
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { features = ["derive"], workspace = true }
+pezsp-runtime = { workspace = true }
+
+[features]
+default = ["std"]
+std = [
+  "codec/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "scale-info/std",
+  "serde/std",
+  "pezsp-runtime/std",
+]
+runtime-benchmarks = [
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+]

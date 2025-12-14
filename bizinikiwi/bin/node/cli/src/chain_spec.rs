@@ -21,7 +21,7 @@
 use pezkuwi_sdk::*;
 
 use crate::chain_spec::pezsc_service::Properties;
-use kitchensink_runtime::{
+use pez_kitchensink_runtime::{
 	genesis_config_presets::{Staker, ENDOWMENT, STASH},
 	wasm_binary_unwrap, Block, MaxNominations, StakerStatus,
 };
@@ -38,8 +38,8 @@ use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
 use pezsp_core::crypto::UncheckedInto;
 use pezsp_mixnet::types::AuthorityId as MixnetId;
 
-pub use kitchensink_runtime::RuntimeGenesisConfig;
-pub use node_primitives::{AccountId, Balance, Signature};
+pub use pez_kitchensink_runtime::RuntimeGenesisConfig;
+pub use pez_node_primitives::{AccountId, Balance, Signature};
 
 const STAGING_TELEMETRY_URL: &str = "wss://telemetry.pezkuwichain.io/submit/";
 
@@ -82,15 +82,15 @@ fn configure_accounts_for_staging_testnet() -> (
 	#[rustfmt::skip]
 	// stash, controller, session-key, beefy id
 	// generated with secret:
-	// for i in 1 2 3 4 ; do for j in stash controller; do subkey inspect "$secret"/fir/$j/$i; done; done
+	// for i in 1 2 3 4 ; do for j in stash controller; do pez_subkey inspect "$secret"/fir/$j/$i; done; done
 	//
 	// and
 	//
-	// for i in 1 2 3 4 ; do for j in session; do subkey inspect --scheme ed25519 "$secret"//fir//$j//$i; done; done
+	// for i in 1 2 3 4 ; do for j in session; do pez_subkey inspect --scheme ed25519 "$secret"//fir//$j//$i; done; done
 	//
 	// and
 	//
-	// for i in 1 2 3 4 ; do for j in session; do subkey inspect --scheme ecdsa "$secret"//fir//$j//$i; done; done
+	// for i in 1 2 3 4 ; do for j in session; do pez_subkey inspect --scheme ecdsa "$secret"//fir//$j//$i; done; done
 
 	let initial_authorities: Vec<(
 		AccountId,
@@ -200,7 +200,7 @@ fn configure_accounts_for_staging_testnet() -> (
 		),
 	];
 
-	// generated with secret: subkey inspect "$secret"/fir
+	// generated with secret: pez_subkey inspect "$secret"/fir
 	let root_key: AccountId = array_bytes::hex_n_into_unchecked(
 		// 5Ff3iXP75ruzroPWRP2FYBHWnmGGBSb63857BgnzCoXNxfPo
 		"9ee5e5bdc0ec239eb164f865ecc345ce4c88e76ee002e0f7e318097347471809",
@@ -430,7 +430,7 @@ pub fn local_testnet_config() -> ChainSpec {
 pub(crate) mod tests {
 	use super::*;
 	use crate::service::{new_full_base, NewFullBase};
-	use kitchensink_runtime::genesis_config_presets::well_known_including_eth_accounts;
+	use pez_kitchensink_runtime::genesis_config_presets::well_known_including_eth_accounts;
 	use pezsc_service_test;
 	use pezsp_runtime::{AccountId32, BuildStorage};
 

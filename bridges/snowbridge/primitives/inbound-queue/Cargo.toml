@@ -1,5 +1,5 @@
 [package]
-name = "snowbridge-inbound-queue-primitives"
+name = "pezsnowbridge-inbound-queue-primitives"
 description = "Snowbridge Inbound Queue Primitives"
 version = "0.9.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowbridge-inbound-queue-primitives"
+documentation = "https://docs.rs/pezsnowbridge-inbound-queue-primitives"
 homepage = { workspace = true }
 
 [lints]
@@ -33,16 +33,16 @@ xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 
-snowbridge-beacon-primitives = { workspace = true }
-snowbridge-core = { workspace = true }
-snowbridge-verification-primitives = { workspace = true }
+pezsnowbridge-beacon-primitives = { workspace = true }
+pezsnowbridge-core = { workspace = true }
+pezsnowbridge-verification-primitives = { workspace = true }
 
 assets-common = { workspace = true }
 
 hex-literal = { workspace = true, default-features = true }
 
 [dev-dependencies]
-snowbridge-test-utils = { workspace = true }
+pezsnowbridge-test-utils = { workspace = true }
 
 [features]
 default = ["std"]
@@ -53,9 +53,9 @@ std = [
   "pezframe-support/std",
   "pezframe-system/std",
   "scale-info/std",
-  "snowbridge-beacon-primitives/std",
-  "snowbridge-core/std",
-  "snowbridge-verification-primitives/std",
+  "pezsnowbridge-beacon-primitives/std",
+  "pezsnowbridge-core/std",
+  "pezsnowbridge-verification-primitives/std",
   "pezsp-core/std",
   "pezsp-io/std",
   "pezsp-runtime/std",
@@ -69,10 +69,10 @@ runtime-benchmarks = [
   "assets-common/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
-  "snowbridge-beacon-primitives/runtime-benchmarks",
-  "snowbridge-core/runtime-benchmarks",
-  "snowbridge-test-utils/runtime-benchmarks",
-  "snowbridge-verification-primitives/runtime-benchmarks",
+  "pezsnowbridge-beacon-primitives/runtime-benchmarks",
+  "pezsnowbridge-core/runtime-benchmarks",
+  "pezsnowbridge-test-utils/runtime-benchmarks",
+  "pezsnowbridge-verification-primitives/runtime-benchmarks",
   "pezsp-io/runtime-benchmarks",
   "pezsp-runtime/runtime-benchmarks",
   "xcm-builder/runtime-benchmarks",

@@ -93,7 +93,7 @@ fn start_docker(docker_bin: &str, docker_image: &str) -> anyhow::Result<Child> {
 			"-p",
 			"8545:8545",
 			&format!("docker.io/paritypr/{docker_image}"),
-			"--node-rpc-url",
+			"--pez-node-rpc-url",
 			"wss://zagros-asset-hub-rpc.pezkuwichain.io",
 			"--rpc-cors",
 			"all",

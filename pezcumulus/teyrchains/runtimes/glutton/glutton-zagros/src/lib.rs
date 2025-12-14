@@ -51,7 +51,7 @@ pub mod xcm_config;
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-use pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezsp_api::impl_runtime_apis;
 pub use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -160,7 +160,7 @@ impl pezframe_system::Config for Runtime {
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 }
 
@@ -170,14 +170,14 @@ parameter_types! {
 	pub const RelayOrigin: AggregateMessageOrigin = AggregateMessageOrigin::Parent;
 }
 
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	3,
 	9,
 >;
 
-impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
@@ -188,7 +188,7 @@ impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type ReservedXcmpWeight = ();
 	type CheckAssociatedRelayNumber = RelayNumberMonotonicallyIncreases;
 	type ConsensusHook = ConsensusHook;
-	type WeightInfo = weights::pezcumulus_pallet_teyrchain_system::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezcumulus_pezpallet_teyrchain_system::WeightInfo<Runtime>;
 	type RelayParentOffset = ConstU32<0>;
 }
 
@@ -222,7 +222,7 @@ impl pezpallet_message_queue::Config for Runtime {
 
 impl teyrchain_info::Config for Runtime {}
 
-impl pezcumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 impl pezpallet_timestamp::Config for Runtime {
 	type Moment = u64;
@@ -255,12 +255,12 @@ construct_runtime! {
 	pub enum Runtime
 	{
 		System: pezframe_system = 0,
-		TeyrchainSystem: pezcumulus_pallet_teyrchain_system = 1,
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system = 1,
 		TeyrchainInfo: teyrchain_info = 2,
 		Timestamp: pezpallet_timestamp = 3,
 
 		// DMP handler.
-		CumulusXcm: pezcumulus_pallet_xcm = 10,
+		CumulusXcm: pezcumulus_pezpallet_xcm = 10,
 		MessageQueue: pezpallet_message_queue = 11,
 
 		// The main stage.
@@ -268,7 +268,7 @@ construct_runtime! {
 
 		// Collator support
 		Aura: pezpallet_aura = 30,
-		AuraExt: pezcumulus_pallet_aura_ext = 31,
+		AuraExt: pezcumulus_pezpallet_aura_ext = 31,
 
 		// Sudo.
 		Sudo: pezpallet_sudo = 255,
@@ -318,7 +318,7 @@ pub type Executive = pezframe_executive::Executive<
 #[cfg(feature = "runtime-benchmarks")]
 mod benches {
 	pezframe_benchmarking::define_benchmarks!(
-		[pezcumulus_pallet_teyrchain_system, TeyrchainSystem]
+		[pezcumulus_pezpallet_teyrchain_system, TeyrchainSystem]
 		[pezframe_system, SystemBench::<Runtime>]
 		[pezframe_system_extensions, SystemExtensionsBench::<Runtime>]
 		[pezpallet_glutton, Glutton]
@@ -476,7 +476,7 @@ impl_runtime_apis! {
 				}
 
 				fn verify_set_code() {
-					System::assert_last_event(pezcumulus_pallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
+					System::assert_last_event(pezcumulus_pezpallet_teyrchain_system::Event::<Runtime>::ValidationFunctionStored.into());
 				}
 			}
 
@@ -517,7 +517,7 @@ impl_runtime_apis! {
 	}
 }
 
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

@@ -52,7 +52,7 @@ use pezkuwi_node_core_pvf_common::{
 	},
 	worker_dir, ArtifactChecksum,
 };
-use pezkuwi_node_primitives::{BlockData, PoV, POV_BOMB_LIMIT};
+use pezkuwi_pez_node_primitives::{BlockData, PoV, POV_BOMB_LIMIT};
 use pezkuwi_primitives::{ExecutorParams, PersistedValidationData};
 use pezkuwi_teyrchain_primitives::primitives::ValidationResult;
 use std::{

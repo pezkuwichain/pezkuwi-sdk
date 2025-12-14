@@ -31,8 +31,8 @@ use codec::Encode;
 use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use pezframe_system_rpc_runtime_api::AccountNonceApi;
 use futures::prelude::*;
-use kitchensink_runtime::RuntimeApi;
-use node_primitives::Block;
+use pez_kitchensink_runtime::RuntimeApi;
+use pez_node_primitives::Block;
 use pezsc_client_api::{Backend, BlockBackend};
 use pezsc_consensus_babe::{self, SlotProportion};
 use pezsc_network::{
@@ -107,51 +107,51 @@ pub fn fetch_nonce(client: &FullClient, account: pezsp_core::sr25519::Pair) -> u
 pub fn create_extrinsic(
 	client: &FullClient,
 	sender: pezsp_core::sr25519::Pair,
-	function: impl Into<kitchensink_runtime::RuntimeCall>,
+	function: impl Into<pez_kitchensink_runtime::RuntimeCall>,
 	nonce: Option<u32>,
-) -> kitchensink_runtime::UncheckedExtrinsic {
+) -> pez_kitchensink_runtime::UncheckedExtrinsic {
 	let function = function.into();
 	let genesis_hash = client.block_hash(0).ok().flatten().expect("Genesis block exists; qed");
 	let best_hash = client.chain_info().best_hash;
 	let best_block = client.chain_info().best_number;
 	let nonce = nonce.unwrap_or_else(|| fetch_nonce(client, sender.clone()));
 
-	let period = kitchensink_runtime::BlockHashCount::get()
+	let period = pez_kitchensink_runtime::BlockHashCount::get()
 		.checked_next_power_of_two()
 		.map(|c| c / 2)
 		.unwrap_or(2) as u64;
 	let tip = 0;
-	let tx_ext: kitchensink_runtime::TxExtension =
+	let tx_ext: pez_kitchensink_runtime::TxExtension =
 		(
-			pezframe_system::AuthorizeCall::<kitchensink_runtime::Runtime>::new(),
-			pezframe_system::CheckNonZeroSender::<kitchensink_runtime::Runtime>::new(),
-			pezframe_system::CheckSpecVersion::<kitchensink_runtime::Runtime>::new(),
-			pezframe_system::CheckTxVersion::<kitchensink_runtime::Runtime>::new(),
-			pezframe_system::CheckGenesis::<kitchensink_runtime::Runtime>::new(),
-			pezframe_system::CheckEra::<kitchensink_runtime::Runtime>::from(generic::Era::mortal(
+			pezframe_system::AuthorizeCall::<pez_kitchensink_runtime::Runtime>::new(),
+			pezframe_system::CheckNonZeroSender::<pez_kitchensink_runtime::Runtime>::new(),
+			pezframe_system::CheckSpecVersion::<pez_kitchensink_runtime::Runtime>::new(),
+			pezframe_system::CheckTxVersion::<pez_kitchensink_runtime::Runtime>::new(),
+			pezframe_system::CheckGenesis::<pez_kitchensink_runtime::Runtime>::new(),
+			pezframe_system::CheckEra::<pez_kitchensink_runtime::Runtime>::from(generic::Era::mortal(
 				period,
 				best_block.saturated_into(),
 			)),
-			pezframe_system::CheckNonce::<kitchensink_runtime::Runtime>::from(nonce),
-			pezframe_system::CheckWeight::<kitchensink_runtime::Runtime>::new(),
+			pezframe_system::CheckNonce::<pez_kitchensink_runtime::Runtime>::from(nonce),
+			pezframe_system::CheckWeight::<pez_kitchensink_runtime::Runtime>::new(),
 			pezpallet_skip_feeless_payment::SkipCheckIfFeeless::from(
 				pezpallet_asset_conversion_tx_payment::ChargeAssetTxPayment::<
-					kitchensink_runtime::Runtime,
+					pez_kitchensink_runtime::Runtime,
 				>::from(tip, None),
 			),
 			pezframe_metadata_hash_extension::CheckMetadataHash::new(false),
-			pezpallet_revive::evm::tx_extension::SetOrigin::<kitchensink_runtime::Runtime>::default(),
-			pezframe_system::WeightReclaim::<kitchensink_runtime::Runtime>::new(),
+			pezpallet_revive::evm::tx_extension::SetOrigin::<pez_kitchensink_runtime::Runtime>::default(),
+			pezframe_system::WeightReclaim::<pez_kitchensink_runtime::Runtime>::new(),
 		);
 
-	let raw_payload = kitchensink_runtime::SignedPayload::from_raw(
+	let raw_payload = pez_kitchensink_runtime::SignedPayload::from_raw(
 		function.clone(),
 		tx_ext.clone(),
 		(
 			(),
 			(),
-			kitchensink_runtime::VERSION.spec_version,
-			kitchensink_runtime::VERSION.transaction_version,
+			pez_kitchensink_runtime::VERSION.spec_version,
+			pez_kitchensink_runtime::VERSION.transaction_version,
 			genesis_hash,
 			best_hash,
 			(),
@@ -167,7 +167,7 @@ pub fn create_extrinsic(
 	generic::UncheckedExtrinsic::new_signed(
 		function,
 		pezsp_runtime::AccountId32::from(sender.public()).into(),
-		kitchensink_runtime::Signature::Sr25519(signature),
+		pez_kitchensink_runtime::Signature::Sr25519(signature),
 		tx_ext,
 	)
 	.into()
@@ -331,24 +331,24 @@ pub fn new_partial(
 		let rpc_backend = backend.clone();
 		let rpc_statement_store = statement_store.clone();
 		let rpc_extensions_builder =
-			move |subscription_executor: node_rpc::SubscriptionTaskExecutor| {
-				let deps = node_rpc::FullDeps {
+			move |subscription_executor: pez_node_rpc::SubscriptionTaskExecutor| {
+				let deps = pez_node_rpc::FullDeps {
 					client: client.clone(),
 					pool: pool.clone(),
 					select_chain: select_chain.clone(),
 					chain_spec: chain_spec.cloned_box(),
-					babe: node_rpc::BabeDeps {
+					babe: pez_node_rpc::BabeDeps {
 						keystore: keystore.clone(),
 						babe_worker_handle: babe_worker_handle.clone(),
 					},
-					grandpa: node_rpc::GrandpaDeps {
+					grandpa: pez_node_rpc::GrandpaDeps {
 						shared_voter_state: shared_voter_state.clone(),
 						shared_authority_set: shared_authority_set.clone(),
 						justification_stream: justification_stream.clone(),
 						subscription_executor: subscription_executor.clone(),
 						finality_provider: finality_proof_provider.clone(),
 					},
-					beefy: node_rpc::BeefyDeps::<beefy_primitives::ecdsa_crypto::AuthorityId> {
+					beefy: pez_node_rpc::BeefyDeps::<beefy_primitives::ecdsa_crypto::AuthorityId> {
 						beefy_finality_proof_stream: beefy_rpc_links
 							.from_voter_justif_stream
 							.clone(),
@@ -362,7 +362,7 @@ pub fn new_partial(
 					mixnet_api: mixnet_api.as_ref().cloned(),
 				};
 
-				node_rpc::create_full(deps).map_err(Into::into)
+				pez_node_rpc::create_full(deps).map_err(Into::into)
 			};
 
 		(rpc_extensions_builder, shared_voter_state2)
@@ -722,9 +722,9 @@ pub fn new_full_base<N: NetworkBackend<Block, <Block as BlockT>::Hash>>(
 	// When offchain indexing is enabled, MMR gadget should also run.
 	if is_offchain_indexing_enabled {
 		task_manager.spawn_essential_handle().spawn_blocking(
-			"mmr-gadget",
+			"pezmmr-gadget",
 			None,
-			mmr_gadget::MmrGadget::start(
+			pezmmr_gadget::MmrGadget::start(
 				client.clone(),
 				backend.clone(),
 				pezsp_mmr_primitives::INDEXING_PREFIX.to_vec(),
@@ -870,11 +870,11 @@ pub fn new_full(config: Configuration, cli: Cli) -> Result<TaskManager, ServiceE
 mod tests {
 	use crate::service::{new_full_base, NewFullBase};
 	use codec::Encode;
-	use kitchensink_runtime::{
+	use pez_kitchensink_runtime::{
 		constants::{currency::CENTS, time::SLOT_DURATION},
 		Address, BalancesCall, RuntimeCall, TxExtension,
 	};
-	use node_primitives::{Block, DigestItem, Signature};
+	use pez_node_primitives::{Block, DigestItem, Signature};
 	use pezkuwi_sdk::{pezsc_transaction_pool_api::MaintainedTransactionPool, *};
 	use pezsc_client_api::BlockBackend;
 	use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};
@@ -1118,7 +1118,7 @@ mod tests {
 				let signature = raw_payload.using_encoded(|payload| signer.sign(payload));
 				let (function, tx_ext, _) = raw_payload.deconstruct();
 				index += 1;
-				let utx: kitchensink_runtime::UncheckedExtrinsic =
+				let utx: pez_kitchensink_runtime::UncheckedExtrinsic =
 					generic::UncheckedExtrinsic::new_signed(
 						function,
 						from.into(),

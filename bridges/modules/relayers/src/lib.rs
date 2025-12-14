@@ -23,7 +23,7 @@ extern crate alloc;
 
 pub use bp_relayers::RewardLedger;
 use bp_relayers::{PaymentProcedure, Registration, RelayerRewardsKeyProvider, StakeAndSlash};
-use bp_runtime::StorageDoubleMapKeyProvider;
+use pezbp_runtime::StorageDoubleMapKeyProvider;
 use core::marker::PhantomData;
 use pezframe_support::{fail, traits::tokens::Balance};
 use pezsp_arithmetic::traits::{AtLeast32BitUnsigned, Zero};

@@ -275,12 +275,12 @@ impl pezframe_system::Config for Runtime {
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
-	type OnSetCode = pezcumulus_pallet_teyrchain_system::TeyrchainSetCode<Self>;
+	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
 	type SingleBlockMigrations = SingleBlockMigrations;
 }
 
-impl pezcumulus_pallet_weight_reclaim::Config for Runtime {
+impl pezcumulus_pezpallet_weight_reclaim::Config for Runtime {
 	type WeightInfo = ();
 }
 
@@ -294,7 +294,7 @@ parameter_types! {
 	pub const Offset: u32 = 0;
 }
 
-impl pezcumulus_pallet_aura_ext::Config for Runtime {}
+impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 impl pezpallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
@@ -359,13 +359,13 @@ const RELAY_PARENT_OFFSET: u32 = 2;
 #[cfg(not(feature = "relay-parent-offset"))]
 const RELAY_PARENT_OFFSET: u32 = 0;
 
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
 	UNINCLUDED_SEGMENT_CAPACITY,
 >;
-impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
+impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
 	type SelfParaId = teyrchain_info::Pallet<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
@@ -377,7 +377,7 @@ impl pezcumulus_pallet_teyrchain_system::Config for Runtime {
 	type XcmpMessageHandler = ();
 	type ReservedXcmpWeight = ();
 	type CheckAssociatedRelayNumber =
-		pezcumulus_pallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
+		pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 	type ConsensusHook = ConsensusHook;
 	type RelayParentOffset = ConstU32<RELAY_PARENT_OFFSET>;
 }
@@ -401,7 +401,7 @@ construct_runtime! {
 	pub enum Runtime
 	{
 		System: pezframe_system,
-		TeyrchainSystem: pezcumulus_pallet_teyrchain_system,
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system,
 		Timestamp: pezpallet_timestamp,
 		TeyrchainInfo: teyrchain_info,
 		Balances: pezpallet_balances,
@@ -410,8 +410,8 @@ construct_runtime! {
 		TestPallet: test_pallet,
 		Glutton: pezpallet_glutton,
 		Aura: pezpallet_aura,
-		AuraExt: pezcumulus_pallet_aura_ext,
-		WeightReclaim: pezcumulus_pallet_weight_reclaim,
+		AuraExt: pezcumulus_pezpallet_aura_ext,
+		WeightReclaim: pezcumulus_pezpallet_weight_reclaim,
 	}
 }
 
@@ -442,7 +442,7 @@ pub type SignedBlock = generic::SignedBlock<Block>;
 /// BlockId type as expected by this runtime.
 pub type BlockId = generic::BlockId<Block>;
 /// The extension to the basic transaction logic.
-pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		pezframe_system::AuthorizeCall<Runtime>,
@@ -638,7 +638,7 @@ impl_runtime_apis! {
 	}
 }
 
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

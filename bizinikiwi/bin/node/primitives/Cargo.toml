@@ -1,5 +1,5 @@
 [package]
-name = "node-primitives"
+name = "pez-node-primitives"
 version = "2.0.0"
 authors.workspace = true
 description = "Bizinikiwi node low-level primitives."
@@ -8,7 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/node-primitives"
+documentation = "https://docs.rs/pez-node-primitives"
 
 [lints]
 workspace = true

@@ -51,7 +51,7 @@ Kurdistan SDK uses a distinct naming scheme to ensure complete independence:
 | Parachain SDK (ex-Pezcumulus) | `pezcumulus-` | `pezcumulus-client` |
 | Client Crates | `pezsc-` | `pezsc-network`, `pezsc-consensus` |
 | Primitives | `pezsp-` | `pezsp-runtime`, `pezsp-core` |
-| Framework | `pezframe-` | `pezpezframe-support`, `pezpezframe-system` |
+| Framework | `pezframe-` | `pezframe-support`, `pezframe-system` |
 | Pallets | `pezpallet-` | `pezpallet-balances`, `pezpallet-staking` |
 | Staging | `pezstaging-` | `pezstaging-xcm` |
 

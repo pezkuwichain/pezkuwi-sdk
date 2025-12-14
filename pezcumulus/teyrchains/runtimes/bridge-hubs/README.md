@@ -112,7 +112,7 @@ PEZKUWI_TEYRCHAIN_BINARY=~/local_bridge_testing/bin/pezkuwi-teyrchain \
 ```
 cd <pezkuwi-sdk-git-repo-dir>
 
-./bridges/testing/environments/pezkuwichain-zagros/bridges_pezkuwichain_zagros.sh run-finality-relay
+./bridges/testing/environments/pezkuwichain-zagros/bridges_pezkuwichain_zagros.sh run-pez-finality-relay
 ```
 
 **Check relay-chain headers relaying:**

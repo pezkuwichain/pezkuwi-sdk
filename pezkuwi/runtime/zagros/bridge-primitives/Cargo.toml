@@ -17,9 +17,9 @@ workspace = true
 
 [dependencies]
 # Bridge Dependencies
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Based Dependencies
 pezframe-support = { workspace = true }
@@ -29,17 +29,17 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-pezkuwi-core/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "pezframe-support/std",
   "pezsp-api/std",
   "pezsp-std/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",
 ]

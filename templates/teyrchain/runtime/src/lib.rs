@@ -75,7 +75,7 @@ pub type BlockId = generic::BlockId<Block>;
 
 /// The extension to the basic transaction logic.
 #[docify::export(template_signed_extra)]
-pub type TxExtension = pezcumulus_pallet_weight_reclaim::StorageWeightReclaim<
+pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
 		pezframe_system::AuthorizeCall<Runtime>,
@@ -231,7 +231,7 @@ pub(crate) use async_backing_params::*;
 
 #[docify::export]
 /// Aura consensus hook
-type ConsensusHook = pezcumulus_pallet_aura_ext::FixedVelocityConsensusHook<
+type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 	Runtime,
 	RELAY_CHAIN_SLOT_DURATION_MILLIS,
 	BLOCK_PROCESSING_VELOCITY,
@@ -265,13 +265,13 @@ mod runtime {
 	#[runtime::pezpallet_index(0)]
 	pub type System = pezframe_system;
 	#[runtime::pezpallet_index(1)]
-	pub type TeyrchainSystem = pezcumulus_pallet_teyrchain_system;
+	pub type TeyrchainSystem = pezcumulus_pezpallet_teyrchain_system;
 	#[runtime::pezpallet_index(2)]
 	pub type Timestamp = pezpallet_timestamp;
 	#[runtime::pezpallet_index(3)]
 	pub type TeyrchainInfo = teyrchain_info;
 	#[runtime::pezpallet_index(4)]
-	pub type WeightReclaim = pezcumulus_pallet_weight_reclaim;
+	pub type WeightReclaim = pezcumulus_pezpallet_weight_reclaim;
 
 	// Monetary stuff.
 	#[runtime::pezpallet_index(10)]
@@ -293,15 +293,15 @@ mod runtime {
 	#[runtime::pezpallet_index(23)]
 	pub type Aura = pezpallet_aura;
 	#[runtime::pezpallet_index(24)]
-	pub type AuraExt = pezcumulus_pallet_aura_ext;
+	pub type AuraExt = pezcumulus_pezpallet_aura_ext;
 
 	// XCM helpers.
 	#[runtime::pezpallet_index(30)]
-	pub type XcmpQueue = pezcumulus_pallet_xcmp_queue;
+	pub type XcmpQueue = pezcumulus_pezpallet_xcmp_queue;
 	#[runtime::pezpallet_index(31)]
 	pub type PezkuwiXcm = pezpallet_xcm;
 	#[runtime::pezpallet_index(32)]
-	pub type CumulusXcm = pezcumulus_pallet_xcm;
+	pub type CumulusXcm = pezcumulus_pezpallet_xcm;
 	#[runtime::pezpallet_index(33)]
 	pub type MessageQueue = pezpallet_message_queue;
 
@@ -311,7 +311,7 @@ mod runtime {
 }
 
 #[docify::export(register_validate_block)]
-pezcumulus_pallet_teyrchain_system::register_validate_block! {
+pezcumulus_pezpallet_teyrchain_system::register_validate_block! {
 	Runtime = Runtime,
-	BlockExecutor = pezcumulus_pallet_aura_ext::BlockExecutor::<Runtime, Executive>,
+	BlockExecutor = pezcumulus_pezpallet_aura_ext::BlockExecutor::<Runtime, Executive>,
 }

@@ -23,20 +23,20 @@ mod imports {
 	pub(crate) use xcm::{latest::ZAGROS_GENESIS_HASH, prelude::*};
 
 	// Pezcumulus
-	pub(crate) use emulated_integration_tests_common::xcm_emulator::{
+	pub(crate) use emulated_integration_tests_common::xcm_pez_emulator::{
 		assert_expected_events, Chain, TestExt, Teyrchain,
 	};
 	pub(crate) use zagros_system_emulated_network::{
 		asset_hub_zagros_emulated_chain::{
 			genesis::ED as ASSET_HUB_ZAGROS_ED, AssetHubZagrosParaPallet as AssetHubZagrosPallet,
 		},
-		bridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
+		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		collectives_zagros_emulated_chain::CollectivesZagrosParaPallet as CollectivesZagrosPallet,
 		coretime_zagros_emulated_chain::{
 			self, coretime_zagros_runtime::ExistentialDeposit as CoretimeZagrosExistentialDeposit,
 			genesis::ED as CORETIME_ZAGROS_ED, CoretimeZagrosParaPallet as CoretimeZagrosPallet,
 		},
-		penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
+		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
 		people_zagros_emulated_chain::PeopleZagrosParaPallet as PeopleZagrosPallet,
 		zagros_emulated_chain::{genesis::ED as ZAGROS_ED, ZagrosRelayPallet as ZagrosPallet},
 		AssetHubZagrosPara as AssetHubZagros, AssetHubZagrosParaReceiver as AssetHubZagrosReceiver,

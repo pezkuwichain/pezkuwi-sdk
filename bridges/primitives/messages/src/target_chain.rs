@@ -18,7 +18,7 @@
 
 use crate::{Message, MessageKey, MessageNonce, MessagePayload, OutboundLaneData};
 
-use bp_runtime::{messages::MessageDispatchResult, raw_storage_proof_size, RawStorageProof, Size};
+use pezbp_runtime::{messages::MessageDispatchResult, raw_storage_proof_size, RawStorageProof, Size};
 use codec::{Decode, DecodeWithMemTracking, Encode, Error as CodecError};
 use pezframe_support::weights::Weight;
 use scale_info::TypeInfo;

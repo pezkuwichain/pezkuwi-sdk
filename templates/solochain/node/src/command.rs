@@ -7,7 +7,7 @@ use crate::{
 use pezframe_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, BIZINIKIWI_REFERENCE_HARDWARE};
 use pezsc_cli::BizinikiwiCli;
 use pezsc_service::PartialComponents;
-use solochain_template_runtime::{Block, EXISTENTIAL_DEPOSIT};
+use pez_solochain_template_runtime::{Block, EXISTENTIAL_DEPOSIT};
 use pezsp_keyring::Sr25519Keyring;
 
 impl BizinikiwiCli for Cli {
@@ -187,8 +187,8 @@ pub fn run() -> pezsc_cli::Result<()> {
 				match config.network.network_backend {
 					pezsc_network::config::NetworkBackendType::Libp2p => service::new_full::<
 						pezsc_network::NetworkWorker<
-							solochain_template_runtime::opaque::Block,
-							<solochain_template_runtime::opaque::Block as pezsp_runtime::traits::Block>::Hash,
+							pez_solochain_template_runtime::opaque::Block,
+							<pez_solochain_template_runtime::opaque::Block as pezsp_runtime::traits::Block>::Hash,
 						>,
 					>(config)
 					.map_err(pezsc_cli::Error::Service),

@@ -14,7 +14,7 @@ use pezframe_support::{
 	ensure,
 	traits::{Contains, Get, ProcessMessageError},
 };
-use snowbridge_core::{ParaId, TokenId};
+use pezsnowbridge_core::{ParaId, TokenId};
 use pezsp_runtime::traits::MaybeConvert;
 use pezsp_std::{marker::PhantomData, ops::ControlFlow, prelude::*};
 use xcm::prelude::*;
@@ -122,7 +122,7 @@ where
 		// messages. We use the presence of an `AliasOrigin` instruction to distinguish between
 		// Snowbridge V2 and Snowbridge V1 messages, since XCM V5 came after Snowbridge V1 and
 		// so it's not supported in Snowbridge V1. Snowbridge V1 messages are processed by the
-		// snowbridge-outbound-queue-primitives v1 exporter.
+		// pezsnowbridge-outbound-queue-primitives v1 exporter.
 		let mut instructions = message.clone().0;
 		let result = instructions.matcher().match_next_inst_while(
 			|_| true,

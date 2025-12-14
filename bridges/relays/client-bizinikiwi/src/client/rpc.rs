@@ -37,7 +37,7 @@ use crate::{
 
 use async_std::sync::{Arc, Mutex, RwLock};
 use async_trait::async_trait;
-use bp_runtime::HeaderIdProvider;
+use pezbp_runtime::HeaderIdProvider;
 use codec::Encode;
 use pezframe_support::weights::Weight;
 use futures::TryFutureExt;

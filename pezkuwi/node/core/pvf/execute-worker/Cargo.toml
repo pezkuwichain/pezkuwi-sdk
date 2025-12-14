@@ -22,7 +22,7 @@ nix = { features = ["process", "resource", "sched"], workspace = true }
 codec = { features = ["derive"], workspace = true }
 
 pezkuwi-node-core-pvf-common = { workspace = true, default-features = true }
-pezkuwi-node-primitives = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 
@@ -33,7 +33,7 @@ builder = []
 runtime-benchmarks = [
   "gum/runtime-benchmarks",
   "pezkuwi-node-core-pvf-common/runtime-benchmarks",
-  "pezkuwi-node-primitives/runtime-benchmarks",
+  "pezkuwi-pez-node-primitives/runtime-benchmarks",
   "pezkuwi-primitives/runtime-benchmarks",
   "pezkuwi-teyrchain-primitives/runtime-benchmarks",
 ]

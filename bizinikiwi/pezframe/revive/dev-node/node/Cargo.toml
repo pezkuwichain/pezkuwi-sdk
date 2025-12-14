@@ -1,5 +1,5 @@
 [package]
-name = "revive-dev-node"
+name = "pez-revive-dev-node"
 description = "A development Bizinikiwi-based Bizinikiwi node, equipped with pezpallet-revive."
 version = "0.0.0"
 authors.workspace = true
@@ -8,7 +8,7 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
-documentation = "https://docs.rs/revive-dev-node"
+documentation = "https://docs.rs/pez-revive-dev-node"
 license = { workspace = true }
 
 [package.metadata.docs.rs]
@@ -25,15 +25,15 @@ futures-timer = { workspace = true }
 jsonrpsee = { features = ["server"], workspace = true }
 
 pezkuwi-sdk = { workspace = true, features = ["experimental", "node"] }
-revive-dev-runtime = { workspace = true }
+pez-revive-dev-runtime = { workspace = true }
 
 [build-dependencies]
 pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]
-std = ["pezkuwi-sdk/std", "revive-dev-runtime/std"]
+std = ["pezkuwi-sdk/std", "pez-revive-dev-runtime/std"]
 runtime-benchmarks = [
   "pezkuwi-sdk/runtime-benchmarks",
-  "revive-dev-runtime/runtime-benchmarks",
+  "pez-revive-dev-runtime/runtime-benchmarks",
 ]

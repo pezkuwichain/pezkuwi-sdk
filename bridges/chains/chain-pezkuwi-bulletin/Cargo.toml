@@ -20,10 +20,10 @@ codec = { features = ["derive"], workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 # Bridge Dependencies
-bp-header-chain = { workspace = true }
+bp-header-pez-chain = { workspace = true }
 bp-messages = { workspace = true }
 bp-pezkuwi-core = { workspace = true }
-bp-runtime = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Based Dependencies
 pezframe-support = { workspace = true }
@@ -35,10 +35,10 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-chain/std",
+  "bp-header-pez-chain/std",
   "bp-messages/std",
   "bp-pezkuwi-core/std",
-  "bp-runtime/std",
+  "pezbp-runtime/std",
   "codec/std",
   "pezframe-support/std",
   "pezframe-system/std",
@@ -48,10 +48,10 @@ std = [
   "pezsp-std/std",
 ]
 runtime-benchmarks = [
-  "bp-header-chain/runtime-benchmarks",
+  "bp-header-pez-chain/runtime-benchmarks",
   "bp-messages/runtime-benchmarks",
   "bp-pezkuwi-core/runtime-benchmarks",
-  "bp-runtime/runtime-benchmarks",
+  "pezbp-runtime/runtime-benchmarks",
   "pezframe-support/runtime-benchmarks",
   "pezframe-system/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",

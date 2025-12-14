@@ -84,7 +84,7 @@
  * - Check: Rejects if `serialized_len > config.max_downward_message_size`
  *
  * **UMP (Upward):**
- * - Teyrchain enforcement: `cumulus/pallets/teyrchain-system/src/lib.rs:1665` in `send_upward_message()`
+ * - Teyrchain enforcement: `cumulus/pezpallets/teyrchain-system/src/lib.rs:1665` in `send_upward_message()`
  * - Relay validation: `polkadot/runtime/teyrchains/src/inclusion/mod.rs:967` in `check_upward_messages()`
  * - Configuration: `max_upward_message_size` (hard bound: 128KB defined as MAX_UPWARD_MESSAGE_SIZE_BOUND)
  *
@@ -96,7 +96,7 @@
  * - Enforced at: `polkadot/runtime/teyrchains/src/dmp.rs:194` in `can_queue_downward_message()`
  *
  * **UMP:**
- * - Teyrchain check: `cumulus/pallets/teyrchain-system/src/lib.rs:369-373` (respects relay's remaining capacity)
+ * - Teyrchain check: `cumulus/pezpallets/teyrchain-system/src/lib.rs:369-373` (respects relay's remaining capacity)
  * - Relay limit: `max_upward_queue_size` enforced at `polkadot/runtime/teyrchains/src/inclusion/mod.rs:977-980`
  *
  * ### 3. Queue Total Count (Messages)
@@ -117,7 +117,7 @@
  *
  * **UMP:**
  * - Configuration: `max_upward_message_num_per_candidate`
- * - Teyrchain limit: `cumulus/pallets/teyrchain-system/src/lib.rs:386` in `on_finalize()`
+ * - Teyrchain limit: `cumulus/pezpallets/teyrchain-system/src/lib.rs:386` in `on_finalize()`
  * - Relay validation: `polkadot/runtime/teyrchains/src/inclusion/mod.rs:949-952`
  * - Max bound: 16,384 messages (MAX_UPWARD_MESSAGE_NUM in `polkadot/teyrchain/src/primitives.rs:436`)
  *

@@ -21,7 +21,7 @@
 use std::{fmt::Debug, sync::Arc};
 
 use codec::Codec;
-use fork_tree::ForkTree;
+use pez_fork_tree::ForkTree;
 use parking_lot::RwLock;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_blockchain::{HeaderBackend, HeaderMetadata};

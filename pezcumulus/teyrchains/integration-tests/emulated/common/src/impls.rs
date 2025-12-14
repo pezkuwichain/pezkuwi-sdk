@@ -46,14 +46,14 @@ pub use xcm::{
 };
 
 // Pezcumulus
-pub use pezcumulus_pallet_teyrchain_system;
-pub use pezcumulus_pallet_xcmp_queue;
+pub use pezcumulus_pezpallet_teyrchain_system;
+pub use pezcumulus_pezpallet_xcmp_queue;
 pub use pezcumulus_primitives_core::{
 	relay_chain::HrmpChannelId, DmpMessageHandler, Junction, Junctions, NetworkId, ParaId,
 	XcmpMessageHandler,
 };
 pub use teyrchains_common::{AccountId, Balance};
-pub use xcm_emulator::{
+pub use xcm_pez_emulator::{
 	assert_expected_events, bx, helpers::weight_within_threshold, BridgeLaneId, BridgeMessage,
 	BridgeMessageDispatchError, BridgeMessageHandler, Chain, Network, RelayChain, TestExt,
 	Teyrchain,
@@ -516,7 +516,7 @@ macro_rules! impl_assert_events_helpers_for_teyrchain {
 						Self,
 						vec![
 							[<$chain RuntimeEvent>]::<N>::TeyrchainSystem(
-								$crate::impls::pezcumulus_pallet_teyrchain_system::Event::UpwardMessageSent { .. }
+								$crate::impls::pezcumulus_pezpallet_teyrchain_system::Event::UpwardMessageSent { .. }
 							) => {},
 						]
 					);

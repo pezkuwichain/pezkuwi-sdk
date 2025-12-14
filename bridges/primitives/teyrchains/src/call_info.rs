@@ -19,7 +19,7 @@
 use crate::{ParaHash, ParaId, RelayBlockHash, RelayBlockNumber};
 
 use bp_pezkuwi_core::teyrchains::ParaHeadsProof;
-use bp_runtime::HeaderId;
+use pezbp_runtime::HeaderId;
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
 use pezsp_runtime::RuntimeDebug;
