@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::{
-	client::{SubscriptionType, BizinikiwiBlock, BizinikiwiBlockNumber},
+	client::{BizinikiwiBlock, BizinikiwiBlockNumber, SubscriptionType},
 	subxt_client::SrcChainConfig,
 	ClientError,
 };
@@ -50,7 +50,8 @@ pub trait BlockInfoProvider: Send + Sync {
 	) -> Result<Option<Arc<BizinikiwiBlock>>, ClientError>;
 
 	/// Get block by block hash.
-	async fn block_by_hash(&self, hash: &H256) -> Result<Option<Arc<BizinikiwiBlock>>, ClientError>;
+	async fn block_by_hash(&self, hash: &H256)
+		-> Result<Option<Arc<BizinikiwiBlock>>, ClientError>;
 }
 
 /// Provides information about blocks.
@@ -86,7 +87,11 @@ impl SubxtBlockInfoProvider {
 
 #[async_trait]
 impl BlockInfoProvider for SubxtBlockInfoProvider {
-	async fn update_latest(&self, block: Arc<BizinikiwiBlock>, subscription_type: SubscriptionType) {
+	async fn update_latest(
+		&self,
+		block: Arc<BizinikiwiBlock>,
+		subscription_type: SubscriptionType,
+	) {
 		let mut latest = match subscription_type {
 			SubscriptionType::FinalizedBlocks => self.latest_finalized_block.write().await,
 			SubscriptionType::BestBlocks => self.latest_block.write().await,
@@ -127,7 +132,10 @@ impl BlockInfoProvider for SubxtBlockInfoProvider {
 		}
 	}
 
-	async fn block_by_hash(&self, hash: &H256) -> Result<Option<Arc<BizinikiwiBlock>>, ClientError> {
+	async fn block_by_hash(
+		&self,
+		hash: &H256,
+	) -> Result<Option<Arc<BizinikiwiBlock>>, ClientError> {
 		let latest = self.latest_block().await;
 		if hash == &latest.hash() {
 			return Ok(Some(latest));

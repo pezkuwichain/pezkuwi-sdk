@@ -34,8 +34,6 @@
 
 use crate::{config::MAX_ADDRESSES, schema::Response};
 use codec::{CompactRef, Decode, Encode};
-use pezcumulus_primitives_core::{relay_chain::Hash as RelayHash, ParaId};
-use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use futures::{
 	channel::oneshot,
 	future::{BoxFuture, Fuse, FusedFuture},
@@ -44,7 +42,8 @@ use futures::{
 	FutureExt, StreamExt,
 };
 use log::{debug, error, info, trace, warn};
-use prost::Message;
+use pezcumulus_primitives_core::{relay_chain::Hash as RelayHash, ParaId};
+use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use pezsc_network::{
 	event::{DhtEvent, Event},
 	request_responses::{IfDisconnected, RequestFailure},
@@ -52,6 +51,7 @@ use pezsc_network::{
 	KademliaKey, Multiaddr, PeerId, ProtocolName,
 };
 use pezsp_consensus_babe::{Epoch, Randomness};
+use prost::Message;
 use std::{collections::HashSet, pin::Pin, sync::Arc, time::Duration};
 use tokio::time::{sleep, Sleep};
 

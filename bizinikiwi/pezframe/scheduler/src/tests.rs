@@ -22,13 +22,13 @@ use crate::mock::{
 	logger::{self, Threshold},
 	new_test_ext, root, LoggerCall, RuntimeCall, Scheduler, Test, *,
 };
+use bizinikiwi_test_utils::assert_eq_uvec;
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	traits::{Contains, GetStorageVersion, OnInitialize, QueryPreimage, StorePreimage},
 	Hashable,
 };
 use pezsp_runtime::traits::Hash;
-use bizinikiwi_test_utils::assert_eq_uvec;
 
 #[test]
 #[docify::export]

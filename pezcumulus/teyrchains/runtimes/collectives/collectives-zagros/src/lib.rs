@@ -53,9 +53,9 @@ pub use ambassador::pezpallet_ambassador_origins;
 
 use alloc::{vec, vec::Vec};
 use ambassador::AmbassadorCoreInstance;
-use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use fellowship::{pezpallet_fellowship_origins, Fellows, FellowshipCoreInstance};
 use impls::{AllianceProposalProvider, EqualOrGreatestRootCmp};
+use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
 use pezsp_runtime::{
@@ -107,10 +107,10 @@ use xcm_config::{
 pub use pezsp_runtime::BuildStorage;
 
 // Pezkuwi imports
-use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_runtime_common::{
 	impls::VersionedLocatableAsset, BlockHashCount, SlowAdjustingFeeUpdate,
 };
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use xcm::{prelude::*, Version as XcmVersion};
 use xcm_runtime_pezapis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
@@ -512,7 +512,8 @@ impl pezpallet_session::Config for Runtime {
 	// we don't have stash and controller, thus we don't need the convert as well.
 	type ValidatorIdOf = pezpallet_collator_selection::IdentityCollator;
 	type ShouldEndSession = pezpallet_session::PeriodicSessions<ConstU32<PERIOD>, ConstU32<OFFSET>>;
-	type NextSessionRotation = pezpallet_session::PeriodicSessions<ConstU32<PERIOD>, ConstU32<OFFSET>>;
+	type NextSessionRotation =
+		pezpallet_session::PeriodicSessions<ConstU32<PERIOD>, ConstU32<OFFSET>>;
 	type SessionManager = CollatorSelection;
 	// Essentially just Aura, but let's be pedantic.
 	type SessionHandler = <SessionKeys as pezsp_runtime::traits::OpaqueKeys>::KeyTypeIdProviders;

@@ -399,9 +399,9 @@ mod tests {
 		graph::Pool,
 		TimedTransactionSource,
 	};
-	use futures::executor::block_on;
 	use bizinikiwi_test_runtime::{AccountId, Transfer, H256};
 	use bizinikiwi_test_runtime_client::Sr25519Keyring::{Alice, Bob};
+	use futures::executor::block_on;
 
 	#[test]
 	fn revalidation_queue_works() {

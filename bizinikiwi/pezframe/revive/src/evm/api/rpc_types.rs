@@ -19,8 +19,8 @@ use super::*;
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
 use pezframe_support::DefaultNoBound;
-use scale_info::TypeInfo;
 use pezsp_core::{H160, U256};
+use scale_info::TypeInfo;
 
 /// Configuration specific to a dry-run execution.
 #[derive(Debug, Encode, Decode, TypeInfo, Clone, DefaultNoBound)]

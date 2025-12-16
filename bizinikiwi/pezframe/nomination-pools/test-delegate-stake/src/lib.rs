@@ -21,6 +21,7 @@
 #[allow(unexpected_cfgs)]
 mod mock;
 
+use mock::*;
 use pezframe_support::{
 	assert_noop, assert_ok, hypothetically,
 	traits::{
@@ -28,7 +29,6 @@ use pezframe_support::{
 		Currency,
 	},
 };
-use mock::*;
 use pezpallet_nomination_pools::{
 	BondExtra, BondedPools, CommissionChangeRate, ConfigOp, Error as PoolsError,
 	Event as PoolsEvent, LastPoolId, PoolMember, PoolMembers, PoolState,

@@ -32,7 +32,11 @@ mod v0 {
 	#[storage_alias]
 	pub type PublicProps<T: Config> = StorageValue<
 		Pezpallet<T>,
-		Vec<(PropIndex, <T as pezframe_system::Config>::Hash, <T as pezframe_system::Config>::AccountId)>,
+		Vec<(
+			PropIndex,
+			<T as pezframe_system::Config>::Hash,
+			<T as pezframe_system::Config>::AccountId,
+		)>,
 		ValueQuery,
 	>;
 

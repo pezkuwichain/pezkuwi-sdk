@@ -31,12 +31,14 @@ where
 {
 	(begin..=end)
 		.filter_map(|nonce| {
-			let message_data =
-				pezpallet_bridge_messages::Pezpallet::<Runtime, MessagesPalletInstance>::outbound_message_data(lane, nonce)?;
+			let message_data = pezpallet_bridge_messages::Pezpallet::<
+				Runtime,
+				MessagesPalletInstance,
+			>::outbound_message_data(lane, nonce)?;
 			Some(OutboundMessageDetails {
 				nonce,
-				// dispatch message weight is always zero at the source chain, since we're paying for
-				// dispatch at the target chain
+				// dispatch message weight is always zero at the source chain, since we're paying
+				// for dispatch at the target chain
 				dispatch_weight: pezframe_support::weights::Weight::zero(),
 				size: message_data.len() as _,
 			})

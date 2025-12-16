@@ -105,7 +105,8 @@ impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = pezframe_system::mocking::MockBlock<Runtime>;
-	type AccountData = pezpallet_balances::AccountData<<Self as pezpallet_balances::Config>::Balance>;
+	type AccountData =
+		pezpallet_balances::AccountData<<Self as pezpallet_balances::Config>::Balance>;
 }
 
 #[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]

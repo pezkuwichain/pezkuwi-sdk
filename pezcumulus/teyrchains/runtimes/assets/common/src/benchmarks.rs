@@ -38,7 +38,8 @@ pub struct AssetPairFactory<Target, SelfParaId, PalletId, L = Location>(
 	PhantomData<(Target, SelfParaId, PalletId, L)>,
 );
 impl<Target: Get<L>, SelfParaId: Get<ParaId>, PalletId: Get<u32>, L: TryFrom<Location> + Debug>
-	pezpallet_asset_conversion::BenchmarkHelper<L> for AssetPairFactory<Target, SelfParaId, PalletId, L>
+	pezpallet_asset_conversion::BenchmarkHelper<L>
+	for AssetPairFactory<Target, SelfParaId, PalletId, L>
 where
 	<L as TryFrom<Location>>::Error: Debug,
 {

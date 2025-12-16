@@ -247,7 +247,8 @@ impl ExtBuilder {
 	}
 
 	pub fn build(self) -> pezsp_io::TestExternalities {
-		let mut storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		let mut storage =
+			pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
 		let mut balances: Vec<(AccountId, Balance)> = vec![
 			(1, 1_000_000 * UNITS),
@@ -287,8 +288,8 @@ impl ExtBuilder {
 				})
 				.collect(),
 			force_era: pezpallet_staking::Forcing::ForceNew, // Yeni era başlatmaya zorla
-			min_nominator_bond: MinNominatorBond::get(),  // Tanımlanan minimum değerleri kullan
-			min_validator_bond: MinValidatorBond::get(),  // Tanımlanan minimum değerleri kullan
+			min_nominator_bond: MinNominatorBond::get(),     // Tanımlanan minimum değerleri kullan
+			min_validator_bond: MinValidatorBond::get(),     // Tanımlanan minimum değerleri kullan
 			..Default::default()
 		}
 		.assimilate_storage(&mut storage)

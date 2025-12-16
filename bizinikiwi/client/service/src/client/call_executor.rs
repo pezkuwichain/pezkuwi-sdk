@@ -105,8 +105,9 @@ where
 		let state = self.backend.state_at(at_hash, context.into())?;
 
 		let state_runtime_code = pezsp_state_machine::backend::BackendRuntimeCode::new(&state);
-		let runtime_code =
-			state_runtime_code.runtime_code().map_err(pezsp_blockchain::Error::RuntimeCode)?;
+		let runtime_code = state_runtime_code
+			.runtime_code()
+			.map_err(pezsp_blockchain::Error::RuntimeCode)?;
 
 		let runtime_code = self.code_provider.maybe_override_code(runtime_code, &state, at_hash)?.0;
 
@@ -146,8 +147,9 @@ where
 		// make sure we use the caching layers.
 		let state_runtime_code = pezsp_state_machine::backend::BackendRuntimeCode::new(&state);
 
-		let runtime_code =
-			state_runtime_code.runtime_code().map_err(pezsp_blockchain::Error::RuntimeCode)?;
+		let runtime_code = state_runtime_code
+			.runtime_code()
+			.map_err(pezsp_blockchain::Error::RuntimeCode)?;
 		let runtime_code = self.code_provider.maybe_override_code(runtime_code, &state, at_hash)?.0;
 		let mut extensions = extensions.borrow_mut();
 
@@ -194,8 +196,9 @@ where
 		let state = self.backend.state_at(at_hash, backend::TrieCacheContext::Untrusted)?;
 		let state_runtime_code = pezsp_state_machine::backend::BackendRuntimeCode::new(&state);
 
-		let runtime_code =
-			state_runtime_code.runtime_code().map_err(pezsp_blockchain::Error::RuntimeCode)?;
+		let runtime_code = state_runtime_code
+			.runtime_code()
+			.map_err(pezsp_blockchain::Error::RuntimeCode)?;
 		self.code_provider
 			.maybe_override_code(runtime_code, &state, at_hash)
 			.map(|(_, v)| v)
@@ -213,9 +216,11 @@ where
 
 		let trie_backend = state.as_trie_backend();
 
-		let state_runtime_code = pezsp_state_machine::backend::BackendRuntimeCode::new(trie_backend);
-		let runtime_code =
-			state_runtime_code.runtime_code().map_err(pezsp_blockchain::Error::RuntimeCode)?;
+		let state_runtime_code =
+			pezsp_state_machine::backend::BackendRuntimeCode::new(trie_backend);
+		let runtime_code = state_runtime_code
+			.runtime_code()
+			.map_err(pezsp_blockchain::Error::RuntimeCode)?;
 		let runtime_code = self.code_provider.maybe_override_code(runtime_code, &state, at_hash)?.0;
 
 		pezsp_state_machine::prove_execution_on_trie_backend(

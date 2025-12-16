@@ -42,11 +42,11 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode, MaxEncodedLen};
+use log;
 use pezframe_support::{
 	traits::{DisabledValidators, FindAuthor, Get, OnTimestampSet, OneSessionHandler},
 	BoundedSlice, BoundedVec, ConsensusEngineId, Parameter,
 };
-use log;
 use pezsp_consensus_aura::{AuthorityIndex, ConsensusLog, Slot, AURA_ENGINE_ID};
 use pezsp_runtime::{
 	generic::DigestItem,
@@ -101,15 +101,15 @@ pub mod pezpallet {
 		/// Whether to allow block authors to create multiple blocks per slot.
 		///
 		/// If this is `true`, the pezpallet will allow slots to stay the same across sequential
-		/// blocks. If this is `false`, the pezpallet will require that subsequent blocks always have
-		/// higher slots than previous ones.
+		/// blocks. If this is `false`, the pezpallet will require that subsequent blocks always
+		/// have higher slots than previous ones.
 		///
 		/// Regardless of the setting of this storage value, the pezpallet will always enforce the
 		/// invariant that slots don't move backwards as the chain progresses.
 		///
 		/// The typical value for this should be 'false' unless this pezpallet is being augmented by
-		/// another pezpallet which enforces some limitation on the number of blocks authors can create
-		/// using the same slot.
+		/// another pezpallet which enforces some limitation on the number of blocks authors can
+		/// create using the same slot.
 		type AllowMultipleBlocksPerSlot: Get<bool>;
 
 		/// The slot duration Aura should run with, expressed in milliseconds.

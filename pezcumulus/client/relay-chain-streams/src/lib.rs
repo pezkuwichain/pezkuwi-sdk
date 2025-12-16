@@ -19,8 +19,8 @@
 
 use std::sync::Arc;
 
-use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
 use futures::{Stream, StreamExt};
+use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
 use pezkuwi_node_subsystem::messages::RuntimeApiRequest;
 use pezkuwi_primitives::{
 	CommittedCandidateReceiptV2 as CommittedCandidateReceipt, Hash as PHash, Id as ParaId,

@@ -198,8 +198,11 @@ mod benchmarks {
 
 		#[block]
 		{
-			let _ =
-				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+			let _ = Pezpallet::<T>::include_pvf_check_statement(
+				RawOrigin::None.into(),
+				stmt,
+				signature,
+			);
 		}
 	}
 
@@ -210,8 +213,11 @@ mod benchmarks {
 
 		#[block]
 		{
-			let _ =
-				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+			let _ = Pezpallet::<T>::include_pvf_check_statement(
+				RawOrigin::None.into(),
+				stmt,
+				signature,
+			);
 		}
 	}
 
@@ -222,8 +228,11 @@ mod benchmarks {
 
 		#[block]
 		{
-			let _ =
-				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+			let _ = Pezpallet::<T>::include_pvf_check_statement(
+				RawOrigin::None.into(),
+				stmt,
+				signature,
+			);
 		}
 	}
 
@@ -234,8 +243,11 @@ mod benchmarks {
 
 		#[block]
 		{
-			let _ =
-				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+			let _ = Pezpallet::<T>::include_pvf_check_statement(
+				RawOrigin::None.into(),
+				stmt,
+				signature,
+			);
 		}
 	}
 
@@ -246,8 +258,11 @@ mod benchmarks {
 
 		#[block]
 		{
-			let _ =
-				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+			let _ = Pezpallet::<T>::include_pvf_check_statement(
+				RawOrigin::None.into(),
+				stmt,
+				signature,
+			);
 		}
 	}
 
@@ -257,7 +272,8 @@ mod benchmarks {
 		let old_code_hash = ValidationCode(vec![0]).hash();
 		CurrentCodeHash::<T>::insert(&para_id, old_code_hash);
 		pezframe_system::Pezpallet::<T>::set_block_number(10u32.into());
-		let inclusion = pezframe_system::Pezpallet::<T>::block_number().saturating_add(10u32.into());
+		let inclusion =
+			pezframe_system::Pezpallet::<T>::block_number().saturating_add(10u32.into());
 		let config = HostConfiguration::<BlockNumberFor<T>>::default();
 		Pezpallet::<T>::schedule_code_upgrade(
 			para_id,
@@ -297,7 +313,8 @@ mod benchmarks {
 			Event::CodeAuthorized {
 				para_id,
 				code_hash: new_code_hash,
-				expire_at: pezframe_system::Pezpallet::<T>::block_number().saturating_add(valid_period),
+				expire_at: pezframe_system::Pezpallet::<T>::block_number()
+					.saturating_add(valid_period),
 			}
 			.into(),
 		);
@@ -307,8 +324,8 @@ mod benchmarks {
 	fn apply_authorized_force_set_current_code(c: Linear<MIN_CODE_SIZE, MAX_CODE_SIZE>) {
 		let code = ValidationCode(vec![0; c as usize]);
 		let para_id = ParaId::from(1000);
-		let expire_at =
-			pezframe_system::Pezpallet::<T>::block_number().saturating_add(BlockNumberFor::<T>::from(c));
+		let expire_at = pezframe_system::Pezpallet::<T>::block_number()
+			.saturating_add(BlockNumberFor::<T>::from(c));
 		AuthorizedCodeHash::<T>::insert(
 			&para_id,
 			AuthorizedCodeHashAndExpiry::from((code.hash(), expire_at)),

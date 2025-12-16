@@ -49,7 +49,6 @@ pub use payload::{known_payloads, BeefyPayloadId, Payload, PayloadProvider};
 use alloc::vec::Vec;
 use codec::{Codec, Decode, DecodeWithMemTracking, Encode};
 use core::fmt::{Debug, Display};
-use scale_info::TypeInfo;
 use pezsp_application_crypto::{AppPublic, RuntimeAppPublic};
 use pezsp_core::H256;
 use pezsp_runtime::{
@@ -57,6 +56,7 @@ use pezsp_runtime::{
 	OpaqueValue,
 };
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
 
 /// Key type for BEEFY module.
 pub const KEY_TYPE: pezsp_core::crypto::KeyTypeId = pezsp_application_crypto::key_types::BEEFY;

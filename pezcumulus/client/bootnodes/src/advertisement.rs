@@ -19,15 +19,14 @@
 
 use crate::config::MAX_ADDRESSES;
 use codec::{Compact, CompactRef, Decode, Encode};
+use futures::{future::Fuse, pin_mut, FutureExt, StreamExt};
+use ip_network::IpNetwork;
+use log::{debug, error, trace, warn};
 use pezcumulus_primitives_core::{
 	relay_chain::{Hash as RelayHash, Header as RelayHeader},
 	ParaId,
 };
 use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
-use futures::{future::Fuse, pin_mut, FutureExt, StreamExt};
-use ip_network::IpNetwork;
-use log::{debug, error, trace, warn};
-use prost::Message;
 use pezsc_network::{
 	config::OutgoingResponse,
 	event::{DhtEvent, Event},
@@ -38,6 +37,7 @@ use pezsc_network::{
 };
 use pezsp_consensus_babe::{digests::CompatibleDigestItem, Epoch, Randomness};
 use pezsp_runtime::traits::Header as _;
+use prost::Message;
 use std::{collections::HashSet, pin::Pin, sync::Arc};
 use tokio::time::Sleep;
 

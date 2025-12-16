@@ -42,6 +42,7 @@ use pezsp_staking::{
 use std::collections::BTreeMap;
 
 use codec::Decode;
+use parking_lot::RwLock;
 use pezframe_election_provider_support::{
 	bounds::ElectionBoundsBuilder, onchain, ElectionDataProvider, ExtendedBalance,
 	SequentialPhragmen, Weight,
@@ -51,7 +52,6 @@ use pezpallet_election_provider_multi_phase::{
 	QueuedSolution, SolutionAccuracyOf,
 };
 use pezpallet_staking::{ActiveEra, CurrentEra, ErasStartSessionIndex, StakerStatus};
-use parking_lot::RwLock;
 use std::sync::Arc;
 
 use crate::{log, log_current_time};

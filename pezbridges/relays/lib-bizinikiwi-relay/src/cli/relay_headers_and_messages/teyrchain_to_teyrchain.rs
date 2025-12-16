@@ -32,11 +32,11 @@ use crate::{
 };
 use bp_pezkuwi_core::teyrchains::ParaHash;
 use bp_teyrchains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};
+use pezsp_core::Pair;
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, Chain, ChainWithRuntimeVersion, ChainWithTransactions, Client,
 	Teyrchain,
 };
-use pezsp_core::Pair;
 
 /// A base relay between two teyrchain from different consensus systems.
 ///

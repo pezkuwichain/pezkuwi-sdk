@@ -21,9 +21,9 @@ use crate::dispatch::{DispatchResult, Parameter};
 use alloc::{vec, vec::Vec};
 use codec::{CompactLen, Decode, DecodeLimit, Encode, EncodeLike, Input, MaxEncodedLen};
 use impl_trait_for_tuples::impl_for_tuples;
-use scale_info::{build::Fields, meta_type, Path, Type, TypeInfo, TypeParameter};
 use pezsp_arithmetic::traits::{CheckedAdd, CheckedMul, CheckedSub, One, Saturating};
 use pezsp_core::bounded::bounded_vec::TruncateFrom;
+use scale_info::{build::Fields, meta_type, Path, Type, TypeInfo, TypeParameter};
 
 use core::cmp::Ordering;
 #[doc(hidden)]

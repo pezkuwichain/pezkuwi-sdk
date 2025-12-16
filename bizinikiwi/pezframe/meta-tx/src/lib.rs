@@ -17,8 +17,8 @@
 
 //! # Meta Tx (Meta Transaction) Pezpallet
 //!
-//! This pezpallet enables the dispatch of transactions that are authorized by one party (the signer)
-//! and executed by an untrusted third party (the relayer), who covers the transaction fees.
+//! This pezpallet enables the dispatch of transactions that are authorized by one party (the
+//! signer) and executed by an untrusted third party (the relayer), who covers the transaction fees.
 //!
 //! ## Pezpallet API
 //!
@@ -47,8 +47,8 @@
 //! and the signature of the payload, encompassing the call and the meta-transaction’s
 //! configurations, such as its mortality.  The extensions follow the same [`TransactionExtension`]
 //! contract, and common types such as [`pezframe_system::CheckGenesis`],
-//! [`pezframe_system::CheckMortality`], [`pezframe_system::CheckNonce`], etc., are applicable in the
-//! context of meta transactions. Check the `mock` setup for the example.
+//! [`pezframe_system::CheckMortality`], [`pezframe_system::CheckNonce`], etc., are applicable in
+//! the context of meta transactions. Check the `mock` setup for the example.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -100,7 +100,8 @@ impl<Call, Extension> MetaTx<Call, Extension> {
 }
 
 /// The [`MetaTx`] for the given config.
-pub type MetaTxFor<T> = MetaTx<<T as pezframe_system::Config>::RuntimeCall, <T as Config>::Extension>;
+pub type MetaTxFor<T> =
+	MetaTx<<T as pezframe_system::Config>::RuntimeCall, <T as Config>::Extension>;
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
@@ -121,7 +122,8 @@ pub mod pezpallet {
 		type WeightInfo: WeightInfo;
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Transaction extension/s for meta transactions.
 		///
 		/// The extensions that must be present in every meta transaction. This generally includes

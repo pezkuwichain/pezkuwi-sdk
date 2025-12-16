@@ -19,9 +19,9 @@
 //! Configuration trait for a CLI based on bizinikiwi
 
 use crate::{
-	arg_enums::Database, error::Result, DatabaseParams, ImportParams, KeystoreParams,
-	NetworkParams, NodeKeyParams, OffchainWorkerParams, PruningParams, RpcEndpoint, SharedParams,
-	BizinikiwiCli,
+	arg_enums::Database, error::Result, BizinikiwiCli, DatabaseParams, ImportParams,
+	KeystoreParams, NetworkParams, NodeKeyParams, OffchainWorkerParams, PruningParams, RpcEndpoint,
+	SharedParams,
 };
 use log::warn;
 use names::{Generator, Name};

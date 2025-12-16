@@ -193,6 +193,10 @@ impl From<Error> for ErrorObjectOwned {
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use bizinikiwi_test_runtime_client::{
+		runtime::Block, Backend, DefaultTestClientBuilderExt, TestClient, TestClientBuilder,
+		TestClientBuilderExt,
+	};
 	use pezsc_consensus_babe::ImportQueueParams;
 	use pezsc_rpc_api::DenyUnsafe;
 	use pezsc_transaction_pool_api::{OffchainTransactionPoolFactory, RejectAllTxPool};
@@ -200,10 +204,6 @@ mod tests {
 	use pezsp_core::{crypto::key_types::BABE, testing::TaskExecutor};
 	use pezsp_keyring::Sr25519Keyring;
 	use pezsp_keystore::{testing::MemoryKeystore, Keystore};
-	use bizinikiwi_test_runtime_client::{
-		runtime::Block, Backend, DefaultTestClientBuilderExt, TestClient, TestClientBuilder,
-		TestClientBuilderExt,
-	};
 
 	fn create_keystore(authority: Sr25519Keyring) -> KeystorePtr {
 		let keystore = MemoryKeystore::new();
@@ -213,8 +213,8 @@ mod tests {
 		keystore.into()
 	}
 
-	fn test_babe_rpc_module() -> Babe<Block, TestClient, pezsc_consensus::LongestChain<Backend, Block>>
-	{
+	fn test_babe_rpc_module(
+	) -> Babe<Block, TestClient, pezsc_consensus::LongestChain<Backend, Block>> {
 		let builder = TestClientBuilder::new();
 		let (client, longest_chain) = builder.build_with_longest_chain();
 		let client = Arc::new(client);

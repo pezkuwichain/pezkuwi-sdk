@@ -397,8 +397,8 @@ impl_for_tuples_attr! {
 /// > because they are not part of the consensus/main block building logic. See
 /// > [`OffchainWorker`](crate::traits::misc::OffchainWorker) for more information.
 ///
-/// To learn more about the execution of hooks see the FRAME `Executive` pezpallet which is in charge
-/// of dispatching extrinsics and calling hooks in the correct order.
+/// To learn more about the execution of hooks see the FRAME `Executive` pezpallet which is in
+/// charge of dispatching extrinsics and calling hooks in the correct order.
 pub trait Hooks<BlockNumber> {
 	/// Block initialization hook. This is called at the very beginning of block execution.
 	///
@@ -414,8 +414,8 @@ pub trait Hooks<BlockNumber> {
 	/// complexity. For example, do not execute any unbounded iterations.
 	///
 	/// NOTE: This function is called BEFORE ANY extrinsic in a block is applied, including inherent
-	/// extrinsics. Hence for instance, if you runtime includes `pezpallet-timestamp`, the `timestamp`
-	/// is not yet up to date at this point.
+	/// extrinsics. Hence for instance, if you runtime includes `pezpallet-timestamp`, the
+	/// `timestamp` is not yet up to date at this point.
 	fn on_initialize(_n: BlockNumber) -> Weight {
 		Weight::zero()
 	}
@@ -461,9 +461,9 @@ pub trait Hooks<BlockNumber> {
 	/// Hook executed when a code change (aka. a "runtime upgrade") is detected by the FRAME
 	/// `Executive` pezpallet.
 	///
-	/// Be aware that this is called before [`Hooks::on_initialize`] of any pezpallet; therefore, a lot
-	/// of the critical storage items such as `block_number` in system pezpallet might have not been
-	/// set yet.
+	/// Be aware that this is called before [`Hooks::on_initialize`] of any pezpallet; therefore, a
+	/// lot of the critical storage items such as `block_number` in system pezpallet might have not
+	/// been set yet.
 	///
 	/// Similar to [`Hooks::on_initialize`], any code in this block is mandatory and MUST execute.
 	/// It is strongly recommended to dry-run the execution of these hooks using

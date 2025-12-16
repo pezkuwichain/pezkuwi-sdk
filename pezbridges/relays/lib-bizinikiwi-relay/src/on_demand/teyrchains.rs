@@ -20,8 +20,8 @@ use crate::{
 	messages::source::best_finalized_peer_header_at_self,
 	on_demand::OnDemandRelay,
 	teyrchains::{
-		source::TeyrchainsSource, target::TeyrchainsTarget, SubmitTeyrchainHeadsCallBuilder,
-		BizinikiwiTeyrchainsPipeline, TeyrchainsPipelineAdapter,
+		source::TeyrchainsSource, target::TeyrchainsTarget, BizinikiwiTeyrchainsPipeline,
+		SubmitTeyrchainHeadsCallBuilder, TeyrchainsPipelineAdapter,
 	},
 	TransactionParams,
 };
@@ -32,10 +32,10 @@ use async_std::{
 };
 use async_trait::async_trait;
 use bp_pezkuwi_core::teyrchains::{ParaHash, ParaId};
-use pezbp_runtime::HeaderIdProvider;
 use bp_teyrchains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};
 use futures::{select, FutureExt};
 use num_traits::Zero;
+use pezbp_runtime::HeaderIdProvider;
 use relay_bizinikiwi_client::{
 	is_ancient_block, AccountIdOf, AccountKeyPairOf, BlockNumberOf, CallOf, Chain, Client,
 	Error as BizinikiwiError, HashOf, HeaderIdOf, TeyrchainBase,
@@ -247,7 +247,8 @@ async fn background_task<P: BizinikiwiTeyrchainsPipeline>(
 	P::SourceTeyrchain: Chain<Hash = ParaHash>,
 	P::SourceRelayChain:
 		Chain<BlockNumber = RelayBlockNumber, Hash = RelayBlockHash, Hasher = RelayBlockHasher>,
-	AccountIdOf<P::TargetChain>: From<<AccountKeyPairOf<P::TargetChain> as pezsp_core::Pair>::Public>,
+	AccountIdOf<P::TargetChain>:
+		From<<AccountKeyPairOf<P::TargetChain> as pezsp_core::Pair>::Public>,
 {
 	let relay_task_name = on_demand_teyrchains_relay_name::<P::SourceTeyrchain, P::TargetChain>();
 	let target_transactions_mortality = target_transaction_params.mortality;

@@ -200,7 +200,8 @@ pub fn get_wasm_module() -> Box<dyn pezsc_executor_common::wasm_runtime::WasmMod
 		cache_path: None,
 		semantics: pezsc_executor_wasmtime::Semantics {
 			heap_alloc_strategy: DEFAULT_HEAP_ALLOC_STRATEGY,
-			instantiation_strategy: pezsc_executor::WasmtimeInstantiationStrategy::PoolingCopyOnWrite,
+			instantiation_strategy:
+				pezsc_executor::WasmtimeInstantiationStrategy::PoolingCopyOnWrite,
 			deterministic_stack_limit: None,
 			canonicalize_nans: false,
 			parallel_compilation: true,

@@ -113,15 +113,16 @@ fn spend_roc_on_asset_hub() {
 		let asset_hub_location: Location = [Teyrchain(1000)].into();
 		let native_asset = Location::parent();
 
-		let treasury_spend_call = RuntimeCall::Treasury(pezpallet_treasury::Call::<Runtime>::spend {
-			asset_kind: bx!(VersionedLocatableAsset::from((
-				asset_hub_location.clone(),
-				native_asset.into()
-			))),
-			amount: treasury_spend_balance,
-			beneficiary: bx!(VersionedLocation::from(alice_location)),
-			valid_from: None,
-		});
+		let treasury_spend_call =
+			RuntimeCall::Treasury(pezpallet_treasury::Call::<Runtime>::spend {
+				asset_kind: bx!(VersionedLocatableAsset::from((
+					asset_hub_location.clone(),
+					native_asset.into()
+				))),
+				amount: treasury_spend_balance,
+				beneficiary: bx!(VersionedLocation::from(alice_location)),
+				valid_from: None,
+			});
 
 		assert_ok!(treasury_spend_call.dispatch(treasury_origin));
 

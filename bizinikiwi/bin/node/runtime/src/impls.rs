@@ -25,10 +25,10 @@ use pezframe_support::{
 		Currency, OnUnbalanced,
 	},
 };
+use pezkuwi_sdk::*;
 use pezpallet_alliance::{IdentityVerifier, ProposalIndex, ProposalProvider};
 use pezpallet_asset_tx_payment::HandleCredit;
 use pezpallet_identity::legacy::IdentityField;
-use pezkuwi_sdk::*;
 
 use crate::{
 	AccountId, AllianceCollective, AllianceMotion, Assets, Authorship, Balances, Hash,
@@ -119,8 +119,8 @@ mod multiplier_tests {
 		dispatch::DispatchClass,
 		weights::{Weight, WeightToFee},
 	};
-	use pezpallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
 	use pezkuwi_sdk::*;
+	use pezpallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
 	use pezsp_runtime::{
 		assert_eq_error_rate,
 		traits::{Convert, One, Zero},
@@ -201,10 +201,11 @@ mod multiplier_tests {
 	where
 		F: Fn() -> (),
 	{
-		let mut t: pezsp_io::TestExternalities = pezframe_system::GenesisConfig::<Runtime>::default()
-			.build_storage()
-			.unwrap()
-			.into();
+		let mut t: pezsp_io::TestExternalities =
+			pezframe_system::GenesisConfig::<Runtime>::default()
+				.build_storage()
+				.unwrap()
+				.into();
 		t.execute_with(|| {
 			System::set_block_consumed_resources(w, 0);
 			assertions()

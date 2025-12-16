@@ -217,22 +217,24 @@ pub fn worker_entrypoint(
 
 				let compiled_artifact_blob = Arc::new(compiled_artifact_blob);
 
-				let raw_block_data =
-					match pezsp_maybe_compressed_blob::decompress(&pov.block_data.0, POV_BOMB_LIMIT) {
-						Ok(data) => data,
-						Err(_) => {
-							send_result::<WorkerResponse, WorkerError>(
-								&mut stream,
-								Ok(WorkerResponse {
-									job_response: JobResponse::PoVDecompressionFailure,
-									duration: Duration::ZERO,
-									pov_size: 0,
-								}),
-								worker_info,
-							)?;
-							continue;
-						},
-					};
+				let raw_block_data = match pezsp_maybe_compressed_blob::decompress(
+					&pov.block_data.0,
+					POV_BOMB_LIMIT,
+				) {
+					Ok(data) => data,
+					Err(_) => {
+						send_result::<WorkerResponse, WorkerError>(
+							&mut stream,
+							Ok(WorkerResponse {
+								job_response: JobResponse::PoVDecompressionFailure,
+								duration: Duration::ZERO,
+								pov_size: 0,
+							}),
+							worker_info,
+						)?;
+						continue;
+					},
+				};
 
 				let pov_size = raw_block_data.len() as u32;
 

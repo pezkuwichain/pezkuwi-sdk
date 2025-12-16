@@ -21,9 +21,9 @@
 
 use bp_header_pez_chain::justification::{required_justification_precommits, GrandpaJustification};
 use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
-use pezbp_runtime::record_all_trie_keys;
 use bp_teyrchains::teyrchain_head_storage_key_at_source;
 use codec::Encode;
+use pezbp_runtime::record_all_trie_keys;
 use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature, AuthorityWeight, SetId};
 use pezsp_runtime::traits::{Header as HeaderT, One, Zero};
 use pezsp_std::prelude::*;
@@ -162,7 +162,10 @@ fn generate_chain<H: HeaderT>(fork_id: u32, depth: u32, ancestor: &H) -> Vec<H> 
 
 		// Modifying the digest so headers at the same height but in different forks have different
 		// hashes
-		header.digest_mut().logs.push(pezsp_runtime::DigestItem::Other(fork_id.encode()));
+		header
+			.digest_mut()
+			.logs
+			.push(pezsp_runtime::DigestItem::Other(fork_id.encode()));
 
 		headers.push(header);
 	}

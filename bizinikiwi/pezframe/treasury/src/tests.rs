@@ -26,9 +26,8 @@ use pezsp_runtime::{
 };
 
 use pezframe_support::{
-	assert_err_ignore_postinfo, assert_noop, assert_ok, derive_impl,
+	assert_err_ignore_postinfo, assert_noop, assert_ok, derive_impl, parameter_types,
 	pezpallet_prelude::Pays,
-	parameter_types,
 	traits::{
 		tokens::{ConversionFromAssetBalance, PaymentStatus},
 		ConstU32, ConstU64, OnInitialize,

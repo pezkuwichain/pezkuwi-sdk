@@ -17,8 +17,8 @@
 use crate::{ChainId, HeaderIdProvider};
 
 use codec::{Codec, Decode, Encode, MaxEncodedLen};
-use pezframe_support::{weights::Weight, Parameter};
 use num_traits::{AsPrimitive, Bounded, CheckedSub, Saturating, SaturatingAdd, Zero};
+use pezframe_support::{weights::Weight, Parameter};
 use pezsp_runtime::{
 	traits::{
 		AtLeast32Bit, AtLeast32BitUnsigned, Hash as HashT, Header as HeaderT, MaybeDisplay,

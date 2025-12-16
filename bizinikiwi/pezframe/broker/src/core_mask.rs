@@ -17,8 +17,8 @@
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not};
-use scale_info::TypeInfo;
 use pezsp_core::RuntimeDebug;
+use scale_info::TypeInfo;
 
 /// The number of bits in the `CoreMask`.
 pub const CORE_MASK_BITS: usize = 80;

@@ -241,8 +241,10 @@ pub trait BlockImportOperation<Block: BlockT> {
 	fn mark_head(&mut self, hash: Block::Hash) -> pezsp_blockchain::Result<()>;
 
 	/// Add a transaction index operation.
-	fn update_transaction_index(&mut self, index: Vec<IndexOperation>)
-		-> pezsp_blockchain::Result<()>;
+	fn update_transaction_index(
+		&mut self,
+		index: Vec<IndexOperation>,
+	) -> pezsp_blockchain::Result<()>;
 
 	/// Configure whether to create a block gap if newly imported block is missing parent
 	fn set_create_gap(&mut self, create_gap: bool);

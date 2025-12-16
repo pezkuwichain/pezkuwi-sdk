@@ -445,8 +445,8 @@ impl<T: Config<I>, I: 'static> FeeTracker for Pezpallet<T, I> {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezframe_support::assert_ok;
 	use mock::*;
+	use pezframe_support::assert_ok;
 
 	use pezframe_support::traits::Hooks;
 	use pezframe_system::{EventRecord, Phase};

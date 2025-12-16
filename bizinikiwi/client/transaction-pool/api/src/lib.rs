@@ -24,9 +24,9 @@ pub mod error;
 use async_trait::async_trait;
 use codec::Codec;
 use futures::Stream;
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use pezsp_core::offchain::TransactionPoolExt;
 use pezsp_runtime::traits::{Block as BlockT, Member};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{collections::HashMap, hash::Hash, marker::PhantomData, pin::Pin, sync::Arc};
 
 const LOG_TARGET: &str = "txpool::api";

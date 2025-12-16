@@ -31,9 +31,9 @@
 pub mod block;
 pub mod logging;
 
+use pezsp_tracing::{WASM_NAME_KEY, WASM_TARGET_KEY, WASM_TRACE_IDENTIFIER};
 use rustc_hash::FxHashMap;
 use serde::ser::{Serialize, SerializeMap, Serializer};
-use pezsp_tracing::{WASM_NAME_KEY, WASM_TARGET_KEY, WASM_TRACE_IDENTIFIER};
 use std::{
 	fmt,
 	time::{Duration, Instant},

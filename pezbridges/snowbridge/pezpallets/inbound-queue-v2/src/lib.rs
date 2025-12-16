@@ -81,7 +81,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The verifier for inbound messages from Ethereum.
 		type Verifier: Verifier;
 		/// XCM message sender.
@@ -99,7 +100,8 @@ pub mod pezpallet {
 		type Helper: BenchmarkHelper<Self>;
 		/// Reward discriminator type.
 		type RewardKind: Parameter + MaxEncodedLen + Send + Sync + Copy + Clone;
-		/// The default RewardKind discriminator for rewards allocated to relayers from this pezpallet.
+		/// The default RewardKind discriminator for rewards allocated to relayers from this
+		/// pezpallet.
 		#[pezpallet::constant]
 		type DefaultRewardKind: Get<Self::RewardKind>;
 		/// Relayer reward payment.

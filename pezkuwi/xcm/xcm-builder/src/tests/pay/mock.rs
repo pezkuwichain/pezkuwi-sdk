@@ -145,7 +145,9 @@ pub struct AssetKind {
 }
 
 pub struct LocatableAssetKindConverter;
-impl pezsp_runtime::traits::TryConvert<AssetKind, LocatableAssetId> for LocatableAssetKindConverter {
+impl pezsp_runtime::traits::TryConvert<AssetKind, LocatableAssetId>
+	for LocatableAssetKindConverter
+{
 	fn try_convert(value: AssetKind) -> Result<LocatableAssetId, AssetKind> {
 		Ok(LocatableAssetId { asset_id: value.asset_id, location: value.destination })
 	}

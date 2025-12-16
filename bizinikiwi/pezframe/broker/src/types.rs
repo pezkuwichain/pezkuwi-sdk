@@ -22,10 +22,10 @@ use crate::{
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezframe_support::traits::fungible::Inspect;
 use pezframe_system::Config as SConfig;
-use scale_info::TypeInfo;
 use pezsp_arithmetic::Perbill;
 use pezsp_core::{ConstU32, RuntimeDebug};
 use pezsp_runtime::BoundedVec;
+use scale_info::TypeInfo;
 
 pub type BalanceOf<T> = <<T as Config>::Currency as Inspect<<T as SConfig>::AccountId>>::Balance;
 pub type RelayBalanceOf<T> = <<T as Config>::Coretime as CoretimeInterface>::Balance;

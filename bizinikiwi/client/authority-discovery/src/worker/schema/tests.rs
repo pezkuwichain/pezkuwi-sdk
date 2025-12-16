@@ -26,9 +26,9 @@ mod schema_v2 {
 
 use super::*;
 use codec::Encode;
-use prost::Message;
 use pezsc_network::{Multiaddr, PeerId};
 use pezsc_network_types::ed25519::Keypair;
+use prost::Message;
 
 #[test]
 fn v2_decodes_v1() {

@@ -21,6 +21,7 @@
 //! are expected to be removed in the near future, once migration to `fungible::*` traits is done.
 
 use super::*;
+pub use imbalances::{NegativeImbalance, PositiveImbalance};
 use pezframe_support::{
 	ensure,
 	pezpallet_prelude::DispatchResult,
@@ -33,7 +34,6 @@ use pezframe_support::{
 	},
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-pub use imbalances::{NegativeImbalance, PositiveImbalance};
 use pezsp_runtime::traits::Bounded;
 
 // wrapping these imbalances in a private module is necessary to ensure absolute privacy

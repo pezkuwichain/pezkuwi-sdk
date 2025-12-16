@@ -32,7 +32,7 @@
 //! state consistency.
 
 use crate::{
-	asset, log, BalanceOf, Bonded, Config, DecodeWithMemTracking, Error, Ledger, Pezpallet, Payee,
+	asset, log, BalanceOf, Bonded, Config, DecodeWithMemTracking, Error, Ledger, Payee, Pezpallet,
 	RewardDestination, Vec, VirtualStakers,
 };
 use alloc::{collections::BTreeMap, fmt::Debug};
@@ -42,9 +42,9 @@ use pezframe_support::{
 	traits::{Defensive, DefensiveSaturating, Get},
 	BoundedVec, CloneNoBound, DebugNoBound, EqNoBound, PartialEqNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{traits::Zero, DispatchResult, Perquintill, Rounding, Saturating};
 use pezsp_staking::{EraIndex, OnStakingUpdate, StakingAccount, StakingInterface};
+use scale_info::TypeInfo;
 
 /// Just a Balance/BlockNumber tuple to encode when a chunk of funds will be unlocked.
 #[derive(

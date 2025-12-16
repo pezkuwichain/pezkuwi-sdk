@@ -86,8 +86,9 @@ use frame::{
 pub use pezpallet::*;
 pub use weights::*;
 
-type BalanceOf<T> =
-	<<T as Config>::Currency as fungible::Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as Config>::Currency as fungible::Inspect<
+	<T as pezframe_system::Config>::AccountId,
+>>::Balance;
 
 #[frame::pezpallet]
 pub mod pezpallet {
@@ -100,7 +101,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Currency type for this pezpallet, used for Deposits.
 		type Currency: Inspect<Self::AccountId>
@@ -109,11 +111,11 @@ pub mod pezpallet {
 		/// The hold reason when reserving funds for entering or extending the safe-mode.
 		type RuntimeHoldReason: From<HoldReason>;
 
-		/// Contains all runtime calls in any pezpallet that can be dispatched even while the safe-mode
-		/// is entered.
+		/// Contains all runtime calls in any pezpallet that can be dispatched even while the
+		/// safe-mode is entered.
 		///
-		/// The safe-mode pezpallet cannot disable it's own calls, and does not need to be explicitly
-		/// added here.
+		/// The safe-mode pezpallet cannot disable it's own calls, and does not need to be
+		/// explicitly added here.
 		type WhitelistedCalls: Contains<Self::RuntimeCall>;
 
 		/// For how many blocks the safe-mode will be entered by [`Pezpallet::enter`].

@@ -18,9 +18,9 @@
 
 //! The chain head's event returned as json compatible object.
 
-use serde::{ser::SerializeStruct, Deserialize, Serialize, Serializer};
 use pezsp_api::ApiError;
 use pezsp_version::RuntimeVersion;
+use serde::{ser::SerializeStruct, Deserialize, Serialize, Serializer};
 use std::collections::BTreeMap;
 
 use crate::common::events::StorageResult;

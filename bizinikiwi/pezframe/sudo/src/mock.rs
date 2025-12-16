@@ -32,7 +32,8 @@ pub mod logger {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::pezpallet]
@@ -140,5 +141,8 @@ pub fn new_test_ext(root_key: u64) -> pezsp_io::TestExternalities {
 
 #[cfg(feature = "runtime-benchmarks")]
 pub fn new_bench_ext() -> pezsp_io::TestExternalities {
-	pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap().into()
+	pezframe_system::GenesisConfig::<Test>::default()
+		.build_storage()
+		.unwrap()
+		.into()
 }

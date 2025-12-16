@@ -21,9 +21,11 @@ use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 #[cfg(feature = "runtime-benchmarks")]
 use enumflags2::BitFlag;
 use enumflags2::{bitflags, BitFlags};
-use pezframe_support::{traits::Get, CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound};
-use scale_info::{build::Variants, Path, Type, TypeInfo};
+use pezframe_support::{
+	traits::Get, CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
+};
 use pezsp_runtime::{BoundedVec, RuntimeDebug};
+use scale_info::{build::Variants, Path, Type, TypeInfo};
 
 use crate::types::{Data, IdentityInformationProvider};
 

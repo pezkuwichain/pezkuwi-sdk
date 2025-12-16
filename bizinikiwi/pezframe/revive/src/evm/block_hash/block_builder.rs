@@ -32,17 +32,17 @@ use alloc::{vec, vec::Vec};
 
 use codec::{Decode, Encode};
 use pezframe_support::traits::Time;
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::Saturating;
 use pezsp_core::{keccak_256, H160, H256, U256};
 use pezsp_runtime::traits::{One, Zero};
+use scale_info::TypeInfo;
 
 const LOG_TARGET: &str = "runtime::revive::block_builder";
 
 /// Ethereum block builder designed to incrementally build the transaction and receipt trie roots.
 ///
-/// This builder is optimized to minimize memory usage and pezpallet storage by leveraging the internal
-/// structure of the Ethereum trie and the RLP encoding of receipts.
+/// This builder is optimized to minimize memory usage and pezpallet storage by leveraging the
+/// internal structure of the Ethereum trie and the RLP encoding of receipts.
 #[cfg_attr(test, derive(pezframe_support::DefaultNoBound))]
 pub struct EthereumBlockBuilder<T> {
 	pub(crate) transaction_root_builder: IncrementalHashBuilder,

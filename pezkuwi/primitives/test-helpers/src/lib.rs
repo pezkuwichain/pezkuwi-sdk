@@ -29,11 +29,11 @@ use pezkuwi_primitives::{
 	Id, Id as ParaId, InternalVersion, MutateDescriptorV2, PersistedValidationData, SessionIndex,
 	ValidationCode, ValidationCodeHash, ValidatorId,
 };
-pub use rand;
-use scale_info::TypeInfo;
 use pezsp_application_crypto::{sr25519, ByteArray};
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_runtime::{generic::Digest, traits::BlakeTwo256};
+pub use rand;
+use scale_info::TypeInfo;
 
 const MAX_POV_SIZE: u32 = 1_000_000;
 

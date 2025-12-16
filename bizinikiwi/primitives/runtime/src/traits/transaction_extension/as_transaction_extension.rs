@@ -20,8 +20,8 @@
 
 #![allow(deprecated)]
 
-use scale_info::TypeInfo;
 use pezsp_core::RuntimeDebug;
+use scale_info::TypeInfo;
 
 use crate::{
 	traits::{AsSystemOriginSigner, SignedExtension, ValidateResult},

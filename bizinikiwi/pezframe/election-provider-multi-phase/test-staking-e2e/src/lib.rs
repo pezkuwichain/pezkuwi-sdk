@@ -23,8 +23,8 @@ mod mock;
 
 pub(crate) const LOG_TARGET: &str = "tests::e2e-epm";
 
-use pezframe_support::{assert_err, assert_ok};
 use mock::*;
+use pezframe_support::{assert_err, assert_ok};
 use pezpallet_timestamp::Now;
 use pezsp_core::Get;
 use pezsp_runtime::Perbill;
@@ -146,7 +146,10 @@ fn mass_slash_doesnt_enter_emergency_phase() {
 		.build_offchainify();
 
 	ext.execute_with(|| {
-		assert_eq!(pezpallet_staking::ForceEra::<Runtime>::get(), pezpallet_staking::Forcing::NotForcing);
+		assert_eq!(
+			pezpallet_staking::ForceEra::<Runtime>::get(),
+			pezpallet_staking::Forcing::NotForcing
+		);
 
 		let active_set_size_before_slash = Session::validators().len();
 
@@ -173,12 +176,16 @@ fn mass_slash_doesnt_enter_emergency_phase() {
 		}
 
 		// Ensure no more than disabling limit of validators (default 1/3) is disabled
-		let disabling_limit = pezpallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy::<
-			SLASHING_DISABLING_FACTOR,
-		>::disable_limit(active_set_size_before_slash);
+		let disabling_limit =
+			pezpallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy::<
+				SLASHING_DISABLING_FACTOR,
+			>::disable_limit(active_set_size_before_slash);
 		assert!(disabled.len() == disabling_limit);
 
-		assert_eq!(pezpallet_staking::ForceEra::<Runtime>::get(), pezpallet_staking::Forcing::NotForcing);
+		assert_eq!(
+			pezpallet_staking::ForceEra::<Runtime>::get(),
+			pezpallet_staking::Forcing::NotForcing
+		);
 	});
 }
 

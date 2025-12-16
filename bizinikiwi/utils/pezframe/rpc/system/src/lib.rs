@@ -217,6 +217,7 @@ mod tests {
 	use super::*;
 
 	use assert_matches::assert_matches;
+	use bizinikiwi_test_runtime_client::{runtime::Transfer, Sr25519Keyring};
 	use futures::executor::block_on;
 	use pezsc_rpc_api::DenyUnsafe;
 	use pezsc_transaction_pool::BasicPool;
@@ -224,7 +225,6 @@ mod tests {
 		transaction_validity::{InvalidTransaction, TransactionValidityError},
 		ApplyExtrinsicResult,
 	};
-	use bizinikiwi_test_runtime_client::{runtime::Transfer, Sr25519Keyring};
 
 	fn deny_unsafe() -> Extensions {
 		let mut ext = Extensions::new();

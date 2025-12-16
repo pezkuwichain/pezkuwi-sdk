@@ -18,9 +18,8 @@
 use crate::{self as fast_unstake};
 use pezframe_election_provider_support::PageIndex;
 use pezframe_support::{
-	assert_ok, derive_impl,
+	assert_ok, derive_impl, parameter_types,
 	pezpallet_prelude::*,
-	parameter_types,
 	traits::{ConstU64, Currency},
 	weights::constants::WEIGHT_REF_TIME_PER_SECOND,
 };

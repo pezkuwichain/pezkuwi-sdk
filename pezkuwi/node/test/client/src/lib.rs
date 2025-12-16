@@ -24,18 +24,21 @@ use pezkuwi_primitives::Block;
 use pezsp_runtime::BuildStorage;
 use std::sync::Arc;
 
+pub use bizinikiwi_test_client::*;
 pub use block_builder::*;
 pub use pezkuwi_test_runtime as runtime;
 pub use pezkuwi_test_service::{
 	construct_extrinsic, construct_transfer_extrinsic, Client, FullBackend,
 };
-pub use bizinikiwi_test_client::*;
 
 /// Test client executor.
 pub type Executor = client::LocalCallExecutor<
 	Block,
 	FullBackend,
-	WasmExecutor<(pezsp_io::BizinikiwiHostFunctions, pezframe_benchmarking::benchmarking::HostFunctions)>,
+	WasmExecutor<(
+		pezsp_io::BizinikiwiHostFunctions,
+		pezframe_benchmarking::benchmarking::HostFunctions,
+	)>,
 >;
 
 /// Test client builder for Pezkuwi.

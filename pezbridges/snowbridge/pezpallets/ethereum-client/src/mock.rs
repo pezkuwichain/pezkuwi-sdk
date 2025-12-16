@@ -10,8 +10,8 @@ use pezsp_std::default::Default;
 use std::{fs::File, path::PathBuf};
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
-use pezframe_support::traits::ConstU32;
 use hex_literal::hex;
+use pezframe_support::traits::ConstU32;
 use pezsp_runtime::BuildStorage;
 
 fn load_fixture<T>(basename: String) -> Result<T, serde_json::Error>

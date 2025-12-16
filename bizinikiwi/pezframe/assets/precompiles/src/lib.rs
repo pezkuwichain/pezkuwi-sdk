@@ -218,8 +218,9 @@ where
 		use pezframe_support::traits::fungibles::Inspect;
 		env.charge(<Runtime as Config<Instance>>::WeightInfo::total_issuance())?;
 
-		let value =
-			Self::to_u256(pezpallet_assets::Pezpallet::<Runtime, Instance>::total_issuance(asset_id))?;
+		let value = Self::to_u256(
+			pezpallet_assets::Pezpallet::<Runtime, Instance>::total_issuance(asset_id),
+		)?;
 		return Ok(IERC20::totalSupplyCall::abi_encode_returns(&value));
 	}
 
@@ -232,8 +233,9 @@ where
 		env.charge(<Runtime as Config<Instance>>::WeightInfo::balance())?;
 		let account = call.account.into_array().into();
 		let account = <Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&account);
-		let value =
-			Self::to_u256(pezpallet_assets::Pezpallet::<Runtime, Instance>::balance(asset_id, account))?;
+		let value = Self::to_u256(pezpallet_assets::Pezpallet::<Runtime, Instance>::balance(
+			asset_id, account,
+		))?;
 		return Ok(IERC20::balanceOfCall::abi_encode_returns(&value));
 	}
 

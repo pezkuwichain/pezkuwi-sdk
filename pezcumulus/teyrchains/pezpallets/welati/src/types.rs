@@ -2,9 +2,9 @@ use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::{pezpallet_prelude::BlockNumberFor, Config as SystemConfig};
 use pezpallet_tiki::Tiki;
-use scale_info::TypeInfo;
 use pezsp_runtime::RuntimeDebug;
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 
 #[derive(RuntimeDebug, Eq, PartialEq)]
 pub enum ElectionOutcome<AccountId> {

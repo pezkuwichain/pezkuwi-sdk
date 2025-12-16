@@ -83,8 +83,8 @@ impl From<QueueDownwardMessageError> for SendError {
 	}
 }
 
-/// An error returned by [`Pezpallet::check_processed_downward_messages`] that indicates an acceptance
-/// check didn't pass.
+/// An error returned by [`Pezpallet::check_processed_downward_messages`] that indicates an
+/// acceptance check didn't pass.
 pub(crate) enum ProcessedDownwardMessagesAcceptanceErr {
 	/// If there are pending messages then `processed_downward_messages` should be at least 1,
 	AdvancementRule,
@@ -219,8 +219,10 @@ impl<T: Config> Pezpallet<T> {
 		let serialized_len = msg.len();
 		Self::can_queue_downward_message(config, &para, &msg)?;
 
-		let inbound =
-			InboundDownwardMessage { msg, sent_at: pezframe_system::Pezpallet::<T>::block_number() };
+		let inbound = InboundDownwardMessage {
+			msg,
+			sent_at: pezframe_system::Pezpallet::<T>::block_number(),
+		};
 
 		// obtain the new link in the MQC and update the head.
 		DownwardMessageQueueHeads::<T>::mutate(para, |head| {

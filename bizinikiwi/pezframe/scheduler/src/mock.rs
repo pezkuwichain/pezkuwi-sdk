@@ -32,7 +32,7 @@ use pezsp_weights::constants::WEIGHT_REF_TIME_PER_SECOND;
 #[pezframe_support::pezpallet]
 pub mod logger {
 	use super::{OriginCaller, OriginTrait};
-	use pezframe_support::{pezpallet_prelude::*, parameter_types};
+	use pezframe_support::{parameter_types, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::*;
 
 	parameter_types! {
@@ -62,7 +62,8 @@ pub mod logger {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::event]

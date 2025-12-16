@@ -79,11 +79,11 @@ extern crate alloc;
 use alloc::{collections::btree_map::BTreeMap, rc::Rc, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::{cell::RefCell, cmp::Ordering};
+use pezsp_arithmetic::{traits::Zero, Normalizable, PerThing, Rational128, ThresholdOrd};
+use pezsp_core::RuntimeDebug;
 use scale_info::TypeInfo;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-use pezsp_arithmetic::{traits::Zero, Normalizable, PerThing, Rational128, ThresholdOrd};
-use pezsp_core::RuntimeDebug;
 
 #[cfg(test)]
 mod mock;
@@ -481,8 +481,8 @@ pub struct ElectionResult<AccountId, P: PerThing> {
 ///
 /// This complements the [`ElectionResult`] and is needed to run the balancing post-processing.
 ///
-/// This, at the current version, resembles the `Exposure` defined in the Staking pezpallet, yet they
-/// do not necessarily have to be the same.
+/// This, at the current version, resembles the `Exposure` defined in the Staking pezpallet, yet
+/// they do not necessarily have to be the same.
 #[derive(RuntimeDebug, Encode, Decode, DecodeWithMemTracking, Clone, Eq, PartialEq, TypeInfo)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Support<AccountId> {

@@ -15,13 +15,13 @@
 
 //! Managed Collective Content Pezpallet
 //!
-//! The pezpallet provides the functionality to store different types of content. This would typically
-//! be used by an on-chain collective, such as the Pezkuwi Alliance or Ambassador Program.
+//! The pezpallet provides the functionality to store different types of content. This would
+//! typically be used by an on-chain collective, such as the Pezkuwi Alliance or Ambassador Program.
 //!
-//! The pezpallet stores content as an [OpaqueCid], which should correspond to some off-chain hosting
-//! service, such as IPFS, and contain any type of data. Each type of content has its own origin
-//! from which it can be managed. The origins are configurable in the runtime. Storing content does
-//! not require a deposit, as it is expected to be managed by a trusted collective.
+//! The pezpallet stores content as an [OpaqueCid], which should correspond to some off-chain
+//! hosting service, such as IPFS, and contain any type of data. Each type of content has its own
+//! origin from which it can be managed. The origins are configurable in the runtime. Storing
+//! content does not require a deposit, as it is expected to be managed by a trusted collective.
 //!
 //! Content types:
 //!

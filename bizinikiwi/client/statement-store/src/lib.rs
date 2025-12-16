@@ -18,8 +18,8 @@
 
 //! Disk-backed statement store.
 //!
-//! This module contains an implementation of `pezsp_statement_store::StatementStore` which is backed
-//! by a database.
+//! This module contains an implementation of `pezsp_statement_store::StatementStore` which is
+//! backed by a database.
 //!
 //! Constraint management.
 //!
@@ -53,11 +53,12 @@ pub use pezsp_statement_store::{Error, StatementStore, MAX_TOPICS};
 
 use metrics::MetricsLink as PrometheusMetrics;
 use parking_lot::RwLock;
-use prometheus_endpoint::Registry as PrometheusRegistry;
 use pezsc_keystore::LocalKeystore;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_blockchain::HeaderBackend;
-use pezsp_core::{crypto::UncheckedFrom, hexdisplay::HexDisplay, traits::SpawnNamed, Decode, Encode};
+use pezsp_core::{
+	crypto::UncheckedFrom, hexdisplay::HexDisplay, traits::SpawnNamed, Decode, Encode,
+};
 use pezsp_runtime::traits::Block as BlockT;
 use pezsp_statement_store::{
 	runtime_api::{
@@ -66,6 +67,7 @@ use pezsp_statement_store::{
 	AccountId, BlockHash, Channel, DecryptionKey, Hash, NetworkPriority, Proof, Result, Statement,
 	SubmitResult, Topic,
 };
+use prometheus_endpoint::Registry as PrometheusRegistry;
 use std::{
 	collections::{BTreeMap, HashMap, HashSet},
 	sync::Arc,

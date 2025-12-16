@@ -25,8 +25,6 @@ use super::{
 use crate::client::notification_pinning::NotificationPinningWorker;
 use log::{debug, info, trace, warn};
 use parking_lot::{Mutex, RwLock};
-use prometheus_endpoint::Registry;
-use rand::Rng;
 use pezsc_chain_spec::{resolve_state_version_from_wasm, BuildGenesisBlock};
 use pezsc_client_api::{
 	backend::{
@@ -57,6 +55,8 @@ use pezsp_blockchain::{
 	HeaderBackend as ChainHeaderBackend, HeaderMetadata, Info as BlockchainInfo,
 };
 use pezsp_consensus::{BlockOrigin, BlockStatus, Error as ConsensusError};
+use prometheus_endpoint::Registry;
+use rand::Rng;
 
 use pezsc_utils::mpsc::{tracing_unbounded, TracingUnboundedSender};
 use pezsp_core::{
@@ -450,7 +450,10 @@ where
 	}
 
 	/// Get the RuntimeVersion at a given block.
-	pub fn runtime_version_at(&self, hash: Block::Hash) -> pezsp_blockchain::Result<RuntimeVersion> {
+	pub fn runtime_version_at(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<RuntimeVersion> {
 		CallExecutor::runtime_version(&self.executor, hash)
 	}
 
@@ -694,8 +697,11 @@ where
 		};
 
 		let tree_route = if is_new_best && info.best_hash != parent_hash && parent_exists {
-			let route_from_best =
-				pezsp_blockchain::tree_route(self.backend.blockchain(), info.best_hash, parent_hash)?;
+			let route_from_best = pezsp_blockchain::tree_route(
+				self.backend.blockchain(),
+				info.best_hash,
+				parent_hash,
+			)?;
 			Some(route_from_best)
 		} else {
 			None
@@ -1320,8 +1326,9 @@ where
 				total_size += size;
 
 				if current_child.is_none() &&
-					pezsp_core::storage::well_known_keys::is_child_storage_key(next_key.as_slice()) &&
-					!child_roots.contains(value.as_slice())
+					pezsp_core::storage::well_known_keys::is_child_storage_key(
+						next_key.as_slice(),
+					) && !child_roots.contains(value.as_slice())
 				{
 					child_roots.insert(value.clone());
 					switch_child_key = Some((next_key.clone(), value.clone()));
@@ -1955,11 +1962,17 @@ where
 		Client::block_status(self, hash)
 	}
 
-	fn justifications(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Justifications>> {
+	fn justifications(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<Option<Justifications>> {
 		self.backend.blockchain().justifications(hash)
 	}
 
-	fn block_hash(&self, number: NumberFor<Block>) -> pezsp_blockchain::Result<Option<Block::Hash>> {
+	fn block_hash(
+		&self,
+		number: NumberFor<Block>,
+	) -> pezsp_blockchain::Result<Option<Block::Hash>> {
 		self.backend.blockchain().hash(number)
 	}
 
@@ -1971,7 +1984,10 @@ where
 		self.backend.blockchain().has_indexed_transaction(hash)
 	}
 
-	fn block_indexed_body(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Vec<Vec<u8>>>> {
+	fn block_indexed_body(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<Option<Vec<Vec<u8>>>> {
 		self.backend.blockchain().block_indexed_body(hash)
 	}
 

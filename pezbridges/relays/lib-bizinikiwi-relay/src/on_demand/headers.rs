@@ -21,12 +21,14 @@ use crate::finality::SubmitFinalityProofCallBuilder;
 use async_std::sync::{Arc, Mutex};
 use async_trait::async_trait;
 use bp_header_pez_chain::ConsensusLogReader;
-use pezbp_runtime::HeaderIdProvider;
 use futures::{select, FutureExt};
 use num_traits::{One, Saturating, Zero};
+use pezbp_runtime::HeaderIdProvider;
 use pezsp_runtime::traits::Header;
 
-use pez_finality_relay::{FinalitySyncParams, HeadersToRelay, TargetClient as FinalityTargetClient};
+use pez_finality_relay::{
+	FinalitySyncParams, HeadersToRelay, TargetClient as FinalityTargetClient,
+};
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, BlockNumberOf, CallOf, Chain, Client, Error as BizinikiwiError,
 	HeaderIdOf,
@@ -38,7 +40,7 @@ use relay_utils::{
 
 use crate::{
 	finality::{
-		source::{RequiredHeaderNumberRef, BizinikiwiFinalitySource},
+		source::{BizinikiwiFinalitySource, RequiredHeaderNumberRef},
 		target::BizinikiwiFinalityTarget,
 		BizinikiwiFinalitySyncPipeline, RECENT_FINALITY_PROOFS_LIMIT,
 	},
@@ -212,7 +214,8 @@ async fn background_task<P: BizinikiwiFinalitySyncPipeline>(
 	required_header_number: RequiredHeaderNumberRef<P::SourceChain>,
 	metrics_params: Option<MetricsParams>,
 ) where
-	AccountIdOf<P::TargetChain>: From<<AccountKeyPairOf<P::TargetChain> as pezsp_core::Pair>::Public>,
+	AccountIdOf<P::TargetChain>:
+		From<<AccountKeyPairOf<P::TargetChain> as pezsp_core::Pair>::Public>,
 {
 	let relay_task_name = on_demand_headers_relay_name::<P::SourceChain, P::TargetChain>();
 	let target_transactions_mortality = target_transaction_params.mortality;
@@ -493,7 +496,8 @@ async fn best_finalized_source_header_at_target<P, TargetClnt>(
 where
 	P: BizinikiwiFinalitySyncPipeline,
 	TargetClnt: Client<P::TargetChain>,
-	AccountIdOf<P::TargetChain>: From<<AccountKeyPairOf<P::TargetChain> as pezsp_core::Pair>::Public>,
+	AccountIdOf<P::TargetChain>:
+		From<<AccountKeyPairOf<P::TargetChain> as pezsp_core::Pair>::Public>,
 {
 	finality_target
 		.best_finalized_source_block_id()

@@ -14,8 +14,9 @@
 //!   upon success
 //! - another dispatchable function that causes a custom error to be thrown
 //!
-//! Each pezpallet section is annotated with an attribute using the `#[pezpallet::...]` procedural macro.
-//! This macro generates the necessary code for a pezpallet to be aggregated into a FRAME runtime.
+//! Each pezpallet section is annotated with an attribute using the `#[pezpallet::...]` procedural
+//! macro. This macro generates the necessary code for a pezpallet to be aggregated into a FRAME
+//! runtime.
 //!
 //! To get started with pezpallet development, consider using this tutorial:
 //!
@@ -34,12 +35,12 @@
 //!
 //! - A **configuration trait** that defines the types and parameters which the pezpallet depends on
 //!   (denoted by the `#[pezpallet::config]` attribute). See: [`Config`].
-//! - A **means to store pezpallet-specific data** (denoted by the `#[pezpallet::storage]` attribute).
-//!   See: [`storage_types`].
+//! - A **means to store pezpallet-specific data** (denoted by the `#[pezpallet::storage]`
+//!   attribute). See: [`storage_types`].
 //! - A **declaration of the events** this pezpallet emits (denoted by the `#[pezpallet::event]`
 //!   attribute). See: [`Event`].
-//! - A **declaration of the errors** that this pezpallet can throw (denoted by the `#[pezpallet::error]`
-//!   attribute). See: [`Error`].
+//! - A **declaration of the errors** that this pezpallet can throw (denoted by the
+//!   `#[pezpallet::error]` attribute). See: [`Error`].
 //! - A **set of dispatchable functions** that define the pezpallet's functionality (denoted by the
 //!   `#[pezpallet::call]` attribute). See: [`dispatchables`].
 //!
@@ -74,7 +75,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A type representing the weights required by the dispatchables of this pezpallet.
 		type WeightInfo: crate::weights::WeightInfo;

@@ -15,8 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use pezframe_election_provider_solution_type::generate_solution_type;
 use honggfuzz::fuzz;
+use pezframe_election_provider_solution_type::generate_solution_type;
 use pezsp_arithmetic::Percent;
 use pezsp_runtime::codec::{Encode, Error};
 

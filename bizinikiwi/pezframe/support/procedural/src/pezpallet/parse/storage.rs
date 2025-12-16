@@ -704,7 +704,8 @@ fn process_generics(
 			.collect::<Vec<_>>();
 		process_named_generics(&storage_kind, args_span, &args, dev_mode)
 	} else {
-		let msg = "Invalid pezpallet::storage, invalid generic declaration for storage. Expect only \
+		let msg =
+			"Invalid pezpallet::storage, invalid generic declaration for storage. Expect only \
 			type generics or binding generics, e.g. `<Name1 = Gen1, Name2 = Gen2, ..>` or \
 			`<Gen1, Gen2, ..>`.";
 		Err(syn::Error::new(segment.span(), msg))
@@ -792,7 +793,10 @@ impl StorageDef {
 		let item = if let syn::Item::Type(item) = item {
 			item
 		} else {
-			return Err(syn::Error::new(item.span(), "Invalid pezpallet::storage, expect item type."));
+			return Err(syn::Error::new(
+				item.span(),
+				"Invalid pezpallet::storage, expect item type.",
+			));
 		};
 
 		let attrs: Vec<PalletStorageAttr> = helper::take_item_pallet_attrs(&mut item.attrs)?;
@@ -920,7 +924,8 @@ impl StorageDef {
 			.unwrap_or(Some(QueryKind::OptionQuery));
 
 		if let (None, Some(getter)) = (query_kind.as_ref(), getter.as_ref()) {
-			let msg = "Invalid pezpallet::storage, cannot generate getter because QueryKind is not \
+			let msg =
+				"Invalid pezpallet::storage, cannot generate getter because QueryKind is not \
 				identifiable. QueryKind must be `OptionQuery`, `ResultQuery`, `ValueQuery`, or default \
 				one to be identifiable.";
 			return Err(syn::Error::new(getter.span(), msg));

@@ -32,9 +32,9 @@ pub use backend::*;
 pub use call_executor::*;
 pub use client::*;
 pub use notifications::*;
-pub use proof_provider::*;
 pub use pezsp_blockchain as blockchain;
 pub use pezsp_blockchain::HeaderBackend;
+pub use proof_provider::*;
 
 pub use pezsp_state_machine::{CompactProof, StorageProof};
 pub use pezsp_storage::{ChildInfo, PrefixedStorageKey, StorageData, StorageKey};

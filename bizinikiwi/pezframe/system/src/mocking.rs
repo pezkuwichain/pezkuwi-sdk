@@ -33,7 +33,8 @@ pub type MockBlock<T> = generic::Block<
 	MockUncheckedExtrinsic<T>,
 >;
 
-/// An implementation of `pezsp_runtime::traits::Block` to be used in tests with u32 BlockNumber type.
+/// An implementation of `pezsp_runtime::traits::Block` to be used in tests with u32 BlockNumber
+/// type.
 pub type MockBlockU32<T> = generic::Block<
 	generic::Header<u32, pezsp_runtime::traits::BlakeTwo256>,
 	MockUncheckedExtrinsic<T>,

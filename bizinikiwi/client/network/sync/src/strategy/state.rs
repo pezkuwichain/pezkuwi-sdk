@@ -31,7 +31,6 @@ use crate::{
 };
 use futures::{channel::oneshot, FutureExt};
 use log::{debug, error, trace};
-use prost::Message;
 use pezsc_client_api::ProofProvider;
 use pezsc_consensus::{BlockImportError, BlockImportStatus, IncomingBlock};
 use pezsc_network::{IfDisconnected, ProtocolName};
@@ -42,6 +41,7 @@ use pezsp_runtime::{
 	traits::{Block as BlockT, Header, NumberFor},
 	Justifications, SaturatedConversion,
 };
+use prost::Message;
 use std::{any::Any, collections::HashMap, sync::Arc};
 
 mod rep {
@@ -398,16 +398,16 @@ mod test {
 		service::network::NetworkServiceProvider,
 		strategy::state_sync::{ImportResult, StateSyncProgress, StateSyncProvider},
 	};
+	use bizinikiwi_test_runtime_client::{
+		runtime::{Block, Hash},
+		BlockBuilderExt, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
+	};
 	use codec::Decode;
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsc_client_api::KeyValueStates;
 	use pezsc_consensus::{ImportedAux, ImportedState};
 	use pezsp_core::H256;
 	use pezsp_runtime::traits::Zero;
-	use bizinikiwi_test_runtime_client::{
-		runtime::{Block, Hash},
-		BlockBuilderExt, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
-	};
 
 	mockall::mock! {
 		pub StateSync<B: BlockT> {}

@@ -227,7 +227,9 @@ impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Pezpa
 	}
 }
 
-impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig> for Pezpallet<T, I> {
+impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig>
+	for Pezpallet<T, I>
+{
 	fn mint_into(
 		collection: &Self::CollectionId,
 		item: &Self::ItemId,

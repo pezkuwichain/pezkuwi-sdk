@@ -21,8 +21,8 @@
 use std::{fmt::Debug, sync::Arc};
 
 use codec::Codec;
-use pez_fork_tree::ForkTree;
 use parking_lot::RwLock;
+use pez_fork_tree::ForkTree;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_blockchain::{HeaderBackend, HeaderMetadata};
 use pezsp_consensus_aura::{AuraApi, ConsensusLog, AURA_ENGINE_ID};
@@ -108,7 +108,8 @@ where
 					compatibility_mode,
 				)
 				.map_err(|e| format!("Could not fetch authorities at {:?}: {}", parent_hash, e))?;
-				let is_descendent_of = pezsc_client_api::utils::is_descendent_of(&*self.client, None);
+				let is_descendent_of =
+					pezsc_client_api::utils::is_descendent_of(&*self.client, None);
 				let mut authorities_cache = self.authorities.write();
 				authorities_cache
 					.import(

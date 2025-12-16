@@ -20,8 +20,8 @@
 //! ## Overview
 //!
 //! The Collator Selection pezpallet manages the collators of a teyrchain. **Collation is _not_ a
-//! secure activity** and this pezpallet does not implement any game-theoretic mechanisms to meet BFT
-//! safety assumptions of the chosen set.
+//! secure activity** and this pezpallet does not implement any game-theoretic mechanisms to meet
+//! BFT safety assumptions of the chosen set.
 //!
 //! ## Terminology
 //!
@@ -142,7 +142,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency mechanism.
 		type Currency: ReservableCurrency<Self::AccountId>;

@@ -13,8 +13,8 @@ use crate::{
 	FinalizedBeaconState, LatestFinalizedBlockRoot, LatestSyncCommitteeUpdatePeriod,
 	NextSyncCommittee, SyncCommitteePrepared,
 };
-use pezframe_support::{assert_err, assert_noop, assert_ok, pezpallet_prelude::Pays};
 use hex_literal::hex;
+use pezframe_support::{assert_err, assert_noop, assert_ok, pezpallet_prelude::Pays};
 use pezsnowbridge_beacon_primitives::{
 	merkle_proof::{generalized_index_length, subtree_index},
 	types::deneb,

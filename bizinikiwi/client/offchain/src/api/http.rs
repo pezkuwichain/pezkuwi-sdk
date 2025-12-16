@@ -779,7 +779,9 @@ mod tests {
 	use core::convert::Infallible;
 	use futures::future;
 	use http_body_util::BodyExt;
-	use pezsp_core::offchain::{Duration, Externalities, HttpError, HttpRequestId, HttpRequestStatus};
+	use pezsp_core::offchain::{
+		Duration, Externalities, HttpError, HttpRequestId, HttpRequestStatus,
+	};
 	use std::sync::LazyLock;
 
 	// Using LazyLock to avoid spawning lots of different SharedClients,

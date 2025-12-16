@@ -28,8 +28,8 @@ mod xcm_config;
 
 use crate::xcm_config::{RelayLocation, XcmOriginToTransactDispatchOrigin};
 
-use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 pub use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezstaging_xcm_builder as xcm_builder;
 use pezstaging_xcm_executor as xcm_executor;
 
@@ -586,7 +586,8 @@ pub struct RemoveCollectiveFlip;
 impl pezframe_support::traits::OnRuntimeUpgrade for RemoveCollectiveFlip {
 	fn on_runtime_upgrade() -> Weight {
 		use pezframe_support::storage::migration;
-		// Remove the storage value `RandomMaterial` from removed pezpallet `RandomnessCollectiveFlip`
+		// Remove the storage value `RandomMaterial` from removed pezpallet
+		// `RandomnessCollectiveFlip`
 		#[allow(deprecated)]
 		migration::remove_storage_prefix(b"RandomnessCollectiveFlip", b"RandomMaterial", b"");
 		<Runtime as pezframe_system::Config>::DbWeight::get().writes(1)

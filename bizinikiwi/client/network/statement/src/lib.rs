@@ -30,9 +30,6 @@ use crate::config::*;
 
 use codec::{Decode, Encode};
 use futures::{channel::oneshot, prelude::*, stream::FuturesUnordered, FutureExt};
-use prometheus_endpoint::{
-	prometheus, register, Counter, Gauge, Histogram, HistogramOpts, PrometheusError, Registry, U64,
-};
 use pezsc_network::{
 	config::{NonReservedPeerMode, SetConfig},
 	error, multiaddr,
@@ -51,6 +48,9 @@ use pezsc_network_types::PeerId;
 use pezsp_runtime::traits::Block as BlockT;
 use pezsp_statement_store::{
 	Hash, NetworkPriority, Statement, StatementSource, StatementStore, SubmitResult,
+};
+use prometheus_endpoint::{
+	prometheus, register, Counter, Gauge, Histogram, HistogramOpts, PrometheusError, Registry, U64,
 };
 use std::{
 	collections::{hash_map::Entry, HashMap, HashSet},
@@ -797,7 +797,9 @@ mod tests {
 			unimplemented!()
 		}
 
-		async fn next_event(&mut self) -> Option<pezsc_network::service::traits::NotificationEvent> {
+		async fn next_event(
+			&mut self,
+		) -> Option<pezsc_network::service::traits::NotificationEvent> {
 			None
 		}
 
@@ -819,7 +821,8 @@ mod tests {
 
 	#[derive(Clone)]
 	struct TestStatementStore {
-		statements: Arc<Mutex<HashMap<pezsp_statement_store::Hash, pezsp_statement_store::Statement>>>,
+		statements:
+			Arc<Mutex<HashMap<pezsp_statement_store::Hash, pezsp_statement_store::Statement>>>,
 		recent_statements:
 			Arc<Mutex<HashMap<pezsp_statement_store::Hash, pezsp_statement_store::Statement>>>,
 	}

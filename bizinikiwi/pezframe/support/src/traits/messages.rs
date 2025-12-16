@@ -23,10 +23,10 @@ use crate::defensive;
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, FullCodec, MaxEncodedLen};
 use core::{cmp::Ordering, fmt::Debug, marker::PhantomData};
-use scale_info::TypeInfo;
 use pezsp_core::{ConstU32, Get, TypedGet};
 use pezsp_runtime::{traits::Convert, BoundedSlice, RuntimeDebug};
 use pezsp_weights::{Weight, WeightMeter};
+use scale_info::TypeInfo;
 
 /// Errors that can happen when attempting to process a message with
 /// [`ProcessMessage::process_message()`].

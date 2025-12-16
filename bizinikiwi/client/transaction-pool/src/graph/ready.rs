@@ -25,8 +25,8 @@ use std::{
 
 use crate::LOG_TARGET;
 use pezsc_transaction_pool_api::error;
-use serde::Serialize;
 use pezsp_runtime::{traits::Member, transaction_validity::TransactionTag as Tag};
+use serde::Serialize;
 use tracing::trace;
 
 use super::{

@@ -127,8 +127,9 @@ fn current_relay_parent<T: pezframe_system::Config>(
 	use codec::Decode as _;
 	let state_version = pezframe_system::Pezpallet::<T>::runtime_version().state_version();
 	let relay_parent_number = pezframe_system::Pezpallet::<T>::block_number();
-	let relay_parent_storage_root = T::Hash::decode(&mut &pezsp_io::storage::root(state_version)[..])
-		.expect("storage root must decode to the Hash type; qed");
+	let relay_parent_storage_root =
+		T::Hash::decode(&mut &pezsp_io::storage::root(state_version)[..])
+			.expect("storage root must decode to the Hash type; qed");
 	(relay_parent_number, relay_parent_storage_root)
 }
 
@@ -148,7 +149,8 @@ where
 		},
 		OccupiedCoreAssumption::TimedOut => build(),
 		OccupiedCoreAssumption::Free =>
-			if !<inclusion::Pezpallet<Config>>::candidates_pending_availability(para_id).is_empty() {
+			if !<inclusion::Pezpallet<Config>>::candidates_pending_availability(para_id).is_empty()
+			{
 				None
 			} else {
 				build()
@@ -238,8 +240,10 @@ pub fn relevant_authority_ids<T: initializer::Config + pezpallet_authority_disco
 	// Due to `max_validators`, the `SessionInfo` stores only the validators who are actively
 	// selected to participate in teyrchain consensus. We'd like all authorities for the current
 	// and next sessions to be used in authority-discovery. The two sets likely have large overlap.
-	let mut authority_ids = pezpallet_authority_discovery::Pezpallet::<T>::current_authorities().to_vec();
-	authority_ids.extend(pezpallet_authority_discovery::Pezpallet::<T>::next_authorities().to_vec());
+	let mut authority_ids =
+		pezpallet_authority_discovery::Pezpallet::<T>::current_authorities().to_vec();
+	authority_ids
+		.extend(pezpallet_authority_discovery::Pezpallet::<T>::next_authorities().to_vec());
 
 	// Due to disputes, we'd like to remain connected to authorities of the previous few sessions.
 	// For this, we don't need anyone other than the validators actively participating in consensus.
@@ -261,7 +265,9 @@ pub fn validation_code<T: initializer::Config>(
 	para_id: ParaId,
 	assumption: OccupiedCoreAssumption,
 ) -> Option<ValidationCode> {
-	with_assumption::<T, _, _>(para_id, assumption, || paras::Pezpallet::<T>::current_code(&para_id))
+	with_assumption::<T, _, _>(para_id, assumption, || {
+		paras::Pezpallet::<T>::current_code(&para_id)
+	})
 }
 
 /// Implementation for the `candidate_pending_availability` function of the runtime API.

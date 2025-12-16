@@ -39,9 +39,9 @@ use pezsp_arithmetic::{
 };
 
 use bounded_collections::BoundedVec;
-use serde::{Deserialize, Serialize};
 use pezsp_core::{ConstU32, RuntimeDebug};
 use pezsp_inherents::InherentIdentifier;
+use serde::{Deserialize, Serialize};
 
 // ==========
 // PUBLIC RE-EXPORTS

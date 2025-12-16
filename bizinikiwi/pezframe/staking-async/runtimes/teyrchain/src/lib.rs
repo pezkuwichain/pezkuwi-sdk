@@ -44,7 +44,12 @@ use assets_common::{
 	AssetIdForPoolAssets, AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use pezcumulus_pezpallet_teyrchain_system::{RelayNumberMonotonicallyIncreases, RelaychainDataProvider};
+use governance::{
+	pezpallet_custom_origins, FellowshipAdmin, GeneralAdmin, StakingAdmin, Treasurer,
+};
+use pezcumulus_pezpallet_teyrchain_system::{
+	RelayNumberMonotonicallyIncreases, RelaychainDataProvider,
+};
 use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	construct_runtime, derive_impl,
@@ -66,12 +71,11 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot, EnsureSigned, EnsureSignedBy,
 };
-use governance::{pezpallet_custom_origins, FellowshipAdmin, GeneralAdmin, StakingAdmin, Treasurer};
+use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
 use pezpallet_asset_conversion_tx_payment::SwapAssetAdapter;
 use pezpallet_nfts::PalletFeatures;
 use pezpallet_nomination_pools::PoolId;
 use pezpallet_xcm::EnsureXcm;
-use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
 #[cfg(any(feature = "std", test))]
@@ -721,8 +725,9 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_metadata { .. }) |
 					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_metadata { .. }) |
 					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_attribute { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_collection_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
+					RuntimeCall::Uniques(
+						pezpallet_uniques::Call::clear_collection_metadata { .. }
+					) | RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
 					RuntimeCall::Utility { .. } |
 					RuntimeCall::Multisig { .. }
 			),

@@ -37,10 +37,10 @@ pub mod mock;
 mod tests;
 
 mod common_functions;
-/// A library providing the feature set of this pezpallet. It contains modules with helper methods that
-/// perform storage updates and checks required by this pezpallet's dispatchables. To use pezpallet level
-/// features, make sure to set appropriate bitflags for [`Config::Features`] in your runtime
-/// configuration trait.
+/// A library providing the feature set of this pezpallet. It contains modules with helper methods
+/// that perform storage updates and checks required by this pezpallet's dispatchables. To use
+/// pezpallet level features, make sure to set appropriate bitflags for [`Config::Features`] in your
+/// runtime configuration trait.
 mod features;
 mod impl_nonfungibles;
 mod types;
@@ -116,10 +116,17 @@ pub mod pezpallet {
 			let account = pezsp_runtime::MultiSigner::Sr25519(public).into_account();
 			(public.into(), account)
 		}
-		fn sign(signer: &pezsp_runtime::MultiSigner, message: &[u8]) -> pezsp_runtime::MultiSignature {
+		fn sign(
+			signer: &pezsp_runtime::MultiSigner,
+			message: &[u8],
+		) -> pezsp_runtime::MultiSignature {
 			pezsp_runtime::MultiSignature::Sr25519(
-				pezsp_io::crypto::sr25519_sign(0.into(), &signer.clone().try_into().unwrap(), message)
-					.unwrap(),
+				pezsp_io::crypto::sr25519_sign(
+					0.into(),
+					&signer.clone().try_into().unwrap(),
+					message,
+				)
+				.unwrap(),
 			)
 		}
 	}

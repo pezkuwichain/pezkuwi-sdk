@@ -607,7 +607,12 @@ pub(crate) mod tests {
 			unimplemented!()
 		}
 
-		fn send_topic(&mut self, _who: &pezsc_network_types::PeerId, _topic: B::Hash, _force: bool) {
+		fn send_topic(
+			&mut self,
+			_who: &pezsc_network_types::PeerId,
+			_topic: B::Hash,
+			_force: bool,
+		) {
 			unimplemented!()
 		}
 	}

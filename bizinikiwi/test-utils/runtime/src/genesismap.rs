@@ -18,7 +18,7 @@
 //! Tool for creating the genesis block.
 
 use super::{
-	currency, bizinikiwi_test_pallet, wasm_binary_unwrap, AccountId, Balance, RuntimeGenesisConfig,
+	bizinikiwi_test_pallet, currency, wasm_binary_unwrap, AccountId, Balance, RuntimeGenesisConfig,
 };
 use codec::Encode;
 use pezsc_service::construct_genesis_block;

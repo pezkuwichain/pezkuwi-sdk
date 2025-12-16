@@ -29,7 +29,6 @@ mod imports {
 			asset_hub_zagros_runtime::xcm_config::LocationToAccountId as AssetHubLocationToAccountId,
 			genesis::ED as ASSET_HUB_ZAGROS_ED, AssetHubZagrosParaPallet as AssetHubZagrosPallet,
 		},
-		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		collectives_zagros_emulated_chain::{
 			collectives_zagros_runtime::{
 				fellowship as collectives_fellowship,
@@ -39,8 +38,9 @@ mod imports {
 			CollectivesZagrosParaPallet as CollectivesZagrosPallet,
 		},
 		coretime_zagros_emulated_chain::CoretimeZagrosParaPallet as CoretimeZagrosPallet,
-		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
 		people_zagros_emulated_chain::PeopleZagrosParaPallet as PeopleZagrosPallet,
+		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
+		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		zagros_emulated_chain::{
 			genesis::ED as ZAGROS_ED,
 			zagros_runtime::{governance as zagros_governance, OriginCaller as ZagrosOriginCaller},

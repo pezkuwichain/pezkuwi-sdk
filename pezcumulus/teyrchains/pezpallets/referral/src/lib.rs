@@ -2,7 +2,8 @@
 
 //! # Referral Pezpallet
 //!
-//! A pezpallet for managing user referrals and tracking network growth through invitation mechanics.
+//! A pezpallet for managing user referrals and tracking network growth through invitation
+//! mechanics.
 //!
 //! ## Overview
 //!
@@ -120,7 +121,8 @@ pub mod pezpallet {
 
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_identity_kyc::Config + TypeInfo {
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type WeightInfo: weights::WeightInfo;
 
 		/// Default referrer account - used when no referrer is specified

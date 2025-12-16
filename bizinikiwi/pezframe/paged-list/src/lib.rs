@@ -25,8 +25,8 @@
 //!
 //! # Paged List Pezpallet
 //!
-//! A thin wrapper pezpallet around a [`paged_list::StoragePagedList`]. It provides an API for a single
-//! paginated list. It can be instantiated multiple times to provide multiple lists.
+//! A thin wrapper pezpallet around a [`paged_list::StoragePagedList`]. It provides an API for a
+//! single paginated list. It can be instantiated multiple times to provide multiple lists.
 //!
 //! ## Overview
 //!

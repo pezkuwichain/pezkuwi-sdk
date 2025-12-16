@@ -163,6 +163,7 @@ where
 mod tests {
 	use super::*;
 
+	use bizinikiwi_test_runtime_client::runtime::Block;
 	use codec::{Decode, Encode};
 	use jsonrpsee::{core::EmptyServerParams as EmptyParams, RpcModule};
 	use pezsc_consensus_beefy::{
@@ -171,7 +172,6 @@ mod tests {
 	};
 	use pezsp_consensus_beefy::{ecdsa_crypto, known_payloads, Payload, SignedCommitment};
 	use pezsp_runtime::traits::{BlakeTwo256, Hash};
-	use bizinikiwi_test_runtime_client::runtime::Block;
 
 	fn setup_io_handler() -> (
 		RpcModule<Beefy<Block, ecdsa_crypto::AuthorityId>>,
@@ -190,9 +190,12 @@ mod tests {
 		let (finality_proof_sender, finality_proof_stream) =
 			BeefyVersionedFinalityProofStream::<Block, ecdsa_crypto::AuthorityId>::channel();
 
-		let handler =
-			Beefy::new(finality_proof_stream, best_block_stream, pezsc_rpc::testing::test_executor())
-				.expect("Setting up the BEEFY RPC handler works");
+		let handler = Beefy::new(
+			finality_proof_stream,
+			best_block_stream,
+			pezsc_rpc::testing::test_executor(),
+		)
+		.expect("Setting up the BEEFY RPC handler works");
 
 		(handler.into_rpc(), finality_proof_sender)
 	}

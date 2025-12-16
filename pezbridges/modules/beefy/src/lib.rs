@@ -277,8 +277,8 @@ pub mod pezpallet {
 
 	/// The current number of requests which have written to storage.
 	///
-	/// If the `RequestCount` hits `MaxRequests`, no more calls will be allowed to the pezpallet until
-	/// the request capacity is increased.
+	/// If the `RequestCount` hits `MaxRequests`, no more calls will be allowed to the pezpallet
+	/// until the request capacity is increased.
 	///
 	/// The `RequestCount` is decreased by one at the beginning of every block. This is to ensure
 	/// that the pezpallet can always make progress.
@@ -415,11 +415,11 @@ pub mod pezpallet {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezbp_runtime::{BasicOperatingMode, OwnedBridgeModuleError};
 	use bp_test_utils::generate_owned_bridge_module_tests;
-	use pezframe_support::{assert_noop, assert_ok, traits::Get};
 	use mock::*;
 	use mock_chain::*;
+	use pezbp_runtime::{BasicOperatingMode, OwnedBridgeModuleError};
+	use pezframe_support::{assert_noop, assert_ok, traits::Get};
 	use pezsp_consensus_beefy::mmr::BeefyAuthoritySet;
 	use pezsp_runtime::DispatchError;
 

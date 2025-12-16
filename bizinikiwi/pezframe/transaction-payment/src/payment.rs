@@ -29,11 +29,11 @@ use pezframe_support::{
 	},
 	unsigned::TransactionValidityError,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{CheckedSub, DispatchInfoOf, PostDispatchInfoOf, Saturating, Zero},
 	transaction_validity::InvalidTransaction,
 };
+use scale_info::TypeInfo;
 
 type NegativeImbalanceOf<C, T> =
 	<C as Currency<<T as pezframe_system::Config>::AccountId>>::NegativeImbalance;
@@ -104,9 +104,9 @@ pub trait TxCreditHold<T: Config> {
 	type Credit: FullCodec + DecodeWithMemTracking + MaxEncodedLen + TypeInfo + SuppressedDrop;
 }
 
-/// Implements transaction payment for a pezpallet implementing the [`pezframe_support::traits::fungible`]
-/// trait (eg. pezpallet_balances) using an unbalance handler (implementing
-/// [`OnUnbalanced`]).
+/// Implements transaction payment for a pezpallet implementing the
+/// [`pezframe_support::traits::fungible`] trait (eg. pezpallet_balances) using an unbalance handler
+/// (implementing [`OnUnbalanced`]).
 ///
 /// The unbalance handler is given 2 unbalanceds in [`OnUnbalanced::on_unbalanceds`]: `fee` and
 /// then `tip`.

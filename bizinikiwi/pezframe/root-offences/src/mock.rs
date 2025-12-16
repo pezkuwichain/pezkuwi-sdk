@@ -205,7 +205,8 @@ impl Default for ExtBuilder {
 
 impl ExtBuilder {
 	fn build(self) -> pezsp_io::TestExternalities {
-		let mut storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		let mut storage =
+			pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
 		pezpallet_balances::GenesisConfig::<Test> {
 			balances: vec![

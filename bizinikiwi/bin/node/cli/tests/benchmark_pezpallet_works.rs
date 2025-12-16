@@ -42,11 +42,21 @@ fn benchmark_pezpallet_args_work() {
 		true,
 	);
 	benchmark_pezpallet_args(
-		&["--list", "--pezpallet=pezpallet_balances", "--chain=dev", "--genesis-builder=spec-genesis"],
+		&[
+			"--list",
+			"--pezpallet=pezpallet_balances",
+			"--chain=dev",
+			"--genesis-builder=spec-genesis",
+		],
 		true,
 	);
 	benchmark_pezpallet_args(
-		&["--list", "--pezpallet=pezpallet_balances", "--chain=dev", "--genesis-builder=spec-runtime"],
+		&[
+			"--list",
+			"--pezpallet=pezpallet_balances",
+			"--chain=dev",
+			"--genesis-builder=spec-runtime",
+		],
 		true,
 	);
 	// Error because no runtime is provided:

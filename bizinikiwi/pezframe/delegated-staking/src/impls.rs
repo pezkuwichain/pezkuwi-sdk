@@ -107,7 +107,10 @@ impl<T: Config> DelegationMigrator for Pezpallet<T> {
 		agent: Agent<Self::AccountId>,
 		reward_account: &Self::AccountId,
 	) -> DispatchResult {
-		Pezpallet::<T>::migrate_to_agent(RawOrigin::Signed(agent.get()).into(), reward_account.clone())
+		Pezpallet::<T>::migrate_to_agent(
+			RawOrigin::Signed(agent.get()).into(),
+			reward_account.clone(),
+		)
 	}
 	fn migrate_delegation(
 		agent: Agent<Self::AccountId>,

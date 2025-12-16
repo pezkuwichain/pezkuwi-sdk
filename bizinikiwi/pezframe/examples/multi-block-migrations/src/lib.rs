@@ -20,8 +20,8 @@
 //! # Multi-Block Migrations Example Pezpallet
 //!
 //! This pezpallet serves as a minimal example of a pezpallet that uses the [Multi-Block Migrations
-//! Framework](pezframe_support::migrations). You can observe how to configure it in a runtime in the
-//! `pez-kitchensink-runtime` crate.
+//! Framework](pezframe_support::migrations). You can observe how to configure it in a runtime in
+//! the `pez-kitchensink-runtime` crate.
 //!
 //! ## Introduction and Purpose
 //!

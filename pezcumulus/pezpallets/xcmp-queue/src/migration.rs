@@ -37,7 +37,8 @@ mod v1 {
 	use codec::{Decode, Encode};
 
 	#[pezframe_support::storage_alias]
-	pub(crate) type QueueConfig<T: Config> = StorageValue<Pezpallet<T>, QueueConfigData, ValueQuery>;
+	pub(crate) type QueueConfig<T: Config> =
+		StorageValue<Pezpallet<T>, QueueConfigData, ValueQuery>;
 
 	#[derive(Encode, Decode, Debug)]
 	pub struct QueueConfigData {
@@ -67,7 +68,8 @@ pub mod v2 {
 	use super::*;
 
 	#[pezframe_support::storage_alias]
-	pub(crate) type QueueConfig<T: Config> = StorageValue<Pezpallet<T>, QueueConfigData, ValueQuery>;
+	pub(crate) type QueueConfig<T: Config> =
+		StorageValue<Pezpallet<T>, QueueConfigData, ValueQuery>;
 
 	#[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug, TypeInfo)]
 	pub struct QueueConfigData {

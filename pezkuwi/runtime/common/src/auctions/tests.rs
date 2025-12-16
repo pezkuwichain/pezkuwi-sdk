@@ -20,9 +20,9 @@
 use super::*;
 use crate::{auctions::mock::*, mock::TestRegistrar};
 use pezframe_support::{assert_noop, assert_ok, assert_storage_noop};
-use pezpallet_balances;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_primitives_test_helpers::{dummy_hash, dummy_head_data, dummy_validation_code};
+use pezpallet_balances;
 use pezsp_core::H256;
 use pezsp_runtime::DispatchError::BadOrigin;
 

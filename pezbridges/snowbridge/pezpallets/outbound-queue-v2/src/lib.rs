@@ -118,7 +118,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type Hashing: Hash<Output = H256>;
 
@@ -163,7 +164,8 @@ pub mod pezpallet {
 		type GatewayAddress: Get<H160>;
 		/// Reward discriminator type.
 		type RewardKind: Parameter + MaxEncodedLen + Send + Sync + Copy + Clone;
-		/// The default RewardKind discriminator for rewards allocated to relayers from this pezpallet.
+		/// The default RewardKind discriminator for rewards allocated to relayers from this
+		/// pezpallet.
 		#[pezpallet::constant]
 		type DefaultRewardKind: Get<Self::RewardKind>;
 		/// Relayer reward payment.

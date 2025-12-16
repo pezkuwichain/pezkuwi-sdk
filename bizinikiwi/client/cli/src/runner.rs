@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{error::Error as CliError, Result, Signals, BizinikiwiCli};
+use crate::{error::Error as CliError, BizinikiwiCli, Result, Signals};
 use chrono::prelude::*;
 use futures::{future::FutureExt, Future};
 use log::info;

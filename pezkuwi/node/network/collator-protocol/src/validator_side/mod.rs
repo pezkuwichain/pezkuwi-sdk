@@ -37,7 +37,6 @@ use pezkuwi_node_network_protocol::{
 	v1 as protocol_v1, v2 as protocol_v2, CollationProtocols, OurView, PeerId,
 	UnifiedReputationChange as Rep, View,
 };
-use pezkuwi_pez_node_primitives::{SignedFullStatement, Statement};
 use pezkuwi_node_subsystem::{
 	messages::{
 		CanSecondRequest, CandidateBackingMessage, CollatorProtocolMessage, IfDisconnected,
@@ -51,6 +50,7 @@ use pezkuwi_node_subsystem_util::{
 	reputation::{ReputationAggregator, REPUTATION_CHANGE_INTERVAL},
 	request_claim_queue, request_node_features, request_session_index_for_child,
 };
+use pezkuwi_pez_node_primitives::{SignedFullStatement, Statement};
 use pezkuwi_primitives::{
 	node_features, CandidateDescriptorV2, CandidateDescriptorVersion, CandidateHash, CollatorId,
 	CoreIndex, Hash, HeadData, Id as ParaId, OccupiedCoreAssumption, PersistedValidationData,
@@ -874,9 +874,9 @@ async fn process_incoming_peer_message<Context>(
 		protocol_v2::CollatorProtocolMessage,
 	>,
 ) {
+	use pezsp_runtime::traits::AppVerify;
 	use protocol_v1::CollatorProtocolMessage as V1;
 	use protocol_v2::CollatorProtocolMessage as V2;
-	use pezsp_runtime::traits::AppVerify;
 
 	match msg {
 		CollationProtocols::V1(V1::Declare(collator_id, para_id, signature)) |

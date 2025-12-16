@@ -31,6 +31,7 @@ use crate::{
 	},
 };
 use codec::Encode;
+use futures::{prelude::*, FutureExt};
 use pezcumulus_client_collator::service::{
 	CollatorService, ServiceInterface as CollatorServiceInterface,
 };
@@ -53,9 +54,7 @@ use pezcumulus_primitives_core::{
 	relay_chain::ValidationCode, CollectCollationInfo, GetTeyrchainInfo, ParaId,
 };
 use pezcumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
-use futures::{prelude::*, FutureExt};
 use pezkuwi_primitives::{CollatorPair, UpgradeGoAhead};
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{Backend, BlockchainEvents};
 use pezsc_client_db::DbHash;
 use pezsc_consensus::{
@@ -76,6 +75,7 @@ use pezsp_runtime::{
 	app_crypto::AppCrypto,
 	traits::{Block as BlockT, Header as HeaderT, UniqueSaturatedInto},
 };
+use prometheus_endpoint::Registry;
 use std::{marker::PhantomData, sync::Arc, time::Duration};
 
 struct Verifier<Block, Client, AuraId> {
@@ -127,8 +127,9 @@ where
 		telemetry_handle: Option<TelemetryHandle>,
 		task_manager: &TaskManager,
 	) -> pezsc_service::error::Result<DefaultImportQueue<Block>> {
-		let inherent_data_providers =
-			move |_, _| async move { Ok(pezsp_timestamp::InherentDataProvider::from_system_time()) };
+		let inherent_data_providers = move |_, _| async move {
+			Ok(pezsp_timestamp::InherentDataProvider::from_system_time())
+		};
 		let registry = config.prometheus_registry();
 		let spawner = task_manager.spawn_essential_handle();
 
@@ -229,10 +230,11 @@ where
 		// Since this is a dev node, prevent it from connecting to peers.
 		config.network.default_peers_set.in_peers = 0;
 		config.network.default_peers_set.out_peers = 0;
-		let net_config = FullNetworkConfiguration::<_, _, pezsc_network::Litep2pNetworkBackend>::new(
-			&config.network,
-			None,
-		);
+		let net_config =
+			FullNetworkConfiguration::<_, _, pezsc_network::Litep2pNetworkBackend>::new(
+				&config.network,
+				None,
+			);
 
 		let (network, system_rpc_tx, tx_handler_controller, sync_service) =
 			pezsc_service::build_network(pezsc_service::BuildNetworkParams {
@@ -319,12 +321,14 @@ where
 							futures_timer::Delay::new(std::time::Duration::from_millis(block_time))
 								.await;
 							manual_seal_sink_clone
-								.try_send(pezsc_consensus_manual_seal::EngineCommand::SealNewBlock {
-									create_empty: true,
-									finalize: true,
-									parent_hash: None,
-									sender: None,
-								})
+								.try_send(
+									pezsc_consensus_manual_seal::EngineCommand::SealNewBlock {
+										create_empty: true,
+										finalize: true,
+										parent_hash: None,
+										sender: None,
+									},
+								)
 								.unwrap();
 						}
 					});

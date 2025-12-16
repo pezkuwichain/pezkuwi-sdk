@@ -31,11 +31,11 @@ use crate::{
 	runtime::BlockNumber,
 };
 use clap::{CommandFactory, FromArgMatches};
+use log::info;
 #[cfg(feature = "runtime-benchmarks")]
 use pezcumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
 use pezframe_benchmarking_cli::{BenchmarkCmd, BIZINIKIWI_REFERENCE_HARDWARE};
-use log::info;
-use pezsc_cli::{Result, BizinikiwiCli};
+use pezsc_cli::{BizinikiwiCli, Result};
 #[cfg(feature = "runtime-benchmarks")]
 use pezsp_runtime::traits::HashingFor;
 
@@ -138,8 +138,8 @@ where
 	}
 
 	// If matching on the extra subcommands fails, match on the rest of the node CLI as usual.
-	let mut cli =
-		Cli::<CliConfig>::from_arg_matches(&matches).map_err(|e| pezsc_cli::Error::Cli(e.into()))?;
+	let mut cli = Cli::<CliConfig>::from_arg_matches(&matches)
+		.map_err(|e| pezsc_cli::Error::Cli(e.into()))?;
 	cli.chain_spec_loader = Some(cmd_config.chain_spec_loader);
 
 	#[allow(deprecated)]
@@ -273,7 +273,8 @@ where
 					// TODO: change `machine` subcommand to take instead a disk path we want to
 					// benchmark?.
 					let runner = cli.create_runner(cmd)?;
-					runner.sync_run(|config| cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone()))
+					runner
+						.sync_run(|config| cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone()))
 				},
 				#[allow(unreachable_patterns)]
 				_ => Err("Benchmarking sub-command unsupported or compilation feature missing. \

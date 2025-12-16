@@ -153,7 +153,8 @@ pub mod pezpallet {
 
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_identity_kyc::Config {
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type WeightInfo: WeightInfo;
 
 		type Score: Member

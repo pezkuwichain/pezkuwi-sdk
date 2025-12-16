@@ -25,8 +25,8 @@
 //!
 //! # Treasury Pezpallet
 //!
-//! The Treasury pezpallet provides a "pot" of funds that can be managed by stakeholders in the system
-//! and a structure for making spending proposals from this pot.
+//! The Treasury pezpallet provides a "pot" of funds that can be managed by stakeholders in the
+//! system and a structure for making spending proposals from this pot.
 //!
 //! ## Overview
 //!
@@ -64,10 +64,10 @@
 //! Spends can be initiated using either the `spend_local` or `spend` dispatchable. The
 //! `spend_local` dispatchable enables the creation of spends using the native currency of the
 //! chain, utilizing the funds stored in the pot. These spends are automatically paid out every
-//! [`pezpallet::Config::SpendPeriod`]. On the other hand, the `spend` dispatchable allows spending of
-//! any asset kind managed by the treasury, with payment facilitated by a designated
-//! [`pezpallet::Config::Paymaster`]. To claim these spends, the `payout` dispatchable should be called
-//! within some temporal bounds, starting from the moment they become valid and within one
+//! [`pezpallet::Config::SpendPeriod`]. On the other hand, the `spend` dispatchable allows spending
+//! of any asset kind managed by the treasury, with payment facilitated by a designated
+//! [`pezpallet::Config::Paymaster`]. To claim these spends, the `payout` dispatchable should be
+//! called within some temporal bounds, starting from the moment they become valid and within one
 //! [`pezpallet::Config::PayoutPeriod`].
 
 #![cfg_attr(not(feature = "std"), no_std)]

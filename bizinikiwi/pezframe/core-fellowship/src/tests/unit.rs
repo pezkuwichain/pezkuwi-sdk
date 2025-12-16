@@ -23,13 +23,14 @@ use std::collections::BTreeMap;
 
 use core::cell::RefCell;
 use pezframe_support::{
-	assert_noop, assert_ok, derive_impl, hypothetically, ord_parameter_types,
+	assert_noop, assert_ok, derive_impl, hypothetically, ord_parameter_types, parameter_types,
 	pezpallet_prelude::Weight,
-	parameter_types,
 	traits::{tokens::GetSalary, ConstU16, ConstU32, IsInVec, TryMapSuccess},
 };
 use pezframe_system::EnsureSignedBy;
-use pezsp_runtime::{bounded_vec, traits::TryMorphInto, BuildStorage, DispatchError, DispatchResult};
+use pezsp_runtime::{
+	bounded_vec, traits::TryMorphInto, BuildStorage, DispatchError, DispatchResult,
+};
 
 use crate as pezpallet_core_fellowship;
 use crate::*;

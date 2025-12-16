@@ -15,7 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! End-to-end testing pezpallet for PoV benchmarking. Should only be deployed in a  testing runtime.
+//! End-to-end testing pezpallet for PoV benchmarking. Should only be deployed in a  testing
+//! runtime.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -39,7 +40,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::storage]

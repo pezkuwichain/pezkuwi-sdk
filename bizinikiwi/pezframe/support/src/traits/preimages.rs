@@ -19,12 +19,12 @@
 
 use alloc::borrow::Cow;
 use codec::{Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_core::RuntimeDebug;
 use pezsp_runtime::{
 	traits::{ConstU32, Hash},
 	DispatchError,
 };
+use scale_info::TypeInfo;
 
 pub type BoundedInline = crate::BoundedVec<u8, ConstU32<128>>;
 

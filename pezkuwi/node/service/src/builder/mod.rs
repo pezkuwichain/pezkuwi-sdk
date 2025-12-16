@@ -29,9 +29,8 @@ use crate::{
 	teyrchains_db, workers, Chain, Error, FullBackend, FullClient, IdentifyVariant,
 	IsTeyrchainNode, GRANDPA_JUSTIFICATION_PERIOD, KEEP_FINALIZED_FOR_LIVE_NETWORKS,
 };
-use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use gum::info;
-use pezmmr_gadget::MmrGadget;
+use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use pezkuwi_availability_recovery::FETCH_CHUNKS_THRESHOLD;
 use pezkuwi_node_core_approval_voting::Config as ApprovalVotingConfig;
 use pezkuwi_node_core_av_store::Config as AvailabilityConfig;
@@ -47,6 +46,7 @@ use pezkuwi_node_network_protocol::{
 use pezkuwi_node_subsystem_types::DefaultSubsystemClient;
 use pezkuwi_overseer::{Handle, OverseerConnector};
 use pezkuwi_primitives::Block;
+use pezmmr_gadget::MmrGadget;
 use pezsc_client_api::Backend;
 use pezsc_network::config::FullNetworkConfiguration;
 use pezsc_network_sync::WarpSyncConfig;
@@ -237,7 +237,8 @@ where
 			// the block authoring backoff is disabled by default on production networks
 			None
 		} else {
-			let mut backoff = pezsc_consensus_slots::BackoffAuthoringOnFinalizedHeadLagging::default();
+			let mut backoff =
+				pezsc_consensus_slots::BackoffAuthoringOnFinalizedHeadLagging::default();
 
 			if config.chain_spec.is_pezkuwichain() ||
 				config.chain_spec.is_versi() ||

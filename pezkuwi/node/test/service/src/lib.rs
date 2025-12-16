@@ -22,9 +22,9 @@ pub mod chain_spec;
 
 pub use chain_spec::*;
 use futures::{future::Future, stream::StreamExt};
-use pezkuwi_pez_node_primitives::{CollationGenerationConfig, CollatorFn};
 use pezkuwi_node_subsystem::messages::{CollationGenerationMessage, CollatorProtocolMessage};
 use pezkuwi_overseer::Handle;
+use pezkuwi_pez_node_primitives::{CollationGenerationConfig, CollatorFn};
 use pezkuwi_primitives::{Balance, CollatorPair, HeadData, Id as ParaId, ValidationCode};
 use pezkuwi_runtime_common::BlockHashCount;
 use pezkuwi_runtime_teyrchains::paras::{ParaGenesisArgs, ParaKind};
@@ -34,6 +34,9 @@ use pezkuwi_test_runtime::{
 	UncheckedExtrinsic, VERSION,
 };
 
+use bizinikiwi_test_client::{
+	BlockchainEventsExt, RpcHandlersExt, RpcTransactionError, RpcTransactionOutput,
+};
 use pezsc_chain_spec::ChainSpec;
 use pezsc_client_api::BlockchainEvents;
 use pezsc_network::{
@@ -59,9 +62,6 @@ use std::{
 	net::{Ipv4Addr, SocketAddr},
 	path::PathBuf,
 	sync::Arc,
-};
-use bizinikiwi_test_client::{
-	BlockchainEventsExt, RpcHandlersExt, RpcTransactionError, RpcTransactionOutput,
 };
 
 /// The client type being used by the test service.
@@ -477,11 +477,12 @@ pub fn construct_transfer_extrinsic(
 	dest: pezsp_keyring::Sr25519Keyring,
 	value: Balance,
 ) -> UncheckedExtrinsic {
-	let function =
-		pezkuwi_test_runtime::RuntimeCall::Balances(pezpallet_balances::Call::transfer_allow_death {
+	let function = pezkuwi_test_runtime::RuntimeCall::Balances(
+		pezpallet_balances::Call::transfer_allow_death {
 			dest: MultiSigner::from(dest.public()).into_account().into(),
 			value,
-		});
+		},
+	);
 
 	construct_extrinsic(client, function, origin, 0)
 }

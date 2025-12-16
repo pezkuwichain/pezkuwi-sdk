@@ -28,13 +28,13 @@ use pezframe_support::{
 	weights::WeightMeter,
 };
 use pezframe_system::Config;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{DispatchInfoOf, Dispatchable, PostDispatchInfoOf, TransactionExtension},
 	transaction_validity::TransactionValidityError,
 	DispatchResult,
 };
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod tests;

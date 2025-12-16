@@ -21,10 +21,10 @@ use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::fmt::Debug;
 use pezframe_support::Parameter;
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::AtLeast32BitUnsigned;
 use pezsp_core::RuntimeDebug;
 use pezsp_runtime::traits::BlockNumberProvider;
+use scale_info::TypeInfo;
 
 use crate::Timeslice;
 

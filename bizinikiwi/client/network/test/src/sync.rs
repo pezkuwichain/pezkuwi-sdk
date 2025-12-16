@@ -17,10 +17,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use super::*;
+use bizinikiwi_test_runtime::Header;
 use futures::Future;
 use pezsp_consensus::{block_validation::Validation, BlockOrigin};
 use pezsp_runtime::Justifications;
-use bizinikiwi_test_runtime::Header;
 
 async fn test_ancestor_search_when_common_is(n: usize) {
 	pezsp_tracing::try_init_simple();
@@ -1303,9 +1303,9 @@ async fn warp_sync_to_target_block() {
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn syncs_huge_blocks() {
+	use bizinikiwi_test_runtime_client::BlockBuilderExt;
 	use pezsp_core::storage::well_known_keys::HEAP_PAGES;
 	use pezsp_runtime::codec::Encode;
-	use bizinikiwi_test_runtime_client::BlockBuilderExt;
 
 	pezsp_tracing::try_init_simple();
 	let mut net = TestNet::new(2);

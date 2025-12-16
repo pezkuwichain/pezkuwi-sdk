@@ -16,7 +16,9 @@
 // limitations under the License.
 
 use super::helper;
-use pezframe_support_procedural_tools::{get_cfg_attributes, get_doc_literals, is_using_frame_crate};
+use pezframe_support_procedural_tools::{
+	get_cfg_attributes, get_doc_literals, is_using_frame_crate,
+};
 use proc_macro_warning::Warning;
 use quote::ToTokens;
 use syn::{parse_quote, spanned::Spanned, token, Token, TraitItemType};
@@ -43,8 +45,8 @@ mod keyword {
 #[derive(Default)]
 pub struct DefaultTrait {
 	/// A bool for each sub-trait item indicates whether the item has
-	/// `#[pezpallet::no_default_bounds]` attached to it. If true, the item will not have any bounds
-	/// in the generated default sub-trait.
+	/// `#[pezpallet::no_default_bounds]` attached to it. If true, the item will not have any
+	/// bounds in the generated default sub-trait.
 	pub items: Vec<(syn::TraitItem, bool)>,
 	pub has_system: bool,
 }
@@ -305,15 +307,17 @@ fn has_expected_system_config(path: syn::Path, pezframe_system: &syn::Path) -> b
 	let mut expected_system_config =
 		match (is_using_frame_crate(&path), is_using_frame_crate(&pezframe_system)) {
 			(true, false) =>
-			// We can't use the path to `pezframe_system` from `frame` if `pezframe_system` is not being
-			// in scope through `frame`.
+			// We can't use the path to `pezframe_system` from `frame` if `pezframe_system` is not
+			// being in scope through `frame`.
 				return false,
 			(false, true) =>
 			// We know that the only valid pezframe_system path is one that is `pezframe_system`, as
 			// `frame` re-exports it as such.
-				syn::parse2::<syn::Path>(quote::quote!(pezframe_system)).expect("is a valid path; qed"),
+				syn::parse2::<syn::Path>(quote::quote!(pezframe_system))
+					.expect("is a valid path; qed"),
 			(_, _) =>
-			// They are either both `pezframe_system` or both `pezkuwi_sdk_frame::xyz::pezframe_system`.
+			// They are either both `pezframe_system` or both
+			// `pezkuwi_sdk_frame::xyz::pezframe_system`.
 				pezframe_system.clone(),
 		};
 
@@ -634,7 +638,8 @@ mod tests {
 		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe_system::Config)).unwrap();
 
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system)).unwrap();
+			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system))
+				.unwrap();
 		assert!(has_expected_system_config(path.clone(), &pezframe_system));
 
 		let pezframe_system =
@@ -645,10 +650,12 @@ mod tests {
 	#[test]
 	fn has_expected_system_config_works_with_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system::Config))
+			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system))
 				.unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(
+			pezkuwi_sdk_frame::deps::pezframe_system::Config
+		))
+		.unwrap();
 		assert!(has_expected_system_config(path, &pezframe_system));
 
 		let pezframe_system =
@@ -661,10 +668,12 @@ mod tests {
 	#[test]
 	fn has_expected_system_config_works_with_other_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::xyz::pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::xyz::pezframe_system::Config))
+			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::xyz::pezframe_system))
 				.unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(
+			pezkuwi_sdk_frame::xyz::pezframe_system::Config
+		))
+		.unwrap();
 		assert!(has_expected_system_config(path, &pezframe_system));
 
 		let pezframe_system =
@@ -677,29 +686,34 @@ mod tests {
 	#[test]
 	fn has_expected_system_config_does_not_works_with_mixed_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::xyz::pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system::Config))
+			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::xyz::pezframe_system))
 				.unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(
+			pezkuwi_sdk_frame::deps::pezframe_system::Config
+		))
+		.unwrap();
 		assert!(!has_expected_system_config(path, &pezframe_system));
 	}
 
 	#[test]
 	fn has_expected_system_config_does_not_works_with_other_mixed_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::xyz::pezframe_system::Config))
+			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system))
 				.unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(
+			pezkuwi_sdk_frame::xyz::pezframe_system::Config
+		))
+		.unwrap();
 		assert!(!has_expected_system_config(path, &pezframe_system));
 	}
 
 	#[test]
 	fn has_expected_system_config_does_not_work_with_frame_full_path_if_not_frame_crate() {
 		let pezframe_system = syn::parse2::<syn::Path>(quote::quote!(pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezkuwi_sdk_frame::deps::pezframe_system::Config))
-				.unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(
+			pezkuwi_sdk_frame::deps::pezframe_system::Config
+		))
+		.unwrap();
 		assert!(!has_expected_system_config(path, &pezframe_system));
 	}
 

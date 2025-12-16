@@ -16,8 +16,8 @@
 // limitations under the License.
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
-use rand::Rng;
 use pezsp_arithmetic::biguint::{BigUint, Single};
+use rand::Rng;
 
 fn random_big_uint(size: usize) -> BigUint {
 	let mut rng = rand::thread_rng();

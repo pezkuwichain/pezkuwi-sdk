@@ -22,8 +22,8 @@ use crate::{
 	AdjustmentDirection::{Decrease as Dec, Increase as Inc},
 	Event,
 };
-use pezframe_support::traits::{fungible::Unbalanced, tokens::Preservation::Expendable};
 use fungible::{hold::Mutate as HoldMutate, Inspect, Mutate};
+use pezframe_support::traits::{fungible::Unbalanced, tokens::Preservation::Expendable};
 
 /// Alice account ID for more readable tests.
 const ALICE: u64 = 1;

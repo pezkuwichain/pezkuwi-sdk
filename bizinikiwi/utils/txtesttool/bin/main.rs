@@ -5,9 +5,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use clap::Parser;
-use codec::Compact;
-use std::{fs, fs::File, io::BufReader, time::Duration};
 use bizinikiwi_txtesttool::{
 	block_monitor::BlockMonitor,
 	cli::{Cli, CliCommand},
@@ -20,6 +17,9 @@ use bizinikiwi_txtesttool::{
 		EthTransactionsSink, SubstrateTransaction, SubstrateTransactionsSink, SENDER_SEED,
 	},
 };
+use clap::Parser;
+use codec::Compact;
+use std::{fs, fs::File, io::BufReader, time::Duration};
 use subxt::{ext::frame_metadata::RuntimeMetadataPrefixed, PolkadotConfig};
 use tracing::info;
 

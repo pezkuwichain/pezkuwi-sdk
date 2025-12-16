@@ -23,8 +23,8 @@ use nix::{
 	unistd::Pid,
 };
 use pez_node_primitives::{Hash, Header};
-use regex::Regex;
 use pezsp_rpc::{list::ListOrValue, number::NumberOrHex};
+use regex::Regex;
 use std::{
 	io::{BufRead, BufReader, Read},
 	ops::{Deref, DerefMut},

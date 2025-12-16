@@ -20,8 +20,8 @@
 use crate::{extension::verify_messages_call_succeeded, Config as BridgeRelayersConfig};
 
 use bp_relayers::{ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
-use pezbp_runtime::StaticStrProvider;
 use core::marker::PhantomData;
+use pezbp_runtime::StaticStrProvider;
 use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
 use pezpallet_bridge_messages::{
 	CallSubType as BridgeMessagesCallSubType, Config as BridgeMessagesConfig, LaneIdOf,

@@ -203,9 +203,9 @@ mod tests {
 		fork_aware_txpool::view::FinishRevalidationLocalChannels,
 		TimedTransactionSource, ValidateTransactionPriority,
 	};
-	use futures::executor::block_on;
 	use bizinikiwi_test_runtime::{AccountId, Transfer, H256};
 	use bizinikiwi_test_runtime_client::Sr25519Keyring::Alice;
+	use futures::executor::block_on;
 	#[test]
 	fn revalidation_queue_works() {
 		let api = Arc::new(TestApi::default());

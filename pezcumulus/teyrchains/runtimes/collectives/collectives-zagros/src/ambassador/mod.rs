@@ -33,14 +33,16 @@ mod tracks;
 
 use super::*;
 use crate::xcm_config::{FellowshipAdminBodyId, LocationToAccountId, WndAssetHub};
-use pezframe_support::traits::{EitherOf, MapSuccess, TryMapSuccess};
-use pezframe_system::EnsureRootWithSuccess;
 pub use origins::pezpallet_origins as pezpallet_ambassador_origins;
 use origins::pezpallet_origins::{
 	EnsureAmbassadorsVoice, EnsureAmbassadorsVoiceFrom, EnsureHeadAmbassadorsVoice, Origin,
 };
+use pezframe_support::traits::{EitherOf, MapSuccess, TryMapSuccess};
+use pezframe_system::EnsureRootWithSuccess;
 use pezsp_core::ConstU128;
-use pezsp_runtime::traits::{CheckedReduceBy, ConstU16, ConvertToValue, Replace, ReplaceWithDefault};
+use pezsp_runtime::traits::{
+	CheckedReduceBy, ConstU16, ConvertToValue, Replace, ReplaceWithDefault,
+};
 use xcm::prelude::*;
 use xcm_builder::{AliasesIntoAccountId32, PayOverXcm};
 
@@ -106,7 +108,8 @@ pub type PromoteOrigin = EitherOf<
 pub type ExchangeOrigin = EitherOf<EnsureRootWithSuccess<AccountId, ConstU16<65535>>, Fellows>;
 
 impl pezpallet_ranked_collective::Config<AmbassadorCollectiveInstance> for Runtime {
-	type WeightInfo = weights::pezpallet_ranked_collective_ambassador_collective::WeightInfo<Runtime>;
+	type WeightInfo =
+		weights::pezpallet_ranked_collective_ambassador_collective::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type AddOrigin = MapSuccess<Self::PromoteOrigin, ReplaceWithDefault<()>>;
 	type PromoteOrigin = PromoteOrigin;

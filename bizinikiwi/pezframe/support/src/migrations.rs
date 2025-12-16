@@ -264,14 +264,14 @@ pub fn migrate_from_pallet_version_to_storage_version<
 /// pezpallet.
 ///
 /// This struct is generic over two parameters:
-/// - `P` is a type that implements the `Get` trait for a static string, representing the pezpallet's
-///   name.
+/// - `P` is a type that implements the `Get` trait for a static string, representing the
+///   pezpallet's name.
 /// - `DbWeight` is a type that implements the `Get` trait for `RuntimeDbWeight`, providing the
 ///   weight for database operations.
 ///
 /// On runtime upgrade, the `on_runtime_upgrade` function will clear all storage items associated
-/// with the specified pezpallet, logging the number of keys removed. If the `try-runtime` feature is
-/// enabled, the `pre_upgrade` and `post_upgrade` functions can be used to verify the storage
+/// with the specified pezpallet, logging the number of keys removed. If the `try-runtime` feature
+/// is enabled, the `pre_upgrade` and `post_upgrade` functions can be used to verify the storage
 /// removal before and after the upgrade.
 ///
 /// # Examples:
@@ -314,8 +314,8 @@ pub fn migrate_from_pallet_version_to_storage_version<
 pub struct RemovePallet<P: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>>(
 	PhantomData<(P, DbWeight)>,
 );
-impl<P: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>> pezframe_support::traits::OnRuntimeUpgrade
-	for RemovePallet<P, DbWeight>
+impl<P: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>>
+	pezframe_support::traits::OnRuntimeUpgrade for RemovePallet<P, DbWeight>
 {
 	fn on_runtime_upgrade() -> pezframe_support::weights::Weight {
 		let hashed_prefix = twox_128(P::get().as_bytes());
@@ -369,8 +369,8 @@ impl<P: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>> pezframe_support::tra
 /// `RemoveStorage` is a utility struct used to remove a storage item from a specific pezpallet.
 ///
 /// This struct is generic over three parameters:
-/// - `P` is a type that implements the [`Get`] trait for a static string, representing the pezpallet's
-///   name.
+/// - `P` is a type that implements the [`Get`] trait for a static string, representing the
+///   pezpallet's name.
 /// - `S` is a type that implements the [`Get`] trait for a static string, representing the storage
 ///   name.
 /// - `DbWeight` is a type that implements the [`Get`] trait for [`RuntimeDbWeight`], providing the
@@ -721,8 +721,10 @@ pub trait SteppedMigrations {
 	///
 	/// Returns `None` if the index is out of bounds.
 	#[cfg(feature = "try-runtime")]
-	fn nth_post_upgrade(n: u32, _state: Vec<u8>)
-		-> Option<Result<(), pezsp_runtime::TryRuntimeError>>;
+	fn nth_post_upgrade(
+		n: u32,
+		_state: Vec<u8>,
+	) -> Option<Result<(), pezsp_runtime::TryRuntimeError>>;
 
 	/// The maximal encoded length across all cursors.
 	fn cursor_max_encoded_len() -> usize;
@@ -882,7 +884,10 @@ impl<T: SteppedMigration> SteppedMigrations for T {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn nth_post_upgrade(n: u32, state: Vec<u8>) -> Option<Result<(), pezsp_runtime::TryRuntimeError>> {
+	fn nth_post_upgrade(
+		n: u32,
+		state: Vec<u8>,
+	) -> Option<Result<(), pezsp_runtime::TryRuntimeError>> {
 		if n != 0 {
 			defensive!("nth_post_upgrade should only be called with n==0");
 		}
@@ -970,7 +975,10 @@ impl SteppedMigrations for Tuple {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn nth_post_upgrade(n: u32, state: Vec<u8>) -> Option<Result<(), pezsp_runtime::TryRuntimeError>> {
+	fn nth_post_upgrade(
+		n: u32,
+		state: Vec<u8>,
+	) -> Option<Result<(), pezsp_runtime::TryRuntimeError>> {
 		let mut i = 0;
 
 		for_tuples! ( #(

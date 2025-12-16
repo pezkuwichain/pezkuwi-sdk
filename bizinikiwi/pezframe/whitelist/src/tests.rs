@@ -69,7 +69,8 @@ fn test_whitelist_call_and_remove() {
 #[test]
 fn test_whitelist_call_and_execute() {
 	new_test_ext().execute_with(|| {
-		let call = RuntimeCall::System(pezframe_system::Call::remark_with_event { remark: vec![1] });
+		let call =
+			RuntimeCall::System(pezframe_system::Call::remark_with_event { remark: vec![1] });
 		let call_weight = call.get_dispatch_info().call_weight;
 		let encoded_call = call.encode();
 		let call_encoded_len = encoded_call.len() as u32;
@@ -196,7 +197,8 @@ fn test_whitelist_call_and_execute_without_note_preimage() {
 #[test]
 fn test_whitelist_call_and_execute_decode_consumes_all() {
 	new_test_ext().execute_with(|| {
-		let call = RuntimeCall::System(pezframe_system::Call::remark_with_event { remark: vec![1] });
+		let call =
+			RuntimeCall::System(pezframe_system::Call::remark_with_event { remark: vec![1] });
 		let call_weight = call.get_dispatch_info().call_weight;
 		let mut call = call.encode();
 		// Appending something does not make the encoded call invalid.

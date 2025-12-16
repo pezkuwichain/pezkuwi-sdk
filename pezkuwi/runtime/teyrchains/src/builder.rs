@@ -54,8 +54,8 @@ fn mock_validation_code() -> ValidationCode {
 
 /// Grab an account, seeded by a name and index.
 ///
-/// This is directly from pezframe-benchmarking. Copy/pasted so we can use it when not compiling with
-/// "features = runtime-benchmarks".
+/// This is directly from pezframe-benchmarking. Copy/pasted so we can use it when not compiling
+/// with "features = runtime-benchmarks".
 fn account<AccountId: Decode>(name: &'static str, index: u32, seed: u32) -> AccountId {
 	let entropy = (name, index, seed).using_encoded(pezsp_io::hashing::blake2_256);
 	AccountId::decode(&mut TrailingZeroInput::new(&entropy[..]))
@@ -505,7 +505,11 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 		let header = Self::header(block_number);
 
 		pezframe_system::Pezpallet::<T>::reset_events();
-		pezframe_system::Pezpallet::<T>::initialize(&header.number(), &header.hash(), header.digest());
+		pezframe_system::Pezpallet::<T>::initialize(
+			&header.number(),
+			&header.hash(),
+			header.digest(),
+		);
 		initializer::Pezpallet::<T>::on_initialize(*header.number());
 
 		assert_eq!(shared::CurrentSessionIndex::<T>::get(), target_session);

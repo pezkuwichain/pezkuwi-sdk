@@ -26,12 +26,12 @@ use codec::{Decode, Encode};
 use log::debug;
 use pezsc_client_api::{CompactProof, KeyValueStates, ProofProvider};
 use pezsc_consensus::ImportedState;
-use smallvec::SmallVec;
 use pezsp_core::storage::well_known_keys;
 use pezsp_runtime::{
 	traits::{Block as BlockT, Header, NumberFor},
 	Justifications,
 };
+use smallvec::SmallVec;
 use std::{collections::HashMap, fmt, sync::Arc};
 
 /// Generic state sync provider. Used for mocking in tests.

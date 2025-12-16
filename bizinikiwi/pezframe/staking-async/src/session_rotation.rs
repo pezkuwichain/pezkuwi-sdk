@@ -437,7 +437,9 @@ impl<T: Config> Eras<T> {
 	}
 
 	/// Ensure the given era is either absent or currently being pruned.
-	pub(crate) fn era_absent_or_pruning(era: EraIndex) -> Result<(), pezsp_runtime::TryRuntimeError> {
+	pub(crate) fn era_absent_or_pruning(
+		era: EraIndex,
+	) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		if Self::era_pruning_in_progress(era) {
 			Ok(())
 		} else {
@@ -774,7 +776,9 @@ impl<T: Config> Rotator<T> {
 			// if the cap is zero (not set), we don't cap the era duration.
 			uncapped_era_duration
 		} else if uncapped_era_duration > cap {
-			Pezpallet::<T>::deposit_event(Event::Unexpected(UnexpectedKind::EraDurationBoundExceeded));
+			Pezpallet::<T>::deposit_event(Event::Unexpected(
+				UnexpectedKind::EraDurationBoundExceeded,
+			));
 
 			// if the cap is set, and era duration exceeds the cap, we cap the era duration to the
 			// maximum allowed.
@@ -990,7 +994,10 @@ impl<T: Config> EraElectionPlanner<T> {
 			},
 			Err(e) => {
 				log!(warn, "election provider page failed due to {:?} (page: {})", e, page);
-				Pezpallet::<T>::deposit_event(Event::PagedElectionProceeded { page, result: Err(0) });
+				Pezpallet::<T>::deposit_event(Event::PagedElectionProceeded {
+					page,
+					result: Err(0),
+				});
 			},
 		}
 	}

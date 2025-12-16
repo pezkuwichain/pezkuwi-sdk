@@ -20,6 +20,8 @@ use crate::*;
 use crate::teyrchain_consensus::run_teyrchain_consensus;
 use async_trait::async_trait;
 use codec::Encode;
+use futures::{channel::mpsc, executor::block_on, select, FutureExt, Stream, StreamExt};
+use futures_timer::Delay;
 use pezcumulus_client_pov_recovery::RecoveryKind;
 use pezcumulus_primitives_core::{
 	relay_chain::{BlockId, BlockNumber, CoreState},
@@ -34,8 +36,6 @@ use pezcumulus_test_client::{
 	Backend, Client, InitBlockBuilder, TestClientBuilder, TestClientBuilderExt,
 };
 use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-use futures::{channel::mpsc, executor::block_on, select, FutureExt, Stream, StreamExt};
-use futures_timer::Delay;
 use pezkuwi_primitives::{CandidateEvent, HeadData};
 use pezsc_client_api::{Backend as _, UsageProvider};
 use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};

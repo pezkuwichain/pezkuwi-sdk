@@ -25,10 +25,10 @@ use crate::{
 	single_state_txpool::BasicPool as SingleStateFullPool,
 	TransactionPoolWrapper, LOG_TARGET,
 };
-use prometheus_endpoint::Registry as PrometheusRegistry;
 use pezsc_transaction_pool_api::{LocalTransactionPool, MaintainedTransactionPool};
 use pezsp_core::traits::SpawnEssentialNamed;
 use pezsp_runtime::traits::Block as BlockT;
+use prometheus_endpoint::Registry as PrometheusRegistry;
 use std::{marker::PhantomData, sync::Arc, time::Duration};
 
 /// The type of transaction pool.

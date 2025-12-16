@@ -26,12 +26,12 @@ use crate::{
 	},
 };
 use asset_hub_zagros_runtime::ForeignAssets;
+use codec::Encode;
+use hex_literal::hex;
 use pezbridge_hub_zagros_runtime::{
 	bridge_common_config::BridgeReward, bridge_to_ethereum_config::EthereumGatewayAddress,
 	EthereumInboundQueueV2,
 };
-use codec::Encode;
-use hex_literal::hex;
 use pezsnowbridge_core::TokenIdOf;
 use pezsnowbridge_inbound_queue_primitives::v2::{
 	EthereumAsset::{ForeignTokenERC20, NativeTokenERC20},

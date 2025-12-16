@@ -6,11 +6,11 @@ use crate::{CallIndex, EthereumLocationsConverterFor};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::marker::PhantomData;
 use pezframe_support::{traits::tokens::Balance as BalanceT, PalletError};
-use scale_info::TypeInfo;
 use pezsnowbridge_core::TokenId;
 use pezsp_core::{Get, RuntimeDebug, H160, H256};
 use pezsp_runtime::{traits::MaybeConvert, MultiAddress};
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 use xcm::prelude::{Junction::AccountKey20, *};
 
 const MINIMUM_DEPOSIT: u128 = 1;
@@ -462,8 +462,8 @@ mod tests {
 		v1::{Command, ConvertMessage, Destination, MessageToXcm, MessageV1, VersionedMessage},
 		CallIndex, EthereumLocationsConverterFor,
 	};
-	use pezframe_support::{assert_ok, parameter_types};
 	use hex_literal::hex;
+	use pezframe_support::{assert_ok, parameter_types};
 	use pezsnowbridge_test_utils::mock_converter::{
 		add_location_override, reanchor_to_ethereum, LocationIdConvert,
 	};

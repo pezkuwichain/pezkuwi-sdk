@@ -110,7 +110,10 @@ mod benchmarks {
 	fn unnote_preimage() {
 		let caller = funded_account::<T>();
 		let (preimage, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pezpallet::<T>::note_preimage(RawOrigin::Signed(caller.clone()).into(), preimage));
+		assert_ok!(Pezpallet::<T>::note_preimage(
+			RawOrigin::Signed(caller.clone()).into(),
+			preimage
+		));
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), hash);
@@ -139,7 +142,10 @@ mod benchmarks {
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (preimage, hash) = preimage_and_hash::<T>();
 		let noter = funded_account::<T>();
-		assert_ok!(Pezpallet::<T>::note_preimage(RawOrigin::Signed(noter.clone()).into(), preimage));
+		assert_ok!(Pezpallet::<T>::note_preimage(
+			RawOrigin::Signed(noter.clone()).into(),
+			preimage
+		));
 
 		#[extrinsic_call]
 		_(o as T::RuntimeOrigin, hash);

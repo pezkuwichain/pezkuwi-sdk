@@ -33,8 +33,8 @@ use alloy_core::{
 use pezframe_support::{assert_err, traits::fungible::Mutate};
 use pezpallet_revive_fixtures::{compile_module_with_type, Callee, Caller, FixtureType};
 use pezpallet_revive_uapi::ReturnFlags;
-use pretty_assertions::assert_eq;
 use pezsp_core::H160;
+use pretty_assertions::assert_eq;
 use test_case::test_case;
 
 /// Tests that the `CALL` opcode works as expected by having one contract call another.

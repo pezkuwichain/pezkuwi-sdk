@@ -17,11 +17,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use codec::{Encode, Joiner};
-use pezframe_support::{
-	dispatch::GetDispatchInfo,
-	traits::Currency,
-	weights::{constants::ExtrinsicBaseWeight, IdentityFee, WeightToFee},
-};
 use pez_kitchensink_runtime::{
 	constants::{currency::*, time::SLOT_DURATION},
 	Balances, CheckedExtrinsic, Multiplier, Runtime, RuntimeCall, TransactionByteFee,
@@ -29,6 +24,11 @@ use pez_kitchensink_runtime::{
 };
 use pez_node_primitives::Balance;
 use pez_node_testing::keyring::*;
+use pezframe_support::{
+	dispatch::GetDispatchInfo,
+	traits::Currency,
+	weights::{constants::ExtrinsicBaseWeight, IdentityFee, WeightToFee},
+};
 use pezkuwi_sdk::*;
 use pezsp_runtime::{traits::One, Perbill};
 
@@ -63,7 +63,9 @@ fn fee_multiplier_increases_and_decreases_on_big_weight() {
 				format: pezsp_runtime::generic::ExtrinsicFormat::Signed(charlie(), tx_ext(0, 0)),
 				function: RuntimeCall::Sudo(pezpallet_sudo::Call::sudo {
 					call: Box::new(RuntimeCall::RootTesting(
-						pezpallet_root_testing::Call::fill_block { ratio: Perbill::from_percent(60) },
+						pezpallet_root_testing::Call::fill_block {
+							ratio: Perbill::from_percent(60),
+						},
 					)),
 				}),
 			},

@@ -63,9 +63,9 @@ pub type ValueIndex = u32;
 /// [`storage::append`](frame::deps::pezsp_io::storage::append). It allows to directly extend
 /// the elements of `values` vector of the page without loading the whole vector from storage. A new
 /// page is instantiated once [`Page::next`] overflows `ValuesPerNewPage`. Its vector will also be
-/// created through [`storage::append`](frame::deps::pezsp_io::storage::append). **Draining** advances
-/// the internal indices identical to Iteration. It additionally persists the increments to storage
-/// and thereby 'drains' elements. Completely drained pages are deleted from storage.
+/// created through [`storage::append`](frame::deps::pezsp_io::storage::append). **Draining**
+/// advances the internal indices identical to Iteration. It additionally persists the increments to
+/// storage and thereby 'drains' elements. Completely drained pages are deleted from storage.
 ///
 /// # Further Observations
 ///
@@ -522,7 +522,8 @@ mod tests {
 			let as_vec = Vec::<u32>::decode(&mut &raw[..]).unwrap();
 			assert_eq!(as_vec.len(), 4, "Second page contains 4");
 
-			let meta = pezsp_io::storage::get(&meta_key::<Prefix>()).expect("Meta should be present");
+			let meta =
+				pezsp_io::storage::get(&meta_key::<Prefix>()).expect("Meta should be present");
 			let meta: StoragePagedListMeta<Prefix, u32, ValuesPerNewPage> =
 				Decode::decode(&mut &meta[..]).unwrap();
 			assert_eq!(meta.first_page, 0);

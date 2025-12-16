@@ -32,8 +32,8 @@ pub type BlockNumber = u64;
 pub type AccountId = u128;
 pub type Balance = u128;
 pub type RewardCounter = FixedU128;
-// This sneaky little hack allows us to write code exactly as we would do in the pezpallet in the tests
-// as well, e.g. `StorageItem::<T>::get()`.
+// This sneaky little hack allows us to write code exactly as we would do in the pezpallet in the
+// tests as well, e.g. `StorageItem::<T>::get()`.
 pub type T = Runtime;
 pub type Currency = <T as Config>::Currency;
 

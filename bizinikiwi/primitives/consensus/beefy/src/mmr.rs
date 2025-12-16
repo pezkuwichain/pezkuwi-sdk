@@ -29,11 +29,11 @@
 use crate::{ecdsa_crypto::AuthorityId, ConsensusLog, MmrRootHash, BEEFY_ENGINE_ID};
 use alloc::vec::Vec;
 use codec::{Decode, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	generic::OpaqueDigestItemId,
 	traits::{Block, Header},
 };
+use scale_info::TypeInfo;
 
 /// A provider for extra data that gets added to the Mmr leaf
 pub trait BeefyDataProvider<ExtraData> {
@@ -48,7 +48,8 @@ impl BeefyDataProvider<Vec<u8>> for () {
 	}
 }
 
-/// A standard leaf that gets added every block to the MMR constructed by Bizinikiwi's `pezpallet_mmr`.
+/// A standard leaf that gets added every block to the MMR constructed by Bizinikiwi's
+/// `pezpallet_mmr`.
 #[derive(Debug, PartialEq, Eq, Clone, Encode, Decode, TypeInfo)]
 pub struct MmrLeaf<BlockNumber, Hash, MerkleRoot, ExtraData> {
 	/// Version of the leaf format.

@@ -615,7 +615,9 @@ impl<Block: BlockT> BlockchainDb<Block> {
 			match Decode::decode(&mut &body[..]) {
 				Ok(body) => return Ok(Some(body)),
 				Err(err) =>
-					return Err(pezsp_blockchain::Error::Backend(format!("Error decoding body: {err}"))),
+					return Err(pezsp_blockchain::Error::Backend(format!(
+						"Error decoding body: {err}"
+					))),
 			}
 		}
 
@@ -1186,7 +1188,9 @@ impl<Block: BlockT> Backend<Block> {
 	///
 	/// Should only be needed for benchmarking.
 	#[cfg(feature = "runtime-benchmarks")]
-	pub fn expose_db(&self) -> (Arc<dyn pezsp_database::Database<DbHash>>, pezsp_database::ColumnId) {
+	pub fn expose_db(
+		&self,
+	) -> (Arc<dyn pezsp_database::Database<DbHash>>, pezsp_database::ColumnId) {
 		(self.storage.db.clone(), columns::STATE)
 	}
 
@@ -1323,7 +1327,8 @@ impl<Block: BlockT> Backend<Block> {
 
 		// Cannot find tree route with empty DB or when imported a detached block.
 		if meta.best_hash != Default::default() && parent_exists {
-			let tree_route = pezsp_blockchain::tree_route(&self.blockchain, meta.best_hash, route_to)?;
+			let tree_route =
+				pezsp_blockchain::tree_route(&self.blockchain, meta.best_hash, route_to)?;
 
 			// uncanonicalize: check safety violations and ensure the numbers no longer
 			// point to these block hashes in the key mapping.
@@ -1888,7 +1893,9 @@ impl<Block: BlockT> Backend<Block> {
 			LastCanonicalized::NotCanonicalizing => false,
 		};
 
-		if requires_canonicalization && pezsc_client_api::Backend::have_state_at(self, f_hash, f_num) {
+		if requires_canonicalization &&
+			pezsc_client_api::Backend::have_state_at(self, f_hash, f_num)
+		{
 			let commit = self.storage.state_db.canonicalize_block(&f_hash).map_err(
 				pezsp_blockchain::Error::from_state_db::<
 					pezsc_state_db::Error<pezsp_database::error::DatabaseError>,
@@ -2460,7 +2467,9 @@ impl<Block: BlockT> pezsc_client_api::backend::Backend<Block> for Backend<Block>
 		let best_hash = self.blockchain.info().best_hash;
 
 		if best_hash == hash {
-			return Err(pezsp_blockchain::Error::Backend(format!("Can't remove best block {hash:?}")));
+			return Err(pezsp_blockchain::Error::Backend(format!(
+				"Can't remove best block {hash:?}"
+			)));
 		}
 
 		let hdr = self.blockchain.header_metadata(hash)?;
@@ -2974,7 +2983,10 @@ pub(crate) mod tests {
 				backend
 					.storage
 					.db
-					.get(columns::STATE, &pezsp_trie::prefixed_key::<BlakeTwo256>(&key, EMPTY_PREFIX))
+					.get(
+						columns::STATE,
+						&pezsp_trie::prefixed_key::<BlakeTwo256>(&key, EMPTY_PREFIX)
+					)
 					.unwrap(),
 				&b"hello"[..]
 			);
@@ -3011,7 +3023,10 @@ pub(crate) mod tests {
 				backend
 					.storage
 					.db
-					.get(columns::STATE, &pezsp_trie::prefixed_key::<BlakeTwo256>(&key, EMPTY_PREFIX))
+					.get(
+						columns::STATE,
+						&pezsp_trie::prefixed_key::<BlakeTwo256>(&key, EMPTY_PREFIX)
+					)
 					.unwrap(),
 				&b"hello"[..]
 			);
@@ -4261,7 +4276,10 @@ pub(crate) mod tests {
 		};
 		let mut op = backend.begin_operation().unwrap();
 		op.set_block_data(header, None, None, None, NewBlockState::Best).unwrap();
-		assert!(matches!(backend.commit_operation(op), Err(pezsp_blockchain::Error::SetHeadTooOld)));
+		assert!(matches!(
+			backend.commit_operation(op),
+			Err(pezsp_blockchain::Error::SetHeadTooOld)
+		));
 
 		// Insert 2 as best again.
 		let header = backend.blockchain().header(block2).unwrap().unwrap();

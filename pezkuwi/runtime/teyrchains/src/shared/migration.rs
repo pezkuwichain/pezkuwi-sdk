@@ -30,7 +30,10 @@ pub mod v0 {
 	#[storage_alias]
 	pub(crate) type AllowedRelayParents<T: Config> = StorageValue<
 		Pezpallet<T>,
-		super::v0::AllowedRelayParentsTracker<<T as pezframe_system::Config>::Hash, BlockNumberFor<T>>,
+		super::v0::AllowedRelayParentsTracker<
+			<T as pezframe_system::Config>::Hash,
+			BlockNumberFor<T>,
+		>,
 		ValueQuery,
 	>;
 

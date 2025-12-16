@@ -2,9 +2,9 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound};
-use scale_info::TypeInfo;
 use pezsp_core::H256;
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 
 use crate::types::{BeaconHeader, SyncAggregate, SyncCommittee};
 

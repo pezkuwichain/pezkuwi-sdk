@@ -19,14 +19,14 @@
 use super::*;
 use crate::testing::{test_executor, timeout_secs};
 use assert_matches::assert_matches;
-use jsonrpsee::core::EmptyServerParams as EmptyParams;
-use pezsc_block_builder::BlockBuilderBuilder;
-use pezsp_consensus::BlockOrigin;
-use pezsp_rpc::list::ListOrValue;
 use bizinikiwi_test_runtime_client::{
 	prelude::*,
 	runtime::{Block, Header, H256},
 };
+use jsonrpsee::core::EmptyServerParams as EmptyParams;
+use pezsc_block_builder::BlockBuilderBuilder;
+use pezsp_consensus::BlockOrigin;
+use pezsp_rpc::list::ListOrValue;
 
 #[tokio::test]
 async fn should_return_header() {

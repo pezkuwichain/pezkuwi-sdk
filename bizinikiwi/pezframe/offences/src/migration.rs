@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::{Config, Kind, OffenceDetails, Pezpallet, Perbill, SessionIndex, LOG_TARGET};
+use super::{Config, Kind, OffenceDetails, Perbill, Pezpallet, SessionIndex, LOG_TARGET};
 use alloc::vec::Vec;
 use pezframe_support::{
 	pezpallet_prelude::ValueQuery,
@@ -90,7 +90,12 @@ pub mod v1 {
 
 /// Type of data stored as a deferred offence
 type DeferredOffenceOf<T> = (
-	Vec<OffenceDetails<<T as pezframe_system::Config>::AccountId, <T as Config>::IdentificationTuple>>,
+	Vec<
+		OffenceDetails<
+			<T as pezframe_system::Config>::AccountId,
+			<T as Config>::IdentificationTuple,
+		>,
+	>,
 	Vec<Perbill>,
 	SessionIndex,
 );

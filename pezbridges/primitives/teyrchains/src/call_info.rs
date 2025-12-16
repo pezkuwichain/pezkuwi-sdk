@@ -19,11 +19,11 @@
 use crate::{ParaHash, ParaId, RelayBlockHash, RelayBlockNumber};
 
 use bp_pezkuwi_core::teyrchains::ParaHeadsProof;
-use pezbp_runtime::HeaderId;
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
+use pezbp_runtime::HeaderId;
 use pezsp_runtime::RuntimeDebug;
 use pezsp_std::vec::Vec;
+use scale_info::TypeInfo;
 
 /// A minimized version of `pezpallet-bridge-teyrchains::Call` that can be used without a runtime.
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]

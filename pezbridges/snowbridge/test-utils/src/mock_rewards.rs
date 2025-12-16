@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023 Snowfork <hello@snowfork.com>
 use bp_relayers::{PaymentProcedure, RewardLedger, RewardsAccountOwner, RewardsAccountParams};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use pezframe_support::{pezpallet_prelude::DispatchResult, parameter_types, pezsp_runtime};
+use pezframe_support::{parameter_types, pezpallet_prelude::DispatchResult, pezsp_runtime};
 use scale_info::TypeInfo;
 use xcm::opaque::latest::Location;
 

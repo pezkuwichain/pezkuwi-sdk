@@ -90,7 +90,9 @@ pub fn pre_migration<T: crate::Config, N: AsRef<str>>(new: N) {
 		),
 		"unexpected next_key({}) = {:?}",
 		new,
-		pezsp_core::hexdisplay::HexDisplay::from(&pezsp_io::storage::next_key(new.as_bytes()).unwrap())
+		pezsp_core::hexdisplay::HexDisplay::from(
+			&pezsp_io::storage::next_key(new.as_bytes()).unwrap()
+		)
 	);
 	// ensure storage version is 3.
 	assert_eq!(StorageVersion::get::<crate::Pezpallet<T>>(), 3);

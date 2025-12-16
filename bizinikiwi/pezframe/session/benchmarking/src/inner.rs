@@ -62,7 +62,8 @@ mod benchmarks {
 			true,
 			RewardDestination::Staked,
 		)?;
-		let v_controller = pezpallet_staking::Pezpallet::<T>::bonded(&v_stash).ok_or("not stash")?;
+		let v_controller =
+			pezpallet_staking::Pezpallet::<T>::bonded(&v_stash).ok_or("not stash")?;
 
 		let keys = T::Keys::decode(&mut TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
@@ -87,7 +88,8 @@ mod benchmarks {
 			true,
 			RewardDestination::Staked,
 		)?;
-		let v_controller = pezpallet_staking::Pezpallet::<T>::bonded(&v_stash).ok_or("not stash")?;
+		let v_controller =
+			pezpallet_staking::Pezpallet::<T>::bonded(&v_stash).ok_or("not stash")?;
 		let keys = T::Keys::decode(&mut TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
 		assert_ok!(Session::<T>::ensure_can_pay_key_deposit(&v_controller));

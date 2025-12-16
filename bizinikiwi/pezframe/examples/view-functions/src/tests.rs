@@ -19,13 +19,15 @@
 #![cfg(test)]
 
 use crate::{
-	pezpallet::{self, Pezpallet},
 	pallet2,
+	pezpallet::{self, Pezpallet},
 };
 use codec::{Decode, Encode};
 use scale_info::meta_type;
 
-use pezframe_support::{derive_impl, pezpallet_prelude::PalletInfoAccess, view_functions::ViewFunction};
+use pezframe_support::{
+	derive_impl, pezpallet_prelude::PalletInfoAccess, view_functions::ViewFunction,
+};
 use pezsp_io::hashing::twox_128;
 use pezsp_metadata_ir::{
 	ItemDeprecationInfoIR, PalletViewFunctionMetadataIR, PalletViewFunctionParamMetadataIR,

@@ -40,8 +40,8 @@
 //!
 //! ## What for?
 //!
-//! Primary use case for this pezpallet is to generate MMR root hashes, that can latter on be used by
-//! BEEFY protocol (see <https://github.com/paritytech/grandpa-bridge-gadget>).
+//! Primary use case for this pezpallet is to generate MMR root hashes, that can latter on be used
+//! by BEEFY protocol (see <https://github.com/paritytech/grandpa-bridge-gadget>).
 //! MMR root hashes along with BEEFY will make it possible to build Super Light Clients (SLC) of
 //! Bizinikiwi-based chains. The SLC will be able to follow finality and can be shown proofs of more
 //! details that happened on the source chain.
@@ -378,8 +378,8 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		best_known_block_number: Option<BlockNumberFor<T>>,
 	) -> Result<(Vec<LeafOf<T, I>>, LeafProof<HashOf<T, I>>), Error> {
 		// check whether best_known_block_number provided, else use current best block
-		let best_known_block_number =
-			best_known_block_number.unwrap_or_else(|| <pezframe_system::Pezpallet<T>>::block_number());
+		let best_known_block_number = best_known_block_number
+			.unwrap_or_else(|| <pezframe_system::Pezpallet<T>>::block_number());
 
 		let leaf_count = Self::block_num_to_leaf_count(best_known_block_number)?;
 
@@ -428,8 +428,8 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		best_known_block_number: Option<BlockNumberFor<T>>,
 	) -> Result<AncestryProof<HashOf<T, I>>, Error> {
 		// check whether best_known_block_number provided, else use current best block
-		let best_known_block_number =
-			best_known_block_number.unwrap_or_else(|| <pezframe_system::Pezpallet<T>>::block_number());
+		let best_known_block_number = best_known_block_number
+			.unwrap_or_else(|| <pezframe_system::Pezpallet<T>>::block_number());
 
 		let leaf_count = Self::block_num_to_leaf_count(best_known_block_number)?;
 		let prev_leaf_count = Self::block_num_to_leaf_count(prev_block_number)?;
@@ -440,7 +440,8 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 
 	#[cfg(feature = "runtime-benchmarks")]
 	pub fn generate_mock_ancestry_proof() -> Result<AncestryProof<HashOf<T, I>>, Error> {
-		let leaf_count = Self::block_num_to_leaf_count(<pezframe_system::Pezpallet<T>>::block_number())?;
+		let leaf_count =
+			Self::block_num_to_leaf_count(<pezframe_system::Pezpallet<T>>::block_number())?;
 		let mmr: ModuleMmr<mmr::storage::OffchainStorage, T, I> = mmr::Mmr::new(leaf_count);
 		mmr.generate_mock_ancestry_proof()
 	}

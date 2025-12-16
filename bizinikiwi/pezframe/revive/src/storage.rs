@@ -39,13 +39,13 @@ use pezframe_support::{
 	weights::{Weight, WeightMeter},
 	CloneNoBound, DebugNoBound, DefaultNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_core::{Get, H160};
 use pezsp_io::KillStorageResult;
 use pezsp_runtime::{
 	traits::{Hash, Saturating, Zero},
 	DispatchError, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 pub enum AccountIdOrAddress<T: Config> {
 	/// An account that is a contract.
@@ -573,7 +573,8 @@ impl<T: Config> DeletionQueueManager<T> {
 	///
 	/// Note:
 	/// we use the delete counter to get the next value to read from the queue and thus don't pay
-	/// the cost of an extra call to `pezsp_io::storage::next_key` to lookup the next entry in the map
+	/// the cost of an extra call to `pezsp_io::storage::next_key` to lookup the next entry in the
+	/// map
 	fn next(&mut self) -> Option<DeletionQueueEntry<'_, T>> {
 		if self.is_empty() {
 			return None;

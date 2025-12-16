@@ -34,7 +34,8 @@ impl Into<pezsc_transaction_pool::TransactionPoolType> for TransactionPoolType {
 		match self {
 			TransactionPoolType::SingleState =>
 				pezsc_transaction_pool::TransactionPoolType::SingleState,
-			TransactionPoolType::ForkAware => pezsc_transaction_pool::TransactionPoolType::ForkAware,
+			TransactionPoolType::ForkAware =>
+				pezsc_transaction_pool::TransactionPoolType::ForkAware,
 		}
 	}
 }

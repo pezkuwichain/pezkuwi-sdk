@@ -53,12 +53,12 @@ pub use alloc::vec::Vec;
 #[doc(hidden)]
 pub use codec;
 #[doc(hidden)]
+pub use pezsp_std;
+#[doc(hidden)]
 pub use scale_info;
 #[cfg(feature = "serde")]
 #[doc(hidden)]
 pub use serde;
-#[doc(hidden)]
-pub use pezsp_std;
 
 #[doc(hidden)]
 pub use paste;

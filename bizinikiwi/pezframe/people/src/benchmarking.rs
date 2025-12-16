@@ -464,7 +464,8 @@ mod benches {
 		let temp_key = new_member_from::<T>(u32::MAX, SEED).1;
 
 		let new_person = pezpallet::Pezpallet::<T>::reserve_new_id();
-		pezpallet::Pezpallet::<T>::recognize_personhood(new_person, Some(temp_key.clone())).unwrap();
+		pezpallet::Pezpallet::<T>::recognize_personhood(new_person, Some(temp_key.clone()))
+			.unwrap();
 
 		let new_key = new_member_from::<T>(u32::MAX - 1, SEED).1;
 
@@ -595,7 +596,8 @@ mod benches {
 		let max_ring_size = T::MaxRingSize::get();
 		recognize_people::<T>(&members);
 		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
-		let to_include = pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, max_ring_size).unwrap();
+		let to_include =
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, max_ring_size).unwrap();
 		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Suspend all people in the ring
@@ -698,7 +700,9 @@ mod benches {
 
 		#[block]
 		{
-			assert_ok!(pezpallet::Pezpallet::<T>::migrate_keys_single_included_key(first_id, first_key));
+			assert_ok!(pezpallet::Pezpallet::<T>::migrate_keys_single_included_key(
+				first_id, first_key
+			));
 		}
 
 		// Pending suspensions are reflected in the ring status.

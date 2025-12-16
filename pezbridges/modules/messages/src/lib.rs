@@ -64,11 +64,11 @@ use bp_messages::{
 	MessageNonce, MessagePayload, MessagesOperatingMode, OutboundLaneData, OutboundMessageDetails,
 	UnrewardedRelayersState, VerificationError,
 };
+use codec::{Decode, Encode};
 use pezbp_runtime::{
 	AccountIdOf, BasicOperatingMode, HashOf, OwnedBridgeModule, PreComputedSize, RangeInclusiveExt,
 	Size,
 };
-use codec::{Decode, Encode};
 use pezframe_support::{dispatch::PostDispatchInfo, ensure, fail, traits::Get, DefaultNoBound};
 use pezsp_std::{marker::PhantomData, prelude::*};
 
@@ -677,7 +677,8 @@ pub struct SendMessageArgs<T: Config<I>, I: 'static> {
 	payload: StoredMessagePayload<T, I>,
 }
 
-impl<T, I> bp_messages::source_chain::MessagesBridge<T::OutboundPayload, T::LaneId> for Pezpallet<T, I>
+impl<T, I> bp_messages::source_chain::MessagesBridge<T::OutboundPayload, T::LaneId>
+	for Pezpallet<T, I>
 where
 	T: Config<I>,
 	I: 'static,

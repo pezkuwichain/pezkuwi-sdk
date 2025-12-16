@@ -4,9 +4,9 @@ use super::*;
 mod util;
 
 use crate::Pezpallet as EthereumBeaconClient;
+use hex_literal::hex;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
-use hex_literal::hex;
 use pezsnowbridge_beacon_primitives::{
 	fast_aggregate_verify,
 	merkle_proof::{generalized_index_length, subtree_index},

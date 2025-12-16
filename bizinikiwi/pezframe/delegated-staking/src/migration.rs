@@ -84,7 +84,8 @@ pub mod unversioned {
 
 			Agents::<T>::iter_keys().take(MaxAgents::get() as usize).for_each(|agent| {
 				let old_proxy: T::AccountId = old_proxy_delegator(agent.clone());
-				let held_balance = Pezpallet::<T>::held_balance_of(Delegator::from(old_proxy.clone()));
+				let held_balance =
+					Pezpallet::<T>::held_balance_of(Delegator::from(old_proxy.clone()));
 				let delegation = Delegation::<T>::get(&old_proxy);
 				if delegation.is_some() || !held_balance.is_zero() {
 					log!(

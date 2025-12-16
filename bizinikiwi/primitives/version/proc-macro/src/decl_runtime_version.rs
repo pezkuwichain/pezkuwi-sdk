@@ -289,8 +289,11 @@ mod tests {
 		.encode();
 
 		assert_eq!(
-			pezsp_version::RuntimeVersion::decode_with_version_hint(&mut &version_bytes[..], Some(4))
-				.unwrap(),
+			pezsp_version::RuntimeVersion::decode_with_version_hint(
+				&mut &version_bytes[..],
+				Some(4)
+			)
+			.unwrap(),
 			pezsp_version::RuntimeVersion {
 				spec_name: "hello".into(),
 				impl_name: "world".into(),

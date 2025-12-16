@@ -17,15 +17,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughput};
+use futures::{future, StreamExt};
 use pezcumulus_client_cli::get_raw_genesis_header;
 use pezcumulus_test_runtime::{AccountId, BalancesCall, ExistentialDeposit, SudoCall};
-use futures::{future, StreamExt};
 use pezsc_transaction_pool_api::{TransactionPool as _, TransactionSource, TransactionStatus};
 use pezsp_core::{crypto::Pair, sr25519};
 use pezsp_runtime::OpaqueExtrinsic;
 
 use pezcumulus_primitives_core::ParaId;
-use pezcumulus_test_service::{construct_extrinsic, fetch_nonce, Client, Keyring::*, TransactionPool};
+use pezcumulus_test_service::{
+	construct_extrinsic, fetch_nonce, Client, Keyring::*, TransactionPool,
+};
 use pezkuwi_primitives::HeadData;
 
 fn create_accounts(num: usize) -> Vec<sr25519::Pair> {

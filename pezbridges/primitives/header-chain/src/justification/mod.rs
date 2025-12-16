@@ -30,12 +30,12 @@ pub use verification::{
 	PrecommitError,
 };
 
-use pezbp_runtime::{BlockNumberOf, Chain, HashOf, HeaderId};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
+use pezbp_runtime::{BlockNumberOf, Chain, HashOf, HeaderId};
 use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature};
 use pezsp_runtime::{traits::Header as HeaderT, RuntimeDebug, SaturatedConversion};
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 
 /// A GRANDPA Justification is a proof that a given header was finalized
 /// at a certain height and with a certain set of authorities.

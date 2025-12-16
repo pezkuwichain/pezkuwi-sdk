@@ -82,8 +82,9 @@ impl SlotTimestampProvider {
 		let slot_duration = pezsc_consensus_aura::slot_duration(&*client)?;
 
 		let time = Self::with_header(&client, slot_duration, |header| {
-			let slot_number = *pezsc_consensus_aura::find_pre_digest::<B, AuthoritySignature>(&header)
-				.map_err(|err| format!("{}", err))?;
+			let slot_number =
+				*pezsc_consensus_aura::find_pre_digest::<B, AuthoritySignature>(&header)
+					.map_err(|err| format!("{}", err))?;
 			Ok(slot_number)
 		})?;
 

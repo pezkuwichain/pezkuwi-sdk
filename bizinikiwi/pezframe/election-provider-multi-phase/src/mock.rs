@@ -17,6 +17,8 @@
 
 use super::*;
 use crate::{self as multi_phase, signed::GeometricDepositBase, unsigned::MinerConfig};
+use multi_phase::unsigned::{IndexAssignmentOf, VoterOf};
+use parking_lot::RwLock;
 use pezframe_election_provider_support::{
 	bounds::{DataProviderBounds, ElectionBounds, ElectionBoundsBuilder},
 	data_provider, onchain, ElectionDataProvider, NposSolution, SequentialPhragmen,
@@ -28,8 +30,6 @@ use pezframe_support::{
 	weights::{constants, Weight},
 	BoundedVec,
 };
-use multi_phase::unsigned::{IndexAssignmentOf, VoterOf};
-use parking_lot::RwLock;
 use pezsp_core::{
 	offchain::{
 		testing::{PoolState, TestOffchainExt, TestTransactionPoolExt},
@@ -680,7 +680,9 @@ impl ExtBuilder {
 		#[cfg(feature = "try-runtime")]
 		ext.execute_with(|| {
 			pezframe_support::assert_ok!(
-				<MultiPhase as pezframe_support::traits::Hooks<u64>>::try_state(System::block_number())
+				<MultiPhase as pezframe_support::traits::Hooks<u64>>::try_state(
+					System::block_number()
+				)
 			);
 		});
 	}

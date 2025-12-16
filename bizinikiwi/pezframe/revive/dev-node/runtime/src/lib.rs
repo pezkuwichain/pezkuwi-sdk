@@ -30,14 +30,6 @@ use pezframe_support::weights::{
 	Weight,
 };
 use pezframe_system::limits::BlockWeights;
-use pezpallet_revive::{
-	evm::{
-		fees::{BlockRatioFee, Info as FeeInfo},
-		runtime::EthExtra,
-	},
-	AccountId32Mapper,
-};
-use pezpallet_transaction_payment::{ConstFeeMultiplier, FeeDetails, Multiplier, RuntimeDispatchInfo};
 use pezkuwi_sdk::{
 	pezkuwi_sdk_frame::{
 		deps::pezsp_genesis_builder,
@@ -45,6 +37,16 @@ use pezkuwi_sdk::{
 		traits::Block as BlockT,
 	},
 	*,
+};
+use pezpallet_revive::{
+	evm::{
+		fees::{BlockRatioFee, Info as FeeInfo},
+		runtime::EthExtra,
+	},
+	AccountId32Mapper,
+};
+use pezpallet_transaction_payment::{
+	ConstFeeMultiplier, FeeDetails, Multiplier, RuntimeDispatchInfo,
 };
 use pezsp_weights::ConstantMultiplier;
 
@@ -302,7 +304,8 @@ impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 	type Hash = Hash;
 	type Nonce = Nonce;
-	type AccountData = pezpallet_balances::AccountData<<Runtime as pezpallet_balances::Config>::Balance>;
+	type AccountData =
+		pezpallet_balances::AccountData<<Runtime as pezpallet_balances::Config>::Balance>;
 }
 
 parameter_types! {

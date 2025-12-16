@@ -23,8 +23,8 @@ use crate::{
 	traits::Registrar as RegistrarTrait,
 };
 use pezframe_support::{assert_noop, assert_ok};
-use pezpallet_balances::Error as BalancesError;
 use pezkuwi_primitives::SessionIndex;
+use pezpallet_balances::Error as BalancesError;
 use pezsp_runtime::traits::BadOrigin;
 
 #[test]

@@ -24,8 +24,8 @@ use crate::{
 use alloc::format;
 use alloc::{vec, vec::Vec};
 use pezframe_support::build_struct_json_patch;
-use pezpallet_staking::{Forcing, StakerStatus};
 use pezkuwi_primitives::{AccountId, AssignmentId, SchedulerParams, ValidatorId};
+use pezpallet_staking::{Forcing, StakerStatus};
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_babe::AuthorityId as BabeId;
 use pezsp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;

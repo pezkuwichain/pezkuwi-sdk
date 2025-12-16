@@ -306,7 +306,8 @@ mod benchmarks {
 				proxy_type: T::ProxyType::default(),
 				disambiguation_index: 0,
 				at: <T as Config>::BlockNumberProvider::current_block_number(),
-				extrinsic_index: pezframe_system::Pezpallet::<T>::extrinsic_index().unwrap_or_default(),
+				extrinsic_index: pezframe_system::Pezpallet::<T>::extrinsic_index()
+					.unwrap_or_default(),
 			}
 			.into(),
 		);

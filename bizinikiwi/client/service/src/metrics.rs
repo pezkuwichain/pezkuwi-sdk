@@ -17,7 +17,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use futures_timer::Delay;
-use prometheus_endpoint::{register, Gauge, GaugeVec, Opts, PrometheusError, Registry, U64};
 use pezsc_client_api::{ClientInfo, UsageProvider};
 use pezsc_network::{config::Role, NetworkStatus, NetworkStatusProvider};
 use pezsc_network_sync::{SyncStatus, SyncStatusProvider};
@@ -26,6 +25,7 @@ use pezsc_transaction_pool_api::{MaintainedTransactionPool, PoolStatus};
 use pezsc_utils::metrics::register_globals;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_runtime::traits::{Block, NumberFor, SaturatedConversion, UniqueSaturatedInto};
+use prometheus_endpoint::{register, Gauge, GaugeVec, Opts, PrometheusError, Registry, U64};
 use std::{
 	sync::Arc,
 	time::{Duration, Instant, SystemTime},

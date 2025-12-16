@@ -26,9 +26,9 @@ use bp_messages::{
 use bp_relayers::{
 	PayRewardFromAccount, PaymentProcedure, RewardsAccountOwner, RewardsAccountParams,
 };
-use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, Teyrchain};
 use bp_teyrchains::SingleParaStoredHeaderDataBuilder;
 use codec::Encode;
+use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, Teyrchain};
 use pezframe_support::{
 	derive_impl, parameter_types,
 	traits::fungible::Mutate,
@@ -267,12 +267,13 @@ impl pezpallet_bridge_messages::Config for TestRuntime {
 	type LaneId = TestLaneIdType;
 
 	type DeliveryPayments = ();
-	type DeliveryConfirmationPayments = pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
-		TestRuntime,
-		(),
-		(),
-		ConstU64<100_000>,
-	>;
+	type DeliveryConfirmationPayments =
+		pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
+			TestRuntime,
+			(),
+			(),
+			ConstU64<100_000>,
+		>;
 	type OnMessagesDelivered = ();
 
 	type MessageDispatch = DummyMessageDispatch;
@@ -408,7 +409,9 @@ pub fn test_reward_account_param() -> RewardsAccountParams<TestLaneIdType> {
 
 /// Return test externalities to use in tests.
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
-	let t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	let t = pezframe_system::GenesisConfig::<TestRuntime>::default()
+		.build_storage()
+		.unwrap();
 	pezsp_io::TestExternalities::new(t)
 }
 

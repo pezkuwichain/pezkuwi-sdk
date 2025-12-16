@@ -19,6 +19,7 @@
 //!
 //! Provides functions for starting a collator node or a normal full node.
 
+use futures::{channel::mpsc, StreamExt};
 use pezcumulus_client_cli::CollatorOptions;
 use pezcumulus_client_network::{AssumeSybilResistance, RequireSecondedInBlockAnnounce};
 use pezcumulus_client_pov_recovery::{PoVRecovery, RecoveryDelayRange, RecoveryHandle};
@@ -27,9 +28,7 @@ pub use pezcumulus_primitives_proof_size_hostfunction::storage_proof_size;
 use pezcumulus_relay_chain_inprocess_interface::build_inprocess_relay_chain;
 use pezcumulus_relay_chain_interface::{RelayChainInterface, RelayChainResult};
 use pezcumulus_relay_chain_minimal_node::build_minimal_relay_chain_node_with_rpc;
-use futures::{channel::mpsc, StreamExt};
 use pezkuwi_primitives::{CandidateEvent, CollatorPair, OccupiedCoreAssumption};
-use prometheus::{Histogram, HistogramOpts, Registry};
 use pezsc_client_api::{
 	Backend as BackendT, BlockBackend, BlockchainEvents, Finalizer, ProofProvider, UsageProvider,
 };
@@ -55,6 +54,7 @@ use pezsp_runtime::{
 	SaturatedConversion, Saturating,
 };
 use pezsp_trie::proof_size_extension::ProofSizeExt;
+use prometheus::{Histogram, HistogramOpts, Registry};
 use std::{
 	sync::Arc,
 	time::{Duration, Instant},
@@ -186,9 +186,11 @@ where
 		sync_service.clone(),
 	);
 
-	task_manager
-		.spawn_essential_handle()
-		.spawn("pezcumulus-pov-recovery", None, pov_recovery.run());
+	task_manager.spawn_essential_handle().spawn(
+		"pezcumulus-pov-recovery",
+		None,
+		pov_recovery.run(),
+	);
 
 	let teyrchain_informant = teyrchain_informant::<Block, _>(
 		para_id,

@@ -13784,7 +13784,7 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk"
-version = "1.11.0"
+version = "0.0.0"
 dependencies = [
  "asset-test-pezutils",
  "assets-common",
@@ -13796,6 +13796,7 @@ dependencies = [
  "bizinikiwi-prometheus-endpoint",
  "bizinikiwi-rpc-client",
  "bizinikiwi-state-trie-migration-rpc",
+ "bizinikiwi-txtesttool",
  "bizinikiwi-wasm-builder",
  "bp-header-pez-chain",
  "bp-messages",
@@ -13806,7 +13807,6 @@ dependencies = [
  "bp-xcm-bridge-hub",
  "bp-xcm-bridge-hub-router",
  "bridge-hub-common",
- "emulated-integration-tests-common",
  "frame-remote-externalities",
  "pez-ethereum-standards",
  "pez-fork-tree",
@@ -13851,7 +13851,6 @@ dependencies = [
  "pezcumulus-relay-chain-minimal-node",
  "pezcumulus-relay-chain-rpc-interface",
  "pezcumulus-relay-chain-streams",
- "pezcumulus-test-relay-sproof-builder",
  "pezframe-benchmarking",
  "pezframe-benchmarking-cli",
  "pezframe-benchmarking-pezpallet-pov",
@@ -13866,7 +13865,6 @@ dependencies = [
  "pezframe-system",
  "pezframe-system-benchmarking",
  "pezframe-system-rpc-runtime-api",
- "pezframe-try-runtime",
  "pezkuwi-approval-distribution",
  "pezkuwi-availability-bitfield-distribution",
  "pezkuwi-availability-distribution",
@@ -13957,7 +13955,6 @@ dependencies = [
  "pezpallet-delegated-staking",
  "pezpallet-democracy",
  "pezpallet-derivatives",
- "pezpallet-dev-mode",
  "pezpallet-dummy-dim",
  "pezpallet-election-provider-multi-block",
  "pezpallet-election-provider-multi-phase",
@@ -14005,7 +14002,6 @@ dependencies = [
  "pezpallet-revive-proc-macro",
  "pezpallet-revive-uapi",
  "pezpallet-root-offences",
- "pezpallet-root-testing",
  "pezpallet-safe-mode",
  "pezpallet-salary",
  "pezpallet-scheduler",
@@ -14040,7 +14036,6 @@ dependencies = [
  "pezpallet-vesting",
  "pezpallet-whitelist",
  "pezpallet-xcm",
- "pezpallet-xcm-benchmarks",
  "pezpallet-xcm-bridge-hub",
  "pezpallet-xcm-bridge-hub-router",
  "pezpallet-xcm-precompiles",
@@ -14135,7 +14130,6 @@ dependencies = [
  "pezsp-offchain",
  "pezsp-panic-handler",
  "pezsp-rpc",
- "pezsp-runtime",
  "pezsp-runtime-interface",
  "pezsp-runtime-interface-proc-macro",
  "pezsp-session",

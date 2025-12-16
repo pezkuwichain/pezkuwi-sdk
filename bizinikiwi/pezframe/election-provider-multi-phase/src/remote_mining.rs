@@ -33,10 +33,10 @@ use pezframe_support::{
 	traits::Get,
 	weights::constants::{WEIGHT_PROOF_SIZE_PER_MB, WEIGHT_REF_TIME_PER_SECOND},
 };
-use remote_externalities::{Builder, Mode, OnlineConfig, Transport};
 use pezsp_core::{ConstU32, H256};
 use pezsp_npos_elections::BalancingConfig;
 use pezsp_runtime::{Perbill, Weight};
+use remote_externalities::{Builder, Mode, OnlineConfig, Transport};
 
 pub mod pezkuwi {
 	use super::*;

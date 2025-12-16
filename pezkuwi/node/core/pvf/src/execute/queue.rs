@@ -34,8 +34,8 @@ use pezkuwi_node_core_pvf_common::{
 	execute::{JobResponse, WorkerError, WorkerResponse},
 	SecurityStatus,
 };
-use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_node_subsystem::{messages::PvfExecKind, ActiveLeavesUpdate};
+use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_primitives::{ExecutorParams, ExecutorParamsHash, Hash, PersistedValidationData};
 use slotmap::HopSlotMap;
 use std::{
@@ -908,8 +908,8 @@ impl Unscheduled {
 
 #[cfg(test)]
 mod tests {
-	use pezkuwi_pez_node_primitives::BlockData;
 	use pezkuwi_node_subsystem_test_helpers::mock::new_leaf;
+	use pezkuwi_pez_node_primitives::BlockData;
 	use pezsp_core::H256;
 
 	use super::*;

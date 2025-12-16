@@ -22,11 +22,11 @@ use core::{fmt::Debug, marker::PhantomData};
 use pezframe_support::{
 	traits::VoteTally, CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Saturating, Zero},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 use super::*;
 use crate::{AccountVote, Conviction, Vote};

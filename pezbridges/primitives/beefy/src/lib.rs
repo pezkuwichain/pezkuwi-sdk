@@ -35,16 +35,16 @@ pub use pezsp_consensus_beefy::{
 	ValidatorSetId, BEEFY_ENGINE_ID,
 };
 
-use pezbp_runtime::{BasicOperatingMode, BlockNumberOf, Chain, HashOf};
 use codec::{Decode, Encode};
+use pezbp_runtime::{BasicOperatingMode, BlockNumberOf, Chain, HashOf};
 use pezframe_support::Parameter;
-use scale_info::TypeInfo;
-use serde::{Deserialize, Serialize};
 use pezsp_runtime::{
 	traits::{Convert, MaybeSerializeDeserialize},
 	RuntimeAppPublic, RuntimeDebug,
 };
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
+use serde::{Deserialize, Serialize};
 
 /// Bizinikiwi-based chain with BEEFY && MMR pallets deployed.
 ///

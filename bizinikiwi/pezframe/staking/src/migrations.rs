@@ -161,7 +161,8 @@ pub mod v15 {
 	type DefaultDisablingStrategy = pezpallet_session::disabling::UpToLimitDisablingStrategy;
 
 	#[storage_alias]
-	pub(crate) type DisabledValidators<T: Config> = StorageValue<Pezpallet<T>, Vec<u32>, ValueQuery>;
+	pub(crate) type DisabledValidators<T: Config> =
+		StorageValue<Pezpallet<T>, Vec<u32>, ValueQuery>;
 
 	pub struct VersionUncheckedMigrateV14ToV15<T>(core::marker::PhantomData<T>);
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateV14ToV15<T> {

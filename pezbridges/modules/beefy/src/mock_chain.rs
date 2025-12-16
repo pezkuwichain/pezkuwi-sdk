@@ -29,10 +29,10 @@ use crate::{
 use bp_beefy::{BeefyPayload, Commitment, ValidatorSetId, MMR_ROOT_PAYLOAD_ID};
 use codec::Encode;
 use pezpallet_mmr::NodeIndex;
-use rand::Rng;
 use pezsp_consensus_beefy::mmr::{BeefyNextAuthoritySet, MmrLeafVersion};
 use pezsp_core::Pair;
 use pezsp_runtime::traits::{Hash, Header as HeaderT};
+use rand::Rng;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone)]

@@ -181,8 +181,8 @@ impl OperatingMode {
 	}
 }
 
-/// See `pezpallet_staking::DefaultExposureOf`. This type is the same, except it is duplicated here so
-/// that an rc-runtime can use it after `pezpallet-staking` is fully removed as a dependency.
+/// See `pezpallet_staking::DefaultExposureOf`. This type is the same, except it is duplicated here
+/// so that an rc-runtime can use it after `pezpallet-staking` is fully removed as a dependency.
 pub struct DefaultExposureOf<T>(core::marker::PhantomData<T>);
 
 impl<T: Config>
@@ -255,9 +255,9 @@ pub mod pezpallet {
 		///
 		/// Note that in case a single session report is larger than a single DMP message, it might
 		/// still be sent over if we use
-		/// [`pezpallet_staking_async_rc_client::XCMSender::split_then_send`]. This will make the size
-		/// of each individual message smaller, yet, it will still try and push them all to the
-		/// queue at the same time.
+		/// [`pezpallet_staking_async_rc_client::XCMSender::split_then_send`]. This will make the
+		/// size of each individual message smaller, yet, it will still try and push them all to
+		/// the queue at the same time.
 		type MaximumValidatorsWithPoints: Get<u32>;
 
 		/// A type that gives us a reliable unix timestamp.
@@ -323,8 +323,9 @@ pub mod pezpallet {
 
 	/// Indicates the current operating mode of the pezpallet.
 	///
-	/// This value determines how the pezpallet behaves in response to incoming and outgoing messages,
-	/// particularly whether it should execute logic directly, defer it, or delegate it entirely.
+	/// This value determines how the pezpallet behaves in response to incoming and outgoing
+	/// messages, particularly whether it should execute logic directly, defer it, or delegate it
+	/// entirely.
 	#[pezpallet::storage]
 	pub type Mode<T: Config> = StorageValue<_, OperatingMode, ValueQuery>;
 
@@ -698,8 +699,10 @@ pub mod pezpallet {
 	}
 
 	impl<T: Config>
-		historical::SessionManager<T::AccountId, pezsp_staking::Exposure<T::AccountId, BalanceOf<T>>>
-		for Pezpallet<T>
+		historical::SessionManager<
+			T::AccountId,
+			pezsp_staking::Exposure<T::AccountId, BalanceOf<T>>,
+		> for Pezpallet<T>
 	{
 		fn new_session(
 			new_index: pezsp_staking::SessionIndex,
@@ -718,7 +721,10 @@ pub mod pezpallet {
 		) -> Option<Vec<(T::AccountId, pezsp_staking::Exposure<T::AccountId, BalanceOf<T>>)>> {
 			if Mode::<T>::get() == OperatingMode::Passive {
 				T::Fallback::new_session_genesis(new_index).map(|validators| {
-					validators.into_iter().map(|v| (v, pezsp_staking::Exposure::default())).collect()
+					validators
+						.into_iter()
+						.map(|v| (v, pezsp_staking::Exposure::default()))
+						.collect()
 				})
 			} else {
 				None
@@ -805,7 +811,9 @@ pub mod pezpallet {
 		}
 	}
 
-	impl<T: Config> pezpallet_authorship::EventHandler<T::AccountId, BlockNumberFor<T>> for Pezpallet<T> {
+	impl<T: Config> pezpallet_authorship::EventHandler<T::AccountId, BlockNumberFor<T>>
+		for Pezpallet<T>
+	{
 		fn note_author(author: T::AccountId) {
 			match Mode::<T>::get() {
 				OperatingMode::Passive => T::Fallback::note_author(author),
@@ -817,9 +825,9 @@ pub mod pezpallet {
 	impl<T: Config> Pezpallet<T> {
 		/// Hook to be called when the AssetHub migration begins.
 		///
-		/// This transitions the pezpallet into [`OperatingMode::Buffered`], meaning it will act as the
-		/// primary staking module on the relay chain but will buffer outgoing messages instead of
-		/// sending them to AssetHub.
+		/// This transitions the pezpallet into [`OperatingMode::Buffered`], meaning it will act as
+		/// the primary staking module on the relay chain but will buffer outgoing messages
+		/// instead of sending them to AssetHub.
 		///
 		/// While in this mode, the pezpallet stops delegating to the fallback implementation and
 		/// temporarily accumulates events for later processing.
@@ -834,11 +842,11 @@ pub mod pezpallet {
 		/// Hook to be called when the AssetHub migration is complete.
 		///
 		/// This transitions the pezpallet into [`OperatingMode::Active`], meaning the counterpart
-		/// pezpallet on AssetHub is ready to accept incoming messages, and this pezpallet can resume
-		/// sending them.
+		/// pezpallet on AssetHub is ready to accept incoming messages, and this pezpallet can
+		/// resume sending them.
 		///
-		/// In this mode, the pezpallet becomes fully active and processes all staking-related events
-		/// directly.
+		/// In this mode, the pezpallet becomes fully active and processes all staking-related
+		/// events directly.
 		pub fn on_migration_end() {
 			debug_assert!(
 				Mode::<T>::get() == OperatingMode::Buffered,

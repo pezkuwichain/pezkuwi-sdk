@@ -21,8 +21,8 @@
 
 use bp_header_pez_chain::ChainWithGrandpa;
 use bp_messages::{ChainWithMessages, InboundLaneData, MessageNonce};
-use pezbp_runtime::{AccountIdOf, Chain};
 use codec::Encode;
+use pezbp_runtime::{AccountIdOf, Chain};
 use pezframe_support::{storage::generator::StorageValue, traits::Get, weights::Weight};
 use pezframe_system::limits;
 use pezpallet_bridge_messages::{ThisChainOf, WeightInfoExt as _};
@@ -56,8 +56,8 @@ macro_rules! assert_chain_types(
 	}
 );
 
-/// Macro that ensures that the bridge messages pezpallet is configured properly to bridge using given
-/// configuration.
+/// Macro that ensures that the bridge messages pezpallet is configured properly to bridge using
+/// given configuration.
 #[macro_export]
 macro_rules! assert_bridge_messages_pallet_types(
 	(
@@ -193,8 +193,8 @@ struct AssertBridgeGrandpaPalletNames<'a> {
 	pub with_bridged_chain_grandpa_pallet_name: &'a str,
 }
 
-/// Tests that bridge pezpallet names used in `construct_runtime!()` macro call are matching constants
-/// from chain primitives crates.
+/// Tests that bridge pezpallet names used in `construct_runtime!()` macro call are matching
+/// constants from chain primitives crates.
 fn assert_bridge_grandpa_pallet_names<R, GI>(params: AssertBridgeGrandpaPalletNames)
 where
 	R: pezpallet_bridge_grandpa::Config<GI>,
@@ -202,13 +202,13 @@ where
 {
 	// check that the bridge GRANDPA pezpallet has required name
 	assert_eq!(
-			pezpallet_bridge_grandpa::PalletOwner::<R, GI>::storage_value_final_key().to_vec(),
-			pezbp_runtime::storage_value_key(
-				params.with_bridged_chain_grandpa_pallet_name,
-				"PalletOwner",
-			)
-			.0,
-		);
+		pezpallet_bridge_grandpa::PalletOwner::<R, GI>::storage_value_final_key().to_vec(),
+		pezbp_runtime::storage_value_key(
+			params.with_bridged_chain_grandpa_pallet_name,
+			"PalletOwner",
+		)
+		.0,
+	);
 	assert_eq!(
 		pezpallet_bridge_grandpa::PalletOperatingMode::<R, GI>::storage_value_final_key().to_vec(),
 		pezbp_runtime::storage_value_key(
@@ -227,8 +227,8 @@ struct AssertBridgeMessagesPalletNames<'a> {
 	pub with_bridged_chain_messages_pallet_name: &'a str,
 }
 
-/// Tests that bridge pezpallet names used in `construct_runtime!()` macro call are matching constants
-/// from chain primitives crates.
+/// Tests that bridge pezpallet names used in `construct_runtime!()` macro call are matching
+/// constants from chain primitives crates.
 fn assert_bridge_messages_pallet_names<R, MI>(params: AssertBridgeMessagesPalletNames)
 where
 	R: pezpallet_bridge_messages::Config<MI>,
@@ -292,7 +292,9 @@ pub fn assert_complete_with_teyrchain_bridge_constants<R, PI, MI>(
 	R: pezframe_system::Config
 		+ pezpallet_bridge_teyrchains::Config<PI>
 		+ pezpallet_bridge_messages::Config<MI>,
-	<R as pezpallet_bridge_teyrchains::BoundedBridgeGrandpaConfig<R::BridgesGrandpaPalletInstance>>::BridgedRelayChain: ChainWithGrandpa,
+	<R as pezpallet_bridge_teyrchains::BoundedBridgeGrandpaConfig<
+		R::BridgesGrandpaPalletInstance,
+	>>::BridgedRelayChain: ChainWithGrandpa,
 	PI: 'static,
 	MI: 'static,
 {
@@ -370,7 +372,9 @@ pub fn check_message_lane_weights<
 	>::encoded_size_hint_u32(
 		this_chain_max_unrewarded_relayers as _
 	);
-	pezpallet_bridge_messages::ensure_able_to_receive_confirmation::<Weights<T, MessagesPalletInstance>>(
+	pezpallet_bridge_messages::ensure_able_to_receive_confirmation::<
+		Weights<T, MessagesPalletInstance>,
+	>(
 		C::max_extrinsic_size(),
 		C::max_extrinsic_weight(),
 		max_incoming_inbound_lane_data_proof_size,

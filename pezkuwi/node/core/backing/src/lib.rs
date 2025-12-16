@@ -80,10 +80,6 @@ use futures::{
 use schnellru::{ByLength, LruMap};
 
 use error::{Error, FatalResult};
-use pezkuwi_pez_node_primitives::{
-	AvailableData, InvalidCandidate, PoV, SignedFullStatementWithPVD, StatementWithPVD,
-	ValidationResult,
-};
 use pezkuwi_node_subsystem::{
 	messages::{
 		AvailabilityDistributionMessage, AvailabilityStoreMessage, CanSecondRequest,
@@ -104,6 +100,10 @@ use pezkuwi_node_subsystem_util::{
 	request_validator_groups, request_validators,
 	runtime::{self, ClaimQueueSnapshot},
 	Validator,
+};
+use pezkuwi_pez_node_primitives::{
+	AvailableData, InvalidCandidate, PoV, SignedFullStatementWithPVD, StatementWithPVD,
+	ValidationResult,
 };
 use pezkuwi_primitives::{
 	BackedCandidate, CandidateCommitments, CandidateHash, CandidateReceiptV2 as CandidateReceipt,

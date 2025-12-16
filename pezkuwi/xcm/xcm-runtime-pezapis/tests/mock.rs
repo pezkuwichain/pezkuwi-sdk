@@ -43,13 +43,13 @@ use xcm_executor::{
 	XcmExecutor,
 };
 
+use xcm_pez_simulator::helpers::derive_topic_id;
 use xcm_runtime_pezapis::{
 	conversions::{Error as LocationToAccountApiError, LocationToAccountApi},
 	dry_run::{CallDryRunEffects, DryRunApi, Error as XcmDryRunApiError, XcmDryRunEffects},
 	fees::{Error as XcmPaymentApiError, XcmPaymentApi},
 	trusted_query::{Error as TrustedQueryApiError, TrustedQueryApi},
 };
-use xcm_pez_simulator::helpers::derive_topic_id;
 
 construct_runtime! {
 	pub enum TestRuntime {
@@ -468,8 +468,12 @@ impl pezpallet_xcm::Config for TestRuntime {
 }
 
 #[allow(dead_code)]
-pub fn new_test_ext_with_balances(balances: Vec<(AccountId, Balance)>) -> pezsp_io::TestExternalities {
-	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+pub fn new_test_ext_with_balances(
+	balances: Vec<(AccountId, Balance)>,
+) -> pezsp_io::TestExternalities {
+	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default()
+		.build_storage()
+		.unwrap();
 
 	pezpallet_balances::GenesisConfig::<TestRuntime> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)
@@ -485,7 +489,9 @@ pub fn new_test_ext_with_balances_and_assets(
 	balances: Vec<(AccountId, Balance)>,
 	assets: Vec<(AssetIdForAssetsPallet, AccountId, Balance)>,
 ) -> pezsp_io::TestExternalities {
-	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default()
+		.build_storage()
+		.unwrap();
 
 	pezpallet_balances::GenesisConfig::<TestRuntime> { balances, ..Default::default() }
 		.assimilate_storage(&mut t)

@@ -23,9 +23,9 @@ use crate::{
 };
 use alloc::vec;
 use pezframe_support::build_struct_json_patch;
-use serde_json::{json, to_string, Value};
 use pezsp_application_crypto::Ss58Codec;
 use pezsp_keyring::Sr25519Keyring;
+use serde_json::{json, to_string, Value};
 
 /// A demo preset with strings only.
 pub const PRESET_1: &str = "preset_1";

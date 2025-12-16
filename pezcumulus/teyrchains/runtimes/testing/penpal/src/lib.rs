@@ -60,9 +60,8 @@ use pezframe_support::{
 	construct_runtime, derive_impl,
 	dispatch::DispatchClass,
 	genesis_builder_helper::{build_state, get_preset},
-	ord_parameter_types,
+	ord_parameter_types, parameter_types,
 	pezpallet_prelude::Weight,
-	parameter_types,
 	traits::{
 		tokens::{fungible, fungibles, imbalance::ResolveAssetTo},
 		AsEnsureOriginWithArg, ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, Everything,
@@ -78,9 +77,8 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot, EnsureSigned, EnsureSignedBy,
 };
-use pezpallet_revive::evm::runtime::EthExtra;
 use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
-use smallvec::smallvec;
+use pezpallet_revive::evm::runtime::EthExtra;
 use pezsp_api::impl_runtime_apis;
 pub use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -91,6 +89,7 @@ use pezsp_runtime::{
 	ApplyExtrinsicResult, FixedU128,
 };
 pub use pezsp_runtime::{traits::ConvertInto, MultiAddress, Perbill, Permill};
+use smallvec::smallvec;
 use testnet_teyrchains_constants::zagros::{consensus::*, time::*};
 use teyrchains_common::{
 	impls::{AssetsToBlockAuthor, NonZeroIssuance},

@@ -65,11 +65,11 @@ impl log::Log for RuntimeLogger {
 
 #[cfg(test)]
 mod tests {
-	use pezsp_api::ProvideRuntimeApi;
-	use std::env;
 	use bizinikiwi_test_runtime_client::{
 		runtime::TestAPI, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
 	};
+	use pezsp_api::ProvideRuntimeApi;
+	use std::env;
 
 	#[test]
 	fn ensure_runtime_logger_works() {

@@ -36,9 +36,9 @@ use assert_matches::assert_matches;
 use pezframe_support::{assert_err, assert_ok, parameter_types};
 use pezframe_system::AccountInfo;
 use pezpallet_revive_uapi::ReturnFlags;
-use pretty_assertions::assert_eq;
 use pezsp_io::hashing::keccak_256;
 use pezsp_runtime::DispatchError;
+use pretty_assertions::assert_eq;
 use std::{cell::RefCell, collections::hash_map::HashMap, rc::Rc};
 
 type System = pezframe_system::Pezpallet<Test>;

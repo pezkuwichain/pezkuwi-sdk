@@ -46,7 +46,8 @@ pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 
 pub const LOG_TARGET: &str = "snowbridge-system-frontend";
 
-/// Call indices within BridgeHub runtime for dispatchables within `pezsnowbridge-pezpallet-system-v2`
+/// Call indices within BridgeHub runtime for dispatchables within
+/// `pezsnowbridge-pezpallet-system-v2`
 #[allow(clippy::large_enum_variant)]
 #[derive(Encode, Decode, Debug, PartialEq, Clone, TypeInfo)]
 pub enum BridgeHubRuntime<T: pezframe_system::Config> {
@@ -88,7 +89,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Origin check for XCM locations that can register token
 		type RegisterTokenOrigin: EnsureOriginWithArg<

@@ -40,6 +40,7 @@ use asset_test_pezutils::{
 };
 use assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use codec::{Decode, Encode};
+use hex_literal::hex;
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok, parameter_types,
 	traits::{
@@ -55,7 +56,6 @@ use pezframe_support::{
 	},
 	weights::{Weight, WeightToFee as WeightToFeeT},
 };
-use hex_literal::hex;
 use pezpallet_revive::{
 	test_utils::builder::{BareInstantiateBuilder, Contract},
 	Code,
@@ -89,8 +89,9 @@ const SOME_ASSET_ADMIN: [u8; 32] = [5u8; 32];
 const ERC20_PVM: &[u8] =
 	include_bytes!("../../../../../../bizinikiwi/pezframe/revive/fixtures/erc20/erc20.polkavm");
 
-const FAKE_ERC20_PVM: &[u8] =
-	include_bytes!("../../../../../../bizinikiwi/pezframe/revive/fixtures/erc20/fake_erc20.polkavm");
+const FAKE_ERC20_PVM: &[u8] = include_bytes!(
+	"../../../../../../bizinikiwi/pezframe/revive/fixtures/erc20/fake_erc20.polkavm"
+);
 
 const EXPENSIVE_ERC20_PVM: &[u8] = include_bytes!(
 	"../../../../../../bizinikiwi/pezframe/revive/fixtures/erc20/expensive_erc20.polkavm"

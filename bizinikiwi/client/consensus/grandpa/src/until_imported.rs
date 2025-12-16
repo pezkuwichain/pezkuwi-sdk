@@ -35,11 +35,11 @@ use futures::{
 use futures_timer::Delay;
 use log::{debug, warn};
 use parking_lot::Mutex;
-use prometheus_endpoint::{register, Gauge, PrometheusError, Registry, U64};
 use pezsc_client_api::{BlockImportNotification, ImportNotifications};
 use pezsc_utils::mpsc::TracingUnboundedReceiver;
 use pezsp_consensus_grandpa::AuthorityId;
 use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT, NumberFor};
+use prometheus_endpoint::{register, Gauge, PrometheusError, Registry, U64};
 
 use std::{
 	collections::{HashMap, VecDeque},
@@ -562,6 +562,7 @@ pub(crate) type UntilGlobalMessageBlocksImported<Block, BlockStatus, BlockSyncRe
 mod tests {
 	use super::*;
 	use crate::{CatchUp, CompactCommit};
+	use bizinikiwi_test_runtime_client::runtime::{Block, Hash, Header};
 	use finality_grandpa::Precommit;
 	use futures::future::Either;
 	use futures_timer::Delay;
@@ -569,7 +570,6 @@ mod tests {
 	use pezsc_utils::mpsc::{tracing_unbounded, TracingUnboundedSender};
 	use pezsp_consensus::BlockOrigin;
 	use pezsp_core::crypto::UncheckedFrom;
-	use bizinikiwi_test_runtime_client::runtime::{Block, Hash, Header};
 
 	#[derive(Clone)]
 	struct TestChainState {

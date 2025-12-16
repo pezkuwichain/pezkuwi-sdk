@@ -21,7 +21,7 @@ use std::sync::Arc;
 use cli::{AuthoringPolicy, RelayChainCli, Subcommand, TestCollatorCli};
 use pezcumulus_primitives_core::relay_chain::CollatorPair;
 use pezcumulus_test_service::{new_partial, AnnounceBlockFn};
-use pezsc_cli::{CliConfiguration, BizinikiwiCli};
+use pezsc_cli::{BizinikiwiCli, CliConfiguration};
 use pezsp_core::Pair;
 
 pub fn wrap_announce_block() -> Box<dyn FnOnce(AnnounceBlockFn) -> AnnounceBlockFn> {

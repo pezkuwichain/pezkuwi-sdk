@@ -19,13 +19,13 @@ use crate::evm::Bytes;
 use alloc::{collections::BTreeMap, string::String, vec::Vec};
 use codec::{Decode, Encode};
 use derive_more::From;
+use pezsp_core::{H160, H256, U256};
 use scale_info::TypeInfo;
 use serde::{
 	de::{Error, MapAccess, Visitor},
 	ser::{SerializeMap, Serializer},
 	Deserialize, Serialize,
 };
-use pezsp_core::{H160, H256, U256};
 
 /// The type of tracer to use.
 #[derive(TypeInfo, Debug, Clone, Encode, Decode, Serialize, Deserialize, PartialEq)]

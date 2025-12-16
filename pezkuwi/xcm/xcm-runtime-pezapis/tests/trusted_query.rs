@@ -20,8 +20,8 @@
 
 mod mock;
 
-use pezframe_support::pezsp_runtime::testing::H256;
 use mock::*;
+use pezframe_support::pezsp_runtime::testing::H256;
 use pezsp_api::ProvideRuntimeApi;
 use xcm::{prelude::*, v3};
 use xcm_runtime_pezapis::trusted_query::{Error, TrustedQueryApi};

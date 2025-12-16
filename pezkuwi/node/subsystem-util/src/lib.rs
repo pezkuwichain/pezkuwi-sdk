@@ -49,10 +49,10 @@ use pezkuwi_primitives::{
 	SessionInfo, Signed, SigningContext, ValidationCode, ValidationCodeHash, ValidatorId,
 	ValidatorIndex, ValidatorSignature,
 };
-pub use rand;
 use pezsp_application_crypto::AppCrypto;
 use pezsp_core::ByteArray;
 use pezsp_keystore::{Error as KeystoreError, KeystorePtr};
+pub use rand;
 use std::{
 	collections::{BTreeMap, VecDeque},
 	time::Duration,

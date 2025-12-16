@@ -28,8 +28,8 @@ use pezframe_support::{
 };
 use pezframe_system::{
 	pezpallet_prelude::*, CheckGenesis, CheckMortality, CheckNonZeroSender, CheckNonce,
-	CheckSpecVersion, CheckTxVersion, CheckWeight, Config, ExtensionsWeightInfo, Pezpallet as System,
-	RawOrigin, WeightReclaim,
+	CheckSpecVersion, CheckTxVersion, CheckWeight, Config, ExtensionsWeightInfo,
+	Pezpallet as System, RawOrigin, WeightReclaim,
 };
 use pezsp_runtime::{
 	generic::Era,
@@ -260,7 +260,8 @@ mod benchmarks {
 		let base_extrinsic = <T as pezframe_system::Config>::BlockWeights::get()
 			.get(DispatchClass::Normal)
 			.base_extrinsic;
-		let extension_weight = <T as pezframe_system::Config>::ExtensionsWeightInfo::weight_reclaim();
+		let extension_weight =
+			<T as pezframe_system::Config>::ExtensionsWeightInfo::weight_reclaim();
 		let info = DispatchInfo {
 			call_weight: Weight::from_parts(base_extrinsic.ref_time() * 5, 0),
 			extension_weight,

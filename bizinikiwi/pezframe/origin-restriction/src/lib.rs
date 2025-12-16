@@ -62,7 +62,6 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezpallet_transaction_payment::OnChargeTransaction;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		AsTransactionAuthorizedOrigin, DispatchInfoOf, DispatchOriginOf, Dispatchable, Implication,
@@ -74,6 +73,7 @@ use pezsp_runtime::{
 	DispatchError::BadOrigin,
 	DispatchResult, RuntimeDebug, SaturatedConversion, Saturating, Weight,
 };
+use scale_info::TypeInfo;
 
 /// The allowance for an entity, defining its usage limit and recovery rate.
 #[derive(Clone, Debug)]
@@ -162,7 +162,8 @@ pub mod pezpallet {
 
 		/// The runtime event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::error]

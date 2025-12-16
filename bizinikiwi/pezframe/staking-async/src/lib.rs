@@ -26,8 +26,8 @@
 //! * It is capable of working with a multi-page `ElectionProvider``, aka.
 //!   `pezpallet-election-provider-multi-block`.
 //!
-//! While `pezpallet-staking` was somewhat general-purpose, this pezpallet is absolutely NOT right from
-//! the get-go: It is designed to be used ONLY in Pezkuwi/Kusama AssetHub system teyrchains.
+//! While `pezpallet-staking` was somewhat general-purpose, this pezpallet is absolutely NOT right
+//! from the get-go: It is designed to be used ONLY in Pezkuwi/Kusama AssetHub system teyrchains.
 //!
 //! The workings of this pezpallet can be divided into a number of subsystems, as follows.
 //!
@@ -198,6 +198,7 @@ pub mod weights;
 extern crate alloc;
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, HasCompact, MaxEncodedLen};
+use ledger::LedgerIntegrityState;
 use pezframe_election_provider_support::ElectionProvider;
 use pezframe_support::{
 	traits::{
@@ -208,14 +209,13 @@ use pezframe_support::{
 	WeakBoundedVec,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-use ledger::LedgerIntegrityState;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AtLeast32BitUnsigned, One, StaticLookup, UniqueSaturatedInto},
 	BoundedBTreeMap, Perbill, RuntimeDebug, Saturating,
 };
 use pezsp_staking::{EraIndex, ExposurePage, PagedExposureMetadata, SessionIndex};
 pub use pezsp_staking::{Exposure, IndividualExposure, StakerStatus};
+use scale_info::TypeInfo;
 pub use weights::WeightInfo;
 
 // public exports
@@ -246,8 +246,8 @@ pub type BoundedExposuresOf<T> = BoundedVec<
 	MaxWinnersPerPageOf<<T as Config>::ElectionProvider>,
 >;
 
-/// Alias for the maximum number of winners (aka. active validators), as defined in by this pezpallet's
-/// config.
+/// Alias for the maximum number of winners (aka. active validators), as defined in by this
+/// pezpallet's config.
 pub type MaxWinnersOf<T> = <T as Config>::MaxValidatorSet;
 
 /// Alias for the maximum number of winners per page, as expected by the election provider.
@@ -263,7 +263,8 @@ pub type RewardPoint = u32;
 /// The balance type of this pezpallet.
 pub type BalanceOf<T> = <T as Config>::CurrencyBalance;
 
-type PositiveImbalanceOf<T> = Debt<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
+type PositiveImbalanceOf<T> =
+	Debt<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
 pub type NegativeImbalanceOf<T> =
 	Credit<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
 

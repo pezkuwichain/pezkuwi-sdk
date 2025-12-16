@@ -67,7 +67,10 @@ impl ErrorDef {
 		let item = if let syn::Item::Enum(item) = item {
 			item
 		} else {
-			return Err(syn::Error::new(item.span(), "Invalid pezpallet::error, expected item enum"));
+			return Err(syn::Error::new(
+				item.span(),
+				"Invalid pezpallet::error, expected item enum",
+			));
 		};
 		if !matches!(item.vis, syn::Visibility::Public(_)) {
 			let msg = "Invalid pezpallet::error, `Error` must be public";
@@ -80,41 +83,42 @@ impl ErrorDef {
 			vec![helper::check_type_def_gen_no_bounds(&item.generics, item.ident.span())?];
 
 		if item.generics.where_clause.is_some() {
-			let msg = "Invalid pezpallet::error, where clause is not allowed on pezpallet error item";
+			let msg =
+				"Invalid pezpallet::error, where clause is not allowed on pezpallet error item";
 			return Err(syn::Error::new(item.generics.where_clause.as_ref().unwrap().span(), msg));
 		}
 
 		let error = syn::parse2::<keyword::Error>(item.ident.to_token_stream())?;
 
-		let variants = item
-			.variants
-			.iter()
-			.map(|variant| {
-				let field_ty = match &variant.fields {
-					Fields::Unit => None,
-					Fields::Named(_) => Some(VariantField { is_named: true }),
-					Fields::Unnamed(_) => Some(VariantField { is_named: false }),
-				};
+		let variants =
+			item.variants
+				.iter()
+				.map(|variant| {
+					let field_ty = match &variant.fields {
+						Fields::Unit => None,
+						Fields::Named(_) => Some(VariantField { is_named: true }),
+						Fields::Unnamed(_) => Some(VariantField { is_named: false }),
+					};
 
-				match &variant.discriminant {
-					None |
-					Some((_, syn::Expr::Lit(syn::ExprLit { lit: syn::Lit::Int(_), .. }))) => {},
-					Some((_, expr)) => {
-						let msg = "Invalid pezpallet::error, only integer discriminants are supported";
-						return Err(syn::Error::new(expr.span(), msg));
-					},
-				}
-				let cfg_attrs: Vec<syn::Attribute> = helper::get_item_cfg_attrs(&variant.attrs);
-				let maybe_allow_attrs = extract_or_return_allow_attrs(&variant.attrs).collect();
+					match &variant.discriminant {
+						None |
+						Some((_, syn::Expr::Lit(syn::ExprLit { lit: syn::Lit::Int(_), .. }))) => {},
+						Some((_, expr)) => {
+							let msg = "Invalid pezpallet::error, only integer discriminants are supported";
+							return Err(syn::Error::new(expr.span(), msg));
+						},
+					}
+					let cfg_attrs: Vec<syn::Attribute> = helper::get_item_cfg_attrs(&variant.attrs);
+					let maybe_allow_attrs = extract_or_return_allow_attrs(&variant.attrs).collect();
 
-				Ok(VariantDef {
-					ident: variant.ident.clone(),
-					field: field_ty,
-					cfg_attrs,
-					maybe_allow_attrs,
+					Ok(VariantDef {
+						ident: variant.ident.clone(),
+						field: field_ty,
+						cfg_attrs,
+						maybe_allow_attrs,
+					})
 				})
-			})
-			.collect::<Result<_, _>>()?;
+				.collect::<Result<_, _>>()?;
 
 		Ok(ErrorDef { attr_span, index, variants, instances, error })
 	}

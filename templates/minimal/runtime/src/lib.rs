@@ -26,7 +26,6 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 extern crate alloc;
 
 use alloc::vec::Vec;
-use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 use pezkuwi_sdk::{
 	pezkuwi_sdk_frame::{
 		self as frame,
@@ -35,6 +34,7 @@ use pezkuwi_sdk::{
 	},
 	*,
 };
+use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 
 /// Provides getters for genesis configuration presets.
 pub mod genesis_config_presets {
@@ -180,7 +180,8 @@ impl pezframe_system::Config for Runtime {
 	type Block = Block;
 	type Version = Version;
 	// Use the account data from the balances pezpallet
-	type AccountData = pezpallet_balances::AccountData<<Runtime as pezpallet_balances::Config>::Balance>;
+	type AccountData =
+		pezpallet_balances::AccountData<<Runtime as pezpallet_balances::Config>::Balance>;
 }
 
 // Implements the types required for the balances pezpallet.
@@ -213,8 +214,13 @@ impl pezpallet_minimal_template::Config for Runtime {}
 type Block = frame::runtime::types_common::BlockOf<Runtime, TxExtension>;
 type Header = HeaderFor<Runtime>;
 
-type RuntimeExecutive =
-	Executive<Runtime, Block, pezframe_system::ChainContext<Runtime>, Runtime, AllPalletsWithSystem>;
+type RuntimeExecutive = Executive<
+	Runtime,
+	Block,
+	pezframe_system::ChainContext<Runtime>,
+	Runtime,
+	AllPalletsWithSystem,
+>;
 
 impl_runtime_apis! {
 	impl apis::Core<Block> for Runtime {

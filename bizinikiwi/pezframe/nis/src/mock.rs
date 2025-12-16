@@ -112,7 +112,8 @@ impl pezpallet_nis::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type PalletId = NisPalletId;
 	type Currency = Balances;
-	type CurrencyBalance = <Self as pezpallet_balances::Config<pezpallet_balances::Instance1>>::Balance;
+	type CurrencyBalance =
+		<Self as pezpallet_balances::Config<pezpallet_balances::Instance1>>::Balance;
 	type FundOrigin = pezframe_system::EnsureSigned<Self::AccountId>;
 	type Deficit = ();
 	type IgnoredIssuance = IgnoredIssuance;
@@ -150,5 +151,8 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 // our desired mockup, but without any balances.
 #[cfg(feature = "runtime-benchmarks")]
 pub fn new_test_ext_empty() -> pezsp_io::TestExternalities {
-	pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap().into()
+	pezframe_system::GenesisConfig::<Test>::default()
+		.build_storage()
+		.unwrap()
+		.into()
 }

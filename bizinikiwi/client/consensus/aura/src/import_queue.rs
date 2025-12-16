@@ -24,7 +24,6 @@ use crate::{
 };
 use codec::Codec;
 use log::{debug, info, trace};
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{backend::AuxStore, BlockOf, UsageProvider};
 use pezsc_consensus::{
 	block_import::{BlockImport, BlockImportParams, ForkChoiceStrategy},
@@ -44,6 +43,7 @@ use pezsp_runtime::{
 	traits::{Block as BlockT, Header, NumberFor},
 	DigestItem,
 };
+use prometheus_endpoint::Registry;
 use std::{fmt::Debug, sync::Arc};
 
 /// check a header has been signed by the right key. If the slot is too far in the future, an error

@@ -25,13 +25,13 @@ use pezframe_support::{
 	CloneNoBound, DefaultNoBound, EqNoBound, PartialEqNoBound,
 };
 use pezframe_system::{CheckNonce, ValidNonceInfo};
-use scale_info::TypeInfo;
 use pezsp_core::twox_64;
 use pezsp_runtime::{
 	traits::{DispatchInfoOf, TransactionExtension, ValidateResult},
 	transaction_validity::{InvalidTransaction, TransactionValidityError, ValidTransaction},
 	Saturating,
 };
+use scale_info::TypeInfo;
 
 /// Information required to transform an origin into a personal alias or personal identity.
 #[derive(

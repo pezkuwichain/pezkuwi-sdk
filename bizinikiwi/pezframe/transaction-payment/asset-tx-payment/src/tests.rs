@@ -15,6 +15,7 @@
 
 use super::*;
 
+use mock::{ExtrinsicBaseWeight, *};
 use pezframe_support::{
 	assert_ok,
 	dispatch::{DispatchInfo, GetDispatchInfo, PostDispatchInfo},
@@ -23,7 +24,6 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system as system;
-use mock::{ExtrinsicBaseWeight, *};
 use pezpallet_balances::Call as BalancesCall;
 use pezsp_runtime::{
 	traits::{DispatchTransaction, StaticLookup},

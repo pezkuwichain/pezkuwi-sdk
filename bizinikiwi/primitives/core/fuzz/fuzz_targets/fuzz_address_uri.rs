@@ -18,12 +18,12 @@
 #![no_main]
 
 extern crate libfuzzer_sys;
-extern crate regex;
 extern crate pezsp_core;
+extern crate regex;
 
 use libfuzzer_sys::fuzz_target;
-use regex::Regex;
 use pezsp_core::crypto::AddressUri;
+use regex::Regex;
 use std::sync::LazyLock;
 
 static SECRET_PHRASE_REGEX: LazyLock<Regex> = LazyLock::new(|| {

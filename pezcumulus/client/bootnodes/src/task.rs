@@ -22,11 +22,13 @@ use crate::{
 	config::paranode_protocol_name,
 	discovery::{BootnodeDiscovery, BootnodeDiscoveryParams},
 };
-use pezcumulus_primitives_core::{relay_chain::BlockId, ParaId};
-use pezcumulus_relay_chain_interface::RelayChainInterface;
 use log::{debug, error};
 use num_traits::Zero;
-use pezsc_network::{request_responses::IncomingRequest, service::traits::NetworkService, Multiaddr};
+use pezcumulus_primitives_core::{relay_chain::BlockId, ParaId};
+use pezcumulus_relay_chain_interface::RelayChainInterface;
+use pezsc_network::{
+	request_responses::IncomingRequest, service::traits::NetworkService, Multiaddr,
+};
 use pezsc_service::TaskManager;
 use std::sync::Arc;
 

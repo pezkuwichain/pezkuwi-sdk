@@ -407,7 +407,10 @@ impl<Block: BlockT> blockchain::Backend<Block> for Blockchain<Block> {
 			.and_then(|b| b.extrinsics().map(|x| x.to_vec())))
 	}
 
-	fn justifications(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Justifications>> {
+	fn justifications(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<Option<Justifications>> {
 		Ok(self.storage.read().blocks.get(&hash).and_then(|b| b.justifications().cloned()))
 	}
 
@@ -672,7 +675,10 @@ impl<Block: BlockT> backend::Backend<Block> for Backend<Block> {
 		Ok(())
 	}
 
-	fn commit_operation(&self, operation: Self::BlockImportOperation) -> pezsp_blockchain::Result<()> {
+	fn commit_operation(
+		&self,
+		operation: Self::BlockImportOperation,
+	) -> pezsp_blockchain::Result<()> {
 		if !operation.finalized_blocks.is_empty() {
 			for (block, justification) in operation.finalized_blocks {
 				self.blockchain.finalize_header(block, justification)?;
@@ -804,9 +810,9 @@ pub fn check_genesis_storage(storage: &Storage) -> pezsp_blockchain::Result<()> 
 #[cfg(test)]
 mod tests {
 	use crate::{in_mem::Blockchain, NewBlockState};
+	use bizinikiwi_test_runtime::{Block, Header, H256};
 	use pezsp_blockchain::Backend;
 	use pezsp_runtime::{traits::Header as HeaderT, ConsensusEngineId, Justifications};
-	use bizinikiwi_test_runtime::{Block, Header, H256};
 
 	pub const ID1: ConsensusEngineId = *b"TST1";
 	pub const ID2: ConsensusEngineId = *b"TST2";

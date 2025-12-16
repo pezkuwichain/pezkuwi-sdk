@@ -17,8 +17,8 @@
 
 //! # Nomination Pools for Staking Delegation
 //!
-//! A pezpallet that allows members to delegate their stake to nominating pools. A nomination pool acts
-//! as nominator and nominates validators on the members' behalf.
+//! A pezpallet that allows members to delegate their stake to nominating pools. A nomination pool
+//! acts as nominator and nominates validators on the members' behalf.
 //!
 //! # Index
 //!
@@ -81,8 +81,8 @@
 //!
 //! > A member can have up to [`Config::MaxUnbonding`] distinct active unbonding requests.
 //!
-//! Second, once [`pezsp_staking::StakingInterface::bonding_duration`] eras have passed, the member can
-//! call [`Call::withdraw_unbonded`] to withdraw any funds that are free.
+//! Second, once [`pezsp_staking::StakingInterface::bonding_duration`] eras have passed, the member
+//! can call [`Call::withdraw_unbonded`] to withdraw any funds that are free.
 //!
 //! For design docs see the [bonded pool](#bonded-pool) and [unbonding sub
 //! pools](#unbonding-sub-pools) sections.
@@ -214,8 +214,8 @@
 //! ## Design
 //!
 //! _Notes_: this section uses pseudo code to explain general design and does not necessarily
-//! reflect the exact implementation. Additionally, a working knowledge of `pezpallet-staking`'s api is
-//! assumed.
+//! reflect the exact implementation. Additionally, a working knowledge of `pezpallet-staking`'s api
+//! is assumed.
 //!
 //! ### Goals
 //!
@@ -368,7 +368,6 @@ use pezframe_support::{
 	},
 	DefaultNoBound, PalletError,
 };
-use scale_info::TypeInfo;
 use pezsp_core::U256;
 use pezsp_runtime::{
 	traits::{
@@ -378,6 +377,7 @@ use pezsp_runtime::{
 	FixedPointNumber, Perbill,
 };
 use pezsp_staking::{EraIndex, StakingInterface};
+use scale_info::TypeInfo;
 
 #[cfg(any(feature = "try-runtime", feature = "fuzzing", test, debug_assertions))]
 use pezsp_runtime::TryRuntimeError;
@@ -1672,7 +1672,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: weights::WeightInfo;
@@ -1693,9 +1694,9 @@ pub mod pezpallet {
 		/// a PITA to do).
 		///
 		/// See the inline code docs of `Member::pending_rewards` and `RewardPool::update_recorded`
-		/// for example analysis. A [`pezsp_runtime::FixedU128`] should be fine for chains with balance
-		/// types similar to that of Pezkuwi and Kusama, in the absence of severe slashing (or
-		/// prevented via a reasonable `MaxPointsToBalance`), for many many years to come.
+		/// for example analysis. A [`pezsp_runtime::FixedU128`] should be fine for chains with
+		/// balance types similar to that of Pezkuwi and Kusama, in the absence of severe slashing
+		/// (or prevented via a reasonable `MaxPointsToBalance`), for many many years to come.
 		type RewardCounter: FixedPointNumber + MaxEncodedLen + TypeInfo + Default + codec::FullCodec;
 
 		/// The nomination pool's pezpallet id.
@@ -2008,9 +2009,9 @@ pub mod pezpallet {
 		CannotWithdrawAny,
 		/// The amount does not meet the minimum bond to either join or create a pool.
 		///
-		/// The depositor can never unbond to a value less than `Pezpallet::depositor_min_bond`. The
-		/// caller does not have nominating permissions for the pool. Members can never unbond to a
-		/// value below `MinJoinBond`.
+		/// The depositor can never unbond to a value less than `Pezpallet::depositor_min_bond`.
+		/// The caller does not have nominating permissions for the pool. Members can never
+		/// unbond to a value below `MinJoinBond`.
 		MinimumBondNotMet,
 		/// The transaction could not be executed due to overflow risk for the pool.
 		OverflowRisk,

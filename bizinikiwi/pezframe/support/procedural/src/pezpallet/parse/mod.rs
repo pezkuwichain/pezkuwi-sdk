@@ -609,8 +609,9 @@ enum PalletAttr {
 	/// Can be used to reduce the repetitive weight annotation in the trivial case. It accepts one
 	/// argument that is expected to be an implementation of the `WeightInfo` or something that
 	/// behaves syntactically equivalent. This allows to annotate a `WeightInfo` for all the calls.
-	/// Now each call does not need to specify its own `#[pezpallet::weight]` but can instead use the
-	/// one from the `#[pezpallet::call]` definition. So instead of having to write it on each call:
+	/// Now each call does not need to specify its own `#[pezpallet::weight]` but can instead use
+	/// the one from the `#[pezpallet::call]` definition. So instead of having to write it on each
+	/// call:
 	///
 	/// ```ignore
 	/// #[pezpallet::call]
@@ -631,9 +632,10 @@ enum PalletAttr {
 	///
 	/// ### Dev Mode
 	///
-	/// Normally the `dev_mode` sets all weights of calls without a `#[pezpallet::weight]` annotation
-	/// to zero. Now when there is a `weight` attribute on the `#[pezpallet::call]`, then that is used
-	/// instead of the zero weight. So to say: it works together with `dev_mode`.
+	/// Normally the `dev_mode` sets all weights of calls without a `#[pezpallet::weight]`
+	/// annotation to zero. Now when there is a `weight` attribute on the `#[pezpallet::call]`,
+	/// then that is used instead of the zero weight. So to say: it works together with
+	/// `dev_mode`.
 	RuntimeCall(Option<InheritedCallWeightAttr>, proc_macro2::Span),
 	Error(proc_macro2::Span),
 	Tasks(proc_macro2::Span),
@@ -803,7 +805,8 @@ impl syn::parse::Parse for PalletAttr {
 	}
 }
 
-/// The optional weight annotation on a `#[pezpallet::call]` like `#[pezpallet::call(weight($type))]`.
+/// The optional weight annotation on a `#[pezpallet::call]` like
+/// `#[pezpallet::call(weight($type))]`.
 #[derive(Clone)]
 pub struct InheritedCallWeightAttr {
 	pub typename: syn::Type,

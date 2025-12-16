@@ -36,9 +36,9 @@
 
 use alloc::{vec, vec::Vec};
 use codec::{self as codec, Decode, Encode};
+use log::{error, info};
 use pezframe_support::traits::{Get, KeyOwnerProofSystem};
 use pezframe_system::pezpallet_prelude::{BlockNumberFor, HeaderFor};
-use log::{error, info};
 use pezsp_consensus_beefy::{
 	check_commitment_signature, AncestryHelper, DoubleVotingProof, ForkVotingProof,
 	FutureBlockVotingProof, ValidatorSetId, KEY_TYPE as BEEFY_KEY_TYPE,

@@ -22,10 +22,10 @@ use ahash::AHashSet;
 use pezsc_network_types::PeerId;
 use schnellru::{ByLength, LruMap};
 
-use prometheus_endpoint::{register, Counter, PrometheusError, Registry, U64};
 use pezsc_network::{types::ProtocolName, NotificationService};
 use pezsc_network_common::role::ObservedRole;
 use pezsp_runtime::traits::{Block as BlockT, Hash, HashingFor};
+use prometheus_endpoint::{register, Counter, PrometheusError, Registry, U64};
 use std::{collections::HashMap, iter, sync::Arc, time, time::Instant};
 
 // FIXME: Add additional spam/DoS attack protection: https://github.com/pezkuwichain/kurdistan-sdk/issues/7

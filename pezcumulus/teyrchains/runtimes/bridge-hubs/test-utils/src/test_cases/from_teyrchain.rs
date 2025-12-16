@@ -129,7 +129,8 @@ pub fn relayed_incoming_message_works<RuntimeHelper>(
 		+ From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	helpers::relayed_incoming_message_works::<
 		RuntimeHelper::Runtime,
@@ -264,7 +265,8 @@ pub fn free_relay_extrinsic_works<RuntimeHelper>(
 		+ From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	// ensure that the runtime allows free header submissions
 	let free_headers_interval = <RuntimeHelper::Runtime as BridgeGrandpaConfig<
@@ -433,7 +435,8 @@ pub fn complex_relay_extrinsic_works<RuntimeHelper>(
 		+ From<pezpallet_utility::Call<RuntimeHelper::Runtime>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	helpers::relayed_incoming_message_works::<
 		RuntimeHelper::Runtime,
@@ -560,7 +563,8 @@ where
 		+ From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	run_test::<RuntimeHelper::Runtime, _>(collator_session_key, 1000, vec![], || {
 		// generate bridged relay chain finality, teyrchain heads and message proofs,
@@ -630,7 +634,8 @@ where
 		+ From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	run_test::<RuntimeHelper::Runtime, _>(collator_session_key, 1000, vec![], || {
 		// generate bridged relay chain finality, teyrchain heads and message proofs,
@@ -694,7 +699,8 @@ where
 		From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	run_test::<RuntimeHelper::Runtime, _>(collator_session_key, 1000, vec![], || {
 		// generate bridged relay chain finality, teyrchain heads and message proofs,
@@ -755,7 +761,8 @@ where
 		From<BridgeMessagesCall<RuntimeHelper::Runtime, RuntimeHelper::MPI>>,
 	BridgedChainOf<RuntimeHelper::Runtime, RuntimeHelper::MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<RuntimeHelper::Runtime as BridgeGrandpaConfig<RuntimeHelper::GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+			+ ChainWithGrandpa,
 {
 	run_test::<RuntimeHelper::Runtime, _>(collator_session_key, 1000, vec![], || {
 		// generate bridged relay chain finality, teyrchain heads and message proofs,

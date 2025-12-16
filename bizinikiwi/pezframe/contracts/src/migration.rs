@@ -67,7 +67,9 @@ pub mod v15;
 pub mod v16;
 include!(concat!(env!("OUT_DIR"), "/migration_codegen.rs"));
 
-use crate::{weights::WeightInfo, Config, Error, MigrationInProgress, Pezpallet, Weight, LOG_TARGET};
+use crate::{
+	weights::WeightInfo, Config, Error, MigrationInProgress, Pezpallet, Weight, LOG_TARGET,
+};
 use codec::{Codec, Decode};
 use core::marker::PhantomData;
 use pezframe_support::{
@@ -578,7 +580,10 @@ mod test {
 
 	#[test]
 	fn test_storage_version_matches_last_migration_file() {
-		assert_eq!(StorageVersion::new(LATEST_MIGRATION_VERSION), crate::pezpallet::STORAGE_VERSION);
+		assert_eq!(
+			StorageVersion::new(LATEST_MIGRATION_VERSION),
+			crate::pezpallet::STORAGE_VERSION
+		);
 	}
 
 	#[test]

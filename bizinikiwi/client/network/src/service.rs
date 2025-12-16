@@ -75,8 +75,8 @@ use libp2p::{
 use log::{debug, error, info, trace, warn};
 use metrics::{Histogram, MetricSources, Metrics};
 use parking_lot::Mutex;
-use prometheus_endpoint::Registry;
 use pezsc_network_types::kad::{Key as KademliaKey, Record};
+use prometheus_endpoint::Registry;
 
 use pezsc_client_api::BlockBackend;
 use pezsc_network_common::{

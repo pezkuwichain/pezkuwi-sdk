@@ -18,15 +18,15 @@
 
 use crate::{MessageNonce, UnrewardedRelayer};
 
-use pezbp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use scale_info::TypeInfo;
+use pezbp_runtime::{raw_storage_proof_size, RawStorageProof, Size};
 use pezsp_core::RuntimeDebug;
 use pezsp_std::{
 	collections::{btree_map::BTreeMap, vec_deque::VecDeque},
 	fmt::Debug,
 	ops::RangeInclusive,
 };
+use scale_info::TypeInfo;
 
 /// Messages delivery proof from the bridged chain.
 ///

@@ -32,7 +32,9 @@ use pezsc_utils::mpsc::TracingUnboundedSender;
 use pezsp_api::{Core, RuntimeApiInfo};
 use pezsp_blockchain::BlockStatus;
 use pezsp_consensus::{BlockOrigin, Error as ConsensusError, SelectChain};
-use pezsp_consensus_grandpa::{ConsensusLog, GrandpaApi, ScheduledChange, SetId, GRANDPA_ENGINE_ID};
+use pezsp_consensus_grandpa::{
+	ConsensusLog, GrandpaApi, ScheduledChange, SetId, GRANDPA_ENGINE_ID,
+};
 use pezsp_runtime::{
 	generic::OpaqueDigestItemId,
 	traits::{Block as BlockT, Header as HeaderT, NumberFor, Zero},

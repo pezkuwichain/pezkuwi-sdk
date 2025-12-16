@@ -18,10 +18,10 @@
 use pezframe_support::{assert_noop, assert_ok, assert_storage_noop, traits::IntegrityTest};
 
 use super::*;
-use pezframe_election_provider_support::{SortedListProvider, VoteWeight};
+use bizinikiwi_test_utils::assert_eq_uvec;
 use list::Bag;
 use mock::{test_utils::*, *};
-use bizinikiwi_test_utils::assert_eq_uvec;
+use pezframe_election_provider_support::{SortedListProvider, VoteWeight};
 
 #[docify::export]
 #[test]

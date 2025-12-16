@@ -37,9 +37,8 @@ use crate::{
 	PristineCode,
 };
 use pezframe_support::{
-	assert_ok, derive_impl,
+	assert_ok, derive_impl, parameter_types,
 	pezpallet_prelude::EnsureOrigin,
-	parameter_types,
 	traits::{ConstU32, ConstU64, FindAuthor, OriginTrait, StorageVersion},
 	weights::{constants::WEIGHT_REF_TIME_PER_SECOND, FixedFee, Weight},
 };

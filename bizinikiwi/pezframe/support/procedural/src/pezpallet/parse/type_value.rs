@@ -60,7 +60,8 @@ impl TypeValueDef {
 				}
 			}
 
-			let msg = "Invalid pezpallet::type_value, unexpected attribute, only doc attribute are \
+			let msg =
+				"Invalid pezpallet::type_value, unexpected attribute, only doc attribute are \
 				allowed";
 			return Err(syn::Error::new(attr.span(), msg));
 		}

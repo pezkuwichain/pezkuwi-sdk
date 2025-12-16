@@ -31,8 +31,9 @@ type ProposalOf<T, I> = <T as pezpallet_collective::Config<I>>::Proposal;
 type HashOf<T> = <T as pezframe_system::Config>::Hash;
 
 /// Type alias to conveniently refer to the `Currency::Balance` associated type.
-pub type BalanceOf<T> =
-	<pezpallet_balances::Pezpallet<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
+pub type BalanceOf<T> = <pezpallet_balances::Pezpallet<T> as Currency<
+	<T as pezframe_system::Config>::AccountId,
+>>::Balance;
 
 /// Proposal provider for alliance pezpallet.
 /// Adapter from collective pezpallet to alliance proposal provider trait.

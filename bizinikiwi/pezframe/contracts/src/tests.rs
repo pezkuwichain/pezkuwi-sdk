@@ -45,8 +45,8 @@ use pezframe_support::{
 	assert_err, assert_err_ignore_postinfo, assert_err_with_weight, assert_noop, assert_ok,
 	derive_impl,
 	dispatch::{DispatchErrorWithPostInfo, PostDispatchInfo},
-	pezpallet_prelude::EnsureOrigin,
 	parameter_types,
+	pezpallet_prelude::EnsureOrigin,
 	storage::child,
 	traits::{
 		fungible::{BalancedHold, Inspect, Mutate, MutateHold},
@@ -57,7 +57,6 @@ use pezframe_support::{
 };
 use pezframe_system::{EventRecord, Phase};
 use pezpallet_contracts_fixtures::compile_module;
-use pretty_assertions::{assert_eq, assert_ne};
 use pezsp_core::ByteArray;
 use pezsp_io::hashing::blake2_256;
 use pezsp_keystore::{testing::MemoryKeystore, KeystoreExt};
@@ -66,6 +65,7 @@ use pezsp_runtime::{
 	traits::{BlakeTwo256, Convert, IdentityLookup},
 	AccountId32, BuildStorage, DispatchError, Perbill, TokenError,
 };
+use pretty_assertions::{assert_eq, assert_ne};
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
@@ -4533,7 +4533,8 @@ fn read_only_subsequent_call_cannot_store() {
 			builder::bare_instantiate(Code::Upload(wasm_callee)).build_and_unwrap_account_id();
 
 		// Subsequent call input.
-		let input = (&addr_callee, pezpallet_contracts_uapi::CallFlags::empty().bits(), 0u64, 100u32);
+		let input =
+			(&addr_callee, pezpallet_contracts_uapi::CallFlags::empty().bits(), 0u64, 100u32);
 
 		// Read-only call fails when modifying storage.
 		assert_err_ignore_postinfo!(

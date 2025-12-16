@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
+use bizinikiwi_rpc_client::{ws_client, ChainApi};
 use pezkuwi_core_primitives::{Block, Hash, Header};
 use std::{
 	future::Future,
 	io::{BufRead, BufReader, Read},
 	time::Duration,
 };
-use bizinikiwi_rpc_client::{ws_client, ChainApi};
 
 /// Run the given `future` and panic if the `timeout` is hit.
 pub async fn run_with_timeout(timeout: Duration, future: impl Future<Output = ()>) {

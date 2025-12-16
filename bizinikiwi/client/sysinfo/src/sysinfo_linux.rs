@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use regex::Regex;
 use pezsc_telemetry::SysInfo;
+use regex::Regex;
 use std::collections::HashSet;
 
 fn read_file(path: &str) -> Option<String> {

@@ -26,7 +26,9 @@ use alloc::{boxed::Box, vec::Vec};
 use codec::DecodeLimit;
 use pezframe_support::MAX_EXTRINSIC_DEPTH;
 use pezsp_core::Get;
-use pezsp_runtime::{transaction_validity::InvalidTransaction, FixedPointNumber, SaturatedConversion};
+use pezsp_runtime::{
+	transaction_validity::InvalidTransaction, FixedPointNumber, SaturatedConversion,
+};
 
 /// Result of decoding an eth transaction into a dispatchable call.
 pub struct CallInfo<T: Config> {

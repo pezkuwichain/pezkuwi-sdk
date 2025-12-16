@@ -52,7 +52,6 @@ use pezframe_support::{
 	DefaultNoBound,
 };
 use pezpallet_transaction_payment::{ChargeTransactionPayment, OnChargeTransaction};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		AsSystemOriginSigner, DispatchInfoOf, Dispatchable, PostDispatchInfoOf, RefundWeight,
@@ -60,6 +59,7 @@ use pezsp_runtime::{
 	},
 	transaction_validity::{InvalidTransaction, TransactionValidityError, ValidTransaction},
 };
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod mock;
@@ -71,8 +71,8 @@ pub mod weights;
 mod benchmarking;
 
 mod payment;
-use pezframe_support::{pezpallet_prelude::Weight, traits::tokens::AssetId};
 pub use payment::*;
+use pezframe_support::{pezpallet_prelude::Weight, traits::tokens::AssetId};
 pub use weights::WeightInfo;
 
 /// Balance type alias for balances of the chain's native asset.
@@ -112,7 +112,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config + pezpallet_transaction_payment::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The asset ID type that can be used for transaction payments in addition to a
 		/// native asset.
 		type AssetId: AssetId;
@@ -316,7 +317,8 @@ where
 			return Ok((ValidTransaction::default(), Val::NoCharge, origin));
 		};
 		// Non-mutating call of `compute_fee` to calculate the fee used in the transaction priority.
-		let fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_fee(len as u32, info, self.tip);
+		let fee =
+			pezpallet_transaction_payment::Pezpallet::<T>::compute_fee(len as u32, info, self.tip);
 		self.can_withdraw_fee(&who, call, info, fee)?;
 		let priority = ChargeTransactionPayment::<T>::get_priority(info, len, self.tip, fee);
 		let validity = ValidTransaction { priority, ..Default::default() };

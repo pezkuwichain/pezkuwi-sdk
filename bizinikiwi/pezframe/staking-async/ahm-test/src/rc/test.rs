@@ -193,7 +193,10 @@ fn upon_receiving_election_queue_and_activate_next_session() {
 				new_validator_set: vec![1, 2, 3, 4],
 			};
 
-			assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
+			assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(
+				RuntimeOrigin::root(),
+				report
+			));
 
 			// session validators are not set yet.
 			assert!(pezpallet_session::Validators::<Runtime>::get().is_empty());
@@ -275,7 +278,10 @@ fn upon_receiving_election_queue_and_activate_next_session() {
 				leftover: false,
 				new_validator_set: vec![1, 2, 3, 5],
 			};
-			assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
+			assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(
+				RuntimeOrigin::root(),
+				report
+			));
 
 			// rotate one more session
 			roll_until_matches(|| pezpallet_session::CurrentIndex::<Runtime>::get() == 6, false);
@@ -971,11 +977,14 @@ mod session_pruning {
 					);
 					assert_eq!(
 						historical_events_since_last_call(),
-						vec![pezpallet_session::historical::Event::<T>::RootStored { index: i + 1 }]
+						vec![pezpallet_session::historical::Event::<T>::RootStored {
+							index: i + 1
+						}]
 					)
 				}
 
-				// ensure that we have the root for these recorded in the historical session pezpallet
+				// ensure that we have the root for these recorded in the historical session
+				// pezpallet
 				assert_eq!(pezpallet_session::historical::StoredRange::<T>::get(), Some((2, 12)));
 
 				// send back a new validator set, but with some pruning info.
@@ -1374,8 +1383,9 @@ mod splitting {
 			assert!(ah_client::ValidatorSet::<Runtime>::get().is_none());
 
 			assert_eq!(
-				pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<ah_client::Event<Runtime>>(
-				),
+				pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<
+					ah_client::Event<Runtime>,
+				>(),
 				vec![
 					ah_client::Event::<T>::ValidatorSetReceived {
 						id: 0,
@@ -1435,7 +1445,9 @@ mod key_proofs {
 				assert_eq!(pezpallet_session::historical::StoredRange::<T>::get(), Some((2, 5)));
 
 				// generate the proof for one of the validators
-				use pezsp_runtime::{key_types::DUMMY, testing::UintAuthorityId, traits::OpaqueKeys};
+				use pezsp_runtime::{
+					key_types::DUMMY, testing::UintAuthorityId, traits::OpaqueKeys,
+				};
 
 				let key_ids = <SessionKeys as OpaqueKeys>::key_ids();
 				assert_eq!(key_ids.len(), 1, "we have inserted only one key type in mock");
@@ -1444,9 +1456,11 @@ mod key_proofs {
 				let our_key = keys.get::<UintAuthorityId>(key_ids[0]);
 				assert_eq!(key_ids[0], DUMMY);
 
-				let proof =
-					pezpallet_session::historical::Pezpallet::<T>::prove((DUMMY, &our_key.encode()[..]))
-						.unwrap();
+				let proof = pezpallet_session::historical::Pezpallet::<T>::prove((
+					DUMMY,
+					&our_key.encode()[..],
+				))
+				.unwrap();
 
 				assert_eq!(proof.session, 3);
 				assert_eq!(proof.validator_count, 4);

@@ -330,8 +330,9 @@ where
 
 	/// Attempt to remove items from the map matching a `first_key` prefix.
 	///
-	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result. Once
-	/// the resultant `maybe_cursor` field is `None`, then no further items remain to be deleted.
+	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result.
+	/// Once the resultant `maybe_cursor` field is `None`, then no further items remain to be
+	/// deleted.
 	///
 	/// NOTE: After the initial call for any given map, it is important that no further items
 	/// are inserted into the map which match the `first_key`. If so, then the map may not be
@@ -523,8 +524,9 @@ where
 
 	/// Attempt to remove all items from the map.
 	///
-	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result. Once
-	/// the resultant `maybe_cursor` field is `None`, then no further items remain to be deleted.
+	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result.
+	/// Once the resultant `maybe_cursor` field is `None`, then no further items remain to be
+	/// deleted.
 	///
 	/// NOTE: After the initial call for any given map, it is important that no further items
 	/// are inserted into the map. If so, then the map may not be empty when the resultant

@@ -16,8 +16,8 @@
 use crate::imports::*;
 
 use codec::Encode;
-use pezframe_support::pezsp_runtime::traits::Dispatchable;
 use people_zagros_runtime::people::IdentityInfo;
+use pezframe_support::pezsp_runtime::traits::Dispatchable;
 use teyrchains_common::AccountId;
 use zagros_runtime::{
 	governance::pezpallet_custom_origins::Origin::GeneralAdmin as GeneralAdminOrigin, Dmp,
@@ -260,12 +260,11 @@ fn relay_commands_kill_identity_wrong_origin() {
 
 			Dmp::make_teyrchain_reachable(1004);
 
-			let kill_identity_call =
-				PeopleCall::Identity(pezpallet_identity::Call::<PeopleRuntime>::kill_identity {
-					target: people_zagros_runtime::MultiAddress::Id(PeopleZagros::account_id_of(
-						ALICE,
-					)),
-				});
+			let kill_identity_call = PeopleCall::Identity(pezpallet_identity::Call::<
+				PeopleRuntime,
+			>::kill_identity {
+				target: people_zagros_runtime::MultiAddress::Id(PeopleZagros::account_id_of(ALICE)),
+			});
 
 			let xcm_message = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
 				dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
@@ -312,12 +311,13 @@ fn relay_commands_add_remove_username_authority() {
 
 		Dmp::make_teyrchain_reachable(1004);
 
-		let add_username_authority =
-			PeopleCall::Identity(pezpallet_identity::Call::<PeopleRuntime>::add_username_authority {
-				authority: people_zagros_runtime::MultiAddress::Id(people_zagros_alice.clone()),
-				suffix: b"suffix1".into(),
-				allocation: 10,
-			});
+		let add_username_authority = PeopleCall::Identity(pezpallet_identity::Call::<
+			PeopleRuntime,
+		>::add_username_authority {
+			authority: people_zagros_runtime::MultiAddress::Id(people_zagros_alice.clone()),
+			suffix: b"suffix1".into(),
+			allocation: 10,
+		});
 
 		let add_authority_xcm_msg = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
 			dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
@@ -410,17 +410,18 @@ fn relay_commands_add_remove_username_authority() {
 			suffix: b"suffix1".into(),
 		});
 
-		let remove_authority_xcm_msg = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
-			dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
-			message: bx!(VersionedXcm::from(Xcm(vec![
-				UnpaidExecution { weight_limit: Unlimited, check_origin: None },
-				Transact {
-					origin_kind,
-					call: remove_username_authority.encode().into(),
-					fallback_max_weight: None
-				}
-			]))),
-		});
+		let remove_authority_xcm_msg =
+			RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
+				dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
+				message: bx!(VersionedXcm::from(Xcm(vec![
+					UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+					Transact {
+						origin_kind,
+						call: remove_username_authority.encode().into(),
+						fallback_max_weight: None
+					}
+				]))),
+			});
 
 		assert_ok!(remove_authority_xcm_msg.dispatch(origin));
 
@@ -476,17 +477,18 @@ fn relay_commands_add_remove_username_authority_wrong_origin() {
 				allocation: 10,
 			});
 
-			let add_authority_xcm_msg = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
-				dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
-				message: bx!(VersionedXcm::from(Xcm(vec![
-					UnpaidExecution { weight_limit: Unlimited, check_origin: None },
-					Transact {
-						origin_kind,
-						call: add_username_authority.encode().into(),
-						fallback_max_weight: None
-					}
-				]))),
-			});
+			let add_authority_xcm_msg =
+				RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
+					dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
+					message: bx!(VersionedXcm::from(Xcm(vec![
+						UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+						Transact {
+							origin_kind,
+							call: add_username_authority.encode().into(),
+							fallback_max_weight: None
+						}
+					]))),
+				});
 
 			assert_ok!(add_authority_xcm_msg.dispatch(origin.clone()));
 			assert_expected_events!(

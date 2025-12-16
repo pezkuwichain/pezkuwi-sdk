@@ -504,9 +504,9 @@ pub(crate) fn load_authorities<B: AuxStore, H: Decode, N: Decode + Clone + Ord>(
 #[cfg(test)]
 mod test {
 	use super::*;
+	use bizinikiwi_test_runtime_client::{self, runtime::Block};
 	use pezsp_consensus_grandpa::AuthorityId;
 	use pezsp_core::{crypto::UncheckedFrom, H256};
-	use bizinikiwi_test_runtime_client::{self, runtime::Block};
 
 	fn dummy_id() -> AuthorityId {
 		AuthorityId::unchecked_from([1; 32])

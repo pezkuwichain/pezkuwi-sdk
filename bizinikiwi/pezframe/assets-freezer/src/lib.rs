@@ -39,8 +39,8 @@
 //!
 //! This pezpallet provides the following functionality:
 //!
-//! - Pezpallet hooks allowing [`pezpallet-assets`] to know the frozen balance for an account on a given
-//!   asset (see [`pezpallet_assets::FrozenBalance`]).
+//! - Pezpallet hooks allowing [`pezpallet-assets`] to know the frozen balance for an account on a
+//!   given asset (see [`pezpallet_assets::FrozenBalance`]).
 //! - An implementation of [`fungibles::freeze::Inspect`](InspectFreeze) and
 //!   [`fungibles::freeze::Mutate`](MutateFreeze), allowing other pallets to manage freezes for the
 //!   `pezpallet-assets` assets.
@@ -74,7 +74,9 @@ pub mod pezpallet {
 	use super::*;
 
 	#[pezpallet::config(with_default)]
-	pub trait Config<I: 'static = ()>: pezframe_system::Config + pezpallet_assets::Config<I> {
+	pub trait Config<I: 'static = ()>:
+		pezframe_system::Config + pezpallet_assets::Config<I>
+	{
 		/// The overarching freeze reason.
 		#[pezpallet::no_default_bounds]
 		type RuntimeFreezeReason: Parameter + Member + MaxEncodedLen + Copy + VariantCount;

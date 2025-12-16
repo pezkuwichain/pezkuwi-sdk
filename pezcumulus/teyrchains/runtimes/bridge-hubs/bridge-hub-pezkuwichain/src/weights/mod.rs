@@ -23,10 +23,11 @@ use ::pezpallet_bridge_relayers::WeightInfo as _;
 use ::pezpallet_bridge_teyrchains::WeightInfoExt as TeyrchainsWeightInfoExt;
 
 pub mod block_weights;
+pub mod extrinsic_weights;
+pub mod paritydb_weights;
 pub mod pezcumulus_pezpallet_teyrchain_system;
 pub mod pezcumulus_pezpallet_weight_reclaim;
 pub mod pezcumulus_pezpallet_xcmp_queue;
-pub mod extrinsic_weights;
 pub mod pezframe_system;
 pub mod pezframe_system_extensions;
 pub mod pezpallet_balances;
@@ -44,12 +45,11 @@ pub mod pezpallet_timestamp;
 pub mod pezpallet_transaction_payment;
 pub mod pezpallet_utility;
 pub mod pezpallet_xcm;
-pub mod paritydb_weights;
-pub mod rocksdb_weights;
 pub mod pezsnowbridge_pezpallet_ethereum_client;
 pub mod pezsnowbridge_pezpallet_inbound_queue;
 pub mod pezsnowbridge_pezpallet_outbound_queue;
 pub mod pezsnowbridge_pezpallet_system;
+pub mod rocksdb_weights;
 pub mod xcm;
 
 pub use block_weights::constants::BlockExecutionWeight;

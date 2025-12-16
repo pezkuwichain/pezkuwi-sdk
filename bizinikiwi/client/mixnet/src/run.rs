@@ -20,7 +20,7 @@
 
 use super::{
 	api::ApiBackend,
-	config::{Config, BizinikiwiConfig},
+	config::{BizinikiwiConfig, Config},
 	error::RemoteErr,
 	extrinsic_queue::ExtrinsicQueue,
 	maybe_inf_delay::MaybeInfDelay,

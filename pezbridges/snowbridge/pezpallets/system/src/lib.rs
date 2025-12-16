@@ -62,8 +62,9 @@ use pezframe_support::traits::OriginTrait;
 
 pub use pezpallet::*;
 
-pub type BalanceOf<T> =
-	<<T as pezpallet::Config>::Token as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
+pub type BalanceOf<T> = <<T as pezpallet::Config>::Token as Inspect<
+	<T as pezframe_system::Config>::AccountId,
+>>::Balance;
 pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 pub type PricingParametersOf<T> = PricingParametersRecord<BalanceOf<T>>;
 
@@ -109,7 +110,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Send messages to Ethereum
 		type OutboundQueue: SendMessage<Balance = BalanceOf<Self>>;
@@ -247,7 +249,8 @@ pub mod pezpallet {
 	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			Pezpallet::<T>::initialize(self.para_id, self.asset_hub_para_id).expect("infallible; qed");
+			Pezpallet::<T>::initialize(self.para_id, self.asset_hub_para_id)
+				.expect("infallible; qed");
 		}
 	}
 

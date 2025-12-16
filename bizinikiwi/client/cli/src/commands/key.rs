@@ -22,7 +22,7 @@ use super::{
 	generate::GenerateCmd, generate_node_key::GenerateNodeKeyCmd, insert_key::InsertKeyCmd,
 	inspect_key::InspectKeyCmd, inspect_node_key::InspectNodeKeyCmd,
 };
-use crate::{Error, BizinikiwiCli};
+use crate::{BizinikiwiCli, Error};
 
 /// Key utilities for the cli.
 #[derive(Debug, clap::Subcommand)]

@@ -25,7 +25,9 @@ use crate::{
 use pezkuwi_primitives::Block;
 use pezsc_consensus_grandpa::FinalityProofProvider as GrandpaFinalityProofProvider;
 use pezsc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
-use pezsc_service::{Configuration, Error as BizinikiwiServiceError, KeystoreContainer, TaskManager};
+use pezsc_service::{
+	Configuration, Error as BizinikiwiServiceError, KeystoreContainer, TaskManager,
+};
 use pezsc_telemetry::{Telemetry, TelemetryWorker, TelemetryWorkerHandle};
 use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
 use pezsp_consensus::SelectChain;

@@ -71,8 +71,8 @@ use litep2p::{
 	},
 	Litep2p, Litep2pEvent, ProtocolName as Litep2pProtocolName,
 };
-use prometheus_endpoint::Registry;
 use pezsc_network_types::kad::{Key as RecordKey, PeerRecord, Record as P2PRecord};
+use prometheus_endpoint::Registry;
 
 use pezsc_client_api::BlockBackend;
 use pezsc_network_common::{role::Roles, ExHashT};

@@ -20,8 +20,8 @@ use crate::{Chain, Error, HashOf, HeaderIdOf, Subscription, TransactionStatusOf}
 
 use async_trait::async_trait;
 use futures::{future::Either, Future, FutureExt, Stream, StreamExt};
-use relay_utils::{HeaderId, TrackedTransactionStatus};
 use pezsp_runtime::traits::Header as _;
+use relay_utils::{HeaderId, TrackedTransactionStatus};
 use std::time::Duration;
 
 /// Transaction tracker environment.

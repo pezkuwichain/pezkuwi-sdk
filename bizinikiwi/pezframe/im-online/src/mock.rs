@@ -166,7 +166,9 @@ impl pezframe_support::traits::EstimateNextSessionRotation<u64> for TestNextSess
 		// take the mock result if any and return it
 		let mock = MockAverageSessionLength::mutate(|p| p.take());
 
-		mock.unwrap_or(pezpallet_session::PeriodicSessions::<Period, Offset>::average_session_length())
+		mock.unwrap_or(
+			pezpallet_session::PeriodicSessions::<Period, Offset>::average_session_length(),
+		)
 	}
 
 	fn estimate_current_session_progress(now: u64) -> (Option<Permill>, Weight) {

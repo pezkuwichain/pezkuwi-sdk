@@ -15,9 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezcumulus. If not, see <https://www.gnu.org/licenses/>.
 
-use pezcumulus_primitives_core::relay_chain::{
-	Block as RelayBlock, BlockNumber as RelayNumber, Hash as RelayHash, Header as RelayHeader,
-};
 use futures::{
 	channel::{mpsc::Sender, oneshot::Sender as OneshotSender},
 	future::BoxFuture,
@@ -32,9 +29,12 @@ use jsonrpsee::{
 	},
 	ws_client::WsClientBuilder,
 };
+use pezcumulus_primitives_core::relay_chain::{
+	Block as RelayBlock, BlockNumber as RelayNumber, Hash as RelayHash, Header as RelayHeader,
+};
 use pezsc_rpc_api::chain::ChainApiClient;
-use schnellru::{ByLength, LruMap};
 use pezsp_runtime::generic::SignedBlock;
+use schnellru::{ByLength, LruMap};
 use std::{sync::Arc, time::Duration};
 use tokio::sync::mpsc::{
 	channel as tokio_channel, Receiver as TokioReceiver, Sender as TokioSender,

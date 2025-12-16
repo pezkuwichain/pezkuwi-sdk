@@ -59,7 +59,10 @@ impl<'a> StorageNoopGuard<'a> {
 
 	/// Creates a new [`StorageNoopGuard`] with a custom error message.
 	pub fn from_error_message(error_message: &'a str) -> Self {
-		Self { storage_root: pezsp_io::storage::root(pezsp_runtime::StateVersion::V1), error_message }
+		Self {
+			storage_root: pezsp_io::storage::root(pezsp_runtime::StateVersion::V1),
+			error_message,
+		}
 	}
 
 	/// Sets a custom error message for a [`StorageNoopGuard`].

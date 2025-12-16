@@ -76,9 +76,15 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 	let balances = pezpallet_balances::GenesisConfig::<Test> {
 		balances: vec![
-			(pezsp_core::sr25519::Pair::from_string("//Alice", None).unwrap().public().into(), 6000),
 			(
-				pezsp_core::sr25519::Pair::from_string("//Charlie", None).unwrap().public().into(),
+				pezsp_core::sr25519::Pair::from_string("//Alice", None).unwrap().public().into(),
+				6000,
+			),
+			(
+				pezsp_core::sr25519::Pair::from_string("//Charlie", None)
+					.unwrap()
+					.public()
+					.into(),
 				500000,
 			),
 		],

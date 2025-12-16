@@ -89,7 +89,8 @@ pub mod pezpallet {
 		+ pezpallet_session::historical::Config
 	{
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The offence handler provided by the runtime.
 		///
@@ -225,8 +226,8 @@ pub mod pezpallet {
 		) {
 			let session_index = maybe_session_index.unwrap_or_else(|| {
 				<pezpallet_session::Pezpallet<T> as pezframe_support::traits::ValidatorSet<
-						T::AccountId,
-					>>::session_index()
+					T::AccountId,
+				>>::session_index()
 			});
 			T::OffenceHandler::on_offence(&offenders, &slash_fraction, session_index);
 		}

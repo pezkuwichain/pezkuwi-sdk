@@ -520,9 +520,9 @@ mod tests {
 	};
 	use pezframe_system::pezpallet_prelude::BlockNumberFor;
 	use pezpallet_contracts_uapi::ReturnFlags;
-	use pretty_assertions::assert_eq;
 	use pezsp_core::H256;
 	use pezsp_runtime::DispatchError;
+	use pretty_assertions::assert_eq;
 	use std::{
 		borrow::BorrowMut,
 		cell::RefCell,

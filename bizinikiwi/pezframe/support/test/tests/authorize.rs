@@ -412,8 +412,9 @@ fn valid_call_weight_test() {
 			let info = tx.get_dispatch_info();
 			let len = tx.using_encoded(|e| e.len());
 
-			let checked = Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
-				.expect("Transaction is general so signature is good");
+			let checked =
+				Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
+					.expect("Transaction is general so signature is good");
 
 			checked
 				.validate::<Runtime>(TransactionSource::External, &info, len)
@@ -498,8 +499,9 @@ fn call_validity() {
 			let info = tx.get_dispatch_info();
 			let len = tx.using_encoded(|e| e.len());
 
-			let checked = Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
-				.expect("Transaction is general so signature is good");
+			let checked =
+				Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
+					.expect("Transaction is general so signature is good");
 
 			let res = checked.validate::<Runtime>(TransactionSource::External, &info, len);
 			assert_eq!(res, validate_res);

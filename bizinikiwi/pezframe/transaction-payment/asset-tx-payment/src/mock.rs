@@ -20,8 +20,8 @@ use codec;
 use pezframe_support::{
 	derive_impl,
 	dispatch::DispatchClass,
-	pezpallet_prelude::*,
 	parameter_types,
+	pezpallet_prelude::*,
 	traits::{AsEnsureOriginWithArg, ConstU32, ConstU64, ConstU8, FindAuthor},
 	weights::{Weight, WeightToFee as WeightToFeeT},
 	ConsensusEngineId,

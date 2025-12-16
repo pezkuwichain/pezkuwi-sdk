@@ -21,9 +21,9 @@ use crate::{Assignment, IdentifierT, IndexAssignmentOf, PerThing128, VoteWeight}
 use alloc::vec::Vec;
 use codec::Encode;
 use core::fmt::Debug;
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::{Bounded, UniqueSaturatedInto};
 use pezsp_npos_elections::{ElectionScore, Error, EvaluateSupport};
+use scale_info::TypeInfo;
 
 /// An opaque index-based, NPoS solution type.
 pub trait NposSolution

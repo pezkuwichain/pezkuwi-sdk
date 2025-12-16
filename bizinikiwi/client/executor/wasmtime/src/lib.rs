@@ -37,12 +37,12 @@ mod util;
 #[cfg(test)]
 mod tests;
 
+pub use pezsc_executor_common::{
+	runtime_blob::RuntimeBlob,
+	wasm_runtime::{HeapAllocStrategy, WasmModule},
+};
 pub use runtime::{
 	create_runtime, create_runtime_from_artifact, create_runtime_from_artifact_bytes,
 	prepare_runtime_artifact, Config, DeterministicStackLimit, InstantiationStrategy, Semantics,
 	WasmtimeRuntime,
-};
-pub use pezsc_executor_common::{
-	runtime_blob::RuntimeBlob,
-	wasm_runtime::{HeapAllocStrategy, WasmModule},
 };

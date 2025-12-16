@@ -17,7 +17,9 @@
 
 use pezsc_client_api::{blockchain::Backend as _, Backend, HeaderBackend as _};
 use pezsp_blockchain::{HashAndNumber, HeaderMetadata, TreeRoute};
-use pezsp_runtime::traits::{Block as BlockT, NumberFor, One, Saturating, UniqueSaturatedInto, Zero};
+use pezsp_runtime::traits::{
+	Block as BlockT, NumberFor, One, Saturating, UniqueSaturatedInto, Zero,
+};
 use std::{
 	collections::{HashMap, HashSet},
 	sync::Arc,

@@ -17,6 +17,8 @@
 #![cfg(test)]
 
 use bp_pezkuwi_core::Signature;
+use codec::{Decode, Encode};
+use hex_literal::hex;
 use pezbridge_hub_pezkuwichain_runtime::{
 	bridge_common_config, bridge_to_bulletin_config, bridge_to_zagros_config,
 	xcm_config::{RelayNetwork, TokenLocation, XcmConfig},
@@ -25,9 +27,7 @@ use pezbridge_hub_pezkuwichain_runtime::{
 	TeyrchainSystem, TransactionPayment, TxExtension, UncheckedExtrinsic,
 };
 use pezbridge_hub_test_utils::{GovernanceOrigin, SlotDurations};
-use codec::{Decode, Encode};
 use pezframe_support::{dispatch::GetDispatchInfo, parameter_types, traits::ConstU8};
-use hex_literal::hex;
 use pezsnowbridge_core::ChannelId;
 use pezsp_consensus_aura::SlotDuration;
 use pezsp_core::{crypto::Ss58Codec, H160};
@@ -131,14 +131,14 @@ mod bridge_hub_zagros_tests {
 		BridgeGrandpaZagrosInstance, BridgeTeyrchainZagrosInstance, DeliveryRewardInBalance,
 		RelayersForLegacyLaneIdsMessagesInstance,
 	};
-	use pezbridge_hub_pezkuwichain_runtime::{
-		bridge_to_ethereum_config::EthereumGatewayAddress, xcm_config::LocationToAccountId,
-	};
-	use pezbridge_hub_test_utils::test_cases::from_teyrchain;
 	use bridge_to_zagros_config::{
 		BridgeHubZagrosLocation, WithBridgeHubZagrosMessagesInstance,
 		XcmOverBridgeHubZagrosInstance, ZagrosGlobalConsensusNetwork,
 	};
+	use pezbridge_hub_pezkuwichain_runtime::{
+		bridge_to_ethereum_config::EthereumGatewayAddress, xcm_config::LocationToAccountId,
+	};
+	use pezbridge_hub_test_utils::test_cases::from_teyrchain;
 	use pezcumulus_primitives_core::UpwardMessageSender;
 
 	// Random para id of sibling chain used in tests.
@@ -240,14 +240,20 @@ mod bridge_hub_zagros_tests {
 			bp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID,
 			Governance::get(),
 			vec![
-				(pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
-					channel_id_one,
-				)
-				.to_vec(), 0u64.encode()),
-				(pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
-					channel_id_one,
-				)
-				.to_vec(), 0u64.encode()),
+				(
+					pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::hashed_key_for::<
+						ChannelId,
+					>(channel_id_one)
+					.to_vec(),
+					0u64.encode(),
+				),
+				(
+					pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::hashed_key_for::<
+						ChannelId,
+					>(channel_id_one)
+					.to_vec(),
+					0u64.encode(),
+				),
 			],
 			|| {
 				// Outbound
@@ -521,16 +527,16 @@ mod bridge_hub_bulletin_tests {
 	use super::*;
 	use bp_messages::LegacyLaneId;
 	use bridge_common_config::BridgeGrandpaPezkuwichainBulletinInstance;
-	use pezbridge_hub_pezkuwichain_runtime::{
-		bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance,
-		xcm_config::LocationToAccountId,
-	};
-	use pezbridge_hub_test_utils::test_cases::from_grandpa_chain;
 	use bridge_to_bulletin_config::{
 		PezkuwichainBulletinGlobalConsensusNetwork,
 		PezkuwichainBulletinGlobalConsensusNetworkLocation,
 		WithPezkuwichainBulletinMessagesInstance, XcmOverPezkuwiBulletinInstance,
 	};
+	use pezbridge_hub_pezkuwichain_runtime::{
+		bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance,
+		xcm_config::LocationToAccountId,
+	};
+	use pezbridge_hub_test_utils::test_cases::from_grandpa_chain;
 	use pezcumulus_primitives_core::UpwardMessageSender;
 
 	// Random para id of sibling chain used in tests.

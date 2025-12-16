@@ -47,10 +47,10 @@ use pezframe_support::{
 	PalletError,
 };
 use pezframe_system::ensure_signed;
-use scale_info::TypeInfo;
 use pezsp_core::H160;
 use pezsp_runtime::traits::Zero;
 use pezsp_std::vec;
+use scale_info::TypeInfo;
 use xcm::prelude::{
 	send_xcm, Junction::*, Location, SendError as XcmpSendError, SendXcm, Xcm, XcmContext, XcmHash,
 };
@@ -69,8 +69,9 @@ use pezsp_runtime::{traits::Saturating, SaturatedConversion, TokenError};
 
 pub use weights::WeightInfo;
 
-type BalanceOf<T> =
-	<<T as pezpallet::Config>::Token as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
+type BalanceOf<T> = <<T as pezpallet::Config>::Token as Inspect<
+	<T as pezframe_system::Config>::AccountId,
+>>::Balance;
 
 pub use pezpallet::*;
 
@@ -98,7 +99,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The verifier for inbound messages from Ethereum
 		type Verifier: Verifier;

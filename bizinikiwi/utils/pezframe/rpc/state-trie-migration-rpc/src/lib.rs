@@ -25,8 +25,8 @@ use jsonrpsee::{
 };
 use pezsc_client_api::TrieCacheContext;
 use pezsc_rpc_api::check_if_safe;
-use serde::{Deserialize, Serialize};
 use pezsp_runtime::traits::Block as BlockT;
+use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 use pezsp_core::{
@@ -88,7 +88,8 @@ where
 	// get all child trie roots
 	for key_value in trie.iter().map_err(|e| format!("TrieDB node iterator error: {}", e))? {
 		let (key, value) = key_value.map_err(|e| format!("TrieDB node iterator error: {}", e))?;
-		if key[..].starts_with(pezsp_core::storage::well_known_keys::DEFAULT_CHILD_STORAGE_KEY_PREFIX)
+		if key[..]
+			.starts_with(pezsp_core::storage::well_known_keys::DEFAULT_CHILD_STORAGE_KEY_PREFIX)
 		{
 			let prefixed_key = PrefixedStorageKey::new(key);
 			let (_type, unprefixed) = ChildType::from_prefixed_key(&prefixed_key).unwrap();

@@ -191,8 +191,9 @@ pub fn expand_call(def: &mut Def) -> proc_macro2::TokenStream {
 			.collect::<Vec<_>>()
 	});
 
-	let default_docs =
-		[syn::parse_quote!(r"Contains a variant per dispatchable extrinsic that this pezpallet has.")];
+	let default_docs = [syn::parse_quote!(
+		r"Contains a variant per dispatchable extrinsic that this pezpallet has."
+	)];
 	let docs = if docs.is_empty() { &default_docs[..] } else { &docs[..] };
 
 	let maybe_compile_error = if def.call.is_none() {

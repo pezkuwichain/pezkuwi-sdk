@@ -60,9 +60,9 @@
 //! Such error messages should always be interpreted as "code accessing host functions accessed
 //! outside of externalities".
 //!
-//! An externality is any type that implements [`pezsp_externalities::Externalities`]. A simple example
-//! of which is [`TestExternalities`], which is commonly used in tests and is exported from this
-//! crate.
+//! An externality is any type that implements [`pezsp_externalities::Externalities`]. A simple
+//! example of which is [`TestExternalities`], which is commonly used in tests and is exported from
+//! this crate.
 //!
 //! ```
 //! use pezsp_io::{storage::get, TestExternalities};
@@ -288,8 +288,9 @@ pub trait Storage {
 	/// operating on the same prefix should always pass `Some`, and this should be equal to the
 	/// previous call result's `maybe_cursor` field.
 	///
-	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result. Once
-	/// the resultant `maybe_cursor` field is `None`, then no further items remain to be deleted.
+	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result.
+	/// Once the resultant `maybe_cursor` field is `None`, then no further items remain to be
+	/// deleted.
 	///
 	/// NOTE: After the initial call for any given prefix, it is important that no keys further
 	/// keys under the same prefix are inserted. If so, then they may or may not be deleted by

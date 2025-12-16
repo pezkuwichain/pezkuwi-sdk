@@ -121,8 +121,13 @@ mod benchmarks {
 
 		let election = ActiveElections::<T>::get(0).unwrap();
 		pezframe_system::Pezpallet::<T>::set_block_number(election.voting_start);
-		Pezpallet::<T>::cast_vote(RawOrigin::Signed(voter.clone()).into(), 0, vec![candidate], None)
-			.unwrap();
+		Pezpallet::<T>::cast_vote(
+			RawOrigin::Signed(voter.clone()).into(),
+			0,
+			vec![candidate],
+			None,
+		)
+		.unwrap();
 
 		// 2. Advance to election end time
 		pezframe_system::Pezpallet::<T>::set_block_number(election.end_block + 1u32.into());

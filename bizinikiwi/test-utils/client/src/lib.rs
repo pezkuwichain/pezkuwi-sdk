@@ -34,13 +34,13 @@ pub use pezsp_runtime::{Storage, StorageChild};
 use futures::{future::Future, stream::StreamExt};
 use pezsc_client_api::BlockchainEvents;
 use pezsc_service::client::{ClientConfig, LocalCallExecutor};
-use serde::Deserialize;
 use pezsp_core::{storage::ChildInfo, testing::TaskExecutor};
 use pezsp_runtime::{
 	codec::Encode,
 	traits::{Block as BlockT, Header},
 	OpaqueExtrinsic,
 };
+use serde::Deserialize;
 use std::{
 	collections::{HashMap, HashSet},
 	pin::Pin,
@@ -186,8 +186,10 @@ impl<Block: BlockT, ExecutorDispatch, Backend, G: GenesisInit>
 		pezsc_consensus::LongestChain<Backend, Block>,
 	)
 	where
-		ExecutorDispatch:
-			pezsc_client_api::CallExecutor<Block> + pezsc_executor::RuntimeVersionOf + Clone + 'static,
+		ExecutorDispatch: pezsc_client_api::CallExecutor<Block>
+			+ pezsc_executor::RuntimeVersionOf
+			+ Clone
+			+ 'static,
 		Backend: pezsc_client_api::backend::Backend<Block>,
 		<Backend as pezsc_client_api::backend::Backend<Block>>::OffchainStorage: 'static,
 	{

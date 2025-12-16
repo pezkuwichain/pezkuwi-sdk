@@ -29,12 +29,12 @@ use pez_finality_relay::{
 	FinalityPipeline, FinalitySyncPipeline, HeadersToRelay, SourceClient, TargetClient,
 };
 use pezpallet_bridge_grandpa::{Call as BridgeGrandpaCall, Config as BridgeGrandpaConfig};
+use pezsp_core::Pair;
 use relay_bizinikiwi_client::{
 	transaction_stall_timeout, AccountIdOf, AccountKeyPairOf, BlockNumberOf, CallOf, Chain,
 	ChainWithTransactions, Client, HashOf, HeaderOf, SyncHeader,
 };
 use relay_utils::{metrics::MetricsParams, TrackedTransactionStatus, TransactionTracker};
-use pezsp_core::Pair;
 use std::{fmt::Debug, marker::PhantomData};
 
 pub mod initialize;

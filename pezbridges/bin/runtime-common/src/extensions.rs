@@ -19,14 +19,16 @@
 //! checks.
 
 use bp_relayers::ExplicitOrAccountParams;
-use pezbp_runtime::Teyrchain;
 use bp_teyrchains::SubmitTeyrchainHeadsInfo;
+use pezbp_runtime::Teyrchain;
 use pezpallet_bridge_grandpa::{
 	BridgedBlockNumber, CallSubType as GrandpaCallSubType, SubmitFinalityProofHelper,
 };
 use pezpallet_bridge_messages::CallSubType as MessagesCallSubType;
 use pezpallet_bridge_relayers::Pezpallet as RelayersPallet;
-use pezpallet_bridge_teyrchains::{CallSubType as TeyrchainsCallSubtype, SubmitTeyrchainHeadsHelper};
+use pezpallet_bridge_teyrchains::{
+	CallSubType as TeyrchainsCallSubtype, SubmitTeyrchainHeadsHelper,
+};
 use pezsp_runtime::{
 	traits::{Get, UniqueSaturatedInto},
 	transaction_validity::{TransactionPriority, TransactionValidity, ValidTransactionBuilder},
@@ -220,7 +222,8 @@ where
 }
 
 impl<T: pezpallet_bridge_messages::Config<I>, I: 'static>
-	BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall> for pezpallet_bridge_messages::Pezpallet<T, I>
+	BridgeRuntimeFilterCall<T::AccountId, T::RuntimeCall>
+	for pezpallet_bridge_messages::Pezpallet<T, I>
 where
 	T::RuntimeCall: MessagesCallSubType<T, I>,
 {
@@ -378,14 +381,13 @@ mod tests {
 	use bp_messages::{InboundLaneData, MessageNonce, OutboundLaneData};
 	use bp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
 	use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
-	use pezbp_runtime::HeaderId;
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use bp_teyrchains::{BestParaHeadHash, ParaInfo};
 	use codec::{Decode, Encode, MaxEncodedLen};
+	use pezbp_runtime::HeaderId;
 	use pezframe_support::{assert_err, assert_ok, traits::fungible::Mutate};
 	use pezpallet_bridge_grandpa::{Call as GrandpaCall, StoredAuthoritySet};
 	use pezpallet_bridge_teyrchains::Call as TeyrchainsCall;
-	use scale_info::TypeInfo;
 	use pezsp_runtime::{
 		traits::{
 			parameter_types, AsSystemOriginSigner, AsTransactionAuthorizedOrigin, ConstU64,
@@ -396,6 +398,7 @@ mod tests {
 		},
 		DispatchError,
 	};
+	use scale_info::TypeInfo;
 
 	parameter_types! {
 		pub MsgProofsRewardsAccount: RewardsAccountParams<TestLaneIdType> = RewardsAccountParams::new(

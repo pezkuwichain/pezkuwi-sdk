@@ -271,7 +271,11 @@ impl pezsp_externalities::Externalities for ValidationExternalities {
 		panic!("storage_root: unsupported feature for teyrchain validation")
 	}
 
-	fn child_storage_root(&mut self, _: &ChildInfo, _: pezsp_core::storage::StateVersion) -> Vec<u8> {
+	fn child_storage_root(
+		&mut self,
+		_: &ChildInfo,
+		_: pezsp_core::storage::StateVersion,
+	) -> Vec<u8> {
 		panic!("child_storage_root: unsupported feature for teyrchain validation")
 	}
 

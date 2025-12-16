@@ -35,9 +35,9 @@ use pezframe_support::{
 	},
 };
 use pezframe_system::EnsureRoot;
-use pezpallet_xcm::XcmPassthrough;
 use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
+use pezpallet_xcm::XcmPassthrough;
 use pezsp_runtime::traits::{AccountIdConversion, ConvertInto, TryConvertInto};
 use teyrchains_common::{
 	xcm_config::{
@@ -300,8 +300,8 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet and
-					// sibling teyrchains get free execution.
+					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet
+					// and sibling teyrchains get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
 						Equals<RelayTreasuryLocation>,
@@ -321,15 +321,20 @@ pub type Barrier = TrailingSetTopicAsId<
 	>,
 >;
 
-// TODO: This calls into the Assets pezpallet's default `BalanceToAssetBalance` implementation, which
-// uses the ratio of minimum balances and requires asset sufficiency. This means that purchasing
-// weight within XCM programs will still use the old way, and paying fees via asset conversion will
-// only be possible when transacting locally. We should add an impl of this trait that does asset
-// conversion.
+// TODO: This calls into the Assets pezpallet's default `BalanceToAssetBalance` implementation,
+// which uses the ratio of minimum balances and requires asset sufficiency. This means that
+// purchasing weight within XCM programs will still use the old way, and paying fees via asset
+// conversion will only be possible when transacting locally. We should add an impl of this trait
+// that does asset conversion.
 pub type AssetFeeAsExistentialDepositMultiplierFeeCharger = AssetFeeAsExistentialDepositMultiplier<
 	Runtime,
 	WeightToFee,
-	pezpallet_assets::BalanceToAssetBalance<Balances, Runtime, ConvertInto, TrustBackedAssetsInstance>,
+	pezpallet_assets::BalanceToAssetBalance<
+		Balances,
+		Runtime,
+		ConvertInto,
+		TrustBackedAssetsInstance,
+	>,
 	TrustBackedAssetsInstance,
 >;
 
@@ -338,7 +343,12 @@ pub type ForeignAssetFeeAsExistentialDepositMultiplierFeeCharger =
 	AssetFeeAsExistentialDepositMultiplier<
 		Runtime,
 		WeightToFee,
-		pezpallet_assets::BalanceToAssetBalance<Balances, Runtime, ConvertInto, ForeignAssetsInstance>,
+		pezpallet_assets::BalanceToAssetBalance<
+			Balances,
+			Runtime,
+			ConvertInto,
+			ForeignAssetsInstance,
+		>,
 		ForeignAssetsInstance,
 	>;
 

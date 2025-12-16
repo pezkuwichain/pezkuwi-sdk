@@ -25,14 +25,14 @@ use crate::{
 	LOG_TARGET,
 };
 use futures::{FutureExt, StreamExt};
-use prometheus_endpoint::{
-	exponential_buckets, histogram_opts, linear_buckets, register, Counter, Gauge, Histogram,
-	PrometheusError, Registry, U64,
-};
 #[cfg(doc)]
 use pezsc_transaction_pool_api::TransactionPool;
 use pezsc_transaction_pool_api::TransactionStatus;
 use pezsc_utils::mpsc;
+use prometheus_endpoint::{
+	exponential_buckets, histogram_opts, linear_buckets, register, Counter, Gauge, Histogram,
+	PrometheusError, Registry, U64,
+};
 use std::{
 	collections::{hash_map::Entry, HashMap},
 	future::Future,

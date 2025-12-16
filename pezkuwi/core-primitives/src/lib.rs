@@ -23,12 +23,12 @@
 extern crate alloc;
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	generic,
 	traits::{IdentifyAccount, Verify},
 	MultiSignature,
 };
+use scale_info::TypeInfo;
 
 pub use pezsp_runtime::traits::{BlakeTwo256, Hash as HashT};
 

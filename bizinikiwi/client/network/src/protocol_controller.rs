@@ -813,7 +813,11 @@ impl ProtocolController {
 			.map(From::from)
 			.collect::<HashSet<pezsc_network_types::PeerId>>()
 			.union(
-				&self.nodes.keys().map(From::from).collect::<HashSet<pezsc_network_types::PeerId>>(),
+				&self
+					.nodes
+					.keys()
+					.map(From::from)
+					.collect::<HashSet<pezsc_network_types::PeerId>>(),
 			)
 			.cloned()
 			.collect();

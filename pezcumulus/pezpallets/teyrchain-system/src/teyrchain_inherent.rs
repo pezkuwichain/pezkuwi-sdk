@@ -29,8 +29,8 @@ use pezframe_support::{
 	defensive,
 	pezpallet_prelude::{Decode, DecodeWithMemTracking, Encode},
 };
-use scale_info::TypeInfo;
 use pezsp_core::{bounded::BoundedSlice, Get};
+use scale_info::TypeInfo;
 
 /// A structure that helps identify a message inside a collection of messages sorted by `sent_at`.
 ///

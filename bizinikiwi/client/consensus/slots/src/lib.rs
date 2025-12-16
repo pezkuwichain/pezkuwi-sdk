@@ -36,7 +36,9 @@ use futures::{future::Either, Future, TryFutureExt};
 use futures_timer::Delay;
 use log::{debug, info, warn};
 use pezsc_consensus::{BlockImport, JustificationSyncLink};
-use pezsc_telemetry::{telemetry, TelemetryHandle, CONSENSUS_DEBUG, CONSENSUS_INFO, CONSENSUS_WARN};
+use pezsc_telemetry::{
+	telemetry, TelemetryHandle, CONSENSUS_DEBUG, CONSENSUS_INFO, CONSENSUS_WARN,
+};
 use pezsp_arithmetic::traits::BaseArithmetic;
 use pezsp_consensus::{Proposal, Proposer, SelectChain, SyncOracle};
 use pezsp_consensus_slots::{Slot, SlotDuration};
@@ -469,7 +471,8 @@ impl<T: SimpleSlotWorker<B> + Send + Sync, B: BlockT>
 
 /// Slot specific extension that the inherent data provider needs to implement.
 pub trait InherentDataProviderExt {
-	/// The current slot that will be found in the [`InherentData`](`pezsp_inherents::InherentData`).
+	/// The current slot that will be found in the
+	/// [`InherentData`](`pezsp_inherents::InherentData`).
 	fn slot(&self) -> Slot;
 }
 
@@ -809,9 +812,9 @@ impl<N> BackoffAuthoringBlocksStrategy<N> for () {
 #[cfg(test)]
 mod test {
 	use super::*;
+	use bizinikiwi_test_runtime_client::runtime::{Block, Header};
 	use pezsp_runtime::traits::NumberFor;
 	use std::time::{Duration, Instant};
-	use bizinikiwi_test_runtime_client::runtime::{Block, Header};
 
 	const SLOT_DURATION: Duration = Duration::from_millis(6000);
 

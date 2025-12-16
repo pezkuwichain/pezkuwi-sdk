@@ -22,7 +22,9 @@ use pezsp_keyring::Sr25519Keyring as Keyring;
 use emulated_integration_tests_common::{
 	accounts, build_genesis_storage, collators, SAFE_XCM_VERSION,
 };
-use pez_penpal_runtime::xcm_config::{LocalReservableFromAssetHub, RelayLocation, UsdtFromAssetHub};
+use pez_penpal_runtime::xcm_config::{
+	LocalReservableFromAssetHub, RelayLocation, UsdtFromAssetHub,
+};
 use teyrchains_common::{AccountId, Balance};
 // Penpal
 pub const PARA_ID_A: u32 = 2000;
@@ -56,8 +58,8 @@ pub fn genesis(para_id: u32) -> Storage {
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
-						acc.clone(),                          // account id
-						acc,                                  // validator id
+						acc.clone(),                              // account id
+						acc,                                      // validator id
 						pez_penpal_runtime::SessionKeys { aura }, // session keys
 					)
 				})

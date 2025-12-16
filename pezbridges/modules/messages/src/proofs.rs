@@ -25,10 +25,10 @@ use bp_messages::{
 	ChainWithMessages, InboundLaneData, Message, MessageKey, MessageNonce, MessagePayload,
 	OutboundLaneData, VerificationError,
 };
+use codec::Decode;
 use pezbp_runtime::{
 	HashOf, HasherOf, RangeInclusiveExt, RawStorageProof, StorageProofChecker, StorageProofError,
 };
-use codec::Decode;
 use pezsp_std::vec::Vec;
 
 /// 'Parsed' message delivery proof - inbound lane id and its state.
@@ -218,8 +218,8 @@ mod tests {
 
 	use bp_header_pez_chain::{HeaderChainError, StoredHeaderDataBuilder};
 	use bp_messages::LaneState;
-	use pezbp_runtime::{HeaderId, StorageProofError};
 	use codec::Encode;
+	use pezbp_runtime::{HeaderId, StorageProofError};
 	use pezsp_runtime::traits::Header;
 
 	fn using_messages_proof<R>(

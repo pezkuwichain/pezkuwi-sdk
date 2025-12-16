@@ -397,8 +397,8 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use rstest::rstest;
 	use pezsc_consensus_aura::SlotDuration;
+	use rstest::rstest;
 	const RELAY_CHAIN_SLOT_DURATION: u64 = 6000;
 
 	#[rstest]

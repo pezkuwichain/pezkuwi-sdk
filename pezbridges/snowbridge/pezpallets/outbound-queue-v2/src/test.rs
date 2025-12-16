@@ -6,13 +6,13 @@ use crate::{
 };
 use alloy_core::primitives::FixedBytes;
 use codec::Encode;
+use hex_literal::hex;
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	traits::{Hooks, ProcessMessage, ProcessMessageError, QueueFootprintQuery},
 	weights::WeightMeter,
 	BoundedVec,
 };
-use hex_literal::hex;
 use pezsnowbridge_core::{digest_item::SnowbridgeDigestItem, ChannelId, ParaId};
 use pezsnowbridge_outbound_queue_primitives::{
 	v2::{abi::OutboundMessageWrapper, Command, Initializer, SendMessage},

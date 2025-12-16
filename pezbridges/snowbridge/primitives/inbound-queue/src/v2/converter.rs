@@ -425,8 +425,8 @@ mod tests {
 	use super::*;
 
 	use codec::Encode;
-	use pezframe_support::{assert_err, assert_ok, parameter_types};
 	use hex_literal::hex;
+	use pezframe_support::{assert_err, assert_ok, parameter_types};
 	use pezsnowbridge_core::TokenId;
 	use pezsnowbridge_test_utils::mock_converter::{
 		add_location_override, reanchor_to_ethereum, LocationIdConvert,

@@ -62,8 +62,8 @@ construct_runtime!(
 mod runtime_types {
 	use super::*;
 	pub(super) type SignedExtra = (
-		// `frame` already provides all the signed extensions from `pezframe-system`. We just add the
-		// one related to tx-payment here.
+		// `frame` already provides all the signed extensions from `pezframe-system`. We just add
+		// the one related to tx-payment here.
 		frame::runtime::types_common::SystemTransactionExtensionsOf<Runtime>,
 		pezpallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 	);

@@ -133,7 +133,9 @@ pub mod pezpallet {
 	pub struct Pezpallet<T, I = ()>(_);
 
 	#[pezpallet::config]
-	pub trait Config<I: 'static = ()>: pezframe_system::Config + pezpallet_treasury::Config<I> {
+	pub trait Config<I: 'static = ()>:
+		pezframe_system::Config + pezpallet_treasury::Config<I>
+	{
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
@@ -435,7 +437,10 @@ pub mod pezpallet {
 
 			let tip = Tips::<T, I>::get(hash).ok_or(Error::<T, I>::UnknownTip)?;
 			let n = tip.closes.as_ref().ok_or(Error::<T, I>::StillOpen)?;
-			ensure!(pezframe_system::Pezpallet::<T>::block_number() >= *n, Error::<T, I>::Premature);
+			ensure!(
+				pezframe_system::Pezpallet::<T>::block_number() >= *n,
+				Error::<T, I>::Premature
+			);
 			// closed.
 			Reasons::<T, I>::remove(&tip.reason);
 			Tips::<T, I>::remove(hash);
@@ -529,7 +534,8 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		Self::retain_active_tips(&mut tip.tips);
 		let threshold = T::Tippers::count().div_ceil(2);
 		if tip.tips.len() >= threshold && tip.closes.is_none() {
-			tip.closes = Some(pezframe_system::Pezpallet::<T>::block_number() + T::TipCountdown::get());
+			tip.closes =
+				Some(pezframe_system::Pezpallet::<T>::block_number() + T::TipCountdown::get());
 			true
 		} else {
 			false

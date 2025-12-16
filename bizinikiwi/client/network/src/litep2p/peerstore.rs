@@ -466,11 +466,17 @@ mod tests {
 		// Report 2 peers with a negative reputation.
 		handle.report_peer(
 			peer_a,
-			pezsc_network_common::types::ReputationChange { value: i32::MIN, reason: "test".into() },
+			pezsc_network_common::types::ReputationChange {
+				value: i32::MIN,
+				reason: "test".into(),
+			},
 		);
 		handle.report_peer(
 			peer_b,
-			pezsc_network_common::types::ReputationChange { value: i32::MIN, reason: "test".into() },
+			pezsc_network_common::types::ReputationChange {
+				value: i32::MIN,
+				reason: "test".into(),
+			},
 		);
 
 		// Advance time to propagate peers.

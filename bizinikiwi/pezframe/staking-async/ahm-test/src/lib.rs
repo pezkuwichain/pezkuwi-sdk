@@ -71,7 +71,10 @@ mod tests {
 			);
 
 			// then
-			assert_eq!(pezframe_system::Pezpallet::<rc::Runtime>::block_number(), rc::Period::get());
+			assert_eq!(
+				pezframe_system::Pezpallet::<rc::Runtime>::block_number(),
+				rc::Period::get()
+			);
 		});
 
 		shared::in_rc(|| {
@@ -194,7 +197,8 @@ mod tests {
 				},
 				true,
 			);
-			let migration_start_block_number = pezframe_system::Pezpallet::<rc::Runtime>::block_number();
+			let migration_start_block_number =
+				pezframe_system::Pezpallet::<rc::Runtime>::block_number();
 
 			// ensure era is still 1 on RC.
 			// (Session events are received by AHClient and never passed on to staking-classic once
@@ -420,7 +424,10 @@ mod tests {
 				pezpallet_staking_async::ErasRewardPoints::<ah::Runtime>::get(1).total;
 			// staking async has always been in NotForcing, not doing anything since no session
 			// reports come in
-			assert_eq!(pezpallet_staking_async::ForceEra::<ah::Runtime>::get(), Forcing::NotForcing);
+			assert_eq!(
+				pezpallet_staking_async::ForceEra::<ah::Runtime>::get(),
+				Forcing::NotForcing
+			);
 
 			// Verify all offences were properly queued in staking-async.
 			// Should have offences for validators 1, 2, and 5 from different sessions (all map to
@@ -580,21 +587,24 @@ mod tests {
 			// Check for unapplied slashes for all validators with any of the slash fractions
 
 			// Check validator 2 slashes
-			let slash_v2_100_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(2, Perbill::from_percent(100), 0),
-			)
-			.is_some();
-			let slash_v2_90_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(2, Perbill::from_percent(90), 0),
-			)
-			.is_some();
-			let slash_v2_70_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(2, Perbill::from_percent(70), 0),
-			)
-			.is_some();
+			let slash_v2_100_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(2, Perbill::from_percent(100), 0),
+				)
+				.is_some();
+			let slash_v2_90_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(2, Perbill::from_percent(90), 0),
+				)
+				.is_some();
+			let slash_v2_70_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(2, Perbill::from_percent(70), 0),
+				)
+				.is_some();
 
 			let total_slashes_v2 =
 				slash_v2_100_present as u8 + slash_v2_90_present as u8 + slash_v2_70_present as u8;
@@ -605,21 +615,24 @@ mod tests {
 			);
 
 			// Check validator 1 slashes
-			let slash_v1_75_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(1, Perbill::from_percent(75), 0),
-			)
-			.is_some();
-			let slash_v1_85_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(1, Perbill::from_percent(85), 0),
-			)
-			.is_some();
-			let slash_v1_65_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(1, Perbill::from_percent(65), 0),
-			)
-			.is_some();
+			let slash_v1_75_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(1, Perbill::from_percent(75), 0),
+				)
+				.is_some();
+			let slash_v1_85_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(1, Perbill::from_percent(85), 0),
+				)
+				.is_some();
+			let slash_v1_65_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(1, Perbill::from_percent(65), 0),
+				)
+				.is_some();
 
 			let total_slashes_v1 =
 				slash_v1_75_present as u8 + slash_v1_85_present as u8 + slash_v1_65_present as u8;
@@ -630,21 +643,24 @@ mod tests {
 			);
 
 			// Check validator 5 slashes
-			let slash_v5_55_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(5, Perbill::from_percent(55), 0),
-			)
-			.is_some();
-			let slash_v5_45_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(5, Perbill::from_percent(45), 0),
-			)
-			.is_some();
-			let slash_v5_40_present = pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
-				3,
-				(5, Perbill::from_percent(40), 0),
-			)
-			.is_some();
+			let slash_v5_55_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(5, Perbill::from_percent(55), 0),
+				)
+				.is_some();
+			let slash_v5_45_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(5, Perbill::from_percent(45), 0),
+				)
+				.is_some();
+			let slash_v5_40_present =
+				pezpallet_staking_async::UnappliedSlashes::<ah::Runtime>::get(
+					3,
+					(5, Perbill::from_percent(40), 0),
+				)
+				.is_some();
 
 			let total_slashes_v5 =
 				slash_v5_55_present as u8 + slash_v5_45_present as u8 + slash_v5_40_present as u8;
@@ -722,9 +738,18 @@ mod tests {
 			assert_eq!(
 				ah::staking_events_since_last_call(),
 				vec![
-					pezpallet_staking_async::Event::PagedElectionProceeded { page: 2, result: Ok(4) },
-					pezpallet_staking_async::Event::PagedElectionProceeded { page: 1, result: Ok(0) },
-					pezpallet_staking_async::Event::PagedElectionProceeded { page: 0, result: Ok(0) }
+					pezpallet_staking_async::Event::PagedElectionProceeded {
+						page: 2,
+						result: Ok(4)
+					},
+					pezpallet_staking_async::Event::PagedElectionProceeded {
+						page: 1,
+						result: Ok(0)
+					},
+					pezpallet_staking_async::Event::PagedElectionProceeded {
+						page: 0,
+						result: Ok(0)
+					}
 				]
 			);
 		});

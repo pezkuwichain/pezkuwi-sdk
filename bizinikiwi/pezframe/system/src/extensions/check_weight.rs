@@ -22,7 +22,6 @@ use pezframe_support::{
 	pezpallet_prelude::TransactionSource,
 	traits::Get,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		DispatchInfoOf, Dispatchable, PostDispatchInfoOf, TransactionExtension, ValidateResult,
@@ -31,6 +30,7 @@ use pezsp_runtime::{
 	DispatchResult,
 };
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
 
 /// Block resource (weight) limit check.
 ///

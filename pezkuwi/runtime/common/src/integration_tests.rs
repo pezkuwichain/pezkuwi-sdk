@@ -34,7 +34,6 @@ use pezframe_support::{
 };
 use pezframe_support_test::TestRandomness;
 use pezframe_system::EnsureRoot;
-use pezpallet_identity::{self, legacy::IdentityInfo};
 use pezkuwi_primitives::{
 	BlockNumber, HeadData, Id as ParaId, SessionIndex, ValidationCode, LOWEST_PUBLIC_ID,
 	MAX_CODE_SIZE,
@@ -42,6 +41,7 @@ use pezkuwi_primitives::{
 use pezkuwi_runtime_teyrchains::{
 	configuration, dmp, origin, paras, shared, Origin as ParaOrigin, ParaLifecycle,
 };
+use pezpallet_identity::{self, legacy::IdentityInfo};
 use pezsp_core::{ConstUint, H256};
 use pezsp_io::TestExternalities;
 use pezsp_keyring::Sr25519Keyring;

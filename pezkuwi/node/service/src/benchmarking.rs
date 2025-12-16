@@ -155,10 +155,9 @@ fn zagros_sign_call(
 		pezframe_system::CheckSpecVersion::<runtime::Runtime>::new(),
 		pezframe_system::CheckTxVersion::<runtime::Runtime>::new(),
 		pezframe_system::CheckGenesis::<runtime::Runtime>::new(),
-		pezframe_system::CheckMortality::<runtime::Runtime>::from(pezsp_runtime::generic::Era::mortal(
-			period,
-			current_block,
-		)),
+		pezframe_system::CheckMortality::<runtime::Runtime>::from(
+			pezsp_runtime::generic::Era::mortal(period, current_block),
+		),
 		pezframe_system::CheckNonce::<runtime::Runtime>::from(nonce),
 		pezframe_system::CheckWeight::<runtime::Runtime>::new(),
 		pezpallet_transaction_payment::ChargeTransactionPayment::<runtime::Runtime>::from(0),
@@ -214,10 +213,9 @@ fn pezkuwichain_sign_call(
 		pezframe_system::CheckSpecVersion::<runtime::Runtime>::new(),
 		pezframe_system::CheckTxVersion::<runtime::Runtime>::new(),
 		pezframe_system::CheckGenesis::<runtime::Runtime>::new(),
-		pezframe_system::CheckMortality::<runtime::Runtime>::from(pezsp_runtime::generic::Era::mortal(
-			period,
-			current_block,
-		)),
+		pezframe_system::CheckMortality::<runtime::Runtime>::from(
+			pezsp_runtime::generic::Era::mortal(period, current_block),
+		),
 		pezframe_system::CheckNonce::<runtime::Runtime>::from(nonce),
 		pezframe_system::CheckWeight::<runtime::Runtime>::new(),
 		pezpallet_transaction_payment::ChargeTransactionPayment::<runtime::Runtime>::from(0),

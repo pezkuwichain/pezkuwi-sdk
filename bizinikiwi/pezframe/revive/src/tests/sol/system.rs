@@ -28,10 +28,10 @@ use pezframe_support::traits::fungible::{Balanced, Mutate};
 use pezpallet_revive_fixtures::{
 	compile_module_with_type, Callee, FixtureType, System as SystemFixture,
 };
-use pretty_assertions::assert_eq;
-use revm::primitives::Bytes;
 use pezsp_core::H160;
 use pezsp_io::hashing::keccak_256;
+use pretty_assertions::assert_eq;
+use revm::primitives::Bytes;
 use test_case::test_case;
 
 #[test_case(FixtureType::Solc)]

@@ -29,11 +29,11 @@ use pezframe_support::{
 	},
 	unsigned::TransactionValidityError,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{DispatchInfoOf, MaybeSerializeDeserialize, One, PostDispatchInfoOf},
 	transaction_validity::InvalidTransaction,
 };
+use scale_info::TypeInfo;
 
 /// Handle withdrawing, refunding and depositing of transaction fees.
 pub trait OnChargeAssetTransaction<T: Config> {
@@ -112,8 +112,8 @@ impl<A, B: Balanced<A>> HandleCredit<A, B> for () {
 /// The credit handler is given the complete fee in terms of the asset used for the transaction.
 pub struct FungiblesAdapter<CON, HC>(PhantomData<(CON, HC)>);
 
-/// Default implementation for a runtime instantiating this pezpallet, a balance to asset converter and
-/// a credit handler.
+/// Default implementation for a runtime instantiating this pezpallet, a balance to asset converter
+/// and a credit handler.
 impl<T, CON, HC> OnChargeAssetTransaction<T> for FungiblesAdapter<CON, HC>
 where
 	T: Config,

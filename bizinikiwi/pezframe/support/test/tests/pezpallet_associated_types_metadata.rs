@@ -16,8 +16,8 @@
 // limitations under the License.
 
 use pezframe_support::{derive_impl, traits::ConstU32};
-use scale_info::meta_type;
 use pezsp_metadata_ir::PalletAssociatedTypeMetadataIR;
+use scale_info::meta_type;
 
 pub type BlockNumber = u64;
 pub type Header = pezsp_runtime::generic::Header<u32, pezsp_runtime::traits::BlakeTwo256>;
@@ -36,7 +36,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		// Runtime events already propagated to the metadata.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		// Constants are already propagated.
 		#[pezpallet::constant]
@@ -61,7 +62,8 @@ pub mod pallet2 {
 	pub trait Config: pezframe_system::Config {
 		// Runtime events already propagated to the metadata.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		// Constants are already propagated.
 		#[pezpallet::constant]
@@ -98,7 +100,8 @@ pub mod pallet3 {
 	pub trait Config: pezframe_system::Config {
 		// Runtime events already propagated to the metadata.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		// Constants are already propagated.
 		#[pezpallet::constant]
@@ -193,7 +196,11 @@ fn associated_types_metadata() {
 	pretty_assertions::assert_eq!(pezpallet.associated_types, vec![]);
 
 	// Collect by default types that implement TypeInfo or Parameter.
-	let pezpallet = ir.pallets.iter().find(|pezpallet| pezpallet.name == "DefaultInclusion").unwrap();
+	let pezpallet = ir
+		.pallets
+		.iter()
+		.find(|pezpallet| pezpallet.name == "DefaultInclusion")
+		.unwrap();
 	pretty_assertions::assert_eq!(
 		pezpallet.associated_types,
 		vec![
@@ -211,7 +218,11 @@ fn associated_types_metadata() {
 	);
 
 	// Explicitly include associated types.
-	let pezpallet = ir.pallets.iter().find(|pezpallet| pezpallet.name == "ExplicitInclusion").unwrap();
+	let pezpallet = ir
+		.pallets
+		.iter()
+		.find(|pezpallet| pezpallet.name == "ExplicitInclusion")
+		.unwrap();
 	pretty_assertions::assert_eq!(
 		pezpallet.associated_types,
 		vec![PalletAssociatedTypeMetadataIR {

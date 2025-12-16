@@ -16,12 +16,14 @@
 //! Expose the auto generated weight files.
 
 pub mod block_weights;
+pub mod extrinsic_weights;
+pub mod paritydb_weights;
 pub mod pezcumulus_pezpallet_teyrchain_system;
 pub mod pezcumulus_pezpallet_weight_reclaim;
 pub mod pezcumulus_pezpallet_xcmp_queue;
-pub mod extrinsic_weights;
 pub mod pezframe_system;
 pub mod pezframe_system_extensions;
+pub mod pezkuwi_runtime_common_identity_migrator;
 pub mod pezpallet_assets;
 pub mod pezpallet_balances;
 pub mod pezpallet_collator_selection;
@@ -35,8 +37,6 @@ pub mod pezpallet_timestamp;
 pub mod pezpallet_transaction_payment;
 pub mod pezpallet_utility;
 pub mod pezpallet_xcm;
-pub mod paritydb_weights;
-pub mod pezkuwi_runtime_common_identity_migrator;
 pub mod rocksdb_weights;
 pub mod xcm;
 

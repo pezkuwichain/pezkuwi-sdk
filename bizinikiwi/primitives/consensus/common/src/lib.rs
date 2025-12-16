@@ -35,9 +35,9 @@ pub mod error;
 mod select_chain;
 
 pub use self::error::Error;
-pub use select_chain::SelectChain;
 pub use pezsp_inherents::InherentData;
 pub use pezsp_state_machine::Backend as StateBackend;
+pub use select_chain::SelectChain;
 
 /// Block status.
 #[derive(Debug, PartialEq, Eq, Clone)]

@@ -23,17 +23,17 @@ use crate::{
 	block_relay_protocol::BlockResponseError, mock::MockBlockDownloader,
 	service::network::NetworkServiceProvider,
 };
+use bizinikiwi_test_runtime_client::{
+	runtime::{Block, Hash, Header},
+	BlockBuilderExt, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt, TestClient,
+	TestClientBuilder, TestClientBuilderExt,
+};
 use futures::{channel::oneshot::Canceled, executor::block_on};
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_network::RequestFailure;
 use pezsc_network_common::sync::message::{BlockAnnounce, BlockData, BlockState, FromBlock};
 use pezsp_blockchain::HeaderBackend;
 use std::sync::Mutex;
-use bizinikiwi_test_runtime_client::{
-	runtime::{Block, Hash, Header},
-	BlockBuilderExt, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt, TestClient,
-	TestClientBuilder, TestClientBuilderExt,
-};
 
 #[derive(Debug)]
 struct ProxyBlockDownloader {

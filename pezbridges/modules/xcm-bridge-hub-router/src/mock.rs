@@ -88,7 +88,9 @@ impl pezpallet_xcm_bridge_hub_router::Config<()> for TestRuntime {
 	type FeeAsset = BridgeFeeAsset;
 }
 
-pub struct LatestOrNoneForLocationVersionChecker<Location>(pezsp_std::marker::PhantomData<Location>);
+pub struct LatestOrNoneForLocationVersionChecker<Location>(
+	pezsp_std::marker::PhantomData<Location>,
+);
 impl<LocationValue: Contains<Location>> GetVersion
 	for LatestOrNoneForLocationVersionChecker<LocationValue>
 {
@@ -172,7 +174,9 @@ impl XcmChannelStatusProvider for TestLocalXcmChannelManager {
 
 /// Return test externalities to use in tests.
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
-	let t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	let t = pezframe_system::GenesisConfig::<TestRuntime>::default()
+		.build_storage()
+		.unwrap();
 	pezsp_io::TestExternalities::new(t)
 }
 

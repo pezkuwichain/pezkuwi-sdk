@@ -18,13 +18,13 @@
 
 use crate::{justification, InitializationData};
 
-use pezbp_runtime::HeaderOf;
 use codec::{Decode, Encode};
+use pezbp_runtime::HeaderOf;
 use pezframe_support::{weights::Weight, RuntimeDebugNoBound};
-use scale_info::TypeInfo;
 use pezsp_consensus_grandpa::SetId;
 use pezsp_runtime::traits::{Header as HeaderT, Zero};
 use pezsp_std::{boxed::Box, fmt::Debug};
+use scale_info::TypeInfo;
 
 /// A minimized version of `pezpallet-bridge-grandpa::Call` that can be used without a runtime.
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]

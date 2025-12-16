@@ -21,8 +21,8 @@
 //! token.
 //!
 //! It makes heavy use of concepts such as Holds and Freezes from the
-//! [`pezframe_support::traits::fungible`] traits, therefore you should read and understand those docs
-//! as a prerequisite to understanding this pezpallet.
+//! [`pezframe_support::traits::fungible`] traits, therefore you should read and understand those
+//! docs as a prerequisite to understanding this pezpallet.
 //!
 //! Also see the [`frame_tokens`] reference docs for higher level information regarding the
 //! place of this palet in FRAME.
@@ -81,8 +81,8 @@
 //!
 //! ### Examples from the FRAME
 //!
-//! The Contract pezpallet uses the `Currency` trait to handle gas payment, and its types inherit from
-//! `Currency`:
+//! The Contract pezpallet uses the `Currency` trait to handle gas payment, and its types inherit
+//! from `Currency`:
 //!
 //! ```
 //! use pezframe_support::traits::Currency;
@@ -159,6 +159,7 @@ use alloc::{
 };
 use codec::{Codec, MaxEncodedLen};
 use core::{cmp, fmt::Debug, mem, result};
+pub use impl_currency::{NegativeImbalance, PositiveImbalance};
 use pezframe_support::{
 	ensure,
 	pezpallet_prelude::DispatchResult,
@@ -175,8 +176,6 @@ use pezframe_support::{
 	BoundedSlice, WeakBoundedVec,
 };
 use pezframe_system as system;
-pub use impl_currency::{NegativeImbalance, PositiveImbalance};
-use scale_info::TypeInfo;
 use pezsp_core::{sr25519::Pair as SrPair, Pair};
 use pezsp_runtime::{
 	traits::{
@@ -185,6 +184,7 @@ use pezsp_runtime::{
 	},
 	ArithmeticError, DispatchError, FixedPointOperand, Perbill, RuntimeDebug, TokenError,
 };
+use scale_info::TypeInfo;
 
 pub use types::{
 	AccountData, AdjustmentDirection, BalanceLock, DustCleaner, ExtraFlags, Reasons, ReserveData,
@@ -288,9 +288,9 @@ pub mod pezpallet {
 		/// The minimum amount required to keep an account open. MUST BE GREATER THAN ZERO!
 		///
 		/// If you *really* need it to be zero, you can enable the feature `insecure_zero_ed` for
-		/// this pezpallet. However, you do so at your own risk: this will open up a major DoS vector.
-		/// In case you have multiple sources of provider references, you may also get unexpected
-		/// behaviour if you set this to zero.
+		/// this pezpallet. However, you do so at your own risk: this will open up a major DoS
+		/// vector. In case you have multiple sources of provider references, you may also get
+		/// unexpected behaviour if you set this to zero.
 		///
 		/// Bottom line: Do yourself a favour and make it at least one!
 		#[pezpallet::constant]
@@ -497,8 +497,8 @@ pub mod pezpallet {
 	/// ```
 	///
 	/// But this comes with tradeoffs, storing account balances in the system pezpallet stores
-	/// `pezframe_system` data alongside the account data contrary to storing account balances in the
-	/// `Balances` pezpallet, which uses a `StorageMap` to store balances data only.
+	/// `pezframe_system` data alongside the account data contrary to storing account balances in
+	/// the `Balances` pezpallet, which uses a `StorageMap` to store balances data only.
 	/// NOTE: This is only used in the case that this pezpallet is used to store balances.
 	#[pezpallet::storage]
 	pub type Account<T: Config<I>, I: 'static = ()> =
@@ -1151,7 +1151,10 @@ pub mod pezpallet {
 					});
 				}
 				if let Some(amount) = maybe_dust {
-					Pezpallet::<T, I>::deposit_event(Event::DustLost { account: who.clone(), amount });
+					Pezpallet::<T, I>::deposit_event(Event::DustLost {
+						account: who.clone(),
+						amount,
+					});
 				}
 				(result, maybe_dust)
 			})

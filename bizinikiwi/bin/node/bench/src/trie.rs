@@ -20,9 +20,9 @@
 
 use hash_db::Prefix;
 use kvdb::KeyValueDB;
-use rand::Rng;
 use pezsp_state_machine::Backend as _;
 use pezsp_trie::{trie_types::TrieDBMutBuilderV1, TrieMut as _};
+use rand::Rng;
 use std::{
 	borrow::Cow,
 	collections::HashMap,

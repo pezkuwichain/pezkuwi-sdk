@@ -125,8 +125,8 @@ pub mod pezpallet_prelude {
 	pub type BlockNumberFor<T> = <T as super::Config>::BlockNumber;
 }
 
-/// Provides an implementation of [`pezframe_support::traits::Randomness`] that should only be used in
-/// tests!
+/// Provides an implementation of [`pezframe_support::traits::Randomness`] that should only be used
+/// in tests!
 pub struct TestRandomness<T>(core::marker::PhantomData<T>);
 
 impl<Output: codec::Decode + Default, T>

@@ -19,12 +19,12 @@ use crate::Config;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::marker::PhantomData;
 use pezframe_support::{pezpallet_prelude::TransactionSource, traits::OriginTrait, DefaultNoBound};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{DispatchInfoOf, TransactionExtension},
 	transaction_validity::InvalidTransaction,
 };
+use scale_info::TypeInfo;
 
 /// Check to ensure that the sender is not the zero address.
 #[derive(Encode, Decode, DecodeWithMemTracking, DefaultNoBound, Clone, Eq, PartialEq, TypeInfo)]

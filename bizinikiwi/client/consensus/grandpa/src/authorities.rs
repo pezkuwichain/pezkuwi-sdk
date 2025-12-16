@@ -22,9 +22,9 @@ use std::{cmp::Ord, fmt::Debug, ops::Add};
 
 use codec::{Decode, Encode};
 use finality_grandpa::voter_set::VoterSet;
-use pez_fork_tree::{FilterAction, ForkTree};
 use log::debug;
 use parking_lot::MappedMutexGuard;
+use pez_fork_tree::{FilterAction, ForkTree};
 use pezsc_consensus::shared_data::{SharedData, SharedDataLocked};
 use pezsc_telemetry::{telemetry, TelemetryHandle, CONSENSUS_INFO};
 use pezsp_consensus_grandpa::{AuthorityId, AuthorityList};

@@ -57,9 +57,6 @@ pub mod __private {
 	pub use impl_trait_for_tuples;
 	pub use log;
 	pub use paste;
-	pub use scale_info;
-	pub use serde;
-	pub use serde_json;
 	pub use pezsp_core::{Get, OpaqueMetadata, Void};
 	pub use pezsp_crypto_hashing_proc_macro;
 	pub use pezsp_inherents;
@@ -77,6 +74,9 @@ pub mod __private {
 	pub use pezsp_state_machine::BasicExternalities;
 	pub use pezsp_std;
 	pub use pezsp_tracing;
+	pub use scale_info;
+	pub use serde;
+	pub use serde_json;
 	pub use tt_call::*;
 }
 
@@ -128,8 +128,8 @@ pub use pezsp_runtime::{
 };
 
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_runtime::TypeId;
+use scale_info::TypeInfo;
 
 /// A unified log target for support operations.
 pub const LOG_TARGET: &str = "runtime::pezframe-support";
@@ -146,17 +146,18 @@ impl TypeId for PalletId {
 	const TYPE_ID: [u8; 4] = *b"modl";
 }
 
-/// Generate a [`#[pezpallet::storage]`](pezpallet_macros::storage) alias outside of a pezpallet.
+/// Generate a [`#[pezpallet::storage]`](pezpallet_macros::storage) alias outside of a
+/// pezpallet.
 ///
-/// This storage alias works similarly to the [`#[pezpallet::storage]`](pezpallet_macros::storage)
-/// attribute macro. It supports [`StorageValue`](storage::types::StorageValue),
-/// [`StorageMap`](storage::types::StorageMap),
+/// This storage alias works similarly to the
+/// [`#[pezpallet::storage]`](pezpallet_macros::storage) attribute macro. It supports
+/// [`StorageValue`](storage::types::StorageValue), [`StorageMap`](storage::types::StorageMap),
 /// [`StorageDoubleMap`](storage::types::StorageDoubleMap) and
 /// [`StorageNMap`](storage::types::StorageNMap). The main difference to the normal
-/// [`#[pezpallet::storage]`](pezpallet_macros::storage) is the flexibility around declaring the
-/// storage prefix to use. The storage prefix determines where to find the value in the
-/// storage. [`#[pezpallet::storage]`](pezpallet_macros::storage) uses the name of the pezpallet as
-/// declared in [`construct_runtime!`].
+/// [`#[pezpallet::storage]`](pezpallet_macros::storage) is the flexibility around declaring
+/// the storage prefix to use. The storage prefix determines where to find the value in the
+/// storage. [`#[pezpallet::storage]`](pezpallet_macros::storage) uses the name of the
+/// pezpallet as declared in [`construct_runtime!`].
 ///
 /// The flexibility around declaring the storage prefix makes this macro very useful for
 /// writing migrations etc.
@@ -166,9 +167,10 @@ impl TypeId for PalletId {
 /// There are different ways to declare the `prefix` to use. The `prefix` type can either be
 /// declared explicitly by passing it to the macro as an attribute or by letting the macro
 /// guess on what the `prefix` type is. The `prefix` is always passed as the first generic
-/// argument to the type declaration. When using [`#[pezpallet::storage]`](pezpallet_macros::storage)
-/// this first generic argument is always `_`. Besides declaring the `prefix`, the rest of the
-/// type declaration works as with [`#[pezpallet::storage]`](pezpallet_macros::storage).
+/// argument to the type declaration. When using
+/// [`#[pezpallet::storage]`](pezpallet_macros::storage) this first generic argument is always
+/// `_`. Besides declaring the `prefix`, the rest of the type declaration works as with
+/// [`#[pezpallet::storage]`](pezpallet_macros::storage).
 ///
 /// 1. Use the `verbatim` prefix type. This prefix type uses the given identifier as the
 /// `prefix`:
@@ -178,8 +180,8 @@ impl TypeId for PalletId {
 /// configured in    [`construct_runtime!`] as the `prefix`:
 #[doc = docify::embed!("src/tests/storage_alias.rs", pezpallet_name_attribute)]
 /// It requires that the given prefix type implements
-/// [`PalletInfoAccess`](traits::PalletInfoAccess) (which is always the case for FRAME pezpallet
-/// structs). In the example above, `Pezpallet<T>` is the prefix type.
+/// [`PalletInfoAccess`](traits::PalletInfoAccess) (which is always the case for FRAME
+/// pezpallet structs). In the example above, `Pezpallet<T>` is the prefix type.
 ///
 /// 3. Use the `dynamic` prefix type. This prefix type calls [`Get::get()`](traits::Get::get)
 ///    to get the `prefix`:
@@ -187,8 +189,8 @@ impl TypeId for PalletId {
 /// It requires that the given prefix type implements [`Get<'static str>`](traits::Get).
 ///
 /// 4. Let the macro "guess" what kind of prefix type to use. This only supports verbatim or
-///    pezpallet name. The macro uses the presence of generic arguments to the prefix type as an
-///    indication that it should use the pezpallet name as the `prefix`:
+///    pezpallet name. The macro uses the presence of generic arguments to the prefix type as
+///    an indication that it should use the pezpallet name as the `prefix`:
 #[doc = docify::embed!("src/tests/storage_alias.rs", storage_alias_guess)]
 pub use pezframe_support_procedural::storage_alias;
 
@@ -444,7 +446,6 @@ pub mod pezpallet_prelude {
 	pub use core::marker::PhantomData;
 	pub use pezframe_support::pezpallet_macros::*;
 	pub use pezframe_support_procedural::{inject_runtime_type, register_default_impl};
-	pub use scale_info::TypeInfo;
 	pub use pezsp_inherents::MakeFatalError;
 	pub use pezsp_runtime::{
 		traits::{
@@ -460,6 +461,7 @@ pub mod pezpallet_prelude {
 		DispatchError, RuntimeDebug, MAX_MODULE_ERROR_ENCODED_SIZE,
 	};
 	pub use pezsp_weights::Weight;
+	pub use scale_info::TypeInfo;
 }
 
 /// The pezpallet macro has 2 purposes:
@@ -488,7 +490,8 @@ pub mod pezpallet_prelude {
 /// }
 /// ```
 ///
-/// The documentation for each individual part can be found at [pezframe_support::pezpallet_macros]
+/// The documentation for each individual part can be found at
+/// [pezframe_support::pezpallet_macros]
 ///
 /// ## Dev Mode (`#[pezpallet(dev_mode)]`)
 ///
@@ -517,8 +520,9 @@ pub mod pezpallet_prelude {
 /// * Call indices no longer need to be specified on every `#[pezpallet::call]` declaration. By
 ///   default, dev mode pallets will assume a call index based on the order of the call.
 /// * All storages are marked as unbounded, meaning you do not need to implement
-///   [`MaxEncodedLen`](pezframe_support::pezpallet_prelude::MaxEncodedLen) on storage types. This is
-///   equivalent to specifying `#[pezpallet::unbounded]` on all storage type definitions.
+///   [`MaxEncodedLen`](pezframe_support::pezpallet_prelude::MaxEncodedLen) on storage types.
+///   This is equivalent to specifying `#[pezpallet::unbounded]` on all storage type
+///   definitions.
 /// * Storage hashers no longer need to be specified and can be replaced by `_`. In dev mode,
 ///   these will be replaced by `Blake2_128Concat`. In case of explicit key-binding, `Hasher`
 ///   can simply be ignored when in `dev_mode`.
@@ -572,20 +576,20 @@ pub mod pezpallet_prelude {
 /// It also implements on the pezpallet:
 ///
 /// * [`GetStorageVersion`](pezframe_support::traits::GetStorageVersion)
-/// * [`OnGenesis`](pezframe_support::traits::OnGenesis): contains some logic to write the pezpallet
-///   version into storage.
-/// * [`PalletInfoAccess`](pezframe_support::traits::PalletInfoAccess) to ease access to pezpallet
-///   information given by [`pezframe_support::traits::PalletInfo`]. (The implementation uses the
-///   associated type [`pezframe_support::traits::PalletInfo`]).
-/// * [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) to give information about
-///   storages.
+/// * [`OnGenesis`](pezframe_support::traits::OnGenesis): contains some logic to write the
+///   pezpallet version into storage.
+/// * [`PalletInfoAccess`](pezframe_support::traits::PalletInfoAccess) to ease access to
+///   pezpallet information given by [`pezframe_support::traits::PalletInfo`]. (The
+///   implementation uses the associated type [`pezframe_support::traits::PalletInfo`]).
+/// * [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) to give information
+///   about storages.
 ///
 /// If the attribute `set_storage_max_encoded_len` is set then the macro calls
 /// [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for each storage in the
 /// implementation of [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for the
 /// pezpallet. Otherwise, it implements
-/// [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for the pezpallet using the
-/// [`PartialStorageInfoTrait`](pezframe_support::traits::PartialStorageInfoTrait)
+/// [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for the pezpallet using
+/// the [`PartialStorageInfoTrait`](pezframe_support::traits::PartialStorageInfoTrait)
 /// implementation of storages.
 ///
 /// ## Note on deprecation.
@@ -717,9 +721,9 @@ pub mod pezpallet_macros {
 	/// Declares a storage as unbounded in potential size.
 	///
 	/// When implementing the storage info (when `#[pezpallet::generate_storage_info]` is
-	/// specified on the pezpallet struct placeholder), the size of the storage will be declared
-	/// as unbounded. This can be useful for storage which can never go into PoV (Proof of
-	/// Validity).
+	/// specified on the pezpallet struct placeholder), the size of the storage will be
+	/// declared as unbounded. This can be useful for storage which can never go into PoV
+	/// (Proof of Validity).
 	///
 	/// ## Example
 	///
@@ -780,8 +784,8 @@ pub mod pezpallet_macros {
 	/// Ensures the trait item will not be used as a default with the
 	/// `#[derive_impl(..)]` attribute macro.
 	///
-	/// The optional attribute `#[pezpallet::no_default]` can be attached to trait items within a
-	/// `Config` trait impl that has [`#[pezpallet::config(with_default)]`](`config`)
+	/// The optional attribute `#[pezpallet::no_default]` can be attached to trait items within
+	/// a `Config` trait impl that has [`#[pezpallet::config(with_default)]`](`config`)
 	/// attached.
 	pub use pezframe_support_procedural::no_default;
 
@@ -789,21 +793,21 @@ pub mod pezpallet_macros {
 	/// [`#[import_section]`](`import_section`).
 	///
 	/// Note that sections are imported by their module name/ident, and should be referred to
-	/// by their _full path_ from the perspective of the target pezpallet. Do not attempt to make
-	/// use of `use` statements to bring pezpallet sections into scope, as this will not work
-	/// (unless you do so as part of a wildcard import, in which case it will work).
+	/// by their _full path_ from the perspective of the target pezpallet. Do not attempt to
+	/// make use of `use` statements to bring pezpallet sections into scope, as this will not
+	/// work (unless you do so as part of a wildcard import, in which case it will work).
 	///
 	/// ## Naming Logistics
 	///
-	/// Also note that because of how `#[pezpallet_section]` works, pezpallet section names must be
-	/// globally unique _within the crate in which they are defined_. For more information on
-	/// why this must be the case, see macro_magic's
+	/// Also note that because of how `#[pezpallet_section]` works, pezpallet section names
+	/// must be globally unique _within the crate in which they are defined_. For more
+	/// information on why this must be the case, see macro_magic's
 	/// [`#[export_tokens]`](https://docs.rs/macro_magic/latest/macro_magic/attr.export_tokens.html) macro.
 	///
 	/// Optionally, you may provide an argument to `#[pezpallet_section]` such as
-	/// `#[pezpallet_section(some_ident)]`, in the event that there is another pezpallet section in
-	/// same crate with the same ident/name. The ident you specify can then be used instead of
-	/// the module's ident name when you go to import it via
+	/// `#[pezpallet_section(some_ident)]`, in the event that there is another pezpallet
+	/// section in same crate with the same ident/name. The ident you specify can then be used
+	/// instead of the module's ident name when you go to import it via
 	/// [`#[import_section]`](`import_section`).
 	pub use pezframe_support_procedural::pezpallet_section;
 
@@ -915,9 +919,9 @@ pub mod pezpallet_macros {
 	/// `use` statements within your pezpallet section, so they are imported as well, or by
 	/// otherwise ensuring that you have the same imports on the target pezpallet.
 	///
-	/// It is perfectly permissible to import multiple pezpallet sections into the same pezpallet,
-	/// which can be done by having multiple `#[import_section(something)]` attributes
-	/// attached to the pezpallet.
+	/// It is perfectly permissible to import multiple pezpallet sections into the same
+	/// pezpallet, which can be done by having multiple `#[import_section(something)]`
+	/// attributes attached to the pezpallet.
 	///
 	/// Note that sections are imported by their module name/ident, and should be referred to
 	/// by their _full path_ from the perspective of the target pezpallet.
@@ -944,7 +948,8 @@ pub mod pezpallet_macros {
 	/// }
 	/// ```
 	///
-	/// See [`pezpallet::storage`](`pezframe_support::pezpallet_macros::storage`) for more info.
+	/// See [`pezpallet::storage`](`pezframe_support::pezpallet_macros::storage`) for more
+	/// info.
 	pub use pezframe_support_procedural::getter;
 
 	/// Defines constants that are added to the constant field of
@@ -1036,9 +1041,9 @@ pub mod pezpallet_macros {
 	/// ```
 	///
 	/// I.e. a regular trait definition named `Config`, with the supertrait
-	/// [`pezframe_system::pezpallet::Config`](../../pezframe_system/pezpallet/trait.Config.html), and
-	/// optionally other supertraits and a where clause. (Specifying other supertraits here is
-	/// known as [tight coupling](https://docs.pezkuwichain.io/reference/how-to-guides/pezpallet-design/use-tight-coupling/))
+	/// [`pezframe_system::pezpallet::Config`](../../pezframe_system/pezpallet/trait.Config.
+	/// html), and optionally other supertraits and a where clause. (Specifying other
+	/// supertraits here is known as [tight coupling](https://docs.pezkuwichain.io/reference/how-to-guides/pezpallet-design/use-tight-coupling/))
 	///
 	/// ## Optional: `with_default`
 	///
@@ -1081,15 +1086,16 @@ pub mod pezpallet_macros {
 	/// As shown above:
 	/// * you may attach the [`#[pezpallet::no_default]`](`no_default`)
 	/// attribute to specify that a particular trait item _cannot_ be used as a default when a
-	/// test `Config` is derived using the [`#[derive_impl(..)]`](`pezframe_support::derive_impl`)
-	/// attribute macro. This will cause that particular trait item to simply not appear in
-	/// default testing configs based on this config (the trait item will not be included in
-	/// `DefaultConfig`).
+	/// test `Config` is derived using the
+	/// [`#[derive_impl(..)]`](`pezframe_support::derive_impl`) attribute macro. This will
+	/// cause that particular trait item to simply not appear in default testing configs based
+	/// on this config (the trait item will not be included in `DefaultConfig`).
 	/// * you may attach the [`#[pezpallet::no_default_bounds]`](`no_default_bounds`)
 	/// attribute to specify that a particular trait item can be used as a default when a
-	/// test `Config` is derived using the [`#[derive_impl(..)]`](`pezframe_support::derive_impl`)
-	/// attribute macro. But its bounds cannot be enforced at this point and should be
-	/// discarded when generating the default config trait.
+	/// test `Config` is derived using the
+	/// [`#[derive_impl(..)]`](`pezframe_support::derive_impl`) attribute macro. But its
+	/// bounds cannot be enforced at this point and should be discarded when generating the
+	/// default config trait.
 	/// * you may not specify any attribute to generate a trait item in the default config
 	///   trait.
 	///
@@ -1108,11 +1114,11 @@ pub mod pezpallet_macros {
 	///
 	/// Consequently:
 	/// - Any items that rely on externalities _must_ be marked with
-	///   [`#[pezpallet::no_default]`](`no_default`) or your trait will fail to compile when used
-	///   with [`derive_impl`](`pezframe_support::derive_impl`).
-	/// - Items marked with [`#[pezpallet::no_default]`](`no_default`) are entirely excluded from
-	///   the `DefaultConfig` trait, and therefore any impl of `DefaultConfig` doesn't need to
-	///   implement such items.
+	///   [`#[pezpallet::no_default]`](`no_default`) or your trait will fail to compile when
+	///   used with [`derive_impl`](`pezframe_support::derive_impl`).
+	/// - Items marked with [`#[pezpallet::no_default]`](`no_default`) are entirely excluded
+	///   from the `DefaultConfig` trait, and therefore any impl of `DefaultConfig` doesn't
+	///   need to implement such items.
 	///
 	/// For more information, see:
 	/// * [`pezframe_support::derive_impl`].
@@ -1246,8 +1252,8 @@ pub mod pezpallet_macros {
 	/// [`ValidateUnsigned`](pezframe_support::pezpallet_prelude::ValidateUnsigned) for
 	/// type `Pezpallet<T>`, and some optional where clause.
 	///
-	/// NOTE: There is also the [`pezsp_runtime::traits::TransactionExtension`] trait that can be
-	/// used to add some specific logic for transaction validation.
+	/// NOTE: There is also the [`pezsp_runtime::traits::TransactionExtension`] trait that can
+	/// be used to add some specific logic for transaction validation.
 	///
 	/// ## Macro expansion
 	///
@@ -1258,9 +1264,9 @@ pub mod pezpallet_macros {
 	/// Allows defining	view functions on a pezpallet.
 	///
 	/// A pezpallet view function is a read-only function providing access to the state of the
-	/// pezpallet from both outside and inside the runtime. It should provide a _stable_ interface
-	/// for querying the state of the pezpallet, avoiding direct storage access and upgrading
-	/// along with the runtime.
+	/// pezpallet from both outside and inside the runtime. It should provide a _stable_
+	/// interface for querying the state of the pezpallet, avoiding direct storage access and
+	/// upgrading along with the runtime.
 	///
 	/// ## Syntax
 	/// View functions methods must be read-only and always return some output. A
@@ -1295,23 +1301,23 @@ pub mod pezpallet_macros {
 	///
 	/// ## Usage and implementation details
 	/// To allow outside access to pezpallet view functions, you need to add a runtime API that
-	/// accepts view function queries and dispatches them to the right pezpallet. You can do that
-	/// by implementing the
+	/// accepts view function queries and dispatches them to the right pezpallet. You can do
+	/// that by implementing the
 	/// [`RuntimeViewFunction`](pezframe_support::view_functions::runtime_api::RuntimeViewFunction)
 	/// trait for the runtime inside an [`impl_runtime_apis!`](pezsp_api::impl_runtime_apis)
 	/// block.
 	///
 	/// The `RuntimeViewFunction` trait implements a hashing-based dispatching mechanism to
-	/// dispatch view functions to the right method in the right pezpallet based on their IDs. A
-	/// view function ID depends both on its pezpallet and on its method signature, so it remains
-	/// stable as long as those two elements are not modified. In general, pezpallet view
-	/// functions should expose a _stable_ interface and changes to the method signature are
-	/// strongly discouraged. For more details on the dispatching mechanism, see the
+	/// dispatch view functions to the right method in the right pezpallet based on their IDs.
+	/// A view function ID depends both on its pezpallet and on its method signature, so it
+	/// remains stable as long as those two elements are not modified. In general, pezpallet
+	/// view functions should expose a _stable_ interface and changes to the method signature
+	/// are strongly discouraged. For more details on the dispatching mechanism, see the
 	/// [`DispatchViewFunction`](pezframe_support::view_functions::DispatchViewFunction) trait.
 	pub use pezframe_support_procedural::view_functions;
 
-	/// Allows defining a struct implementing the [`Get`](pezframe_support::traits::Get) trait to
-	/// ease the use of storage types.
+	/// Allows defining a struct implementing the [`Get`](pezframe_support::traits::Get) trait
+	/// to ease the use of storage types.
 	///
 	/// This attribute is meant to be used alongside [`#[pezpallet::storage]`](`storage`) to
 	/// define a storage's default value. This attribute can be used multiple times.
@@ -1498,8 +1504,8 @@ pub mod pezpallet_macros {
 	///
 	/// ### Macro expansion
 	///
-	/// The macro implements the [`pezpallet_skip_feeless_payment::CheckIfFeeless`] trait on the
-	/// dispatchable and calls the corresponding closure in the implementation.
+	/// The macro implements the [`pezpallet_skip_feeless_payment::CheckIfFeeless`] trait on
+	/// the dispatchable and calls the corresponding closure in the implementation.
 	///
 	/// [`pezpallet_skip_feeless_payment::SkipCheckIfFeeless`]: ../../pezpallet_skip_feeless_payment/struct.SkipCheckIfFeeless.html
 	/// [`pezpallet_skip_feeless_payment::CheckIfFeeless`]: ../../pezpallet_skip_feeless_payment/struct.SkipCheckIfFeeless.html
@@ -1562,8 +1568,8 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of Errors
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
-	///   metadata where the item was declared.
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the
+	///   pezpallet metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - It's possible to deprecated either certain variants inside the `Error` or the whole
 	///   `Error` itself. If both the `Error` and its variants are deprecated a compile error
@@ -1618,8 +1624,8 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of Events
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
-	///   metadata where the item was declared.
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the
+	///   pezpallet metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - It's possible to deprecated either certain variants inside the `Event` or the whole
 	///   `Event` itself. If both the `Event` and its variants are deprecated a compile error
@@ -1749,11 +1755,12 @@ pub mod pezpallet_macros {
 	/// ## Weight info
 	///
 	/// Each call needs to define a weight.
-	/// * The weight can be defined explicitly using the attribute `#[pezpallet::weight($expr)]`
-	///   (Note that argument of the call are available inside the expression).
+	/// * The weight can be defined explicitly using the attribute
+	///   `#[pezpallet::weight($expr)]` (Note that argument of the call are available inside
+	///   the expression).
 	/// * Or it can be defined implicitly, the weight info for the calls needs to be specified
-	///   in the call attribute: `#[pezpallet::call(weight = $WeightInfo)]`, then each call that
-	///   doesn't have explicit weight will use `$WeightInfo::$call_name` as the weight.
+	///   in the call attribute: `#[pezpallet::call(weight = $WeightInfo)]`, then each call
+	///   that doesn't have explicit weight will use `$WeightInfo::$call_name` as the weight.
 	///
 	/// * Or it can be simply ignored when the pezpallet is in `dev_mode`.
 	///
@@ -1827,8 +1834,8 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of Calls
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
-	///   metadata where the item was declared.
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the
+	///   pezpallet metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - Usage of `allow(deprecated)` on the item will propagate this attribute to the
 	///   generated code.
@@ -1885,8 +1892,8 @@ pub mod pezpallet_macros {
 	pub use pezframe_support_procedural::genesis_config;
 
 	/// Allows you to define how the state of your pezpallet at genesis is built. This
-	/// takes as input the `GenesisConfig` type (as `self`) and constructs the pezpallet's initial
-	/// state.
+	/// takes as input the `GenesisConfig` type (as `self`) and constructs the pezpallet's
+	/// initial state.
 	///
 	/// The fields of the `GenesisConfig` can in turn be populated by the chain-spec.
 	///
@@ -1947,8 +1954,8 @@ pub mod pezpallet_macros {
 	pub use pezframe_support_procedural::genesis_build;
 
 	/// Allows adding an associated type trait bounded by
-	/// [`Get`](pezframe_support::pezpallet_prelude::Get) from [`pezpallet::config`](`macro@config`)
-	/// into metadata.
+	/// [`Get`](pezframe_support::pezpallet_prelude::Get) from
+	/// [`pezpallet::config`](`macro@config`) into metadata.
 	///
 	/// ## Example
 	///
@@ -1969,8 +1976,8 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of constants
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
-	///   metadata where the item was declared.
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the
+	///   pezpallet metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - Usage of `allow(deprecated)` on the item will propagate this attribute to the
 	///   generated code.
@@ -1983,7 +1990,8 @@ pub mod pezpallet_macros {
 	/// Storage items are pointers to data stored on-chain (the *blockchain state*), under a
 	/// specific key. The exact key is dependent on the type of the storage.
 	///
-	/// > From the perspective of this pezpallet, the entire blockchain state is abstracted behind
+	/// > From the perspective of this pezpallet, the entire blockchain state is abstracted
+	/// > behind
 	/// > a key-value api, namely [`pezsp_io::storage`].
 	///
 	/// ## Storage Types
@@ -2016,8 +2024,8 @@ pub mod pezpallet_macros {
 	/// Each `Key` type requires its own designated `Hasher` declaration, so that
 	/// [`StorageDoubleMap`](pezframe_support::storage::types::StorageDoubleMap) needs two of
 	/// each, and [`StorageNMap`](pezframe_support::storage::types::StorageNMap) needs `N` such
-	/// pairs. Since [`StorageValue`](pezframe_support::storage::types::StorageValue) only stores
-	/// a single element, no configuration of hashers is needed.
+	/// pairs. Since [`StorageValue`](pezframe_support::storage::types::StorageValue) only
+	/// stores a single element, no configuration of hashers is needed.
 	///
 	/// ### Syntax
 	///
@@ -2077,24 +2085,25 @@ pub mod pezpallet_macros {
 	///
 	/// There are three types of queries:
 	///
-	/// 1. [`OptionQuery`](pezframe_support::storage::types::OptionQuery): The default query type.
-	///    It returns `Some(V)` if the value is present, or `None` if it isn't, where `V` is
-	///    the value type.
-	/// 2. [`ValueQuery`](pezframe_support::storage::types::ValueQuery): Returns the value itself
-	///    if present; otherwise, it returns `Default::default()`. This behavior can be
+	/// 1. [`OptionQuery`](pezframe_support::storage::types::OptionQuery): The default query
+	///    type. It returns `Some(V)` if the value is present, or `None` if it isn't, where `V`
+	///    is the value type.
+	/// 2. [`ValueQuery`](pezframe_support::storage::types::ValueQuery): Returns the value
+	///    itself if present; otherwise, it returns `Default::default()`. This behavior can be
 	///    adjusted with the `OnEmpty` generic parameter, which defaults to `OnEmpty =
 	///    GetDefault`.
-	/// 3. [`ResultQuery`](pezframe_support::storage::types::ResultQuery): Returns `Result<V, E>`,
-	///    where `V` is the value type.
+	/// 3. [`ResultQuery`](pezframe_support::storage::types::ResultQuery): Returns `Result<V,
+	///    E>`, where `V` is the value type.
 	///
-	/// See [`QueryKind`](pezframe_support::storage::types::QueryKindTrait) for further examples.
+	/// See [`QueryKind`](pezframe_support::storage::types::QueryKindTrait) for further
+	/// examples.
 	///
 	/// ### Optimized Appending
 	///
 	/// All storage items — such as
 	/// [`StorageValue`](pezframe_support::storage::types::StorageValue),
-	/// [`StorageMap`](pezframe_support::storage::types::StorageMap), and their variants—offer an
-	/// `::append()` method optimized for collections. Using this method avoids the
+	/// [`StorageMap`](pezframe_support::storage::types::StorageMap), and their variants—offer
+	/// an `::append()` method optimized for collections. Using this method avoids the
 	/// inefficiency of decoding and re-encoding entire collections when adding items. For
 	/// instance, consider the storage declaration `type MyVal<T> = StorageValue<_, Vec<u8>,
 	/// ValueQuery>`. With `MyVal` storing a large list of bytes, `::append()` lets you
@@ -2121,9 +2130,9 @@ pub mod pezpallet_macros {
 	/// ### Hashers
 	///
 	/// For all storage types, except
-	/// [`StorageValue`](pezframe_support::storage::types::StorageValue), a set of hashers needs
-	/// to be specified. The choice of hashers is crucial, especially in production chains. The
-	/// purpose of storage hashers in maps is to ensure the keys of a map are
+	/// [`StorageValue`](pezframe_support::storage::types::StorageValue), a set of hashers
+	/// needs to be specified. The choice of hashers is crucial, especially in production
+	/// chains. The purpose of storage hashers in maps is to ensure the keys of a map are
 	/// uniformly distributed. An unbalanced map/trie can lead to inefficient performance.
 	///
 	/// In general, hashers are categorized as either cryptographically secure or not. The
@@ -2149,10 +2158,11 @@ pub mod pezpallet_macros {
 	///
 	/// Internally, every storage type generates a "prefix". This prefix serves as the initial
 	/// segment of the key utilized to store values in the on-chain state (i.e., the final key
-	/// used in [`pezsp_io::storage`](pezsp_io::storage)). For all storage types, the following rule
-	/// applies:
+	/// used in [`pezsp_io::storage`](pezsp_io::storage)). For all storage types, the following
+	/// rule applies:
 	///
-	/// > The storage prefix begins with `twox128(pezpallet_prefix) ++ twox128(STORAGE_PREFIX)`,
+	/// > The storage prefix begins with `twox128(pezpallet_prefix) ++
+	/// > twox128(STORAGE_PREFIX)`,
 	/// > where
 	/// > `pezpallet_prefix` is the name assigned to the pezpallet instance in
 	/// > [`pezframe_support::construct_runtime`](pezframe_support::construct_runtime), and
@@ -2160,9 +2170,9 @@ pub mod pezpallet_macros {
 	/// > as
 	/// > `Foo` in `type Foo<T> = StorageValue<..>`.
 	///
-	/// For [`StorageValue`](pezframe_support::storage::types::StorageValue), no additional key is
-	/// required. For map types, the prefix is extended with one or more keys defined by the
-	/// map.
+	/// For [`StorageValue`](pezframe_support::storage::types::StorageValue), no additional key
+	/// is required. For map types, the prefix is extended with one or more keys defined by
+	/// the map.
 	///
 	/// #### Example
 	#[doc = docify::embed!("src/lib.rs", example_storage_value_map_prefixes)]
@@ -2197,8 +2207,8 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of storage items
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
-	///   metadata where the storage item was declared.
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the
+	///   pezpallet metadata where the storage item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - Usage of `allow(deprecated)` on the item will propagate this attribute to the
 	///   generated code.
@@ -2270,7 +2280,9 @@ pub mod pezpallet_macros {
 	pub use pezframe_support_procedural::origin;
 }
 
-#[deprecated(note = "Will be removed after July 2023; Use `pezsp_runtime::traits` directly instead.")]
+#[deprecated(
+	note = "Will be removed after July 2023; Use `pezsp_runtime::traits` directly instead."
+)]
 pub mod error {
 	#[doc(hidden)]
 	pub use pezsp_runtime::traits::{BadOrigin, LookupError};

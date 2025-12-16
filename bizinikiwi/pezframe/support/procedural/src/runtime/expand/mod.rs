@@ -100,12 +100,14 @@ fn construct_runtime_implicit_to_explicit(
 		let pezpallet_path = &pezpallet.path;
 		let pezpallet_name = &pezpallet.name;
 		let runtime_param = &pezpallet.runtime_param;
-		let pezpallet_segment_and_instance = match (&pezpallet.pezpallet_segment, &pezpallet.instance) {
-			(Some(segment), Some(instance)) => quote::quote!(::#segment<#runtime_param, #instance>),
-			(Some(segment), None) => quote::quote!(::#segment<#runtime_param>),
-			(None, Some(instance)) => quote::quote!(<#instance>),
-			(None, None) => quote::quote!(),
-		};
+		let pezpallet_segment_and_instance =
+			match (&pezpallet.pezpallet_segment, &pezpallet.instance) {
+				(Some(segment), Some(instance)) =>
+					quote::quote!(::#segment<#runtime_param, #instance>),
+				(Some(segment), None) => quote::quote!(::#segment<#runtime_param>),
+				(None, Some(instance)) => quote::quote!(<#instance>),
+				(None, None) => quote::quote!(),
+			};
 		expansion = quote::quote!(
 			#pezframe_support::__private::tt_call! {
 				macro = [{ #pezpallet_path::tt_default_parts_v2 }]

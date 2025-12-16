@@ -53,13 +53,13 @@ use pezframe_support::{
 	},
 	CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::Saturating;
 use pezsp_runtime::{
 	traits::{Convert, StaticLookup},
 	ArithmeticError::Overflow,
 	DispatchError, Perbill, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod tests;

@@ -38,7 +38,6 @@ use crate::{
 use async_trait::async_trait;
 use futures::{channel::oneshot, future, prelude::*, Future, FutureExt};
 use parking_lot::Mutex;
-use prometheus_endpoint::Registry as PrometheusRegistry;
 use pezsc_transaction_pool_api::{
 	error::Error as TxPoolError, ChainEvent, ImportNotificationStream, MaintainedTransactionPool,
 	PoolStatus, TransactionFor, TransactionPool, TransactionSource, TransactionStatusStreamFor,
@@ -53,6 +52,7 @@ use pezsp_runtime::{
 	},
 	transaction_validity::{TransactionTag as Tag, TransactionValidityError},
 };
+use prometheus_endpoint::Registry as PrometheusRegistry;
 use std::{
 	collections::{HashMap, HashSet},
 	pin::Pin,

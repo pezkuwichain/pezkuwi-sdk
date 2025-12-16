@@ -30,8 +30,8 @@ use chain_spec_builder::ChainSpecBuilder;
 use clap::{Command, CommandFactory, FromArgMatches, ValueEnum};
 use pezsc_chain_spec::ChainSpec;
 use pezsc_cli::{
-	CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams, NetworkParams,
-	RpcEndpoint, SharedParams, BizinikiwiCli,
+	BizinikiwiCli, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
+	NetworkParams, RpcEndpoint, SharedParams,
 };
 use pezsc_service::{config::PrometheusConfig, BasePath};
 use pezsc_storage_monitor::StorageMonitorParams;

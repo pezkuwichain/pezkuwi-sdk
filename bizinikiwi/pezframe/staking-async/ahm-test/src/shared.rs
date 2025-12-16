@@ -89,7 +89,8 @@ pub fn migrate_state() {
 		}
 
 		// exposure
-		for (era, account, overview) in pezpallet_staking::ErasStakersOverview::<rc::Runtime>::drain()
+		for (era, account, overview) in
+			pezpallet_staking::ErasStakersOverview::<rc::Runtime>::drain()
 		{
 			shared::in_ah(|| {
 				pezpallet_staking_async::ErasStakersOverview::<ah::Runtime>::insert(

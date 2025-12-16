@@ -61,7 +61,8 @@ where
 /// Fungible implementation of `OnUnbalanced` that deals with the fees by combining tip and fee and
 /// passing the result on to `ToStakingPot`.
 pub struct DealWithFees<R>(PhantomData<R>);
-impl<R> OnUnbalanced<fungible::Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>> for DealWithFees<R>
+impl<R> OnUnbalanced<fungible::Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>>
+	for DealWithFees<R>
 where
 	R: pezpallet_balances::Config + pezpallet_collator_selection::Config,
 	AccountIdOf<R>: From<pezkuwi_primitives::AccountId> + Into<pezkuwi_primitives::AccountId>,
@@ -76,7 +77,9 @@ where
 			if let Some(tips) = fees_then_tips.next() {
 				tips.merge_into(&mut fees);
 			}
-			ResolveTo::<StakingPotAccountId<R>, pezpallet_balances::Pezpallet<R>>::on_unbalanced(fees)
+			ResolveTo::<StakingPotAccountId<R>, pezpallet_balances::Pezpallet<R>>::on_unbalanced(
+				fees,
+			)
 		}
 	}
 }
@@ -84,7 +87,8 @@ where
 /// A `HandleCredit` implementation that naively transfers the fees to the block author.
 /// Will drop and burn the assets in case the transfer fails.
 pub struct AssetsToBlockAuthor<R, I>(PhantomData<(R, I)>);
-impl<R, I> HandleCredit<AccountIdOf<R>, pezpallet_assets::Pezpallet<R, I>> for AssetsToBlockAuthor<R, I>
+impl<R, I> HandleCredit<AccountIdOf<R>, pezpallet_assets::Pezpallet<R, I>>
+	for AssetsToBlockAuthor<R, I>
 where
 	I: 'static,
 	R: pezpallet_authorship::Config + pezpallet_assets::Config<I>,
@@ -135,8 +139,9 @@ impl<T: Get<Location>> ContainsPair<Asset, Location> for AssetsFrom<T> {
 }
 
 /// Type alias to conveniently refer to the `Currency::Balance` associated type.
-pub type BalanceOf<T> =
-	<pezpallet_balances::Pezpallet<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
+pub type BalanceOf<T> = <pezpallet_balances::Pezpallet<T> as Currency<
+	<T as pezframe_system::Config>::AccountId,
+>>::Balance;
 
 /// Implements `OnUnbalanced::on_unbalanced` to teleport slashed assets to relay chain treasury
 /// account.
@@ -201,8 +206,8 @@ mod tests {
 		PalletId,
 	};
 	use pezframe_system::{limits, EnsureRoot};
-	use pezpallet_collator_selection::IdentityCollator;
 	use pezkuwi_primitives::AccountId;
+	use pezpallet_collator_selection::IdentityCollator;
 	use pezsp_core::H256;
 	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},

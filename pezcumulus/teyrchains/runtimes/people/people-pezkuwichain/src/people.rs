@@ -25,11 +25,11 @@ use pezframe_support::{
 };
 use pezframe_system::EnsureRoot;
 use pezpallet_identity::{Data, IdentityInformationProvider};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AccountIdConversion, ConvertInto, Verify},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 use testnet_teyrchains_constants::pezkuwichain::currency::UNITS;
 use teyrchains_common::{impls::ToParentTreasury, DAYS, HOURS};
 

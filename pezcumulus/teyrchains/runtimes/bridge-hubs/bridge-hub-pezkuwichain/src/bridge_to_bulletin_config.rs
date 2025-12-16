@@ -35,12 +35,12 @@ use pezframe_support::{
 	traits::{Equals, PalletInfoAccess},
 };
 use pezframe_system::{EnsureNever, EnsureRoot};
+use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezpallet_bridge_messages::LaneIdOf;
 use pezpallet_bridge_relayers::extension::{
 	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
 };
 use pezpallet_xcm_bridge_hub::XcmAsPlainPayload;
-use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use testnet_teyrchains_constants::pezkuwichain::currency::UNITS as TYR;
 use xcm::{
 	latest::prelude::*,
@@ -115,7 +115,9 @@ pub type WithPezkuwichainBulletinMessagesInstance = pezpallet_bridge_messages::I
 impl pezpallet_bridge_messages::Config<WithPezkuwichainBulletinMessagesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo =
-		weights::pezpallet_bridge_messages_pezkuwichain_to_pezkuwichain_bulletin::WeightInfo<Runtime>;
+		weights::pezpallet_bridge_messages_pezkuwichain_to_pezkuwichain_bulletin::WeightInfo<
+			Runtime,
+		>;
 
 	type ThisChain = bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain;
 	type BridgedChain = bp_pezkuwi_bulletin::PezkuwiBulletin;

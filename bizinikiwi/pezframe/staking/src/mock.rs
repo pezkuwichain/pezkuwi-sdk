@@ -148,8 +148,9 @@ impl pezpallet_session::Config for Test {
 	type ValidatorId = AccountId;
 	type ValidatorIdOf = pezsp_runtime::traits::ConvertInto;
 	type NextSessionRotation = pezpallet_session::PeriodicSessions<Period, Offset>;
-	type DisablingStrategy =
-		pezpallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy<DISABLING_LIMIT_FACTOR>;
+	type DisablingStrategy = pezpallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy<
+		DISABLING_LIMIT_FACTOR,
+	>;
 	type WeightInfo = ();
 	type Currency = Balances;
 	type KeyDeposit = ();
@@ -454,7 +455,8 @@ impl ExtBuilder {
 	}
 	fn build(self) -> pezsp_io::TestExternalities {
 		pezsp_tracing::try_init_simple();
-		let mut storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		let mut storage =
+			pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 		let ed = ExistentialDeposit::get();
 
 		let _ = pezpallet_balances::GenesisConfig::<Test> {

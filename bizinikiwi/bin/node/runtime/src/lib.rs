@@ -24,18 +24,20 @@
 extern crate alloc;
 
 #[cfg(feature = "runtime-benchmarks")]
+use pezkuwi_sdk::pezsp_core::crypto::FromEntropy;
+#[cfg(feature = "runtime-benchmarks")]
 use pezpallet_asset_rate::AssetKindFactory;
 #[cfg(feature = "runtime-benchmarks")]
 use pezpallet_multi_asset_bounties::ArgumentsFactory as PalletMultiAssetBountiesArgumentsFactory;
 #[cfg(feature = "runtime-benchmarks")]
 use pezpallet_treasury::ArgumentsFactory as PalletTreasuryArgumentsFactory;
-#[cfg(feature = "runtime-benchmarks")]
-use pezkuwi_sdk::pezsp_core::crypto::FromEntropy;
 
 use pezkuwi_sdk::*;
 
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
+pub use pez_node_primitives::{AccountId, Signature};
+use pez_node_primitives::{AccountIndex, Balance, BlockNumber, Hash, Moment, Nonce};
 use pezframe_election_provider_support::{
 	bounds::{ElectionBounds, ElectionBoundsBuilder},
 	onchain, BalancingConfig, ElectionDataProvider, SequentialPhragmen, VoteWeight,
@@ -46,9 +48,8 @@ use pezframe_support::{
 	dynamic_params::{dynamic_pallet_params, dynamic_params},
 	genesis_builder_helper::{build_state, get_preset},
 	instances::{Instance1, Instance2},
-	ord_parameter_types,
+	ord_parameter_types, parameter_types,
 	pezpallet_prelude::Get,
-	parameter_types,
 	traits::{
 		fungible::{
 			Balanced, Credit, HoldConsideration, ItemOf, NativeFromLeft, NativeOrWithId, UnionOf,
@@ -76,8 +77,6 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot, EnsureRootWithSuccess, EnsureSigned, EnsureSignedBy, EnsureWithSuccess,
 };
-pub use pez_node_primitives::{AccountId, Signature};
-use pez_node_primitives::{AccountIndex, Balance, BlockNumber, Hash, Moment, Nonce};
 use pezpallet_asset_conversion::{AccountIdConverter, Ascending, Chain, WithFirstAsset};
 use pezpallet_asset_conversion_tx_payment::SwapAssetAdapter;
 use pezpallet_assets_precompiles::{InlineIdConfig, ERC20};
@@ -826,11 +825,14 @@ parameter_types! {
 	pub MaxActiveValidators: u32 = 1000;
 }
 
-/// The numbers configured here could always be more than the the maximum limits of staking pezpallet
-/// to ensure election snapshot will not run out of memory. For now, we set them to smaller values
-/// since the staking is bounded and the weight pipeline takes hours for this single pezpallet.
+/// The numbers configured here could always be more than the the maximum limits of staking
+/// pezpallet to ensure election snapshot will not run out of memory. For now, we set them to
+/// smaller values since the staking is bounded and the weight pipeline takes hours for this single
+/// pezpallet.
 pub struct ElectionProviderBenchmarkConfig;
-impl pezpallet_election_provider_multi_phase::BenchmarkingConfig for ElectionProviderBenchmarkConfig {
+impl pezpallet_election_provider_multi_phase::BenchmarkingConfig
+	for ElectionProviderBenchmarkConfig
+{
 	const VOTERS: [u32; 2] = [1000, 2000];
 	const TARGETS: [u32; 2] = [500, 1000];
 	const ACTIVE_VOTERS: [u32; 2] = [500, 800];
@@ -1424,7 +1426,8 @@ impl pezpallet_multi_asset_bounties::Config for Runtime {
 	type WeightInfo = pezpallet_multi_asset_bounties::weights::BizinikiwiWeight<Runtime>;
 	type FundingSource =
 		pezpallet_multi_asset_bounties::PalletIdAsFundingSource<TreasuryPalletId, Runtime>;
-	type BountySource = pezpallet_multi_asset_bounties::BountySourceAccount<TreasuryPalletId, Runtime>;
+	type BountySource =
+		pezpallet_multi_asset_bounties::BountySourceAccount<TreasuryPalletId, Runtime>;
 	type ChildBountySource =
 		pezpallet_multi_asset_bounties::ChildBountySourceAccount<TreasuryPalletId, Runtime>;
 	type Paymaster = PayWithFungibles<NativeAndAssets, AccountId>;
@@ -1659,7 +1662,9 @@ where
 			pezframe_system::CheckNonce::<Runtime>::from(0),
 			pezframe_system::CheckWeight::<Runtime>::new(),
 			pezpallet_skip_feeless_payment::SkipCheckIfFeeless::from(
-				pezpallet_asset_conversion_tx_payment::ChargeAssetTxPayment::<Runtime>::from(0, None),
+				pezpallet_asset_conversion_tx_payment::ChargeAssetTxPayment::<Runtime>::from(
+					0, None,
+				),
 			),
 			pezframe_metadata_hash_extension::CheckMetadataHash::new(false),
 			pezpallet_revive::evm::tx_extension::SetOrigin::<Runtime>::default(),
@@ -2623,7 +2628,8 @@ mod runtime {
 	pub type AssetConversionTxPayment = pezpallet_asset_conversion_tx_payment::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(10)]
-	pub type ElectionProviderMultiPhase = pezpallet_election_provider_multi_phase::Pezpallet<Runtime>;
+	pub type ElectionProviderMultiPhase =
+		pezpallet_election_provider_multi_phase::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(11)]
 	pub type Staking = pezpallet_staking::Pezpallet<Runtime>;
@@ -2674,7 +2680,8 @@ mod runtime {
 	pub type Historical = pezpallet_session_historical::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(27)]
-	pub type RandomnessCollectiveFlip = pezpallet_insecure_randomness_collective_flip::Pezpallet<Runtime>;
+	pub type RandomnessCollectiveFlip =
+		pezpallet_insecure_randomness_collective_flip::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(28)]
 	pub type Identity = pezpallet_identity::Pezpallet<Runtime>;
@@ -2983,7 +2990,9 @@ parameter_types! {
 pub struct OracleBenchmarkingHelper;
 
 #[cfg(feature = "runtime-benchmarks")]
-impl pezpallet_oracle::BenchmarkHelper<u32, u128, OracleMaxFeedValues> for OracleBenchmarkingHelper {
+impl pezpallet_oracle::BenchmarkHelper<u32, u128, OracleMaxFeedValues>
+	for OracleBenchmarkingHelper
+{
 	fn get_currency_id_value_pairs() -> BoundedVec<(u32, u128), OracleMaxFeedValues> {
 		use rand::{distributions::Uniform, prelude::*};
 

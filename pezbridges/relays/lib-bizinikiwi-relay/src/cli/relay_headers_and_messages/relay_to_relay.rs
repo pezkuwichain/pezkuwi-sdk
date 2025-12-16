@@ -31,10 +31,10 @@ use crate::{
 	finality::BizinikiwiFinalitySyncPipeline,
 	on_demand::{headers::OnDemandHeadersRelay, OnDemandRelay},
 };
+use pezsp_core::Pair;
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, ChainWithRuntimeVersion, ChainWithTransactions, Client,
 };
-use pezsp_core::Pair;
 
 /// A base relay between two standalone (relay) chains.
 ///

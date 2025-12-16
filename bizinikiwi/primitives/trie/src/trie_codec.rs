@@ -80,7 +80,8 @@ where
 
 		let mut iter = trie.iter()?;
 
-		let childtrie_roots = pezsp_core::storage::well_known_keys::DEFAULT_CHILD_STORAGE_KEY_PREFIX;
+		let childtrie_roots =
+			pezsp_core::storage::well_known_keys::DEFAULT_CHILD_STORAGE_KEY_PREFIX;
 		if iter.seek(childtrie_roots).is_ok() {
 			loop {
 				match iter.next() {
@@ -161,7 +162,8 @@ where
 
 		let mut iter = trie.iter()?;
 
-		let childtrie_roots = pezsp_core::storage::well_known_keys::DEFAULT_CHILD_STORAGE_KEY_PREFIX;
+		let childtrie_roots =
+			pezsp_core::storage::well_known_keys::DEFAULT_CHILD_STORAGE_KEY_PREFIX;
 		if iter.seek(childtrie_roots).is_ok() {
 			loop {
 				match iter.next() {

@@ -29,8 +29,8 @@ use pezpallet_bridge_grandpa::BridgedHeader;
 use xcm::latest::prelude::*;
 
 use bp_messages::MessageNonce;
-use pezbp_runtime::BasicOperatingMode;
 use bp_test_utils::authority_list;
+use pezbp_runtime::BasicOperatingMode;
 use xcm::GetVersion;
 use xcm_builder::{BridgeMessage, HaulBlob, HaulBlobError, HaulBlobExporter};
 use xcm_executor::traits::{validate_export, ExportXcm};

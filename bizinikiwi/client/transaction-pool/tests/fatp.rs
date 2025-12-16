@@ -18,6 +18,8 @@
 
 //! Tests for fork-aware transaction pool.
 
+use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
+use bizinikiwi_test_runtime_transaction_pool::uxt;
 use fatp_common::{
 	finalized_block_event, invalid_hash, new_best_block_event, pool, pool_with_api,
 	test_chain_with_forks, LOG_TARGET, SOURCE,
@@ -30,8 +32,6 @@ use pezsc_transaction_pool_api::{
 };
 use pezsp_runtime::transaction_validity::InvalidTransaction;
 use std::{sync::Arc, time::Duration};
-use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
-use bizinikiwi_test_runtime_transaction_pool::uxt;
 use tracing::debug;
 
 pub mod fatp_common;

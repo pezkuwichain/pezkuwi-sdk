@@ -64,14 +64,14 @@ use pezkuwi_node_subsystem_util::metrics::prometheus::{
 };
 use pezkuwi_overseer::AllMessages;
 use pezkuwi_primitives::AuthorityDiscoveryId;
-use prometheus_endpoint::U64;
-use rand::{seq::SliceRandom, thread_rng};
 use pezsc_network::{
 	request_responses::{IncomingRequest, OutgoingResponse},
 	RequestFailure,
 };
 use pezsc_network_types::PeerId;
 use pezsc_service::SpawnTaskHandle;
+use prometheus_endpoint::U64;
+use rand::{seq::SliceRandom, thread_rng};
 use std::{
 	collections::HashMap,
 	sync::Arc,

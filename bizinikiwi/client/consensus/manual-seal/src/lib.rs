@@ -21,7 +21,6 @@
 
 use futures::prelude::*;
 use futures_timer::Delay;
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{
 	backend::{Backend as ClientBackend, Finalizer},
 	client::BlockchainEvents,
@@ -35,6 +34,7 @@ use pezsp_consensus::{Environment, Proposer, SelectChain};
 use pezsp_core::traits::SpawnNamed;
 use pezsp_inherents::CreateInherentDataProviders;
 use pezsp_runtime::{traits::Block as BlockT, ConsensusEngineId};
+use prometheus_endpoint::Registry;
 use std::{marker::PhantomData, sync::Arc, time::Duration};
 
 mod error;
@@ -346,16 +346,18 @@ pub async fn run_delayed_finalize<B, CB, C, S>(
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezsc_basic_authorship::ProposerFactory;
-	use pezsc_consensus::ImportedAux;
-	use pezsc_transaction_pool::{BasicPool, FullChainApi, Options, RevalidationType};
-	use pezsc_transaction_pool_api::{MaintainedTransactionPool, TransactionPool, TransactionSource};
-	use pezsp_inherents::InherentData;
-	use pezsp_runtime::generic::{Digest, DigestItem};
 	use bizinikiwi_test_runtime_client::{
 		DefaultTestClientBuilderExt, Sr25519Keyring::*, TestClientBuilder, TestClientBuilderExt,
 	};
 	use bizinikiwi_test_runtime_transaction_pool::{uxt, TestApi};
+	use pezsc_basic_authorship::ProposerFactory;
+	use pezsc_consensus::ImportedAux;
+	use pezsc_transaction_pool::{BasicPool, FullChainApi, Options, RevalidationType};
+	use pezsc_transaction_pool_api::{
+		MaintainedTransactionPool, TransactionPool, TransactionSource,
+	};
+	use pezsp_inherents::InherentData;
+	use pezsp_runtime::generic::{Digest, DigestItem};
 
 	fn api() -> Arc<TestApi> {
 		Arc::new(TestApi::empty())

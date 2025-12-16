@@ -63,7 +63,8 @@ pub fn fill_old_queue<T: Config>(len: usize) {
 type DeletionQueue<T: Config> = StorageMap<Pezpallet<T>, Twox64Concat, u32, TrieId>;
 
 #[storage_alias]
-type DeletionQueueCounter<T: Config> = StorageValue<Pezpallet<T>, DeletionQueueManager<T>, ValueQuery>;
+type DeletionQueueCounter<T: Config> =
+	StorageValue<Pezpallet<T>, DeletionQueueManager<T>, ValueQuery>;
 
 #[derive(Encode, Decode, MaxEncodedLen, DefaultNoBound)]
 pub struct Migration<T: Config> {

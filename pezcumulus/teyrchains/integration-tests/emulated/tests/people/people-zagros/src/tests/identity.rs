@@ -18,9 +18,9 @@
 use crate::imports::*;
 use codec::Encode;
 use emulated_integration_tests_common::accounts::ALICE;
+use people_zagros_runtime::people::{IdentityField, IdentityInfo};
 use pezframe_support::BoundedVec;
 use pezpallet_identity::Data;
-use people_zagros_runtime::people::{IdentityField, IdentityInfo};
 use xcm::latest::AssetTransferFilter;
 
 #[test]

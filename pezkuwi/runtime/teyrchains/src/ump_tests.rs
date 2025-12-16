@@ -209,7 +209,10 @@ mod check_upward_messages {
 	fn queue_size_exceeded_error() {
 		new_test_ext(GenesisConfigBuilder::large_queue_count().build()).execute_with(|| {
 			let limit = configuration::ActiveConfig::<Test>::get().max_upward_queue_size as u64;
-			assert_eq!(pezpallet_message_queue::ItemHeader::<MessageQueueSize>::max_encoded_len(), 5);
+			assert_eq!(
+				pezpallet_message_queue::ItemHeader::<MessageQueueSize>::max_encoded_len(),
+				5
+			);
 			assert!(
 				configuration::ActiveConfig::<Test>::get().max_upward_queue_size <
 					crate::inclusion::MaxUmpMessageLenOf::<Test>::get(),

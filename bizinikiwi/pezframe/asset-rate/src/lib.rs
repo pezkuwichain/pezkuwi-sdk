@@ -107,7 +107,8 @@ pub mod pezpallet {
 
 		/// The runtime event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The origin permissioned to create a conversion rate for an asset.
 		type CreateOrigin: EnsureOrigin<Self::RuntimeOrigin>;

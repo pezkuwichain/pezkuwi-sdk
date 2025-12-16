@@ -2,7 +2,8 @@
 //!
 //! A pezpallet with minimal functionality to help developers understand the essential components of
 //! writing a FRAME pezpallet. It is typically used in beginner tutorials or in Bizinikiwi template
-//! nodes as a starting point for creating a new pezpallet and **not meant to be used in production**.
+//! nodes as a starting point for creating a new pezpallet and **not meant to be used in
+//! production**.
 //!
 //! ## Overview
 //!
@@ -14,8 +15,9 @@
 //!   upon success
 //! - another dispatchable function that causes a custom error to be thrown
 //!
-//! Each pezpallet section is annotated with an attribute using the `#[pezpallet::...]` procedural macro.
-//! This macro generates the necessary code for a pezpallet to be aggregated into a FRAME runtime.
+//! Each pezpallet section is annotated with an attribute using the `#[pezpallet::...]` procedural
+//! macro. This macro generates the necessary code for a pezpallet to be aggregated into a FRAME
+//! runtime.
 //!
 //! Learn more about FRAME macros [here](https://docs.pezkuwichain.io/reference/frame-macros/).
 //!
@@ -25,12 +27,12 @@
 //!
 //! - A **configuration trait** that defines the types and parameters which the pezpallet depends on
 //!   (denoted by the `#[pezpallet::config]` attribute). See: [`Config`].
-//! - A **means to store pezpallet-specific data** (denoted by the `#[pezpallet::storage]` attribute).
-//!   See: [`storage_types`].
+//! - A **means to store pezpallet-specific data** (denoted by the `#[pezpallet::storage]`
+//!   attribute). See: [`storage_types`].
 //! - A **declaration of the events** this pezpallet emits (denoted by the `#[pezpallet::event]`
 //!   attribute). See: [`Event`].
-//! - A **declaration of the errors** that this pezpallet can throw (denoted by the `#[pezpallet::error]`
-//!   attribute). See: [`Error`].
+//! - A **declaration of the errors** that this pezpallet can throw (denoted by the
+//!   `#[pezpallet::error]` attribute). See: [`Error`].
 //! - A **set of dispatchable functions** that define the pezpallet's functionality (denoted by the
 //!   `#[pezpallet::call]` attribute). See: [`dispatchables`].
 //!
@@ -52,15 +54,16 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
-// Every callable function or "dispatchable" a pezpallet exposes must have weight values that correctly
-// estimate a dispatchable's execution time. The benchmarking module is used to calculate weights
-// for each dispatchable and generates this pezpallet's weight.rs file. Learn more about benchmarking here: https://docs.pezkuwichain.io/test/benchmark/
+// Every callable function or "dispatchable" a pezpallet exposes must have weight values that
+// correctly estimate a dispatchable's execution time. The benchmarking module is used to calculate
+// weights for each dispatchable and generates this pezpallet's weight.rs file. Learn more about benchmarking here: https://docs.pezkuwichain.io/test/benchmark/
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
-// All pezpallet logic is defined in its own module and must be annotated by the `pezpallet` attribute.
+// All pezpallet logic is defined in its own module and must be annotated by the `pezpallet`
+// attribute.
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
 	// Import various useful types required by all FRAME pallets.
@@ -82,7 +85,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching runtime event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// A type representing the weights required by the dispatchables of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
@@ -97,13 +101,14 @@ pub mod pezpallet {
 	/// Events that functions in this pezpallet can emit.
 	///
 	/// Events are a simple means of indicating to the outside world (such as dApps, chain explorers
-	/// or other users) that some notable update in the runtime has occurred. In a FRAME pezpallet, the
-	/// documentation for each event field and its parameters is added to a node's metadata so it
-	/// can be used by external interfaces or tools.
+	/// or other users) that some notable update in the runtime has occurred. In a FRAME pezpallet,
+	/// the documentation for each event field and its parameters is added to a node's metadata so
+	/// it can be used by external interfaces or tools.
 	///
-	///	The `generate_deposit` macro generates a function on `Pezpallet` called `deposit_event` which
-	/// will convert the event type of your pezpallet into `RuntimeEvent` (declared in the pezpallet's
-	/// [`Config`] trait) and deposit it using [`pezframe_system::Pezpallet::deposit_event`].
+	///	The `generate_deposit` macro generates a function on `Pezpallet` called `deposit_event`
+	/// which will convert the event type of your pezpallet into `RuntimeEvent` (declared in the
+	/// pezpallet's [`Config`] trait) and deposit it using
+	/// [`pezframe_system::Pezpallet::deposit_event`].
 	#[pezpallet::event]
 	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {

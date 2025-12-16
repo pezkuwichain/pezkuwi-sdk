@@ -104,7 +104,10 @@ impl EventDef {
 		let item = if let syn::Item::Enum(item) = item {
 			item
 		} else {
-			return Err(syn::Error::new(item.span(), "Invalid pezpallet::event, expected enum item"));
+			return Err(syn::Error::new(
+				item.span(),
+				"Invalid pezpallet::event, expected enum item",
+			));
 		};
 
 		crate::deprecation::prevent_deprecation_attr_on_outer_enum(&item.attrs)?;

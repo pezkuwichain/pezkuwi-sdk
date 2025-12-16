@@ -347,18 +347,18 @@ where
 mod tests {
 	use super::WarpSyncProof;
 	use crate::{AuthoritySetChanges, GrandpaJustification};
+	use bizinikiwi_test_runtime_client::{
+		BlockBuilderExt, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt,
+		TestClientBuilder, TestClientBuilderExt,
+	};
 	use codec::Encode;
-	use rand::prelude::*;
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsp_blockchain::HeaderBackend;
 	use pezsp_consensus::BlockOrigin;
 	use pezsp_consensus_grandpa::GRANDPA_ENGINE_ID;
 	use pezsp_keyring::Ed25519Keyring;
+	use rand::prelude::*;
 	use std::sync::Arc;
-	use bizinikiwi_test_runtime_client::{
-		BlockBuilderExt, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt,
-		TestClientBuilder, TestClientBuilderExt,
-	};
 
 	#[test]
 	fn warp_sync_proof_generate_verify() {
@@ -426,7 +426,8 @@ mod tests {
 					let precommit = finality_grandpa::Precommit { target_hash, target_number };
 
 					let msg = finality_grandpa::Message::Precommit(precommit.clone());
-					let encoded = pezsp_consensus_grandpa::localized_payload(42, current_set_id, &msg);
+					let encoded =
+						pezsp_consensus_grandpa::localized_payload(42, current_set_id, &msg);
 					let signature = keyring.sign(&encoded[..]).into();
 
 					let precommit = finality_grandpa::SignedPrecommit {

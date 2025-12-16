@@ -27,8 +27,8 @@ use crate::{
 	scheduler::common::Assignment,
 };
 use pezframe_support::{assert_noop, assert_ok, pezpallet_prelude::*};
-use pezpallet_broker::TaskId;
 use pezkuwi_primitives::{BlockNumber, Id as ParaId, SessionIndex, ValidationCode};
+use pezpallet_broker::TaskId;
 
 fn schedule_blank_para(id: ParaId, parakind: ParaKind) {
 	let validation_code: ValidationCode = vec![1, 2, 3].into();

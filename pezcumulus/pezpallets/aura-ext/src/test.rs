@@ -22,13 +22,11 @@ use pezcumulus_pezpallet_teyrchain_system::{
 };
 use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
-	derive_impl,
+	derive_impl, parameter_types,
 	pezpallet_prelude::ConstU32,
-	parameter_types,
 	traits::{ConstBool, EnqueueWithOrigin, ExecuteBlock, Hooks},
 	BoundedVec,
 };
-use rstest::rstest;
 use pezsp_consensus_aura::{sr25519::AuthorityId, Slot};
 use pezsp_core::{Blake2Hasher, Get, H256};
 use pezsp_io::TestExternalities;
@@ -36,6 +34,7 @@ use pezsp_keyring::Sr25519Keyring::*;
 use pezsp_runtime::{generic::Digest, traits::Block as BlockT};
 use pezsp_trie::{proof_size_extension::ProofSizeExt, recorder::Recorder};
 use pezsp_version::RuntimeVersion;
+use rstest::rstest;
 use std::cell::RefCell;
 
 // Test pezpallet that reads storage and calls storage_proof_size

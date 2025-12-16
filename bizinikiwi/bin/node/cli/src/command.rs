@@ -24,10 +24,10 @@ use crate::{
 	service::{new_partial, FullClient},
 	Cli, Subcommand,
 };
-use pezframe_benchmarking_cli::*;
 use pez_kitchensink_runtime::{ExistentialDeposit, RuntimeApi};
 use pez_node_primitives::Block;
-use pezsc_cli::{Result, BizinikiwiCli};
+use pezframe_benchmarking_cli::*;
+use pezsc_cli::{BizinikiwiCli, Result};
 use pezsc_service::PartialComponents;
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_runtime::traits::HashingFor;
@@ -59,7 +59,10 @@ impl BizinikiwiCli for Cli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		let spec = match id {
 			"" =>
 				return Err(

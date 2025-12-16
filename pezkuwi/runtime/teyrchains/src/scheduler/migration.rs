@@ -38,7 +38,8 @@ mod v0 {
 	use pezkuwi_primitives::{CollatorId, Id};
 
 	#[storage_alias]
-	pub(super) type Scheduled<T: Config> = StorageValue<Pezpallet<T>, Vec<CoreAssignment>, ValueQuery>;
+	pub(super) type Scheduled<T: Config> =
+		StorageValue<Pezpallet<T>, Vec<CoreAssignment>, ValueQuery>;
 
 	#[derive(Clone, Encode, Decode)]
 	#[cfg_attr(feature = "std", derive(PartialEq))]

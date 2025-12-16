@@ -44,11 +44,15 @@ fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
 fn run_to_block<T: Config>(n: pezframe_system::pezpallet_prelude::BlockNumberFor<T>) {
 	while pezframe_system::Pezpallet::<T>::block_number() < n {
 		crate::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
-		pezframe_system::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_finalize(
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		pezframe_system::Pezpallet::<T>::set_block_number(
 			pezframe_system::Pezpallet::<T>::block_number() + One::one(),
 		);
-		pezframe_system::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_initialize(
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		crate::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 	}
 }

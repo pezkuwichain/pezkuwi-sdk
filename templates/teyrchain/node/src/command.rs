@@ -1,11 +1,11 @@
 use pezkuwi_sdk::*;
 
+use log::info;
 use pezcumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
 use pezframe_benchmarking_cli::{BenchmarkCmd, BIZINIKIWI_REFERENCE_HARDWARE};
-use log::info;
 use pezsc_cli::{
-	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
-	NetworkParams, Result, RpcEndpoint, SharedParams, BizinikiwiCli,
+	BizinikiwiCli, ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams,
+	KeystoreParams, NetworkParams, Result, RpcEndpoint, SharedParams,
 };
 use pezsc_service::config::{BasePath, PrometheusConfig};
 use teyrchain_template_runtime::Block;
@@ -56,7 +56,10 @@ impl BizinikiwiCli for Cli {
 		2020
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		load_spec(id)
 	}
 }
@@ -92,7 +95,10 @@ impl BizinikiwiCli for RelayChainCli {
 		2020
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		pezkuwi_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
 	}
 }
@@ -212,8 +218,8 @@ pub fn run() -> Result<()> {
 
 					cmd.run(config, partials.client.clone(), db, storage, shared_cache)
 				}),
-				BenchmarkCmd::Machine(cmd) =>
-					runner.sync_run(|config| cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone())),
+				BenchmarkCmd::Machine(cmd) => runner
+					.sync_run(|config| cmd.run(&config, BIZINIKIWI_REFERENCE_HARDWARE.clone())),
 				// NOTE: this allows the Client to leniently implement
 				// new benchmark commands without requiring a companion MR.
 				#[allow(unreachable_patterns)]
@@ -330,7 +336,10 @@ impl CliConfiguration<Self> for RelayChainCli {
 		self.base.base.role(is_dev)
 	}
 
-	fn transaction_pool(&self, is_dev: bool) -> Result<pezsc_service::config::TransactionPoolOptions> {
+	fn transaction_pool(
+		&self,
+		is_dev: bool,
+	) -> Result<pezsc_service::config::TransactionPoolOptions> {
 		self.base.base.transaction_pool(is_dev)
 	}
 

@@ -20,12 +20,12 @@
 //! See the [`crate::traits::fungible`] doc for more information about fungible traits
 //! including the place of the Freezes in FRAME.
 
-use scale_info::TypeInfo;
 use pezsp_arithmetic::{
 	traits::{CheckedAdd, CheckedSub},
 	ArithmeticError,
 };
 use pezsp_runtime::{DispatchResult, TokenError};
+use scale_info::TypeInfo;
 
 use crate::{ensure, traits::tokens::Fortitude};
 

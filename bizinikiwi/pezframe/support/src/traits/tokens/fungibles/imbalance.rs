@@ -195,7 +195,8 @@ impl<
 /// a specified `asset`.
 ///
 /// This function facilitates imbalance conversions within the implementations of
-/// [`pezframe_support::traits::fungibles::UnionOf`], [`pezframe_support::traits::fungible::UnionOf`], and
+/// [`pezframe_support::traits::fungibles::UnionOf`],
+/// [`pezframe_support::traits::fungible::UnionOf`], and
 /// [`pezframe_support::traits::fungible::ItemOf`] adapters. It is intended only for internal use
 /// within the current crate.
 pub(crate) fn from_fungible<
@@ -217,7 +218,8 @@ pub(crate) fn from_fungible<
 /// Converts a `fungibles` `imbalance` instance of one type to another using a specified `asset`.
 ///
 /// This function facilitates imbalance conversions within the implementations of
-/// [`pezframe_support::traits::fungibles::UnionOf`], [`pezframe_support::traits::fungible::UnionOf`], and
+/// [`pezframe_support::traits::fungibles::UnionOf`],
+/// [`pezframe_support::traits::fungible::UnionOf`], and
 /// [`pezframe_support::traits::fungible::ItemOf`] adapters. It is intended only for internal use
 /// within the current crate.
 pub(crate) fn from_fungibles<

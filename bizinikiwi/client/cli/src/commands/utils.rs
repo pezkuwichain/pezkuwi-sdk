@@ -21,7 +21,6 @@ use crate::{
 	error::{self, Error},
 	OutputType,
 };
-use serde_json::json;
 use pezsp_core::{
 	crypto::{
 		unwrap_or_default_ss58_version, ExposeSecret, SecretString, Ss58AddressFormat, Ss58Codec,
@@ -31,6 +30,7 @@ use pezsp_core::{
 	Pair,
 };
 use pezsp_runtime::{traits::IdentifyAccount, MultiSigner};
+use serde_json::json;
 use std::path::PathBuf;
 
 /// Public key type for Runtime

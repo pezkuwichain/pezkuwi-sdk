@@ -21,11 +21,11 @@ use pezframe_election_provider_support::{
 	SortedListProvider,
 };
 use pezframe_support::traits::PalletInfoAccess;
-use remote_externalities::{Builder, Mode, OnlineConfig};
 use pezsp_runtime::{
 	traits::{Block as BlockT, Zero},
 	DeserializeOwned,
 };
+use remote_externalities::{Builder, Mode, OnlineConfig};
 
 /// Execute create a snapshot from pezpallet-staking.
 pub async fn execute<Runtime, Block>(voter_limit: Option<usize>, currency_unit: u64, ws_url: String)
@@ -39,10 +39,12 @@ where
 	let mut ext = Builder::<Block>::new()
 		.mode(Mode::Online(OnlineConfig {
 			transport: ws_url.to_string().into(),
-			// NOTE: we don't scrape pezpallet-staking, this kinda ensures that the source of the data
-			// is bags-list.
-			pallets: vec![pezpallet_bags_list::Pezpallet::<Runtime, pezpallet_bags_list::Instance1>::name()
-				.to_string()],
+			// NOTE: we don't scrape pezpallet-staking, this kinda ensures that the source of the
+			// data is bags-list.
+			pallets: vec![
+				pezpallet_bags_list::Pezpallet::<Runtime, pezpallet_bags_list::Instance1>::name()
+					.to_string(),
+			],
 			at: None,
 			hashed_prefixes: vec![
 				<pezpallet_staking::Bonded<Runtime>>::prefix_hash().to_vec(),

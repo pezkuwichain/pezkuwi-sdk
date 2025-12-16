@@ -29,7 +29,8 @@ use pezsp_io::{hashing::twox_128, storage};
 
 use crate as pezpallet_bounties;
 
-/// Migrate the storage of the bounties pezpallet to a new prefix, leaving all other storage untouched
+/// Migrate the storage of the bounties pezpallet to a new prefix, leaving all other storage
+/// untouched
 ///
 /// This new prefix must be the same as the one set in construct_runtime. For safety, use
 /// `PalletInfo` to get it, as:
@@ -113,7 +114,11 @@ pub fn migrate<
 /// `pezframe_support::traits::OnRuntimeUpgrade::pre_upgrade` for further testing.
 ///
 /// Panics if anything goes wrong.
-pub fn pre_migration<T: pezpallet_bounties::Config, P: GetStorageVersion + 'static, N: AsRef<str>>(
+pub fn pre_migration<
+	T: pezpallet_bounties::Config,
+	P: GetStorageVersion + 'static,
+	N: AsRef<str>,
+>(
 	old_pallet_name: N,
 	new_pallet_name: N,
 ) {
@@ -123,7 +128,8 @@ pub fn pre_migration<T: pezpallet_bounties::Config, P: GetStorageVersion + 'stat
 	let storage_prefix_bounties = pezpallet_bounties::Bounties::<T>::storage_prefix();
 	let storage_prefix_bounties_description =
 		pezpallet_bounties::BountyDescriptions::<T>::storage_prefix();
-	let storage_prefix_bounties_approvals = pezpallet_bounties::BountyApprovals::<T>::storage_prefix();
+	let storage_prefix_bounties_approvals =
+		pezpallet_bounties::BountyApprovals::<T>::storage_prefix();
 	log_migration("pre-migration", storage_prefix_bounties_count, old_pallet_name, new_pallet_name);
 	log_migration("pre-migration", storage_prefix_bounties, old_pallet_name, new_pallet_name);
 	log_migration(
@@ -177,7 +183,8 @@ pub fn post_migration<T: pezpallet_bounties::Config, P: GetStorageVersion, N: As
 	let storage_prefix_bounties = pezpallet_bounties::Bounties::<T>::storage_prefix();
 	let storage_prefix_bounties_description =
 		pezpallet_bounties::BountyDescriptions::<T>::storage_prefix();
-	let storage_prefix_bounties_approvals = pezpallet_bounties::BountyApprovals::<T>::storage_prefix();
+	let storage_prefix_bounties_approvals =
+		pezpallet_bounties::BountyApprovals::<T>::storage_prefix();
 	log_migration(
 		"post-migration",
 		storage_prefix_bounties_count,

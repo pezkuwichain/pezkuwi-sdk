@@ -269,8 +269,8 @@ impl ConvertLocation<AccountId> for AccountIndex64Aliases {
 /// `Convert` implementation to convert from some a `Signed` (system) `Origin` into an
 /// `AccountIndex64`.
 ///
-/// Typically used when configuring `pezpallet-xcm` in tests to allow `u64` accounts to dispatch an XCM
-/// from an `AccountIndex64` origin.
+/// Typically used when configuring `pezpallet-xcm` in tests to allow `u64` accounts to dispatch an
+/// XCM from an `AccountIndex64` origin.
 pub struct SignedToAccountIndex64<RuntimeOrigin, AccountId, Network>(
 	PhantomData<(RuntimeOrigin, AccountId, Network)>,
 );

@@ -23,8 +23,8 @@
 use codec::{Decode, Encode};
 use pezcumulus_primitives_core::ParaId;
 pub use pezpallet::*;
-use scale_info::TypeInfo;
 use pezsp_runtime::{traits::BadOrigin, RuntimeDebug};
+use scale_info::TypeInfo;
 use xcm::latest::{ExecuteXcm, Outcome};
 
 #[pezframe_support::pezpallet]
@@ -40,7 +40,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}

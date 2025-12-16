@@ -21,9 +21,6 @@
 use crate::traits::UnfilteredDispatchable;
 use codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
 use core::fmt;
-use scale_info::TypeInfo;
-#[cfg(feature = "std")]
-use serde::{Deserialize, Serialize};
 use pezsp_runtime::{
 	generic::{CheckedExtrinsic, UncheckedExtrinsic},
 	traits::{
@@ -32,6 +29,9 @@ use pezsp_runtime::{
 	DispatchError,
 };
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
+#[cfg(feature = "std")]
+use serde::{Deserialize, Serialize};
 
 /// The return type of a `Dispatchable` in frame. When returned explicitly from
 /// a dispatchable function it allows overriding the default `PostDispatchInfo`
@@ -60,8 +60,9 @@ pub type CallableCallFor<A, R> = <A as Callable<R>>::RuntimeCall;
 /// Means to checks if the dispatchable is feeless.
 ///
 /// This is automatically implemented for all dispatchables during pezpallet expansion.
-/// If a call is marked by [`#[pezpallet::feeless_if]`](`macro@pezframe_support_procedural::feeless_if`)
-/// attribute, the corresponding closure is checked.
+/// If a call is marked by
+/// [`#[pezpallet::feeless_if]`](`macro@pezframe_support_procedural::feeless_if`) attribute, the
+/// corresponding closure is checked.
 pub trait CheckIfFeeless {
 	/// The Origin type of the runtime.
 	type Origin;
@@ -1207,7 +1208,6 @@ mod per_dispatch_class_tests {
 #[cfg(test)]
 mod test_extensions {
 	use codec::{Decode, DecodeWithMemTracking, Encode};
-	use scale_info::TypeInfo;
 	use pezsp_runtime::{
 		impl_tx_ext_default,
 		traits::{
@@ -1217,6 +1217,7 @@ mod test_extensions {
 		transaction_validity::TransactionValidityError,
 	};
 	use pezsp_weights::Weight;
+	use scale_info::TypeInfo;
 
 	use super::{DispatchResult, PostDispatchInfo};
 

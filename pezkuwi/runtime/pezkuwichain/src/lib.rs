@@ -41,7 +41,6 @@ use alloc::{
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::cmp::Ordering;
 use pezframe_support::dynamic_params::{dynamic_pallet_params, dynamic_params};
-use pezpallet_balances::WeightInfo;
 use pezkuwi_primitives::{
 	async_backing::Constraints, slashing, AccountId, AccountIndex, ApprovalVotingParams, Balance,
 	BlockNumber, CandidateEvent, CandidateHash,
@@ -77,13 +76,14 @@ use pezkuwi_runtime_teyrchains::{
 	shared as teyrchains_shared,
 };
 use pezkuwichain_runtime_constants::system_teyrchain::{coretime::TIMESLICE_PERIOD, BROKER_ID};
-use scale_info::TypeInfo;
+use pezpallet_balances::WeightInfo;
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_beefy::{
 	ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature},
 	mmr::{BeefyDataProvider, MmrLeafVersion},
 };
 use pezsp_genesis_builder::PresetId;
+use scale_info::TypeInfo;
 
 use pezframe_support::{
 	construct_runtime, derive_impl,

@@ -19,6 +19,7 @@
 use super::{helpers::SyncState, *};
 use crate::DenyUnsafe;
 use assert_matches::assert_matches;
+use bizinikiwi_test_runtime_client::runtime::Block;
 use futures::prelude::*;
 use jsonrpsee::{core::EmptyServerParams as EmptyParams, MethodsError as RpcError, RpcModule};
 use pezsc_network::{self, config::Role, PeerId};
@@ -31,7 +32,6 @@ use std::{
 	process::{Command, Stdio},
 	thread,
 };
-use bizinikiwi_test_runtime_client::runtime::Block;
 
 struct Status {
 	pub peers: usize,

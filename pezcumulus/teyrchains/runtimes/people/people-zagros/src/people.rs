@@ -22,11 +22,11 @@ use pezframe_support::{
 	RuntimeDebugNoBound,
 };
 use pezpallet_identity::{Data, IdentityInformationProvider};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AccountIdConversion, Verify},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 use teyrchains_common::{impls::ToParentTreasury, DAYS};
 
 parameter_types! {

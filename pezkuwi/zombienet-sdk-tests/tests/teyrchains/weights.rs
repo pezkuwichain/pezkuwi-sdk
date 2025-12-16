@@ -15,8 +15,8 @@ use asset_hub_zagros_runtime::Runtime as AHWRuntime;
 use ethabi::Token;
 use futures::{stream::FuturesUnordered, StreamExt};
 use pezpallet_revive::AddressMapper;
-use rand::Rng;
 use pezsp_core::{H160, H256};
+use rand::Rng;
 use std::str::FromStr;
 use zombienet_sdk::{
 	subxt::{
@@ -272,7 +272,8 @@ async fn instantiate_contract(
 
 	// We need a nonce before instantiating the contract
 	let account_id = caller.public_key().0.into();
-	let caller_h160 = <AHWRuntime as pezpallet_revive::Config>::AddressMapper::to_address(&account_id);
+	let caller_h160 =
+		<AHWRuntime as pezpallet_revive::Config>::AddressMapper::to_address(&account_id);
 	log::info!("H160 Account: {:?}", caller_h160);
 	let caller_revive_nonce = client
 		.runtime_api()

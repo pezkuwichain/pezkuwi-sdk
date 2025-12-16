@@ -197,7 +197,8 @@ pub struct PalletDeclaration {
 	pub index: Option<u8>,
 	/// The path of the pezpallet, e.g. `pezframe_system` in `System: pezframe_system`.
 	pub path: PalletPath,
-	/// The instance of the pezpallet, e.g. `Instance1` in `Council: pezpallet_collective::<Instance1>`.
+	/// The instance of the pezpallet, e.g. `Instance1` in `Council:
+	/// pezpallet_collective::<Instance1>`.
 	pub instance: Option<Ident>,
 	/// The declared pezpallet parts,
 	/// e.g. `Some([Pezpallet, Call])` for `System: system::{Pezpallet, Call}`
@@ -301,7 +302,16 @@ impl Parse for PalletDeclaration {
 			None
 		};
 
-		Ok(Self { is_expanded, attrs, name, path, instance, pezpallet_parts, specified_parts, index })
+		Ok(Self {
+			is_expanded,
+			attrs,
+			name,
+			path,
+			instance,
+			pezpallet_parts,
+			specified_parts,
+			index,
+		})
 	}
 }
 
@@ -585,7 +595,8 @@ pub struct Pezpallet {
 	pub index: u8,
 	/// The path of the pezpallet, e.g. `pezframe_system` in `System: pezframe_system`.
 	pub path: PalletPath,
-	/// The instance of the pezpallet, e.g. `Instance1` in `Council: pezpallet_collective::<Instance1>`.
+	/// The instance of the pezpallet, e.g. `Instance1` in `Council:
+	/// pezpallet_collective::<Instance1>`.
 	pub instance: Option<Ident>,
 	/// The pezpallet parts to use for the pezpallet.
 	pub pezpallet_parts: Vec<PalletPart>,

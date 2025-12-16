@@ -456,7 +456,9 @@ impl<T: Config> Pezpallet<T> {
 			// Initial era has been set.
 			let current_era_start_session_index = ErasStartSessionIndex::<T>::get(current_era)
 				.unwrap_or_else(|| {
-					pezframe_support::print("Error: start_session_index must be set for current_era");
+					pezframe_support::print(
+						"Error: start_session_index must be set for current_era",
+					);
 					0
 				});
 
@@ -2012,8 +2014,8 @@ impl<T: Config> StakingInterface for Pezpallet<T> {
 	}
 
 	fn set_payee(stash: &Self::AccountId, reward_acc: &Self::AccountId) -> DispatchResult {
-		// Since virtual stakers are not allowed to compound their rewards as this pezpallet does not
-		// manage their locks, we do not allow reward account to be set same as stash. For
+		// Since virtual stakers are not allowed to compound their rewards as this pezpallet does
+		// not manage their locks, we do not allow reward account to be set same as stash. For
 		// external pallets that manage the virtual bond, they can claim rewards and re-bond them.
 		ensure!(
 			!Self::is_virtual_staker(stash) || stash != reward_acc,

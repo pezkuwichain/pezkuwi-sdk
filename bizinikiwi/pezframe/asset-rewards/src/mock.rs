@@ -174,7 +174,9 @@ impl Config for MockRuntime {
 }
 
 pub(crate) fn new_test_ext() -> pezsp_io::TestExternalities {
-	let mut t = pezframe_system::GenesisConfig::<MockRuntime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<MockRuntime>::default()
+		.build_storage()
+		.unwrap();
 
 	pezpallet_assets::GenesisConfig::<MockRuntime, Instance1> {
 		// Genesis assets: id, owner, is_sufficient, min_balance

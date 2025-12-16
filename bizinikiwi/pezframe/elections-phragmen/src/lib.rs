@@ -103,6 +103,7 @@ extern crate alloc;
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::cmp::Ordering;
+use log;
 use pezframe_support::{
 	traits::{
 		defensive_prelude::*, ChangeMembers, Contains, ContainsLengthBound, Currency, Get,
@@ -111,14 +112,13 @@ use pezframe_support::{
 	},
 	weights::Weight,
 };
-use log;
-use scale_info::TypeInfo;
 use pezsp_npos_elections::{ElectionResult, ExtendedBalance};
 use pezsp_runtime::{
 	traits::{Saturating, StaticLookup, Zero},
 	DispatchError, Perbill, RuntimeDebug,
 };
 use pezsp_staking::currency_to_vote::CurrencyToVote;
+use scale_info::TypeInfo;
 
 #[cfg(any(feature = "try-runtime", test))]
 use pezsp_runtime::TryRuntimeError;
@@ -202,7 +202,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Identifier for the elections-phragmen pezpallet's lock
 		#[pezpallet::constant]
@@ -636,7 +637,10 @@ pub mod pezpallet {
 		/// runner-up.
 		///
 		/// Note that old members and runners-up are also candidates.
-		CandidateSlashed { candidate: <T as pezframe_system::Config>::AccountId, amount: BalanceOf<T> },
+		CandidateSlashed {
+			candidate: <T as pezframe_system::Config>::AccountId,
+			amount: BalanceOf<T>,
+		},
 		/// A seat holder was slashed by amount by being forcefully removed from the set.
 		SeatHolderSlashed {
 			seat_holder: <T as pezframe_system::Config>::AccountId,
@@ -1304,6 +1308,7 @@ impl<T: Config> Pezpallet<T> {
 mod tests {
 	use super::*;
 	use crate as elections_phragmen;
+	use bizinikiwi_test_utils::assert_eq_uvec;
 	use pezframe_support::{
 		assert_noop, assert_ok, derive_impl,
 		dispatch::DispatchResultWithPostInfo,
@@ -1312,7 +1317,6 @@ mod tests {
 	};
 	use pezframe_system::ensure_signed;
 	use pezsp_runtime::{testing::Header, BuildStorage};
-	use bizinikiwi_test_utils::assert_eq_uvec;
 
 	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 	impl pezframe_system::Config for Test {

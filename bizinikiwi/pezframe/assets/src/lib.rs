@@ -21,8 +21,8 @@
 //! [`fungible`](pezframe_support::traits::fungible) traits, via [`fungibles`] traits.
 //!
 //! The pezpallet makes heavy use of concepts such as Holds and Freezes from the
-//! [`pezframe_support::traits::fungible`] traits, therefore you should read and understand those docs
-//! as a prerequisite to understanding this pezpallet.
+//! [`pezframe_support::traits::fungible`] traits, therefore you should read and understand those
+//! docs as a prerequisite to understanding this pezpallet.
 //!
 //! See the [`frame_tokens`] reference docs for more information about the place of the
 //! Assets pezpallet in FRAME.
@@ -171,11 +171,11 @@ pub use types::*;
 extern crate alloc;
 extern crate core;
 
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AtLeast32BitUnsigned, CheckedAdd, CheckedSub, Saturating, StaticLookup, Zero},
 	ArithmeticError, DispatchError, TokenError,
 };
+use scale_info::TypeInfo;
 
 use alloc::vec::Vec;
 use core::{fmt::Debug, marker::PhantomData};
@@ -1951,7 +1951,9 @@ pub mod pezpallet {
 
 	/// Implements [`ProvideAssetReserves`] trait for getting the list of trusted reserves for a
 	/// given asset.
-	impl<T: Config<I>, I: 'static> ProvideAssetReserves<T::AssetId, T::ReserveData> for Pezpallet<T, I> {
+	impl<T: Config<I>, I: 'static> ProvideAssetReserves<T::AssetId, T::ReserveData>
+		for Pezpallet<T, I>
+	{
 		/// Provide the configured reserves for asset `id`.
 		fn reserves(id: &T::AssetId) -> Vec<T::ReserveData> {
 			Reserves::<T, I>::get(id).into_inner()

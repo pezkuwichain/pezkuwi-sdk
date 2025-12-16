@@ -21,9 +21,9 @@ use crate::{Config, Error};
 use bp_header_pez_chain::{AuthoritySet, ChainWithGrandpa};
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::{traits::Get, BoundedVec, CloneNoBound, RuntimeDebugNoBound};
-use scale_info::TypeInfo;
 use pezsp_consensus_grandpa::{AuthorityId, AuthorityList, AuthorityWeight, SetId};
 use pezsp_std::marker::PhantomData;
+use scale_info::TypeInfo;
 
 /// A bounded list of Grandpa authorities with associated weights.
 pub type StoredAuthorityList<MaxBridgedAuthorities> =

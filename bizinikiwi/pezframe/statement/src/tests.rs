@@ -116,7 +116,8 @@ fn validate_event() {
 			event_index: 0,
 			block_hash: parent_hash.into(),
 		});
-		let result = Pezpallet::<Test>::validate_statement(StatementSource::Chain, statement.clone());
+		let result =
+			Pezpallet::<Test>::validate_statement(StatementSource::Chain, statement.clone());
 		assert_eq!(Ok(ValidStatement { max_count: 6, max_size: 3000 }), result);
 
 		// Use wrong event index
@@ -125,7 +126,8 @@ fn validate_event() {
 			event_index: 1,
 			block_hash: parent_hash.into(),
 		});
-		let result = Pezpallet::<Test>::validate_statement(StatementSource::Chain, statement.clone());
+		let result =
+			Pezpallet::<Test>::validate_statement(StatementSource::Chain, statement.clone());
 		assert_eq!(Err(InvalidStatement::BadProof), result);
 
 		// Use wrong block hash
@@ -134,7 +136,8 @@ fn validate_event() {
 			event_index: 0,
 			block_hash: pezsp_core::H256::random().into(),
 		});
-		let result = Pezpallet::<Test>::validate_statement(StatementSource::Chain, statement.clone());
+		let result =
+			Pezpallet::<Test>::validate_statement(StatementSource::Chain, statement.clone());
 		assert_eq!(Err(InvalidStatement::BadProof), result);
 	});
 }

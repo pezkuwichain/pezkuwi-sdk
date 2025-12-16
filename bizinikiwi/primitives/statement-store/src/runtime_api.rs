@@ -20,7 +20,6 @@
 use crate::{Hash, Statement, Topic};
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_runtime::RuntimeDebug;
 use pezsp_runtime_interface::{
 	pass_by::{
@@ -29,6 +28,7 @@ use pezsp_runtime_interface::{
 	},
 	runtime_interface,
 };
+use scale_info::TypeInfo;
 
 #[cfg(feature = "std")]
 use pezsp_externalities::ExternalitiesExt;

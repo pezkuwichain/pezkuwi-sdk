@@ -85,7 +85,6 @@ pub use pezsc_chain_spec::{
 };
 
 use crate::config::RpcConfiguration;
-use prometheus_endpoint::Registry;
 pub use pezsc_consensus::ImportQueue;
 pub use pezsc_executor::NativeExecutionDispatch;
 pub use pezsc_network_sync::WarpSyncConfig;
@@ -95,6 +94,7 @@ pub use pezsc_rpc::{RandomIntegerSubscriptionId, RandomStringSubscriptionId};
 pub use pezsc_tracing::TracingReceiver;
 pub use pezsc_transaction_pool::TransactionPoolOptions;
 pub use pezsc_transaction_pool_api::{error::IntoPoolError, InPoolTransaction, TransactionPool};
+use prometheus_endpoint::Registry;
 #[doc(hidden)]
 pub use std::{ops::Deref, result::Result, sync::Arc};
 pub use task_manager::{
@@ -335,9 +335,9 @@ pub async fn build_system_rpc_future<
 						network_service.remove_reserved_peer(peer_id);
 						sender.send(Ok(()))
 					},
-					Err(e) => sender.send(Err(pezsc_rpc::system::error::Error::MalformattedPeerArg(
-						e.to_string(),
-					))),
+					Err(e) => sender.send(Err(
+						pezsc_rpc::system::error::Error::MalformattedPeerArg(e.to_string()),
+					)),
 				};
 			},
 			pezsc_rpc::system::Request::NetworkReservedPeers(sender) => {
@@ -571,13 +571,13 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use futures::executor::block_on;
-	use pezsc_transaction_pool::BasicPool;
-	use pezsp_consensus::SelectChain;
 	use bizinikiwi_test_runtime_client::{
 		prelude::*,
 		runtime::{ExtrinsicBuilder, Transfer, TransferData},
 	};
+	use futures::executor::block_on;
+	use pezsc_transaction_pool::BasicPool;
+	use pezsp_consensus::SelectChain;
 
 	#[test]
 	fn should_not_propagate_transactions_that_are_marked_as_such() {

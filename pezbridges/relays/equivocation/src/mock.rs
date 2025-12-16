@@ -19,8 +19,8 @@
 use crate::{EquivocationDetectionPipeline, HeaderFinalityInfo, SourceClient, TargetClient};
 use async_trait::async_trait;
 use bp_header_pez_chain::{FinalityProof, FindEquivocations};
-use pez_finality_relay::{FinalityPipeline, SourceClientBase};
 use futures::{Stream, StreamExt};
+use pez_finality_relay::{FinalityPipeline, SourceClientBase};
 use relay_utils::{
 	relay_loop::Client as RelayClient, HeaderId, MaybeConnectionError, TrackedTransactionStatus,
 	TransactionTracker,

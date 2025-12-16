@@ -21,9 +21,9 @@
 
 extern crate alloc;
 
+use pezsp_debug_derive::RuntimeDebug;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-use pezsp_debug_derive::RuntimeDebug;
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};

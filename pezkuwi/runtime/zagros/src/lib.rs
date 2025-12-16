@@ -28,7 +28,9 @@ use alloc::{
 	vec::Vec,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use pezframe_election_provider_support::{bounds::ElectionBoundsBuilder, onchain, SequentialPhragmen};
+use pezframe_election_provider_support::{
+	bounds::ElectionBoundsBuilder, onchain, SequentialPhragmen,
+};
 use pezframe_support::{
 	derive_impl,
 	dynamic_params::{dynamic_pallet_params, dynamic_params},
@@ -44,15 +46,6 @@ use pezframe_support::{
 	PalletId,
 };
 use pezframe_system::{EnsureRoot, EnsureSigned};
-use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
-use pezpallet_identity::legacy::IdentityInfo;
-use pezpallet_nomination_pools::PoolId;
-use pezpallet_session::historical as session_historical;
-use pezpallet_staking::UseValidatorsMap;
-use pezpallet_staking_async_ah_client as ah_client;
-use pezpallet_staking_async_rc_client as rc_client;
-use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
-use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_primitives::{
 	async_backing::Constraints, slashing, AccountId, AccountIndex, ApprovalVotingParams, Balance,
 	BlockNumber, CandidateEvent, CandidateHash,
@@ -91,7 +84,15 @@ use pezkuwi_runtime_teyrchains::{
 	scheduler as teyrchains_scheduler, session_info as teyrchains_session_info,
 	shared as teyrchains_shared,
 };
-use scale_info::TypeInfo;
+use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
+use pezpallet_identity::legacy::IdentityInfo;
+use pezpallet_nomination_pools::PoolId;
+use pezpallet_session::historical as session_historical;
+use pezpallet_staking::UseValidatorsMap;
+use pezpallet_staking_async_ah_client as ah_client;
+use pezpallet_staking_async_rc_client as rc_client;
+use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_beefy::{
 	ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature},
@@ -113,6 +114,7 @@ use pezsp_staking::{EraIndex, SessionIndex};
 #[cfg(any(feature = "std", test))]
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
+use scale_info::TypeInfo;
 use xcm::{
 	latest::prelude::*, Version as XcmVersion, VersionedAsset, VersionedAssetId, VersionedAssets,
 	VersionedLocation, VersionedXcm,
@@ -148,8 +150,8 @@ use impls::ToTeyrchainIdentityReaper;
 // Governance and configurations.
 pub mod governance;
 use governance::{
-	pezpallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin, StakingAdmin,
-	Treasurer, TreasurySpender,
+	pezpallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin,
+	StakingAdmin, Treasurer, TreasurySpender,
 };
 use xcm_config::XcmConfig;
 
@@ -193,10 +195,10 @@ pub fn native_version() -> NativeVersion {
 	NativeVersion { runtime_version: VERSION, can_author_with: Default::default() }
 }
 
-/// A type to identify calls to the Identity pezpallet. These will be filtered to prevent invocation,
-/// locking the state of the pezpallet and preventing further updates to identities and sub-identities.
-/// The locked state will be the genesis state of a new system chain and then removed from the Relay
-/// Chain.
+/// A type to identify calls to the Identity pezpallet. These will be filtered to prevent
+/// invocation, locking the state of the pezpallet and preventing further updates to identities and
+/// sub-identities. The locked state will be the genesis state of a new system chain and then
+/// removed from the Relay Chain.
 pub struct IsIdentityCall;
 impl Contains<RuntimeCall> for IsIdentityCall {
 	fn contains(c: &RuntimeCall) -> bool {

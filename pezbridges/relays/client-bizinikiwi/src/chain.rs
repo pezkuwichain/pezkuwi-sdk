@@ -19,22 +19,22 @@ use crate::calls::UtilityCall;
 use crate::SimpleRuntimeVersion;
 use bp_header_pez_chain::ChainWithGrandpa as ChainWithGrandpaBase;
 use bp_messages::ChainWithMessages as ChainWithMessagesBase;
+use codec::{Codec, Decode, Encode, MaxEncodedLen};
+use jsonrpsee::core::{DeserializeOwned, Serialize};
+use num_traits::Zero;
 use pezbp_runtime::{
 	Chain as ChainBase, EncodedOrDecodedCall, HashOf, Teyrchain as TeyrchainBase, TransactionEra,
 	TransactionEraOf, UnderlyingChainProvider,
 };
-use codec::{Codec, Decode, Encode, MaxEncodedLen};
 use pezframe_support::Parameter;
-use jsonrpsee::core::{DeserializeOwned, Serialize};
-use num_traits::Zero;
 use pezsc_transaction_pool_api::TransactionStatus;
-use scale_info::TypeInfo;
 use pezsp_core::{storage::StorageKey, Pair};
 use pezsp_runtime::{
 	generic::SignedBlock,
 	traits::{AtLeast32BitUnsigned, Block as BlockT, Member},
 	ConsensusEngineId, EncodedJustification,
 };
+use scale_info::TypeInfo;
 use std::{fmt::Debug, time::Duration};
 
 /// Signed block type of given chain.
@@ -128,8 +128,8 @@ pub type CallOf<C> = <C as Chain>::Call;
 /// Transaction status of the chain.
 pub type TransactionStatusOf<C> = TransactionStatus<HashOf<C>, HashOf<C>>;
 
-/// Bizinikiwi-based chain with `AccountData` generic argument of `pezframe_system::AccountInfo` set to
-/// the `pezpallet_balances::AccountData<Balance>`.
+/// Bizinikiwi-based chain with `AccountData` generic argument of `pezframe_system::AccountInfo` set
+/// to the `pezpallet_balances::AccountData<Balance>`.
 pub trait ChainWithBalances: Chain {
 	/// Return runtime storage key for getting `pezframe_system::AccountInfo` of given account.
 	fn account_info_storage_key(account_id: &Self::AccountId) -> StorageKey;

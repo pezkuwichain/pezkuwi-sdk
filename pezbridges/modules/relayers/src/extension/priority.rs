@@ -157,8 +157,8 @@ mod integrity_tests {
 		pub fn ensure_priority_boost_is_sane<Runtime, GrandpaInstance, PriorityBoostPerHeader>(
 			tip_boost_per_header: BalanceOf<Runtime>,
 		) where
-			Runtime:
-				pezpallet_transaction_payment::Config + pezpallet_bridge_grandpa::Config<GrandpaInstance>,
+			Runtime: pezpallet_transaction_payment::Config
+				+ pezpallet_bridge_grandpa::Config<GrandpaInstance>,
 			GrandpaInstance: 'static,
 			PriorityBoostPerHeader: Get<TransactionPriority>,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
@@ -189,8 +189,8 @@ mod integrity_tests {
 			tip: BalanceOf<Runtime>,
 		) -> TransactionPriority
 		where
-			Runtime:
-				pezpallet_transaction_payment::Config + pezpallet_bridge_grandpa::Config<GrandpaInstance>,
+			Runtime: pezpallet_transaction_payment::Config
+				+ pezpallet_bridge_grandpa::Config<GrandpaInstance>,
 			GrandpaInstance: 'static,
 			Runtime::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
 			BalanceOf<Runtime>: Send + Sync + FixedPointOperand,

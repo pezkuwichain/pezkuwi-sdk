@@ -25,12 +25,12 @@ use alloc::{boxed::Box, fmt::Debug, string::String, vec::Vec};
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::weights::Weight;
 use pezpallet_revive_uapi::ReturnFlags;
-use scale_info::TypeInfo;
 use pezsp_core::Get;
 use pezsp_runtime::{
 	traits::{One, Saturating, Zero},
 	DispatchError, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// Result type of a `bare_call` or `bare_instantiate` call as well as `ContractsApi::call` and
 /// `ContractsApi::instantiate`.

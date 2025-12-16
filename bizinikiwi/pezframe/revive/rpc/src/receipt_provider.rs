@@ -611,8 +611,8 @@ mod tests {
 	use super::*;
 	use crate::test::{MockBlockInfo, MockBlockInfoProvider};
 	use pezpallet_revive::evm::{ReceiptInfo, TransactionSigned};
-	use pretty_assertions::assert_eq;
 	use pezsp_core::{H160, H256};
+	use pretty_assertions::assert_eq;
 	use sqlx::SqlitePool;
 
 	async fn count(pool: &SqlitePool, table: &str, block_hash: Option<H256>) -> usize {

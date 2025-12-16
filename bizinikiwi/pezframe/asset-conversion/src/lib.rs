@@ -26,8 +26,8 @@
 //!  - [create a liquidity pool](`Pezpallet::create_pool()`) for 2 assets
 //!  - [provide the liquidity](`Pezpallet::add_liquidity()`) and receive back an LP token
 //!  - [exchange the LP token back to assets](`Pezpallet::remove_liquidity()`)
-//!  - [swap a specific amount of assets for another](`Pezpallet::swap_exact_tokens_for_tokens()`) if
-//!    there is a pool created, or
+//!  - [swap a specific amount of assets for another](`Pezpallet::swap_exact_tokens_for_tokens()`)
+//!    if there is a pool created, or
 //!  - [swap some assets for a specific amount of
 //!    another](`Pezpallet::swap_tokens_for_exact_tokens()`).
 //!  - [query for an exchange price](`AssetConversionApi::quote_price_exact_tokens_for_tokens`) via
@@ -112,7 +112,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The type in which the assets for swapping are measured.
 		type Balance: Balance;
@@ -149,8 +150,8 @@ pub mod pezpallet {
 		/// Asset class for the lp tokens from [`Self::PoolAssets`].
 		type PoolAssetId: AssetId + PartialOrd + Incrementable + From<u32>;
 
-		/// Registry for the lp tokens. Ideally only this pezpallet should have create permissions on
-		/// the assets.
+		/// Registry for the lp tokens. Ideally only this pezpallet should have create permissions
+		/// on the assets.
 		type PoolAssets: Inspect<Self::AccountId, AssetId = Self::PoolAssetId, Balance = Self::Balance>
 			+ Create<Self::AccountId>
 			+ Mutate<Self::AccountId>
@@ -387,8 +388,9 @@ pub mod pezpallet {
 		///
 		/// NOTE: when encountering an incorrect exchange rate and non-withdrawable pool liquidity,
 		/// batch an atomic call with [`Pezpallet::add_liquidity`] and
-		/// [`Pezpallet::swap_exact_tokens_for_tokens`] or [`Pezpallet::swap_tokens_for_exact_tokens`]
-		/// calls to render the liquidity withdrawable and rectify the exchange rate.
+		/// [`Pezpallet::swap_exact_tokens_for_tokens`] or
+		/// [`Pezpallet::swap_tokens_for_exact_tokens`] calls to render the liquidity withdrawable
+		/// and rectify the exchange rate.
 		///
 		/// Once liquidity is added, someone may successfully call
 		/// [`Pezpallet::swap_exact_tokens_for_tokens`].

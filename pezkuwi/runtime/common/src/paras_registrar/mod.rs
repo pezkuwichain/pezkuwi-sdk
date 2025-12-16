@@ -37,13 +37,13 @@ use pezkuwi_runtime_teyrchains::{
 
 use crate::traits::{OnSwap, Registrar};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-pub use pezpallet::*;
 use pezkuwi_runtime_teyrchains::paras::{OnNewHead, ParaKind};
-use scale_info::TypeInfo;
+pub use pezpallet::*;
 use pezsp_runtime::{
 	traits::{CheckedSub, Saturating},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 #[derive(
 	Encode,
@@ -131,7 +131,8 @@ pub mod pezpallet {
 	pub trait Config: configuration::Config + paras::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The aggregated origin type must support the `teyrchains` origin. We require that we can
 		/// infallibly convert between this origin and the system origin, but in reality, they're
@@ -383,8 +384,8 @@ pub mod pezpallet {
 		///
 		/// This function will reserve a new Para Id to be owned/managed by the origin account.
 		/// The origin account is able to register head data and validation code using `register` to
-		/// create an on-demand teyrchain. Using the Slots pezpallet, an on-demand teyrchain can then
-		/// be upgraded to a lease holding teyrchain.
+		/// create an on-demand teyrchain. Using the Slots pezpallet, an on-demand teyrchain can
+		/// then be upgraded to a lease holding teyrchain.
 		///
 		/// ## Arguments
 		/// - `origin`: Must be called by a `Signed` origin. Becomes the manager/owner of the new

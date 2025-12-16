@@ -21,9 +21,9 @@ use core::marker::PhantomData;
 
 use codec::{Decode, DecodeWithMemTracking, Encode, FullCodec, MaxEncodedLen};
 use pezframe_support::{CloneNoBound, EqNoBound, Parameter, PartialEqNoBound};
-use scale_info::TypeInfo;
 use pezsp_core::ConstU32;
 use pezsp_runtime::{traits::Member, BoundedVec, DispatchError, DispatchResult, RuntimeDebug};
+use scale_info::TypeInfo;
 
 /// Identity of personhood.
 ///

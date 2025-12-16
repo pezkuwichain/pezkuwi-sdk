@@ -25,12 +25,12 @@ use crate::{error::Error, finality_base::engine::Engine};
 use pezsp_core::Pair;
 
 use pezbp_runtime::HeaderIdOf;
+use pezsp_runtime::traits::Header as HeaderT;
 use relay_bizinikiwi_client::{
 	AccountKeyPairOf, Chain, ChainWithTransactions, Client, Error as BizinikiwiError,
 	UnsignedTransaction,
 };
 use relay_utils::{TrackedTransactionStatus, TransactionTracker};
-use pezsp_runtime::traits::Header as HeaderT;
 
 /// Submit headers-bridge initialization transaction.
 pub async fn initialize<

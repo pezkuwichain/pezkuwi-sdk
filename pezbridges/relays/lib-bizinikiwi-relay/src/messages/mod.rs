@@ -29,11 +29,15 @@ use async_std::sync::Arc;
 use bp_messages::{
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages as _, MessageNonce,
 };
-use pezbp_runtime::{AccountIdOf, EncodedOrDecodedCall, HeaderIdOf, TransactionEra, WeightExtraOps};
 use codec::{Codec, Encode, EncodeLike};
-use pezframe_support::{dispatch::GetDispatchInfo, weights::Weight};
 use pez_messages_relay::{message_lane::MessageLane, message_lane_loop::BatchTransaction, Labeled};
+use pezbp_runtime::{
+	AccountIdOf, EncodedOrDecodedCall, HeaderIdOf, TransactionEra, WeightExtraOps,
+};
+use pezframe_support::{dispatch::GetDispatchInfo, weights::Weight};
 use pezpallet_bridge_messages::{Call as BridgeMessagesCall, Config as BridgeMessagesConfig};
+use pezsp_core::Pair;
+use pezsp_runtime::traits::Zero;
 use relay_bizinikiwi_client::{
 	transaction_stall_timeout, AccountKeyPairOf, BalanceOf, BlockNumberOf, CallOf, Chain,
 	ChainBase, ChainWithMessages, ChainWithTransactions, Client, Error as BizinikiwiError, HashOf,
@@ -43,8 +47,6 @@ use relay_utils::{
 	metrics::{GlobalMetrics, MetricsParams, StandaloneMetric},
 	STALL_TIMEOUT,
 };
-use pezsp_core::Pair;
-use pezsp_runtime::traits::Zero;
 use std::{fmt::Debug, marker::PhantomData, ops::RangeInclusive};
 
 pub mod metrics;
@@ -291,8 +293,8 @@ where
 	.map_err(Into::into)
 }
 
-/// Deliver range of Bizinikiwi-to-Bizinikiwi messages. No checks are made to ensure that transaction
-/// will succeed.
+/// Deliver range of Bizinikiwi-to-Bizinikiwi messages. No checks are made to ensure that
+/// transaction will succeed.
 pub async fn relay_messages_range<P: BizinikiwiMessageLane>(
 	source_client: impl Client<P::SourceChain>,
 	target_client: impl Client<P::TargetChain>,
@@ -396,8 +398,10 @@ where
 	P: BizinikiwiMessageLane,
 	R: BridgeMessagesConfig<I, LaneId = P::LaneId>,
 	I: 'static,
-	R::BridgedChain:
-		pezbp_runtime::Chain<AccountId = AccountIdOf<P::SourceChain>, Hash = HashOf<P::SourceChain>>,
+	R::BridgedChain: pezbp_runtime::Chain<
+		AccountId = AccountIdOf<P::SourceChain>,
+		Hash = HashOf<P::SourceChain>,
+	>,
 	CallOf<P::TargetChain>: From<BridgeMessagesCall<R, I>> + GetDispatchInfo,
 {
 	fn build_receive_messages_proof_call(

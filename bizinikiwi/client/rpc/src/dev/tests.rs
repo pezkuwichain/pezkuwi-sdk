@@ -18,10 +18,10 @@
 
 use super::*;
 use crate::DenyUnsafe;
+use bizinikiwi_test_runtime_client::{prelude::*, runtime::Block};
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsp_blockchain::HeaderBackend;
 use pezsp_consensus::BlockOrigin;
-use bizinikiwi_test_runtime_client::{prelude::*, runtime::Block};
 
 #[tokio::test]
 async fn block_stats_work() {

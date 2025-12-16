@@ -27,14 +27,14 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use pezbp_runtime::{AccountIdOf, BlockNumberOf, HashOf};
 use pez_equivocation_detector::EquivocationDetectionPipeline;
 use pez_finality_relay::FinalityPipeline;
+use pezbp_runtime::{AccountIdOf, BlockNumberOf, HashOf};
 use pezpallet_grandpa::{Call as GrandpaCall, Config as GrandpaConfig};
-use relay_bizinikiwi_client::{AccountKeyPairOf, CallOf, Chain, ChainWithTransactions, Client};
-use relay_utils::metrics::MetricsParams;
 use pezsp_core::Pair;
 use pezsp_runtime::traits::{Block, Header};
+use relay_bizinikiwi_client::{AccountKeyPairOf, CallOf, Chain, ChainWithTransactions, Client};
+use relay_utils::metrics::MetricsParams;
 use std::marker::PhantomData;
 
 /// Convenience trait that adds bounds to `BizinikiwiEquivocationDetectionPipeline`.

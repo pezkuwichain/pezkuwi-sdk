@@ -36,8 +36,8 @@
 //!   accounts are, for the purposes of proxy filtering considered exactly the same as the origin
 //!   and are thus hampered with the origin's filters.
 //!
-//! Since proxy filters are respected in all dispatches of this pezpallet, it should never need to be
-//! filtered by any proxy.
+//! Since proxy filters are respected in all dispatches of this pezpallet, it should never need to
+//! be filtered by any proxy.
 //!
 //! ## Interface
 //!

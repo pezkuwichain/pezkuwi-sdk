@@ -55,9 +55,9 @@ mod record_xcm;
 mod weight;
 pub use event_emitter::EventEmitter;
 
-pub use record_xcm::RecordXcm;
 #[deprecated = "Use `pezsp_runtime::traits::` instead"]
 pub use pezsp_runtime::traits::{Identity, TryConvertInto as JustTry};
+pub use record_xcm::RecordXcm;
 pub use weight::{WeightBounds, WeightTrader};
 
 pub mod prelude {

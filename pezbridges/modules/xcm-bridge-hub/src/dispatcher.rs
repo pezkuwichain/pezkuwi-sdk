@@ -24,13 +24,13 @@
 use crate::{Config, Pezpallet, LOG_TARGET};
 
 use bp_messages::target_chain::{DispatchMessage, MessageDispatch};
-use pezbp_runtime::messages::MessageDispatchResult;
 use bp_xcm_bridge_hub::{LocalXcmChannelManager, XcmAsPlainPayload};
 use codec::{Decode, DecodeWithMemTracking, Encode};
+use pezbp_runtime::messages::MessageDispatchResult;
 use pezframe_support::{weights::Weight, CloneNoBound, EqNoBound, PartialEqNoBound};
 use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, WeightInfoExt};
-use scale_info::TypeInfo;
 use pezsp_runtime::SaturatedConversion;
+use scale_info::TypeInfo;
 use xcm::prelude::*;
 use xcm_builder::{DispatchBlob, DispatchBlobError};
 

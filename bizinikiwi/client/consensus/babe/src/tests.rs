@@ -20,6 +20,7 @@
 
 use super::*;
 use authorship::claim_slot;
+use bizinikiwi_test_runtime_client::DefaultTestClientBuilderExt;
 use pezsc_block_builder::{BlockBuilder, BlockBuilderBuilder};
 use pezsc_client_api::{BlockchainEvents, Finalizer};
 use pezsc_consensus::{BoxBlockImport, BoxJustificationImport};
@@ -43,7 +44,6 @@ use pezsp_runtime::{
 	traits::Block as BlockT,
 };
 use std::{cell::RefCell, task::Poll, time::Duration};
-use bizinikiwi_test_runtime_client::DefaultTestClientBuilderExt;
 
 type Item = DigestItem;
 

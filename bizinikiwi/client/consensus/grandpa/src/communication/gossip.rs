@@ -88,8 +88,6 @@
 use ahash::{AHashMap, AHashSet};
 use codec::{Decode, DecodeAll, Encode};
 use log::{debug, trace};
-use prometheus_endpoint::{register, CounterVec, Opts, PrometheusError, Registry, U64};
-use rand::seq::SliceRandom;
 use pezsc_network::ReputationChange;
 use pezsc_network_common::role::ObservedRole;
 use pezsc_network_gossip::{MessageIntent, ValidatorContext};
@@ -98,6 +96,8 @@ use pezsc_telemetry::{telemetry, TelemetryHandle, CONSENSUS_DEBUG};
 use pezsc_utils::mpsc::{tracing_unbounded, TracingUnboundedReceiver, TracingUnboundedSender};
 use pezsp_consensus_grandpa::AuthorityId;
 use pezsp_runtime::traits::{Block as BlockT, NumberFor, Zero};
+use prometheus_endpoint::{register, CounterVec, Opts, PrometheusError, Registry, U64};
+use rand::seq::SliceRandom;
 
 use super::{benefit, cost, Round, SetId, NEIGHBOR_REBROADCAST_PERIOD};
 use crate::{environment, CatchUp, CompactCommit, SignedMessage, LOG_TARGET};
@@ -1666,11 +1666,11 @@ pub(super) struct PeerReport {
 mod tests {
 	use super::{super::NEIGHBOR_REBROADCAST_PERIOD, environment::SharedVoterSetState, *};
 	use crate::communication;
+	use bizinikiwi_test_runtime_client::runtime::{Block, Header};
 	use pezsc_network::config::Role;
 	use pezsc_network_gossip::Validator as GossipValidatorT;
 	use pezsp_core::{crypto::UncheckedFrom, H256};
 	use std::time::Instant;
-	use bizinikiwi_test_runtime_client::runtime::{Block, Header};
 
 	// some random config (not really needed)
 	fn config() -> crate::Config {

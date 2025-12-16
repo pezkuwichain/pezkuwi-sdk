@@ -22,9 +22,10 @@
 //! verified, finalized headers are stored in the pezpallet, thereby creating a sparse header chain.
 //! This sparse header chain can be used as a source of truth for other higher-level applications.
 //!
-//! The pezpallet is responsible for tracking GRANDPA validator set hand-offs. We only import headers
-//! with justifications signed by the current validator set we know of. The header is inspected for
-//! a `ScheduledChanges` digest item, which is then used to update to next validator set.
+//! The pezpallet is responsible for tracking GRANDPA validator set hand-offs. We only import
+//! headers with justifications signed by the current validator set we know of. The header is
+//! inspected for a `ScheduledChanges` digest item, which is then used to update to next validator
+//! set.
 //!
 //! Since this pezpallet only tracks finalized headers it does not deal with forks. Forks can only
 //! occur if the GRANDPA validator set on the bridged chain is either colluding or there is a severe
@@ -198,7 +199,8 @@ pub mod pezpallet {
 			)
 		}
 
-		/// Bootstrap the bridge pezpallet with an initial header and authority set from which to sync.
+		/// Bootstrap the bridge pezpallet with an initial header and authority set from which to
+		/// sync.
 		///
 		/// The initial configuration provided does not need to be the genesis header of the bridged
 		/// chain, it can be any arbitrary header. You can also provide the next scheduled set
@@ -517,7 +519,8 @@ pub mod pezpallet {
 		InvalidJustification,
 		/// The authority set from the underlying header chain is invalid.
 		InvalidAuthoritySet,
-		/// The header being imported is older than the best finalized header known to the pezpallet.
+		/// The header being imported is older than the best finalized header known to the
+		/// pezpallet.
 		OldHeader,
 		/// The scheduled authority set change found in the header is unsupported by the pezpallet.
 		///
@@ -814,7 +817,7 @@ pub fn initialize_for_benchmarks<T: Config<I>, I: 'static>(header: BridgedHeader
 	initialize_bridge::<T, I>(InitializationData {
 		header: Box::new(header),
 		authority_list: pezsp_std::vec::Vec::new(), /* we don't verify any proofs in external
-		                                          * benchmarks */
+		                                             * benchmarks */
 		set_id: 0,
 		operating_mode: pezbp_runtime::BasicOperatingMode::Normal,
 	})
@@ -836,13 +839,13 @@ mod tests {
 		System, TestBridgedChain, TestHeader, TestNumber, TestRuntime, MAX_BRIDGED_AUTHORITIES,
 	};
 	use bp_header_pez_chain::BridgeGrandpaCall;
-	use pezbp_runtime::BasicOperatingMode;
 	use bp_test_utils::{
 		authority_list, generate_owned_bridge_module_tests, make_default_justification,
 		make_justification_for_header, JustificationGeneratorParams, ALICE, BOB,
 		TEST_GRANDPA_SET_ID,
 	};
 	use codec::Encode;
+	use pezbp_runtime::BasicOperatingMode;
 	use pezframe_support::{
 		assert_err, assert_noop, assert_ok,
 		dispatch::{Pays, PostDispatchInfo},
@@ -1470,7 +1473,9 @@ mod tests {
 			<BestFinalized<TestRuntime>>::put(HeaderId(2, hash));
 			<ImportedHeaders<TestRuntime>>::insert(hash, header.build());
 
-			assert_ok!(Pezpallet::<TestRuntime>::verify_storage_proof(hash, storage_proof).map(|_| ()));
+			assert_ok!(
+				Pezpallet::<TestRuntime>::verify_storage_proof(hash, storage_proof).map(|_| ())
+			);
 		});
 	}
 

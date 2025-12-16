@@ -27,13 +27,14 @@ use futures::{
 	future::{Future, FutureExt},
 };
 use log::{debug, error, info, log_enabled, trace, warn, Level};
-use prometheus_endpoint::Registry as PrometheusRegistry;
 use pezsc_block_builder::{BlockBuilderApi, BlockBuilderBuilder};
 use pezsc_proposer_metrics::{EndProposingReason, MetricsLink as PrometheusMetrics};
 use pezsc_telemetry::{telemetry, TelemetryHandle, CONSENSUS_INFO};
 use pezsc_transaction_pool_api::{InPoolTransaction, TransactionPool, TxInvalidityReportMap};
 use pezsp_api::{ApiExt, CallApiAt, ProofRecorder, ProvideRuntimeApi};
-use pezsp_blockchain::{ApplyExtrinsicFailed::Validity, Error::ApplyExtrinsicFailed, HeaderBackend};
+use pezsp_blockchain::{
+	ApplyExtrinsicFailed::Validity, Error::ApplyExtrinsicFailed, HeaderBackend,
+};
 use pezsp_consensus::{DisableProofRecording, EnableProofRecording, ProofRecording, Proposal};
 use pezsp_core::traits::SpawnNamed;
 use pezsp_inherents::InherentData;
@@ -42,6 +43,7 @@ use pezsp_runtime::{
 	Digest, ExtrinsicInclusionMode, Percent, SaturatedConversion,
 };
 use pezsp_trie::recorder::IgnoredNodes;
+use prometheus_endpoint::Registry as PrometheusRegistry;
 use std::{marker::PhantomData, pin::Pin, sync::Arc, time};
 
 /// Default block size limit in bytes used by [`Proposer`].
@@ -68,8 +70,8 @@ pub struct ProposerFactory<A, C, PR> {
 	metrics: PrometheusMetrics,
 	/// The default block size limit.
 	///
-	/// If no `block_size_limit` is passed to [`pezsp_consensus::Proposer::propose`], this block size
-	/// limit will be used.
+	/// If no `block_size_limit` is passed to [`pezsp_consensus::Proposer::propose`], this block
+	/// size limit will be used.
 	default_block_size_limit: usize,
 	/// Soft deadline percentage of hard deadline.
 	///
@@ -672,6 +674,11 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use bizinikiwi_test_runtime_client::{
+		prelude::*,
+		runtime::{Block as TestBlock, Extrinsic, ExtrinsicBuilder, Transfer},
+		TestClientBuilder, TestClientBuilderExt,
+	};
 	use futures::executor::block_on;
 	use parking_lot::Mutex;
 	use pezsc_client_api::{Backend, TrieCacheContext};
@@ -681,11 +688,6 @@ mod tests {
 	use pezsp_blockchain::HeaderBackend;
 	use pezsp_consensus::{BlockOrigin, Environment};
 	use pezsp_runtime::{generic::BlockId, traits::NumberFor, Perbill};
-	use bizinikiwi_test_runtime_client::{
-		prelude::*,
-		runtime::{Block as TestBlock, Extrinsic, ExtrinsicBuilder, Transfer},
-		TestClientBuilder, TestClientBuilderExt,
-	};
 
 	const SOURCE: TransactionSource = TransactionSource::External;
 

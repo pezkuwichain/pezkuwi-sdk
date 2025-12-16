@@ -284,8 +284,8 @@ pub trait WeightInfoExt: WeightInfo {
 	// storage values that are read during the call. So we may ignore the weight of this check.
 	//
 	// However, during (2) we read and update storage values of other pallets
-	// (`pezpallet-bridge-relayers` and balances/assets pezpallet). So we need to add this weight to the
-	// weight of our call. Hence two following methods.
+	// (`pezpallet-bridge-relayers` and balances/assets pezpallet). So we need to add this weight to
+	// the weight of our call. Hence two following methods.
 
 	/// Extra weight that is added to the `receive_messages_proof` call weight by signed extensions
 	/// that are declared at runtime level.

@@ -21,8 +21,8 @@ use super::*;
 use crate::{claims, claims::mock::*};
 use claims::Call as ClaimsCall;
 use hex_literal::hex;
-use secp_utils::*;
 use pezsp_runtime::transaction_validity::TransactionSource::External;
+use secp_utils::*;
 
 use codec::Encode;
 // The testing primitives are very useful for avoiding having to work with signatures

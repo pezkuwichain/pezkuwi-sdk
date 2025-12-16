@@ -21,9 +21,9 @@
 /// may see equivocations in a different order, and therefore may not agree on which blocks
 /// should be thrown out and which ones should be kept.
 use codec::Codec;
+use parking_lot::Mutex;
 use pezcumulus_client_consensus_common::TeyrchainBlockImportMarker;
 use pezcumulus_primitives_core::{CumulusDigestItem, RelayBlockIdentifier};
-use parking_lot::Mutex;
 use pezkuwi_primitives::Hash as RHash;
 use pezsc_consensus::{
 	import_queue::{BasicQueue, Verifier as VerifierT},
@@ -31,7 +31,6 @@ use pezsc_consensus::{
 };
 use pezsc_consensus_aura::{standalone as aura_internal, AuthoritiesTracker};
 use pezsc_telemetry::{telemetry, TelemetryHandle, CONSENSUS_DEBUG, CONSENSUS_TRACE};
-use schnellru::{ByLength, LruMap};
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_block_builder::BlockBuilder as BlockBuilderApi;
 use pezsp_blockchain::{HeaderBackend, HeaderMetadata};
@@ -40,6 +39,7 @@ use pezsp_consensus_aura::{AuraApi, Slot, SlotDuration};
 use pezsp_core::crypto::Pair;
 use pezsp_inherents::CreateInherentDataProviders;
 use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT, NumberFor};
+use schnellru::{ByLength, LruMap};
 use std::{fmt::Debug, sync::Arc};
 
 const LRU_WINDOW: u32 = 512;
@@ -305,12 +305,12 @@ where
 mod test {
 	use super::*;
 	use codec::Encode;
+	use futures::FutureExt;
 	use pezcumulus_test_client::{
 		runtime::Block, seal_block, Client, InitBlockBuilder, TestClientBuilder,
 		TestClientBuilderExt,
 	};
 	use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-	use futures::FutureExt;
 	use pezkuwi_primitives::{HeadData, PersistedValidationData};
 	use pezsc_client_api::HeaderBackend;
 	use pezsp_consensus_aura::sr25519;

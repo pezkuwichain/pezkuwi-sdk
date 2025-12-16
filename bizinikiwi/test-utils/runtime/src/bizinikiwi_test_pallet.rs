@@ -240,7 +240,9 @@ pub mod pezpallet {
 	}
 }
 
-pub fn validate_runtime_call<T: pezpallet::Config>(call: &pezpallet::Call<T>) -> TransactionValidity {
+pub fn validate_runtime_call<T: pezpallet::Config>(
+	call: &pezpallet::Call<T>,
+) -> TransactionValidity {
 	log::trace!(target: LOG_TARGET, "validate_runtime_call {call:?}");
 	match call {
 		Call::call_do_not_propagate {} =>

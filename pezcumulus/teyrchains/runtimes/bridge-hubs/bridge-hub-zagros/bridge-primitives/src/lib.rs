@@ -20,10 +20,10 @@
 
 pub use bp_bridge_hub_pezcumulus::*;
 use bp_messages::*;
+use codec::{Decode, Encode};
 use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis, Chain, ChainId, Teyrchain,
 };
-use codec::{Decode, Encode};
 use pezframe_support::dispatch::DispatchClass;
 use pezsp_runtime::{RuntimeDebug, StateVersion};
 

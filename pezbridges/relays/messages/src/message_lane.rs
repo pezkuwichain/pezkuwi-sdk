@@ -21,8 +21,8 @@
 
 use crate::metrics::Labeled;
 use num_traits::{SaturatingAdd, Zero};
-use relay_utils::{BlockNumberBase, HeaderId};
 use pezsp_arithmetic::traits::AtLeast32BitUnsigned;
+use relay_utils::{BlockNumberBase, HeaderId};
 use std::{fmt::Debug, ops::Sub};
 
 /// One-way message lane.

@@ -32,9 +32,8 @@ use async_std::{
 };
 use async_trait::async_trait;
 use codec::Encode;
-use pezframe_support::weights::Weight;
 use futures::{FutureExt, StreamExt};
-use quick_cache::unsync::Cache;
+use pezframe_support::weights::Weight;
 use pezsp_consensus_grandpa::{AuthorityId, OpaqueKeyOwnershipProof, SetId};
 use pezsp_core::{
 	storage::{StorageData, StorageKey},
@@ -43,6 +42,7 @@ use pezsp_core::{
 use pezsp_runtime::{traits::Header as _, transaction_validity::TransactionValidity};
 use pezsp_trie::StorageProof;
 use pezsp_version::RuntimeVersion;
+use quick_cache::unsync::Cache;
 
 /// `quick_cache::unsync::Cache` wrapped in async-aware synchronization primitives.
 type SyncCache<K, V> = Arc<RwLock<Cache<K, V>>>;

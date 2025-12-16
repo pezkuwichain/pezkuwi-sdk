@@ -35,11 +35,11 @@ use pezpallet_xcm_bridge_hub::{BridgeId, XcmAsPlainPayload};
 
 use pezframe_support::{parameter_types, traits::PalletInfoAccess};
 use pezframe_system::{EnsureNever, EnsureRoot};
+use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezpallet_bridge_messages::LaneIdOf;
 use pezpallet_bridge_relayers::extension::{
 	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
 };
-use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use testnet_teyrchains_constants::pezkuwichain::currency::UNITS as TYR;
 use teyrchains_common::xcm_config::{AllSiblingSystemTeyrchains, RelayOrOtherSystemTeyrchains};
 use xcm::{
@@ -105,7 +105,8 @@ pezbp_runtime::generate_static_str_provider!(OnBridgeHubPezkuwichainRefundBridge
 pub type WithBridgeHubZagrosMessagesInstance = pezpallet_bridge_messages::Instance3;
 impl pezpallet_bridge_messages::Config<WithBridgeHubZagrosMessagesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pezpallet_bridge_messages_pezkuwichain_to_zagros::WeightInfo<Runtime>;
+	type WeightInfo =
+		weights::pezpallet_bridge_messages_pezkuwichain_to_zagros::WeightInfo<Runtime>;
 
 	type ThisChain = bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain;
 	type BridgedChain = bp_bridge_hub_zagros::BridgeHubZagros;
@@ -120,12 +121,13 @@ impl pezpallet_bridge_messages::Config<WithBridgeHubZagrosMessagesInstance> for 
 	type LaneId = LegacyLaneId;
 
 	type DeliveryPayments = ();
-	type DeliveryConfirmationPayments = pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
-		Runtime,
-		WithBridgeHubZagrosMessagesInstance,
-		RelayersForLegacyLaneIdsMessagesInstance,
-		DeliveryRewardInBalance,
-	>;
+	type DeliveryConfirmationPayments =
+		pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
+			Runtime,
+			WithBridgeHubZagrosMessagesInstance,
+			RelayersForLegacyLaneIdsMessagesInstance,
+			DeliveryRewardInBalance,
+		>;
 
 	type MessageDispatch = XcmOverBridgeHubZagros;
 	type OnMessagesDelivered = XcmOverBridgeHubZagros;
@@ -363,8 +365,8 @@ pub mod migration {
 
 	mod v1_wrong {
 		use bp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
-		use pezbp_runtime::AccountIdOf;
 		use codec::{Decode, Encode};
+		use pezbp_runtime::AccountIdOf;
 		use pezpallet_bridge_messages::BridgedChainOf;
 		use pezsp_std::collections::vec_deque::VecDeque;
 
@@ -396,8 +398,8 @@ pub mod migration {
 	/// for Pezkuwichain/Zagros).
 	pub struct FixMessagesV1Migration<T, I>(pezsp_std::marker::PhantomData<(T, I)>);
 
-	impl<T: pezpallet_bridge_messages::Config<I>, I: 'static> pezframe_support::traits::OnRuntimeUpgrade
-		for FixMessagesV1Migration<T, I>
+	impl<T: pezpallet_bridge_messages::Config<I>, I: 'static>
+		pezframe_support::traits::OnRuntimeUpgrade for FixMessagesV1Migration<T, I>
 	{
 		fn on_runtime_upgrade() -> Weight {
 			use pezsp_core::Get;

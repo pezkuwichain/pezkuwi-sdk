@@ -19,8 +19,8 @@
 //! teyrchains and parathreads to be swapped.
 //!
 //! This doesn't handle the mechanics of determining which para ID actually ends up with a teyrchain
-//! lease. This must handled by a separately, through the trait interface that this pezpallet provides
-//! or the root dispatchables.
+//! lease. This must handled by a separately, through the trait interface that this pezpallet
+//! provides or the root dispatchables.
 
 pub mod migration;
 
@@ -32,8 +32,8 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::*;
-pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
+pub use pezpallet::*;
 use pezsp_runtime::traits::{CheckedConversion, CheckedSub, Saturating, Zero};
 
 type BalanceOf<T> =
@@ -75,7 +75,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency type used for bidding.
 		type Currency: ReservableCurrency<Self::AccountId>;
@@ -506,9 +507,9 @@ mod tests {
 	use crate::{mock::TestRegistrar, slots};
 	use pezframe_support::{assert_noop, assert_ok, derive_impl, parameter_types};
 	use pezframe_system::EnsureRoot;
-	use pezpallet_balances;
 	use pezkuwi_primitives::BlockNumber;
 	use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
+	use pezpallet_balances;
 	use pezsp_core::H256;
 	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},

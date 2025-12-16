@@ -21,11 +21,11 @@
 use crate::{Pezpallet as Staking, *};
 use pezframe_benchmarking::account;
 use pezframe_system::RawOrigin;
+use pezsp_io::hashing::blake2_256;
 use rand_chacha::{
 	rand_core::{RngCore, SeedableRng},
 	ChaChaRng,
 };
-use pezsp_io::hashing::blake2_256;
 
 use pezframe_election_provider_support::SortedListProvider;
 use pezframe_support::pezpallet_prelude::*;

@@ -18,6 +18,10 @@
 
 use futures::prelude::*;
 
+use bizinikiwi_test_runtime_client::{
+	runtime::{Block as TestBlock, Hash as TestHash},
+	TestClientBuilder, TestClientBuilderExt as _,
+};
 use pezsc_consensus::{ImportQueue, Link};
 use pezsc_network::{
 	config::{self, FullNetworkConfiguration, MultiaddrWithPeerId, ProtocolId, TransportConfig},
@@ -38,10 +42,6 @@ use pezsc_network_sync::{
 };
 use pezsp_blockchain::HeaderBackend;
 use pezsp_runtime::traits::{Block as BlockT, Zero};
-use bizinikiwi_test_runtime_client::{
-	runtime::{Block as TestBlock, Hash as TestHash},
-	TestClientBuilder, TestClientBuilderExt as _,
-};
 
 use std::{sync::Arc, time::Duration};
 

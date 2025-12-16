@@ -24,7 +24,6 @@ use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{
 	dispatch::DispatchInfo, pezpallet_prelude::TransactionSource, RuntimeDebugNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		AsSystemOriginSigner, CheckedAdd, DispatchInfoOf, Dispatchable, One, PostDispatchInfoOf,
@@ -36,6 +35,7 @@ use pezsp_runtime::{
 	DispatchResult, Saturating,
 };
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
 
 /// Nonce check and increment to give replay protection for transactions.
 ///

@@ -65,6 +65,7 @@ extern crate alloc;
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::marker::PhantomData;
+use log::info;
 use pezframe_support::{
 	dispatch::{ClassifyDispatch, DispatchClass, DispatchResult, Pays, PaysFee, WeighData},
 	pezpallet_prelude::TransactionSource,
@@ -72,8 +73,6 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::ensure_signed;
-use log::info;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{
@@ -82,6 +81,7 @@ use pezsp_runtime::{
 	},
 	transaction_validity::{InvalidTransaction, ValidTransaction},
 };
+use scale_info::TypeInfo;
 
 // Re-export pezpallet items so that they can be accessed from the crate namespace.
 pub use pezpallet::*;
@@ -103,8 +103,8 @@ const MILLICENTS: u32 = 1_000_000_000;
 // The `WeightData<T>` trait has access to the arguments of the dispatch that it wants to assign a
 // weight to. Nonetheless, the trait itself cannot make any assumptions about what the generic type
 // of the arguments (`T`) is. Based on our needs, we could replace `T` with a more concrete type
-// while implementing the trait. The `pezpallet::weight` expects whatever implements `WeighData<T>` to
-// replace `T` with a tuple of the dispatch arguments. This is exactly how we will craft the
+// while implementing the trait. The `pezpallet::weight` expects whatever implements `WeighData<T>`
+// to replace `T` with a tuple of the dispatch arguments. This is exactly how we will craft the
 // implementation below.
 //
 // The rules of `WeightForSetDummy` are as follows:
@@ -173,8 +173,8 @@ pub mod pezpallet {
 	#[pezpallet::pezpallet]
 	pub struct Pezpallet<T>(_);
 
-	// This pezpallet implements the [`pezframe_support::traits::Hooks`] trait to define some logic to
-	// execute in some context.
+	// This pezpallet implements the [`pezframe_support::traits::Hooks`] trait to define some logic
+	// to execute in some context.
 	#[pezpallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		// `on_initialize` is executed at the beginning of the block before any extrinsic are
@@ -275,9 +275,9 @@ pub mod pezpallet {
 		// If you don't respect these rules, it is likely that your chain will be attackable.
 		//
 		// Each transaction must define a `#[pezpallet::weight(..)]` attribute to convey a set of
-		// static information about its dispatch. FRAME System and FRAME Executive pezpallet then use
-		// this information to properly execute the transaction, whilst keeping the total load of
-		// the chain in a moderate rate.
+		// static information about its dispatch. FRAME System and FRAME Executive pezpallet then
+		// use this information to properly execute the transaction, whilst keeping the total load
+		// of the chain in a moderate rate.
 		//
 		// The parenthesized value of the `#[pezpallet::weight(..)]` attribute can be any type that
 		// implements a set of traits, namely [`WeighData`], [`ClassifyDispatch`], and
@@ -447,11 +447,11 @@ impl<T: Config> Pezpallet<T> {
 	}
 }
 
-// Similar to other FRAME pallets, your pezpallet can also define a transaction extension and perform
-// some checks and [pre/post]processing [before/after] the transaction. A transaction extension can
-// be any decodable type that implements `TransactionExtension`. See the trait definition for the
-// full list of bounds. As a convention, you can follow this approach to create an extension for
-// your pezpallet:
+// Similar to other FRAME pallets, your pezpallet can also define a transaction extension and
+// perform some checks and [pre/post]processing [before/after] the transaction. A transaction
+// extension can be any decodable type that implements `TransactionExtension`. See the trait
+// definition for the full list of bounds. As a convention, you can follow this approach to create
+// an extension for your pezpallet:
 //   - If the extension does not carry any data, then use a tuple struct with just a `marker`
 //     (needed for the compiler to accept `T: Config`) will suffice.
 //   - Otherwise, create a tuple struct which contains the external data. Of course, for the entire

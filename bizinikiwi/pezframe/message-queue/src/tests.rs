@@ -24,8 +24,8 @@ use crate::{mock::*, *};
 use pezframe_support::{
 	assert_noop, assert_ok, assert_storage_noop, traits::BatchFootprint, StorageNoopGuard,
 };
-use rand::{rngs::StdRng, Rng, SeedableRng};
 use pezsp_crypto_hashing::blake2_256;
+use rand::{rngs::StdRng, Rng, SeedableRng};
 
 #[test]
 fn mocked_weight_works() {
@@ -1250,8 +1250,10 @@ fn permanently_overweight_limit_is_valid_basic() {
 			MessageQueue::enqueue_message(msg(&m), Here);
 			MessageQueue::service_queues(w.into());
 
-			let last_event =
-				pezframe_system::Pezpallet::<Test>::events().into_iter().last().expect("No event");
+			let last_event = pezframe_system::Pezpallet::<Test>::events()
+				.into_iter()
+				.last()
+				.expect("No event");
 
 			// The weight overhead for a single message is set to 50. The message itself needs 200.
 			// Every weight in range `[50, 249]` should result in a permanently overweight message:
@@ -1310,8 +1312,10 @@ fn permanently_overweight_limit_is_valid_fuzzy() {
 				MessageQueue::enqueue_message(msg(&m), Here);
 				MessageQueue::service_queues(w.into());
 
-				let last_event =
-					pezframe_system::Pezpallet::<Test>::events().into_iter().last().expect("No event");
+				let last_event = pezframe_system::Pezpallet::<Test>::events()
+					.into_iter()
+					.last()
+					.expect("No event");
 
 				if w < o + 200 {
 					assert_eq!(

@@ -128,7 +128,8 @@ fn transact_recursion_limit_works() {
 
 	let mut block_builder = client.init_pezkuwi_block_builder();
 
-	let execute = construct_extrinsic(&client, call.unwrap(), pezsp_keyring::Sr25519Keyring::Alice, 0);
+	let execute =
+		construct_extrinsic(&client, call.unwrap(), pezsp_keyring::Sr25519Keyring::Alice, 0);
 
 	block_builder.push_pezkuwi_extrinsic(execute).expect("pushes extrinsic");
 
@@ -168,9 +169,9 @@ fn transact_recursion_limit_works() {
 
 #[test]
 fn query_response_fires() {
+	use pezkuwi_test_runtime::RuntimeEvent::TestNotifier;
 	use pezpallet_test_notifier::Event::*;
 	use pezpallet_xcm::QueryStatus;
-	use pezkuwi_test_runtime::RuntimeEvent::TestNotifier;
 
 	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();
@@ -251,8 +252,8 @@ fn query_response_fires() {
 
 #[test]
 fn query_response_elicits_handler() {
-	use pezpallet_test_notifier::Event::*;
 	use pezkuwi_test_runtime::RuntimeEvent::TestNotifier;
+	use pezpallet_test_notifier::Event::*;
 
 	pezsp_tracing::try_init_simple();
 	let client = TestClientBuilder::new().build();

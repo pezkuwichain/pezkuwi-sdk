@@ -88,7 +88,9 @@ fn initialize(
 					>(&path, config)
 				}
 			} else {
-				pezsc_executor_wasmtime::create_runtime::<pezsp_io::BizinikiwiHostFunctions>(blob, config)
+				pezsc_executor_wasmtime::create_runtime::<pezsp_io::BizinikiwiHostFunctions>(
+					blob, config,
+				)
 			}
 			.map(|runtime| -> Box<dyn WasmModule> { Box::new(runtime) })
 		},

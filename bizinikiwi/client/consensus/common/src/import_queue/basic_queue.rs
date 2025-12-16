@@ -20,13 +20,13 @@ use futures::{
 	task::{Context, Poll},
 };
 use log::{debug, trace};
-use prometheus_endpoint::Registry;
 use pezsc_utils::mpsc::{tracing_unbounded, TracingUnboundedReceiver, TracingUnboundedSender};
 use pezsp_consensus::BlockOrigin;
 use pezsp_runtime::{
 	traits::{Block as BlockT, Header as HeaderT, NumberFor},
 	Justification, Justifications,
 };
+use prometheus_endpoint::Registry;
 use std::pin::Pin;
 
 use crate::{

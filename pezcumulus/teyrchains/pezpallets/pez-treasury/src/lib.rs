@@ -2,7 +2,8 @@
 
 //! # PEZ Treasury Pezpallet
 //!
-//! A pezpallet for managing the PEZ token distribution and treasury with automated halving mechanics.
+//! A pezpallet for managing the PEZ token distribution and treasury with automated halving
+//! mechanics.
 //!
 //! ## Overview
 //!
@@ -92,8 +93,8 @@ use pezframe_support::{
 	PalletId,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-use scale_info::TypeInfo;
 use pezsp_runtime::traits::{AccountIdConversion, Saturating, Zero};
+use scale_info::TypeInfo;
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {

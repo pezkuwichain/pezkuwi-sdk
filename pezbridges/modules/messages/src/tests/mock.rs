@@ -39,21 +39,21 @@ use bp_messages::{
 	Message, MessageKey, MessageNonce, OutboundLaneData, UnrewardedRelayer,
 	UnrewardedRelayersState,
 };
+use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezbp_runtime::{
 	messages::MessageDispatchResult, Chain, ChainId, Size, UnverifiedStorageProofParams,
 };
-use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{
 	derive_impl,
 	weights::{constants::RocksDbWeight, Weight},
 };
-use scale_info::TypeInfo;
 use pezsp_core::H256;
 use pezsp_runtime::{
 	testing::Header as BizinikiwiHeader,
 	traits::{BlakeTwo256, ConstU32},
 	BuildStorage, StateVersion,
 };
+use scale_info::TypeInfo;
 use std::{collections::VecDeque, ops::RangeInclusive};
 
 pub type AccountId = u64;
@@ -354,7 +354,8 @@ impl TestMessageDispatch {
 
 	pub fn emulate_enqueued_message(lane: TestLaneIdType) {
 		let key = (b"dispatched", lane).encode();
-		let dispatched = pezframe_support::storage::unhashed::get_or_default::<MessageNonce>(&key[..]);
+		let dispatched =
+			pezframe_support::storage::unhashed::get_or_default::<MessageNonce>(&key[..]);
 		pezframe_support::storage::unhashed::put(&key[..], &(dispatched + 1));
 	}
 }
@@ -460,7 +461,9 @@ pub fn inbound_unrewarded_relayers_state(lane: TestLaneIdType) -> UnrewardedRela
 
 /// Return test externalities to use in tests.
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
-	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap();
+	let mut t = pezframe_system::GenesisConfig::<TestRuntime>::default()
+		.build_storage()
+		.unwrap();
 	pezpallet_balances::GenesisConfig::<TestRuntime> {
 		balances: vec![(ENDOWED_ACCOUNT, 1_000_000)],
 		..Default::default()

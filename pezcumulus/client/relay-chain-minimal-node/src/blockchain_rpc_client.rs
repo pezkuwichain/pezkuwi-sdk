@@ -20,10 +20,10 @@ use std::{
 	pin::Pin,
 };
 
+use futures::{Stream, StreamExt};
 use pezcumulus_primitives_core::{InboundDownwardMessage, ParaId, PersistedValidationData};
 use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainResult};
 use pezcumulus_relay_chain_rpc_interface::RelayChainRpcClient;
-use futures::{Stream, StreamExt};
 use pezkuwi_core_primitives::{Block, BlockNumber, Hash, Header};
 use pezkuwi_overseer::{ChainApiBackend, RuntimeApiSubsystemClient};
 use pezkuwi_primitives::{
@@ -217,7 +217,8 @@ impl RuntimeApiSubsystemClient for BlockChainRpcClient {
 		&self,
 		at: Hash,
 		para_id: pezcumulus_primitives_core::ParaId,
-	) -> Result<Option<pezkuwi_primitives::CommittedCandidateReceiptV2<Hash>>, pezsp_api::ApiError> {
+	) -> Result<Option<pezkuwi_primitives::CommittedCandidateReceiptV2<Hash>>, pezsp_api::ApiError>
+	{
 		Ok(self
 			.rpc_client
 			.teyrchain_host_candidate_pending_availability(at, para_id)
@@ -324,7 +325,10 @@ impl RuntimeApiSubsystemClient for BlockChainRpcClient {
 			.await?)
 	}
 
-	async fn current_epoch(&self, at: Hash) -> Result<pezsp_consensus_babe::Epoch, pezsp_api::ApiError> {
+	async fn current_epoch(
+		&self,
+		at: Hash,
+	) -> Result<pezsp_consensus_babe::Epoch, pezsp_api::ApiError> {
 		Ok(self.rpc_client.babe_api_current_epoch(at).await?)
 	}
 
@@ -335,7 +339,10 @@ impl RuntimeApiSubsystemClient for BlockChainRpcClient {
 		Ok(self.rpc_client.authority_discovery_authorities(at).await?)
 	}
 
-	async fn api_version_teyrchain_host(&self, at: Hash) -> Result<Option<u32>, pezsp_api::ApiError> {
+	async fn api_version_teyrchain_host(
+		&self,
+		at: Hash,
+	) -> Result<Option<u32>, pezsp_api::ApiError> {
 		let api_id = <dyn pezkuwi_primitives::runtime_api::TeyrchainHost<Block>>::ID;
 		Ok(self.rpc_client.runtime_version(at).await.map(|v| v.api_version(&api_id))?)
 	}

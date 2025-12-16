@@ -24,9 +24,9 @@ use crate::{
 };
 use bp_asset_hub_zagros::CreateForeignAssetDeposit;
 use bridge_hub_common::AggregateMessageOrigin;
+use hex_literal::hex;
 use pezframe_support::{parameter_types, traits::Contains, weights::ConstantMultiplier};
 use pezframe_system::EnsureRootWithSuccess;
-use hex_literal::hex;
 use pezpallet_xcm::EnsureXcm;
 use pezsnowbridge_beacon_primitives::{Fork, ForkVersions};
 use pezsnowbridge_core::{gwei, meth, AllowSiblingsOnly, PricingParameters, Rewards};
@@ -53,7 +53,8 @@ use xcm::prelude::{GlobalConsensus, InteriorLocation, Location, PalletInstance, 
 use xcm_executor::XcmExecutor;
 use zagros_runtime_constants::system_teyrchain::ASSET_HUB_ID;
 
-pub const SLOTS_PER_EPOCH: u32 = pezsnowbridge_pezpallet_ethereum_client::config::SLOTS_PER_EPOCH as u32;
+pub const SLOTS_PER_EPOCH: u32 =
+	pezsnowbridge_pezpallet_ethereum_client::config::SLOTS_PER_EPOCH as u32;
 
 /// Exports message to the Ethereum Gateway contract.
 pub type SnowbridgeExporter = EthereumBlobExporter<
@@ -194,7 +195,8 @@ impl pezsnowbridge_pezpallet_outbound_queue_v2::Config for Runtime {
 	type WeightToFee = WeightToFee;
 	type Verifier = EthereumBeaconClient;
 	type GatewayAddress = EthereumGatewayAddress;
-	type WeightInfo = crate::weights::pezsnowbridge_pezpallet_outbound_queue_v2::WeightInfo<Runtime>;
+	type WeightInfo =
+		crate::weights::pezsnowbridge_pezpallet_outbound_queue_v2::WeightInfo<Runtime>;
 	type EthereumNetwork = EthereumNetwork;
 	type RewardKind = BridgeReward;
 	type DefaultRewardKind = SnowbridgeReward;
@@ -325,8 +327,8 @@ pub mod benchmark_helpers {
 		RuntimeOrigin, System,
 	};
 	use codec::Encode;
-	use pezframe_support::assert_ok;
 	use hex_literal::hex;
+	use pezframe_support::assert_ok;
 	use pezsnowbridge_beacon_primitives::BeaconHeader;
 	use pezsnowbridge_inbound_queue_primitives::EventFixture;
 	use pezsnowbridge_pezpallet_inbound_queue::BenchmarkHelper;
@@ -357,7 +359,9 @@ pub mod benchmark_helpers {
 		}
 	}
 
-	impl<T: pezsnowbridge_pezpallet_inbound_queue_v2::Config> InboundQueueBenchmarkHelperV2<T> for Runtime {
+	impl<T: pezsnowbridge_pezpallet_inbound_queue_v2::Config> InboundQueueBenchmarkHelperV2<T>
+		for Runtime
+	{
 		fn initialize_storage() -> EventFixture {
 			let message = make_register_token_message_v2();
 
@@ -370,7 +374,9 @@ pub mod benchmark_helpers {
 		}
 	}
 
-	impl<T: pezsnowbridge_pezpallet_outbound_queue_v2::Config> OutboundQueueBenchmarkHelperV2<T> for Runtime {
+	impl<T: pezsnowbridge_pezpallet_outbound_queue_v2::Config> OutboundQueueBenchmarkHelperV2<T>
+		for Runtime
+	{
 		fn initialize_storage(beacon_header: BeaconHeader, block_roots_root: H256) {
 			EthereumBeaconClient::store_finalized_header(beacon_header, block_roots_root).unwrap();
 		}
@@ -440,7 +446,9 @@ pub(crate) mod migrations {
 	>;
 
 	/// One shot migration for NetworkId::Zagros to NetworkId::ByGenesis(ZAGROS_GENESIS_HASH)
-	pub struct MigrationForXcmV5<T: pezsnowbridge_pezpallet_system::Config>(core::marker::PhantomData<T>);
+	pub struct MigrationForXcmV5<T: pezsnowbridge_pezpallet_system::Config>(
+		core::marker::PhantomData<T>,
+	);
 	impl<T: pezsnowbridge_pezpallet_system::Config> pezframe_support::traits::OnRuntimeUpgrade
 		for MigrationForXcmV5<T>
 	{
@@ -451,7 +459,9 @@ pub(crate) mod migrations {
 				weight.saturating_accrue(T::DbWeight::get().reads_writes(1, 1));
 				Some(xcm::v5::Location::try_from(pre).expect("valid location"))
 			};
-			pezsnowbridge_pezpallet_system::ForeignToNativeId::<T>::translate_values(translate_zagros);
+			pezsnowbridge_pezpallet_system::ForeignToNativeId::<T>::translate_values(
+				translate_zagros,
+			);
 
 			weight
 		}

@@ -325,9 +325,11 @@ pub fn get_payment_id(
 	parent_bounty_id: BountyIndex,
 	child_bounty_id: Option<BountyIndex>,
 ) -> Option<u64> {
-	let bounty =
-		pezpallet_bounties::Pezpallet::<Test>::get_bounty_details(parent_bounty_id, child_bounty_id)
-			.expect("no bounty");
+	let bounty = pezpallet_bounties::Pezpallet::<Test>::get_bounty_details(
+		parent_bounty_id,
+		child_bounty_id,
+	)
+	.expect("no bounty");
 
 	match bounty.3 {
 		BountyStatus::FundingAttempted {

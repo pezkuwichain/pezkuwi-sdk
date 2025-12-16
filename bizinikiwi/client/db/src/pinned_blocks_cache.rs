@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use schnellru::{Limiter, LruMap};
 use pezsp_runtime::{traits::Block as BlockT, Justifications};
+use schnellru::{Limiter, LruMap};
 
 const LOG_TARGET: &str = "db::pin";
 const PINNING_CACHE_SIZE: usize = 2048;

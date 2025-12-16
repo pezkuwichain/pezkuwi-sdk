@@ -30,20 +30,22 @@
 //!
 //! The [TransactionExtension](pezsp_runtime::traits::TransactionExtension) used in this example is
 //! [AuthorizeCoownership](extensions::AuthorizeCoownership). If activated, the extension will
-//! authorize 2 signers as coowners, with a [coowner origin](pezpallet_coownership::Origin) specific to
-//! the [coownership example pezpallet](pezpallet_coownership), by validating a signature of the rest of
-//! the transaction from each party. This means any extensions after ours in the pipeline, their
-//! implicits and the actual call. The extension pipeline used in our example checks the genesis
-//! hash, transaction version and mortality of the transaction after the `AuthorizeCoownership` runs
-//! as we want these transactions to run regardless of what origin passes through them and/or we
-//! want their implicit data in any signature authorization happening earlier in the pipeline.
+//! authorize 2 signers as coowners, with a [coowner origin](pezpallet_coownership::Origin) specific
+//! to the [coownership example pezpallet](pezpallet_coownership), by validating a signature of the
+//! rest of the transaction from each party. This means any extensions after ours in the pipeline,
+//! their implicits and the actual call. The extension pipeline used in our example checks the
+//! genesis hash, transaction version and mortality of the transaction after the
+//! `AuthorizeCoownership` runs as we want these transactions to run regardless of what origin
+//! passes through them and/or we want their implicit data in any signature authorization happening
+//! earlier in the pipeline.
 //!
 //! In this example, aside from the [AuthorizeCoownership](extensions::AuthorizeCoownership)
 //! extension, we use the following pallets:
 //! - [pezpallet_coownership] - provides a coowner origin and the functionality to authorize it.
 //! - [pezpallet_assets] - a dummy asset pezpallet that tracks assets, identified by an
 //!   [AssetId](pezpallet_assets::AssetId), and their respective owners, which can be either an
-//!   [account](pezpallet_assets::Owner::Single) or a [pair of owners](pezpallet_assets::Owner::Double).
+//!   [account](pezpallet_assets::Owner::Single) or a [pair of
+//!   owners](pezpallet_assets::Owner::Double).
 //!
 //! Assets are created in [pezpallet_assets] using the
 //! [create_asset](pezpallet_assets::Call::create_asset) call, which accepts traditionally signed
@@ -56,9 +58,9 @@
 //! ### Example usage
 #![doc = docify::embed!("src/tests.rs", create_coowned_asset_works)]
 //!
-//! This example does not focus on any pezpallet logic or syntax, but rather on `TransactionExtension`
-//! functionality. The pallets used are just skeletons to provide storage state and custom origin
-//! choices and requirements, as shown in the examples. Any weight and/or
+//! This example does not focus on any pezpallet logic or syntax, but rather on
+//! `TransactionExtension` functionality. The pallets used are just skeletons to provide storage
+//! state and custom origin choices and requirements, as shown in the examples. Any weight and/or
 //! transaction fee is out of scope for this example.
 
 #![cfg_attr(not(feature = "std"), no_std)]

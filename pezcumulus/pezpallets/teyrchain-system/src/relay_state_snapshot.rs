@@ -21,10 +21,10 @@ use codec::{Decode, Encode};
 use pezcumulus_primitives_core::{
 	relay_chain, AbridgedHostConfiguration, AbridgedHrmpChannel, ParaId,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::traits::HashingFor;
 use pezsp_state_machine::{Backend, TrieBackend, TrieBackendBuilder};
 use pezsp_trie::{HashDBT, MemoryDB, StorageProof, EMPTY_PREFIX};
+use scale_info::TypeInfo;
 
 /// The capacity of the upward message queue of a teyrchain on the relay chain.
 // The field order should stay the same as the data can be found in the proof to ensure both are
@@ -300,8 +300,10 @@ impl RelayChainStateProof {
 	/// Read relay chain authorities.
 	pub fn read_authorities(
 		&self,
-	) -> Result<Vec<(pezsp_consensus_babe::AuthorityId, pezsp_consensus_babe::BabeAuthorityWeight)>, Error>
-	{
+	) -> Result<
+		Vec<(pezsp_consensus_babe::AuthorityId, pezsp_consensus_babe::BabeAuthorityWeight)>,
+		Error,
+	> {
 		read_entry(&self.trie_backend, &relay_chain::well_known_keys::AUTHORITIES, None)
 			.map_err(Error::Authorities)
 	}

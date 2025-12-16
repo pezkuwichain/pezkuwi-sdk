@@ -86,8 +86,9 @@ fn transactions_are_captured() {
 			builder::bare_instantiate(Code::Upload(binary.clone())).build_and_unwrap_contract();
 		let Contract { addr: addr2, .. } =
 			builder::bare_instantiate(Code::Upload(gas_binary.clone())).build_and_unwrap_contract();
-		let balance =
-			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+		let balance = Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<
+			Test,
+		>(100, 10));
 
 		<Test as Config>::FeeInfo::deposit_txfee(<Test as Config>::Currency::issue(5_000_000_000));
 
@@ -144,8 +145,9 @@ fn events_are_captured() {
 
 		// Bare call must not be captured.
 		builder::bare_instantiate(Code::Existing(code_hash)).build_and_unwrap_contract();
-		let balance =
-			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+		let balance = Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<
+			Test,
+		>(100, 10));
 
 		<Test as Config>::FeeInfo::deposit_txfee(<Test as Config>::Currency::issue(
 			500_000_000_000,

@@ -25,9 +25,9 @@ use crate::{
 	Config, Error, U256,
 };
 use core::ops::ControlFlow;
-use revm::interpreter::gas::{BASE, VERYLOW};
 use pezsp_core::H256;
 use pezsp_io::hashing::keccak_256;
+use revm::interpreter::gas::{BASE, VERYLOW};
 // TODO: Fix the gas handling for the memory operations
 
 /// The Keccak-256 hash of the empty string `""`.

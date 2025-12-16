@@ -19,8 +19,8 @@
 use crate::{RuntimeT, LOG_TARGET};
 use pezframe_support::traits::PalletInfoAccess;
 use pezpallet_staking::Nominators;
-use remote_externalities::{Builder, Mode, OnlineConfig};
 use pezsp_runtime::{traits::Block as BlockT, DeserializeOwned};
+use remote_externalities::{Builder, Mode, OnlineConfig};
 
 /// Test voter bags migration. `currency_unit` is the number of planks per the the runtimes `UNITS`
 /// (i.e. number of decimal places per HEZ, KSM etc)
@@ -56,7 +56,8 @@ pub async fn execute<Runtime, Block>(
 		);
 		log::info!(target: LOG_TARGET, "Moved {} nominators", moved);
 
-		let voter_list_len = <Runtime as pezpallet_staking::Config>::VoterList::iter().count() as u32;
+		let voter_list_len =
+			<Runtime as pezpallet_staking::Config>::VoterList::iter().count() as u32;
 		let voter_list_count = <Runtime as pezpallet_staking::Config>::VoterList::count();
 		// and confirm it is equal to the length of the `VoterList`.
 		assert_eq!(pre_migrate_nominator_count, voter_list_len);

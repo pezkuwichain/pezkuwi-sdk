@@ -22,9 +22,9 @@ use crate::{
 	error, utils, with_crypto_scheme, CryptoSchemeFlag, NetworkSchemeFlag, OutputTypeFlag,
 };
 use clap::Parser;
-use rand::{rngs::OsRng, RngCore};
 use pezsp_core::crypto::{unwrap_or_default_ss58_version, Ss58AddressFormat, Ss58Codec};
 use pezsp_runtime::traits::IdentifyAccount;
+use rand::{rngs::OsRng, RngCore};
 use utils::print_from_uri;
 
 /// The `vanity` command

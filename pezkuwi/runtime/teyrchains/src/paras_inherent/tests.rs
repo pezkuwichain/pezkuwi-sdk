@@ -63,10 +63,10 @@ mod enter {
 		MutateDescriptorV2, UMPSignal, UncheckedSigned,
 	};
 	use pezkuwi_primitives_test_helpers::CandidateDescriptor;
-	use pretty_assertions::assert_eq;
-	use rstest::rstest;
 	use pezsp_core::ByteArray;
 	use pezsp_runtime::Perbill;
+	use pretty_assertions::assert_eq;
+	use rstest::rstest;
 
 	struct TestConfig {
 		dispute_statements: BTreeMap<u32, u32>,
@@ -2040,7 +2040,8 @@ mod enter {
 			// * 5 v2 candidate descriptors.
 			assert_eq!(inherent_data.backed_candidates.len(), 5);
 
-			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
+			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data)
+				.unwrap();
 		});
 	}
 
@@ -2099,7 +2100,8 @@ mod enter {
 			// * 5 v2 candidate descriptors.
 			assert_eq!(inherent_data.backed_candidates.len(), 5);
 
-			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
+			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data)
+				.unwrap();
 		});
 	}
 
@@ -2264,7 +2266,8 @@ mod enter {
 				expected_inherent_data
 			);
 
-			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap_err();
+			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data)
+				.unwrap_err();
 		});
 	}
 
@@ -2374,8 +2377,8 @@ mod sanitizers {
 		AvailabilityBitfield, GroupIndex, Hash, Id as ParaId, SignedAvailabilityBitfield,
 		ValidatorIndex,
 	};
-	use rstest::rstest;
 	use pezsp_core::crypto::UncheckedFrom;
+	use rstest::rstest;
 
 	use crate::mock::Test;
 	use pezkuwi_primitives::TEYRCHAIN_KEY_TYPE_ID;
@@ -2644,8 +2647,8 @@ mod sanitizers {
 		fn get_test_data_one_core_per_para(backing_kind: BackingKind) -> TestData {
 			const RELAY_PARENT_NUM: u32 = 3;
 
-			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering backing
-			// votes) won't behave correctly
+			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering
+			// backing votes) won't behave correctly
 			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				default_header().hash(),
 				Default::default(),
@@ -2967,8 +2970,8 @@ mod sanitizers {
 				),
 			]));
 
-			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering backing
-			// votes) won't behave correctly
+			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering
+			// backing votes) won't behave correctly
 			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				relay_parent,
 				Default::default(),
@@ -2984,7 +2987,10 @@ mod sanitizers {
 
 			// Set the on-chain included head data and current code hash.
 			for id in 1..=8u32 {
-				paras::Pezpallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
+				paras::Pezpallet::<Test>::set_current_head(
+					ParaId::from(id),
+					HeadData(vec![id as u8]),
+				);
 				paras::Pezpallet::<Test>::force_set_current_code(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
@@ -3508,7 +3514,10 @@ mod sanitizers {
 
 			// Set the on-chain included head data and current code hash.
 			for id in 1..=4u32 {
-				paras::Pezpallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
+				paras::Pezpallet::<Test>::set_current_head(
+					ParaId::from(id),
+					HeadData(vec![id as u8]),
+				);
 				paras::Pezpallet::<Test>::force_set_current_code(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
@@ -3878,8 +3887,8 @@ mod sanitizers {
 			}
 			.hash();
 
-			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering backing
-			// votes) won't behave correctly
+			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering
+			// backing votes) won't behave correctly
 			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				prev_relay_parent,
 				Default::default(),
@@ -3990,7 +3999,10 @@ mod sanitizers {
 
 			// Set the on-chain included head data and current code hash.
 			for id in 1..=2u32 {
-				paras::Pezpallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
+				paras::Pezpallet::<Test>::set_current_head(
+					ParaId::from(id),
+					HeadData(vec![id as u8]),
+				);
 				paras::Pezpallet::<Test>::force_set_current_code(
 					RuntimeOrigin::root(),
 					ParaId::from(id),

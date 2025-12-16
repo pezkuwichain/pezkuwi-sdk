@@ -55,10 +55,11 @@ pub mod pezpallet {
 
 		/// The runtime event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The origin which may command personhood updates through this pezpallet. Root can always do
-		/// this.
+		/// The origin which may command personhood updates through this pezpallet. Root can always
+		/// do this.
 		type UpdateOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The maximum number of people supported in a single operation.

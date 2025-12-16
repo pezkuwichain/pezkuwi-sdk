@@ -104,7 +104,8 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Test {
 	type XcmpMessageHandler = XcmpQueue;
 	type ReservedXcmpWeight = ();
 	type CheckAssociatedRelayNumber = AnyRelayNumber;
-	type ConsensusHook = pezcumulus_pezpallet_teyrchain_system::consensus_hook::ExpectParentIncluded;
+	type ConsensusHook =
+		pezcumulus_pezpallet_teyrchain_system::consensus_hook::ExpectParentIncluded;
 	type RelayParentOffset = ConstU32<0>;
 }
 
@@ -246,7 +247,10 @@ impl Config for Test {
 }
 
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
-	pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap().into()
+	pezframe_system::GenesisConfig::<Test>::default()
+		.build_storage()
+		.unwrap()
+		.into()
 }
 
 /// A para that we have an HRMP channel with.

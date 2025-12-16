@@ -39,12 +39,12 @@ mod imports {
 		test_relay_is_trusted_teleporter, test_teyrchain_is_trusted_teleporter,
 		test_teyrchain_is_trusted_teleporter_for_relay,
 		test_xcm_fee_querying_apis_work_for_asset_hub,
+		xcm_helpers::{
+			fee_asset, get_amount_from_versioned_assets, non_fee_asset, xcm_transact_paid_execution,
+		},
 		xcm_pez_emulator::{
 			assert_expected_events, bx, Chain, RelayChain as Relay, Test, TestArgs, TestContext,
 			TestExt, Teyrchain as Para,
-		},
-		xcm_helpers::{
-			fee_asset, get_amount_from_versioned_assets, non_fee_asset, xcm_transact_paid_execution,
 		},
 		PenpalATeleportableAssetLocation, ASSETS_PALLET_ID, RESERVABLE_ASSET_ID, XCM_V3,
 	};

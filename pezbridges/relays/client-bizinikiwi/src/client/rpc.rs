@@ -37,17 +37,16 @@ use crate::{
 
 use async_std::sync::{Arc, Mutex, RwLock};
 use async_trait::async_trait;
-use pezbp_runtime::HeaderIdProvider;
 use codec::Encode;
-use pezframe_support::weights::Weight;
 use futures::TryFutureExt;
 use jsonrpsee::{
 	core::{client::Subscription as RpcSubscription, ClientError},
 	ws_client::{WsClient, WsClientBuilder},
 };
 use num_traits::Zero;
+use pezbp_runtime::HeaderIdProvider;
+use pezframe_support::weights::Weight;
 use pezpallet_transaction_payment::RuntimeDispatchInfo;
-use relay_utils::{relay_loop::RECONNECT_DELAY, STALL_TIMEOUT};
 use pezsp_core::{
 	storage::{StorageData, StorageKey},
 	Bytes, Hasher, Pair,
@@ -58,6 +57,7 @@ use pezsp_runtime::{
 };
 use pezsp_trie::StorageProof;
 use pezsp_version::RuntimeVersion;
+use relay_utils::{relay_loop::RECONNECT_DELAY, STALL_TIMEOUT};
 use std::{cmp::Ordering, future::Future, marker::PhantomData};
 
 const MAX_SUBSCRIPTION_CAPACITY: usize = 4096;
@@ -132,8 +132,8 @@ impl<C: Chain> RpcClient<C> {
 		}
 	}
 
-	/// Try to connect to Bizinikiwi node over websocket. Returns Bizinikiwi RPC client if connection
-	/// has been established or error otherwise.
+	/// Try to connect to Bizinikiwi node over websocket. Returns Bizinikiwi RPC client if
+	/// connection has been established or error otherwise.
 	async fn try_connect(params: Arc<ConnectionParams>) -> Result<Self> {
 		let (tokio, client) = Self::build_client(&params).await?;
 

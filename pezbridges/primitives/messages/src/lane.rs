@@ -17,11 +17,11 @@
 //! Primitives of messages module, that represents lane id.
 
 use codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
-use scale_info::TypeInfo;
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use pezsp_core::{RuntimeDebug, TypeId, H256};
 use pezsp_io::hashing::blake2_256;
 use pezsp_std::fmt::Debug;
+use scale_info::TypeInfo;
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 /// Trait representing a generic `LaneId` type.
 pub trait LaneIdType:

@@ -55,10 +55,6 @@ use pezframe_support::{
 	traits::{KeyOwnerProofSystem, WithdrawReasons},
 	PalletId,
 };
-use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
-use pezpallet_session::historical as session_historical;
-use pezpallet_timestamp::Now;
-use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 use pezkuwi_primitives::{
 	async_backing::Constraints, slashing, AccountId, AccountIndex, Balance, BlockNumber,
 	CandidateEvent, CandidateHash, CommittedCandidateReceiptV2 as CommittedCandidateReceipt,
@@ -73,6 +69,10 @@ use pezkuwi_runtime_common::{
 	SlowAdjustingFeeUpdate,
 };
 use pezkuwi_runtime_teyrchains::reward_points::RewardValidatorsWithEraPoints;
+use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
+use pezpallet_session::historical as session_historical;
+use pezpallet_timestamp::Now;
+use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_beefy::ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature};
 use pezsp_core::{ConstBool, ConstU32, ConstUint, Get, OpaqueMetadata};
@@ -93,12 +93,12 @@ use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
 use xcm::latest::{Assets, InteriorLocation, Location, SendError, SendResult, SendXcm, XcmHash};
 
+pub use paras_sudo_wrapper::Call as ParasSudoWrapperCall;
 pub use pezpallet_balances::Call as BalancesCall;
 #[cfg(feature = "std")]
 pub use pezpallet_staking::StakerStatus;
 pub use pezpallet_sudo::Call as SudoCall;
 pub use pezpallet_timestamp::Call as TimestampCall;
-pub use paras_sudo_wrapper::Call as ParasSudoWrapperCall;
 #[cfg(any(feature = "std", test))]
 pub use pezsp_runtime::BuildStorage;
 pub use teyrchains_paras::Call as ParasCall;
@@ -719,7 +719,8 @@ pub mod pezpallet_test_notifier {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_xcm::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent> + From<Event<Self>>;
+		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent>
+			+ From<Event<Self>>;
 		type RuntimeOrigin: IsType<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<Result<pezpallet_xcm::Origin, <Self as Config>::RuntimeOrigin>>;
 		type RuntimeCall: IsType<<Self as pezpallet_xcm::Config>::RuntimeCall> + From<Call<Self>>;

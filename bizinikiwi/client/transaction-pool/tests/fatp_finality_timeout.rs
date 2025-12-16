@@ -22,14 +22,14 @@ pub mod fatp_common;
 
 use std::cmp::min;
 
+use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
+use bizinikiwi_test_runtime_transaction_pool::uxt;
 use fatp_common::{
 	finalized_block_event, invalid_hash, new_best_block_event, TestPoolBuilder, LOG_TARGET, SOURCE,
 };
 use futures::{executor::block_on, FutureExt};
 use pezsc_transaction_pool::ChainApi;
 use pezsc_transaction_pool_api::{MaintainedTransactionPool, TransactionPool, TransactionStatus};
-use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
-use bizinikiwi_test_runtime_transaction_pool::uxt;
 
 #[test]
 fn fatp_finality_timeout_works() {

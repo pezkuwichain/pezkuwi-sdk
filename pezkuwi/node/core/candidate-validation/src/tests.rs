@@ -24,11 +24,11 @@ use crate::PvfExecKind;
 use assert_matches::assert_matches;
 use futures::executor;
 use pezkuwi_node_core_pvf::PrepareError;
-use pezkuwi_pez_node_primitives::BlockData;
 use pezkuwi_node_subsystem::messages::AllMessages;
 use pezkuwi_node_subsystem_test_helpers::{make_subsystem_context, TestSubsystemContextHandle};
 use pezkuwi_node_subsystem_util::reexports::SubsystemContext;
 use pezkuwi_overseer::ActivatedLeaf;
+use pezkuwi_pez_node_primitives::BlockData;
 use pezkuwi_primitives::{
 	CandidateDescriptorV2, CandidateDescriptorVersion, ClaimQueueOffset,
 	CommittedCandidateReceiptError, CoreIndex, CoreSelector, GroupIndex, HeadData, Id as ParaId,
@@ -39,10 +39,10 @@ use pezkuwi_primitives_test_helpers::{
 	dummy_collator, dummy_collator_signature, dummy_hash, make_valid_candidate_descriptor,
 	make_valid_candidate_descriptor_v2, CandidateDescriptor,
 };
-use rstest::rstest;
 use pezsp_core::{sr25519::Public, testing::TaskExecutor};
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_keystore::{testing::MemoryKeystore, Keystore};
+use rstest::rstest;
 
 const VALIDATION_CODE_BOMB_LIMIT: u32 = 30 * 1024 * 1024;
 
@@ -1341,10 +1341,12 @@ fn compressed_code_works() {
 	let head_data = HeadData(vec![1, 1, 1]);
 
 	let raw_code = vec![2u8; 16];
-	let validation_code =
-		pezsp_maybe_compressed_blob::compress_strongly(&raw_code, VALIDATION_CODE_BOMB_LIMIT as usize)
-			.map(ValidationCode)
-			.unwrap();
+	let validation_code = pezsp_maybe_compressed_blob::compress_strongly(
+		&raw_code,
+		VALIDATION_CODE_BOMB_LIMIT as usize,
+	)
+	.map(ValidationCode)
+	.unwrap();
 
 	let descriptor = make_valid_candidate_descriptor(
 		ParaId::from(1_u32),

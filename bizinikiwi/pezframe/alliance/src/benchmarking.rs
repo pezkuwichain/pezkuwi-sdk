@@ -24,7 +24,9 @@ use pezsp_runtime::traits::{Bounded, Hash, StaticLookup};
 
 use pezframe_benchmarking::{account, v2::*, BenchmarkError};
 use pezframe_support::traits::{EnsureOrigin, Get, UnfilteredDispatchable};
-use pezframe_system::{pezpallet_prelude::BlockNumberFor, Pezpallet as System, RawOrigin as SystemOrigin};
+use pezframe_system::{
+	pezpallet_prelude::BlockNumberFor, Pezpallet as System, RawOrigin as SystemOrigin,
+};
 
 use super::{Call as AllianceCall, Pezpallet as Alliance, *};
 

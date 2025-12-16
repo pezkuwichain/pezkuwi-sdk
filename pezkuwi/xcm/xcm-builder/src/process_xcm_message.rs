@@ -22,8 +22,8 @@ use pezframe_support::{
 	dispatch::GetDispatchInfo,
 	traits::{ProcessMessage, ProcessMessageError},
 };
-use scale_info::TypeInfo;
 use pezsp_weights::{Weight, WeightMeter};
+use scale_info::TypeInfo;
 use xcm::{prelude::*, MAX_XCM_DECODE_DEPTH};
 
 const LOG_TARGET: &str = "xcm::process-message";

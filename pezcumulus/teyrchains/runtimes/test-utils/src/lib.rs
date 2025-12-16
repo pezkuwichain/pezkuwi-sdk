@@ -83,8 +83,8 @@ impl<Runtime: pezframe_system::Config + pezpallet_balances::Config + pezpallet_s
 	}
 }
 
-impl<Runtime: pezframe_system::Config + pezpallet_balances::Config + pezpallet_session::Config> Default
-	for CollatorSessionKeys<Runtime>
+impl<Runtime: pezframe_system::Config + pezpallet_balances::Config + pezpallet_session::Config>
+	Default for CollatorSessionKeys<Runtime>
 {
 	fn default() -> Self {
 		Self { items: vec![] }
@@ -237,9 +237,12 @@ impl<Runtime: BasicTeyrchainRuntime> ExtBuilder<Runtime> {
 			.unwrap();
 		}
 
-		pezpallet_balances::GenesisConfig::<Runtime> { balances: self.balances, ..Default::default() }
-			.assimilate_storage(&mut t)
-			.unwrap();
+		pezpallet_balances::GenesisConfig::<Runtime> {
+			balances: self.balances,
+			..Default::default()
+		}
+		.assimilate_storage(&mut t)
+		.unwrap();
 
 		pezpallet_collator_selection::GenesisConfig::<Runtime> {
 			invulnerables: self.collators.clone(),
@@ -269,7 +272,9 @@ pub struct RuntimeHelper<Runtime, AllPalletsWithoutSystem>(
 /// Utility function that advances the chain to the desired block number.
 /// If an author is provided, that author information is injected to all the blocks in the meantime.
 impl<
-		Runtime: pezframe_system::Config + pezcumulus_pezpallet_teyrchain_system::Config + pezpallet_timestamp::Config,
+		Runtime: pezframe_system::Config
+			+ pezcumulus_pezpallet_teyrchain_system::Config
+			+ pezpallet_timestamp::Config,
 		AllPalletsWithoutSystem,
 	> RuntimeHelper<Runtime, AllPalletsWithoutSystem>
 where
@@ -356,14 +361,15 @@ where
 			let (inherent_data, downward_messages, horizontal_messages) =
 				deconstruct_teyrchain_inherent_data(inherent_data);
 
-			let _ = pezcumulus_pezpallet_teyrchain_system::Pezpallet::<Runtime>::set_validation_data(
-				Runtime::RuntimeOrigin::none(),
-				inherent_data,
-				InboundMessagesData::new(
-					downward_messages.into_abridged(&mut usize::MAX.clone()),
-					horizontal_messages.into_abridged(&mut usize::MAX.clone()),
-				),
-			);
+			let _ =
+				pezcumulus_pezpallet_teyrchain_system::Pezpallet::<Runtime>::set_validation_data(
+					Runtime::RuntimeOrigin::none(),
+					inherent_data,
+					InboundMessagesData::new(
+						downward_messages.into_abridged(&mut usize::MAX.clone()),
+						horizontal_messages.into_abridged(&mut usize::MAX.clone()),
+					),
+				);
 			let _ = pezpallet_timestamp::Pezpallet::<Runtime>::set(
 				Runtime::RuntimeOrigin::none(),
 				300_u32.into(),

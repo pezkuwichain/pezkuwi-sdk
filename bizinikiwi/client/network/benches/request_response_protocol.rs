@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+use bizinikiwi_test_runtime_client::runtime;
 use criterion::{
 	criterion_group, criterion_main, AxisScale, BenchmarkId, Criterion, PlotConfiguration,
 	Throughput,
@@ -33,7 +34,6 @@ use pezsc_network_common::{sync::message::BlockAnnouncesHandshake, ExHashT};
 use pezsp_core::H256;
 use pezsp_runtime::traits::{Block as BlockT, Zero};
 use std::{sync::Arc, time::Duration};
-use bizinikiwi_test_runtime_client::runtime;
 use tokio::{sync::Mutex, task::JoinHandle};
 
 const MAX_SIZE: u64 = 2u64.pow(30);

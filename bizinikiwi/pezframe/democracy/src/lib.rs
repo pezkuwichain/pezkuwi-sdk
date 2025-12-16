@@ -223,7 +223,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config + Sized {
 		type WeightInfo: WeightInfo;
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The Scheduler.
 		type Scheduler: ScheduleNamed<
@@ -841,8 +842,8 @@ pub mod pezpallet {
 				.try_insert(insert_position, who.clone())
 				.map_err(|_| Error::<T>::TooMany)?;
 
-			let until =
-				pezframe_system::Pezpallet::<T>::block_number().saturating_add(T::CooloffPeriod::get());
+			let until = pezframe_system::Pezpallet::<T>::block_number()
+				.saturating_add(T::CooloffPeriod::get());
 			Blacklist::<T>::insert(&proposal_hash, (until, existing_vetoers));
 
 			Self::deposit_event(Event::<T>::Vetoed { who, proposal_hash, until });

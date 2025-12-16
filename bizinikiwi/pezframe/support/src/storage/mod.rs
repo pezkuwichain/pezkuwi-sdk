@@ -885,8 +885,9 @@ pub trait StorageNMap<K: KeyGenerator, V: FullCodec> {
 
 	/// Attempt to remove items from the map matching a `partial_key` prefix.
 	///
-	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result. Once
-	/// the resultant `maybe_cursor` field is `None`, then no further items remain to be deleted.
+	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result.
+	/// Once the resultant `maybe_cursor` field is `None`, then no further items remain to be
+	/// deleted.
 	///
 	/// NOTE: After the initial call for any given map, it is important that no further items
 	/// are inserted into the map which match the `partial key`. If so, then the map may not be
@@ -1391,8 +1392,9 @@ pub trait StoragePrefixedMap<Value: FullCodec> {
 
 	/// Attempt to remove all items from the map.
 	///
-	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result. Once
-	/// the resultant `maybe_cursor` field is `None`, then no further items remain to be deleted.
+	/// Returns [`MultiRemovalResults`](pezsp_io::MultiRemovalResults) to inform about the result.
+	/// Once the resultant `maybe_cursor` field is `None`, then no further items remain to be
+	/// deleted.
 	///
 	/// NOTE: After the initial call for any given map, it is important that no further items
 	/// are inserted into the map. If so, then the map may not be empty when the resultant
@@ -1752,8 +1754,8 @@ mod test {
 	use super::*;
 	use crate::{assert_ok, hash::Identity, pezpallet_prelude::NMapKey, Twox128};
 	use bounded_vec::BoundedVec;
-	use pezframe_support::traits::ConstU32;
 	use generator::StorageValue as _;
+	use pezframe_support::traits::ConstU32;
 	use pezsp_crypto_hashing::twox_128;
 	use pezsp_io::TestExternalities;
 	use weak_bounded_vec::WeakBoundedVec;

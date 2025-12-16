@@ -19,6 +19,8 @@
 
 use super::{ConfigOp, Event, *};
 use crate::{asset, ledger::StakingLedgerInspect};
+use bizinikiwi_test_utils::assert_eq_uvec;
+use mock::*;
 use pezframe_election_provider_support::{
 	bounds::{DataProviderBounds, ElectionBoundsBuilder},
 	ElectionProvider, SortedListProvider, Support,
@@ -33,9 +35,10 @@ use pezframe_support::{
 		ReservableCurrency, RewardsReporter, WithdrawReasons,
 	},
 };
-use mock::*;
 use pezpallet_balances::Error as BalancesError;
-use pezpallet_session::{disabling::UpToLimitWithReEnablingDisablingStrategy, Event as SessionEvent};
+use pezpallet_session::{
+	disabling::UpToLimitWithReEnablingDisablingStrategy, Event as SessionEvent,
+};
 use pezsp_runtime::{
 	assert_eq_error_rate, bounded_vec,
 	traits::{BadOrigin, Dispatchable},
@@ -45,7 +48,6 @@ use pezsp_staking::{
 	offence::{OffenceDetails, OnOffenceHandler},
 	SessionIndex, StakingAccount,
 };
-use bizinikiwi_test_utils::assert_eq_uvec;
 
 #[test]
 fn set_staking_configs_works() {
@@ -3478,7 +3480,9 @@ fn test_multi_page_payout_stakers_by_page() {
 
 		// verify rewards have been paid out but still some left
 		assert!(pezpallet_balances::TotalIssuance::<Test>::get() > pre_payout_total_issuance);
-		assert!(pezpallet_balances::TotalIssuance::<Test>::get() < pre_payout_total_issuance + payout);
+		assert!(
+			pezpallet_balances::TotalIssuance::<Test>::get() < pre_payout_total_issuance + payout
+		);
 
 		// verify the validator has been rewarded
 		assert!(controller_balance_after_p0_payout > controller_balance_before_p0_payout);
@@ -3748,7 +3752,9 @@ fn test_multi_page_payout_stakers_backward_compatible() {
 
 		// verify rewards have been paid out but still some left
 		assert!(pezpallet_balances::TotalIssuance::<Test>::get() > pre_payout_total_issuance);
-		assert!(pezpallet_balances::TotalIssuance::<Test>::get() < pre_payout_total_issuance + payout);
+		assert!(
+			pezpallet_balances::TotalIssuance::<Test>::get() < pre_payout_total_issuance + payout
+		);
 
 		// verify the validator has been rewarded
 		assert!(controller_balance_after_p0_payout > controller_balance_before_p0_payout);
@@ -8427,8 +8433,8 @@ mod validator_disabling_integration {
 #[cfg(all(feature = "try-runtime", test))]
 mod migration_tests {
 	use super::*;
-	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
 	use migrations::{v15, v16};
+	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
 
 	#[test]
 	fn migrate_v15_to_v16_with_try_runtime() {

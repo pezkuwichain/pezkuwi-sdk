@@ -21,16 +21,16 @@
 
 use futures::prelude::*;
 use libp2p::PeerId;
-use rand::{
-	distributions::{Distribution, Uniform, WeightedIndex},
-	seq::IteratorRandom,
-};
 use pezsc_network::{
 	peer_store::{PeerStore, PeerStoreProvider},
 	protocol_controller::{IncomingIndex, Message, ProtoSetConfig, ProtocolController, SetId},
 	ReputationChange,
 };
 use pezsc_utils::mpsc::tracing_unbounded;
+use rand::{
+	distributions::{Distribution, Uniform, WeightedIndex},
+	seq::IteratorRandom,
+};
 use std::{
 	collections::{HashMap, HashSet},
 	sync::Arc,

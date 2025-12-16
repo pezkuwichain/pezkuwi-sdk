@@ -23,7 +23,6 @@ use futures_timer::Delay;
 use orchestra::async_trait;
 use std::time::Duration;
 
-use pezkuwi_pez_node_primitives::{BlockData, PoV};
 use pezkuwi_node_subsystem_types::messages::{CandidateValidationMessage, PvfExecKind};
 use pezkuwi_overseer::{
 	self as overseer,
@@ -31,6 +30,7 @@ use pezkuwi_overseer::{
 	gen::{FromOrchestra, SpawnedSubsystem},
 	HeadSupportsTeyrchains, SubsystemError,
 };
+use pezkuwi_pez_node_primitives::{BlockData, PoV};
 use pezkuwi_primitives::{CandidateReceiptV2 as CandidateReceipt, Hash, PersistedValidationData};
 use pezkuwi_primitives_test_helpers::{
 	dummy_candidate_descriptor_v2, dummy_hash, dummy_validation_code,

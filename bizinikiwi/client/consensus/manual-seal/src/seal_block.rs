@@ -20,7 +20,9 @@
 
 use crate::{rpc, ConsensusDataProvider, CreatedBlock, Error};
 use futures::prelude::*;
-use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy, ImportResult, StateAction};
+use pezsc_consensus::{
+	BlockImport, BlockImportParams, ForkChoiceStrategy, ImportResult, StateAction,
+};
 use pezsc_transaction_pool_api::TransactionPool;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_blockchain::HeaderBackend;

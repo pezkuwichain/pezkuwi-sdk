@@ -149,7 +149,8 @@ pub mod pezpallet {
 		// Ensuring BlockNumber is convertible from u32.
 		BlockNumberFor<Self>: From<u32>,
 	{
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Balance type to be used for staking.
 		/// Adding all required mathematical and comparison properties.
 		type Balance: Member

@@ -33,8 +33,6 @@ use codec::{
 #[doc(hidden)]
 pub use core::{fmt::Debug, marker::PhantomData};
 use impl_trait_for_tuples::impl_for_tuples;
-#[cfg(feature = "serde")]
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use pezsp_application_crypto::AppCrypto;
 pub use pezsp_arithmetic::traits::{
 	checked_pow, ensure_pow, AtLeast32Bit, AtLeast32BitUnsigned, Bounded, CheckedAdd, CheckedDiv,
@@ -50,6 +48,8 @@ pub use pezsp_core::{
 	ConstU128, ConstU16, ConstU32, ConstU64, ConstU8, ConstUint, Get, GetDefault, TryCollect,
 	TypedGet,
 };
+#[cfg(feature = "serde")]
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 #[cfg(feature = "std")]
 use std::fmt::Display;
 #[cfg(feature = "std")]
@@ -157,8 +157,9 @@ pub trait AppVerify {
 }
 
 impl<
-		S: Verify<Signer = <<T as AppCrypto>::Public as pezsp_application_crypto::AppPublic>::Generic>
-			+ From<T>,
+		S: Verify<
+				Signer = <<T as AppCrypto>::Public as pezsp_application_crypto::AppPublic>::Generic,
+			> + From<T>,
 		T: pezsp_application_crypto::Wraps<Inner = S>
 			+ pezsp_application_crypto::AppCrypto
 			+ pezsp_application_crypto::AppSignature
@@ -1279,8 +1280,8 @@ pub trait Header:
 // via `HeaderFor` or `BlockNumberFor`.
 //
 // This is needed to fix the "cyclical" issue in loading Header/BlockNumber as part of a
-// `pezpallet::call`. Essentially, `construct_runtime` aggregates all calls to create a `RuntimeCall`
-// that is then used to define `UncheckedExtrinsic`.
+// `pezpallet::call`. Essentially, `construct_runtime` aggregates all calls to create a
+// `RuntimeCall` that is then used to define `UncheckedExtrinsic`.
 // ```ignore
 // pub type UncheckedExtrinsic =
 // 	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;

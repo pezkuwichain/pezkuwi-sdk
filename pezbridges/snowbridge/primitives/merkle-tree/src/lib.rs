@@ -25,9 +25,9 @@ use alloc::vec;
 use alloc::vec::Vec;
 
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_core::{RuntimeDebug, H256};
 use pezsp_runtime::traits::Hash;
+use scale_info::TypeInfo;
 
 /// Construct a root hash of a Binary Merkle Tree created from given leaves.
 ///

@@ -22,8 +22,8 @@
 //! - Avoid cluttering the source pezpallet with new dispatchables that are unrelated to its
 //!   functionality and only used for migration.
 //!
-//! After the migration is complete, the pezpallet may be removed from both chains' runtimes as well as
-//! the `pezkuwi-runtime-common` crate.
+//! After the migration is complete, the pezpallet may be removed from both chains' runtimes as well
+//! as the `pezkuwi-runtime-common` crate.
 
 use pezframe_support::{dispatch::DispatchResult, traits::Currency, weights::Weight};
 pub use pezpallet::*;
@@ -79,7 +79,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config + pezpallet_identity::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The origin that can reap identities. Expected to be `EnsureSigned<AccountId>` on the
 		/// source chain such that anyone can all this function.
@@ -119,7 +120,8 @@ pub mod pezpallet {
 			// - number of registrars (required to calculate weight)
 			// - byte size of `IdentityInfo` (required to calculate remote deposit)
 			// - number of sub accounts (required to calculate both weight and remote deposit)
-			let (registrars, bytes, subs) = pezpallet_identity::Pezpallet::<T>::reap_identity(&who)?;
+			let (registrars, bytes, subs) =
+				pezpallet_identity::Pezpallet::<T>::reap_identity(&who)?;
 			T::ReapIdentityHandler::on_reap_identity(&who, bytes, subs)?;
 			Self::deposit_event(Event::IdentityReaped { who });
 			let post = PostDispatchInfo {
@@ -137,7 +139,8 @@ pub mod pezpallet {
 		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::poke_deposit())]
 		pub fn poke_deposit(origin: OriginFor<T>, who: T::AccountId) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
-			let (id_deposit, subs_deposit) = pezpallet_identity::Pezpallet::<T>::poke_deposit(&who)?;
+			let (id_deposit, subs_deposit) =
+				pezpallet_identity::Pezpallet::<T>::poke_deposit(&who)?;
 			Self::deposit_event(Event::DepositUpdated {
 				who,
 				identity: id_deposit,

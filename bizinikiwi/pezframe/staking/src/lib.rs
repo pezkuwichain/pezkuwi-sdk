@@ -25,8 +25,8 @@
 //!
 //! ## Overview
 //!
-//! The Staking pezpallet is the means by which a set of network maintainers (known as _authorities_ in
-//! some contexts and _validators_ in others) are chosen based upon those who voluntarily place
+//! The Staking pezpallet is the means by which a set of network maintainers (known as _authorities_
+//! in some contexts and _validators_ in others) are chosen based upon those who voluntarily place
 //! funds under deposit. Under deposit, those funds are rewarded under normal operation but are held
 //! at pain of _slash_ (expropriation) should the staked maintainer be found not to be discharging
 //! its duties properly.
@@ -59,11 +59,11 @@
 //!
 //! #### Staking
 //!
-//! Almost any interaction with the Staking pezpallet requires a process of _**bonding**_ (also known
-//! as being a _staker_). To become *bonded*, a fund-holding register known as the _stash account_,
-//! which holds some or all of the funds that become frozen in place as part of the staking process.
-//! The controller account, which this pezpallet now assigns the stash account to, issues instructions
-//! on how funds shall be used.
+//! Almost any interaction with the Staking pezpallet requires a process of _**bonding**_ (also
+//! known as being a _staker_). To become *bonded*, a fund-holding register known as the _stash
+//! account_, which holds some or all of the funds that become frozen in place as part of the
+//! staking process. The controller account, which this pezpallet now assigns the stash account to,
+//! issues instructions on how funds shall be used.
 //!
 //! An account can become a bonded stash account using the [`bond`](Call::bond) call.
 //!
@@ -108,8 +108,8 @@
 //!
 //! #### Rewards and Slash
 //!
-//! The **reward and slashing** procedure is the core of the Staking pezpallet, attempting to _embrace
-//! valid behavior_ while _punishing any misbehavior or lack of availability_.
+//! The **reward and slashing** procedure is the core of the Staking pezpallet, attempting to
+//! _embrace valid behavior_ while _punishing any misbehavior or lack of availability_.
 //!
 //! Rewards must be claimed for each era before it gets too old by
 //! [`HistoryDepth`](`Config::HistoryDepth`) using the `payout_stakers` call. Any account can call
@@ -147,8 +147,9 @@
 //!
 //! ### Dispatchable Functions
 //!
-//! The dispatchable functions of the Staking pezpallet enable the steps needed for entities to accept
-//! and change their role, alongside some helper functions to get/set the metadata of the pezpallet.
+//! The dispatchable functions of the Staking pezpallet enable the steps needed for entities to
+//! accept and change their role, alongside some helper functions to get/set the metadata of the
+//! pezpallet.
 //!
 //! ### Public Functions
 //!
@@ -224,8 +225,8 @@
 //! they received during the era. Points are added to a validator using the method
 //! [`pezframe_support::traits::RewardsReporter::reward_by_ids`] implemented by the [`Pezpallet`].
 //!
-//! [`Pezpallet`] implements [`pezpallet_authorship::EventHandler`] to add reward points to block producer
-//! and block producer of referenced uncles.
+//! [`Pezpallet`] implements [`pezpallet_authorship::EventHandler`] to add reward points to block
+//! producer and block producer of referenced uncles.
 //!
 //! The validator and its nominator split their reward as following:
 //!
@@ -275,8 +276,8 @@
 //!
 //! ## GenesisConfig
 //!
-//! The Staking pezpallet depends on the [`GenesisConfig`]. The `GenesisConfig` is optional and allow
-//! to set some initial stakers.
+//! The Staking pezpallet depends on the [`GenesisConfig`]. The `GenesisConfig` is optional and
+//! allow to set some initial stakers.
 //!
 //! ## Related Modules
 //!
@@ -321,7 +322,6 @@ use pezframe_support::{
 	weights::Weight,
 	BoundedVec, CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	curve::PiecewiseLinear,
 	traits::{AtLeast32BitUnsigned, Convert, StaticLookup, Zero},
@@ -332,6 +332,7 @@ use pezsp_staking::{
 	EraIndex, ExposurePage, OnStakingUpdate, Page, PagedExposureMetadata, SessionIndex,
 };
 pub use pezsp_staking::{Exposure, IndividualExposure, StakerStatus};
+use scale_info::TypeInfo;
 pub use weights::WeightInfo;
 
 pub use pezpallet::{pezpallet::*, UseNominatorsAndValidatorsMap, UseValidatorsMap};
@@ -350,8 +351,8 @@ macro_rules! log {
 	};
 }
 
-/// Alias for the maximum number of winners (aka. active validators), as defined in by this pezpallet's
-/// config.
+/// Alias for the maximum number of winners (aka. active validators), as defined in by this
+/// pezpallet's config.
 pub type MaxWinnersOf<T> = <T as Config>::MaxValidatorSet;
 
 /// Alias for the maximum number of winners per page, as expected by the election provider.
@@ -367,7 +368,8 @@ pub type RewardPoint = u32;
 /// The balance type of this pezpallet.
 pub type BalanceOf<T> = <T as Config>::CurrencyBalance;
 
-type PositiveImbalanceOf<T> = Debt<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
+type PositiveImbalanceOf<T> =
+	Debt<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
 pub type NegativeImbalanceOf<T> =
 	Credit<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
 
@@ -1104,8 +1106,8 @@ impl<T: Config> Convert<T::AccountId, Option<Exposure<T::AccountId, BalanceOf<T>
 /// In the new model, we don't need to identify a validator with their full exposure anymore, and
 /// therefore [`UnitIdentificationOf`] is perfectly fine. Yet, for runtimes that used to work with
 /// [`ExposureOf`], we need to be able to decode old identification data, possibly stored in the
-/// historical session pezpallet in older blocks. Therefore, this type is a good compromise, allowing
-/// old exposure identifications to be decoded, and returning a few zero bytes
+/// historical session pezpallet in older blocks. Therefore, this type is a good compromise,
+/// allowing old exposure identifications to be decoded, and returning a few zero bytes
 /// (`Exposure::default`) for any new identification request.
 ///
 /// A typical usage of this type is:

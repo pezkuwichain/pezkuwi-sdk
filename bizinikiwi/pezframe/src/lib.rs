@@ -40,8 +40,8 @@
 //! 3. Accessing frame/bizinikiwi dependencies directly: `deps`.
 //!
 //! The main intended use of this crate is through preludes, which re-export most of the components
-//! needed for pezpallet development. Domain-specific modules serve as a backup for organization, and
-//! `deps` provides direct access to all dependencies if needed.
+//! needed for pezpallet development. Domain-specific modules serve as a backup for organization,
+//! and `deps` provides direct access to all dependencies if needed.
 //!
 //!
 //! ### Example Usage
@@ -150,8 +150,8 @@ pub use pezframe_support::storage_alias;
 
 /// Macros used within the main [`pezpallet`] macro.
 ///
-/// Note: All of these macros are "stubs" and not really usable outside `#[pezpallet] mod pezpallet { ..
-/// }`. They are mainly provided for documentation and IDE support.
+/// Note: All of these macros are "stubs" and not really usable outside `#[pezpallet] mod pezpallet
+/// { .. }`. They are mainly provided for documentation and IDE support.
 ///
 /// To view a list of all the macros and their documentation, follow the links in the 'Re-exports'
 /// section below:
@@ -171,7 +171,8 @@ pub mod pezpallet_macros {
 /// mod pezpallet {}
 /// ```
 pub mod prelude {
-	/// `pezframe_system`'s parent crate, which is mandatory in all pallets build with this crate.
+	/// `pezframe_system`'s parent crate, which is mandatory in all pallets build with this
+	/// crate.
 	///
 	/// Conveniently, the keyword `pezframe_system` is in scope as one uses `use
 	/// pezkuwi_sdk_frame::prelude::*`.
@@ -261,7 +262,9 @@ pub mod try_runtime {
 #[cfg(feature = "runtime-benchmarks")]
 pub mod benchmarking {
 	mod shared {
-		pub use pezframe_benchmarking::{add_benchmark, v1::account, whitelist, whitelisted_caller};
+		pub use pezframe_benchmarking::{
+			add_benchmark, v1::account, whitelist, whitelisted_caller,
+		};
 		// all benchmarking functions.
 		pub use pezframe_benchmarking::benchmarking::*;
 		// The system origin, which is very often needed in benchmarking code. Might be tricky only
@@ -430,8 +433,8 @@ pub mod runtime {
 	/// ```
 	// TODO: This is because of wildcard imports, and it should be not needed once we can avoid
 	// that. Imports like that are needed because we seem to need some unknown types in the macro
-	// expansion. See `pezsp_session::runtime_api::*;` as one example. All runtime api decls should be
-	// moved to file similarly.
+	// expansion. See `pezsp_session::runtime_api::*;` as one example. All runtime api decls should
+	// be moved to file similarly.
 	#[allow(ambiguous_glob_reexports)]
 	pub mod apis {
 		pub use pezframe_system_rpc_runtime_api::*;
@@ -453,10 +456,10 @@ pub mod runtime {
 	/// Some note-worthy opinions in this prelude:
 	///
 	/// - `u32` block number.
-	/// - [`pezsp_runtime::MultiAddress`] and [`pezsp_runtime::MultiSignature`] are used as the account id
-	///   and signature types. This implies that this prelude can possibly used with an
-	///   "account-index" system (eg `pezpallet-indices`). And, in any case, it should be paired with
-	///   `AccountIdLookup` in [`pezframe_system::Config::Lookup`].
+	/// - [`pezsp_runtime::MultiAddress`] and [`pezsp_runtime::MultiSignature`] are used as the
+	///   account id and signature types. This implies that this prelude can possibly used with an
+	///   "account-index" system (eg `pezpallet-indices`). And, in any case, it should be paired
+	///   with `AccountIdLookup` in [`pezframe_system::Config::Lookup`].
 	pub mod types_common {
 		use pezframe_system::Config as SysConfig;
 		use pezsp_runtime::{generic, traits, OpaqueExtrinsic};
@@ -565,6 +568,7 @@ pub mod derive {
 		CloneNoBound, DebugNoBound, DefaultNoBound, EqNoBound, OrdNoBound, PartialEqNoBound,
 		PartialOrdNoBound, RuntimeDebugNoBound,
 	};
+	pub use pezsp_runtime::RuntimeDebug;
 	pub use scale_info::TypeInfo;
 	pub use serde;
 	/// The `serde` `Serialize`/`Deserialize` derive macros and traits.
@@ -573,7 +577,6 @@ pub mod derive {
 	/// or specify the `#[serde(crate = "PATH_TO_THIS_CRATE::serde")]` attribute that points
 	/// to the path where serde can be found.
 	pub use serde::{Deserialize, Serialize};
-	pub use pezsp_runtime::RuntimeDebug;
 }
 
 /// All hashing related components.

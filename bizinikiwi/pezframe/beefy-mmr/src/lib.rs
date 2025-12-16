@@ -67,7 +67,8 @@ mod weights;
 /// A BEEFY consensus digest item with MMR root hash.
 pub struct DepositBeefyDigest<T>(core::marker::PhantomData<T>);
 
-impl<T> pezpallet_mmr::primitives::OnNewRoot<pezsp_consensus_beefy::MmrRootHash> for DepositBeefyDigest<T>
+impl<T> pezpallet_mmr::primitives::OnNewRoot<pezsp_consensus_beefy::MmrRootHash>
+	for DepositBeefyDigest<T>
 where
 	T: pezpallet_mmr::Config<Hashing = pezsp_consensus_beefy::MmrHashing>,
 	T: pezpallet_beefy::Config,
@@ -97,7 +98,8 @@ impl Convert<pezsp_consensus_beefy::ecdsa_crypto::AuthorityId, Vec<u8>> for Beef
 	}
 }
 
-type MerkleRootOf<T> = <<T as pezpallet_mmr::Config>::Hashing as pezsp_runtime::traits::Hash>::Output;
+type MerkleRootOf<T> =
+	<<T as pezpallet_mmr::Config>::Hashing as pezsp_runtime::traits::Hash>::Output;
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
@@ -126,7 +128,10 @@ pub mod pezpallet {
 		/// and later to Ethereum Addresses (160 bits) to simplify using them on Ethereum chain,
 		/// but the rest of the Bizinikiwi codebase is storing them compressed (33 bytes) for
 		/// efficiency reasons.
-		type BeefyAuthorityToMerkleLeaf: Convert<<Self as pezpallet_beefy::Config>::BeefyId, Vec<u8>>;
+		type BeefyAuthorityToMerkleLeaf: Convert<
+			<Self as pezpallet_beefy::Config>::BeefyId,
+			Vec<u8>,
+		>;
 
 		/// The type expected for the leaf extra data
 		type LeafExtra: Member + codec::FullCodec;
@@ -168,7 +173,8 @@ impl<T: Config> LeafDataProvider for Pezpallet<T> {
 	}
 }
 
-impl<T> pezsp_consensus_beefy::OnNewValidatorSet<<T as pezpallet_beefy::Config>::BeefyId> for Pezpallet<T>
+impl<T> pezsp_consensus_beefy::OnNewValidatorSet<<T as pezpallet_beefy::Config>::BeefyId>
+	for Pezpallet<T>
 where
 	T: pezpallet::Config,
 {

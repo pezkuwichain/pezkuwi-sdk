@@ -111,8 +111,12 @@ struct ContractInfo<T: Config> {
 }
 
 #[storage_alias]
-type ContractInfoOf<T: Config> =
-	StorageMap<Pezpallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
+type ContractInfoOf<T: Config> = StorageMap<
+	Pezpallet<T>,
+	Twox64Concat,
+	<T as pezframe_system::Config>::AccountId,
+	ContractInfo<T>,
+>;
 
 #[derive(Encode, Decode, MaxEncodedLen, DefaultNoBound)]
 pub struct Migration<T: Config> {

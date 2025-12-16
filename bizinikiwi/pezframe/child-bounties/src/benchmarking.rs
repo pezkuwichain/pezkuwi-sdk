@@ -280,15 +280,15 @@ mod benchmarks {
 
 		// If `BountyUpdatePeriod` overflows the inactivity timeout the benchmark still
 		// executes the slash
-		let origin: T::RuntimeOrigin = if Pezpallet::<T>::treasury_block_number() <= inactivity_timeout
-		{
-			let child_curator = bounty_setup.child_curator;
-			T::RejectOrigin::try_successful_origin()
-				.unwrap_or_else(|_| RawOrigin::Signed(child_curator).into())
-		} else {
-			let caller = whitelisted_caller();
-			RawOrigin::Signed(caller).into()
-		};
+		let origin: T::RuntimeOrigin =
+			if Pezpallet::<T>::treasury_block_number() <= inactivity_timeout {
+				let child_curator = bounty_setup.child_curator;
+				T::RejectOrigin::try_successful_origin()
+					.unwrap_or_else(|_| RawOrigin::Signed(child_curator).into())
+			} else {
+				let caller = whitelisted_caller();
+				RawOrigin::Signed(caller).into()
+			};
 
 		#[extrinsic_call]
 		_(origin as T::RuntimeOrigin, bounty_setup.bounty_id, bounty_setup.child_bounty_id);

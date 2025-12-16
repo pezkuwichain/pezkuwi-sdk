@@ -26,7 +26,6 @@ use crate::schema;
 use codec::{self, Decode, Encode};
 use futures::prelude::*;
 use log::{debug, trace};
-use prost::Message;
 use pezsc_client_api::{BlockBackend, ProofProvider};
 use pezsc_network::{
 	config::ProtocolId,
@@ -39,6 +38,7 @@ use pezsp_core::{
 	storage::{ChildInfo, ChildType, PrefixedStorageKey},
 };
 use pezsp_runtime::traits::Block;
+use prost::Message;
 use std::{marker::PhantomData, sync::Arc};
 
 const LOG_TARGET: &str = "light-client-request-handler";

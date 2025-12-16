@@ -474,7 +474,9 @@ mod benchmarks {
 		let address = Lookup::<T>::get(name).unwrap();
 		let (when, index) = address;
 		let period = BlockNumberFor::<T>::one();
-		assert!(Pezpallet::<T>::set_retry(RawOrigin::Root.into(), (when, index), 10, period).is_ok());
+		assert!(
+			Pezpallet::<T>::set_retry(RawOrigin::Root.into(), (when, index), 10, period).is_ok()
+		);
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, (when, index));

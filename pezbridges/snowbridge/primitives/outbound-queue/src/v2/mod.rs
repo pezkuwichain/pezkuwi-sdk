@@ -10,9 +10,9 @@ pub use delivery_receipt::*;
 pub use message::*;
 
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_runtime::RuntimeDebug;
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 
 /// The `XCM::Transact` payload for calling arbitrary smart contracts on Ethereum.
 /// On Ethereum, this call will be dispatched by the agent contract acting as a proxy

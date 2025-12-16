@@ -160,7 +160,9 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 			if amount < details.min_balance {
 				return DepositConsequence::BelowMinimum;
 			}
-			if !details.is_sufficient && !pezframe_system::Pezpallet::<T>::can_accrue_consumers(who, 2) {
+			if !details.is_sufficient &&
+				!pezframe_system::Pezpallet::<T>::can_accrue_consumers(who, 2)
+			{
 				return DepositConsequence::CannotCreate;
 			}
 			if details.is_sufficient && details.sufficients.checked_add(1).is_none() {

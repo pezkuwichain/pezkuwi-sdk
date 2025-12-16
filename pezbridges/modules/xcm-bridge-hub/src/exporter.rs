@@ -355,9 +355,9 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 ///
 /// We are using `HaulBlobExporter`, which requires `HaulBlob` implementation. It assumes that
 /// there's a single channel between two bridge hubs - `HaulBlob` only accepts the blob and nothing
-/// else. But bridge messages pezpallet may have a dedicated channel (lane) for every pair of bridged
-/// chains. So we are using our own `ExportXcm` implementation, but to utilize `HaulBlobExporter` we
-/// still need this `DummyHaulBlob`.
+/// else. But bridge messages pezpallet may have a dedicated channel (lane) for every pair of
+/// bridged chains. So we are using our own `ExportXcm` implementation, but to utilize
+/// `HaulBlobExporter` we still need this `DummyHaulBlob`.
 pub struct DummyHaulBlob;
 
 impl HaulBlob for DummyHaulBlob {
@@ -371,8 +371,8 @@ mod tests {
 	use super::*;
 	use crate::{mock::*, Bridges, LaneToBridge, LanesManagerOf};
 
-	use pezbp_runtime::RangeInclusiveExt;
 	use bp_xcm_bridge_hub::{Bridge, BridgeLocations, BridgeState};
+	use pezbp_runtime::RangeInclusiveExt;
 	use pezframe_support::{assert_ok, traits::EnsureOrigin};
 	use pezpallet_bridge_messages::InboundLaneStorage;
 	use xcm_builder::{NetworkExportTable, UnpaidRemoteExporter};

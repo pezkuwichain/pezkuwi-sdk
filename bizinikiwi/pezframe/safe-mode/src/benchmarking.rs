@@ -100,7 +100,8 @@ mod benchmarks {
 
 		assert_eq!(
 			EnteredUntil::<T>::get().unwrap(),
-			pezframe_system::Pezpallet::<T>::block_number() + 1u32.into() + T::ExtendDuration::get()
+			pezframe_system::Pezpallet::<T>::block_number() +
+				1u32.into() + T::ExtendDuration::get()
 		);
 		Ok(())
 	}
@@ -161,7 +162,9 @@ mod benchmarks {
 		assert!(SafeMode::<T>::do_exit(ExitReason::Force).is_ok());
 
 		pezframe_system::Pezpallet::<T>::set_block_number(delay + One::one() + 2u32.into());
-		pezframe_system::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_initialize(
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		SafeMode::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		#[extrinsic_call]
@@ -197,7 +200,9 @@ mod benchmarks {
 		pezframe_system::Pezpallet::<T>::set_block_number(
 			pezframe_system::Pezpallet::<T>::block_number() + One::one(),
 		);
-		pezframe_system::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_initialize(
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		SafeMode::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		#[extrinsic_call]

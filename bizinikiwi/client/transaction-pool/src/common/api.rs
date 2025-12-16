@@ -26,7 +26,6 @@ use crate::{
 use async_trait::async_trait;
 use codec::Encode;
 use futures::future::{Future, FutureExt};
-use prometheus_endpoint::Registry as PrometheusRegistry;
 use pezsc_client_api::{blockchain::HeaderBackend, BlockBackend};
 use pezsp_api::{ApiExt, ProvideRuntimeApi};
 use pezsp_blockchain::{HeaderMetadata, TreeRoute};
@@ -37,6 +36,7 @@ use pezsp_runtime::{
 	transaction_validity::{TransactionSource, TransactionValidity},
 };
 use pezsp_transaction_pool::runtime_api::TaggedTransactionQueue;
+use prometheus_endpoint::Registry as PrometheusRegistry;
 use std::{
 	marker::PhantomData,
 	pin::Pin,

@@ -19,9 +19,9 @@
 
 use codec::{FullCodec, MaxEncodedLen};
 use core::fmt::Debug;
-use scale_info::TypeInfo;
 use pezsp_core::TypedGet;
 use pezsp_runtime::DispatchError;
+use scale_info::TypeInfo;
 
 use super::{fungible, fungibles, Balance, Preservation::Expendable};
 

@@ -22,6 +22,8 @@ use crate::common::{
 	types::{AccountId, Balance, Nonce, TeyrchainBackend, TeyrchainClient},
 	ConstructNodeRuntimeApi,
 };
+use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
+use bizinikiwi_state_trie_migration_rpc::{StateMigration, StateMigrationApiServer};
 use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 use pezsc_rpc::{
 	dev::{Dev, DevApiServer},
@@ -29,8 +31,6 @@ use pezsc_rpc::{
 };
 use pezsp_runtime::traits::Block as BlockT;
 use std::{marker::PhantomData, sync::Arc};
-use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
-use bizinikiwi_state_trie_migration_rpc::{StateMigration, StateMigrationApiServer};
 
 /// A type representing all RPC extensions.
 pub type RpcExtension = jsonrpsee::RpcModule<()>;
@@ -63,7 +63,10 @@ where
 		client: Arc<TeyrchainClient<Block, RuntimeApi>>,
 		backend: Arc<TeyrchainBackend<Block>>,
 		pool: Arc<
-			pezsc_transaction_pool::TransactionPoolHandle<Block, TeyrchainClient<Block, RuntimeApi>>,
+			pezsc_transaction_pool::TransactionPoolHandle<
+				Block,
+				TeyrchainClient<Block, RuntimeApi>,
+			>,
 		>,
 		statement_store: Option<Arc<pezsc_statement_store::Store>>,
 	) -> pezsc_service::error::Result<RpcExtension> {

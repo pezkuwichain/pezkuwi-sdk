@@ -30,10 +30,10 @@
 //!
 //! ### Example
 //!
-//! This example demonstrates a simple mocked walk through of a basic success scenario. The pezpallet
-//! is configured with two migrations: one succeeding after just one step, and the second one
-//! succeeding after two steps. A runtime upgrade is then enacted and the block number is advanced
-//! until all migrations finish executing. Afterwards, the recorded historic migrations are
+//! This example demonstrates a simple mocked walk through of a basic success scenario. The
+//! pezpallet is configured with two migrations: one succeeding after just one step, and the second
+//! one succeeding after two steps. A runtime upgrade is then enacted and the block number is
+//! advanced until all migrations finish executing. Afterwards, the recorded historic migrations are
 //! checked and events are asserted.
 #![doc = docify::embed!("src/tests.rs", simple_works)]
 //!
@@ -62,26 +62,26 @@
 //!
 //! ### Design
 //!
-//! Migrations are provided to the pezpallet through the associated type [`Config::Migrations`] of type
-//! [`SteppedMigrations`]. This allows multiple migrations to be aggregated through a tuple. It
+//! Migrations are provided to the pezpallet through the associated type [`Config::Migrations`] of
+//! type [`SteppedMigrations`]. This allows multiple migrations to be aggregated through a tuple. It
 //! simplifies the trait bounds since all associated types of the trait must be provided by the
-//! pezpallet. The actual progress of the pezpallet is stored in the [`Cursor`] storage item. This can
-//! either be [`MigrationCursor::Active`] or [`MigrationCursor::Stuck`]. In the active case it
+//! pezpallet. The actual progress of the pezpallet is stored in the [`Cursor`] storage item. This
+//! can either be [`MigrationCursor::Active`] or [`MigrationCursor::Stuck`]. In the active case it
 //! points to the currently active migration and stores its inner cursor. The inner cursor can then
 //! be used by the migration to store its inner state and advance. Each time when the migration
 //! returns `Some(cursor)`, it signals the pezpallet that it is not done yet.
 //!
 //! The cursor is reset on each runtime upgrade. This ensures that it starts to execute at the
 //! first migration in the vector. The pallets cursor is only ever incremented or set to `Stuck`
-//! once it encounters an error (Goal 4). Once in the stuck state, the pezpallet will stay stuck until
-//! it is fixed through manual governance intervention.
+//! once it encounters an error (Goal 4). Once in the stuck state, the pezpallet will stay stuck
+//! until it is fixed through manual governance intervention.
 //!
 //! As soon as the cursor of the pezpallet becomes `Some(_)`; [`MultiStepMigrator::ongoing`] returns
 //! `true` (Goal 2). This can be used by upstream code to possibly pause transactions.
-//! In `on_initialize` the pezpallet will load the current migration and check whether it was already
-//! executed in the past by checking for membership of its ID in the [`Historic`] set. Historic
-//! migrations are skipped without causing an error. Each successfully executed migration is added
-//! to this set (Goal 5).
+//! In `on_initialize` the pezpallet will load the current migration and check whether it was
+//! already executed in the past by checking for membership of its ID in the [`Historic`] set.
+//! Historic migrations are skipped without causing an error. Each successfully executed migration
+//! is added to this set (Goal 5).
 //!
 //! This proceeds until no more migrations remain. At that point, the event `UpgradeCompleted` is
 //! emitted (Goal 1).
@@ -90,14 +90,14 @@
 //! This function wraps the inner `step` function into a transactional layer to allow rollback in
 //! the error case (Goal 6).
 //!
-//! Weight limits must be checked by the migration itself. The pezpallet provides a [`WeightMeter`] for
-//! that purpose. The pezpallet may return [`SteppedMigrationError::InsufficientWeight`] at any point.
-//! In that scenario, one of two things will happen: if that migration was exclusively executed
-//! in this block, and therefore required more than the maximum amount of weight possible, the
-//! process becomes `Stuck`. Otherwise, one re-attempt is executed with the same logic in the next
-//! block (Goal 3). Progress through the migrations is guaranteed by providing a timeout for each
-//! migration via [`SteppedMigration::max_steps`]. The pezpallet **ONLY** guarantees progress if this
-//! is set to sensible limits (Goal 7).
+//! Weight limits must be checked by the migration itself. The pezpallet provides a [`WeightMeter`]
+//! for that purpose. The pezpallet may return [`SteppedMigrationError::InsufficientWeight`] at any
+//! point. In that scenario, one of two things will happen: if that migration was exclusively
+//! executed in this block, and therefore required more than the maximum amount of weight possible,
+//! the process becomes `Stuck`. Otherwise, one re-attempt is executed with the same logic in the
+//! next block (Goal 3). Progress through the migrations is guaranteed by providing a timeout for
+//! each migration via [`SteppedMigration::max_steps`]. The pezpallet **ONLY** guarantees progress
+//! if this is set to sensible limits (Goal 7).
 //!
 //! ### Scenario: Governance cleanup
 //!
@@ -333,7 +333,8 @@ pub mod pezpallet {
 		/// The overarching event type of the runtime.
 		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// All the multi-block migrations to run.
 		///

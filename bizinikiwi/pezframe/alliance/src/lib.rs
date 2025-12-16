@@ -163,7 +163,8 @@ impl<AccountId> IdentityVerifier<AccountId> for () {
 	}
 }
 
-/// The provider of a collective action interface, for example an instance of `pezpallet-collective`.
+/// The provider of a collective action interface, for example an instance of
+/// `pezpallet-collective`.
 pub trait ProposalProvider<AccountId, Hash, Proposal> {
 	/// Add a new proposal.
 	/// Returns a proposal length and active proposals count if successful.
@@ -430,7 +431,10 @@ pub mod pezpallet {
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			for m in self.fellows.iter().chain(self.allies.iter()) {
-				assert!(Pezpallet::<T, I>::has_identity(m).is_ok(), "Member does not set identity!");
+				assert!(
+					Pezpallet::<T, I>::has_identity(m).is_ok(),
+					"Member does not set identity!"
+				);
 			}
 
 			if !self.fellows.is_empty() {

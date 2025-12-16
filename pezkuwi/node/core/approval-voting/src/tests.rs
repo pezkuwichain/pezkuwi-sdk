@@ -22,6 +22,15 @@ use overseer::prometheus::{
 	prometheus::{IntCounter, IntCounterVec},
 	Histogram, HistogramOpts, HistogramVec, Opts,
 };
+use pezkuwi_node_subsystem::{
+	messages::{
+		AllMessages, ApprovalVotingMessage, AssignmentCheckResult, AvailabilityRecoveryMessage,
+	},
+	ActiveLeavesUpdate, SubsystemContext,
+};
+use pezkuwi_node_subsystem_test_helpers as test_helpers;
+use pezkuwi_node_subsystem_util::TimeoutExt;
+use pezkuwi_overseer::SpawnGlue;
 use pezkuwi_pez_node_primitives::{
 	approval::{
 		v1::{
@@ -32,15 +41,6 @@ use pezkuwi_pez_node_primitives::{
 	},
 	AvailableData, BlockData, PoV,
 };
-use pezkuwi_node_subsystem::{
-	messages::{
-		AllMessages, ApprovalVotingMessage, AssignmentCheckResult, AvailabilityRecoveryMessage,
-	},
-	ActiveLeavesUpdate, SubsystemContext,
-};
-use pezkuwi_node_subsystem_test_helpers as test_helpers;
-use pezkuwi_node_subsystem_util::TimeoutExt;
-use pezkuwi_overseer::SpawnGlue;
 use pezkuwi_primitives::{
 	ApprovalVote, CandidateCommitments, CandidateEvent, CoreIndex, DisputeStatement, GroupIndex,
 	Header, Id as ParaId, IndexedVec, MutateDescriptorV2, NodeFeatures, ValidDisputeStatementKind,
@@ -259,7 +259,8 @@ where
 		_relay_vrf_story: pezkuwi_pez_node_primitives::approval::v1::RelayVRFStory,
 		_assignment: &pezkuwi_pez_node_primitives::approval::v2::AssignmentCertV2,
 		_backing_groups: Vec<pezkuwi_primitives::GroupIndex>,
-	) -> Result<pezkuwi_pez_node_primitives::approval::v1::DelayTranche, criteria::InvalidAssignment> {
+	) -> Result<pezkuwi_pez_node_primitives::approval::v1::DelayTranche, criteria::InvalidAssignment>
+	{
 		self.1(validator_index)
 	}
 }

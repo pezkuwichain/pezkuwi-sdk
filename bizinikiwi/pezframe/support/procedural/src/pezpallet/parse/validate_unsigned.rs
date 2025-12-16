@@ -31,7 +31,8 @@ impl ValidateUnsignedDef {
 		};
 
 		if item.trait_.is_none() {
-			let msg = "Invalid pezpallet::validate_unsigned, expected impl<..> ValidateUnsigned for \
+			let msg =
+				"Invalid pezpallet::validate_unsigned, expected impl<..> ValidateUnsigned for \
 				Pezpallet<..>";
 			return Err(syn::Error::new(item.span(), msg));
 		}
@@ -42,7 +43,8 @@ impl ValidateUnsignedDef {
 				return Err(syn::Error::new(last.span(), msg));
 			}
 		} else {
-			let msg = "Invalid pezpallet::validate_unsigned, expected impl<..> ValidateUnsigned for \
+			let msg =
+				"Invalid pezpallet::validate_unsigned, expected impl<..> ValidateUnsigned for \
 				Pezpallet<..>";
 			return Err(syn::Error::new(item.span(), msg));
 		}

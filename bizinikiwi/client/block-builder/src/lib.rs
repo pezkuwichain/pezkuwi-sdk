@@ -378,12 +378,12 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezsp_blockchain::HeaderBackend;
-	use pezsp_core::Blake2Hasher;
-	use pezsp_state_machine::Backend;
 	use bizinikiwi_test_runtime_client::{
 		runtime::ExtrinsicBuilder, DefaultTestClientBuilderExt, TestClientBuilderExt,
 	};
+	use pezsp_blockchain::HeaderBackend;
+	use pezsp_core::Blake2Hasher;
+	use pezsp_state_machine::Backend;
 
 	#[test]
 	fn block_building_storage_proof_does_not_include_runtime_by_default() {
@@ -404,9 +404,11 @@ mod tests {
 		let proof = block.proof.expect("Proof is build on request");
 		let genesis_state_root = client.header(genesis_hash).unwrap().unwrap().state_root;
 
-		let backend =
-			pezsp_state_machine::create_proof_check_backend::<Blake2Hasher>(genesis_state_root, proof)
-				.unwrap();
+		let backend = pezsp_state_machine::create_proof_check_backend::<Blake2Hasher>(
+			genesis_state_root,
+			proof,
+		)
+		.unwrap();
 
 		assert!(backend
 			.storage(&pezsp_core::storage::well_known_keys::CODE)

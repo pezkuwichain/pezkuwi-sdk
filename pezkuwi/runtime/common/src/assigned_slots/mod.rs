@@ -34,14 +34,14 @@ use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezframe_support::{pezpallet_prelude::*, traits::Currency};
 use pezframe_system::pezpallet_prelude::*;
-pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_runtime_teyrchains::{
 	configuration,
 	paras::{self},
 };
-use scale_info::TypeInfo;
+pub use pezpallet::*;
 use pezsp_runtime::traits::{One, Saturating, Zero};
+use scale_info::TypeInfo;
 
 const LOG_TARGET: &str = "runtime::assigned_slots";
 
@@ -121,7 +121,8 @@ pub mod pezpallet {
 	pub trait Config: configuration::Config + paras::Config + slots::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Origin for assigning slots.
 		type AssignSlotOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
@@ -637,13 +638,13 @@ mod tests {
 	use crate::{assigned_slots, mock::TestRegistrar, slots};
 	use pezframe_support::{assert_noop, assert_ok, derive_impl, parameter_types};
 	use pezframe_system::EnsureRoot;
-	use pezpallet_balances;
 	use pezkuwi_primitives::BlockNumber;
 	use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
 	use pezkuwi_runtime_teyrchains::{
 		configuration as teyrchains_configuration, paras as teyrchains_paras,
 		shared as teyrchains_shared,
 	};
+	use pezpallet_balances;
 	use pezsp_core::H256;
 	use pezsp_runtime::{
 		traits::{BlakeTwo256, IdentityLookup},

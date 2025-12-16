@@ -24,11 +24,11 @@ use pezframe_support::{
 	BoundedVec,
 };
 use pezframe_system::RawOrigin::Root;
-use pretty_assertions::assert_eq;
 use pezsp_runtime::{
 	traits::{BadOrigin, Get},
 	Perbill, TokenError,
 };
+use pretty_assertions::assert_eq;
 use CoreAssignment::*;
 use CoretimeTraceItem::*;
 use Finality::*;

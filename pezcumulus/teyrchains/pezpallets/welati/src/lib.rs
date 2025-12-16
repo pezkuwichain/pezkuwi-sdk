@@ -224,7 +224,8 @@ pub mod pezpallet {
 		+ pezpallet_identity_kyc::Config
 		+ core::fmt::Debug
 	{
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type WeightInfo: crate::WeightInfo;
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self>>;
 		type RuntimeCall: Parameter

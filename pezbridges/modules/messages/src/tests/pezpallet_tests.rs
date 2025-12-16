@@ -23,7 +23,7 @@ use crate::{
 	tests::mock::{RuntimeEvent as TestEvent, *},
 	weights_ext::WeightInfoExt,
 	Call, Config, Error, Event, InboundLanes, LanesManagerError, OutboundLanes, OutboundMessages,
-	Pezpallet, PalletOperatingMode, PalletOwner, StoredInboundLaneData,
+	PalletOperatingMode, PalletOwner, Pezpallet, StoredInboundLaneData,
 };
 
 use bp_messages::{
@@ -34,9 +34,9 @@ use bp_messages::{
 	OutboundLaneData, OutboundMessageDetails, UnrewardedRelayer, UnrewardedRelayersState,
 	VerificationError,
 };
-use pezbp_runtime::{BasicOperatingMode, PreComputedSize, RangeInclusiveExt, Size};
 use bp_test_utils::generate_owned_bridge_module_tests;
 use codec::Encode;
+use pezbp_runtime::{BasicOperatingMode, PreComputedSize, RangeInclusiveExt, Size};
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::Pays,
@@ -248,7 +248,10 @@ fn send_message_rejects_too_large_message() {
 			.extra
 			.extend_from_slice(&vec![0u8; max_outbound_payload_size as usize]);
 		assert_noop!(
-			Pezpallet::<TestRuntime, ()>::validate_message(test_lane_id(), &message_payload.clone(),),
+			Pezpallet::<TestRuntime, ()>::validate_message(
+				test_lane_id(),
+				&message_payload.clone(),
+			),
 			Error::<TestRuntime, ()>::MessageRejectedByPallet(VerificationError::MessageTooLarge),
 		);
 

@@ -17,10 +17,10 @@
 use super::*;
 use pezcumulus_primitives_core::relay_chain::SessionIndex;
 use pezframe_election_provider_support::{ElectionDataProvider, SequentialPhragmen};
+use pezkuwi_runtime_common::{prod_or_fast, BalanceToU256, U256ToBalance};
 use pezpallet_election_provider_multi_block::{self as multi_block, SolutionAccuracyOf};
 use pezpallet_staking_async::UseValidatorsMap;
 use pezpallet_staking_async_rc_client as rc_client;
-use pezkuwi_runtime_common::{prod_or_fast, BalanceToU256, U256ToBalance};
 use pezsp_runtime::{
 	transaction_validity::TransactionPriority, FixedPointNumber, FixedU128, SaturatedConversion,
 };
@@ -139,7 +139,8 @@ impl multi_block::verifier::Config for Runtime {
 	type MaxBackersPerWinner = MaxBackersPerWinner;
 	type MaxBackersPerWinnerFinal = MaxBackersPerWinnerFinal;
 	type SolutionDataProvider = MultiBlockElectionSigned;
-	type WeightInfo = weights::pezpallet_election_provider_multi_block_verifier::WeightInfo<Runtime>;
+	type WeightInfo =
+		weights::pezpallet_election_provider_multi_block_verifier::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -178,7 +179,8 @@ impl multi_block::unsigned::Config for Runtime {
 	type OffchainSolver = SequentialPhragmen<AccountId, SolutionAccuracyOf<Runtime>>;
 	type MinerTxPriority = MinerTxPriority;
 	type OffchainRepeat = OffchainRepeat;
-	type WeightInfo = weights::pezpallet_election_provider_multi_block_unsigned::WeightInfo<Runtime>;
+	type WeightInfo =
+		weights::pezpallet_election_provider_multi_block_unsigned::WeightInfo<Runtime>;
 }
 
 parameter_types! {
@@ -288,7 +290,8 @@ impl pezpallet_staking_async::Config for Runtime {
 	type VoterList = VoterList;
 	type TargetList = UseValidatorsMap<Self>;
 	type MaxValidatorSet = MaxValidatorSet;
-	type NominationsQuota = pezpallet_staking_async::FixedNominationsQuota<{ MaxNominations::get() }>;
+	type NominationsQuota =
+		pezpallet_staking_async::FixedNominationsQuota<{ MaxNominations::get() }>;
 	type MaxUnlockingChunks = pezframe_support::traits::ConstU32<32>;
 	type HistoryDepth = pezframe_support::traits::ConstU32<84>;
 	type MaxControllersInDeprecationBatch = MaxControllersInDeprecationBatch;

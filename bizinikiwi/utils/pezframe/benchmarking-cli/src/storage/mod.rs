@@ -39,7 +39,8 @@ pub(crate) fn get_wasm_module() -> Box<dyn pezsc_executor_common::wasm_runtime::
 			heap_alloc_strategy: pezsc_executor_common::wasm_runtime::HeapAllocStrategy::Dynamic {
 				maximum_pages: Some(4096),
 			},
-			instantiation_strategy: pezsc_executor::WasmtimeInstantiationStrategy::PoolingCopyOnWrite,
+			instantiation_strategy:
+				pezsc_executor::WasmtimeInstantiationStrategy::PoolingCopyOnWrite,
 			deterministic_stack_limit: None,
 			canonicalize_nans: false,
 			parallel_compilation: false,

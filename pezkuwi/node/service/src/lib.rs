@@ -61,17 +61,17 @@ use pezkuwi_overseer::SpawnGlue;
 pub use {
 	pezkuwi_overseer::{Handle, Overseer, OverseerConnector, OverseerHandle},
 	pezkuwi_primitives::runtime_api::TeyrchainHost,
-	relay_chain_selection::SelectRelayChain,
 	pezsc_client_api::AuxStore,
 	pezsp_authority_discovery::AuthorityDiscoveryApi,
 	pezsp_blockchain::{HeaderBackend, HeaderMetadata},
 	pezsp_consensus_babe::BabeApi,
+	relay_chain_selection::SelectRelayChain,
 };
 
 use std::{path::PathBuf, sync::Arc};
 
-use prometheus_endpoint::Registry;
 use pezsc_service::SpawnTaskHandle;
+use prometheus_endpoint::Registry;
 
 pub use chain_spec::{GenericChainSpec, PezkuwichainChainSpec, ZagrosChainSpec};
 pub use pezkuwi_primitives::{Block, BlockId, BlockNumber, CollatorPair, Hash, Id as ParaId};
@@ -105,7 +105,10 @@ pub type FullBackend = pezsc_service::TFullBackend<Block>;
 pub type FullClient = pezsc_service::TFullClient<
 	Block,
 	RuntimeApi,
-	WasmExecutor<(pezsp_io::BizinikiwiHostFunctions, pezframe_benchmarking::benchmarking::HostFunctions)>,
+	WasmExecutor<(
+		pezsp_io::BizinikiwiHostFunctions,
+		pezframe_benchmarking::benchmarking::HostFunctions,
+	)>,
 >;
 
 /// The minimum period of blocks on which justifications will be
@@ -399,8 +402,9 @@ macro_rules! chain_ops {
 		// use the longest chain selection, since there is no overseer available
 		let chain_selection = LongestChain::new(basics.backend.clone());
 
-		let pezsc_service::PartialComponents { client, backend, import_queue, task_manager, .. } =
-			new_partial::<LongestChain<_, Block>>(&mut config, basics, chain_selection)?;
+		let pezsc_service::PartialComponents {
+			client, backend, import_queue, task_manager, ..
+		} = new_partial::<LongestChain<_, Block>>(&mut config, basics, chain_selection)?;
 		Ok((client, backend, import_queue, task_manager))
 	}};
 }
@@ -409,8 +413,10 @@ macro_rules! chain_ops {
 #[cfg(feature = "full-node")]
 pub fn new_chain_ops(
 	config: &mut Configuration,
-) -> Result<(Arc<FullClient>, Arc<FullBackend>, pezsc_consensus::BasicQueue<Block>, TaskManager), Error>
-{
+) -> Result<
+	(Arc<FullClient>, Arc<FullBackend>, pezsc_consensus::BasicQueue<Block>, TaskManager),
+	Error,
+> {
 	config.keystore = pezsc_service::config::KeystoreConfig::InMemory;
 
 	if config.chain_spec.is_pezkuwichain() || config.chain_spec.is_versi() {

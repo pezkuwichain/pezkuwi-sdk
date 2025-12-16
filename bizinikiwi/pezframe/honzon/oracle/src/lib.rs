@@ -86,12 +86,12 @@ use pezframe_support::{
 	PalletId, Parameter,
 };
 use pezframe_system::pezpallet_prelude::*;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AccountIdConversion, Member},
 	DispatchResult, RuntimeDebug,
 };
 use pezsp_std::{prelude::*, vec};
+use scale_info::TypeInfo;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;

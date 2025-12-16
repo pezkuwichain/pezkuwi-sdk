@@ -27,8 +27,8 @@
 //! More information about `honggfuzz` can be found
 //! [here](https://docs.rs/honggfuzz/).
 
-use pezframe_election_provider_support::{SortedListProvider, VoteWeight};
 use honggfuzz::fuzz;
+use pezframe_election_provider_support::{SortedListProvider, VoteWeight};
 use pezpallet_bags_list::mock::{AccountId, BagsList, ExtBuilder};
 
 const ID_RANGE: AccountId = 25_000;

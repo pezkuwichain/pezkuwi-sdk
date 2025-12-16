@@ -24,12 +24,12 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::*;
 pub use pezpallet::*;
-use scale_info::TypeInfo;
 use pezsp_core::sr25519;
 use pezsp_runtime::{
 	traits::{CheckedAdd, Saturating, Verify, Zero},
 	AnySignature, DispatchError, DispatchResult, Permill, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
@@ -101,7 +101,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Balances Pezpallet
 		type Currency: Currency<Self::AccountId>;

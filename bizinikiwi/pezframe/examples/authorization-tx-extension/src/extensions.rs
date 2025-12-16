@@ -25,7 +25,6 @@ use core::{fmt, marker::PhantomData};
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{pezpallet_prelude::TransactionSource, traits::OriginTrait, Parameter};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{
@@ -34,6 +33,7 @@ use pezsp_runtime::{
 	},
 	transaction_validity::{InvalidTransaction, ValidTransaction},
 };
+use scale_info::TypeInfo;
 
 use crate::pezpallet_coownership::{Config, Origin};
 

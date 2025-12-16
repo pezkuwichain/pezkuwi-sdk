@@ -181,7 +181,8 @@ impl<B: Balance, OnDrop: HandleImbalanceDrop<B>, OppositeOnDrop: HandleImbalance
 /// Converts a `fungibles` `imbalance` instance to an instance of a `fungible` imbalance type.
 ///
 /// This function facilitates imbalance conversions within the implementations of
-/// [`pezframe_support::traits::fungibles::UnionOf`], [`pezframe_support::traits::fungible::UnionOf`], and
+/// [`pezframe_support::traits::fungibles::UnionOf`],
+/// [`pezframe_support::traits::fungible::UnionOf`], and
 /// [`pezframe_support::traits::fungible::ItemOf`] adapters. It is intended only for internal use
 /// within the current crate.
 pub(crate) fn from_fungibles<

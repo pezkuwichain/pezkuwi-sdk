@@ -18,8 +18,8 @@
 
 //! Extrinsic helpers for author RPC module.
 
-use serde::{Deserialize, Serialize};
 use pezsp_core::Bytes;
+use serde::{Deserialize, Serialize};
 
 /// RPC Extrinsic or hash
 ///

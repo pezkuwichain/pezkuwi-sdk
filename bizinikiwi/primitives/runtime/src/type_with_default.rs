@@ -31,8 +31,8 @@ use num_traits::{
 	CheckedAdd, CheckedDiv, CheckedMul, CheckedNeg, CheckedRem, CheckedShl, CheckedShr, CheckedSub,
 	Num, NumCast, PrimInt, Saturating, ToPrimitive,
 };
-use scale_info::{StaticTypeInfo, TypeInfo};
 use pezsp_core::Get;
+use scale_info::{StaticTypeInfo, TypeInfo};
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -523,9 +523,9 @@ impl<T: HasCompact, D: Get<T>> CompactAs for TypeWithDefault<T, D> {
 #[cfg(test)]
 mod tests {
 	use super::TypeWithDefault;
-	use scale_info::TypeInfo;
 	use pezsp_arithmetic::traits::{AtLeast16Bit, AtLeast32Bit, AtLeast8Bit};
 	use pezsp_core::Get;
+	use scale_info::TypeInfo;
 
 	#[test]
 	#[allow(dead_code)]

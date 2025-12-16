@@ -28,7 +28,7 @@ use alloc::{boxed::Box, vec, vec::Vec};
 use codec::{Decode, DecodeLimit, Encode, MaxEncodedLen};
 use core::fmt;
 use pezframe_support::{
-	dispatch::DispatchInfo, ensure, pezpallet_prelude::DispatchResultWithPostInfo, parameter_types,
+	dispatch::DispatchInfo, ensure, parameter_types, pezpallet_prelude::DispatchResultWithPostInfo,
 	traits::Get, weights::Weight,
 };
 use pezpallet_contracts_proc_macro::define_env;
@@ -61,8 +61,8 @@ pub enum AllowUnstableInterface {
 	Yes,
 }
 
-/// Trait implemented by the [`define_env`](pezpallet_contracts_proc_macro::define_env) macro for the
-/// emitted `Env` struct.
+/// Trait implemented by the [`define_env`](pezpallet_contracts_proc_macro::define_env) macro for
+/// the emitted `Env` struct.
 pub trait Environment<HostState> {
 	/// Adds all declared functions to the supplied [`Linker`](wasmi::Linker) and
 	/// [`Store`](wasmi::Store).

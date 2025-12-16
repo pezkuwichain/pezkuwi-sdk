@@ -36,7 +36,6 @@ use pezsc_client_api::{
 	StaleBlock,
 };
 use pezsc_rpc::utils::Subscription;
-use schnellru::{ByLength, LruMap};
 use pezsp_api::CallApiAt;
 use pezsp_blockchain::{
 	Backend as BlockChainBackend, Error as BlockChainError, HeaderBackend, HeaderMetadata, Info,
@@ -45,6 +44,7 @@ use pezsp_runtime::{
 	traits::{Block as BlockT, Header as HeaderT, NumberFor},
 	SaturatedConversion, Saturating,
 };
+use schnellru::{ByLength, LruMap};
 use std::{
 	collections::{HashSet, VecDeque},
 	sync::Arc,
@@ -579,8 +579,11 @@ where
 			}
 
 			if let Some(best_block_hash) = self.current_best_block {
-				let ancestor =
-					pezsp_blockchain::lowest_common_ancestor(&*self.client, *hash, best_block_hash)?;
+				let ancestor = pezsp_blockchain::lowest_common_ancestor(
+					&*self.client,
+					*hash,
+					best_block_hash,
+				)?;
 
 				// If we end up here and the `best_block` is a descendent of the finalized block
 				// (last block in the list), it means that there were skipped notifications.

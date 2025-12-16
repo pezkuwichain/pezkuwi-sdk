@@ -24,9 +24,9 @@ use crate::{
 	traits::{self, BlakeTwo256, Dispatchable, LazyExtrinsic, OpaqueKeys},
 	DispatchResultWithInfo, KeyTypeId, OpaqueExtrinsic,
 };
-use serde::{de::Error as DeError, Deserialize, Deserializer, Serialize};
 use pezsp_core::crypto::{key_types, ByteArray, CryptoType, Dummy};
 pub use pezsp_core::{sr25519, H256};
+use serde::{de::Error as DeError, Deserialize, Deserializer, Serialize};
 use std::{cell::RefCell, fmt::Debug};
 
 /// A dummy type which can be used instead of regular cryptographic primitives.

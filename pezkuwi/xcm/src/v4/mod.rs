@@ -899,8 +899,8 @@ pub enum Instruction<Call> {
 
 	/// Ensure that a particular pezpallet with a particular version exists.
 	///
-	/// - `index: Compact`: The index which identifies the pezpallet. An error if no pezpallet exists at
-	///   this index.
+	/// - `index: Compact`: The index which identifies the pezpallet. An error if no pezpallet
+	///   exists at this index.
 	/// - `name: Vec<u8>`: Name which must be equal to the name of the pezpallet.
 	/// - `module_name: Vec<u8>`: Module name which must be equal to the name of the module in
 	///   which the pezpallet exists.

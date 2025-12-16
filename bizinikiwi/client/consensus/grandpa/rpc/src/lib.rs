@@ -36,13 +36,13 @@ mod report;
 use error::Error;
 use finality::{EncodedFinalityProof, RpcFinalityProofProvider};
 use notification::JustificationNotification;
-use report::{ReportAuthoritySet, ReportVoterState, ReportedRoundStates};
 use pezsc_consensus_grandpa::GrandpaJustificationStream;
 use pezsc_rpc::{
 	utils::{BoundedVecDeque, PendingSubscription},
 	SubscriptionTaskExecutor,
 };
 use pezsp_runtime::traits::{Block as BlockT, NumberFor};
+use report::{ReportAuthoritySet, ReportVoterState, ReportedRoundStates};
 
 /// Provides RPC methods for interacting with GRANDPA.
 #[rpc(client, server)]
@@ -133,6 +133,10 @@ mod tests {
 	use super::*;
 	use std::{collections::HashSet, sync::Arc};
 
+	use bizinikiwi_test_runtime_client::{
+		runtime::{Block, Header, H256},
+		DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
+	};
 	use codec::{Decode, Encode};
 	use jsonrpsee::{core::EmptyServerParams as EmptyParams, types::SubscriptionId, RpcModule};
 	use pezsc_block_builder::BlockBuilderBuilder;
@@ -144,10 +148,6 @@ mod tests {
 	use pezsp_core::crypto::ByteArray;
 	use pezsp_keyring::Ed25519Keyring;
 	use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT};
-	use bizinikiwi_test_runtime_client::{
-		runtime::{Block, Header, H256},
-		DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
-	};
 
 	struct TestAuthoritySet;
 	struct TestVoterState;

@@ -85,8 +85,8 @@ use xcm_builder::{
 use xcm_executor::traits::JustTry;
 
 // XCM imports
-use pezpallet_xcm::{EnsureXcm, IsMajorityOfBody, XcmPassthrough};
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
+use pezpallet_xcm::{EnsureXcm, IsMajorityOfBody, XcmPassthrough};
 use xcm::latest::{prelude::*, PEZKUWICHAIN_GENESIS_HASH};
 use xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowTopLevelPaidExecutionFrom,
@@ -702,7 +702,8 @@ pub struct RemoveCollectiveFlip;
 impl pezframe_support::traits::OnRuntimeUpgrade for RemoveCollectiveFlip {
 	fn on_runtime_upgrade() -> Weight {
 		use pezframe_support::storage::migration;
-		// Remove the storage value `RandomMaterial` from removed pezpallet `RandomnessCollectiveFlip`
+		// Remove the storage value `RandomMaterial` from removed pezpallet
+		// `RandomnessCollectiveFlip`
 		#[allow(deprecated)]
 		migration::remove_storage_prefix(b"RandomnessCollectiveFlip", b"RandomMaterial", b"");
 		<Runtime as pezframe_system::Config>::DbWeight::get().writes(1)

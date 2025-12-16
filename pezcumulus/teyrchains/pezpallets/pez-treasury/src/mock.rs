@@ -97,8 +97,9 @@ impl pezpallet_assets::Config for Test {
 	type AssetId = u32;
 	type AssetIdParameter = u32;
 	type Currency = Balances;
-	type CreateOrigin =
-		pezframe_support::traits::AsEnsureOriginWithArg<pezframe_system::EnsureSigned<Self::AccountId>>;
+	type CreateOrigin = pezframe_support::traits::AsEnsureOriginWithArg<
+		pezframe_system::EnsureSigned<Self::AccountId>,
+	>;
 	type ForceOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type AssetDeposit = AssetDeposit;
 	type AssetAccountDeposit = ConstU128<0>;

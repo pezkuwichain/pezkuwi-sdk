@@ -67,7 +67,6 @@ use pezkuwi_primitives::{
 	slashing::{DisputeProof, DisputesTimeSlot, PendingSlashes},
 	CandidateHash, DisputeOffenceKind, SessionIndex, ValidatorId, ValidatorIndex,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::Convert,
 	transaction_validity::{
@@ -78,6 +77,7 @@ use pezsp_runtime::{
 };
 use pezsp_session::{GetSessionNumber, GetValidatorCount};
 use pezsp_staking::offence::{Kind, Offence, OffenceError, ReportOffence};
+use scale_info::TypeInfo;
 
 const LOG_TARGET: &str = "runtime::teyrchains::slashing";
 

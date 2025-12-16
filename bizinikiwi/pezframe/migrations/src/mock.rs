@@ -142,11 +142,15 @@ impl IntoRecord for Event<Test> {
 }
 
 pub trait IntoRecords {
-	fn into_records(self) -> Vec<EventRecord<<Test as pezframe_system::Config>::RuntimeEvent, H256>>;
+	fn into_records(
+		self,
+	) -> Vec<EventRecord<<Test as pezframe_system::Config>::RuntimeEvent, H256>>;
 }
 
 impl<E: IntoRecord> IntoRecords for Vec<E> {
-	fn into_records(self) -> Vec<EventRecord<<Test as pezframe_system::Config>::RuntimeEvent, H256>> {
+	fn into_records(
+		self,
+	) -> Vec<EventRecord<<Test as pezframe_system::Config>::RuntimeEvent, H256>> {
 		self.into_iter().map(|e| e.into_record()).collect()
 	}
 }

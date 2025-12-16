@@ -47,7 +47,6 @@ use crate::worker::UntilImportedOrTimeout;
 use codec::{Decode, Encode};
 use futures::{Future, StreamExt};
 use log::*;
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{self, backend::AuxStore, BlockOf, BlockchainEvents};
 use pezsc_consensus::{
 	BasicQueue, BlockCheckParams, BlockImport, BlockImportParams, BoxBlockImport,
@@ -63,6 +62,7 @@ use pezsp_runtime::{
 	generic::{BlockId, Digest, DigestItem},
 	traits::{Block as BlockT, Header as HeaderT},
 };
+use prometheus_endpoint::Registry;
 use std::{cmp::Ordering, marker::PhantomData, sync::Arc, time::Duration};
 
 const LOG_TARGET: &str = "pow";

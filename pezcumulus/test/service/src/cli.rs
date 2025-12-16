@@ -18,8 +18,8 @@ use clap::ValueEnum;
 use pezcumulus_client_cli::{ExportGenesisHeadCommand, ExportGenesisWasmCommand};
 use pezkuwi_service::{ChainSpec, ParaId, PrometheusConfig};
 use pezsc_cli::{
-	CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams, NetworkParams,
-	Result as CliResult, RpcEndpoint, SharedParams, BizinikiwiCli,
+	BizinikiwiCli, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
+	NetworkParams, Result as CliResult, RpcEndpoint, SharedParams,
 };
 use pezsc_service::BasePath;
 use std::{
@@ -282,11 +282,15 @@ impl BizinikiwiCli for TestCollatorCli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		Ok(match id {
 			"" => {
 				tracing::info!("Using default test service chain spec.");
-				Box::new(pezcumulus_test_service::get_chain_spec(Some(ParaId::from(2000)))) as Box<_>
+				Box::new(pezcumulus_test_service::get_chain_spec(Some(ParaId::from(2000))))
+					as Box<_>
 			},
 			"elastic-scaling-mvp" => {
 				tracing::info!("Using elastic-scaling mvp chain spec.");
@@ -296,9 +300,9 @@ impl BizinikiwiCli for TestCollatorCli {
 			},
 			"elastic-scaling" => {
 				tracing::info!("Using elastic-scaling chain spec.");
-				Box::new(pezcumulus_test_service::get_elastic_scaling_chain_spec(Some(ParaId::from(
-					2200,
-				)))) as Box<_>
+				Box::new(pezcumulus_test_service::get_elastic_scaling_chain_spec(Some(
+					ParaId::from(2200),
+				))) as Box<_>
 			},
 			"elastic-scaling-500ms" => {
 				tracing::info!("Using elastic-scaling 500ms chain spec.");
@@ -324,9 +328,10 @@ impl BizinikiwiCli for TestCollatorCli {
 					2500,
 				)))) as Box<_>
 			},
-			"relay-parent-offset" => Box::new(
-				pezcumulus_test_service::get_relay_parent_offset_chain_spec(Some(ParaId::from(2600))),
-			) as Box<_>,
+			"relay-parent-offset" =>
+				Box::new(pezcumulus_test_service::get_relay_parent_offset_chain_spec(Some(
+					ParaId::from(2600),
+				))) as Box<_>,
 			path => {
 				let chain_spec: pezsc_chain_spec::GenericChainSpec =
 					pezsc_chain_spec::GenericChainSpec::from_json_file(path.into())?;
@@ -367,7 +372,10 @@ impl BizinikiwiCli for RelayChainCli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		<pezkuwi_cli::Cli as BizinikiwiCli>::from_iter([RelayChainCli::executable_name()].iter())
 			.load_spec(id)
 	}

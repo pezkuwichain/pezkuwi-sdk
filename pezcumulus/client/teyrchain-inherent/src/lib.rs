@@ -19,6 +19,7 @@
 mod mock;
 
 use codec::Decode;
+pub use mock::{MockValidationDataInherentDataProvider, MockXcmConfig};
 use pezcumulus_primitives_core::{
 	relay_chain::{
 		self, ApprovedPeerId, Block as RelayBlock, Hash as PHash, Header as RelayHeader,
@@ -28,7 +29,6 @@ use pezcumulus_primitives_core::{
 };
 pub use pezcumulus_primitives_teyrchain_inherent::{TeyrchainInherentData, INHERENT_IDENTIFIER};
 use pezcumulus_relay_chain_interface::RelayChainInterface;
-pub use mock::{MockValidationDataInherentDataProvider, MockXcmConfig};
 use pezsc_network_types::PeerId;
 
 const LOG_TARGET: &str = "teyrchain-inherent";

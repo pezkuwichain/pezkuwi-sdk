@@ -23,20 +23,20 @@
 use crate::justification::{
 	GrandpaJustification, JustificationVerificationContext, JustificationVerificationError,
 };
+use codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
+use core::{clone::Clone, cmp::Eq, default::Default, fmt::Debug};
 use pezbp_runtime::{
 	BasicOperatingMode, BlockNumberOf, Chain, HashOf, HasherOf, HeaderOf, RawStorageProof,
 	StorageProofChecker, StorageProofError, UnderlyingChainProvider,
 };
-use codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen};
-use core::{clone::Clone, cmp::Eq, default::Default, fmt::Debug};
 use pezframe_support::PalletError;
-use scale_info::TypeInfo;
-use serde::{Deserialize, Serialize};
 use pezsp_consensus_grandpa::{
 	AuthorityList, ConsensusLog, ScheduledChange, SetId, GRANDPA_ENGINE_ID,
 };
 use pezsp_runtime::{traits::Header as HeaderT, Digest, RuntimeDebug, SaturatedConversion};
 use pezsp_std::{boxed::Box, vec::Vec};
+use scale_info::TypeInfo;
+use serde::{Deserialize, Serialize};
 
 pub use call_info::{BridgeGrandpaCall, BridgeGrandpaCallOf, SubmitFinalityProofInfo};
 
@@ -251,8 +251,8 @@ pub trait FindEquivocations<FinalityProof, FinalityVerificationContext, Equivoca
 /// Keep in mind that teyrchains are relying on relay chain GRANDPA, so they should not implement
 /// this trait.
 pub trait ChainWithGrandpa: Chain {
-	/// Name of the bridge GRANDPA pezpallet (used in `construct_runtime` macro call) that is deployed
-	/// at some other chain to bridge with this `ChainWithGrandpa`.
+	/// Name of the bridge GRANDPA pezpallet (used in `construct_runtime` macro call) that is
+	/// deployed at some other chain to bridge with this `ChainWithGrandpa`.
 	///
 	/// We assume that all chains that are bridging with this `ChainWithGrandpa` are using
 	/// the same name.

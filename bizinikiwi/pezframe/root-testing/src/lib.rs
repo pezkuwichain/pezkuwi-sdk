@@ -19,8 +19,8 @@
 //!
 //! Pezpallet that contains extrinsics that can be useful in testing.
 //!
-//! NOTE: This pezpallet should only be used for testing purposes and should not be used in production
-//! runtimes!
+//! NOTE: This pezpallet should only be used for testing purposes and should not be used in
+//! production runtimes!
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -38,7 +38,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::pezpallet]

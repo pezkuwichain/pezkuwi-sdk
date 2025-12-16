@@ -27,6 +27,7 @@ use crate::{
 };
 use codec::Encode;
 use core::marker::PhantomData;
+use num_traits::Zero;
 use pezframe_support::{
 	dispatch::{DispatchClass, DispatchInfo, GetDispatchInfo},
 	pezpallet_prelude::Weight,
@@ -34,7 +35,6 @@ use pezframe_support::{
 	weights::WeightToFee,
 };
 use pezframe_system::Config as SysConfig;
-use num_traits::Zero;
 use pezpallet_transaction_payment::{
 	Config as TxConfig, MultiplierUpdate, NextFeeMultiplier, Pezpallet as TxPallet, TxCreditHold,
 };

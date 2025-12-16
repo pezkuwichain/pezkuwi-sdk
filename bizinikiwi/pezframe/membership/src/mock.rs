@@ -107,7 +107,10 @@ pub(crate) fn new_test_ext() -> pezsp_io::TestExternalities {
 
 #[cfg(feature = "runtime-benchmarks")]
 pub(crate) fn new_bench_ext() -> pezsp_io::TestExternalities {
-	pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap().into()
+	pezframe_system::GenesisConfig::<Test>::default()
+		.build_storage()
+		.unwrap()
+		.into()
 }
 
 #[cfg(feature = "runtime-benchmarks")]

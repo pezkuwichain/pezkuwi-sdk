@@ -28,7 +28,8 @@ use pezframe_benchmarking::{
 	v2::*,
 };
 use pezframe_system::{
-	pezpallet_prelude::BlockNumberFor, Call as SystemCall, Pezpallet as System, RawOrigin as SystemOrigin,
+	pezpallet_prelude::BlockNumberFor, Call as SystemCall, Pezpallet as System,
+	RawOrigin as SystemOrigin,
 };
 
 const SEED: u32 = 0;

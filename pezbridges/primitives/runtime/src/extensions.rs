@@ -18,13 +18,13 @@
 
 use codec::{Compact, Decode, DecodeWithMemTracking, Encode};
 use impl_trait_for_tuples::impl_for_tuples;
-use scale_info::{StaticTypeInfo, TypeInfo};
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{Dispatchable, TransactionExtension},
 	transaction_validity::TransactionValidityError,
 };
 use pezsp_std::{fmt::Debug, marker::PhantomData};
+use scale_info::{StaticTypeInfo, TypeInfo};
 
 /// Trait that describes some properties of a `TransactionExtension` that are needed in order to
 /// send a transaction to the chain.

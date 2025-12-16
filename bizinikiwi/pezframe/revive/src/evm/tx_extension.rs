@@ -23,12 +23,12 @@ use pezframe_support::{
 	pezpallet_prelude::{InvalidTransaction, TransactionSource},
 	DebugNoBound, DefaultNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{DispatchInfoOf, TransactionExtension, ValidateResult},
 	Weight,
 };
+use scale_info::TypeInfo;
 
 /// An extension that sets the origin to [`Origin::EthTransaction`] in case it originated from an
 /// eth transaction.

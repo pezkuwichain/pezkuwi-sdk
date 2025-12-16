@@ -425,7 +425,10 @@ fn dry_run_xcm_common(xcm_version: XcmVersion) {
 					account: 2100,
 					free_balance: 520
 				}),
-				RuntimeEvent::Balances(pezpallet_balances::Event::Minted { who: 2100, amount: 520 }),
+				RuntimeEvent::Balances(pezpallet_balances::Event::Minted {
+					who: 2100,
+					amount: 520
+				}),
 				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent {
 					origin: (who,).into(),
 					destination: (Parent, Teyrchain(2100)).into(),

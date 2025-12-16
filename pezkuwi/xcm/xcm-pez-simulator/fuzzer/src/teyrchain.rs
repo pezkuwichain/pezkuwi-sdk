@@ -30,11 +30,11 @@ use pezsp_runtime::{
 	MultiAddress, MultiSignature,
 };
 
-use pezpallet_xcm::XcmPassthrough;
 use pezkuwi_core_primitives::BlockNumber as RelayBlockNumber;
 use pezkuwi_teyrchain_primitives::primitives::{
 	DmpMessageHandler, Id as ParaId, Sibling, XcmpMessageFormat, XcmpMessageHandler,
 };
+use pezpallet_xcm::XcmPassthrough;
 use xcm::{latest::prelude::*, VersionedXcm};
 use xcm_builder::{
 	AccountId32Aliases, AllowUnpaidExecutionFrom, EnsureXcmOrigin, FixedRateOfFungible,
@@ -158,7 +158,8 @@ pub mod mock_msg_queue {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}
 

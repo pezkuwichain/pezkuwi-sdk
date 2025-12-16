@@ -20,7 +20,6 @@ use alloc::vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::{fmt, marker::PhantomData};
 use pezframe_support::{dispatch::DispatchInfo, ensure, pezpallet_prelude::TransactionSource};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{AsSystemOriginSigner, DispatchInfoOf, Dispatchable, Hash, TransactionExtension},
@@ -29,6 +28,7 @@ use pezsp_runtime::{
 		ValidTransaction,
 	},
 };
+use scale_info::TypeInfo;
 
 /// Ensure that signed transactions are only valid if they are signed by sudo account.
 ///

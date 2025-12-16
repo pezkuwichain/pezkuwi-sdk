@@ -29,7 +29,6 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	DispatchEventInfo,
 };
-use scale_info::TypeInfo;
 use pezsp_core::sr25519;
 use pezsp_runtime::{
 	generic,
@@ -37,6 +36,7 @@ use pezsp_runtime::{
 	DispatchError, ModuleError,
 };
 use pezsp_version::RuntimeVersion;
+use scale_info::TypeInfo;
 
 parameter_types! {
 	pub static IntegrityTestExec: u32 = 0;
@@ -102,7 +102,8 @@ mod module2 {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::hooks]
@@ -238,7 +239,8 @@ pub mod module3 {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::call]
@@ -624,7 +626,10 @@ fn event_codec() {
 #[test]
 fn call_codec() {
 	use codec::Encode;
-	assert_eq!(RuntimeCall::System(pezframe_system::Call::remark { remark: vec![1] }).encode()[0], 30);
+	assert_eq!(
+		RuntimeCall::System(pezframe_system::Call::remark { remark: vec![1] }).encode()[0],
+		30
+	);
 	assert_eq!(RuntimeCall::Module1_1(module1::Call::fail {}).encode()[0], 31);
 	assert_eq!(RuntimeCall::Module2(module2::Call::fail {}).encode()[0], 32);
 	assert_eq!(RuntimeCall::Module1_2(module1::Call::fail {}).encode()[0], 33);
@@ -759,9 +764,9 @@ fn test_metadata() {
 		v14::{StorageEntryType::Plain, *},
 		*,
 	};
-	use scale_info::meta_type;
 	use pezsp_core::Encode;
 	use pezsp_metadata_ir::StorageEntryModifierIR::Optional;
+	use scale_info::meta_type;
 
 	fn maybe_docs(doc: Vec<&'static str>) -> Vec<&'static str> {
 		if cfg!(feature = "no-metadata-docs") {

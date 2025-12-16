@@ -29,9 +29,9 @@ use bp_relayers::{
 	ExplicitOrAccountParams, ExtensionCallData, ExtensionCallInfo, ExtensionConfig,
 	RewardsAccountOwner, RewardsAccountParams,
 };
-use pezbp_runtime::{Chain, RangeInclusiveExt, StaticStrProvider};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::{fmt::Debug, marker::PhantomData};
+use pezbp_runtime::{Chain, RangeInclusiveExt, StaticStrProvider};
 use pezframe_support::{
 	dispatch::{DispatchInfo, PostDispatchInfo},
 	pezpallet_prelude::TransactionSource,
@@ -45,7 +45,6 @@ use pezpallet_bridge_messages::{
 use pezpallet_transaction_payment::{
 	Config as TransactionPaymentConfig, OnChargeTransaction, Pezpallet as TransactionPaymentPallet,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		AsSystemOriginSigner, DispatchInfoOf, Dispatchable, PostDispatchInfoOf,
@@ -54,6 +53,7 @@ use pezsp_runtime::{
 	transaction_validity::{InvalidTransaction, TransactionValidityError, ValidTransactionBuilder},
 	DispatchResult, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 pub use grandpa_adapter::WithGrandpaChainExtensionConfig;
 pub use messages_adapter::WithMessagesExtensionConfig;
@@ -464,16 +464,18 @@ mod tests {
 	};
 	use bp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
 	use bp_relayers::RuntimeWithUtilityPallet;
-	use pezbp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use bp_teyrchains::{BestParaHeadHash, ParaInfo, SubmitTeyrchainHeadsInfo};
+	use pezbp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use pezframe_support::{
 		__private::pezsp_tracing,
 		assert_storage_noop, parameter_types,
 		traits::{fungible::Mutate, ReservableCurrency},
 		weights::Weight,
 	};
-	use pezpallet_bridge_grandpa::{Call as GrandpaCall, Pezpallet as GrandpaPallet, StoredAuthoritySet};
+	use pezpallet_bridge_grandpa::{
+		Call as GrandpaCall, Pezpallet as GrandpaPallet, StoredAuthoritySet,
+	};
 	use pezpallet_bridge_messages::{Call as MessagesCall, Pezpallet as MessagesPallet};
 	use pezpallet_bridge_teyrchains::{Call as TeyrchainsCall, Pezpallet as TeyrchainsPallet};
 	use pezpallet_utility::Call as UtilityCall;

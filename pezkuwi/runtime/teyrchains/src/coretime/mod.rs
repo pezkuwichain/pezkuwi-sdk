@@ -25,9 +25,9 @@ use pezframe_support::{
 	traits::{defensive_prelude::*, Currency},
 };
 use pezframe_system::pezpallet_prelude::*;
+use pezkuwi_primitives::{Balance, BlockNumber, CoreIndex, Id as ParaId};
 pub use pezpallet::*;
 use pezpallet_broker::{CoreAssignment, CoreIndex as BrokerCoreIndex};
-use pezkuwi_primitives::{Balance, BlockNumber, CoreIndex, Id as ParaId};
 use pezsp_arithmetic::traits::SaturatedConversion;
 use pezsp_runtime::traits::TryConvert;
 use xcm::prelude::*;
@@ -115,11 +115,14 @@ pub mod pezpallet {
 	pub struct Pezpallet<T>(_);
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config + assigner_coretime::Config + on_demand::Config {
+	pub trait Config:
+		pezframe_system::Config + assigner_coretime::Config + on_demand::Config
+	{
 		type RuntimeOrigin: From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<result::Result<Origin, <Self as Config>::RuntimeOrigin>>;
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The ParaId of the coretime chain.
 		#[pezpallet::constant]
 		type BrokerId: Get<u32>;
@@ -216,8 +219,8 @@ pub mod pezpallet {
 		/// -`begin`: The starting blockheight of the instruction.
 		/// -`assignment`: How the blockspace should be utilised.
 		/// -`end_hint`: An optional hint as to when this particular set of instructions will end.
-		// The broker pezpallet's `CoreIndex` definition is `u16` but on the relay chain it's `struct
-		// CoreIndex(u32)`
+		// The broker pezpallet's `CoreIndex` definition is `u16` but on the relay chain it's
+		// `struct CoreIndex(u32)`
 		#[pezpallet::call_index(4)]
 		#[pezpallet::weight(<T as Config>::WeightInfo::assign_core(assignment.len() as u32))]
 		pub fn assign_core(
@@ -352,16 +355,16 @@ fn do_notify_revenue<T: Config>(when: BlockNumber, raw_revenue: Balance) -> Resu
 	let dummy_xcm_context = XcmContext { origin: None, message_id: [0; 32], topic: None };
 
 	if raw_revenue > 0 {
-		let on_demand_pot =
-			T::AccountToLocation::try_convert(&<on_demand::Pezpallet<T>>::account_id()).map_err(
-				|err| {
-					log::error!(
-						target: LOG_TARGET,
-						"Failed to convert on-demand pot account to XCM location: {err:?}",
-					);
-					XcmError::InvalidLocation
-				},
-			)?;
+		let on_demand_pot = T::AccountToLocation::try_convert(
+			&<on_demand::Pezpallet<T>>::account_id(),
+		)
+		.map_err(|err| {
+			log::error!(
+				target: LOG_TARGET,
+				"Failed to convert on-demand pot account to XCM location: {err:?}",
+			);
+			XcmError::InvalidLocation
+		})?;
 
 		let withdrawn = T::AssetTransactor::withdraw_asset(&asset, &on_demand_pot, None)?;
 

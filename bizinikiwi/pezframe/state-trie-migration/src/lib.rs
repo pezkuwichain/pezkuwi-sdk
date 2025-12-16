@@ -22,8 +22,8 @@
 //!
 //! ## Migration Types
 //!
-//! This pezpallet provides 2 ways to do this, each of which is suited for a particular use-case, and
-//! can be enabled independently.
+//! This pezpallet provides 2 ways to do this, each of which is suited for a particular use-case,
+//! and can be enabled independently.
 //!
 //! ### Auto migration
 //!
@@ -43,15 +43,15 @@
 //! can be a good safe alternative, if the former system is not desirable.
 //!
 //! The (minor) caveat of this approach is that we cannot know in advance how many bytes reading a
-//! certain number of keys will incur. To overcome this, the runtime needs to configure this pezpallet
-//! with a `SignedDepositPerItem`. This is the per-item deposit that the origin of the signed
-//! migration transactions need to have in their account (on top of the normal fee) and if the size
-//! witness data that they claim is incorrect, this deposit is slashed.
+//! certain number of keys will incur. To overcome this, the runtime needs to configure this
+//! pezpallet with a `SignedDepositPerItem`. This is the per-item deposit that the origin of the
+//! signed migration transactions need to have in their account (on top of the normal fee) and if
+//! the size witness data that they claim is incorrect, this deposit is slashed.
 //!
 //! ---
 //!
-//! Initially, this pezpallet does not contain any auto migration. They must be manually enabled by the
-//! `ControlOrigin`.
+//! Initially, this pezpallet does not contain any auto migration. They must be manually enabled by
+//! the `ControlOrigin`.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -508,7 +508,8 @@ pub mod pezpallet {
 		/// The overarching event type.
 		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency provider type.
 		#[pezpallet::no_default]
@@ -1730,12 +1731,12 @@ pub(crate) mod remote_tests {
 		weights::Weight,
 	};
 	use pezframe_system::{pezpallet_prelude::BlockNumberFor, Pezpallet as System};
-	use remote_externalities::Mode;
 	use pezsp_core::H256;
 	use pezsp_runtime::{
 		traits::{Block as BlockT, HashingFor, Header as _, One, Zero},
 		DeserializeOwned,
 	};
+	use remote_externalities::Mode;
 	use thousands::Separable;
 
 	#[allow(dead_code)]
@@ -1861,8 +1862,8 @@ mod remote_tests_local {
 		remote_tests::run_with_limits,
 		*,
 	};
-	use remote_externalities::{Mode, OfflineConfig, OnlineConfig, SnapshotConfig};
 	use pezsp_runtime::traits::Bounded;
+	use remote_externalities::{Mode, OfflineConfig, OnlineConfig, SnapshotConfig};
 	use std::env::var as env_var;
 
 	// we only use the hash type from this, so using the mock should be fine.

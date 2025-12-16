@@ -34,10 +34,10 @@ use pezcumulus_client_consensus_aura::{
 	},
 	ImportQueueParams,
 };
-use prometheus::Registry;
-use runtime::AccountId;
 use pezsc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
 use pezsp_consensus_aura::sr25519::AuthorityPair;
+use prometheus::Registry;
+use runtime::AccountId;
 use std::{
 	collections::HashSet,
 	future::Future,
@@ -62,6 +62,9 @@ use pezcumulus_relay_chain_minimal_node::build_minimal_relay_chain_node_with_rpc
 
 use pezcumulus_test_runtime::{Hash, NodeBlock as Block, RuntimeApi};
 
+use bizinikiwi_test_client::{
+	BlockchainEventsExt, RpcHandlersExt, RpcTransactionError, RpcTransactionOutput,
+};
 use pezframe_system_rpc_runtime_api::AccountNonceApi;
 use pezkuwi_node_subsystem::{errors::RecoveryError, messages::AvailabilityRecoveryMessage};
 use pezkuwi_overseer::Handle as OverseerHandle;
@@ -90,9 +93,6 @@ use pezsp_keyring::Sr25519Keyring;
 use pezsp_runtime::{codec::Encode, generic, MultiAddress};
 use pezsp_state_machine::BasicExternalities;
 use std::sync::Arc;
-use bizinikiwi_test_client::{
-	BlockchainEventsExt, RpcHandlersExt, RpcTransactionError, RpcTransactionOutput,
-};
 
 pub use chain_spec::*;
 pub use pezcumulus_test_runtime as runtime;
@@ -103,8 +103,10 @@ const LOG_TARGET: &str = "pezcumulus-test-service";
 /// The signature of the announce block fn.
 pub type AnnounceBlockFn = Arc<dyn Fn(Hash, Option<Vec<u8>>) + Send + Sync>;
 
-type HostFunctions =
-	(pezsp_io::BizinikiwiHostFunctions, pezcumulus_client_service::storage_proof_size::HostFunctions);
+type HostFunctions = (
+	pezsp_io::BizinikiwiHostFunctions,
+	pezcumulus_client_service::storage_proof_size::HostFunctions,
+);
 /// The client type being used by the test service.
 pub type Client = TFullClient<runtime::NodeBlock, runtime::RuntimeApi, WasmExecutor<HostFunctions>>;
 
@@ -215,26 +217,27 @@ pub fn new_partial(
 	);
 
 	let slot_duration = pezsc_consensus_aura::slot_duration(&*client)?;
-	let import_queue = pezcumulus_client_consensus_aura::import_queue::<AuthorityPair, _, _, _, _, _>(
-		ImportQueueParams {
-			block_import: block_import.clone(),
-			client: client.clone(),
-			create_inherent_data_providers: move |_, ()| async move {
-				let timestamp = pezsp_timestamp::InherentDataProvider::from_system_time();
+	let import_queue =
+		pezcumulus_client_consensus_aura::import_queue::<AuthorityPair, _, _, _, _, _>(
+			ImportQueueParams {
+				block_import: block_import.clone(),
+				client: client.clone(),
+				create_inherent_data_providers: move |_, ()| async move {
+					let timestamp = pezsp_timestamp::InherentDataProvider::from_system_time();
 
-				let slot =
+					let slot =
 					pezsp_consensus_aura::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
 						*timestamp,
 						slot_duration,
 					);
 
-				Ok((slot, timestamp))
+					Ok((slot, timestamp))
+				},
+				spawner: &task_manager.spawn_essential_handle(),
+				registry: None,
+				telemetry: None,
 			},
-			spawner: &task_manager.spawn_essential_handle(),
-			registry: None,
-			telemetry: None,
-		},
-	)?;
+		)?;
 
 	let params = PartialComponents {
 		backend,

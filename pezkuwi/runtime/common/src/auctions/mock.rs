@@ -23,9 +23,9 @@ use pezframe_support::{
 	assert_ok, derive_impl, ord_parameter_types, parameter_types, traits::EitherOfDiverse,
 };
 use pezframe_system::{EnsureRoot, EnsureSignedBy};
-use pezpallet_balances;
 use pezkuwi_primitives::{BlockNumber, Id as ParaId};
 use pezkuwi_primitives_test_helpers::{dummy_head_data, dummy_validation_code};
+use pezpallet_balances;
 use pezsp_core::H256;
 use pezsp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},

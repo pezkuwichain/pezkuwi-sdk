@@ -21,8 +21,8 @@ use pezframe_support::{
 	assert_ok, derive_impl,
 	dispatch::{DispatchClass, DispatchInfo, GetDispatchInfo, Parameter, Pays},
 	dispatch_context::with_context,
-	pezpallet_prelude::{StorageInfoTrait, ValueQuery},
 	parameter_types,
+	pezpallet_prelude::{StorageInfoTrait, ValueQuery},
 	storage::{unhashed, unhashed::contains_prefixed_key},
 	traits::{
 		ConstU32, GetCallIndex, GetCallName, GetStorageVersion, OnFinalize, OnGenesis,
@@ -33,7 +33,6 @@ use pezframe_support::{
 	OrdNoBound, PartialOrdNoBound,
 };
 use pezframe_system::offchain::{CreateSignedTransaction, CreateTransactionBase, SigningTypes};
-use scale_info::{meta_type, TypeInfo};
 use pezsp_io::{
 	hashing::{blake2_128, twox_128, twox_64},
 	TestExternalities,
@@ -43,6 +42,7 @@ use pezsp_runtime::{
 	traits::{Block as BlockT, Dispatchable},
 	DispatchError, ModuleError,
 };
+use scale_info::{meta_type, TypeInfo};
 
 parameter_types! {
 	/// Used to control if the storage version should be updated.
@@ -149,7 +149,8 @@ pub mod pezpallet {
 		type Balance: Parameter + Default + TypeInfo;
 
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::extra_constants]
@@ -678,7 +679,8 @@ pub mod pallet2 {
 	}
 }
 
-/// Test that the supertrait check works when we pass some parameter to the `pezframe_system::Config`.
+/// Test that the supertrait check works when we pass some parameter to the
+/// `pezframe_system::Config`.
 #[pezframe_support::pezpallet]
 pub mod pallet3 {
 	#[pezpallet::config]
@@ -704,7 +706,8 @@ pub mod pallet4 {
 	impl<T: Config> Pezpallet<T> {}
 }
 
-/// Test that the supertrait check works when we pass some parameter to the `pezframe_system::Config`.
+/// Test that the supertrait check works when we pass some parameter to the
+/// `pezframe_system::Config`.
 #[pezframe_support::pezpallet]
 pub mod pallet5 {
 	#[pezpallet::config]
@@ -973,7 +976,10 @@ fn error_expand() {
 	);
 	assert_eq!(<pezpallet::Error::<Runtime> as PalletError>::MAX_ENCODED_SIZE, 3);
 	#[cfg(feature = "frame-feature-testing")]
-	assert_eq!(format!("{:?}", pezpallet::Error::<Runtime>::FeatureTest), String::from("FeatureTest"),);
+	assert_eq!(
+		format!("{:?}", pezpallet::Error::<Runtime>::FeatureTest),
+		String::from("FeatureTest"),
+	);
 }
 
 #[test]
@@ -993,8 +999,9 @@ fn inherent_expand() {
 
 	let inherents = InherentData::new().create_extrinsics();
 
-	let expected =
-		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_no_post_info {}))];
+	let expected = vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(
+		pezpallet::Call::foo_no_post_info {},
+	))];
 	assert_eq!(expected, inherents);
 
 	let block = Block::new(
@@ -1006,7 +1013,9 @@ fn inherent_expand() {
 			Digest::default(),
 		),
 		vec![
-			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_no_post_info {})),
+			UncheckedExtrinsic::new_bare(RuntimeCall::Example(
+				pezpallet::Call::foo_no_post_info {},
+			)),
 			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo {
 				foo: 1,
 				bar: 0,
@@ -1025,7 +1034,9 @@ fn inherent_expand() {
 			Digest::default(),
 		),
 		vec![
-			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_no_post_info {})),
+			UncheckedExtrinsic::new_bare(RuntimeCall::Example(
+				pezpallet::Call::foo_no_post_info {},
+			)),
 			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo {
 				foo: 0,
 				bar: 0,
@@ -1043,9 +1054,9 @@ fn inherent_expand() {
 			BlakeTwo256::hash(b"test"),
 			Digest::default(),
 		),
-		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_storage_layer {
-			foo: 0,
-		}))],
+		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(
+			pezpallet::Call::foo_storage_layer { foo: 0 },
+		))],
 	);
 
 	let mut inherent = InherentData::new();
@@ -1081,12 +1092,14 @@ fn validate_unsigned_expand() {
 	};
 	let call = pezpallet::Call::<Runtime>::foo_no_post_info {};
 
-	let validity = pezpallet::Pezpallet::validate_unsigned(TransactionSource::Local, &call).unwrap_err();
+	let validity =
+		pezpallet::Pezpallet::validate_unsigned(TransactionSource::Local, &call).unwrap_err();
 	assert_eq!(validity, TransactionValidityError::Invalid(InvalidTransaction::Call));
 
 	let call = pezpallet::Call::<Runtime>::foo_storage_layer { foo: 0 };
 
-	let validity = pezpallet::Pezpallet::validate_unsigned(TransactionSource::External, &call).unwrap();
+	let validity =
+		pezpallet::Pezpallet::validate_unsigned(TransactionSource::External, &call).unwrap();
 	assert_eq!(validity, ValidTransaction::default());
 }
 
@@ -1332,7 +1345,10 @@ fn pezpallet_hooks_expand() {
 #[test]
 fn pezpallet_on_genesis() {
 	TestExternalities::default().execute_with(|| {
-		assert_eq!(pezpallet::Pezpallet::<Runtime>::on_chain_storage_version(), StorageVersion::new(0));
+		assert_eq!(
+			pezpallet::Pezpallet::<Runtime>::on_chain_storage_version(),
+			StorageVersion::new(0)
+		);
 		pezpallet::Pezpallet::<Runtime>::on_genesis();
 		assert_eq!(
 			pezpallet::Pezpallet::<Runtime>::in_code_storage_version(),
@@ -1346,7 +1362,10 @@ fn migrate_from_pallet_version_to_storage_version() {
 	const PALLET_VERSION_STORAGE_KEY_POSTFIX: &[u8] = b":__PALLET_VERSION__:";
 
 	fn pezpallet_version_key(name: &str) -> [u8; 32] {
-		pezframe_support::storage::storage_prefix(name.as_bytes(), PALLET_VERSION_STORAGE_KEY_POSTFIX)
+		pezframe_support::storage::storage_prefix(
+			name.as_bytes(),
+			PALLET_VERSION_STORAGE_KEY_POSTFIX,
+		)
 	}
 
 	TestExternalities::default().execute_with(|| {
@@ -2335,8 +2354,8 @@ fn pezpallet_on_chain_storage_version_initializes_correctly() {
 		AllPalletsWithSystem,
 	>;
 
-	// Simple example of a pezpallet with in-code version 10 being added to the runtime for the first
-	// time.
+	// Simple example of a pezpallet with in-code version 10 being added to the runtime for the
+	// first time.
 	TestExternalities::default().execute_with(|| {
 		let in_code_version = Example::in_code_storage_version();
 
@@ -2345,8 +2364,8 @@ fn pezpallet_on_chain_storage_version_initializes_correctly() {
 		let exists = contains_prefixed_key(&pezpallet_hashed_prefix);
 		assert_eq!(exists, false);
 
-		// [`pezframe_support::traits::BeforeAllRuntimeMigrations`] hook should initialize the storage
-		// version.
+		// [`pezframe_support::traits::BeforeAllRuntimeMigrations`] hook should initialize the
+		// storage version.
 		Executive::execute_on_runtime_upgrade();
 
 		// Check that the storage version was initialized to the in-code version
@@ -2533,7 +2552,9 @@ fn test_error_feature_parsing() {
 
 #[test]
 fn pezpallet_metadata() {
-	use pezsp_metadata_ir::{EnumDeprecationInfoIR, ItemDeprecationInfoIR, VariantDeprecationInfoIR};
+	use pezsp_metadata_ir::{
+		EnumDeprecationInfoIR, ItemDeprecationInfoIR, VariantDeprecationInfoIR,
+	};
 	let pallets = Runtime::metadata_ir().pallets;
 	let example = pallets[0].clone();
 	let example2 = pallets[1].clone();

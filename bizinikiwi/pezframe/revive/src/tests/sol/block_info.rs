@@ -27,8 +27,8 @@ use crate::{
 use alloy_core::sol_types::{SolCall, SolInterface};
 use pezframe_support::traits::fungible::Mutate;
 use pezpallet_revive_fixtures::{compile_module_with_type, BlockInfo, FixtureType};
-use pretty_assertions::assert_eq;
 use pezsp_core::H160;
+use pretty_assertions::assert_eq;
 use test_case::test_case;
 
 /// Tests that the blocknumber opcode works as expected.

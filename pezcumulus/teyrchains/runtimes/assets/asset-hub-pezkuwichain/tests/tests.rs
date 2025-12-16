@@ -33,6 +33,7 @@ use asset_test_pezutils::{
 	ExtBuilder, GovernanceOrigin, SlotDurations,
 };
 use codec::{Decode, Encode};
+use hex_literal::hex;
 use pezframe_support::{
 	assert_noop, assert_ok, parameter_types,
 	traits::{
@@ -43,7 +44,6 @@ use pezframe_support::{
 	},
 	weights::{Weight, WeightToFee as WeightToFeeT},
 };
-use hex_literal::hex;
 use pezsp_consensus_aura::SlotDuration;
 use pezsp_core::crypto::Ss58Codec;
 use pezsp_runtime::traits::MaybeEquivalence;

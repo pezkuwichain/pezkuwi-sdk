@@ -70,8 +70,8 @@ mod v1 {
 		PendingAvailabilityCommitments as V0PendingAvailabilityCommitments,
 	};
 	use crate::inclusion::{
-		CandidatePendingAvailability as V1CandidatePendingAvailability, Config, Pezpallet,
-		PendingAvailability as V1PendingAvailability,
+		CandidatePendingAvailability as V1CandidatePendingAvailability, Config,
+		PendingAvailability as V1PendingAvailability, Pezpallet,
 	};
 	use alloc::{collections::vec_deque::VecDeque, vec::Vec};
 	use pezframe_support::{traits::UncheckedOnRuntimeUpgrade, weights::Weight};

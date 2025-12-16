@@ -38,9 +38,9 @@ use bizinikiwi_test_runtime_client::{
 	DefaultTestClientBuilderExt, TestClient, TestClientBuilder,
 };
 
+use bizinikiwi_test_runtime_client::pezsc_executor::WasmExecutor;
 use codec::Encode;
 use pezsp_consensus::SelectChain;
-use bizinikiwi_test_runtime_client::pezsc_executor::WasmExecutor;
 
 #[test]
 fn calling_runtime_function() {

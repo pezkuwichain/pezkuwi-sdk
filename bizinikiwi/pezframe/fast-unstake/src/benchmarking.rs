@@ -79,7 +79,8 @@ fn setup_staking<T: Config>(v: u32, until: EraIndex) {
 	for era in 0..=until {
 		let others = (0..T::Staking::max_exposure_page_size())
 			.map(|s| {
-				let who = pezframe_benchmarking::account::<T::AccountId>("nominator", era, s.into());
+				let who =
+					pezframe_benchmarking::account::<T::AccountId>("nominator", era, s.into());
 				let value = ed;
 				(who, value)
 			})
@@ -103,7 +104,9 @@ mod benchmarks {
 	fn on_idle_unstake(b: Linear<1, { T::BatchSize::get() }>) {
 		ErasToCheckPerBlock::<T>::put(1);
 		for who in create_unexposed_batch::<T>(b).into_iter() {
-			assert_ok!(Pezpallet::<T>::register_fast_unstake(RawOrigin::Signed(who.clone()).into(),));
+			assert_ok!(Pezpallet::<T>::register_fast_unstake(
+				RawOrigin::Signed(who.clone()).into(),
+			));
 		}
 
 		// Run on_idle once. This will check era 0.
@@ -142,9 +145,9 @@ mod benchmarks {
 		let stashes = create_unexposed_batch::<T>(b)
 			.into_iter()
 			.map(|s| {
-				assert_ok!(
-					Pezpallet::<T>::register_fast_unstake(RawOrigin::Signed(s.clone()).into(),)
-				);
+				assert_ok!(Pezpallet::<T>::register_fast_unstake(
+					RawOrigin::Signed(s.clone()).into(),
+				));
 				(s, T::Deposit::get())
 			})
 			.collect::<Vec<_>>();

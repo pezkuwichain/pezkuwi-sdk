@@ -23,7 +23,9 @@ use crate::*;
 use alloc::{vec, vec::Vec};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::{Get, OnFinalize, OnInitialize};
-use pezframe_system::{pezpallet_prelude::BlockNumberFor, EventRecord, Pezpallet as System, RawOrigin};
+use pezframe_system::{
+	pezpallet_prelude::BlockNumberFor, EventRecord, Pezpallet as System, RawOrigin,
+};
 use pezsp_runtime::traits::{Bounded, CheckedDiv, One, Zero};
 use pezsp_transaction_storage_proof::TransactionStorageProof;
 
@@ -111,11 +113,15 @@ fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
 pub fn run_to_block<T: Config>(n: pezframe_system::pezpallet_prelude::BlockNumberFor<T>) {
 	while pezframe_system::Pezpallet::<T>::block_number() < n {
 		crate::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
-		pezframe_system::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_finalize(
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		pezframe_system::Pezpallet::<T>::set_block_number(
 			pezframe_system::Pezpallet::<T>::block_number() + One::one(),
 		);
-		pezframe_system::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_initialize(
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		crate::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 	}
 }

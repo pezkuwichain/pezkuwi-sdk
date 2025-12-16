@@ -33,7 +33,8 @@ mod benchmarks {
 	fn set_keys() -> Result<(), BenchmarkError> {
 		let caller: T::AccountId = whitelisted_caller();
 		pezframe_system::Pezpallet::<T>::inc_providers(&caller);
-		let keys = T::Keys::decode(&mut pezsp_runtime::traits::TrailingZeroInput::zeroes()).unwrap();
+		let keys =
+			T::Keys::decode(&mut pezsp_runtime::traits::TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
 		<pezpallet_session::Pezpallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
 
@@ -47,7 +48,8 @@ mod benchmarks {
 	fn purge_keys() -> Result<(), BenchmarkError> {
 		let caller: T::AccountId = whitelisted_caller();
 		pezframe_system::Pezpallet::<T>::inc_providers(&caller);
-		let keys = T::Keys::decode(&mut pezsp_runtime::traits::TrailingZeroInput::zeroes()).unwrap();
+		let keys =
+			T::Keys::decode(&mut pezsp_runtime::traits::TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
 		<pezpallet_session::Pezpallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
 		let _t = pezpallet_session::Pezpallet::<T>::set_keys(

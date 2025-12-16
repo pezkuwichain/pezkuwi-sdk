@@ -23,8 +23,8 @@ use crate::{
 };
 use codec::{Encode, HasCompact};
 use core::fmt::Debug;
-use pezframe_support::pezpallet_prelude::DispatchResultWithPostInfo;
 use paste::paste;
+use pezframe_support::pezpallet_prelude::DispatchResultWithPostInfo;
 use scale_info::TypeInfo;
 
 /// Helper macro to generate a builder for contract API calls.

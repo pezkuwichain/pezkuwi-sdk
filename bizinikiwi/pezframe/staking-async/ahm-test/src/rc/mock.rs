@@ -387,23 +387,27 @@ pub fn historical_events_since_last_call() -> Vec<pezpallet_session::historical:
 }
 
 pub fn offence_events_since_last_call() -> Vec<pezpallet_offences::Event> {
-	let all = pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<pezpallet_offences::Event>();
+	let all = pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<
+		pezpallet_offences::Event,
+	>();
 	let seen = OffenceEventsIndex::get();
 	OffenceEventsIndex::set(all.len());
 	all.into_iter().skip(seen).collect()
 }
 
 pub fn session_events_since_last_call() -> Vec<pezpallet_session::Event<Runtime>> {
-	let all =
-		pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<pezpallet_session::Event<Runtime>>();
+	let all = pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<
+		pezpallet_session::Event<Runtime>,
+	>();
 	let seen = SessionEventsIndex::get();
 	SessionEventsIndex::set(all.len());
 	all.into_iter().skip(seen).collect()
 }
 
 pub fn ah_client_events_since_last_call() -> Vec<ah_client::Event<Runtime>> {
-	let all =
-		pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<ah_client::Event<Runtime>>();
+	let all = pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<
+		ah_client::Event<Runtime>,
+	>();
 	let seen = AhClientEventsIndex::get();
 	AhClientEventsIndex::set(all.len());
 	all.into_iter().skip(seen).collect()
@@ -487,7 +491,9 @@ impl ExtBuilder {
 				(112, vec![8, 1]),
 			]
 			.into_iter()
-			.map(|(x, y)| (x, x, INITIAL_STAKE, pezpallet_staking_async::StakerStatus::Nominator(y)));
+			.map(|(x, y)| {
+				(x, x, INITIAL_STAKE, pezpallet_staking_async::StakerStatus::Nominator(y))
+			});
 
 			let stakers = validators.chain(nominators).collect::<Vec<_>>();
 			let balances = stakers
@@ -541,7 +547,8 @@ impl ExtBuilder {
 }
 
 /// Progress until `sessions`, receive a `new_validator_set` with `id`, and go forward to `sessions
-/// + 1` such that it is queued in pezpallet-session. If `active`, then progress until `sessions + 2`
+/// + 1` such that it is queued in pezpallet-session. If `active`, then progress until `sessions +
+///   2`
 /// such that it is in the active session validators.
 pub(crate) fn receive_validator_set_at(
 	sessions: SessionIndex,

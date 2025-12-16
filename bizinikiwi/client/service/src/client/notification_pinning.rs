@@ -21,8 +21,8 @@
 //! This file contains a worker that should be started when a new client instance is created.
 //! The goal is to avoid pruning of blocks that have active notifications in the node. Every
 //! recipient of notifications should receive the chance to act upon them. In addition, notification
-//! listeners can hold onto a [`pezsc_client_api::UnpinHandle`] to keep a block pinned. Once the handle
-//! is dropped, a message is sent and the worker unpins the respective block.
+//! listeners can hold onto a [`pezsc_client_api::UnpinHandle`] to keep a block pinned. Once the
+//! handle is dropped, a message is sent and the worker unpins the respective block.
 use std::{
 	marker::PhantomData,
 	sync::{Arc, Weak},
@@ -32,8 +32,8 @@ use futures::StreamExt;
 use pezsc_client_api::{Backend, UnpinWorkerMessage};
 
 use pezsc_utils::mpsc::TracingUnboundedReceiver;
-use schnellru::Limiter;
 use pezsp_runtime::traits::Block as BlockT;
+use schnellru::Limiter;
 
 const LOG_TARGET: &str = "db::notification_pinning";
 const NOTIFICATION_PINNING_LIMIT: usize = 1024;

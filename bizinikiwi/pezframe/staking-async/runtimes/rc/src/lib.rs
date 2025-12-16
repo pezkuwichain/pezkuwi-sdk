@@ -47,17 +47,6 @@ use pezframe_support::{
 };
 pub use pezframe_system::Call as SystemCall;
 use pezframe_system::{EnsureRoot, EnsureSigned};
-pub use pezpallet_balances::Call as BalancesCall;
-use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
-use pezpallet_identity::legacy::IdentityInfo;
-use pezpallet_session::{
-	disabling::{DisablingDecision, DisablingStrategy},
-	historical as session_historical,
-};
-use pezpallet_staking_async_ah_client::{self as ah_client};
-use pezpallet_staking_async_rc_client::{self as rc_client};
-pub use pezpallet_timestamp::Call as TimestampCall;
-use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
 use pezkuwi_primitives::{
 	async_backing::Constraints, slashing, AccountId, AccountIndex, ApprovalVotingParams, Balance,
 	BlockNumber, CandidateEvent, CandidateHash,
@@ -94,7 +83,17 @@ use pezkuwi_runtime_teyrchains::{
 	scheduler as teyrchains_scheduler, session_info as teyrchains_session_info,
 	shared as teyrchains_shared,
 };
-use scale_info::TypeInfo;
+pub use pezpallet_balances::Call as BalancesCall;
+use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
+use pezpallet_identity::legacy::IdentityInfo;
+use pezpallet_session::{
+	disabling::{DisablingDecision, DisablingStrategy},
+	historical as session_historical,
+};
+use pezpallet_staking_async_ah_client::{self as ah_client};
+use pezpallet_staking_async_rc_client::{self as rc_client};
+pub use pezpallet_timestamp::Call as TimestampCall;
+use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_beefy::{
 	ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature},
@@ -116,6 +115,7 @@ use pezsp_staking::{offence::OffenceSeverity, SessionIndex};
 #[cfg(any(feature = "std", test))]
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
+use scale_info::TypeInfo;
 use xcm::{
 	latest::prelude::*, VersionedAsset, VersionedAssetId, VersionedAssets, VersionedLocation,
 	VersionedXcm,
@@ -143,7 +143,9 @@ pub mod pezpallet_reward_point_filler {
 		use super::*;
 
 		#[pezpallet::config]
-		pub trait Config: pezframe_system::Config + pezpallet_staking_async_ah_client::Config {
+		pub trait Config:
+			pezframe_system::Config + pezpallet_staking_async_ah_client::Config
+		{
 			type FillValidatorPointsTo: Get<u32>;
 		}
 
@@ -192,8 +194,8 @@ use impls::ToTeyrchainIdentityReaper;
 // Governance and configurations.
 pub mod governance;
 use governance::{
-	pezpallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin, StakingAdmin,
-	Treasurer, TreasurySpender,
+	pezpallet_custom_origins, AuctionAdmin, FellowshipAdmin, GeneralAdmin, LeaseAdmin,
+	StakingAdmin, Treasurer, TreasurySpender,
 };
 
 #[cfg(test)]
@@ -236,10 +238,10 @@ pub fn native_version() -> NativeVersion {
 	NativeVersion { runtime_version: VERSION, can_author_with: Default::default() }
 }
 
-/// A type to identify calls to the Identity pezpallet. These will be filtered to prevent invocation,
-/// locking the state of the pezpallet and preventing further updates to identities and sub-identities.
-/// The locked state will be the genesis state of a new system chain and then removed from the Relay
-/// Chain.
+/// A type to identify calls to the Identity pezpallet. These will be filtered to prevent
+/// invocation, locking the state of the pezpallet and preventing further updates to identities and
+/// sub-identities. The locked state will be the genesis state of a new system chain and then
+/// removed from the Relay Chain.
 pub struct IsIdentityCall;
 impl Contains<RuntimeCall> for IsIdentityCall {
 	fn contains(c: &RuntimeCall) -> bool {
@@ -1743,8 +1745,8 @@ parameter_types! {
 impl pezpallet_migrations::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	// For this test runtime, always use MockedMigrations to satisfy both regular and benchmark
-	// builds. When runtime-benchmarks is enabled on pezframe-support (via --benches), the Migrations
-	// type must implement MockedMigrations, but LazyMigrationV1ToV2 doesn't.
+	// builds. When runtime-benchmarks is enabled on pezframe-support (via --benches), the
+	// Migrations type must implement MockedMigrations, but LazyMigrationV1ToV2 doesn't.
 	type Migrations = pezpallet_migrations::mock_helpers::MockedMigrations;
 	type CursorMaxLen = ConstU32<65_536>;
 	type IdentifierMaxLen = ConstU32<256>;

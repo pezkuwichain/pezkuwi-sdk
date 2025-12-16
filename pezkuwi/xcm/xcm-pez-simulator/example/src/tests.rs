@@ -92,7 +92,10 @@ fn ump() {
 	});
 
 	Relay::execute_with(|| {
-		assert!(system_contains_event!(relay_chain, System(pezframe_system::Event::Remarked { .. })));
+		assert!(system_contains_event!(
+			relay_chain,
+			System(pezframe_system::Event::Remarked { .. })
+		));
 	});
 }
 
@@ -190,8 +193,10 @@ fn reserve_transfer_with_error() {
 			assert!(log_capture.contains("XCM validate_send failed"));
 
 			// Verify that XcmPallet::Attempted was NOT emitted (rollback happened)
-			let xcm_attempted_emitted =
-				system_contains_event!(relay_chain, XcmPallet(pezpallet_xcm::Event::Attempted { .. }));
+			let xcm_attempted_emitted = system_contains_event!(
+				relay_chain,
+				XcmPallet(pezpallet_xcm::Event::Attempted { .. })
+			);
 			assert!(
 				!xcm_attempted_emitted,
 				"Expected no XcmPallet::Attempted event due to rollback, but it was emitted"

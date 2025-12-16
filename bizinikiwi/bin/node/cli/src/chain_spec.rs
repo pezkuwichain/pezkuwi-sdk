@@ -30,13 +30,13 @@ use pezpallet_revive::is_eth_derived;
 use pezsc_chain_spec::ChainSpecExtension;
 use pezsc_service::ChainType;
 use pezsc_telemetry::TelemetryEndpoints;
-use serde::{Deserialize, Serialize};
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_babe::AuthorityId as BabeId;
 use pezsp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
 use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
 use pezsp_core::crypto::UncheckedInto;
 use pezsp_mixnet::types::AuthorityId as MixnetId;
+use serde::{Deserialize, Serialize};
 
 pub use pez_kitchensink_runtime::RuntimeGenesisConfig;
 pub use pez_node_primitives::{AccountId, Balance, Signature};
@@ -466,17 +466,25 @@ pub(crate) mod tests {
 	fn test_connectivity() {
 		pezsp_tracing::try_init_simple();
 
-		pezsc_service_test::connectivity(integration_test_config_with_two_authorities(), |config| {
-			let NewFullBase { task_manager, client, network, sync, transaction_pool, .. } =
-				new_full_base::<pezsc_network::NetworkWorker<_, _>>(config, None, false, |_, _| ())?;
-			Ok(pezsc_service_test::TestNetComponents::new(
-				task_manager,
-				client,
-				network,
-				sync,
-				transaction_pool,
-			))
-		});
+		pezsc_service_test::connectivity(
+			integration_test_config_with_two_authorities(),
+			|config| {
+				let NewFullBase { task_manager, client, network, sync, transaction_pool, .. } =
+					new_full_base::<pezsc_network::NetworkWorker<_, _>>(
+						config,
+						None,
+						false,
+						|_, _| (),
+					)?;
+				Ok(pezsc_service_test::TestNetComponents::new(
+					task_manager,
+					client,
+					network,
+					sync,
+					transaction_pool,
+				))
+			},
+		);
 	}
 
 	#[test]

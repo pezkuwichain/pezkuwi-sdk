@@ -17,10 +17,10 @@
 
 use crate::{Config, DebugSettingsOf};
 use codec::{Decode, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
-use serde::{Deserialize, Serialize};
 use pezsp_core::Get;
 use pezsp_runtime::RuntimeDebug;
+use scale_info::TypeInfo;
+use serde::{Deserialize, Serialize};
 
 /// Debugging settings that can be configured when DebugEnabled config is true.
 #[derive(

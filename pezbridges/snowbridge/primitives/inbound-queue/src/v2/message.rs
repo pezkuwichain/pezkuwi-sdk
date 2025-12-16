@@ -9,9 +9,9 @@ use alloy_core::{
 	sol_types::{SolEvent, SolType},
 };
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_core::{RuntimeDebug, H160, H256};
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 
 sol! {
 	interface IGatewayV2 {
@@ -245,8 +245,8 @@ impl TryFrom<&IGatewayV2::EthereumAsset> for EthereumAsset {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezframe_support::assert_ok;
 	use hex_literal::hex;
+	use pezframe_support::assert_ok;
 	use pezsp_core::H160;
 
 	#[test]

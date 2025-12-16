@@ -15,8 +15,8 @@
 // limitations under the License.
 
 use crate::*;
-use pezframe_support::{parameter_types, traits::fungibles::Inspect};
 use mock::{setup_pool, AccountId, AssetId, Balance, Fungibles};
+use pezframe_support::{parameter_types, traits::fungibles::Inspect};
 use xcm::latest::AssetId as XcmAssetId;
 use xcm_executor::AssetsInHolding;
 

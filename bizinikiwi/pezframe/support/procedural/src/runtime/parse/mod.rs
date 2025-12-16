@@ -211,7 +211,8 @@ impl Def {
 							&bounds,
 						)?;
 
-						if let Some(used_pallet) = indices.insert(pezpallet.index, pezpallet.name.clone())
+						if let Some(used_pallet) =
+							indices.insert(pezpallet.index, pezpallet.name.clone())
 						{
 							let msg = format!(
 								"Pezpallet indices are conflicting: Both pallets {} and {} are at index {}",

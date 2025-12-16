@@ -55,7 +55,6 @@ use futures::{
 	FutureExt,
 };
 use parking_lot::Mutex;
-use prometheus_endpoint::Registry as PrometheusRegistry;
 use pezsc_transaction_pool_api::{
 	error::Error as TxPoolApiError, ChainEvent, ImportNotificationStream,
 	MaintainedTransactionPool, PoolStatus, TransactionFor, TransactionPool, TransactionSource,
@@ -69,6 +68,7 @@ use pezsp_runtime::{
 	transaction_validity::{TransactionTag as Tag, TransactionValidityError, ValidTransaction},
 	Saturating,
 };
+use prometheus_endpoint::Registry as PrometheusRegistry;
 use std::{
 	collections::{BTreeMap, HashMap, HashSet},
 	pin::Pin,

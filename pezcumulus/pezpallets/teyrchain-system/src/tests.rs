@@ -21,6 +21,7 @@ use crate::mock::*;
 
 use alloc::collections::BTreeMap;
 use core::num::NonZeroU32;
+use hex_literal::hex;
 use pezcumulus_primitives_core::{
 	relay_chain::ApprovedPeerId, AbridgedHrmpChannel, ClaimQueueOffset, CoreInfo, CoreSelector,
 	InboundDownwardMessage, InboundHrmpMessage, CUMULUS_CONSENSUS_ID,
@@ -30,13 +31,12 @@ use pezcumulus_primitives_teyrchain_inherent::{
 };
 use pezframe_support::{assert_ok, parameter_types, weights::Weight};
 use pezframe_system::RawOrigin;
-use hex_literal::hex;
-use rand::Rng;
-use relay_chain::HrmpChannelId;
 use pezsp_core::H256;
 use pezsp_inherents::InherentDataProvider;
 use pezsp_runtime::DigestItem;
 use pezsp_trie::StorageProof;
+use rand::Rng;
+use relay_chain::HrmpChannelId;
 
 #[test]
 #[should_panic]
@@ -894,7 +894,10 @@ fn runtime_upgrade_events() {
 			|| {
 				let events = System::events();
 
-				assert_eq!(events[0].event, RuntimeEvent::System(pezframe_system::Event::CodeUpdated));
+				assert_eq!(
+					events[0].event,
+					RuntimeEvent::System(pezframe_system::Event::CodeUpdated)
+				);
 
 				assert_eq!(
 					events[1].event,
@@ -1576,7 +1579,9 @@ fn upgrade_version_checks_should_work() {
 		let read_runtime_version = ReadRuntimeVersion(version.encode());
 
 		let mut ext = new_test_ext();
-		ext.register_extension(pezsp_core::traits::ReadRuntimeVersionExt::new(read_runtime_version));
+		ext.register_extension(pezsp_core::traits::ReadRuntimeVersionExt::new(
+			read_runtime_version,
+		));
 		ext.execute_with(|| {
 			System::set_block_number(1);
 

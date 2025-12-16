@@ -53,9 +53,9 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::EnsureRoot;
-use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezkuwi_runtime_common::{impls::ToAuthor, xcm_sender::ExponentialPrice};
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
+use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezsp_runtime::traits::{AccountIdConversion, ConvertInto, Identity, TryConvertInto};
 use testnet_teyrchains_constants::zagros::currency::deposit;
 use teyrchains_common::{
@@ -448,7 +448,12 @@ pub type ForeignAssetFeeAsExistentialDepositMultiplierFeeCharger =
 	AssetFeeAsExistentialDepositMultiplier<
 		Runtime,
 		WeightToFee,
-		pezpallet_assets::BalanceToAssetBalance<Balances, Runtime, ConvertInto, ForeignAssetsInstance>,
+		pezpallet_assets::BalanceToAssetBalance<
+			Balances,
+			Runtime,
+			ConvertInto,
+			ForeignAssetsInstance,
+		>,
 		ForeignAssetsInstance,
 	>;
 

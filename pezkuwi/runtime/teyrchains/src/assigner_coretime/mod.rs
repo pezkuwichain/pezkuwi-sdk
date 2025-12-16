@@ -37,8 +37,8 @@ use crate::{
 use alloc::{vec, vec::Vec};
 use pezframe_support::{defensive, pezpallet_prelude::*};
 use pezframe_system::pezpallet_prelude::*;
-use pezpallet_broker::CoreAssignment;
 use pezkuwi_primitives::CoreIndex;
+use pezpallet_broker::CoreAssignment;
 use pezsp_runtime::traits::{One, Saturating};
 
 pub use pezpallet::*;
@@ -282,7 +282,8 @@ impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pezpallet<T> {
 
 			match a_type {
 				CoreAssignment::Idle => None,
-				CoreAssignment::Pool => on_demand::Pezpallet::<T>::pop_assignment_for_core(core_idx),
+				CoreAssignment::Pool =>
+					on_demand::Pezpallet::<T>::pop_assignment_for_core(core_idx),
 				CoreAssignment::Task(para_id) => Some(Assignment::Bulk((*para_id).into())),
 			}
 		})
@@ -473,7 +474,8 @@ impl<T: Config> AssignCoretime for Pezpallet<T> {
 		configuration::Pezpallet::<T>::force_set_active_config(config);
 
 		let begin = current_block + One::one();
-		let assignment = vec![(pezpallet_broker::CoreAssignment::Task(id.into()), PartsOf57600::FULL)];
+		let assignment =
+			vec![(pezpallet_broker::CoreAssignment::Task(id.into()), PartsOf57600::FULL)];
 		Pezpallet::<T>::assign_core(CoreIndex(core), begin, assignment, None)
 	}
 }

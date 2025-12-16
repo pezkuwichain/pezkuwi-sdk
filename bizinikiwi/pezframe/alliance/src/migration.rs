@@ -16,8 +16,8 @@
 // limitations under the License.
 
 use crate::{Config, Pezpallet, Weight, LOG_TARGET};
-use pezframe_support::{pezpallet_prelude::*, storage::migration, traits::OnRuntimeUpgrade};
 use log;
+use pezframe_support::{pezpallet_prelude::*, storage::migration, traits::OnRuntimeUpgrade};
 
 /// The in-code storage version.
 pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);

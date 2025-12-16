@@ -17,7 +17,8 @@
 
 //! # Multi-phase, multi-block, election provider pezpallet.
 //!
-//! > This pezpallet is sometimes abbreviated as `EPMB`, and `pezpallet_election_provider_multi_phase` as
+//! > This pezpallet is sometimes abbreviated as `EPMB`, and
+//! > `pezpallet_election_provider_multi_phase` as
 //! > `EPM`.
 //!
 //! ## Overall idea
@@ -35,16 +36,16 @@
 //! with large enough blocks (in a dedicated teyrchain), the number of voters included in the NPoS
 //! system can grow significantly (yet, obviously not indefinitely).
 //!
-//! Note that this pezpallet does not consider how the recipient is processing the results. To ensure
-//! scalability, the recipient of this pezpallet's data (i.e. `pezpallet-staking`) must also be capable of
-//! pagination and multi-block processing.
+//! Note that this pezpallet does not consider how the recipient is processing the results. To
+//! ensure scalability, the recipient of this pezpallet's data (i.e. `pezpallet-staking`) must also
+//! be capable of pagination and multi-block processing.
 //!
 //! ## Companion pallets
 //!
 //! This pezpallet will only function in a sensible way if it is peered with its companion pallets.
 //!
-//! - The [`verifier`] pezpallet provides a standard implementation of the [`verifier::Verifier`]. This
-//!   pezpallet is mandatory.
+//! - The [`verifier`] pezpallet provides a standard implementation of the [`verifier::Verifier`].
+//!   This pezpallet is mandatory.
 //! - The [`unsigned`] module provides the implementation of unsigned submission by validators. If
 //!   this pezpallet is included, then [`Config::UnsignedPhase`] will determine its duration.
 //! - The [`signed`] module provides the implementation of the signed submission by any account. If
@@ -61,8 +62,8 @@
 //!
 //! ### Pezpallet Ordering:
 //!
-//! TODO: @kiaenigma: this needs clarification and a enforcement. Signed pezpallet should come first.
-//! Fixing this should yield removing `verifier_done` from the phase transition.
+//! TODO: @kiaenigma: this needs clarification and a enforcement. Signed pezpallet should come
+//! first. Fixing this should yield removing `verifier_done` from the phase transition.
 //!
 //! The ordering of these pallets in a runtime should be:
 //! * parent
@@ -76,11 +77,11 @@
 //!
 //! ## Pagination
 //!
-//! Most of the external APIs of this pezpallet are paginated. All pagination follow a pattern where if
-//! `N` pages exist, the first paginated call is `function(N-1)` and the last one is `function(0)`.
-//! For example, with 3 pages, the `elect` of [`ElectionProvider`] is expected to be called as
-//! `elect(2) -> elect(1) -> elect(0)`. In essence, calling a paginated function with index 0 is
-//! always a signal of termination, meaning that no further calls will follow.
+//! Most of the external APIs of this pezpallet are paginated. All pagination follow a pattern where
+//! if `N` pages exist, the first paginated call is `function(N-1)` and the last one is
+//! `function(0)`. For example, with 3 pages, the `elect` of [`ElectionProvider`] is expected to be
+//! called as `elect(2) -> elect(1) -> elect(0)`. In essence, calling a paginated function with
+//! index 0 is always a signal of termination, meaning that no further calls will follow.
 //!
 //! The snapshot creation for voters (Nominators in staking), submission of signed pages, validation
 //! of signed solutions and exporting of pages are all paginated. Note that this pezpallet is yet to
@@ -95,8 +96,8 @@
 //! ## Phases
 //!
 //! The operations in this pezpallet are divided intor rounds, a `u32` number stored in [`Round`].
-//! This value helps this pezpallet organize itself, and leaves the door open for lazy deletion of any
-//! stale data. A round, under the happy path, starts by receiving the call to
+//! This value helps this pezpallet organize itself, and leaves the door open for lazy deletion of
+//! any stale data. A round, under the happy path, starts by receiving the call to
 //! [`ElectionProvider::start`], and is terminated by receiving a call to
 //! [`ElectionProvider::elect`] with value 0.
 //!
@@ -124,7 +125,8 @@
 //! * [`Config::Pages`] calls to elect are expected, but all in all the pezpallet will close a round
 //!   once `elect(0)` is called.
 //!
-//! > Given this, it is rather important for the user of this pezpallet to ensure it always terminates
+//! > Given this, it is rather important for the user of this pezpallet to ensure it always
+//! > terminates
 //! > election via `elect` before requesting a new one.
 //!
 //! ## Feasible Solution (correct solution)
@@ -149,8 +151,8 @@
 //!
 //! 1. Do nothing: [`Continue`]
 //! 2. Force us into the emergency phase: [`crate::InitiateEmergencyPhase`]. This initiates
-//!    [`Phase::Emergency`], which will halt almost all operations of this pezpallet, and it can only
-//!    be recovered by [`AdminOperation`], dispatched via [`Call::manage`].
+//!    [`Phase::Emergency`], which will halt almost all operations of this pezpallet, and it can
+//!    only be recovered by [`AdminOperation`], dispatched via [`Call::manage`].
 //! 3. compute an onchain from the give page of snapshot.
 //!
 //! Note that configuring the fallback to be onchain computation is not recommended, unless for
@@ -182,16 +184,16 @@
 // - Naming convention is: `${singular}_page` for singular, e.g. `voter_page` for `Vec<Voter>`.
 //   `paged_${plural}` for plural, e.g. `paged_voters` for `Vec<Vec<Voter>>`.
 //
-// - Since this crate has multiple `Pezpallet` and `Configs`, in each sub-pezpallet, we only reference the
-//   local `Pezpallet` without a prefix and allow it to be imported via `use`. Avoid `super::Pezpallet`
-//   except for the case of a modules that want to reference their local `Pezpallet` . The
-//   `crate::Pezpallet` is always reserved for the parent pezpallet. Other sibling pallets must be
-//   referenced with full path, e.g. `crate::Verifier::Pezpallet`. Do NOT write something like `use
-//   unsigned::Pezpallet as UnsignedPallet`.
+// - Since this crate has multiple `Pezpallet` and `Configs`, in each sub-pezpallet, we only
+//   reference the local `Pezpallet` without a prefix and allow it to be imported via `use`. Avoid
+//   `super::Pezpallet` except for the case of a modules that want to reference their local
+//   `Pezpallet` . The `crate::Pezpallet` is always reserved for the parent pezpallet. Other sibling
+//   pallets must be referenced with full path, e.g. `crate::Verifier::Pezpallet`. Do NOT write
+//   something like `use unsigned::Pezpallet as UnsignedPallet`.
 //
 // - Respecting private storage items with wrapper We move all implementations out of the `mod
-//   pezpallet` as much as possible to ensure we NEVER access the internal storage items directly. All
-//   operations should happen with the wrapper types.
+//   pezpallet` as much as possible to ensure we NEVER access the internal storage items directly.
+//   All operations should happen with the wrapper types.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -210,7 +212,6 @@ use pezframe_support::{
 	DebugNoBound, Twox64Concat,
 };
 use pezframe_system::pezpallet_prelude::*;
-use scale_info::TypeInfo;
 use pezsp_arithmetic::{
 	traits::{CheckedAdd, Zero},
 	PerThing, UpperOf,
@@ -221,6 +222,7 @@ use pezsp_runtime::{
 	SaturatedConversion,
 };
 use pezsp_std::{borrow::ToOwned, boxed::Box, prelude::*};
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod mock;
@@ -1630,8 +1632,8 @@ impl<T: Config> ElectionProvider for Pezpallet<T> {
 			.map_err(|err| {
 				// if any pages returns an error, we go into the emergency phase and don't do
 				// anything else anymore. This will prevent any new submissions to signed and
-				// unsigned pezpallet, and thus the verifier will also be almost stuck, except for the
-				// submission of emergency solutions.
+				// unsigned pezpallet, and thus the verifier will also be almost stuck, except for
+				// the submission of emergency solutions.
 				log!(debug, "fallback also ({:?}) failed for page {:?}", err, remaining);
 				err
 			})
@@ -2904,9 +2906,9 @@ mod manage_ops {
 	// This scenario have multiple outcomes:
 	// 1. rotate in off => almost a noop
 	// 2. rotate mid signed, validation, unsigned, done, but NOT export => clear all data, move to
-	//    next round and be off. Note: all of the data in this pezpallet is indexed by the round index,
-	//    so moving to the next round will implicitly make the old data unavaioable, even if not
-	//    cleared out. This secnario needs further testing.
+	//    next round and be off. Note: all of the data in this pezpallet is indexed by the round
+	//    index, so moving to the next round will implicitly make the old data unavaioable, even if
+	//    not cleared out. This secnario needs further testing.
 	// 3. rotate mid export: same as above, except staking will be out of sync and will also need
 	//    governance intervention.
 	//

@@ -19,8 +19,8 @@
 use async_std::sync::Mutex;
 use async_trait::async_trait;
 use bp_pezkuwi_core::BlockNumber as RelayBlockNumber;
-use pezbp_runtime::HeaderIdProvider;
 use clap::Parser;
+use pezbp_runtime::HeaderIdProvider;
 use relay_bizinikiwi_client::{Client, Teyrchain};
 use relay_utils::metrics::{GlobalMetrics, StandaloneMetric};
 use std::sync::Arc;

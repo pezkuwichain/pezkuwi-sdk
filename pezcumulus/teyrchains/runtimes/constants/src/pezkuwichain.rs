@@ -39,8 +39,8 @@ pub mod fee {
 		},
 	};
 	use pezkuwi_core_primitives::Balance;
-	use smallvec::smallvec;
 	pub use pezsp_runtime::Perbill;
+	use smallvec::smallvec;
 
 	/// The block saturation level. Fees will be updates based on this value.
 	pub const TARGET_BLOCK_FULLNESS: Perbill = Perbill::from_percent(25);

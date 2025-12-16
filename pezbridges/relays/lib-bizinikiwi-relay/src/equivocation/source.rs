@@ -18,17 +18,17 @@
 
 use crate::{
 	equivocation::{
-		EquivocationDetectionPipelineAdapter, EquivocationProofOf, ReportEquivocationCallBuilder,
-		BizinikiwiEquivocationDetectionPipeline,
+		BizinikiwiEquivocationDetectionPipeline, EquivocationDetectionPipelineAdapter,
+		EquivocationProofOf, ReportEquivocationCallBuilder,
 	},
 	finality_base::{engine::Engine, finality_proofs, BizinikiwiFinalityProofsStream},
 	TransactionParams,
 };
 
 use async_trait::async_trait;
-use pezbp_runtime::{HashOf, TransactionEra};
 use pez_equivocation_detector::SourceClient;
 use pez_finality_relay::SourceClientBase;
+use pezbp_runtime::{HashOf, TransactionEra};
 use relay_bizinikiwi_client::{
 	AccountKeyPairOf, Client, Error, TransactionTracker, UnsignedTransaction,
 };

@@ -278,8 +278,8 @@ mod test {
 		assert_err,
 		traits::fungible::{InspectHold, Mutate},
 	};
-	use pretty_assertions::assert_eq;
 	use pezsp_core::{hex2array, H160};
+	use pretty_assertions::assert_eq;
 
 	#[test]
 	fn create1_works() {

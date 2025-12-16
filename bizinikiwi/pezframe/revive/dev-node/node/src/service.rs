@@ -16,6 +16,7 @@
 // limitations under the License.
 
 use crate::cli::Consensus;
+use pez_revive_dev_runtime::{OpaqueBlock as Block, Runtime, RuntimeApi};
 use pezkuwi_sdk::{
 	pezsc_client_api::StorageProvider,
 	pezsc_executor::WasmExecutor,
@@ -24,7 +25,6 @@ use pezkuwi_sdk::{
 	pezsp_runtime::traits::Block as BlockT,
 	*,
 };
-use pez_revive_dev_runtime::{OpaqueBlock as Block, Runtime, RuntimeApi};
 use std::sync::Arc;
 
 type HostFunctions = pezsp_io::BizinikiwiHostFunctions;
@@ -221,7 +221,8 @@ pub fn new_full<Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>:
 				create_inherent_data_providers: timestamp_provider,
 			};
 
-			let authorship_future = pezsc_consensus_manual_seal::run_instant_seal_and_finalize(params);
+			let authorship_future =
+				pezsc_consensus_manual_seal::run_instant_seal_and_finalize(params);
 
 			task_manager.spawn_essential_handle().spawn_blocking(
 				"instant-seal",

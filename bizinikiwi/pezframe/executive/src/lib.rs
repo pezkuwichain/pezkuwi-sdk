@@ -24,9 +24,10 @@
 //!
 //! ## Overview
 //!
-//! The executive module is not a typical pezpallet providing functionality around a specific feature.
-//! It is a cross-cutting framework component for the FRAME. It works in conjunction with the
-//! [FRAME System module](../pezframe_system/index.html) to perform these cross-cutting functions.
+//! The executive module is not a typical pezpallet providing functionality around a specific
+//! feature. It is a cross-cutting framework component for the FRAME. It works in conjunction with
+//! the [FRAME System module](../pezframe_system/index.html) to perform these cross-cutting
+//! functions.
 //!
 //! The Executive module provides functions to:
 //!
@@ -143,12 +144,12 @@ use pezsp_runtime::{
 
 #[cfg(feature = "try-runtime")]
 use ::{
+	log,
 	pezframe_support::{
 		traits::{TryDecodeEntireStorage, TryDecodeEntireStorageError, TryState},
 		StorageNoopGuard,
 	},
 	pezframe_try_runtime::{TryStateSelect, UpgradeCheckSelect},
-	log,
 	pezsp_runtime::TryRuntimeError,
 };
 
@@ -221,8 +222,8 @@ impl core::fmt::Debug for ExecutiveError {
 /// - `Block`: The block type of the runtime
 /// - `Context`: The context that is used when checking an extrinsic.
 /// - `UnsignedValidator`: The unsigned transaction validator of the runtime.
-/// - `AllPalletsWithSystem`: Tuple that contains all pallets including frame system pezpallet. Will be
-///   used to call hooks e.g. `on_initialize`.
+/// - `AllPalletsWithSystem`: Tuple that contains all pallets including frame system pezpallet. Will
+///   be used to call hooks e.g. `on_initialize`.
 /// - [**DEPRECATED** `OnRuntimeUpgrade`]: This parameter is deprecated and will be removed after
 ///   September 2026. Use type `SingleBlockMigrations` in pezframe_system::Config instead.
 #[allow(deprecated)]
@@ -617,7 +618,9 @@ where
 		}
 	}
 
-	fn extract_pre_digest(header: &pezframe_system::pezpallet_prelude::HeaderFor<System>) -> Digest {
+	fn extract_pre_digest(
+		header: &pezframe_system::pezpallet_prelude::HeaderFor<System>,
+	) -> Digest {
 		let mut digest = <Digest>::default();
 		header.digest().logs().iter().for_each(|d| {
 			if d.as_pre_runtime().is_some() {
@@ -685,8 +688,9 @@ where
 		let n = *header.number();
 		assert!(
 			n > BlockNumberFor::<System>::zero() &&
-				<pezframe_system::Pezpallet<System>>::block_hash(n - BlockNumberFor::<System>::one()) ==
-					*header.parent_hash(),
+				<pezframe_system::Pezpallet<System>>::block_hash(
+					n - BlockNumberFor::<System>::one()
+				) == *header.parent_hash(),
 			"Parent hash should be valid.",
 		);
 	}
@@ -802,15 +806,16 @@ where
 		<pezframe_system::Pezpallet<System>>::finalize()
 	}
 
-	/// Run the `on_idle` hook of all pezpallet, but only if there is weight remaining and there are no
-	/// ongoing MBMs.
+	/// Run the `on_idle` hook of all pezpallet, but only if there is weight remaining and there are
+	/// no ongoing MBMs.
 	fn on_idle_hook(block_number: NumberFor<Block>) {
 		if <System as pezframe_system::Config>::MultiBlockMigrator::ongoing() {
 			return;
 		}
 
 		let weight = <pezframe_system::Pezpallet<System>>::block_weight();
-		let max_weight = <System::BlockWeights as pezframe_support::traits::Get<_>>::get().max_block;
+		let max_weight =
+			<System::BlockWeights as pezframe_support::traits::Get<_>>::get().max_block;
 		let remaining_weight = max_weight.saturating_sub(weight.total());
 
 		if remaining_weight.all_gt(Weight::zero()) {
@@ -832,7 +837,8 @@ where
 		);
 
 		let weight = <pezframe_system::Pezpallet<System>>::block_weight();
-		let max_weight = <System::BlockWeights as pezframe_support::traits::Get<_>>::get().max_block;
+		let max_weight =
+			<System::BlockWeights as pezframe_support::traits::Get<_>>::get().max_block;
 		let remaining = max_weight.saturating_sub(weight.total());
 
 		if remaining.all_gt(Weight::zero()) {

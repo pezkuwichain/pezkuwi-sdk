@@ -260,6 +260,11 @@ where
 mod tests {
 	use super::*;
 	use crate::{authorities::AuthoritySetChanges, BlockNumberOps, ClientError, SetId};
+	use bizinikiwi_test_runtime_client::{
+		runtime::{Block, Header, H256},
+		Backend as TestBackend, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt,
+		TestClient, TestClientBuilder, TestClientBuilderExt,
+	};
 	use futures::executor::block_on;
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsc_client_api::{apply_aux, LockImportRun};
@@ -267,11 +272,6 @@ mod tests {
 	use pezsp_consensus_grandpa::GRANDPA_ENGINE_ID as ID;
 	use pezsp_core::crypto::UncheckedFrom;
 	use pezsp_keyring::Ed25519Keyring;
-	use bizinikiwi_test_runtime_client::{
-		runtime::{Block, Header, H256},
-		Backend as TestBackend, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt,
-		TestClient, TestClientBuilder, TestClientBuilderExt,
-	};
 
 	/// Check GRANDPA proof-of-finality for the given block.
 	///

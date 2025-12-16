@@ -25,8 +25,8 @@ use pezkuwi_node_core_pvf::{
 	ValidationHost, JOB_TIMEOUT_WALL_CLOCK_FACTOR,
 };
 use pezkuwi_node_core_pvf_common::{compute_checksum, ArtifactChecksum};
-use pezkuwi_pez_node_primitives::{PoV, POV_BOMB_LIMIT};
 use pezkuwi_node_subsystem::messages::PvfExecKind;
+use pezkuwi_pez_node_primitives::{PoV, POV_BOMB_LIMIT};
 use pezkuwi_primitives::{
 	ExecutorParam, ExecutorParams, Hash, PersistedValidationData, PvfExecKind as RuntimePvfExecKind,
 };

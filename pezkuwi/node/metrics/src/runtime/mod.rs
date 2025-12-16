@@ -213,7 +213,8 @@ impl RuntimeMetricsProvider {
 }
 
 /// Returns the custom profiling closure that we'll apply to the `LoggerBuilder`.
-pub fn logger_hook() -> impl FnOnce(&mut pezsc_cli::LoggerBuilder, &pezsc_service::Configuration) -> () {
+pub fn logger_hook(
+) -> impl FnOnce(&mut pezsc_cli::LoggerBuilder, &pezsc_service::Configuration) -> () {
 	|logger_builder, config| {
 		if config.prometheus_registry().is_none() {
 			return;

@@ -30,7 +30,9 @@ use pezframe_support::{
 
 use super::*;
 
-impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId>
+	for Pezpallet<T, I>
+{
 	type AssetId = T::AssetId;
 	type Balance = T::Balance;
 
@@ -83,7 +85,9 @@ impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::Mutate<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Mutate<<T as SystemConfig>::AccountId>
+	for Pezpallet<T, I>
+{
 	fn done_mint_into(
 		asset_id: Self::AssetId,
 		beneficiary: &<T as SystemConfig>::AccountId,

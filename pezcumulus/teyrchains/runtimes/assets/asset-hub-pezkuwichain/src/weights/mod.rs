@@ -15,10 +15,11 @@
 // limitations under the License.
 
 pub mod block_weights;
+pub mod extrinsic_weights;
+pub mod paritydb_weights;
 pub mod pezcumulus_pezpallet_teyrchain_system;
 pub mod pezcumulus_pezpallet_weight_reclaim;
 pub mod pezcumulus_pezpallet_xcmp_queue;
-pub mod extrinsic_weights;
 pub mod pezframe_system;
 pub mod pezframe_system_extensions;
 pub mod pezpallet_asset_conversion;
@@ -49,7 +50,6 @@ pub mod pezpallet_uniques;
 pub mod pezpallet_utility;
 pub mod pezpallet_xcm;
 pub mod pezpallet_xcm_bridge_hub_router;
-pub mod paritydb_weights;
 pub mod rocksdb_weights;
 pub mod xcm;
 

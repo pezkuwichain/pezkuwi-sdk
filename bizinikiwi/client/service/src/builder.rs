@@ -28,7 +28,6 @@ use crate::{
 use futures::{select, FutureExt, StreamExt};
 use jsonrpsee::RpcModule;
 use log::{debug, error, info};
-use prometheus_endpoint::Registry;
 use pezsc_chain_spec::{get_extension, ChainSpec};
 use pezsc_client_api::{
 	execution_extensions::ExecutionExtensions, proof_provider::ProofProvider, BadBlocks,
@@ -38,8 +37,8 @@ use pezsc_client_api::{
 use pezsc_client_db::{Backend, BlocksPruning, DatabaseSettings, PruningMode};
 use pezsc_consensus::import_queue::{ImportQueue, ImportQueueService};
 use pezsc_executor::{
-	pezsp_wasm_interface::HostFunctions, HeapAllocStrategy, NativeExecutionDispatch, RuntimeVersionOf,
-	WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY,
+	pezsp_wasm_interface::HostFunctions, HeapAllocStrategy, NativeExecutionDispatch,
+	RuntimeVersionOf, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY,
 };
 use pezsc_keystore::LocalKeystore;
 use pezsc_network::{
@@ -93,6 +92,7 @@ use pezsp_core::traits::{CodeExecutor, SpawnNamed};
 use pezsp_keystore::KeystorePtr;
 use pezsp_runtime::traits::{Block as BlockT, BlockIdTo, NumberFor, Zero};
 use pezsp_storage::{ChildInfo, ChildType, PrefixedStorageKey};
+use prometheus_endpoint::Registry;
 use std::{
 	str::FromStr,
 	sync::Arc,
@@ -357,7 +357,9 @@ pub fn new_native_or_wasm_executor<D: NativeExecutionDispatch>(
 	config: &Configuration,
 ) -> pezsc_executor::NativeElseWasmExecutor<D> {
 	#[allow(deprecated)]
-	pezsc_executor::NativeElseWasmExecutor::new_with_wasm_executor(new_wasm_executor(&config.executor))
+	pezsc_executor::NativeElseWasmExecutor::new_with_wasm_executor(new_wasm_executor(
+		&config.executor,
+	))
 }
 
 /// Creates a [`WasmExecutor`] according to [`ExecutorConfiguration`].
@@ -501,10 +503,11 @@ where
 		+ CallApiAt<TBl>
 		+ Send
 		+ 'static,
-	<TCl as ProvideRuntimeApi<TBl>>::Api: pezsp_api::Metadata<TBl>
-		+ pezsp_transaction_pool::runtime_api::TaggedTransactionQueue<TBl>
-		+ pezsp_session::SessionKeys<TBl>
-		+ pezsp_api::ApiExt<TBl>,
+	<TCl as ProvideRuntimeApi<TBl>>::Api:
+		pezsp_api::Metadata<TBl>
+			+ pezsp_transaction_pool::runtime_api::TaggedTransactionQueue<TBl>
+			+ pezsp_session::SessionKeys<TBl>
+			+ pezsp_api::ApiExt<TBl>,
 	TBl: BlockT,
 	TBl::Hash: Unpin,
 	TBl::Header: Unpin,
@@ -823,7 +826,8 @@ where
 		+ Sync
 		+ 'static,
 	TBackend: pezsc_client_api::backend::Backend<TBl> + 'static,
-	<TCl as ProvideRuntimeApi<TBl>>::Api: pezsp_session::SessionKeys<TBl> + pezsp_api::Metadata<TBl>,
+	<TCl as ProvideRuntimeApi<TBl>>::Api:
+		pezsp_session::SessionKeys<TBl> + pezsp_api::Metadata<TBl>,
 	TExPool: MaintainedTransactionPool<Block = TBl, Hash = <TBl as BlockT>::Hash> + 'static,
 	TBl::Hash: Unpin,
 	TBl::Header: Unpin,

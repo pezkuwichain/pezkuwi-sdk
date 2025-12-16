@@ -883,7 +883,8 @@ pub fn asset_transactor_transfer_with_pallet_assets_instance_works<
 		From<AssetId> + Into<AssetId>,
 	<Runtime as pezpallet_assets::Config<AssetsPalletInstance>>::AssetIdParameter:
 		From<AssetId> + Into<AssetId>,
-	<Runtime as pezpallet_assets::Config<AssetsPalletInstance>>::Balance: From<Balance> + Into<u128>,
+	<Runtime as pezpallet_assets::Config<AssetsPalletInstance>>::Balance:
+		From<Balance> + Into<u128>,
 	<Runtime as pezframe_system::Config>::AccountId:
 		Into<<<Runtime as pezframe_system::Config>::RuntimeOrigin as OriginTrait>::AccountId>,
 	<<Runtime as pezframe_system::Config>::Lookup as StaticLookup>::Source:
@@ -1199,11 +1200,15 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 		.with_tracing()
 		.build()
 		.execute_with(|| {
-			assert!(<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
-				.collect::<Vec<_>>()
-				.is_empty());
+			assert!(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
+					.collect::<Vec<_>>()
+					.is_empty()
+			);
 			assert_eq!(
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&foreign_creator_as_account_id),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+					&foreign_creator_as_account_id
+				),
 				existential_deposit +
 					asset_deposit + metadata_deposit_base +
 					metadata_deposit_per_byte_eta +
@@ -1289,9 +1294,11 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 			assert!(events.any(|e| matches!(e, pezpallet_assets::Event::TeamChanged { .. })));
 
 			// check assets after
-			assert!(!<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
-				.collect::<Vec<_>>()
-				.is_empty());
+			assert!(
+				!<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
+					.collect::<Vec<_>>()
+					.is_empty()
+			);
 
 			// check update metadata
 			use pezframe_support::traits::fungibles::roles::Inspect as InspectRoles;
@@ -1320,10 +1327,13 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 				Some(bob_account.clone())
 			);
 			assert!(
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&foreign_creator_as_account_id) >=
-					existential_deposit + buy_execution_fee_amount.into(),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+					&foreign_creator_as_account_id
+				) >= existential_deposit + buy_execution_fee_amount.into(),
 				"Free balance: {:?} should be ge {:?}",
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&foreign_creator_as_account_id),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+					&foreign_creator_as_account_id
+				),
 				existential_deposit + buy_execution_fee_amount.into()
 			);
 			assert_metadata::<
@@ -1701,9 +1711,10 @@ where
 		assert_eq!(execution_fees, expected_weight_native_fee);
 
 		// We need some balance to create an asset.
-		assert_ok!(
-			pezpallet_balances::Pezpallet::<Runtime>::mint_into(&test_account, 3_000_000_000_000,)
-		);
+		assert_ok!(pezpallet_balances::Pezpallet::<Runtime>::mint_into(
+			&test_account,
+			3_000_000_000_000,
+		));
 
 		// Now we try to use an asset that's not in a pool.
 		let asset_id = 1984u32; // USDT.

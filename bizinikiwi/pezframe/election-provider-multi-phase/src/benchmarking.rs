@@ -26,9 +26,9 @@ use pezframe_support::{
 	BoundedVec,
 };
 use pezframe_system::RawOrigin;
-use rand::{prelude::SliceRandom, rngs::SmallRng, SeedableRng};
 use pezsp_arithmetic::{per_things::Percent, traits::One};
 use pezsp_runtime::InnerOf;
+use rand::{prelude::SliceRandom, rngs::SmallRng, SeedableRng};
 
 use crate::{unsigned::IndexAssignmentOf, *};
 
@@ -252,7 +252,9 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pezpallet::<T>::finalize_signed_phase_accept_solution(ready, &receiver, deposit, call_fee);
+			Pezpallet::<T>::finalize_signed_phase_accept_solution(
+				ready, &receiver, deposit, call_fee,
+			);
 		}
 
 		assert_eq!(T::Currency::free_balance(&receiver), initial_balance + reward + call_fee);
@@ -330,8 +332,9 @@ mod benchmarks {
 
 		let witness = SolutionOrSnapshotSize { voters: v, targets: t };
 		let raw_solution = solution_with_size::<T>(witness, a, d)?;
-		let ready_solution = Pezpallet::<T>::feasibility_check(raw_solution, ElectionCompute::Signed)
-			.map_err(<&str>::from)?;
+		let ready_solution =
+			Pezpallet::<T>::feasibility_check(raw_solution, ElectionCompute::Signed)
+				.map_err(<&str>::from)?;
 		CurrentPhase::<T>::put(Phase::Signed);
 		// Assume a queued solution is stored, regardless of where it comes from.
 		QueuedSolution::<T>::put(ready_solution);
@@ -396,8 +399,10 @@ mod benchmarks {
 		};
 
 		let caller = pezframe_benchmarking::whitelisted_caller();
-		let deposit =
-			Pezpallet::<T>::deposit_for(&solution, SnapshotMetadata::<T>::get().unwrap_or_default());
+		let deposit = Pezpallet::<T>::deposit_for(
+			&solution,
+			SnapshotMetadata::<T>::get().unwrap_or_default(),
+		);
 		T::Currency::make_free_balance_be(
 			&caller,
 			T::Currency::minimum_balance() * 1000u32.into() + deposit,
@@ -406,7 +411,9 @@ mod benchmarks {
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), Box::new(solution));
 
-		assert!(Pezpallet::<T>::signed_submissions().len() as u32 == T::SignedMaxSubmissions::get());
+		assert!(
+			Pezpallet::<T>::signed_submissions().len() as u32 == T::SignedMaxSubmissions::get()
+		);
 
 		Ok(())
 	}

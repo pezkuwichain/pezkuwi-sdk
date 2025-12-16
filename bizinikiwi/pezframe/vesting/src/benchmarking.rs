@@ -128,7 +128,11 @@ mod benchmarks {
 		vest(RawOrigin::Signed(caller.clone()));
 
 		// Vesting schedule is removed!
-		assert_eq!(Pezpallet::<T>::vesting_balance(&caller), None, "Vesting schedule was not removed",);
+		assert_eq!(
+			Pezpallet::<T>::vesting_balance(&caller),
+			None,
+			"Vesting schedule was not removed",
+		);
 
 		Ok(())
 	}
@@ -194,7 +198,11 @@ mod benchmarks {
 		vest_other(RawOrigin::Signed(caller.clone()), other_lookup);
 
 		// Vesting schedule is removed.
-		assert_eq!(Pezpallet::<T>::vesting_balance(&other), None, "Vesting schedule was not removed",);
+		assert_eq!(
+			Pezpallet::<T>::vesting_balance(&other),
+			None,
+			"Vesting schedule was not removed",
+		);
 
 		Ok(())
 	}

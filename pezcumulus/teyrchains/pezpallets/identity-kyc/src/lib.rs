@@ -124,7 +124,8 @@ pub mod pezpallet {
 
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type Currency: ReservableCurrency<Self::AccountId>;
 
 		/// Origin that can revoke citizenship (governance/root)

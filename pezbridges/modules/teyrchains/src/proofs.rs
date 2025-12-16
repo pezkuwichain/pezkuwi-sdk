@@ -19,9 +19,9 @@
 use crate::{Config, GrandpaPalletOf, RelayBlockHash, RelayBlockHasher};
 use bp_header_pez_chain::{HeaderChain, HeaderChainError};
 use bp_pezkuwi_core::teyrchains::{ParaHead, ParaId};
-use pezbp_runtime::{RawStorageProof, StorageProofChecker, StorageProofError};
 use bp_teyrchains::teyrchain_head_storage_key_at_source;
 use codec::Decode;
+use pezbp_runtime::{RawStorageProof, StorageProofChecker, StorageProofError};
 use pezframe_support::traits::Get;
 
 /// Abstraction over storage proof manipulation, hiding implementation details of actual storage

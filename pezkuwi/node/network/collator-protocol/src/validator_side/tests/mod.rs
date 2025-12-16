@@ -34,12 +34,12 @@ use pezkuwi_node_network_protocol::{
 	request_response::{Requests, ResponseSender},
 	ObservedRole,
 };
-use pezkuwi_pez_node_primitives::{BlockData, PoV};
 use pezkuwi_node_subsystem::messages::{
 	AllMessages, ReportPeerMessage, RuntimeApiMessage, RuntimeApiRequest,
 };
 use pezkuwi_node_subsystem_test_helpers as test_helpers;
 use pezkuwi_node_subsystem_util::{reputation::add_reputation, TimeoutExt};
+use pezkuwi_pez_node_primitives::{BlockData, PoV};
 use pezkuwi_primitives::{
 	node_features, CandidateReceiptV2 as CandidateReceipt, CollatorPair, CoreIndex,
 	GroupRotationInfo, HeadData, NodeFeatures, PersistedValidationData, ValidatorId,

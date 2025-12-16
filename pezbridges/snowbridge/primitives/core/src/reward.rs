@@ -7,13 +7,13 @@ use crate::reward::RewardPaymentError::{ChargeFeesFailure, XcmSendFailure};
 use bp_relayers::PaymentProcedure;
 use codec::DecodeWithMemTracking;
 use pezframe_support::{dispatch::GetDispatchInfo, PalletError};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	codec::{Decode, Encode},
 	traits::Get,
 	DispatchError,
 };
 use pezsp_std::{fmt::Debug, marker::PhantomData};
+use scale_info::TypeInfo;
 use xcm::{
 	opaque::latest::prelude::Xcm,
 	prelude::{ExecuteXcm, Junction::*, Location, SendXcm, *},

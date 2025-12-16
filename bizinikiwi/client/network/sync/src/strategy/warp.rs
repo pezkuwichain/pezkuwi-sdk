@@ -772,16 +772,16 @@ where
 mod test {
 	use super::*;
 	use crate::{mock::MockBlockDownloader, service::network::NetworkServiceProvider};
+	use bizinikiwi_test_runtime_client::{
+		runtime::{Block, Hash},
+		BlockBuilderExt, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
+	};
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsp_blockchain::{BlockStatus, Error as BlockchainError, HeaderBackend, Info};
 	use pezsp_consensus_grandpa::{AuthorityList, SetId, GRANDPA_ENGINE_ID};
 	use pezsp_core::H256;
 	use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT, NumberFor};
 	use std::{io::ErrorKind, sync::Arc};
-	use bizinikiwi_test_runtime_client::{
-		runtime::{Block, Hash},
-		BlockBuilderExt, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
-	};
 
 	mockall::mock! {
 		pub Client<B: BlockT> {}

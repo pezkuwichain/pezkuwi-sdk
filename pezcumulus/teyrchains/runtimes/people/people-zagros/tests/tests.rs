@@ -16,11 +16,11 @@
 
 #![cfg(test)]
 
-use pezframe_support::{assert_err, assert_ok};
 use people_zagros_runtime::{
 	xcm_config::{GovernanceLocation, LocationToAccountId},
 	Block, Runtime, RuntimeCall, RuntimeOrigin,
 };
+use pezframe_support::{assert_err, assert_ok};
 use pezsp_core::crypto::Ss58Codec;
 use pezsp_runtime::Either;
 use testnet_teyrchains_constants::zagros::fee::WeightToFee;

@@ -18,12 +18,12 @@
 use super::{deposit_limit, GAS_LIMIT};
 use crate::{
 	address::AddressMapper, evm::TransactionSigned, AccountIdOf, BalanceOf, Code, Config,
-	ContractResult, ExecConfig, ExecReturnValue, InstantiateReturnValue, OriginFor, Pezpallet, Weight,
-	U256,
+	ContractResult, ExecConfig, ExecReturnValue, InstantiateReturnValue, OriginFor, Pezpallet,
+	Weight, U256,
 };
 use alloc::{vec, vec::Vec};
-use pezframe_support::pezpallet_prelude::DispatchResultWithPostInfo;
 use paste::paste;
+use pezframe_support::pezpallet_prelude::DispatchResultWithPostInfo;
 use pezsp_core::H160;
 
 /// Helper macro to generate a builder for contract API calls.

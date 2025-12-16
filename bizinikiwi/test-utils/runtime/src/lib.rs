@@ -21,11 +21,11 @@
 
 extern crate alloc;
 
+pub mod bizinikiwi_test_pallet;
 #[cfg(feature = "std")]
 pub mod extrinsic;
 #[cfg(feature = "std")]
 pub mod genesismap;
-pub mod bizinikiwi_test_pallet;
 
 #[cfg(not(feature = "std"))]
 use alloc::{vec, vec::Vec};
@@ -45,9 +45,9 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	CheckNonce, CheckWeight,
 };
-use scale_info::TypeInfo;
 use pezsp_application_crypto::Ss58Codec;
 use pezsp_keyring::Sr25519Keyring;
+use scale_info::TypeInfo;
 
 use pezsp_application_crypto::{ecdsa, ed25519, sr25519, RuntimeAppPublic};
 
@@ -61,7 +61,6 @@ use pezsp_trie::{
 };
 use trie_db::{Trie, TrieMut};
 
-use serde_json::json;
 use pezsp_api::{decl_runtime_apis, impl_runtime_apis};
 pub use pezsp_core::hash::H256;
 use pezsp_genesis_builder::PresetId;
@@ -77,6 +76,7 @@ use pezsp_runtime::{
 #[cfg(any(feature = "std", test))]
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
+use serde_json::json;
 
 pub use pezsp_consensus_babe::{AllowedSlots, BabeEpochConfiguration, Slot};
 
@@ -947,7 +947,8 @@ fn test_read_child_storage() {
 fn test_witness(proof: StorageProof, root: crate::Hash) {
 	use pezsp_externalities::Externalities;
 	let db: pezsp_trie::MemoryDB<crate::Hashing> = proof.into_memory_db();
-	let backend = pezsp_state_machine::TrieBackendBuilder::<_, crate::Hashing>::new(db, root).build();
+	let backend =
+		pezsp_state_machine::TrieBackendBuilder::<_, crate::Hashing>::new(db, root).build();
 	let mut overlay = pezsp_state_machine::OverlayedChanges::default();
 	let mut ext = pezsp_state_machine::Ext::new(
 		&mut overlay,
@@ -1146,9 +1147,11 @@ pub mod storage_key_generator {
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use bizinikiwi_test_runtime_client::{
+		prelude::*, runtime::TestAPI, DefaultTestClientBuilderExt, TestClientBuilder,
+	};
 	use codec::Encode;
 	use pezframe_support::dispatch::DispatchInfo;
-	use pretty_assertions::assert_eq;
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsp_api::{ApiExt, ProvideRuntimeApi};
 	use pezsp_consensus::BlockOrigin;
@@ -1157,9 +1160,7 @@ mod tests {
 		traits::{DispatchTransaction, Hash as _},
 		transaction_validity::{InvalidTransaction, TransactionSource::External, ValidTransaction},
 	};
-	use bizinikiwi_test_runtime_client::{
-		prelude::*, runtime::TestAPI, DefaultTestClientBuilderExt, TestClientBuilder,
-	};
+	use pretty_assertions::assert_eq;
 
 	#[test]
 	fn expected_keys_vec_are_matching() {
@@ -1351,14 +1352,14 @@ mod tests {
 	mod genesis_builder_tests {
 		use super::*;
 		use crate::genesismap::GenesisStorageBuilder;
-		use pretty_assertions::assert_eq;
 		use pezsc_executor::{error::Result, WasmExecutor};
 		use pezsc_executor_common::runtime_blob::RuntimeBlob;
-		use serde_json::json;
 		use pezsp_application_crypto::Ss58Codec;
 		use pezsp_core::traits::Externalities;
 		use pezsp_genesis_builder::Result as BuildResult;
 		use pezsp_state_machine::BasicExternalities;
+		use pretty_assertions::assert_eq;
+		use serde_json::json;
 		use std::{fs, io::Write};
 		use storage_key_generator::hex;
 

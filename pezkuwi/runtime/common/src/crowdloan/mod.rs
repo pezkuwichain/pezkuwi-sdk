@@ -69,15 +69,15 @@ use pezframe_support::{
 	Identity, PalletId,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
-use scale_info::TypeInfo;
+pub use pezpallet::*;
 use pezsp_runtime::{
 	traits::{
 		AccountIdConversion, CheckedAdd, Hash, IdentifyAccount, One, Saturating, Verify, Zero,
 	},
 	MultiSignature, MultiSigner, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 type CurrencyOf<T> = <<T as Config>::Auctioneer as Auctioneer<BlockNumberFor<T>>>::Currency;
 type LeasePeriodOf<T> = <<T as Config>::Auctioneer as Auctioneer<BlockNumberFor<T>>>::LeasePeriod;
@@ -187,7 +187,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// `PalletId` for the crowdloan pezpallet. An appropriate value could be
 		/// `PalletId(*b"py/cfund")`
@@ -552,7 +553,10 @@ pub mod pezpallet {
 		/// Remove a fund after the retirement period has ended and all funds have been returned.
 		#[pezpallet::call_index(4)]
 		#[pezpallet::weight(T::WeightInfo::dissolve())]
-		pub fn dissolve(origin: OriginFor<T>, #[pezpallet::compact] index: ParaId) -> DispatchResult {
+		pub fn dissolve(
+			origin: OriginFor<T>,
+			#[pezpallet::compact] index: ParaId,
+		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
 			let fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;

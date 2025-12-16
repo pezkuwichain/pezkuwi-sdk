@@ -19,9 +19,9 @@
 
 use bp_header_pez_chain::SubmitFinalityProofInfo;
 use bp_messages::MessagesCallInfo;
-use pezbp_runtime::StaticStrProvider;
 use bp_teyrchains::SubmitTeyrchainHeadsInfo;
 use codec::{Decode, Encode};
+use pezbp_runtime::StaticStrProvider;
 use pezframe_support::{
 	dispatch::CallableCallFor, traits::IsSubType, weights::Weight, RuntimeDebugNoBound,
 };

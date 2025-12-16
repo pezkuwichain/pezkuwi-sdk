@@ -32,7 +32,6 @@ use codec::{Decode, Encode};
 use futures::{prelude::*, stream::FuturesUnordered};
 use log::{debug, trace, warn};
 
-use prometheus_endpoint::{register, Counter, PrometheusError, Registry, U64};
 use pezsc_network::{
 	config::{NonReservedPeerMode, ProtocolId, SetConfig},
 	error, multiaddr,
@@ -50,6 +49,7 @@ use pezsc_network_sync::{SyncEvent, SyncEventStream};
 use pezsc_network_types::PeerId;
 use pezsc_utils::mpsc::{tracing_unbounded, TracingUnboundedReceiver, TracingUnboundedSender};
 use pezsp_runtime::traits::Block as BlockT;
+use prometheus_endpoint::{register, Counter, PrometheusError, Registry, U64};
 
 use std::{
 	collections::{hash_map::Entry, HashMap},

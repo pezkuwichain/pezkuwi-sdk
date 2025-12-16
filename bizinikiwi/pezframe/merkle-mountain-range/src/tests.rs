@@ -28,7 +28,10 @@ use frame::{
 };
 
 pub(crate) fn new_test_ext() -> TestState {
-	pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap().into()
+	pezframe_system::GenesisConfig::<Test>::default()
+		.build_storage()
+		.unwrap()
+		.into()
 }
 
 fn register_offchain_ext(ext: &mut TestState) {
@@ -260,7 +263,9 @@ fn should_generate_proofs_correctly() {
 		// when generate proofs for all leaves.
 		let proofs = (1_u64..=best_block_number)
 			.into_iter()
-			.map(|block_num| crate::Pezpallet::<Test>::generate_proof(vec![block_num], None).unwrap())
+			.map(|block_num| {
+				crate::Pezpallet::<Test>::generate_proof(vec![block_num], None).unwrap()
+			})
 			.collect::<Vec<_>>();
 		// when generate historical proofs for all leaves
 		let historical_proofs = (1_u64..best_block_number)
@@ -545,7 +550,10 @@ fn generate_and_verify_batch_proof(
 		// then
 		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proof), Ok(()));
 		historical_proofs.iter().for_each(|(leaves, proof)| {
-			assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves.clone(), proof.clone()), Ok(()));
+			assert_eq!(
+				crate::Pezpallet::<Test>::verify_leaves(leaves.clone(), proof.clone()),
+				Ok(())
+			);
 		});
 	})
 }
@@ -741,8 +749,8 @@ fn should_verify_canonicalized() {
 	}
 
 	// Generate proofs for some blocks.
-	let (leaves, proofs) =
-		ext.execute_with(|| crate::Pezpallet::<Test>::generate_proof(vec![1, 4, 5, 7], None).unwrap());
+	let (leaves, proofs) = ext
+		.execute_with(|| crate::Pezpallet::<Test>::generate_proof(vec![1, 4, 5, 7], None).unwrap());
 	// Verify all previously generated proofs.
 	ext.execute_with(|| {
 		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proofs), Ok(()));
@@ -773,7 +781,10 @@ fn does_not_panic_when_generating_historical_proofs() {
 	register_offchain_ext(&mut ext);
 	ext.execute_with(|| {
 		// when leaf index is invalid
-		assert_eq!(crate::Pezpallet::<Test>::generate_proof(vec![10], None), Err(Error::LeafNotFound),);
+		assert_eq!(
+			crate::Pezpallet::<Test>::generate_proof(vec![10], None),
+			Err(Error::LeafNotFound),
+		);
 
 		// when leaves count is invalid
 		assert_eq!(
@@ -819,6 +830,9 @@ fn generating_and_verifying_ancestry_proofs_works_correctly() {
 		}
 
 		// Check that we can't generate ancestry proofs for a future block.
-		assert_eq!(Pezpallet::<Test>::generate_ancestry_proof(501, None), Err(Error::GenerateProof));
+		assert_eq!(
+			Pezpallet::<Test>::generate_ancestry_proof(501, None),
+			Err(Error::GenerateProof)
+		);
 	});
 }

@@ -49,8 +49,8 @@ pub trait VoteTally<Votes, Class> {
 	/// A function that should be called before any use of the `runtime-benchmarks` gated functions
 	/// of the `VoteTally` trait.
 	///
-	/// Should be used to set up any needed state in a Pezpallet which implements `VoteTally` so that
-	/// benchmarks that execute will complete successfully. `class` can be used to set up a
+	/// Should be used to set up any needed state in a Pezpallet which implements `VoteTally` so
+	/// that benchmarks that execute will complete successfully. `class` can be used to set up a
 	/// particular class of voters, and `granularity` is used to determine the weight of one vote
 	/// relative to total unanimity.
 	///

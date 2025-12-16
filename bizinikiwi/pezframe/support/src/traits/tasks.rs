@@ -21,9 +21,9 @@
 use alloc::{vec, vec::IntoIter};
 use codec::FullCodec;
 use core::{fmt::Debug, iter::Iterator};
-use scale_info::TypeInfo;
 use pezsp_runtime::DispatchError;
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
 
 /// Contain's re-exports of all the supporting types for the [`Task`] trait. Used in the macro
 /// expansion of `RuntimeTask`.
@@ -32,9 +32,9 @@ pub mod __private {
 	pub use alloc::{vec, vec::IntoIter};
 	pub use codec::FullCodec;
 	pub use core::{fmt::Debug, iter::Iterator};
-	pub use scale_info::TypeInfo;
 	pub use pezsp_runtime::DispatchError;
 	pub use pezsp_weights::Weight;
+	pub use scale_info::TypeInfo;
 }
 
 /// A general-purpose trait which defines a type of service work (i.e., work to performed by an

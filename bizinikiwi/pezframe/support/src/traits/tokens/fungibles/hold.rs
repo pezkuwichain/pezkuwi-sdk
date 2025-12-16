@@ -30,12 +30,12 @@ use crate::{
 		Restriction::{self, Free, OnHold},
 	},
 };
-use scale_info::TypeInfo;
 use pezsp_arithmetic::{
 	traits::{CheckedAdd, CheckedSub, Zero},
 	ArithmeticError,
 };
 use pezsp_runtime::{DispatchError, DispatchResult, Saturating, TokenError};
+use scale_info::TypeInfo;
 
 use super::*;
 

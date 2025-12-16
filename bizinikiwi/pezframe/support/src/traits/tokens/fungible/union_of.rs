@@ -30,13 +30,13 @@ use pezframe_support::traits::{
 	},
 	AccountTouch,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::Convert,
 	DispatchError, DispatchResult, Either,
 	Either::{Left, Right},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// The `NativeOrWithId` enum classifies an asset as either `Native` to the current chain or as an
 /// asset with a specific ID.

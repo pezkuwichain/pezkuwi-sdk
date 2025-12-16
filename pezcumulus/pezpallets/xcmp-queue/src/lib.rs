@@ -71,12 +71,12 @@ use pezframe_support::{
 	},
 	weights::{Weight, WeightMeter},
 };
-use pezpallet_message_queue::OnQueueChanged;
 use pezkuwi_runtime_common::xcm_sender::PriceForMessageDelivery;
 use pezkuwi_runtime_teyrchains::{FeeTracker, GetMinFeeFactor};
-use scale_info::TypeInfo;
+use pezpallet_message_queue::OnQueueChanged;
 use pezsp_core::MAX_POSSIBLE_ALLOCATION;
 use pezsp_runtime::{FixedU128, RuntimeDebug, SaturatedConversion, WeakBoundedVec};
+use scale_info::TypeInfo;
 use xcm::{latest::prelude::*, VersionedLocation, VersionedXcm, WrapVersion, MAX_XCM_DECODE_DEPTH};
 use xcm_builder::InspectMessageQueues;
 use xcm_executor::traits::ConvertOrigin;
@@ -115,7 +115,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Information on the available XCMP channels.
 		type ChannelInfo: GetChannelInfo;
@@ -125,8 +126,8 @@ pub mod pezpallet {
 
 		/// Enqueue an inbound horizontal message for later processing.
 		///
-		/// This defines the maximal message length via [`crate::MaxXcmpMessageLenOf`]. The pezpallet
-		/// assumes that this hook will eventually process all the pushed messages.
+		/// This defines the maximal message length via [`crate::MaxXcmpMessageLenOf`]. The
+		/// pezpallet assumes that this hook will eventually process all the pushed messages.
 		type XcmpQueue: EnqueueMessage<ParaId>
 			+ QueueFootprintQuery<ParaId, MaxMessageLen = MaxXcmpMessageLenOf<Self>>;
 

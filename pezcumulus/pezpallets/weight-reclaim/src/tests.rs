@@ -73,8 +73,10 @@ impl TransactionExtension<RuntimeCall> for MockExtensionWithRefund {
 	pezsp_runtime::impl_tx_ext_default!(RuntimeCall; validate prepare);
 }
 
-pub type Tx =
-	crate::StorageWeightReclaim<Test, (pezframe_system::CheckWeight<Test>, MockExtensionWithRefund)>;
+pub type Tx = crate::StorageWeightReclaim<
+	Test,
+	(pezframe_system::CheckWeight<Test>, MockExtensionWithRefund),
+>;
 type AccountId = u64;
 type Extrinsic = generic::UncheckedExtrinsic<AccountId, RuntimeCall, (), Tx>;
 type Block = generic::Block<generic::Header<AccountId, BlakeTwo256>, Extrinsic>;
@@ -960,7 +962,9 @@ fn test_pov_missing_from_node_reclaim() {
 
 		// Assert the results.
 		assert_eq!(
-			pezframe_system::BlockWeight::<Test>::get().get(DispatchClass::Normal).proof_size(),
+			pezframe_system::BlockWeight::<Test>::get()
+				.get(DispatchClass::Normal)
+				.proof_size(),
 			node_post_dispatch + len,
 		);
 		assert_eq!(
@@ -1027,7 +1031,9 @@ fn test_ref_time_weight_reclaim() {
 
 		// Assert the results.
 		assert_eq!(
-			pezframe_system::BlockWeight::<Test>::get().get(DispatchClass::Normal).ref_time(),
+			pezframe_system::BlockWeight::<Test>::get()
+				.get(DispatchClass::Normal)
+				.ref_time(),
 			block_pre_dispatch +
 				base_extrinsic.ref_time() +
 				bench_post_dispatch_actual +

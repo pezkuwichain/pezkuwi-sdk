@@ -17,8 +17,8 @@
 
 //! # System Pezpallet
 //!
-//! The System pezpallet provides low-level access to core types and cross-cutting utilities. It acts
-//! as the base layer for other pallets to interact with the Bizinikiwi framework components.
+//! The System pezpallet provides low-level access to core types and cross-cutting utilities. It
+//! acts as the base layer for other pallets to interact with the Bizinikiwi framework components.
 //!
 //! - [`Config`]
 //!
@@ -37,8 +37,8 @@
 //!
 //! ### Dispatchable Functions
 //!
-//! The System pezpallet provides dispatchable functions that, with the exception of `remark`, manage
-//! low-level or privileged functionality of a Bizinikiwi-based runtime.
+//! The System pezpallet provides dispatchable functions that, with the exception of `remark`,
+//! manage low-level or privileged functionality of a Bizinikiwi-based runtime.
 //!
 //! - `remark`: Make some on-chain remark.
 //! - `set_heap_pages`: Set the number of pages in the WebAssembly environment's heap.
@@ -102,8 +102,6 @@ extern crate alloc;
 use alloc::{borrow::Cow, boxed::Box, vec, vec::Vec};
 use core::{fmt::Debug, marker::PhantomData};
 use pezpallet_prelude::{BlockNumberFor, HeaderFor};
-#[cfg(feature = "std")]
-use serde::Serialize;
 use pezsp_io::hashing::blake2_256;
 #[cfg(feature = "runtime-benchmarks")]
 use pezsp_runtime::traits::TrailingZeroInput;
@@ -121,6 +119,8 @@ use pezsp_runtime::{
 	DispatchError, RuntimeDebug,
 };
 use pezsp_version::RuntimeVersion;
+#[cfg(feature = "std")]
+use serde::Serialize;
 
 use codec::{Decode, DecodeWithMemTracking, Encode, EncodeLike, FullCodec, MaxEncodedLen};
 #[cfg(feature = "std")]
@@ -142,13 +142,13 @@ use pezframe_support::{
 	},
 	Parameter,
 };
-use scale_info::TypeInfo;
 use pezsp_core::storage::well_known_keys;
 use pezsp_runtime::{
 	traits::{DispatchInfoOf, PostDispatchInfoOf},
 	transaction_validity::TransactionValidityError,
 };
 use pezsp_weights::{RuntimeDbWeight, Weight, WeightMeter};
+use scale_info::TypeInfo;
 
 #[cfg(any(feature = "std", test))]
 use pezsp_io::TestExternalities;
@@ -592,8 +592,8 @@ pub mod pezpallet {
 		///
 		/// Used to define the type and conversion mechanism for referencing accounts in
 		/// transactions. It's perfectly reasonable for this to be an identity conversion (with the
-		/// source type being `AccountId`), but other pallets (e.g. Indices pezpallet) may provide more
-		/// functional/efficient alternatives.
+		/// source type being `AccountId`), but other pallets (e.g. Indices pezpallet) may provide
+		/// more functional/efficient alternatives.
 		type Lookup: StaticLookup<Target = Self::AccountId>;
 
 		/// The Block type used by the runtime. This is used by `construct_runtime` to retrieve the
@@ -672,8 +672,8 @@ pub mod pezpallet {
 
 		/// The migrator that is used to run Multi-Block-Migrations.
 		///
-		/// Can be set to [`pezpallet-migrations`] or an alternative implementation of the interface.
-		/// The diagram in `pezframe_executive::block_flowchart` explains when it runs.
+		/// Can be set to [`pezpallet-migrations`] or an alternative implementation of the
+		/// interface. The diagram in `pezframe_executive::block_flowchart` explains when it runs.
 		type MultiBlockMigrator: MultiStepMigrator;
 
 		/// A callback that executes in *every block* directly before all inherents were applied.

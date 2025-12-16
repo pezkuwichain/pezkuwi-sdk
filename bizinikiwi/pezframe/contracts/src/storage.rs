@@ -33,13 +33,13 @@ use pezframe_support::{
 	weights::{Weight, WeightMeter},
 	CloneNoBound, DefaultNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_core::Get;
 use pezsp_io::KillStorageResult;
 use pezsp_runtime::{
 	traits::{Hash, Saturating, Zero},
 	BoundedBTreeMap, DispatchError, DispatchResult, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 use self::meter::Diff;
 
@@ -458,7 +458,8 @@ impl<T: Config> DeletionQueueManager<T> {
 	///
 	/// Note:
 	/// we use the delete counter to get the next value to read from the queue and thus don't pay
-	/// the cost of an extra call to `pezsp_io::storage::next_key` to lookup the next entry in the map
+	/// the cost of an extra call to `pezsp_io::storage::next_key` to lookup the next entry in the
+	/// map
 	fn next(&mut self) -> Option<DeletionQueueEntry<'_, T>> {
 		if self.is_empty() {
 			return None;

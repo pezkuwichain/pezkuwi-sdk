@@ -23,11 +23,11 @@ use bp_messages::{
 	ChainWithMessages, DeliveredMessages, InboundLaneData, LaneState, MessageKey, MessageNonce,
 	OutboundLaneData, ReceptionResult, UnrewardedRelayer,
 };
-use pezbp_runtime::AccountIdOf;
 use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
-use scale_info::{Type, TypeInfo};
+use pezbp_runtime::AccountIdOf;
 use pezsp_runtime::RuntimeDebug;
 use pezsp_std::prelude::PartialEq;
+use scale_info::{Type, TypeInfo};
 
 /// Inbound lane storage.
 pub trait InboundLaneStorage {

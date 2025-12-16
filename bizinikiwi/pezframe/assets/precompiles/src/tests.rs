@@ -141,7 +141,8 @@ fn balance_of_works() {
 		assert_ok!(Assets::force_create(RuntimeOrigin::root(), asset_id, owner, true, 1));
 		assert_ok!(Assets::mint(RuntimeOrigin::signed(owner), asset_id, owner, 1000));
 
-		let account = <Test as pezpallet_revive::Config>::AddressMapper::to_address(&owner).0.into();
+		let account =
+			<Test as pezpallet_revive::Config>::AddressMapper::to_address(&owner).0.into();
 		let data = IERC20::balanceOfCall { account }.abi_encode();
 
 		let data = pezpallet_revive::Pezpallet::<Test>::bare_call(

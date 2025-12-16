@@ -410,10 +410,10 @@ mod tests {
 		communication::tests::{make_test_network, Event},
 	};
 	use assert_matches::assert_matches;
+	use bizinikiwi_test_runtime_client::{TestClientBuilder, TestClientBuilderExt};
 	use pezsc_network_types::PeerId;
 	use pezsc_utils::mpsc::tracing_unbounded;
 	use pezsp_blockchain::HeaderBackend as _;
-	use bizinikiwi_test_runtime_client::{TestClientBuilder, TestClientBuilderExt};
 
 	use futures::executor;
 

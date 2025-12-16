@@ -30,14 +30,14 @@ use crate::{
 use cid::{self, Version};
 use futures::StreamExt;
 use log::{debug, error, trace};
-use prost::Message;
 use pezsc_client_api::BlockBackend;
 use pezsc_network_types::PeerId;
+use pezsp_runtime::traits::Block as BlockT;
+use prost::Message;
 use schema::bitswap::{
 	message::{wantlist::WantType, Block as MessageBlock, BlockPresence, BlockPresenceType},
 	Message as BitswapMessage,
 };
-use pezsp_runtime::traits::Block as BlockT;
 use std::{io, sync::Arc, time::Duration};
 use unsigned_varint::encode as varint_encode;
 
@@ -292,16 +292,16 @@ pub enum BitswapError {
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use bizinikiwi_test_runtime::ExtrinsicBuilder;
+	use bizinikiwi_test_runtime_client::{self, prelude::*, TestClientBuilder};
 	use futures::channel::oneshot;
 	use pezsc_block_builder::BlockBuilderBuilder;
+	use pezsp_consensus::BlockOrigin;
+	use pezsp_runtime::codec::Encode;
 	use schema::bitswap::{
 		message::{wantlist::Entry, Wantlist},
 		Message as BitswapMessage,
 	};
-	use pezsp_consensus::BlockOrigin;
-	use pezsp_runtime::codec::Encode;
-	use bizinikiwi_test_runtime::ExtrinsicBuilder;
-	use bizinikiwi_test_runtime_client::{self, prelude::*, TestClientBuilder};
 
 	#[tokio::test]
 	async fn undecodable_message() {
@@ -503,7 +503,9 @@ mod tests {
 								0x70,
 								cid::multihash::Multihash::wrap(
 									u64::from(cid::multihash::Code::Blake2b256),
-									&pezsp_crypto_hashing::blake2_256(&ext.encode()[pattern_index..]),
+									&pezsp_crypto_hashing::blake2_256(
+										&ext.encode()[pattern_index..],
+									),
 								)
 								.unwrap(),
 							)

@@ -27,7 +27,8 @@ use crate::{
 		AllowEvmBytecode, DebugFlag, ExtBuilder, RuntimeOrigin, Test,
 	},
 	tracing::trace,
-	Code, Config, Error, EthBlockBuilderFirstValues, GenesisConfig, Origin, Pezpallet, PristineCode,
+	Code, Config, Error, EthBlockBuilderFirstValues, GenesisConfig, Origin, Pezpallet,
+	PristineCode,
 };
 use alloy_core::sol_types::{SolCall, SolInterface};
 use pezframe_support::{

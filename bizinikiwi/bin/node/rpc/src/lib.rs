@@ -135,7 +135,11 @@ where
 		+ Send
 		+ 'static,
 	C::Api: bizinikiwi_frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
-	C::Api: pezmmr_rpc::MmrRuntimeApi<Block, <Block as pezsp_runtime::traits::Block>::Hash, BlockNumber>,
+	C::Api: pezmmr_rpc::MmrRuntimeApi<
+		Block,
+		<Block as pezsp_runtime::traits::Block>::Hash,
+		BlockNumber,
+	>,
 	C::Api: pezpallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
 	C::Api: BabeApi<Block>,
 	C::Api: BlockBuilder<Block>,
@@ -146,6 +150,8 @@ where
 	AuthorityId: AuthorityIdBound,
 	<AuthorityId as RuntimeAppPublic>::Signature: Send + Sync,
 {
+	use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
+	use bizinikiwi_state_trie_migration_rpc::{StateMigration, StateMigrationApiServer};
 	use pezmmr_rpc::{Mmr, MmrApiServer};
 	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 	use pezsc_consensus_babe_rpc::{Babe, BabeApiServer};
@@ -157,8 +163,6 @@ where
 		statement::StatementApiServer,
 	};
 	use pezsc_sync_state_rpc::{SyncState, SyncStateApiServer};
-	use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
-	use bizinikiwi_state_trie_migration_rpc::{StateMigration, StateMigrationApiServer};
 
 	let mut io = RpcModule::new(());
 

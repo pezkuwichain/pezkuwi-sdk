@@ -20,6 +20,8 @@
 
 pub mod fatp_common;
 
+use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
+use bizinikiwi_test_runtime_transaction_pool::uxt;
 use fatp_common::{
 	finalized_block_event, invalid_hash, new_best_block_event, pool, TestPoolBuilder, LOG_TARGET,
 	SOURCE,
@@ -31,8 +33,6 @@ use pezsc_transaction_pool_api::{
 	MaintainedTransactionPool, TransactionPool, TransactionStatus,
 };
 use pezsp_runtime::transaction_validity::{InvalidTransaction, TransactionValidityError};
-use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
-use bizinikiwi_test_runtime_transaction_pool::uxt;
 use tracing::debug;
 
 #[test]

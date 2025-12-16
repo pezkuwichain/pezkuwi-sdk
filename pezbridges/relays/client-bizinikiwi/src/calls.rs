@@ -17,8 +17,8 @@
 //! Basic runtime calls.
 
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_std::{boxed::Box, vec::Vec};
+use scale_info::TypeInfo;
 
 use xcm::{VersionedLocation, VersionedXcm};
 

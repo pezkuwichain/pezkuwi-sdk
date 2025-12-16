@@ -377,7 +377,8 @@ pub fn setup_alias_account(
 	});
 	let other_tx_ext = (pezframe_system::CheckNonce::<Test>::from(0),);
 	// Here we simply ignore implicit as they are null.
-	let msg = (&EXTENSION_VERSION, &call, &other_tx_ext).using_encoded(pezsp_io::hashing::blake2_256);
+	let msg =
+		(&EXTENSION_VERSION, &call, &other_tx_ext).using_encoded(pezsp_io::hashing::blake2_256);
 	let (proof, _alias) =
 		Simple::create(commitment, secret, &context, &msg).expect("proof creation failed");
 	let tx_ext = (

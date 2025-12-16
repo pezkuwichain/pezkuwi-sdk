@@ -326,6 +326,12 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use bizinikiwi_test_runtime_client::{
+		runtime::{
+			bizinikiwi_test_pallet::pezpallet::Call as PalletCall, ExtrinsicBuilder, RuntimeCall,
+		},
+		ClientBlockImportExt, DefaultTestClientBuilderExt, TestClientBuilderExt,
+	};
 	use futures::executor::block_on;
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsc_client_api::Backend as _;
@@ -338,12 +344,6 @@ mod tests {
 	use pezsp_consensus::BlockOrigin;
 	use pezsp_runtime::traits::Block as BlockT;
 	use std::{collections::HashSet, sync::Arc};
-	use bizinikiwi_test_runtime_client::{
-		runtime::{
-			bizinikiwi_test_pallet::pezpallet::Call as PalletCall, ExtrinsicBuilder, RuntimeCall,
-		},
-		ClientBlockImportExt, DefaultTestClientBuilderExt, TestClientBuilderExt,
-	};
 
 	struct TestNetwork();
 

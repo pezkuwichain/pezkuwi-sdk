@@ -81,12 +81,12 @@ pub(crate) fn verify_with_validator_set<'a, Block: BlockT, AuthorityId: Authorit
 
 #[cfg(test)]
 pub(crate) mod tests {
+	use bizinikiwi_test_runtime_client::runtime::Block;
 	use codec::Encode;
 	use pezsp_consensus_beefy::{
 		ecdsa_crypto, known_payloads, test_utils::Keyring, Commitment, Payload, SignedCommitment,
 		VersionedFinalityProof,
 	};
-	use bizinikiwi_test_runtime_client::runtime::Block;
 
 	use super::*;
 	use crate::tests::make_beefy_ids;

@@ -26,7 +26,6 @@ use pezsc_client_api::HeaderBackend;
 use pezsc_consensus::import_queue::{
 	BlockImportError, BlockImportStatus, ImportQueue, IncomingBlock, Link,
 };
-use serde_json::{de::IoRead as JsonIoRead, Deserializer, StreamDeserializer};
 use pezsp_consensus::BlockOrigin;
 use pezsp_runtime::{
 	generic::SignedBlock,
@@ -34,6 +33,7 @@ use pezsp_runtime::{
 		Block as BlockT, CheckedDiv, Header, MaybeSerializeDeserialize, NumberFor, Saturating, Zero,
 	},
 };
+use serde_json::{de::IoRead as JsonIoRead, Deserializer, StreamDeserializer};
 use std::{
 	io::Read,
 	pin::Pin,

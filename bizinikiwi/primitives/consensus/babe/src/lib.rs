@@ -28,10 +28,10 @@ pub mod inherents;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
+use pezsp_runtime::{traits::Header, ConsensusEngineId, RuntimeDebug};
 use scale_info::TypeInfo;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-use pezsp_runtime::{traits::Header, ConsensusEngineId, RuntimeDebug};
 
 use crate::digests::{NextConfigDescriptor, NextEpochDescriptor};
 

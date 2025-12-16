@@ -75,7 +75,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezsnowbridge_pezpallet_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// Send messages to Ethereum and add additional relayer rewards if deposited
 		type OutboundQueue: SendMessage + AddTip;
 		/// Add to the relayer reward for a specific message

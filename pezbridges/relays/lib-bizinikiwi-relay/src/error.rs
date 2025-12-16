@@ -16,9 +16,9 @@
 
 //! Relay errors.
 
-use relay_bizinikiwi_client as client;
 use pezsp_consensus_grandpa::AuthorityList;
 use pezsp_runtime::traits::MaybeDisplay;
+use relay_bizinikiwi_client as client;
 use std::fmt::Debug;
 use thiserror::Error;
 

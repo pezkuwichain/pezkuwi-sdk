@@ -43,17 +43,17 @@ use pezkuwi_primitives::{
 	ApprovalVoteMultipleCandidates, CandidateEvent, CandidateHash, CandidateIndex, CoreIndex, Hash,
 	SessionInfo, Slot, ValidatorId, ValidatorIndex, ASSIGNMENT_KEY_TYPE_ID,
 };
-use rand::{seq::SliceRandom, RngCore, SeedableRng};
-use rand_chacha::ChaCha20Rng;
-use rand_distr::{Distribution, Normal};
 use pezsc_keystore::LocalKeystore;
 use pezsc_network_types::PeerId;
 use pezsc_service::SpawnTaskHandle;
-use sha1::Digest;
 use pezsp_application_crypto::AppCrypto;
 use pezsp_consensus_babe::SlotDuration;
 use pezsp_keystore::Keystore;
 use pezsp_timestamp::Timestamp;
+use rand::{seq::SliceRandom, RngCore, SeedableRng};
+use rand_chacha::ChaCha20Rng;
+use rand_distr::{Distribution, Normal};
+use sha1::Digest;
 use std::{
 	cmp::max,
 	collections::{BTreeMap, HashSet},

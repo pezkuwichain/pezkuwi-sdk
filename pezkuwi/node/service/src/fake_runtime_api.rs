@@ -19,7 +19,6 @@
 //! These are used to provide a type that implements these runtime APIs without requiring to import
 //! the native runtimes.
 
-use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 use pezkuwi_primitives::{
 	runtime_api, slashing, AccountId, AuthorityDiscoveryId, Balance, Block, BlockNumber,
 	CandidateCommitments, CandidateEvent, CandidateHash,
@@ -29,6 +28,7 @@ use pezkuwi_primitives::{
 	ScrapedOnChainVotes, SessionIndex, SessionInfo, ValidationCode, ValidationCodeHash,
 	ValidatorId, ValidatorIndex, ValidatorSignature,
 };
+use pezpallet_transaction_payment::{FeeDetails, RuntimeDispatchInfo};
 use pezsp_consensus_beefy::ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature};
 use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
 

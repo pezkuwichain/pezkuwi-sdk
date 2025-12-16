@@ -26,8 +26,8 @@ use crate::{
 use codec::{Decode, Encode};
 use futures::{channel::oneshot, stream::StreamExt};
 use log::{debug, trace};
-use prost::Message;
 use pezsc_network_types::PeerId;
+use prost::Message;
 use schnellru::{ByLength, LruMap};
 
 use pezsc_client_api::{BlockBackend, ProofProvider};

@@ -27,8 +27,8 @@ pub use stats::{StatSelect, Stats};
 pub use weight_params::WeightParams;
 
 use clap::Args;
-use rand::prelude::*;
 use pezsc_sysinfo::gather_sysinfo;
+use rand::prelude::*;
 use serde::Serialize;
 
 /// A Handlebars helper to add an underscore after every 3rd character,

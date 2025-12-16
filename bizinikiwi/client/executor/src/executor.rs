@@ -573,8 +573,9 @@ pub struct NativeElseWasmExecutor<D: NativeExecutionDispatch> {
 	/// Native runtime version info.
 	native_version: NativeVersion,
 	/// Fallback wasm executor.
-	wasm:
-		WasmExecutor<ExtendedHostFunctions<pezsp_io::BizinikiwiHostFunctions, D::ExtendHostFunctions>>,
+	wasm: WasmExecutor<
+		ExtendedHostFunctions<pezsp_io::BizinikiwiHostFunctions, D::ExtendHostFunctions>,
+	>,
 
 	use_native: bool,
 }
@@ -745,7 +746,9 @@ impl<D: NativeExecutionDispatch> Clone for NativeElseWasmExecutor<D> {
 }
 
 #[allow(deprecated)]
-impl<D: NativeExecutionDispatch> pezsp_core::traits::ReadRuntimeVersion for NativeElseWasmExecutor<D> {
+impl<D: NativeExecutionDispatch> pezsp_core::traits::ReadRuntimeVersion
+	for NativeElseWasmExecutor<D>
+{
 	fn read_runtime_version(
 		&self,
 		wasm_code: &[u8],

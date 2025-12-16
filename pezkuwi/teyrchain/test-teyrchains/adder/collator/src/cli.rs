@@ -100,7 +100,10 @@ impl BizinikiwiCli for Cli {
 		"adder-collator".into()
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		let id = if id.is_empty() { "pezkuwichain" } else { id };
 		Ok(match id {
 			"pezkuwichain-staging" =>

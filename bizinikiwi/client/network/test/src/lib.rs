@@ -36,6 +36,11 @@ use std::{
 	time::Duration,
 };
 
+use bizinikiwi_test_runtime_client::Sr25519Keyring;
+pub use bizinikiwi_test_runtime_client::{
+	runtime::{Block, ExtrinsicBuilder, Hash, Header, Transfer},
+	TestClient, TestClientBuilder, TestClientBuilderExt,
+};
 use futures::{future::BoxFuture, pin_mut, prelude::*};
 use libp2p::PeerId;
 use log::trace;
@@ -92,11 +97,6 @@ use pezsp_runtime::{
 	generic::BlockId,
 	traits::{Block as BlockT, Header as HeaderT, NumberFor, Zero},
 	Justification, Justifications,
-};
-use bizinikiwi_test_runtime_client::Sr25519Keyring;
-pub use bizinikiwi_test_runtime_client::{
-	runtime::{Block, ExtrinsicBuilder, Hash, Header, Transfer},
-	TestClient, TestClientBuilder, TestClientBuilderExt,
 };
 use tokio::time::timeout;
 

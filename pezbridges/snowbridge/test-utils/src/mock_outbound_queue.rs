@@ -20,7 +20,9 @@ impl SendMessage for MockOkOutboundQueue {
 		Ok(())
 	}
 
-	fn deliver(_: Self::Ticket) -> Result<H256, pezsnowbridge_outbound_queue_primitives::SendError> {
+	fn deliver(
+		_: Self::Ticket,
+	) -> Result<H256, pezsnowbridge_outbound_queue_primitives::SendError> {
 		Ok(H256::zero())
 	}
 }
@@ -55,7 +57,9 @@ impl SendMessageV1 for MockOkOutboundQueueV1 {
 		Ok(((), Fee::from((0, 0))))
 	}
 
-	fn deliver(_: Self::Ticket) -> Result<H256, pezsnowbridge_outbound_queue_primitives::SendError> {
+	fn deliver(
+		_: Self::Ticket,
+	) -> Result<H256, pezsnowbridge_outbound_queue_primitives::SendError> {
 		Ok(H256::zero())
 	}
 }

@@ -32,11 +32,11 @@ use pezkuwi_primitives::{
 	SessionIndex,
 };
 use pezkuwi_teyrchain_primitives::primitives::{HorizontalMessages, IsSystem};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AccountIdConversion, BlakeTwo256, Hash as HashT, UniqueSaturatedInto, Zero},
 	ArithmeticError,
 };
+use scale_info::TypeInfo;
 
 pub use pezpallet::*;
 
@@ -173,8 +173,8 @@ pub(crate) enum HrmpWatermarkAcceptanceErr<BlockNumber> {
 	LandsOnBlockWithNoMessages { new_watermark: BlockNumber },
 }
 
-/// An error returned by [`Pezpallet::check_outbound_hrmp`] that indicates an acceptance criteria check
-/// didn't pass.
+/// An error returned by [`Pezpallet::check_outbound_hrmp`] that indicates an acceptance criteria
+/// check didn't pass.
 pub(crate) enum OutboundHrmpAcceptanceErr {
 	MoreMessagesThanPermitted { sent: u32, permitted: u32 },
 	NotSorted { idx: u32 },
@@ -260,7 +260,8 @@ pub mod pezpallet {
 	{
 		/// The outer event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type RuntimeOrigin: From<crate::Origin>
 			+ From<<Self as pezframe_system::Config>::RuntimeOrigin>

@@ -76,7 +76,7 @@ pezframe_support::construct_runtime!(
 #[cfg(feature = "experimental")]
 #[test]
 fn module_error_outer_enum_expand_explicit() {
-	use common::outer_enums::{pezpallet, pallet2};
+	use common::outer_enums::{pallet2, pezpallet};
 	// The Runtime has *all* parts explicitly defined.
 
 	// Check that all error types are propagated

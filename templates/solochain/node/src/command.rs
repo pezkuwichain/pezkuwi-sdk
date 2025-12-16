@@ -4,10 +4,10 @@ use crate::{
 	cli::{Cli, Subcommand},
 	service,
 };
+use pez_solochain_template_runtime::{Block, EXISTENTIAL_DEPOSIT};
 use pezframe_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, BIZINIKIWI_REFERENCE_HARDWARE};
 use pezsc_cli::BizinikiwiCli;
 use pezsc_service::PartialComponents;
-use pez_solochain_template_runtime::{Block, EXISTENTIAL_DEPOSIT};
 use pezsp_keyring::Sr25519Keyring;
 
 impl BizinikiwiCli for Cli {

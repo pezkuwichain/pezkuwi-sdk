@@ -42,7 +42,6 @@ use pezframe_support::{
 	BoundedSlice,
 };
 use pezframe_system::pezpallet_prelude::*;
-use pezpallet_message_queue::OnQueueChanged;
 use pezkuwi_primitives::{
 	effective_minimum_backing_votes, skip_ump_signals, supermajority_threshold, well_known_keys,
 	BackedCandidate, CandidateCommitments, CandidateDescriptorV2 as CandidateDescriptor,
@@ -51,8 +50,9 @@ use pezkuwi_primitives::{
 	Id as ParaId, SignedAvailabilityBitfields, SigningContext, UpwardMessage, ValidatorId,
 	ValidatorIndex, ValidityAttestation,
 };
-use scale_info::TypeInfo;
+use pezpallet_message_queue::OnQueueChanged;
 use pezsp_runtime::{traits::One, DispatchError, SaturatedConversion, Saturating};
+use scale_info::TypeInfo;
 
 pub use pezpallet::*;
 
@@ -289,7 +289,8 @@ pub mod pezpallet {
 		+ scheduler::Config
 	{
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type DisputesHandler: disputes::DisputesHandler<BlockNumberFor<Self>>;
 		type RewardValidators: RewardValidators;
 

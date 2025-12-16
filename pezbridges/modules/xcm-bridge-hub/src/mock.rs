@@ -22,9 +22,9 @@ use bp_messages::{
 	target_chain::{DispatchMessage, MessageDispatch},
 	ChainWithMessages, HashedLaneId, MessageNonce,
 };
-use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, HashOf};
 use bp_xcm_bridge_hub::{BridgeId, LocalXcmChannelManager};
 use codec::{Decode, Encode};
+use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, HashOf};
 use pezframe_support::{
 	assert_ok, derive_impl, parameter_types,
 	traits::{EnsureOrigin, Equals, Everything, Get, OriginTrait},
@@ -276,8 +276,8 @@ thread_local! {
 
 /// The `SendXcm` implementation directly executes XCM using `XcmExecutor`.
 ///
-/// We ensure that the `ExportMessage` produced by `pezpallet_xcm_bridge_hub_router` is compatible with
-/// the `ExportXcm` implementation of `pezpallet_xcm_bridge_hub`.
+/// We ensure that the `ExportMessage` produced by `pezpallet_xcm_bridge_hub_router` is compatible
+/// with the `ExportXcm` implementation of `pezpallet_xcm_bridge_hub`.
 ///
 /// Note: The crucial part is that `ExportMessage` is processed by `XcmExecutor`, which calls the
 /// `ExportXcm` implementation of `pezpallet_xcm_bridge_hub` as `MessageExporter`.
@@ -663,7 +663,9 @@ impl MessageDispatch for TestMessageDispatch {
 /// Run pezpallet test.
 pub fn run_test<T>(test: impl FnOnce() -> T) -> T {
 	pezsp_io::TestExternalities::new(
-		pezframe_system::GenesisConfig::<TestRuntime>::default().build_storage().unwrap(),
+		pezframe_system::GenesisConfig::<TestRuntime>::default()
+			.build_storage()
+			.unwrap(),
 	)
 	.execute_with(test)
 }

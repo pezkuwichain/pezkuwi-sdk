@@ -24,8 +24,8 @@ use crate::{
 	Pezpallet, RuntimeCosts,
 };
 use core::ops::{ControlFlow, Range};
-use revm::interpreter::interpreter_action::CallScheme;
 use pezsp_core::{H160, U256};
+use revm::interpreter::interpreter_action::CallScheme;
 
 /// Gets memory input and output ranges for call instructions.
 pub fn get_memory_in_and_out_ranges<'a, E: Ext>(

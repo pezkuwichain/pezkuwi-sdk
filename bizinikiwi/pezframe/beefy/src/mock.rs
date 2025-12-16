@@ -26,7 +26,6 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::HeaderFor;
 use pezpallet_session::historical as pezpallet_session_historical;
-use scale_info::TypeInfo;
 use pezsp_core::{crypto::KeyTypeId, ConstBool, ConstU128};
 use pezsp_runtime::{
 	app_crypto::ecdsa::Public,
@@ -38,10 +37,13 @@ use pezsp_runtime::{
 };
 use pezsp_staking::{EraIndex, SessionIndex};
 use pezsp_state_machine::BasicExternalities;
+use scale_info::TypeInfo;
 
 use crate as pezpallet_beefy;
 
-pub use pezsp_consensus_beefy::{ecdsa_crypto::AuthorityId as BeefyId, ConsensusLog, BEEFY_ENGINE_ID};
+pub use pezsp_consensus_beefy::{
+	ecdsa_crypto::AuthorityId as BeefyId, ConsensusLog, BEEFY_ENGINE_ID,
+};
 use pezsp_consensus_beefy::{AncestryHelper, AncestryHelperWeightInfo, Commitment};
 
 impl_opaque_keys! {
@@ -304,7 +306,9 @@ impl ExtBuilder {
 
 		// controllers are same as stash
 		let stakers: Vec<_> = (0..self.authorities.len())
-			.map(|i| (i as u64, i as u64, 10_000, pezpallet_staking::StakerStatus::<u64>::Validator))
+			.map(|i| {
+				(i as u64, i as u64, 10_000, pezpallet_staking::StakerStatus::<u64>::Validator)
+			})
 			.collect();
 
 		let staking_config = pezpallet_staking::GenesisConfig::<Test> {

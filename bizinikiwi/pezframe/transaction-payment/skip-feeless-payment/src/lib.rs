@@ -22,15 +22,15 @@
 //! ## Overview
 //!
 //! It does this by wrapping an existing [`TransactionExtension`] implementation (e.g.
-//! [`pezpallet-transaction-payment`]) and checking if the dispatchable is feeless before applying the
-//! wrapped extension. If the dispatchable is indeed feeless, the extension is skipped and a custom
-//! event is emitted instead. Otherwise, the extension is applied as usual.
+//! [`pezpallet-transaction-payment`]) and checking if the dispatchable is feeless before applying
+//! the wrapped extension. If the dispatchable is indeed feeless, the extension is skipped and a
+//! custom event is emitted instead. Otherwise, the extension is applied as usual.
 //!
 //!
 //! ## Integration
 //!
-//! This pezpallet wraps an existing transaction payment pezpallet. This means you should both pallets
-//! in your [`construct_runtime`](pezframe_support::construct_runtime) macro and
+//! This pezpallet wraps an existing transaction payment pezpallet. This means you should both
+//! pallets in your [`construct_runtime`](pezframe_support::construct_runtime) macro and
 //! include this pezpallet's [`TransactionExtension`] ([`SkipCheckIfFeeless`]) that would accept the
 //! existing one as an argument.
 
@@ -45,7 +45,6 @@ use pezframe_support::{
 	traits::{IsType, OriginTrait},
 	weights::Weight,
 };
-use scale_info::{StaticTypeInfo, TypeInfo};
 use pezsp_runtime::{
 	traits::{
 		DispatchInfoOf, DispatchOriginOf, Implication, PostDispatchInfoOf, TransactionExtension,
@@ -53,6 +52,7 @@ use pezsp_runtime::{
 	},
 	transaction_validity::TransactionValidityError,
 };
+use scale_info::{StaticTypeInfo, TypeInfo};
 
 #[cfg(test)]
 mod mock;
@@ -69,7 +69,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
 	#[pezpallet::pezpallet]

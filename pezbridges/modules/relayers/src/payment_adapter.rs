@@ -26,8 +26,8 @@ use bp_messages::{
 };
 pub use bp_relayers::PayRewardFromAccount;
 use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
-use pezbp_runtime::Chain;
 use core::{marker::PhantomData, ops::RangeInclusive};
+use pezbp_runtime::Chain;
 use pezframe_support::{pezsp_runtime::SaturatedConversion, traits::Get};
 use pezpallet_bridge_messages::LaneIdOf;
 use pezsp_arithmetic::traits::{Saturating, Zero};
@@ -55,8 +55,10 @@ where
 		confirmation_relayer: &T::AccountId,
 		received_range: &RangeInclusive<bp_messages::MessageNonce>,
 	) -> MessageNonce {
-		let relayers_rewards =
-			bp_messages::calc_relayers_rewards::<T::AccountId>(pez_messages_relayers, received_range);
+		let relayers_rewards = bp_messages::calc_relayers_rewards::<T::AccountId>(
+			pez_messages_relayers,
+			received_range,
+		);
 		let rewarded_relayers = relayers_rewards.len();
 
 		register_relayers_rewards::<T, RI, MI>(

@@ -22,8 +22,8 @@ use pezframe_support::traits::{
 	tokens::imbalance::ResolveTo,
 	Contains, ContainsPair, Imbalance, OnUnbalanced,
 };
-use pezpallet_treasury::TreasuryAccountId;
 use pezkuwi_primitives::Balance;
+use pezpallet_treasury::TreasuryAccountId;
 use pezsp_runtime::{traits::TryConvert, Perquintill, RuntimeDebug};
 use xcm::VersionedLocation;
 
@@ -61,7 +61,9 @@ where
 				// for tips, if any, 100% to author
 				tips.merge_into(&mut split.1);
 			}
-			ResolveTo::<TreasuryAccountId<R>, pezpallet_balances::Pezpallet<R>>::on_unbalanced(split.0);
+			ResolveTo::<TreasuryAccountId<R>, pezpallet_balances::Pezpallet<R>>::on_unbalanced(
+				split.0,
+			);
 			<ToAuthor<R> as OnUnbalanced<_>>::on_unbalanced(split.1);
 		}
 	}

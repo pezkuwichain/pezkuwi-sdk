@@ -29,12 +29,12 @@ use pezkuwi_node_subsystem::messages::ReportPeerMessage;
 use pezkuwi_node_subsystem_test_helpers::make_subsystem_context;
 use pezkuwi_node_subsystem_util::TimeoutExt;
 use pezkuwi_primitives::{AvailabilityBitfield, Signed, ValidatorIndex};
-use rand_chacha::ChaCha12Rng;
 use pezsp_application_crypto::AppCrypto;
 use pezsp_authority_discovery::AuthorityPair as AuthorityDiscoveryPair;
 use pezsp_core::Pair as PairT;
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_keystore::{testing::MemoryKeystore, Keystore, KeystorePtr};
+use rand_chacha::ChaCha12Rng;
 
 use std::{sync::Arc, time::Duration};
 

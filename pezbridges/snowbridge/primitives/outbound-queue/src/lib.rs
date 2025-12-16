@@ -9,9 +9,9 @@ pub mod v2;
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::PalletError;
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned};
 use pezsp_core::RuntimeDebug;
+use scale_info::TypeInfo;
 
 pub use pezsnowbridge_verification_primitives::*;
 

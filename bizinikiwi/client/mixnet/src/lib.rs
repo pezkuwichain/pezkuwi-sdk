@@ -36,7 +36,7 @@ mod sync_with_runtime;
 
 pub use self::{
 	api::{Api, ApiBackend},
-	config::{Config, CoreConfig, BizinikiwiConfig},
+	config::{BizinikiwiConfig, Config, CoreConfig},
 	error::{Error, RemoteErr},
 	protocol::{peers_set_config, protocol_name},
 	run::run,

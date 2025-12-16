@@ -165,7 +165,6 @@ mod execution {
 	use super::*;
 	use codec::Codec;
 	use hash_db::Hasher;
-	use smallvec::SmallVec;
 	use pezsp_core::{
 		hexdisplay::HexDisplay,
 		storage::{ChildInfo, ChildType, PrefixedStorageKey},
@@ -173,6 +172,7 @@ mod execution {
 	};
 	use pezsp_externalities::Extensions;
 	use pezsp_trie::PrefixedMemoryDB;
+	use smallvec::SmallVec;
 	use std::collections::{HashMap, HashSet};
 
 	pub(crate) type CallResult<E> = Result<Vec<u8>, E>;

@@ -305,8 +305,8 @@ mod test {
 	use super::*;
 	use crate::mock::*;
 	use alloc::borrow::Cow;
-	use pezframe_support::Hashable;
 	use bizinikiwi_test_utils::assert_eq_uvec;
+	use pezframe_support::Hashable;
 
 	#[test]
 	#[allow(deprecated)]

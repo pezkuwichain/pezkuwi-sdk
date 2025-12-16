@@ -1,9 +1,9 @@
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned, Zero};
 use pezsp_core::U256;
 use pezsp_runtime::{FixedU128, RuntimeDebug};
 use pezsp_std::prelude::*;
+use scale_info::TypeInfo;
 
 #[derive(
 	Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo,

@@ -16,8 +16,8 @@
 
 use crate::imports::*;
 
-/// CollectivesZagros dispatches `pezpallet_xcm::send` with `OriginKind:Xcm` to the dest with encoded
-/// whitelist call.
+/// CollectivesZagros dispatches `pezpallet_xcm::send` with `OriginKind:Xcm` to the dest with
+/// encoded whitelist call.
 #[cfg(test)]
 pub fn collectives_send_whitelist(
 	dest: Location,

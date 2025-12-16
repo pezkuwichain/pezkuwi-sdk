@@ -60,7 +60,8 @@ pub fn migrate<T: pezpallet_session_historical::Config, P: GetStorageVersion + P
 	);
 
 	if on_chain_storage_version < 1 {
-		let storage_prefix = pezpallet_session_historical::HistoricalSessions::<T>::storage_prefix();
+		let storage_prefix =
+			pezpallet_session_historical::HistoricalSessions::<T>::storage_prefix();
 		pezframe_support::storage::migration::move_storage_from_pallet(
 			storage_prefix,
 			OLD_PREFIX.as_bytes(),
@@ -100,7 +101,8 @@ pub fn pre_migrate<
 
 	let storage_prefix_historical_sessions =
 		pezpallet_session_historical::HistoricalSessions::<T>::storage_prefix();
-	let storage_prefix_stored_range = pezpallet_session_historical::StoredRange::<T>::storage_prefix();
+	let storage_prefix_stored_range =
+		pezpallet_session_historical::StoredRange::<T>::storage_prefix();
 
 	log_migration("pre-migration", storage_prefix_historical_sessions, OLD_PREFIX, new_pallet_name);
 	log_migration("pre-migration", storage_prefix_stored_range, OLD_PREFIX, new_pallet_name);
@@ -136,7 +138,8 @@ pub fn post_migrate<
 
 	let storage_prefix_historical_sessions =
 		pezpallet_session_historical::HistoricalSessions::<T>::storage_prefix();
-	let storage_prefix_stored_range = pezpallet_session_historical::StoredRange::<T>::storage_prefix();
+	let storage_prefix_stored_range =
+		pezpallet_session_historical::StoredRange::<T>::storage_prefix();
 
 	log_migration(
 		"post-migration",

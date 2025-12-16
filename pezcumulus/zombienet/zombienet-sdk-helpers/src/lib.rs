@@ -3,8 +3,8 @@
 
 use anyhow::anyhow;
 use codec::{Compact, Decode};
-use pezcumulus_primitives_core::{relay_chain, rpsr_digest::RPSR_CONSENSUS_ID};
 use futures::stream::StreamExt;
+use pezcumulus_primitives_core::{relay_chain, rpsr_digest::RPSR_CONSENSUS_ID};
 use pezkuwi_primitives::{CandidateReceiptV2, Id as ParaId};
 use std::{
 	cmp::max,
@@ -18,7 +18,7 @@ use tokio::{
 use zombienet_sdk::subxt::{
 	self,
 	blocks::Block,
-	config::{polkadot::PolkadotExtrinsicParamsBuilder, bizinikiwi::DigestItem},
+	config::{bizinikiwi::DigestItem, polkadot::PolkadotExtrinsicParamsBuilder},
 	dynamic::Value,
 	events::Events,
 	ext::scale_value::value,

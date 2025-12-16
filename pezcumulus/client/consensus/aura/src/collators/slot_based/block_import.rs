@@ -133,9 +133,9 @@ where
 				)));
 			}
 
-			params.state_action = StateAction::ApplyChanges(pezsc_consensus::StorageChanges::Changes(
-				gen_storage_changes,
-			));
+			params.state_action = StateAction::ApplyChanges(
+				pezsc_consensus::StorageChanges::Changes(gen_storage_changes),
+			);
 
 			let _ = self.sender.unbounded_send((block, storage_proof));
 		}

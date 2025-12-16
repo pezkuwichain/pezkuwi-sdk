@@ -33,7 +33,6 @@ use crate::{
 	LOG_TARGET,
 };
 use log::{debug, error, info, warn};
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{BlockBackend, ProofProvider};
 use pezsc_consensus::{BlockImportError, BlockImportStatus};
 use pezsc_network::ProtocolName;
@@ -41,6 +40,7 @@ use pezsc_network_common::sync::{message::BlockAnnounce, SyncMode};
 use pezsc_network_types::PeerId;
 use pezsp_blockchain::{Error as ClientError, HeaderBackend, HeaderMetadata};
 use pezsp_runtime::traits::{Block as BlockT, Header, NumberFor};
+use prometheus_endpoint::Registry;
 use std::{any::Any, collections::HashMap, sync::Arc};
 
 /// Corresponding `ChainSync` mode.

@@ -38,8 +38,8 @@
 //! ```
 
 use async_trait::async_trait;
-use serde::de::DeserializeOwned;
 use pezsp_runtime::traits::{Block as BlockT, Header as HeaderT};
+use serde::de::DeserializeOwned;
 use std::collections::VecDeque;
 
 pub use jsonrpsee::{

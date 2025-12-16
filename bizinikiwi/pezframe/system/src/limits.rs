@@ -29,8 +29,8 @@ use pezframe_support::{
 	dispatch::{DispatchClass, OneOrMany, PerDispatchClass},
 	weights::{constants, Weight},
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{traits::Bounded, Perbill, RuntimeDebug};
+use scale_info::TypeInfo;
 
 /// Block length limit configuration.
 #[derive(RuntimeDebug, Clone, codec::Encode, codec::Decode, TypeInfo)]

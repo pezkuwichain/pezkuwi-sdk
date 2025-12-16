@@ -127,12 +127,12 @@ use pezkuwi_primitives::{
 	ConsensusLog, HeadData, Id as ParaId, PvfCheckStatement, SessionIndex, UpgradeGoAhead,
 	UpgradeRestriction, ValidationCode, ValidationCodeHash, ValidatorSignature, MIN_CODE_SIZE,
 };
-use scale_info::{Type, TypeInfo};
 use pezsp_core::RuntimeDebug;
 use pezsp_runtime::{
 	traits::{AppVerify, One, Saturating},
 	DispatchResult, SaturatedConversion,
 };
+use scale_info::{Type, TypeInfo};
 
 use serde::{Deserialize, Serialize};
 
@@ -664,7 +664,8 @@ pub mod pezpallet {
 		+ pezframe_system::offchain::CreateBare<Call<Self>>
 	{
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		#[pezpallet::constant]
 		type UnsignedPriority: Get<TransactionPriority>;
@@ -706,8 +707,9 @@ pub mod pezpallet {
 
 		/// The origin that can authorize [`Pezpallet::authorize_force_set_current_code_hash`].
 		///
-		/// In the end this allows [`Pezpallet::apply_authorized_force_set_current_code`] to force set
-		/// the current code without paying any fee. So, the origin should be chosen with care.
+		/// In the end this allows [`Pezpallet::apply_authorized_force_set_current_code`] to force
+		/// set the current code without paying any fee. So, the origin should be chosen with
+		/// care.
 		type AuthorizeCurrentCodeOrigin: EnsureOriginWithArg<Self::RuntimeOrigin, ParaId>;
 	}
 
@@ -2420,7 +2422,11 @@ impl<T: Config> Pezpallet<T> {
 	fn do_force_set_current_code_update(para: ParaId, new_code: ValidationCode) {
 		let new_code_hash = new_code.hash();
 		Self::increase_code_ref(&new_code_hash, &new_code);
-		Self::set_current_code(para, new_code_hash, pezframe_system::Pezpallet::<T>::block_number());
+		Self::set_current_code(
+			para,
+			new_code_hash,
+			pezframe_system::Pezpallet::<T>::block_number(),
+		);
 		Self::deposit_event(Event::CurrentCodeUpdated(para));
 	}
 

@@ -17,7 +17,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion};
-use rand::{distributions::Uniform, rngs::StdRng, Rng, SeedableRng};
 use pezsc_client_api::{
 	Backend as _, BlockImportOperation, NewBlockState, StateBackend, TrieCacheContext,
 };
@@ -27,6 +26,7 @@ use pezsp_runtime::{
 	testing::{Block as RawBlock, Header, MockCallU64, TestXt},
 	StateVersion, Storage,
 };
+use rand::{distributions::Uniform, rngs::StdRng, Rng, SeedableRng};
 use tempfile::TempDir;
 
 pub(crate) type Block = RawBlock<TestXt<MockCallU64, ()>>;

@@ -4614,7 +4614,9 @@ mod withdraw_unbonded {
 			// pool is destroyed.
 			assert!(!Metadata::<T>::contains_key(1));
 			// ensure the pool account is reaped.
-			assert!(!pezframe_system::Account::<T>::contains_key(&Pools::generate_bonded_account(1)));
+			assert!(!pezframe_system::Account::<T>::contains_key(&Pools::generate_bonded_account(
+				1
+			)));
 		})
 	}
 

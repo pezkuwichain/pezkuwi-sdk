@@ -21,8 +21,8 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::EnsureRoot;
-use primitive_types::H256;
 use pezsp_runtime::{traits::IdentityLookup, AccountId32, BuildStorage};
+use primitive_types::H256;
 
 use pezkuwi_runtime_teyrchains::{configuration, origin, shared};
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
@@ -245,7 +245,9 @@ construct_runtime!(
 	}
 );
 
-pub fn kusama_like_with_balances(balances: Vec<(AccountId, Balance)>) -> pezsp_io::TestExternalities {
+pub fn kusama_like_with_balances(
+	balances: Vec<(AccountId, Balance)>,
+) -> pezsp_io::TestExternalities {
 	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
 
 	pezpallet_balances::GenesisConfig::<Runtime> { balances, ..Default::default() }

@@ -34,9 +34,9 @@ use pezpallet_revive::{
 	},
 	EthTransactError,
 };
-use runtime_api::RuntimeApi;
 use pezsp_runtime::traits::Block as BlockT;
 use pezsp_weights::Weight;
+use runtime_api::RuntimeApi;
 use std::{ops::Range, sync::Arc, time::Duration};
 use storage_api::StorageApi;
 use subxt::{
@@ -514,7 +514,10 @@ impl Client {
 	}
 
 	/// Get receipts count per block.
-	pub async fn receipts_count_per_block(&self, block_hash: &BizinikiwiBlockHash) -> Option<usize> {
+	pub async fn receipts_count_per_block(
+		&self,
+		block_hash: &BizinikiwiBlockHash,
+	) -> Option<usize> {
 		self.receipt_provider.receipts_count_per_block(block_hash).await
 	}
 
@@ -710,8 +713,8 @@ impl Client {
 		// This could potentially fail under below circumstances:
 		//  - state has been pruned
 		//  - the block author cannot be obtained from the digest logs (highly unlikely)
-		//  - the node we are targeting has an outdated revive pezpallet (or ETH block functionality is
-		//    disabled)
+		//  - the node we are targeting has an outdated revive pezpallet (or ETH block functionality
+		//    is disabled)
 		match self.runtime_api(block.hash()).eth_block().await {
 			Ok(mut eth_block) => {
 				log::trace!(target: LOG_TARGET, "Ethereum block from runtime API hash {:?}", eth_block.hash);

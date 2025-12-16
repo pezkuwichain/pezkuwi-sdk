@@ -309,9 +309,9 @@ impl<B: BlockT> FusedStream for BlockAnnounceValidator<B> {
 mod tests {
 	use super::*;
 	use crate::block_announce_validator::AllocateSlotForBlockAnnounceValidation;
+	use bizinikiwi_test_runtime_client::runtime::Block;
 	use pezsc_network_types::PeerId;
 	use pezsp_consensus::block_validation::DefaultBlockAnnounceValidator;
-	use bizinikiwi_test_runtime_client::runtime::Block;
 
 	#[test]
 	fn allocate_one_validation_slot() {

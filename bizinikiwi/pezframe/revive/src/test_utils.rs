@@ -23,8 +23,8 @@ pub mod builder;
 pub use pezsp_runtime::AccountId32;
 
 use crate::{BalanceOf, Config};
-use pezframe_support::weights::Weight;
 use hex_literal::hex;
+use pezframe_support::weights::Weight;
 use pezsp_core::H160;
 
 const fn ee_suffix(mut account: [u8; 32]) -> AccountId32 {

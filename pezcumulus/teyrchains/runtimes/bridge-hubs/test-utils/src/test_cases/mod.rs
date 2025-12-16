@@ -31,8 +31,8 @@ use bp_messages::{
 	target_chain::{DispatchMessage, DispatchMessageData, MessageDispatch},
 	LaneState, MessageKey, MessagesOperatingMode, OutboundLaneData,
 };
-use pezbp_runtime::BasicOperatingMode;
 use codec::Encode;
+use pezbp_runtime::BasicOperatingMode;
 use pezframe_support::{
 	assert_ok,
 	dispatch::GetDispatchInfo,
@@ -320,7 +320,9 @@ pub fn handle_export_message_from_system_teyrchain_to_outbound_queue_works<
 	runtime_para_id: u32,
 	sibling_teyrchain_id: u32,
 	unwrap_pallet_bridge_messages_event: Box<
-		dyn Fn(Vec<u8>) -> Option<pezpallet_bridge_messages::Event<Runtime, MessagesPalletInstance>>,
+		dyn Fn(
+			Vec<u8>,
+		) -> Option<pezpallet_bridge_messages::Event<Runtime, MessagesPalletInstance>>,
 	>,
 	export_message_instruction: fn() -> Instruction<XcmConfig::RuntimeCall>,
 	existential_deposit: Option<Asset>,
@@ -409,7 +411,9 @@ pub fn handle_export_message_from_system_teyrchain_to_outbound_queue_works<
 		let mut events = <pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_pallet_bridge_messages_event(e.event.encode()));
-		assert!(events.any(|e| matches!(e, pezpallet_bridge_messages::Event::MessageAccepted { .. })));
+		assert!(
+			events.any(|e| matches!(e, pezpallet_bridge_messages::Event::MessageAccepted { .. }))
+		);
 	})
 }
 
@@ -565,9 +569,8 @@ pub fn message_dispatch_routing_works<
 		let mut events = <pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_pezcumulus_pezpallet_xcmp_queue_event(e.event.encode()));
-		assert!(
-			events.any(|e| matches!(e, pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }))
-		);
+		assert!(events
+			.any(|e| matches!(e, pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. })));
 	})
 }
 
@@ -689,10 +692,13 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 	{
 		run_test::<Runtime, _>(collator_session_key, runtime_para_id, vec![], || {
 			// construct expected bridge configuration
-			let locations = pezpallet_xcm_bridge_hub::Pezpallet::<Runtime, XcmOverBridgePalletInstance>::bridge_locations(
-				expected_source.clone().into(),
-				destination.clone().into(),
-			).expect("valid bridge locations");
+			let locations = pezpallet_xcm_bridge_hub::Pezpallet::<
+				Runtime,
+				XcmOverBridgePalletInstance,
+			>::bridge_locations(
+				expected_source.clone().into(), destination.clone().into()
+			)
+			.expect("valid bridge locations");
 			let expected_lane_id =
 				locations.calculate_lane_id(xcm::latest::VERSION).expect("valid laneId");
 			let lanes_manager = LanesManagerOf::<Runtime, XcmOverBridgePalletInstance>::new();

@@ -142,7 +142,8 @@ where
 				};
 
 				// Adjust gas using actual weight or fallback to initially charged weight
-				let actual_weight = pezframe_support::dispatch::extract_actual_weight(&result, &pre);
+				let actual_weight =
+					pezframe_support::dispatch::extract_actual_weight(&result, &pre);
 				env.adjust_gas(charged_amount, actual_weight);
 
 				result.map(|_| Vec::new()).map_err(|error| {

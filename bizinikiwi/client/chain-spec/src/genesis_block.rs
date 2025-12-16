@@ -106,8 +106,9 @@ impl<Block: BlockT, B: Backend<Block>, E: RuntimeVersionOf> GenesisBlockBuilder<
 		backend: Arc<B>,
 		executor: E,
 	) -> pezsp_blockchain::Result<Self> {
-		let genesis_storage =
-			build_genesis_storage.build_storage().map_err(pezsp_blockchain::Error::Storage)?;
+		let genesis_storage = build_genesis_storage
+			.build_storage()
+			.map_err(pezsp_blockchain::Error::Storage)?;
 		Self::new_with_storage(genesis_storage, commit_genesis_state, backend, executor)
 	}
 

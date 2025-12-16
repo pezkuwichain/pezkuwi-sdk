@@ -18,9 +18,8 @@
 use crate::VoterBagsListInstance;
 use pezframe_election_provider_support::VoteWeight;
 use pezframe_support::{
-	derive_impl,
+	derive_impl, parameter_types,
 	pezpallet_prelude::*,
-	parameter_types,
 	traits::{ConstU64, Nothing, VariantCountOf},
 	PalletId,
 };

@@ -134,9 +134,9 @@ where
 
 #[cfg(test)]
 mod test {
+	use bizinikiwi_test_runtime_client;
 	use pezsp_core::{hash::H256, sr25519, Pair};
 	use pezsp_runtime::testing::{Digest as DigestTest, Header as HeaderTest};
-	use bizinikiwi_test_runtime_client;
 
 	use super::{check_equivocation, MAX_SLOT_CAPACITY, PRUNING_BOUND};
 

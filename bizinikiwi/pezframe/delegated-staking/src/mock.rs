@@ -17,9 +17,8 @@
 
 use crate::{self as delegated_staking, types::AgentLedgerOuter};
 use pezframe_support::{
-	assert_ok, derive_impl,
+	assert_ok, derive_impl, parameter_types,
 	pezpallet_prelude::*,
-	parameter_types,
 	traits::{ConstU64, Currency, VariantCountOf},
 	PalletId,
 };

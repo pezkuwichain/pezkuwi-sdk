@@ -24,22 +24,22 @@ use pezframe_support::{
 	pezpallet_prelude::DispatchResult, weights::Weight, PalletError, StorageHasher, StorageValue,
 };
 use pezframe_system::RawOrigin;
-use scale_info::TypeInfo;
-use serde::{Deserialize, Serialize};
 use pezsp_core::storage::StorageKey;
 use pezsp_runtime::{
 	traits::{BadOrigin, Header as HeaderT, UniqueSaturatedInto},
 	RuntimeDebug,
 };
 use pezsp_std::{fmt::Debug, ops::RangeInclusive, vec, vec::Vec};
+use scale_info::TypeInfo;
+use serde::{Deserialize, Serialize};
 
 pub use chain::{
 	AccountIdOf, AccountPublicOf, BalanceOf, BlockNumberOf, Chain, EncodedOrDecodedCall, HashOf,
 	HasherOf, HeaderOf, NonceOf, SignatureOf, Teyrchain, TeyrchainIdOf, TransactionEraOf,
 	UnderlyingChainOf, UnderlyingChainProvider, __private,
 };
-pub use pezframe_support::storage::storage_prefix as storage_value_final_key;
 use num_traits::{CheckedAdd, CheckedSub, One, SaturatingAdd, Zero};
+pub use pezframe_support::storage::storage_prefix as storage_value_final_key;
 #[cfg(feature = "std")]
 pub use storage_proof::craft_valid_storage_proof;
 #[cfg(feature = "test-helpers")]
@@ -205,8 +205,10 @@ impl<BlockNumber: Copy + UniqueSaturatedInto<u64>, BlockHash: Copy>
 			TransactionEra::Immortal => pezsp_runtime::generic::Era::immortal(),
 			// `unique_saturated_into` is fine here - mortality `u64::MAX` is not something we
 			// expect to see on any chain
-			TransactionEra::Mortal(header_id, period) =>
-				pezsp_runtime::generic::Era::mortal(period as _, header_id.0.unique_saturated_into()),
+			TransactionEra::Mortal(header_id, period) => pezsp_runtime::generic::Era::mortal(
+				period as _,
+				header_id.0.unique_saturated_into(),
+			),
 		}
 	}
 
@@ -437,10 +439,10 @@ pub trait OwnedBridgeModule<T: pezframe_system::Config> {
 		Ok(())
 	}
 
-	/// Pezpallet owner has a right to halt all module operations and then resume it. If it is `None`,
-	/// then there are no direct ways to halt/resume module operations, but other runtime methods
-	/// may still be used to do that (i.e. democracy::referendum to update halt flag directly
-	/// or call the `set_operating_mode`).
+	/// Pezpallet owner has a right to halt all module operations and then resume it. If it is
+	/// `None`, then there are no direct ways to halt/resume module operations, but other runtime
+	/// methods may still be used to do that (i.e. democracy::referendum to update halt flag
+	/// directly or call the `set_operating_mode`).
 	fn module_owner() -> Option<T::AccountId> {
 		Self::OwnerStorage::get()
 	}

@@ -18,7 +18,6 @@
 use crate::Config;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		DispatchInfoOf, Dispatchable, PostDispatchInfoOf, TransactionExtension, ValidateResult,
@@ -27,6 +26,7 @@ use pezsp_runtime::{
 	DispatchResult,
 };
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
 
 /// Reclaim the unused weight using the post dispatch information
 ///

@@ -35,9 +35,9 @@
 //! curator or once the bounty is active or payout is pending, resulting in the slash of the
 //! curator's deposit.
 //!
-//! This pezpallet may opt into using a [`ChildBountyManager`] that enables bounties to be split into
-//! sub-bounties, as children of an established bounty (called the parent in the context of it's
-//! children).
+//! This pezpallet may opt into using a [`ChildBountyManager`] that enables bounties to be split
+//! into sub-bounties, as children of an established bounty (called the parent in the context of
+//! it's children).
 //!
 //! > NOTE: The parent bounty cannot be closed if it has a non-zero number of it has active child
 //! > bounties associated with it.
@@ -232,7 +232,9 @@ pub mod pezpallet {
 	pub struct Pezpallet<T, I = ()>(_);
 
 	#[pezpallet::config]
-	pub trait Config<I: 'static = ()>: pezframe_system::Config + pezpallet_treasury::Config<I> {
+	pub trait Config<I: 'static = ()>:
+		pezframe_system::Config + pezpallet_treasury::Config<I>
+	{
 		/// The amount held on deposit for placing a bounty proposal.
 		#[pezpallet::constant]
 		type BountyDepositBase: Get<BalanceOf<Self, I>>;

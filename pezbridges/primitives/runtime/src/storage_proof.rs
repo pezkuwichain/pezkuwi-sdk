@@ -25,9 +25,9 @@ use pezsp_trie::{
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use hash_db::{HashDB, Hasher, EMPTY_PREFIX};
-use scale_info::TypeInfo;
 #[cfg(feature = "test-helpers")]
 use pezsp_trie::{recorder_ext::RecorderExt, Recorder, TrieDBBuilder, TrieError, TrieHash};
+use scale_info::TypeInfo;
 #[cfg(feature = "test-helpers")]
 use trie_db::{Trie, TrieConfiguration, TrieDBMut};
 
@@ -336,7 +336,8 @@ pub mod tests_for_storage_proof_checker {
 
 		// checking proof against invalid commitment fails
 		assert_eq!(
-			<StorageProofChecker<pezsp_core::Blake2Hasher>>::new(pezsp_core::H256::random(), proof).err(),
+			<StorageProofChecker<pezsp_core::Blake2Hasher>>::new(pezsp_core::H256::random(), proof)
+				.err(),
 			Some(StorageProofError::StorageRootMismatch)
 		);
 	}

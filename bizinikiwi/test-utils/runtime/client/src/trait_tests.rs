@@ -25,6 +25,7 @@ use std::sync::Arc;
 use crate::{
 	BlockBuilderExt, ClientBlockImportExt, Sr25519Keyring, TestClientBuilder, TestClientBuilderExt,
 };
+use bizinikiwi_test_runtime::Transfer;
 use futures::executor::block_on;
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_client_api::{
@@ -33,7 +34,6 @@ use pezsc_client_api::{
 };
 use pezsp_consensus::BlockOrigin;
 use pezsp_runtime::traits::Block as BlockT;
-use bizinikiwi_test_runtime::Transfer;
 
 /// helper to test the `leaves` implementation for various backends
 pub fn test_leaves_for_backend<B: 'static>(backend: Arc<B>)

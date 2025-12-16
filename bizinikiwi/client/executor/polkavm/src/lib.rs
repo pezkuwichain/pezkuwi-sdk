@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use polkavm::{CallError, Caller, Reg};
 use pezsc_executor_common::{
 	error::{Error, WasmError},
 	wasm_runtime::{AllocationStats, WasmInstance, WasmModule},
@@ -24,6 +23,7 @@ use pezsc_executor_common::{
 use pezsp_wasm_interface::{
 	Function, FunctionContext, HostFunctions, Pointer, Value, ValueType, WordSize,
 };
+use polkavm::{CallError, Caller, Reg};
 
 #[repr(transparent)]
 pub struct InstancePre(polkavm::InstancePre<(), String>);
@@ -140,7 +140,11 @@ impl<'r, 'a> FunctionContext for Context<'r, 'a> {
 			.map(|_| ())
 	}
 
-	fn write_memory(&mut self, address: Pointer<u8>, data: &[u8]) -> pezsp_wasm_interface::Result<()> {
+	fn write_memory(
+		&mut self,
+		address: Pointer<u8>,
+		data: &[u8],
+	) -> pezsp_wasm_interface::Result<()> {
 		self.0
 			.instance
 			.write_memory(u32::from(address), data)

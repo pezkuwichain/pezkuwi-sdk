@@ -139,6 +139,7 @@ pub fn load_block_weight<H: Encode, B: AuxStore>(
 mod test {
 	use super::*;
 	use crate::migration::EpochV0;
+	use bizinikiwi_test_runtime_client;
 	use pez_fork_tree::ForkTree;
 	use pezsc_consensus_epochs::{EpochHeader, PersistedEpoch, PersistedEpochHeader};
 	use pezsc_network_test::Block as TestBlock;
@@ -146,7 +147,6 @@ mod test {
 	use pezsp_consensus_babe::AllowedSlots;
 	use pezsp_core::H256;
 	use pezsp_runtime::traits::NumberFor;
-	use bizinikiwi_test_runtime_client;
 
 	#[test]
 	fn load_decode_from_v0_epoch_changes() {

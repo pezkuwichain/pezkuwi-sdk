@@ -22,10 +22,10 @@
 //!
 //! ## Overview
 //!
-//! A simple pezpallet providing a means of placing a linear curve on an account's locked balance. This
-//! pezpallet ensures that there is a lock in place preventing the balance to drop below the *unvested*
-//! amount for any reason other than the ones specified in `UnvestedFundsAllowedWithdrawReasons`
-//! configuration value.
+//! A simple pezpallet providing a means of placing a linear curve on an account's locked balance.
+//! This pezpallet ensures that there is a lock in place preventing the balance to drop below the
+//! *unvested* amount for any reason other than the ones specified in
+//! `UnvestedFundsAllowedWithdrawReasons` configuration value.
 //!
 //! As the amount vested increases over time, the amount unvested reduces. However, locks remain in
 //! place and explicit action is needed on behalf of the user to ensure that the amount locked is
@@ -72,7 +72,6 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		AtLeast32BitUnsigned, BlockNumberProvider, Bounded, Convert, MaybeSerializeDeserialize,
@@ -80,6 +79,7 @@ use pezsp_runtime::{
 	},
 	DispatchError, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 pub use pezpallet::*;
 pub use vesting_info::*;
@@ -87,8 +87,9 @@ pub use weights::WeightInfo;
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
-type MaxLocksOf<T> =
-	<<T as Config>::Currency as LockableCurrency<<T as pezframe_system::Config>::AccountId>>::MaxLocks;
+type MaxLocksOf<T> = <<T as Config>::Currency as LockableCurrency<
+	<T as pezframe_system::Config>::AccountId,
+>>::MaxLocks;
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
 const VESTING_ID: LockIdentifier = *b"vesting ";
@@ -161,7 +162,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency trait.
 		type Currency: LockableCurrency<Self::AccountId>;
@@ -199,8 +201,8 @@ pub mod pezpallet {
 		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
 		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
-		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
-		///     providers can be used. Relay provider can be a bit better in cases where the
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and
+		///     remote providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider<BlockNumber = BlockNumberFor<Self>>;
 

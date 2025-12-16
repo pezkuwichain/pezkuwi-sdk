@@ -17,8 +17,8 @@
 
 //! ## The unsigned phase, and its miner.
 //!
-//! This pezpallet deals with unsigned submissions. These are backup, "possibly" multi-page submissions
-//! from validators.
+//! This pezpallet deals with unsigned submissions. These are backup, "possibly" multi-page
+//! submissions from validators.
 //!
 //! This pezpallet has two miners, described in [`unsigned::miner`].
 //!

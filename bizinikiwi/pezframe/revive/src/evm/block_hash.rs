@@ -33,8 +33,8 @@ use alloc::vec::Vec;
 use alloy_core::primitives::{bytes::BufMut, B256};
 
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_core::{H256, U256};
+use scale_info::TypeInfo;
 
 /// Details needed to reconstruct the receipt info in the RPC
 /// layer without losing accuracy.

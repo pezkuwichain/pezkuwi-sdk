@@ -28,12 +28,12 @@ use crate::{
 };
 use clap::{error::ErrorKind, CommandFactory};
 use codec::{Decode, DecodeWithMemTracking, Encode};
+use linked_hash_map::LinkedHashMap;
 use pezframe_benchmarking::{
 	Analysis, BenchmarkBatch, BenchmarkBatchSplitResults, BenchmarkList, BenchmarkParameter,
 	BenchmarkResult, BenchmarkSelector,
 };
 use pezframe_support::traits::StorageInfo;
-use linked_hash_map::LinkedHashMap;
 use pezsc_cli::{execution_method_from_cli, ChainSpec, CliConfiguration, Result, SharedParams};
 use pezsc_client_db::BenchmarkingState;
 use pezsc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
@@ -117,9 +117,8 @@ fn combine_batches(
 	let mut all_benchmarks =
 		LinkedHashMap::<_, (Vec<BenchmarkResult>, Vec<BenchmarkResult>)>::new();
 
-	db_batches
-		.into_iter()
-		.for_each(|BenchmarkBatch { pezpallet, instance, benchmark, results }| {
+	db_batches.into_iter().for_each(
+		|BenchmarkBatch { pezpallet, instance, benchmark, results }| {
 			// We use this key to uniquely identify a benchmark among batches.
 			let key = (pezpallet, instance, benchmark);
 
@@ -131,11 +130,11 @@ fn combine_batches(
 					all_benchmarks.insert(key, (Vec::new(), results));
 				},
 			}
-		});
+		},
+	);
 
-	time_batches
-		.into_iter()
-		.for_each(|BenchmarkBatch { pezpallet, instance, benchmark, results }| {
+	time_batches.into_iter().for_each(
+		|BenchmarkBatch { pezpallet, instance, benchmark, results }| {
 			// We use this key to uniquely identify a benchmark among batches.
 			let key = (pezpallet, instance, benchmark);
 
@@ -144,7 +143,8 @@ fn combine_batches(
 				Some(x) => x.0.extend(results),
 				None => panic!("all benchmark keys should have been populated by db batches"),
 			}
-		});
+		},
+	);
 
 	all_benchmarks
 		.into_iter()
@@ -582,19 +582,21 @@ impl PalletCmd {
 	fn select_benchmarks_to_run(&self, list: Vec<BenchmarkList>) -> Result<Vec<SelectedBenchmark>> {
 		// Use the benchmark list and the user input to determine the set of benchmarks to run.
 		let mut benchmarks_to_run = Vec::new();
-		list.iter().filter(|item| self.pezpallet_selected(&item.pezpallet)).for_each(|item| {
-			for benchmark in &item.benchmarks {
-				if self.extrinsic_selected(&item.pezpallet, &benchmark.name) {
-					benchmarks_to_run.push((
-						item.pezpallet.clone(),
-						item.instance.clone(),
-						benchmark.name.clone(),
-						benchmark.components.clone(),
-						benchmark.pov_modes.clone(),
-					))
+		list.iter()
+			.filter(|item| self.pezpallet_selected(&item.pezpallet))
+			.for_each(|item| {
+				for benchmark in &item.benchmarks {
+					if self.extrinsic_selected(&item.pezpallet, &benchmark.name) {
+						benchmarks_to_run.push((
+							item.pezpallet.clone(),
+							item.instance.clone(),
+							benchmark.name.clone(),
+							benchmark.components.clone(),
+							benchmark.pov_modes.clone(),
+						))
+					}
 				}
-			}
-		});
+			});
 		// Convert `Vec<u8>` to `String` for better readability.
 		let benchmarks_to_run: Vec<_> = benchmarks_to_run
 			.into_iter()
@@ -841,7 +843,8 @@ impl PalletCmd {
 	) {
 		for batch in batches.iter() {
 			// Print benchmark metadata
-			let pezpallet = String::from_utf8(batch.pezpallet.clone()).expect("Encoded from String; qed");
+			let pezpallet =
+				String::from_utf8(batch.pezpallet.clone()).expect("Encoded from String; qed");
 			let benchmark =
 				String::from_utf8(batch.benchmark.clone()).expect("Encoded from String; qed");
 			println!(
@@ -1163,7 +1166,15 @@ mod tests {
 			"--genesis-builder",
 			"none",
 		])?;
-		cli_succeed(&["test", "--extrinsic", "", "--pezpallet", "", "--runtime", "path/to/runtime"])?;
+		cli_succeed(&[
+			"test",
+			"--extrinsic",
+			"",
+			"--pezpallet",
+			"",
+			"--runtime",
+			"path/to/runtime",
+		])?;
 		cli_succeed(&[
 			"test",
 			"--extrinsic",

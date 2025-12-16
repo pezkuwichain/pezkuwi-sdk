@@ -215,7 +215,6 @@ mod tests {
 	use codec::{Decode, Encode};
 	use pezcumulus_primitives_core::relay_chain;
 	use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-	use rstest::rstest;
 	use pezsp_consensus_babe::{
 		digests::{CompatibleDigestItem, NextEpochDescriptor, PreDigest, PrimaryPreDigest},
 		AuthorityId, AuthorityPair, BabeAuthorityWeight, ConsensusLog, BABE_ENGINE_ID,
@@ -226,6 +225,7 @@ mod tests {
 	};
 	use pezsp_keyring::Sr25519Keyring;
 	use pezsp_runtime::{testing::Header as TestHeader, DigestItem};
+	use rstest::rstest;
 	const PARA_ID: u32 = 2000;
 
 	/// Verify a header chain with different lengths and different number of authorities included in

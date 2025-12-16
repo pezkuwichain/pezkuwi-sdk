@@ -42,7 +42,9 @@ use pez_node_primitives::Block;
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_client_api::{execution_extensions::ExecutionExtensions, UsageProvider};
 use pezsc_client_db::PruningMode;
-use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy, ImportResult, ImportedAux};
+use pezsc_consensus::{
+	BlockImport, BlockImportParams, ForkChoiceStrategy, ImportResult, ImportedAux,
+};
 use pezsc_executor::{WasmExecutionMethod, WasmtimeInstantiationStrategy};
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_block_builder::BlockBuilder;

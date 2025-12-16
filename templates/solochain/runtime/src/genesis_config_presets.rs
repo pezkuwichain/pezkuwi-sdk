@@ -18,11 +18,11 @@
 use crate::{AccountId, BalancesConfig, RuntimeGenesisConfig, SudoConfig};
 use alloc::{vec, vec::Vec};
 use pezframe_support::build_struct_json_patch;
-use serde_json::Value;
 use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
 use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
 use pezsp_genesis_builder::{self, PresetId};
 use pezsp_keyring::Sr25519Keyring;
+use serde_json::Value;
 
 // Returns the genesis config presets populated with given parameters.
 fn testnet_genesis(

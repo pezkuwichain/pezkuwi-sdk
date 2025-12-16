@@ -327,7 +327,8 @@ impl Response {
 	/// Retrieve the headers for this response.
 	pub fn headers(&mut self) -> &Headers {
 		if self.headers.is_none() {
-			self.headers = Some(Headers { raw: pezsp_io::offchain::http_response_headers(self.id) });
+			self.headers =
+				Some(Headers { raw: pezsp_io::offchain::http_response_headers(self.id) });
 		}
 		self.headers.as_ref().expect("Headers were just set; qed")
 	}
@@ -406,8 +407,11 @@ impl Iterator for ResponseBody {
 		}
 
 		if self.filled_up_to.is_none() {
-			let result =
-				pezsp_io::offchain::http_response_read_body(self.id, &mut self.buffer, self.deadline);
+			let result = pezsp_io::offchain::http_response_read_body(
+				self.id,
+				&mut self.buffer,
+				self.deadline,
+			);
 			match result {
 				Err(e) => {
 					self.error = Some(e);

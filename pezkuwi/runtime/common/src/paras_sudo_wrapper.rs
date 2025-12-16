@@ -20,13 +20,13 @@ use alloc::boxed::Box;
 use codec::Encode;
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::pezpallet_prelude::*;
-pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_runtime_teyrchains::{
 	configuration, dmp, hrmp,
 	paras::{self, AssignCoretime, ParaGenesisArgs, ParaKind},
 	ParaLifecycle,
 };
+pub use pezpallet::*;
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
@@ -155,11 +155,12 @@ pub mod pezpallet {
 			ensure_root(origin)?;
 			ensure!(paras::Pezpallet::<T>::is_valid_para(id), Error::<T>::ParaDoesntExist);
 			let config = configuration::ActiveConfig::<T>::get();
-			dmp::Pezpallet::<T>::queue_downward_message(&config, id, xcm.encode()).map_err(|e| match e
-			{
-				dmp::QueueDownwardMessageError::ExceedsMaxMessageSize =>
-					Error::<T>::ExceedsMaxMessageSize.into(),
-				dmp::QueueDownwardMessageError::Unroutable => Error::<T>::Unroutable.into(),
+			dmp::Pezpallet::<T>::queue_downward_message(&config, id, xcm.encode()).map_err(|e| {
+				match e {
+					dmp::QueueDownwardMessageError::ExceedsMaxMessageSize =>
+						Error::<T>::ExceedsMaxMessageSize.into(),
+					dmp::QueueDownwardMessageError::Unroutable => Error::<T>::Unroutable.into(),
+				}
 			})
 		}
 

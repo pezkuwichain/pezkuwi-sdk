@@ -21,7 +21,8 @@
 //! The `DiscoveryBehaviour` struct implements the `NetworkBehaviour` trait of libp2p and is
 //! responsible for discovering other nodes that are part of the network.
 //!
-//! Bizinikiwi uses the following mechanisms in order to discover nodes that are part of the network:
+//! Bizinikiwi uses the following mechanisms in order to discover nodes that are part of the
+//! network:
 //!
 //! - Bootstrap nodes. These are hard-coded node identities and addresses passed in the constructor
 //! of the `DiscoveryBehaviour`. You can also call `add_known_address` later to add an entry.

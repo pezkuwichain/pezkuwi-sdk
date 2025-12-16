@@ -32,8 +32,8 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
+pub use pezpallet::*;
 use pezsp_runtime::traits::{CheckedSub, One, Saturating, Zero};
 
 type CurrencyOf<T> = <<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Currency;
@@ -91,7 +91,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The type representing the leasing system.
 		type Leaser: Leaser<

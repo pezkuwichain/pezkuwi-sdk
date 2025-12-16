@@ -42,7 +42,8 @@
 //!                                         ElectionProvider
 //! ```
 //!
-//! > It could also be possible that a third party pezpallet (C), provides the data of election to an
+//! > It could also be possible that a third party pezpallet (C), provides the data of election to
+//! > an
 //! > election provider (B), which then passes the election result to another pezpallet (A).
 //!
 //! ## Election Types
@@ -218,13 +219,13 @@ pub use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 /// Re-export the solution generation macro.
 pub use pezframe_election_provider_solution_type::generate_solution_type;
 pub use pezframe_support::{traits::Get, weights::Weight, BoundedVec, DefaultNoBound};
-use scale_info::TypeInfo;
 /// Re-export some type as they are used in the interface.
 pub use pezsp_arithmetic::PerThing;
 pub use pezsp_npos_elections::{
 	Assignment, BalancingConfig, ElectionResult, Error, ExtendedBalance, IdentifierT, PerThing128,
 	Support, Supports, VoteWeight,
 };
+use scale_info::TypeInfo;
 pub use traits::NposSolution;
 
 #[cfg(feature = "try-runtime")]
@@ -238,8 +239,8 @@ pub mod private {
 		vec::Vec,
 	};
 	pub use codec;
-	pub use scale_info;
 	pub use pezsp_arithmetic;
+	pub use scale_info;
 
 	// Simple Extension trait to easily convert `None` from index closures to `Err`.
 	//
@@ -634,8 +635,8 @@ pub trait SortedListProvider<AccountId> {
 	///
 	/// If this is implemented by a bags-list instance, it will be the smallest and largest bags.
 	///
-	/// This is useful to help another pezpallet that consumes this trait generate an even distribution
-	/// of nodes for testing/genesis.
+	/// This is useful to help another pezpallet that consumes this trait generate an even
+	/// distribution of nodes for testing/genesis.
 	fn range() -> (Self::Score, Self::Score) {
 		(Self::Score::min_value(), Self::Score::max_value())
 	}
@@ -924,7 +925,9 @@ pub struct BoundedSupport<AccountId, Bound: Get<u32>> {
 	pub voters: BoundedVec<(AccountId, ExtendedBalance), Bound>,
 }
 
-impl<AccountId, Bound: Get<u32>> pezsp_npos_elections::Backings for &BoundedSupport<AccountId, Bound> {
+impl<AccountId, Bound: Get<u32>> pezsp_npos_elections::Backings
+	for &BoundedSupport<AccountId, Bound>
+{
 	fn total(&self) -> ExtendedBalance {
 		self.total
 	}
@@ -963,7 +966,9 @@ impl<AccountId: Clone, Bound: Get<u32>> BoundedSupport<AccountId, Bound> {
 	/// truncating if needed.
 	///
 	/// Returns the number of backers removed.
-	pub fn sorted_truncate_from(mut support: pezsp_npos_elections::Support<AccountId>) -> (Self, u32) {
+	pub fn sorted_truncate_from(
+		mut support: pezsp_npos_elections::Support<AccountId>,
+	) -> (Self, u32) {
 		// If bounds meet, then short circuit.
 		if let Ok(bounded) = support.clone().try_into() {
 			return (bounded, 0);

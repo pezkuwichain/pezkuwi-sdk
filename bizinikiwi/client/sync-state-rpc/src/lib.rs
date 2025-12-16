@@ -114,7 +114,8 @@ pub struct LightSyncState<Block: BlockT> {
 	pub finalized_block_header: <Block as BlockT>::Header,
 	/// The epoch changes tree for babe.
 	#[serde(serialize_with = "serialize_encoded")]
-	pub babe_epoch_changes: pezsc_consensus_epochs::EpochChangesFor<Block, pezsc_consensus_babe::Epoch>,
+	pub babe_epoch_changes:
+		pezsc_consensus_epochs::EpochChangesFor<Block, pezsc_consensus_babe::Epoch>,
 	/// The babe weight of the finalized block.
 	pub babe_finalized_block_weight: pezsc_consensus_babe::BabeBlockWeight,
 	/// The authority set for grandpa.

@@ -34,9 +34,9 @@
 //! definition.
 
 use alloc::{boxed::Box, vec, vec::Vec};
+use log::{error, info};
 use pezframe_support::traits::{Get, KeyOwnerProofSystem};
 use pezframe_system::pezpallet_prelude::HeaderFor;
-use log::{error, info};
 
 use pezsp_consensus_babe::{AuthorityId, EquivocationProof, Slot, KEY_TYPE};
 use pezsp_runtime::{

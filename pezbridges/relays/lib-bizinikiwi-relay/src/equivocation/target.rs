@@ -18,19 +18,19 @@
 
 use crate::{
 	equivocation::{
-		EquivocationDetectionPipelineAdapter, FinalityProoffOf, FinalityVerificationContextfOf,
-		BizinikiwiEquivocationDetectionPipeline,
+		BizinikiwiEquivocationDetectionPipeline, EquivocationDetectionPipelineAdapter,
+		FinalityProoffOf, FinalityVerificationContextfOf,
 	},
 	finality_base::{best_synced_header_id, engine::Engine},
 };
 
 use async_trait::async_trait;
 use bp_header_pez_chain::HeaderFinalityInfo;
-use pezbp_runtime::{BlockNumberOf, HashOf};
 use pez_equivocation_detector::TargetClient;
+use pezbp_runtime::{BlockNumberOf, HashOf};
+use pezsp_runtime::traits::Header;
 use relay_bizinikiwi_client::{Client, Error};
 use relay_utils::relay_loop::Client as RelayClient;
-use pezsp_runtime::traits::Header;
 use std::marker::PhantomData;
 
 /// Bizinikiwi node as equivocation source.

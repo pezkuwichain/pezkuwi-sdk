@@ -18,9 +18,9 @@
 
 //! Utilities to build a `TestClient` for `pez-kitchensink-runtime`.
 
-use pezsp_runtime::BuildStorage;
 /// Re-export test-client utilities.
 pub use bizinikiwi_test_client::*;
+use pezsp_runtime::BuildStorage;
 
 /// Call executor for `pez-kitchensink-runtime` `TestClient`.
 use node_cli::service::RuntimeExecutor;

@@ -33,7 +33,6 @@ use pezframe_support::{
 	},
 };
 use pezpallet_transaction_payment::Config as TxConfig;
-use scale_info::{StaticTypeInfo, TypeInfo};
 use pezsp_core::U256;
 use pezsp_runtime::{
 	generic::{self, CheckedExtrinsic, ExtrinsicFormat},
@@ -44,6 +43,7 @@ use pezsp_runtime::{
 	transaction_validity::{InvalidTransaction, TransactionValidityError},
 	OpaqueExtrinsic, RuntimeDebug, Weight,
 };
+use scale_info::{StaticTypeInfo, TypeInfo};
 
 /// Used to set the weight limit argument of a `eth_call` or `eth_instantiate_with_code` call.
 pub trait SetWeightLimit {

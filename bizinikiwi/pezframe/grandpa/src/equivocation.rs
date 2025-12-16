@@ -37,9 +37,9 @@
 
 use alloc::{boxed::Box, vec, vec::Vec};
 use codec::{self as codec, Decode, Encode};
+use log::{error, info};
 use pezframe_support::traits::{Get, KeyOwnerProofSystem};
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-use log::{error, info};
 use pezsp_consensus_grandpa::{AuthorityId, EquivocationProof, RoundNumber, SetId, KEY_TYPE};
 use pezsp_runtime::{
 	transaction_validity::{

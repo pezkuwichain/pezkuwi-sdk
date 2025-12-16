@@ -26,17 +26,17 @@ use bp_header_pez_chain::{
 	AuthoritySet, ConsensusLogReader, FinalityProof, FindEquivocations, GrandpaConsensusLogReader,
 	HeaderFinalityInfo, HeaderGrandpaInfo, StoredHeaderGrandpaInfo, SubmitFinalityProofCallExtras,
 };
-use pezbp_runtime::{BasicOperatingMode, HeaderIdProvider, OperatingMode};
 use codec::{Decode, Encode};
 use futures::stream::StreamExt;
 use num_traits::{One, Zero};
+use pezbp_runtime::{BasicOperatingMode, HeaderIdProvider, OperatingMode};
+use pezsp_consensus_grandpa::{AuthorityList as GrandpaAuthoritiesSet, GRANDPA_ENGINE_ID};
+use pezsp_core::{storage::StorageKey, Bytes};
+use pezsp_runtime::{scale_info::TypeInfo, traits::Header, ConsensusEngineId};
 use relay_bizinikiwi_client::{
 	BlockNumberOf, Chain, ChainWithGrandpa, Client, Error as BizinikiwiError, HashOf, HeaderOf,
 	Subscription,
 };
-use pezsp_consensus_grandpa::{AuthorityList as GrandpaAuthoritiesSet, GRANDPA_ENGINE_ID};
-use pezsp_core::{storage::StorageKey, Bytes};
-use pezsp_runtime::{scale_info::TypeInfo, traits::Header, ConsensusEngineId};
 use std::{fmt::Debug, marker::PhantomData};
 
 /// Finality engine, used by the Bizinikiwi chain.
@@ -185,7 +185,8 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 	type ConsensusLogReader = GrandpaConsensusLogReader<<C::Header as Header>::Number>;
 	type FinalityProof = GrandpaJustification<HeaderOf<C>>;
 	type FinalityVerificationContext = JustificationVerificationContext;
-	type EquivocationProof = pezsp_consensus_grandpa::EquivocationProof<HashOf<C>, BlockNumberOf<C>>;
+	type EquivocationProof =
+		pezsp_consensus_grandpa::EquivocationProof<HashOf<C>, BlockNumberOf<C>>;
 	type EquivocationsFinder = GrandpaEquivocationsFinder<C>;
 	type KeyOwnerProof = C::KeyOwnerProof;
 	type InitializationData = bp_header_pez_chain::InitializationData<C::Header>;
@@ -196,7 +197,9 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 	}
 
 	fn pezpallet_operating_mode_key() -> StorageKey {
-		bp_header_pez_chain::storage_keys::pezpallet_operating_mode_key(C::WITH_CHAIN_GRANDPA_PALLET_NAME)
+		bp_header_pez_chain::storage_keys::pezpallet_operating_mode_key(
+			C::WITH_CHAIN_GRANDPA_PALLET_NAME,
+		)
 	}
 
 	async fn source_finality_proofs(
@@ -247,8 +250,8 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 		source_client: impl Client<C>,
 	) -> Result<Self::InitializationData, Error<HashOf<C>, BlockNumberOf<C>>> {
 		// In ideal world we just need to get best finalized header and then to read GRANDPA
-		// authorities set (`pezpallet_grandpa::CurrentSetId` + `GrandpaApi::grandpa_authorities()`) at
-		// this header.
+		// authorities set (`pezpallet_grandpa::CurrentSetId` + `GrandpaApi::grandpa_authorities()`)
+		// at this header.
 		//
 		// But now there are problems with this approach - `CurrentSetId` may return invalid value.
 		// So here we're waiting for the next justification, read the authorities set and then try
@@ -369,9 +372,10 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 		target_client: &impl Client<TargetChain>,
 		at: HashOf<TargetChain>,
 	) -> Result<Self::FinalityVerificationContext, BizinikiwiError> {
-		let current_authority_set_key = bp_header_pez_chain::storage_keys::current_authority_set_key(
-			C::WITH_CHAIN_GRANDPA_PALLET_NAME,
-		);
+		let current_authority_set_key =
+			bp_header_pez_chain::storage_keys::current_authority_set_key(
+				C::WITH_CHAIN_GRANDPA_PALLET_NAME,
+			);
 		let authority_set: AuthoritySet = target_client
 			.storage_value(at, current_authority_set_key)
 			.await?

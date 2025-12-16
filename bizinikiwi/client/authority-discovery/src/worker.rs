@@ -48,7 +48,6 @@ use pezsc_network::{
 	Multiaddr, NetworkDHTProvider, NetworkSigner, NetworkStateInfo,
 };
 use pezsc_network_types::{multihash::Code, PeerId};
-use schema::PeerSignature;
 use pezsp_api::{ApiError, ProvideRuntimeApi};
 use pezsp_authority_discovery::{
 	AuthorityDiscoveryApi, AuthorityId, AuthorityPair, AuthoritySignature,
@@ -60,6 +59,7 @@ use pezsp_core::{
 };
 use pezsp_keystore::{Keystore, KeystorePtr};
 use pezsp_runtime::traits::Block as BlockT;
+use schema::PeerSignature;
 
 mod addr_cache;
 /// Dht payload schemas generated from Protobuf definitions via Prost crate in build.rs.

@@ -19,8 +19,8 @@
 
 use alloc::collections::BTreeSet;
 use core::hash::Hash;
-use scale_info::TypeInfo;
 use pezsp_core::{Decode, Encode};
+use scale_info::TypeInfo;
 use trie_db::{RecordedForKey, TrieAccess, TrieRecorder};
 
 /// Error associated with the `AccessedNodesTracker` module.

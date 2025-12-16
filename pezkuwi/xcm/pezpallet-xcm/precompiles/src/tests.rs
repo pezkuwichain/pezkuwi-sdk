@@ -21,6 +21,7 @@ use crate::{
 	VersionedLocation, VersionedXcm,
 };
 use pezframe_support::traits::Currency;
+use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
 use pezpallet_revive::{
 	precompiles::{
 		alloy::{
@@ -31,7 +32,6 @@ use pezpallet_revive::{
 	},
 	ExecConfig, U256,
 };
-use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
 use pezsp_runtime::traits::AccountIdConversion;
 use xcm::{prelude::*, v3, v4};
 

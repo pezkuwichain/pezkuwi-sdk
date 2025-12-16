@@ -179,7 +179,8 @@ fn invoke_build(current_dir: &Path) -> Result<()> {
 	// Note: panic_immediate_abort is now a real panic strategy in newer Rust nightlies
 	// Use -Cpanic=immediate-abort instead of -Zbuild-std-features=panic_immediate_abort
 	// -Zunstable-options must be in RUSTFLAGS as well for the rustc probe
-	let encoded_rustflags = ["-Dwarnings", "-Zunstable-options", "-Cpanic=immediate-abort"].join("\x1f");
+	let encoded_rustflags =
+		["-Dwarnings", "-Zunstable-options", "-Cpanic=immediate-abort"].join("\x1f");
 
 	let mut build_command = Command::new("cargo");
 	build_command
@@ -190,11 +191,7 @@ fn invoke_build(current_dir: &Path) -> Result<()> {
 		.env("RUSTUP_HOME", env::var("RUSTUP_HOME").unwrap_or_default())
 		// Support compilation on stable rust
 		.env("RUSTC_BOOTSTRAP", "1")
-		.args([
-			"build",
-			"--release",
-			"-Zbuild-std=core",
-		])
+		.args(["build", "--release", "-Zbuild-std=core"])
 		.arg("--target")
 		.arg(polkavm_linker::target_json_path(polkavm_linker::TargetJsonArgs::default()).unwrap());
 

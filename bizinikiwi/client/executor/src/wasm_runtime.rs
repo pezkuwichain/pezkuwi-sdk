@@ -29,10 +29,10 @@ use pezsc_executor_common::{
 	runtime_blob::RuntimeBlob,
 	wasm_runtime::{HeapAllocStrategy, WasmInstance, WasmModule},
 };
-use schnellru::{ByLength, LruMap};
 use pezsp_core::traits::{Externalities, FetchRuntimeCode, RuntimeCode};
 use pezsp_version::RuntimeVersion;
 use pezsp_wasm_interface::HostFunctions;
+use schnellru::{ByLength, LruMap};
 
 use std::{
 	panic::AssertUnwindSafe,
@@ -53,7 +53,8 @@ pub enum WasmExecutionMethod {
 impl Default for WasmExecutionMethod {
 	fn default() -> Self {
 		Self::Compiled {
-			instantiation_strategy: pezsc_executor_wasmtime::InstantiationStrategy::PoolingCopyOnWrite,
+			instantiation_strategy:
+				pezsc_executor_wasmtime::InstantiationStrategy::PoolingCopyOnWrite,
 		}
 	}
 }
@@ -445,11 +446,11 @@ mod tests {
 
 	use super::*;
 	use alloc::borrow::Cow;
+	use bizinikiwi_test_runtime::Block;
 	use codec::Encode;
 	use pezsp_api::{Core, RuntimeApiInfo};
 	use pezsp_version::{create_apis_vec, RuntimeVersion};
 	use pezsp_wasm_interface::HostFunctions;
-	use bizinikiwi_test_runtime::Block;
 
 	#[derive(Encode)]
 	pub struct OldRuntimeVersion {

@@ -27,10 +27,10 @@ use pezsc_network::{
 	Roles,
 };
 
+use bizinikiwi_test_runtime_client::runtime;
 use pezsc_network_common::sync::message::BlockAnnouncesHandshake;
 use pezsp_runtime::traits::Zero;
 use std::{sync::Arc, time::Duration};
-use bizinikiwi_test_runtime_client::runtime;
 use tokio::sync::Mutex;
 
 /// High level network backend (litep2p or libp2p) test client.

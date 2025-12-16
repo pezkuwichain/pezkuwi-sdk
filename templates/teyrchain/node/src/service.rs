@@ -34,7 +34,6 @@ use pezcumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
 // Bizinikiwi Imports
 use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use pezkuwi_sdk::pezsc_network::PeerId;
-use prometheus_endpoint::Registry;
 use pezsc_client_api::Backend;
 use pezsc_consensus::ImportQueue;
 use pezsc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
@@ -44,6 +43,7 @@ use pezsc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWork
 use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_keystore::KeystorePtr;
+use prometheus_endpoint::Registry;
 
 #[docify::export(wasm_executor)]
 type TeyrchainExecutor = WasmExecutor<TeyrchainHostFunctions>;
@@ -223,9 +223,10 @@ fn start_consensus(
 		reinitialize: false,
 		max_pov_percentage: None,
 	};
-	let fut = aura::run::<Block, pezsp_consensus_aura::sr25519::AuthorityPair, _, _, _, _, _, _, _, _>(
-		params,
-	);
+	let fut =
+		aura::run::<Block, pezsp_consensus_aura::sr25519::AuthorityPair, _, _, _, _, _, _, _, _>(
+			params,
+		);
 	task_manager.spawn_essential_handle().spawn("aura", None, fut);
 
 	Ok(())

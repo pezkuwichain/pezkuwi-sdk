@@ -90,7 +90,9 @@ pub(crate) fn roll_until_next_active(mut end_index: SessionIndex) -> Vec<Account
 	let planned_era = pezpallet_staking_async::session_rotation::Rotator::<Runtime>::planned_era();
 	let active_era = pezpallet_staking_async::session_rotation::Rotator::<Runtime>::active_era();
 
-	while pezpallet_staking_async::session_rotation::Rotator::<Runtime>::planned_era() == planned_era {
+	while pezpallet_staking_async::session_rotation::Rotator::<Runtime>::planned_era() ==
+		planned_era
+	{
 		let report = SessionReport {
 			end_index,
 			activation_timestamp: None,
@@ -539,7 +541,8 @@ parameter_types! {
 	static RcClientEventsIndex: usize = 0;
 }
 
-pub(crate) fn rc_client_events_since_last_call() -> Vec<pezpallet_staking_async_rc_client::Event<T>> {
+pub(crate) fn rc_client_events_since_last_call() -> Vec<pezpallet_staking_async_rc_client::Event<T>>
+{
 	let all: Vec<_> = System::events()
 		.into_iter()
 		.filter_map(

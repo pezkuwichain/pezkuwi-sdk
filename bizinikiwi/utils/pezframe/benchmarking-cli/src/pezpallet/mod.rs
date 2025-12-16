@@ -32,8 +32,8 @@ use std::{fmt::Debug, path::PathBuf};
 /// Logging target
 const LOG_TARGET: &'static str = "frame::benchmark::pezpallet";
 
-// Add a more relaxed parsing for pezpallet names by allowing pezpallet directory names with `-` to be
-// used like crate names with `_`
+// Add a more relaxed parsing for pezpallet names by allowing pezpallet directory names with `-` to
+// be used like crate names with `_`
 fn parse_pallet_name(pezpallet: &str) -> std::result::Result<String, String> {
 	Ok(pezpallet.replace("-", "_"))
 }

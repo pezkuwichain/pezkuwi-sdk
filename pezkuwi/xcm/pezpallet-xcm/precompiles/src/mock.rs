@@ -329,9 +329,13 @@ pub fn new_test_ext_with_balances_and_xcm_version(
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	pezpallet_xcm::GenesisConfig::<Test> { safe_xcm_version, supported_version, ..Default::default() }
-		.assimilate_storage(&mut t)
-		.unwrap();
+	pezpallet_xcm::GenesisConfig::<Test> {
+		safe_xcm_version,
+		supported_version,
+		..Default::default()
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
 
 	pezpallet_revive::GenesisConfig::<Test> { mapped_accounts: vec![ALICE], ..Default::default() }
 		.assimilate_storage(&mut t)

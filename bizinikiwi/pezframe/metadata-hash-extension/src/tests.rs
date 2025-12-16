@@ -16,24 +16,24 @@
 // limitations under the License.
 
 use crate::CheckMetadataHash;
+use bizinikiwi_test_runtime_client::{
+	prelude::*,
+	runtime::{self, ExtrinsicBuilder},
+	DefaultTestClientBuilderExt, TestClientBuilder,
+};
 use codec::{Decode, Encode};
 use frame_metadata::RuntimeMetadataPrefixed;
+use merkleized_metadata::{generate_metadata_digest, ExtraInfo};
 use pezframe_support::{
 	derive_impl,
 	pezpallet_prelude::{InvalidTransaction, TransactionValidityError},
 };
-use merkleized_metadata::{generate_metadata_digest, ExtraInfo};
 use pezsp_api::{Metadata, ProvideRuntimeApi};
 use pezsp_runtime::{
 	traits::{ExtrinsicLike, TransactionExtension},
 	transaction_validity::{TransactionSource, UnknownTransaction},
 };
 use pezsp_transaction_pool::runtime_api::TaggedTransactionQueue;
-use bizinikiwi_test_runtime_client::{
-	prelude::*,
-	runtime::{self, ExtrinsicBuilder},
-	DefaultTestClientBuilderExt, TestClientBuilder,
-};
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
@@ -154,8 +154,12 @@ mod docs {
 		type Signature = ();
 
 		/// Unchecked extrinsic type as expected by this runtime.
-		pub type UncheckedExtrinsic =
-			pezsp_runtime::generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
+		pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<
+			Address,
+			RuntimeCall,
+			Signature,
+			TxExtension,
+		>;
 	}
 
 	// Put here to not have it in the docs as well.

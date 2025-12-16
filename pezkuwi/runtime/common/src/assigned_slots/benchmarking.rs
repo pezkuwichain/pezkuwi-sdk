@@ -60,8 +60,10 @@ mod benchmarks {
 		let para_id = ParaId::from(1_u32);
 		let caller = RawOrigin::Root;
 
-		let _ =
-			AssignedSlots::<T>::set_max_permanent_slots(pezframe_system::Origin::<T>::Root.into(), 10);
+		let _ = AssignedSlots::<T>::set_max_permanent_slots(
+			pezframe_system::Origin::<T>::Root.into(),
+			10,
+		);
 		register_teyrchain::<T>(para_id);
 
 		let counter = PermanentSlotCount::<T>::get();
@@ -87,8 +89,10 @@ mod benchmarks {
 		let para_id = ParaId::from(2_u32);
 		let caller = RawOrigin::Root;
 
-		let _ =
-			AssignedSlots::<T>::set_max_temporary_slots(pezframe_system::Origin::<T>::Root.into(), 10);
+		let _ = AssignedSlots::<T>::set_max_temporary_slots(
+			pezframe_system::Origin::<T>::Root.into(),
+			10,
+		);
 		register_teyrchain::<T>(para_id);
 
 		let current_lease_period: BlockNumberFor<T> =
@@ -116,8 +120,10 @@ mod benchmarks {
 		let para_id = ParaId::from(3_u32);
 		let caller = RawOrigin::Root;
 
-		let _ =
-			AssignedSlots::<T>::set_max_temporary_slots(pezframe_system::Origin::<T>::Root.into(), 10);
+		let _ = AssignedSlots::<T>::set_max_temporary_slots(
+			pezframe_system::Origin::<T>::Root.into(),
+			10,
+		);
 		register_teyrchain::<T>(para_id);
 
 		let _ = AssignedSlots::<T>::assign_temp_teyrchain_slot(

@@ -131,8 +131,8 @@ impl<Call> BatchCallBuilder<Call> for () {
 /// Module for handling storage proofs compatibility.
 pub mod proofs {
 	use pezbp_runtime::{HashOf, RawStorageProof};
-	use relay_bizinikiwi_client::Chain;
 	use pezsp_trie::StorageProof;
+	use relay_bizinikiwi_client::Chain;
 
 	/// Converts proof to `RawStorageProof` type.
 	pub fn to_raw_storage_proof<SourceChain: Chain>(

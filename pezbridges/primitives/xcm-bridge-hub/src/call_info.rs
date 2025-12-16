@@ -18,8 +18,8 @@
 
 use bp_messages::MessageNonce;
 use codec::{Decode, Encode};
-use scale_info::TypeInfo;
 use pezsp_std::boxed::Box;
+use scale_info::TypeInfo;
 use xcm::prelude::VersionedInteriorLocation;
 
 /// A minimized version of `pezpallet_xcm_bridge_hub::Call` that can be used without a runtime.

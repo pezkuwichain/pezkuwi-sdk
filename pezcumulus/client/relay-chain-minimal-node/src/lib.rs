@@ -17,10 +17,10 @@
 
 use collator_overseer::NewMinimalNode;
 
+use network::build_collator_network;
 use pezcumulus_client_bootnodes::bootnode_request_response_config;
 use pezcumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
 use pezcumulus_relay_chain_rpc_interface::{RelayChainRpcClient, RelayChainRpcInterface, Url};
-use network::build_collator_network;
 use pezkuwi_network_bridge::{peer_sets_info, IsAuthority};
 use pezkuwi_node_network_protocol::{
 	peer_set::{PeerSet, PeerSetProtocolNames},
@@ -107,22 +107,22 @@ async fn build_interface(
 )> {
 	let collator_pair = CollatorPair::generate().0;
 	let blockchain_rpc_client = Arc::new(BlockChainRpcClient::new(client.clone()));
-	let collator_node = match pezkuwi_config.network.network_backend {
-		pezsc_network::config::NetworkBackendType::Libp2p =>
-			new_minimal_relay_chain::<RelayBlock, pezsc_network::NetworkWorker<RelayBlock, RelayHash>>(
-				pezkuwi_config,
-				collator_pair.clone(),
-				blockchain_rpc_client,
-			)
-			.await?,
-		pezsc_network::config::NetworkBackendType::Litep2p =>
-			new_minimal_relay_chain::<RelayBlock, pezsc_network::Litep2pNetworkBackend>(
-				pezkuwi_config,
-				collator_pair.clone(),
-				blockchain_rpc_client,
-			)
-			.await?,
-	};
+	let collator_node =
+		match pezkuwi_config.network.network_backend {
+			pezsc_network::config::NetworkBackendType::Libp2p =>
+				new_minimal_relay_chain::<
+					RelayBlock,
+					pezsc_network::NetworkWorker<RelayBlock, RelayHash>,
+				>(pezkuwi_config, collator_pair.clone(), blockchain_rpc_client)
+				.await?,
+			pezsc_network::config::NetworkBackendType::Litep2p =>
+				new_minimal_relay_chain::<RelayBlock, pezsc_network::Litep2pNetworkBackend>(
+					pezkuwi_config,
+					collator_pair.clone(),
+					blockchain_rpc_client,
+				)
+				.await?,
+		};
 	task_manager.add_child(collator_node.task_manager);
 	Ok((
 		Arc::new(RelayChainRpcInterface::new(client, collator_node.overseer_handle)),

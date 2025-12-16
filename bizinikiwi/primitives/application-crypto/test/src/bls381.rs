@@ -17,6 +17,10 @@
 
 //! Integration tests for bls12-381
 
+use bizinikiwi_test_runtime_client::{
+	runtime::{TestAPI, TEST_OWNER},
+	DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
+};
 use pezsp_api::{ApiExt, ProvideRuntimeApi};
 use pezsp_application_crypto::{bls381::AppPair, RuntimePublic};
 use pezsp_core::{
@@ -28,10 +32,6 @@ use pezsp_core::{
 };
 use pezsp_keystore::{testing::MemoryKeystore, Keystore, KeystoreExt};
 use std::sync::Arc;
-use bizinikiwi_test_runtime_client::{
-	runtime::{TestAPI, TEST_OWNER},
-	DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
-};
 
 #[test]
 fn bls381_works_in_runtime() {

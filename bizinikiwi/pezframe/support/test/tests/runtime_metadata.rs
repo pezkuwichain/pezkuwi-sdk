@@ -17,12 +17,12 @@
 #![allow(useless_deprecated)]
 
 use pezframe_support::{derive_impl, traits::ConstU32};
-use scale_info::{form::MetaForm, meta_type};
 use pezsp_metadata_ir::{
 	ItemDeprecationInfoIR, RuntimeApiMetadataIR, RuntimeApiMethodMetadataIR,
 	RuntimeApiMethodParamMetadataIR,
 };
 use pezsp_runtime::traits::Block as BlockT;
+use scale_info::{form::MetaForm, meta_type};
 
 pub type BlockNumber = u64;
 pub type Header = pezsp_runtime::generic::Header<u32, pezsp_runtime::traits::BlakeTwo256>;

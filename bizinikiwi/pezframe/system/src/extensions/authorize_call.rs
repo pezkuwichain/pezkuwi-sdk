@@ -230,8 +230,9 @@ mod tests {
 			let info = tx.get_dispatch_info();
 			let len = tx.using_encoded(|e| e.len());
 
-			let checked = Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
-				.expect("Transaction is general so signature is good");
+			let checked =
+				Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
+					.expect("Transaction is general so signature is good");
 
 			let valid_tx = checked
 				.validate::<Runtime>(TransactionSource::External, &info, len)
@@ -263,8 +264,9 @@ mod tests {
 			let info = tx.get_dispatch_info();
 			let len = tx.using_encoded(|e| e.len());
 
-			let checked = Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
-				.expect("Transaction is general so signature is good");
+			let checked =
+				Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
+					.expect("Transaction is general so signature is good");
 
 			let validate_err = checked
 				.validate::<Runtime>(TransactionSource::External, &info, len)
@@ -292,8 +294,9 @@ mod tests {
 			let info = tx.get_dispatch_info();
 			let len = tx.using_encoded(|e| e.len());
 
-			let checked = Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
-				.expect("Signature is good");
+			let checked =
+				Checkable::check(tx, &pezframe_system::ChainContext::<Runtime>::default())
+					.expect("Signature is good");
 
 			checked
 				.validate::<Runtime>(TransactionSource::External, &info, len)
@@ -314,7 +317,8 @@ mod tests {
 	fn call_filter_preserved() {
 		new_test_ext().execute_with(|| {
 			let ext = pezframe_system::AuthorizeCall::<Runtime>::new();
-			let filtered_call = RuntimeCall::System(pezframe_system::Call::remark { remark: vec![] });
+			let filtered_call =
+				RuntimeCall::System(pezframe_system::Call::remark { remark: vec![] });
 
 			let origin = {
 				let mut o: RuntimeOrigin = crate::Origin::<Runtime>::Signed(42).into();

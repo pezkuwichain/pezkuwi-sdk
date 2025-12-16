@@ -64,7 +64,8 @@ pub trait ProposerInterface<Block: BlockT> {
 	///
 	/// Also specify any required inherent digests, the maximum proposal duration,
 	/// and the block size limit in bytes. See the documentation on
-	/// [`pezsp_consensus::Proposer::propose`] for more details on how to interpret these parameters.
+	/// [`pezsp_consensus::Proposer::propose`] for more details on how to interpret these
+	/// parameters.
 	///
 	/// The `InherentData` and `Digest` are left deliberately general in order to accommodate
 	/// all possible collator selection algorithms or inherent creation mechanisms,

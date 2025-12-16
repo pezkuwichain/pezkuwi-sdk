@@ -18,20 +18,20 @@
 
 //! # Subkey
 //!
-//! Subkey is a commandline utility included with Bizinikiwi. It allows generating and restoring keys
-//! for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing number of teyrchains and
+//! Subkey is a commandline utility included with Bizinikiwi. It allows generating and restoring
+//! keys for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing number of teyrchains and
 //! Bizinikiwi based projects.
 
 //! `pez_subkey` provides a few sub-commands to generate keys, check keys, sign messages, verify
 //! messages, etc...
 //!
-//! You can see the full list of commands with `pez_subkey --help`. Most commands have additional help
-//! available with for instance `pez_subkey generate --help` for the `generate` command.
+//! You can see the full list of commands with `pez_subkey --help`. Most commands have additional
+//! help available with for instance `pez_subkey generate --help` for the `generate` command.
 //!
 //! ## Safety first
 //!
-//! `pez_subkey` does not need an internet connection to work. Indeed, for the best security, you should
-//! be using `pez_subkey` on a machine that is **not connected** to the internet.
+//! `pez_subkey` does not need an internet connection to work. Indeed, for the best security, you
+//! should be using `pez_subkey` on a machine that is **not connected** to the internet.
 //!
 //! `pez_subkey` deals with **seeds** and **private keys**. Make sure to use `pez_subkey` in a safe
 //! environment (ie. no one looking over your shoulder) and on a safe computer (ie. no one able to
@@ -42,8 +42,8 @@
 //!
 //! ## Usage
 //!
-//! The following guide explains *some* of the `pez_subkey` commands. For the full list and the most up
-//! to date documentation, make sure to check the integrated help with `pez_subkey --help`.
+//! The following guide explains *some* of the `pez_subkey` commands. For the full list and the most
+//! up to date documentation, make sure to check the integrated help with `pez_subkey --help`.
 //!
 //! ### Install with Cargo
 //!
@@ -146,8 +146,8 @@
 //!
 //! ### Additional user-defined password
 //!
-//! `pez_subkey` supports an additional user-defined secret that will be appended to the seed. Let's see
-//! the following example:
+//! `pez_subkey` supports an additional user-defined secret that will be appended to the seed. Let's
+//! see the following example:
 //!
 //! ```bash
 //! pez_subkey generate --password extra_secret
@@ -184,8 +184,8 @@
 //!
 //! ### Inspecting a key
 //!
-//! If you have *some data* about a key, `pez_subkey inspect` will help you discover more information
-//! about it.
+//! If you have *some data* about a key, `pez_subkey inspect` will help you discover more
+//! information about it.
 //!
 //! If you have **secrets** that you would like to verify for instance, you can use:
 //!

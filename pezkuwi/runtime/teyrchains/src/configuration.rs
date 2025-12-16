@@ -41,8 +41,8 @@ mod benchmarking;
 
 pub mod migration;
 
-pub use pezpallet::*;
 use pezkuwi_primitives::SchedulerParams;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::configuration";
 

@@ -21,12 +21,12 @@ mod common;
 
 use common::*;
 use honggfuzz::fuzz;
-use rand::{self, SeedableRng};
 use pezsp_npos_elections::{
 	assignment_ratio_to_staked_normalized, phragmms, to_supports, BalancingConfig, ElectionResult,
 	EvaluateSupport, VoteWeight,
 };
 use pezsp_runtime::Perbill;
+use rand::{self, SeedableRng};
 
 fn main() {
 	loop {

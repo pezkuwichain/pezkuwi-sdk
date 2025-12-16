@@ -52,8 +52,8 @@
 //!   transfer.
 //!
 //! - **Held Balance**: Held balance still belongs to the account holder, but is suspended — it
-//!   cannot be transferred or used for most operations. It may be slashed by the pezpallet that placed
-//!   the hold.
+//!   cannot be transferred or used for most operations. It may be slashed by the pezpallet that
+//!   placed the hold.
 //!
 //!   Multiple holds stack rather than overlay. This means that if an account has
 //!   3 holds for 100 units, the account can spend its funds for any reason down to 300 units, at
@@ -164,9 +164,9 @@ mod union_of;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::marker::PhantomData;
 use pezframe_support_procedural::{CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound};
-use scale_info::TypeInfo;
 #[cfg(feature = "runtime-benchmarks")]
 use pezsp_runtime::Saturating;
+use scale_info::TypeInfo;
 
 use super::{
 	Fortitude::{Force, Polite},
@@ -179,12 +179,12 @@ pub use hold::{
 };
 pub use imbalance::{Credit, Debt, HandleImbalanceDrop, Imbalance};
 pub use item_of::ItemOf;
-pub use regular::{
-	Balanced, DecreaseIssuance, Dust, IncreaseIssuance, Inspect, Mutate, Unbalanced,
-};
 use pezsp_arithmetic::traits::Zero;
 use pezsp_core::Get;
 use pezsp_runtime::{traits::Convert, DispatchError};
+pub use regular::{
+	Balanced, DecreaseIssuance, Dust, IncreaseIssuance, Inspect, Mutate, Unbalanced,
+};
 pub use union_of::{NativeFromLeft, NativeOrWithId, UnionOf};
 
 #[cfg(feature = "experimental")]

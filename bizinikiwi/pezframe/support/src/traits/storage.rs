@@ -20,20 +20,20 @@
 use alloc::{collections::btree_set::BTreeSet, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, FullCodec, MaxEncodedLen};
 use core::{marker::PhantomData, mem, ops::Drop};
-use pezframe_support::CloneNoBound;
 use impl_trait_for_tuples::impl_for_tuples;
-use scale_info::TypeInfo;
+use pezframe_support::CloneNoBound;
 pub use pezsp_core::storage::TrackedStorageKey;
 use pezsp_core::Get;
 use pezsp_runtime::{
 	traits::{Convert, Member},
 	DispatchError, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// An instance of a pezpallet in the storage.
 ///
-/// It is required that these instances are unique, to support multiple instances per pezpallet in the
-/// same runtime!
+/// It is required that these instances are unique, to support multiple instances per pezpallet in
+/// the same runtime!
 ///
 /// E.g. for module MyModule default instance will have prefix "MyModule" and other instances
 /// "InstanceNMyModule".

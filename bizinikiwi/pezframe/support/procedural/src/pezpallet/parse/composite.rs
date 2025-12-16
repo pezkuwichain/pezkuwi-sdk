@@ -91,7 +91,8 @@ pub struct CompositeDef {
 	pub composite_keyword: keyword::CompositeKeyword,
 	/// Name of the associated type.
 	pub ident: syn::Ident,
-	/// Type parameters and where clause attached to a declaration of the pezpallet::composite_enum.
+	/// Type parameters and where clause attached to a declaration of the
+	/// pezpallet::composite_enum.
 	pub generics: syn::Generics,
 	/// The span of the pezpallet::composite_enum attribute.
 	pub attr_span: proc_macro2::Span,

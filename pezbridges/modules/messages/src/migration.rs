@@ -31,8 +31,8 @@ pub mod v0 {
 	use super::Config;
 	use crate::BridgedChainOf;
 	use bp_messages::{MessageNonce, UnrewardedRelayer};
-	use pezbp_runtime::AccountIdOf;
 	use codec::{Decode, Encode};
+	use pezbp_runtime::AccountIdOf;
 	use pezsp_std::collections::vec_deque::VecDeque;
 
 	#[derive(Encode, Decode, Clone, PartialEq, Eq)]
@@ -107,7 +107,9 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: pezsp_std::vec::Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
+		fn post_upgrade(
+			state: pezsp_std::vec::Vec<u8>,
+		) -> Result<(), pezsp_runtime::DispatchError> {
 			use codec::Decode;
 			const LOG_TARGET: &str = "runtime::bridge-messages-migration";
 

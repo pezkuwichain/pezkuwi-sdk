@@ -33,11 +33,11 @@ use pezkuwi_primitives::{
 	ValidDisputeStatementKind, ValidatorId, ValidatorIndex, ValidatorSignature,
 };
 use pezkuwi_runtime_metrics::get_current_time;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AppVerify, One, Saturating, Zero},
 	DispatchError, RuntimeDebug, SaturatedConversion,
 };
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 #[allow(unused_imports)]
@@ -372,9 +372,12 @@ pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config + configuration::Config + session_info::Config {
+	pub trait Config:
+		pezframe_system::Config + configuration::Config + session_info::Config
+	{
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type RewardValidators: RewardValidators;
 		type SlashingHandler: SlashingHandler<BlockNumberFor<Self>>;
 

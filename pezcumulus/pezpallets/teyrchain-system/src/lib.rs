@@ -50,11 +50,11 @@ use pezframe_support::{
 use pezframe_system::{ensure_none, ensure_root, pezpallet_prelude::HeaderFor};
 use pezkuwi_runtime_teyrchains::{FeeTracker, GetMinFeeFactor};
 use pezkuwi_teyrchain_primitives::primitives::RelayChainBlockNumber;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{BlockNumberProvider, Hash},
 	FixedU128, RuntimeDebug, SaturatedConversion,
 };
+use scale_info::TypeInfo;
 use teyrchain_inherent::{
 	deconstruct_teyrchain_inherent_data, AbridgedInboundDownwardMessages,
 	AbridgedInboundHrmpMessages, BasicTeyrchainInherentData, InboundMessageId, InboundMessagesData,
@@ -201,7 +201,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config<OnSetCode = TeyrchainSetCode<Self>> {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Something which can be notified when the validation data is set.
 		type OnSystemEvent: OnSystemEvent;
@@ -796,8 +797,8 @@ pub mod pezpallet {
 	/// applied.
 	///
 	/// As soon as the relay chain gives us the go-ahead signal, we will overwrite the
-	/// [`:code`][pezsp_core::storage::well_known_keys::CODE] which will result the next block process
-	/// with the new validation code. This concludes the upgrade process.
+	/// [`:code`][pezsp_core::storage::well_known_keys::CODE] which will result the next block
+	/// process with the new validation code. This concludes the upgrade process.
 	#[pezpallet::storage]
 	pub type PendingValidationCode<T: Config> = StorageValue<_, Vec<u8>, ValueQuery>;
 
@@ -811,7 +812,8 @@ pub mod pezpallet {
 
 	/// The [`PersistedValidationData`] set for this block.
 	///
-	/// This value is expected to be set only once by the [`Pezpallet::set_validation_data`] inherent.
+	/// This value is expected to be set only once by the [`Pezpallet::set_validation_data`]
+	/// inherent.
 	#[pezpallet::storage]
 	pub type ValidationData<T: Config> = StorageValue<_, PersistedValidationData>;
 

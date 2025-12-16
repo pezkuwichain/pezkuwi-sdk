@@ -37,8 +37,8 @@ use pezcumulus_primitives_core::{
 	},
 	InboundDownwardMessage, InboundHrmpMessage, ParaId, PersistedValidationData,
 };
-use scale_info::TypeInfo;
 use pezsp_inherents::InherentIdentifier;
+use scale_info::TypeInfo;
 
 /// The identifier for the teyrchain inherent.
 pub const TEYRCHAIN_INHERENT_IDENTIFIER_V0: InherentIdentifier = *b"sysi1337";

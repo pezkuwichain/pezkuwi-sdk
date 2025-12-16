@@ -389,7 +389,8 @@ fn good_commit_leads_to_relay() {
 		for (i, key) in private.iter().enumerate() {
 			precommits.push(precommit.clone());
 
-			let signature = pezsp_consensus_grandpa::AuthoritySignature::from(key.sign(&payload[..]));
+			let signature =
+				pezsp_consensus_grandpa::AuthoritySignature::from(key.sign(&payload[..]));
 			auth_data.push((signature, public[i].0.clone()))
 		}
 
@@ -540,7 +541,8 @@ fn bad_commit_leads_to_report() {
 		for (i, key) in private.iter().enumerate() {
 			precommits.push(precommit.clone());
 
-			let signature = pezsp_consensus_grandpa::AuthoritySignature::from(key.sign(&payload[..]));
+			let signature =
+				pezsp_consensus_grandpa::AuthoritySignature::from(key.sign(&payload[..]));
 			auth_data.push((signature, public[i].0.clone()))
 		}
 

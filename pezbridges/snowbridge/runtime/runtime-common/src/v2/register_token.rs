@@ -28,7 +28,8 @@ impl<
 	for ForeignAssetOwner<IsForeign, AssetInspect, AccountId, LocationToAccountId, L>
 where
 	for<'a> &'a RuntimeOrigin::PalletsOrigin: TryInto<&'a XcmOrigin>,
-	<AssetInspect as pezframe_support::traits::fungibles::Inspect<AccountId>>::AssetId: From<Location>,
+	<AssetInspect as pezframe_support::traits::fungibles::Inspect<AccountId>>::AssetId:
+		From<Location>,
 {
 	type Success = L;
 
@@ -75,7 +76,8 @@ impl<
 	for LocalAssetOwner<MatchAssetId, AssetInspect, AccountId, AssetId, L>
 where
 	RuntimeOrigin: Into<Result<RawOrigin<AccountId>, RuntimeOrigin>> + From<RawOrigin<AccountId>>,
-	<AssetInspect as pezframe_support::traits::fungibles::Inspect<AccountId>>::AssetId: From<AssetId>,
+	<AssetInspect as pezframe_support::traits::fungibles::Inspect<AccountId>>::AssetId:
+		From<AssetId>,
 {
 	type Success = L;
 

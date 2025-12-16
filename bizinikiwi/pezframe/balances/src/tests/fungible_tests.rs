@@ -18,6 +18,10 @@
 //! Tests regarding the functionality of the `fungible` trait set implementations.
 
 use super::*;
+use fungible::{
+	FreezeConsideration, HoldConsideration, Inspect, InspectFreeze, InspectHold,
+	LoneFreezeConsideration, LoneHoldConsideration, Mutate, MutateFreeze, MutateHold, Unbalanced,
+};
 use pezframe_support::traits::{
 	tokens::{
 		Fortitude::{Force, Polite},
@@ -26,10 +30,6 @@ use pezframe_support::traits::{
 		Restriction::Free,
 	},
 	Consideration, Footprint, LinearStoragePrice, MaybeConsideration,
-};
-use fungible::{
-	FreezeConsideration, HoldConsideration, Inspect, InspectFreeze, InspectHold,
-	LoneFreezeConsideration, LoneHoldConsideration, Mutate, MutateFreeze, MutateHold, Unbalanced,
 };
 use pezsp_core::ConstU64;
 

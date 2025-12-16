@@ -27,10 +27,8 @@ use pezframe_support::{
 	weights::Weight,
 	DefaultNoBound,
 };
-pub use pezpallet::*;
 use pezkuwi_primitives::ValidityError;
-use scale_info::TypeInfo;
-use serde::{self, Deserialize, Deserializer, Serialize, Serializer};
+pub use pezpallet::*;
 use pezsp_io::{crypto::secp256k1_ecdsa_recover, hashing::keccak_256};
 use pezsp_runtime::{
 	impl_tx_ext_default,
@@ -44,6 +42,8 @@ use pezsp_runtime::{
 	},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
+use serde::{self, Deserialize, Deserializer, Serialize, Serializer};
 
 type CurrencyOf<T> = <<T as Config>::VestingSchedule as VestingSchedule<
 	<T as pezframe_system::Config>::AccountId,
@@ -209,7 +209,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type VestingSchedule: VestingSchedule<Self::AccountId, Moment = BlockNumberFor<Self>>;
 		#[pezpallet::constant]
 		type Prefix: Get<&'static [u8]>;

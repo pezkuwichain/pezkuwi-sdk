@@ -37,8 +37,8 @@ mod storage_alias;
 mod transactional;
 mod tt_macro;
 
-use pezframe_support_procedural_tools::generate_access_from_frame_or_crate;
 use macro_magic::{import_tokens_attr, import_tokens_attr_verbatim};
+use pezframe_support_procedural_tools::generate_access_from_frame_or_crate;
 use proc_macro::TokenStream;
 use quote::{quote, ToTokens};
 use std::{cell::RefCell, str::FromStr};
@@ -129,19 +129,20 @@ fn counter_prefix(prefix: &str) -> String {
 /// * `path::to::pezpallet`: identifiers separated by colons which declare the path to a pezpallet
 ///   definition.
 ///
-/// * `::<InstanceN>` optional: specify the instance of the pezpallet to use. If not specified it will
-///   use the default instance (or the only instance in case of non-instantiable pallets).
+/// * `::<InstanceN>` optional: specify the instance of the pezpallet to use. If not specified it
+///   will use the default instance (or the only instance in case of non-instantiable pallets).
 ///
-/// * `::{ Part1, Part2<T>, .. }` optional if pezpallet declared with `pezframe_support::pezpallet`: Comma
-///   separated parts declared with their generic. If a pezpallet is declared with
-///   `pezframe_support::pezpallet` macro then the parts can be automatically derived if not explicitly
-///   provided. We provide support for the following module parts in a pezpallet:
+/// * `::{ Part1, Part2<T>, .. }` optional if pezpallet declared with `pezframe_support::pezpallet`:
+///   Comma separated parts declared with their generic. If a pezpallet is declared with
+///   `pezframe_support::pezpallet` macro then the parts can be automatically derived if not
+///   explicitly provided. We provide support for the following module parts in a pezpallet:
 ///
 ///   - `Pezpallet` - Required for all pallets
 ///   - `Call` - If the pezpallet has callable functions
 ///   - `Storage` - If the pezpallet uses storage
 ///   - `Event` or `Event<T>` (if the event is generic) - If the pezpallet emits events
-///   - `Origin` or `Origin<T>` (if the origin is generic) - If the pezpallet has instantiable origins
+///   - `Origin` or `Origin<T>` (if the origin is generic) - If the pezpallet has instantiable
+///     origins
 ///   - `Config` or `Config<T>` (if the config is generic) - If the pezpallet builds the genesis
 ///     storage with `GenesisConfig`
 ///   - `Inherent` - If the pezpallet provides/can check inherents.
@@ -151,23 +152,23 @@ fn counter_prefix(prefix: &str) -> String {
 /// the pezpallet usable in the runtime.
 ///
 /// * `exclude_parts { Part1, Part2 }` optional: comma separated parts without generics. I.e. one of
-///   `Pezpallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`. It
-///   is incompatible with `use_parts`. This specifies the part to exclude. In order to select
+///   `Pezpallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`.
+///   It is incompatible with `use_parts`. This specifies the part to exclude. In order to select
 ///   subset of the pezpallet parts.
 ///
 ///   For example excluding the part `Call` can be useful if the runtime doesn't want to make the
 ///   pezpallet calls available.
 ///
 /// * `use_parts { Part1, Part2 }` optional: comma separated parts without generics. I.e. one of
-///   `Pezpallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`. It
-///   is incompatible with `exclude_parts`. This specifies the part to use. In order to select a
+///   `Pezpallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`.
+///   It is incompatible with `exclude_parts`. This specifies the part to use. In order to select a
 ///   subset of the pezpallet parts.
 ///
 ///   For example not using the part `Call` can be useful if the runtime doesn't want to make the
 ///   pezpallet calls available.
 ///
-/// * `= $n` optional: number to define at which index the pezpallet variants in `OriginCaller`, `Call`
-///   and `Event` are encoded, and to define the ModuleToIndex value.
+/// * `= $n` optional: number to define at which index the pezpallet variants in `OriginCaller`,
+///   `Call` and `Event` are encoded, and to define the ModuleToIndex value.
 ///
 ///   if `= $n` is not given, then index is resolved in the same way as fieldless enum in Rust
 ///   (i.e. incrementally from previous index):
@@ -424,7 +425,8 @@ pub fn impl_key_prefix_for_tuples(input: TokenStream) -> TokenStream {
 		.into()
 }
 
-/// Internal macro use by pezframe_support to generate dummy part checker for old pezpallet declaration
+/// Internal macro use by pezframe_support to generate dummy part checker for old pezpallet
+/// declaration
 #[proc_macro]
 pub fn __generate_dummy_part_checker(input: TokenStream) -> TokenStream {
 	dummy_part_checker::generate_dummy_part_checker(input)
@@ -468,7 +470,8 @@ pub fn __create_tt_macro(input: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::storage_alias`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::storage_alias`.
 #[proc_macro_attribute]
 pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream {
 	storage_alias::storage_alias(attributes.into(), input.into())
@@ -537,8 +540,8 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// attached with [`#[inject_runtime_type]`]) should not be injected with the respective concrete
 /// types. By default, all such types are injected.
 ///
-/// You can also make use of `#[pezpallet::no_default]` on specific items in your default impl that you
-/// want to ensure will not be copied over but that you nonetheless want to use locally in the
+/// You can also make use of `#[pezpallet::no_default]` on specific items in your default impl that
+/// you want to ensure will not be copied over but that you nonetheless want to use locally in the
 /// context of the foreign impl and the pezpallet (or context) in which it is defined.
 ///
 /// ## Use-Case Example: Auto-Derive Test Pezpallet Config Traits
@@ -552,10 +555,11 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// implements a compatible `Config` such as `pezframe_system::Config` for a test/mock runtime, and
 /// should receive as its first argument the path to a `DefaultConfig` impl that has been registered
 /// via [`#[register_default_impl]`](`macro@register_default_impl`), and as its second argument, the
-/// path to the auto-generated `DefaultConfig` for the existing pezpallet `Config` we want to base our
-/// test config off of.
+/// path to the auto-generated `DefaultConfig` for the existing pezpallet `Config` we want to base
+/// our test config off of.
 ///
-/// The following is what the `basic` example pezpallet would look like with a default testing config:
+/// The following is what the `basic` example pezpallet would look like with a default testing
+/// config:
 ///
 /// ```ignore
 /// #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig as pezframe_system::pezpallet::DefaultConfig)]
@@ -640,8 +644,8 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// [`#[pezpallet::no_default]`](`macro@no_default`), in which case it cannot be overridden, and any
 /// attempts to do so will result in a compiler error.
 ///
-/// See `frame/examples/default-config/tests.rs` for a runnable end-to-end example pezpallet that makes
-/// use of `derive_impl` to derive its testing config.
+/// See `frame/examples/default-config/tests.rs` for a runnable end-to-end example pezpallet that
+/// makes use of `derive_impl` to derive its testing config.
 ///
 /// See [here](`macro@config`) for more information and caveats about the auto-generated
 /// `DefaultConfig` trait.
@@ -649,10 +653,10 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// ## Optional Conventions
 ///
 /// Note that as an optional convention, we encourage creating a `config_preludes` module inside of
-/// your pezpallet. This is the convention we follow for `pezframe_system`'s `TestDefaultConfig` which, as
-/// shown above, is located at `pezframe_system::config_preludes::TestDefaultConfig`. This is just a
-/// suggested convention -- there is nothing in the code that expects modules with these names to be
-/// in place, so there is no imperative to follow this pattern unless desired.
+/// your pezpallet. This is the convention we follow for `pezframe_system`'s `TestDefaultConfig`
+/// which, as shown above, is located at `pezframe_system::config_preludes::TestDefaultConfig`. This
+/// is just a suggested convention -- there is nothing in the code that expects modules with these
+/// names to be in place, so there is no imperative to follow this pattern unless desired.
 ///
 /// In `config_preludes`, you can place types named like:
 ///
@@ -717,7 +721,8 @@ pub fn no_default(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::no_default_bounds`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::no_default_bounds`.
 #[proc_macro_attribute]
 pub fn no_default_bounds(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -866,7 +871,8 @@ pub fn constant(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::constant_name`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::constant_name`.
 #[proc_macro_attribute]
 pub fn constant_name(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -885,7 +891,8 @@ pub fn disable_pezframe_system_supertrait_check(_: TokenStream, _: TokenStream) 
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::storage_version`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::storage_version`.
 #[proc_macro_attribute]
 pub fn storage_version(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -950,7 +957,8 @@ pub fn feeless_if(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::extra_constants`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::extra_constants`.
 #[proc_macro_attribute]
 pub fn extra_constants(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -977,7 +985,8 @@ pub fn event(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::include_metadata`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::include_metadata`.
 #[proc_macro_attribute]
 pub fn include_metadata(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -986,7 +995,8 @@ pub fn include_metadata(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::generate_deposit`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::generate_deposit`.
 #[proc_macro_attribute]
 pub fn generate_deposit(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1013,7 +1023,8 @@ pub fn getter(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::storage_prefix`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::storage_prefix`.
 #[proc_macro_attribute]
 pub fn storage_prefix(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1031,7 +1042,8 @@ pub fn unbounded(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::whitelist_storage`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::whitelist_storage`.
 #[proc_macro_attribute]
 pub fn whitelist_storage(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1059,7 +1071,8 @@ pub fn type_value(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::genesis_config`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::genesis_config`.
 #[proc_macro_attribute]
 pub fn genesis_config(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1068,7 +1081,8 @@ pub fn genesis_config(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::genesis_build`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::genesis_build`.
 #[proc_macro_attribute]
 pub fn genesis_build(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1086,7 +1100,8 @@ pub fn inherent(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::validate_unsigned`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::validate_unsigned`.
 #[proc_macro_attribute]
 pub fn validate_unsigned(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1114,7 +1129,8 @@ pub fn origin(_: TokenStream, _: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pezpallet_macros::composite_enum`.
+/// Documentation for this macro can be found at
+/// `pezframe_support::pezpallet_macros::composite_enum`.
 #[proc_macro_attribute]
 pub fn composite_enum(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
@@ -1125,9 +1141,9 @@ pub fn composite_enum(_: TokenStream, _: TokenStream) -> TokenStream {
 /// The off-chain worker can then create and submit all such work items at any given time.
 ///
 /// These work items are defined as instances of the `Task` trait (found at
-/// `pezframe_support::traits::Task`). [`pezpallet:tasks_experimental`](macro@tasks_experimental) when
-/// attached to an `impl` block inside a pezpallet, will generate an enum `Task<T>` whose variants
-/// are mapped to functions inside this `impl` block.
+/// `pezframe_support::traits::Task`). [`pezpallet:tasks_experimental`](macro@tasks_experimental)
+/// when attached to an `impl` block inside a pezpallet, will generate an enum `Task<T>` whose
+/// variants are mapped to functions inside this `impl` block.
 ///
 /// Each such function must have the following set of attributes:
 ///
@@ -1460,11 +1476,11 @@ pub fn dynamic_aggregated_params_internal(attrs: TokenStream, input: TokenStream
 ///
 /// Authorize process comes with 2 attributes macro on top of the authorized call:
 ///
-/// * `#[pezpallet::authorize($authorized_function)]` - defines the function that authorizes the call.
-///   First argument is the transaction source `TransactionSource` then followed by the same as call
-///   arguments but by reference `&`. Return type is `TransactionValidityWithRefund`.
-/// * `#[pezpallet::weight_of_authorize($weight)]` - defines the value of the weight of the authorize
-///   function. This attribute is similar to `#[pezpallet::weight]`:
+/// * `#[pezpallet::authorize($authorized_function)]` - defines the function that authorizes the
+///   call. First argument is the transaction source `TransactionSource` then followed by the same
+///   as call arguments but by reference `&`. Return type is `TransactionValidityWithRefund`.
+/// * `#[pezpallet::weight_of_authorize($weight)]` - defines the value of the weight of the
+///   authorize function. This attribute is similar to `#[pezpallet::weight]`:
 ///   * it can be ignore in `dev_mode`
 ///   * it can be automatically infered from weight info. For the call `foo` the function
 ///     `authorize_foo` in the weight info will be used. (weight info needs to be provided in the

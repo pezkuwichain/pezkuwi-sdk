@@ -46,12 +46,12 @@ extern crate alloc;
 use alloc::{boxed::Box, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::{marker::PhantomData, result};
-use scale_info::TypeInfo;
 use pezsp_io::storage;
 use pezsp_runtime::{
 	traits::{Dispatchable, Hash},
 	DispatchError, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 use pezframe_support::{
 	dispatch::{
@@ -566,8 +566,8 @@ pub mod pezpallet {
 		///
 		/// # WARNING:
 		///
-		/// The `pezpallet-collective` can also be managed by logic outside of the pezpallet through the
-		/// implementation of the trait [`ChangeMembers`].
+		/// The `pezpallet-collective` can also be managed by logic outside of the pezpallet through
+		/// the implementation of the trait [`ChangeMembers`].
 		/// Any call to `set_members` must be careful that the member set doesn't get out of sync
 		/// with other logic managing the member set.
 		///
@@ -1088,7 +1088,10 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		}
 
 		// Only allow actual closing of the proposal after the voting period has ended.
-		ensure!(pezframe_system::Pezpallet::<T>::block_number() >= voting.end, Error::<T, I>::TooEarly);
+		ensure!(
+			pezframe_system::Pezpallet::<T>::block_number() >= voting.end,
+			Error::<T, I>::TooEarly
+		);
 
 		let prime_vote = Prime::<T, I>::get().map(|who| voting.ayes.iter().any(|a| a == &who));
 

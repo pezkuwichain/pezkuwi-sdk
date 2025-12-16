@@ -41,7 +41,6 @@ use pezframe_support::{
 	Blake2_128Concat, BoundedVec, StorageHasher,
 };
 use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
-use smallvec::{Array, SmallVec};
 use pezsp_core::{
 	ecdsa::Public as ECDSAPublic,
 	sr25519::{Public as SR25519Public, Signature as SR25519Signature},
@@ -52,6 +51,7 @@ use pezsp_runtime::{
 	traits::{Convert, Dispatchable, Zero},
 	DispatchError,
 };
+use smallvec::{Array, SmallVec};
 
 pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 pub type MomentOf<T> = <<T as Config>::Time as Time>::Moment;
@@ -1723,8 +1723,8 @@ mod tests {
 	use pezframe_support::{assert_err, assert_ok, parameter_types};
 	use pezframe_system::{EventRecord, Phase};
 	use pezpallet_contracts_uapi::ReturnFlags;
-	use pretty_assertions::assert_eq;
 	use pezsp_runtime::{traits::Hash, DispatchError};
+	use pretty_assertions::assert_eq;
 	use std::{cell::RefCell, collections::hash_map::HashMap, rc::Rc};
 
 	type System = pezframe_system::Pezpallet<Test>;

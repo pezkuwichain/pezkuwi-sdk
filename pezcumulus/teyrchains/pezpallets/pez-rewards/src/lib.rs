@@ -115,8 +115,8 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezpallet_trust::TrustScoreProvider;
-use scale_info::TypeInfo;
 use pezsp_runtime::traits::{AccountIdConversion, Member, Saturating, Zero};
+use scale_info::TypeInfo;
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {

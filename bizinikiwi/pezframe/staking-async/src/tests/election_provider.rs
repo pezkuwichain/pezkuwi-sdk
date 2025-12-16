@@ -17,9 +17,9 @@
 
 use super::*;
 use crate::session_rotation::{EraElectionPlanner, Eras};
+use bizinikiwi_test_utils::assert_eq_uvec;
 use pezframe_support::assert_ok;
 use pezsp_npos_elections::Support;
-use bizinikiwi_test_utils::assert_eq_uvec;
 
 use crate::tests::session_mock::ReceivedValidatorSets;
 

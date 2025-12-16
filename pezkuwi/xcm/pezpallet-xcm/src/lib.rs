@@ -48,7 +48,6 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::{BlockNumberFor, *};
 pub use pezpallet::*;
-use scale_info::TypeInfo;
 use pezsp_core::H256;
 use pezsp_runtime::{
 	traits::{
@@ -57,6 +56,7 @@ use pezsp_runtime::{
 	},
 	Either, RuntimeDebug, SaturatedConversion,
 };
+use scale_info::TypeInfo;
 use storage::{with_transaction, TransactionOutcome};
 use xcm::{latest::QueryResponseInfo, prelude::*};
 use xcm_builder::{
@@ -255,7 +255,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A lockable currency.
 		// TODO: We should really use a trait which can handle multiple currencies.
@@ -1722,7 +1723,8 @@ pub mod pezpallet {
 			if let Some(expiry) = expires {
 				ensure!(
 					expiry >
-						pezframe_system::Pezpallet::<T>::current_block_number().saturated_into::<u64>(),
+						pezframe_system::Pezpallet::<T>::current_block_number()
+							.saturated_into::<u64>(),
 					Error::<T>::ExpiresInPast
 				);
 			}
@@ -1970,7 +1972,10 @@ impl<T: Config> QueryHandler for Pezpallet<T> {
 		let response = response.into();
 		Queries::<T>::insert(
 			id,
-			QueryStatus::Ready { response, at: pezframe_system::Pezpallet::<T>::current_block_number() },
+			QueryStatus::Ready {
+				response,
+				at: pezframe_system::Pezpallet::<T>::current_block_number(),
+			},
 		);
 	}
 }
@@ -3068,7 +3073,10 @@ impl<T: Config> Pezpallet<T> {
 		origin: OriginCaller,
 		call: RuntimeCall,
 		result_xcms_version: XcmVersion,
-	) -> Result<CallDryRunEffects<<Runtime as pezframe_system::Config>::RuntimeEvent>, XcmDryRunApiError>
+	) -> Result<
+		CallDryRunEffects<<Runtime as pezframe_system::Config>::RuntimeEvent>,
+		XcmDryRunApiError,
+	>
 	where
 		Runtime: crate::Config,
 		Router: InspectMessageQueues,
@@ -3456,7 +3464,8 @@ impl<T: Config> Pezpallet<T> {
 				aliaser
 					.expiry
 					.map(|expiry| {
-						pezframe_system::Pezpallet::<T>::current_block_number().saturated_into::<u64>() <
+						pezframe_system::Pezpallet::<T>::current_block_number()
+							.saturated_into::<u64>() <
 							expiry
 					})
 					.unwrap_or(true)
@@ -3492,10 +3501,10 @@ impl<T: Config> Pezpallet<T> {
 	/// - `message`: The message whose outcome should be reported.
 	/// - `responder`: The origin from which a response should be expected.
 	/// - `notify`: A dispatchable function which will be called once the outcome of `message` is
-	///   known. It may be a dispatchable in any pezpallet of the local chain, but other than the usual
-	///   origin, it must accept exactly two arguments: `query_id: QueryId` and `outcome: Response`,
-	///   and in that order. It should expect that the origin is `Origin::Response` and will contain
-	///   the responder's location.
+	///   known. It may be a dispatchable in any pezpallet of the local chain, but other than the
+	///   usual origin, it must accept exactly two arguments: `query_id: QueryId` and `outcome:
+	///   Response`, and in that order. It should expect that the origin is `Origin::Response` and
+	///   will contain the responder's location.
 	/// - `timeout`: The block number after which it is permissible for `notify` not to be called
 	///   even if a response is received.
 	///
@@ -4120,7 +4129,8 @@ impl<T: Config> OnResponse for Pezpallet<T> {
 							let dispatch_origin = Origin::Response(origin.clone()).into();
 							match call.dispatch(dispatch_origin) {
 								Ok(post_info) => {
-									let e = Event::Notified { query_id, pezpallet_index, call_index };
+									let e =
+										Event::Notified { query_id, pezpallet_index, call_index };
 									Self::deposit_event(e);
 									post_info.actual_weight
 								},

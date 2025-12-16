@@ -157,7 +157,8 @@ pub fn process_generics(def: &mut Def) -> syn::Result<Vec<ResultOnEmptyStructMet
 			}
 			syn::parse_quote!(#pezframe_support::traits::GetDefault)
 		};
-		let default_max_values: syn::Type = syn::parse_quote!(#pezframe_support::traits::GetDefault);
+		let default_max_values: syn::Type =
+			syn::parse_quote!(#pezframe_support::traits::GetDefault);
 
 		let set_result_query_type_parameter = |query_type: &mut syn::Type| -> syn::Result<()> {
 			if let Some(QueryKind::ResultQuery(error_path, _)) = storage_def.query_kind.as_ref() {
@@ -860,8 +861,8 @@ pub fn expand_storages(def: &mut Def) -> proc_macro2::TokenStream {
 			.iter()
 			.filter_map(|storage| {
 				// A little hacky; don't generate for cfg gated storages to not get compile errors
-				// when building "frame-feature-testing" gated storages in the "pezframe-support-test"
-				// crate.
+				// when building "frame-feature-testing" gated storages in the
+				// "pezframe-support-test" crate.
 				if storage.try_decode && storage.cfg_attrs.is_empty() {
 					let ident = &storage.ident;
 					let gen = &def.type_use_generics(storage.attr_span);

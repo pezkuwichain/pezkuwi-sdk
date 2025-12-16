@@ -25,6 +25,10 @@ use crate::{
 	Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, Scheduler, TeyrchainInfo,
 	ZagrosTreasuryAccount, DAYS,
 };
+pub use origins::{
+	pezpallet_origins as pezpallet_fellowship_origins, Architects, EnsureCanPromoteTo,
+	EnsureCanRetainAt, EnsureFellowship, Fellows, Masters, Members, ToVoice,
+};
 use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
 	parameter_types,
@@ -35,15 +39,11 @@ use pezframe_support::{
 	PalletId,
 };
 use pezframe_system::{EnsureRoot, EnsureRootWithSuccess};
-pub use origins::{
-	pezpallet_origins as pezpallet_fellowship_origins, Architects, EnsureCanPromoteTo, EnsureCanRetainAt,
-	EnsureFellowship, Fellows, Masters, Members, ToVoice,
-};
-use pezpallet_ranked_collective::EnsureOfRank;
-use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_runtime_common::impls::{
 	ContainsParts, LocatableAssetConverter, VersionedLocatableAsset, VersionedLocationConverter,
 };
+use pezpallet_ranked_collective::EnsureOfRank;
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezsp_arithmetic::Permill;
 use pezsp_core::{ConstU128, ConstU32, ConstU8};
 use pezsp_runtime::traits::{ConstU16, ConvertToValue, IdentityLookup, Replace, TakeFirst};
@@ -112,10 +112,12 @@ impl pezpallet_referenda::Config<FellowshipReferendaInstance> for Runtime {
 pub type FellowshipCollectiveInstance = pezpallet_ranked_collective::Instance1;
 
 impl pezpallet_ranked_collective::Config<FellowshipCollectiveInstance> for Runtime {
-	type WeightInfo = weights::pezpallet_ranked_collective_fellowship_collective::WeightInfo<Runtime>;
+	type WeightInfo =
+		weights::pezpallet_ranked_collective_fellowship_collective::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 
-	// Promotions and the induction of new members are serviced by `FellowshipCore` pezpallet instance.
+	// Promotions and the induction of new members are serviced by `FellowshipCore` pezpallet
+	// instance.
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type AddOrigin = pezframe_system::EnsureNever<()>;
 	#[cfg(feature = "runtime-benchmarks")]

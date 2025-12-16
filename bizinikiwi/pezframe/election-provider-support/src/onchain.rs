@@ -223,7 +223,8 @@ mod tests {
 	type Nonce = u64;
 	type BlockNumber = u64;
 
-	pub type Header = pezsp_runtime::generic::Header<BlockNumber, pezsp_runtime::traits::BlakeTwo256>;
+	pub type Header =
+		pezsp_runtime::generic::Header<BlockNumber, pezsp_runtime::traits::BlakeTwo256>;
 	pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<AccountId, (), (), ()>;
 	pub type Block = pezsp_runtime::generic::Block<Header, UncheckedExtrinsic>;
 

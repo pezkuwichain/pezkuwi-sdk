@@ -34,8 +34,8 @@ use honggfuzz::fuzz;
 
 mod common;
 use common::to_range;
-use rand::{self, Rng, RngCore, SeedableRng};
 use pezsp_npos_elections::{reduce, to_support_map, ExtendedBalance, StakedAssignment};
+use rand::{self, Rng, RngCore, SeedableRng};
 
 type Balance = u128;
 type AccountId = u64;

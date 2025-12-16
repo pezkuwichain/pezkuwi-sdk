@@ -55,7 +55,8 @@ pub trait WeightInfo {
 	fn report_bridge_status() -> Weight;
 }
 
-/// Weights for `pezpallet_xcm_bridge_hub_router` that are generated using one of the Bridge testnets.
+/// Weights for `pezpallet_xcm_bridge_hub_router` that are generated using one of the Bridge
+/// testnets.
 ///
 /// Those weights are test only and must never be used in production.
 pub struct BridgeWeight<T>(PhantomData<T>);

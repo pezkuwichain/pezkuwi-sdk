@@ -88,8 +88,8 @@
 //!
 //! ### Example from the FRAME
 //!
-//! The [Staking pezpallet](../pezpallet_staking/index.html) uses the Session pezpallet to get the validator
-//! set.
+//! The [Staking pezpallet](../pezpallet_staking/index.html) uses the Session pezpallet to get the
+//! validator set.
 //!
 //! ```
 //! use pezpallet_session as session;
@@ -270,8 +270,8 @@ pub trait SessionManager<ValidatorId> {
 	}
 	/// End the session.
 	///
-	/// Because the session pezpallet can queue validator set the ending session can be lower than the
-	/// last new session index.
+	/// Because the session pezpallet can queue validator set the ending session can be lower than
+	/// the last new session index.
 	fn end_session(end_index: SessionIndex);
 	/// Start an already planned session.
 	///
@@ -405,7 +405,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A stable ID for a validator.
 		type ValidatorId: Member
@@ -673,8 +674,8 @@ pub mod pezpallet {
 	impl<T: Config> Pezpallet<T> {
 		/// Mint enough funds into `who`, such that they can pay the session key setting deposit.
 		///
-		/// Meant to be used if any pezpallet's benchmarking code wishes to set session keys, and wants
-		/// to make sure it will succeed.
+		/// Meant to be used if any pezpallet's benchmarking code wishes to set session keys, and
+		/// wants to make sure it will succeed.
 		pub fn ensure_can_pay_key_deposit(who: &T::AccountId) -> Result<(), DispatchError> {
 			use pezframe_support::traits::tokens::{Fortitude, Preservation};
 			let deposit = T::KeyDeposit::get();

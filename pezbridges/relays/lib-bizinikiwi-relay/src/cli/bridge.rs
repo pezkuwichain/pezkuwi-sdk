@@ -19,7 +19,7 @@
 use crate::{
 	equivocation::BizinikiwiEquivocationDetectionPipeline,
 	finality::BizinikiwiFinalitySyncPipeline,
-	messages::{MessagesRelayLimits, BizinikiwiMessageLane},
+	messages::{BizinikiwiMessageLane, MessagesRelayLimits},
 	teyrchains::BizinikiwiTeyrchainsPipeline,
 };
 use bp_teyrchains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};

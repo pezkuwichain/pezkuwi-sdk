@@ -17,8 +17,8 @@
 //! Deal with CLI args of bizinikiwi-to-bizinikiwi relay.
 
 use clap::Parser;
-use rbtag::BuildInfo;
 use pezsp_runtime::traits::TryConvert;
+use rbtag::BuildInfo;
 use std::str::FromStr;
 
 pub mod bridge;

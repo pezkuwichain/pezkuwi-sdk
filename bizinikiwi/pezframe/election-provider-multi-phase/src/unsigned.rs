@@ -35,7 +35,6 @@ use pezframe_system::{
 	offchain::{CreateBare, SubmitTransaction},
 	pezpallet_prelude::BlockNumberFor,
 };
-use scale_info::TypeInfo;
 use pezsp_npos_elections::{
 	assignment_ratio_to_staked_normalized, assignment_staked_to_ratio_normalized, ElectionResult,
 	ElectionScore, EvaluateSupport,
@@ -44,6 +43,7 @@ use pezsp_runtime::{
 	offchain::storage::{MutateStorageError, StorageValueRef},
 	DispatchError, SaturatedConversion,
 };
+use scale_info::TypeInfo;
 
 /// Storage key used to store the last block number at which offchain worker ran.
 pub(crate) const OFFCHAIN_LAST_BLOCK: &[u8] = b"parity/multi-phase-unsigned-election";
@@ -64,12 +64,15 @@ pub type MinerVoterOf<T> = pezframe_election_provider_support::Voter<
 >;
 
 /// The relative distribution of a voter's stake among the winning targets.
-pub type Assignment<T> =
-	pezsp_npos_elections::Assignment<<T as pezframe_system::Config>::AccountId, SolutionAccuracyOf<T>>;
+pub type Assignment<T> = pezsp_npos_elections::Assignment<
+	<T as pezframe_system::Config>::AccountId,
+	SolutionAccuracyOf<T>,
+>;
 
-/// The [`IndexAssignment`][pezframe_election_provider_support::IndexAssignment] type specialized for a
-/// particular runtime `T`.
-pub type IndexAssignmentOf<T> = pezframe_election_provider_support::IndexAssignmentOf<SolutionOf<T>>;
+/// The [`IndexAssignment`][pezframe_election_provider_support::IndexAssignment] type specialized
+/// for a particular runtime `T`.
+pub type IndexAssignmentOf<T> =
+	pezframe_election_provider_support::IndexAssignmentOf<SolutionOf<T>>;
 
 /// Error type of the pezpallet's [`crate::Config::Solver`].
 pub type SolverErrorOf<T> = <<T as Config>::Solver as NposSolver>::Error;
@@ -477,8 +480,8 @@ impl<T: MinerConfig> Miner<T> {
 			})
 	}
 
-	/// Convert a raw solution from [`pezsp_npos_elections::ElectionResult`] to [`RawSolution`], which
-	/// is ready to be submitted to the chain.
+	/// Convert a raw solution from [`pezsp_npos_elections::ElectionResult`] to [`RawSolution`],
+	/// which is ready to be submitted to the chain.
 	///
 	/// Will always reduce the solution as well.
 	pub fn prepare_election_result_with_snapshot<Accuracy: PerThing128>(

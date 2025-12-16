@@ -25,8 +25,8 @@ use libp2p::PeerId;
 use log::trace;
 use parking_lot::Mutex;
 use partial_sort::PartialSort;
-use prometheus_endpoint::Registry;
 use pezsc_network_common::{role::ObservedRole, types::ReputationChange};
+use prometheus_endpoint::Registry;
 use std::{
 	cmp::{Ord, Ordering, PartialOrd},
 	collections::{hash_map::Entry, HashMap, HashSet},
@@ -558,11 +558,17 @@ mod tests {
 		// Report 2 peers with a negative reputation.
 		handle.report_peer(
 			peer_a,
-			pezsc_network_common::types::ReputationChange { value: i32::MIN, reason: "test".into() },
+			pezsc_network_common::types::ReputationChange {
+				value: i32::MIN,
+				reason: "test".into(),
+			},
 		);
 		handle.report_peer(
 			peer_b,
-			pezsc_network_common::types::ReputationChange { value: i32::MIN, reason: "test".into() },
+			pezsc_network_common::types::ReputationChange {
+				value: i32::MIN,
+				reason: "test".into(),
+			},
 		);
 
 		// Advance time to propagate banned peers.

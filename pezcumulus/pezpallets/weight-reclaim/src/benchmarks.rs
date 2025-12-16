@@ -67,5 +67,9 @@ mod bench {
 		);
 	}
 
-	impl_benchmark_test_suite!(Pezpallet, crate::tests::setup_test_ext_default(), crate::tests::Test);
+	impl_benchmark_test_suite!(
+		Pezpallet,
+		crate::tests::setup_test_ext_default(),
+		crate::tests::Test
+	);
 }

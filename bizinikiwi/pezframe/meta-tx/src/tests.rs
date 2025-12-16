@@ -16,8 +16,8 @@
 // limitations under the License.
 
 use crate::*;
-use pezframe_support::traits::tokens::fungible::Inspect;
 use mock::*;
+use pezframe_support::traits::tokens::fungible::Inspect;
 use pezsp_io::hashing::blake2_256;
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_runtime::{
@@ -387,7 +387,9 @@ fn meta_tx_call_fails() {
 					actual_weight: Some(meta_tx_weight),
 					pays_fee: Pays::Yes,
 				},
-				error: pezsp_runtime::DispatchError::Token(pezsp_runtime::TokenError::FundsUnavailable),
+				error: pezsp_runtime::DispatchError::Token(
+					pezsp_runtime::TokenError::FundsUnavailable,
+				),
 			}),
 		}));
 

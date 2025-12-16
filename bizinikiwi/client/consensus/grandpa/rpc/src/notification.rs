@@ -18,8 +18,8 @@
 
 use codec::Encode;
 use pezsc_consensus_grandpa::GrandpaJustification;
-use serde::{Deserialize, Serialize};
 use pezsp_runtime::traits::Block as BlockT;
+use serde::{Deserialize, Serialize};
 
 /// An encoded justification proving that the given header has been finalized
 #[derive(Clone, Serialize, Deserialize)]

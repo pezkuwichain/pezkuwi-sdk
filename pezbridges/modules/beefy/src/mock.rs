@@ -22,8 +22,8 @@ use crate::{
 };
 
 use bp_beefy::{BeefyValidatorSignatureOf, ChainWithBeefy, Commitment, MmrDataOrHash};
-use pezbp_runtime::{BasicOperatingMode, Chain, ChainId};
 use codec::Encode;
+use pezbp_runtime::{BasicOperatingMode, Chain, ChainId};
 use pezframe_support::{construct_runtime, derive_impl, weights::Weight};
 use pezsp_core::{sr25519::Signature, Pair};
 use pezsp_runtime::{

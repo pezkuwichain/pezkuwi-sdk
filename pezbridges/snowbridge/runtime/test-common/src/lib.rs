@@ -177,18 +177,23 @@ pub fn send_transfer_token_message_success<Runtime, XcmConfig>(
 			// start next block
 			<pezframe_system::Pezpallet<Runtime>>::set_block_number(next_block_number);
 			<pezframe_system::Pezpallet<Runtime>>::on_initialize(next_block_number);
-			<pezsnowbridge_pezpallet_outbound_queue::Pezpallet<Runtime>>::on_initialize(next_block_number);
+			<pezsnowbridge_pezpallet_outbound_queue::Pezpallet<Runtime>>::on_initialize(
+				next_block_number,
+			);
 			<pezpallet_message_queue::Pezpallet<Runtime>>::on_initialize(next_block_number);
 
 			// finish next block
 			<pezpallet_message_queue::Pezpallet<Runtime>>::on_finalize(next_block_number);
-			<pezsnowbridge_pezpallet_outbound_queue::Pezpallet<Runtime>>::on_finalize(next_block_number);
+			<pezsnowbridge_pezpallet_outbound_queue::Pezpallet<Runtime>>::on_finalize(
+				next_block_number,
+			);
 			let included_head = <pezframe_system::Pezpallet<Runtime>>::finalize();
 
 			let origin: ParaId = assethub_teyrchain_id.into();
 			let channel_id: ChannelId = origin.into();
 
-			let nonce = pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::try_get(channel_id);
+			let nonce =
+				pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::try_get(channel_id);
 			assert_ok!(nonce);
 			assert_eq!(nonce.unwrap(), 1);
 
@@ -475,15 +480,19 @@ pub fn ethereum_extrinsic<Runtime>(
 				10_000_000_000_000_u128.saturated_into::<BalanceOf<Runtime>>(),
 			)
 			.unwrap();
-			let balance_before =
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account.clone().into());
+			let balance_before = <pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+				&alice_account.clone().into(),
+			);
 
-			assert_ok!(<pezsnowbridge_pezpallet_ethereum_client::Pezpallet<Runtime>>::force_checkpoint(
-				RuntimeHelper::<Runtime>::root_origin(),
-				initial_checkpoint.clone(),
-			));
-			let balance_after_checkpoint =
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account.clone().into());
+			assert_ok!(
+				<pezsnowbridge_pezpallet_ethereum_client::Pezpallet<Runtime>>::force_checkpoint(
+					RuntimeHelper::<Runtime>::root_origin(),
+					initial_checkpoint.clone(),
+				)
+			);
+			let balance_after_checkpoint = <pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+				&alice_account.clone().into(),
+			);
 
 			let update_call: <Runtime as pezpallet_utility::Config>::RuntimeCall =
 				pezsnowbridge_pezpallet_ethereum_client::Call::<Runtime>::submit {
@@ -512,8 +521,9 @@ pub fn ethereum_extrinsic<Runtime>(
 			// Finalized header update
 			let update_outcome = construct_and_apply_extrinsic(alice, update_call.into());
 			assert_ok!(update_outcome);
-			let balance_after_update =
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account.clone().into());
+			let balance_after_update = <pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+				&alice_account.clone().into(),
+			);
 
 			// All the extrinsics in this test do no fit into 1 block
 			let _ = RuntimeHelper::<Runtime>::run_to_block(2, alice_account.clone().into());
@@ -526,14 +536,18 @@ pub fn ethereum_extrinsic<Runtime>(
 				pezsnowbridge_pezpallet_ethereum_client::Error::<Runtime>::InvalidUpdateSlot
 			);
 			let balance_after_invalid_update =
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account.clone().into());
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+					&alice_account.clone().into(),
+				);
 
 			// Sync committee update
 			let sync_committee_outcome =
 				construct_and_apply_extrinsic(alice, update_sync_committee_call.into());
 			assert_ok!(sync_committee_outcome);
 			let balance_after_sync_com_update =
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account.clone().into());
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+					&alice_account.clone().into(),
+				);
 
 			// Invalid sync committee update
 			let invalid_sync_committee_outcome =
@@ -543,7 +557,9 @@ pub fn ethereum_extrinsic<Runtime>(
 				pezsnowbridge_pezpallet_ethereum_client::Error::<Runtime>::InvalidUpdateSlot
 			);
 			let balance_after_invalid_sync_com_update =
-				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account.clone().into());
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
+					&alice_account.clone().into(),
+				);
 
 			// Assert paid operations are charged and free operations are free
 			// Checkpoint is a free operation
@@ -610,10 +626,12 @@ pub fn ethereum_to_pezkuwi_message_extrinsics_work<Runtime>(
 			)
 			.unwrap();
 
-			assert_ok!(<pezsnowbridge_pezpallet_ethereum_client::Pezpallet<Runtime>>::force_checkpoint(
-				RuntimeHelper::<Runtime>::root_origin(),
-				initial_checkpoint,
-			));
+			assert_ok!(
+				<pezsnowbridge_pezpallet_ethereum_client::Pezpallet<Runtime>>::force_checkpoint(
+					RuntimeHelper::<Runtime>::root_origin(),
+					initial_checkpoint,
+				)
+			);
 
 			let update_sync_committee_call: <Runtime as pezpallet_utility::Config>::RuntimeCall =
 				pezsnowbridge_pezpallet_ethereum_client::Call::<Runtime>::submit {

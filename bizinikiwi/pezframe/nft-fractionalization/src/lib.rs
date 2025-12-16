@@ -80,7 +80,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency mechanism, used for paying for deposits.
 		type Currency: InspectFungible<Self::AccountId>
@@ -390,7 +391,12 @@ pub mod pezpallet {
 			let pezpallet_account_balance = T::Currency::balance(&pezpallet_account);
 
 			if pezpallet_account_balance < existential_deposit {
-				T::Currency::transfer(&depositor, &pezpallet_account, existential_deposit, Preserve)?;
+				T::Currency::transfer(
+					&depositor,
+					&pezpallet_account,
+					existential_deposit,
+					Preserve,
+				)?;
 			}
 			let metadata_deposit = T::Assets::calc_metadata_deposit(name.as_bytes(), symbol);
 			if !metadata_deposit.is_zero() {

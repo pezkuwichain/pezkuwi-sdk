@@ -20,8 +20,8 @@ use pezkuwi_sdk::*;
 
 use criterion::{criterion_group, criterion_main, BatchSize, Criterion, Throughput};
 
-use pez_kitchensink_runtime::{constants::currency::*, BalancesCall};
 use node_cli::service::{create_extrinsic, FullClient};
+use pez_kitchensink_runtime::{constants::currency::*, BalancesCall};
 use pezkuwi_sdk::pezsc_service::config::{ExecutorConfiguration, RpcConfiguration};
 use pezsc_block_builder::{BlockBuilderBuilder, BuiltBlock};
 use pezsc_consensus::{

@@ -42,18 +42,18 @@
 
 use crate::{
 	asset, log, session_rotation::Eras, BalanceOf, Config, NegativeImbalanceOf, OffenceQueue,
-	OffenceQueueEras, PagedExposure, Pezpallet, Perbill, ProcessingOffence, SlashRewardFraction,
+	OffenceQueueEras, PagedExposure, Perbill, Pezpallet, ProcessingOffence, SlashRewardFraction,
 	UnappliedSlash, UnappliedSlashes, ValidatorSlashInEra, WeightInfo,
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::traits::{Defensive, DefensiveSaturating, Get, Imbalance, OnUnbalanced};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Saturating, Zero},
 	RuntimeDebug, WeakBoundedVec, Weight,
 };
 use pezsp_staking::{EraIndex, StakingInterface};
+use scale_info::TypeInfo;
 
 /// Parameters for performing a slash.
 #[derive(Clone)]
@@ -398,7 +398,9 @@ pub fn do_slash<T: Config>(
 	slash_era: EraIndex,
 ) {
 	let mut ledger =
-		match Pezpallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone())).defensive() {
+		match Pezpallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone()))
+			.defensive()
+		{
 			Ok(ledger) => ledger,
 			Err(_) => return, // nothing to do.
 		};
@@ -425,7 +427,10 @@ pub fn do_slash<T: Config>(
 		.defensive_proof("ledger fetched from storage so it exists in storage; qed.");
 
 	// trigger the event
-	<Pezpallet<T>>::deposit_event(super::Event::<T>::Slashed { staker: stash.clone(), amount: value });
+	<Pezpallet<T>>::deposit_event(super::Event::<T>::Slashed {
+		staker: stash.clone(),
+		amount: value,
+	});
 }
 
 /// Apply a previously-unapplied slash.

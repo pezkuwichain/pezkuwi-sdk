@@ -23,15 +23,15 @@ pub mod trait_tests;
 
 mod block_builder_ext;
 
-pub use pezsc_consensus::LongestChain;
-use std::sync::Arc;
 pub use bizinikiwi_test_client::*;
 pub use bizinikiwi_test_runtime as runtime;
+pub use pezsc_consensus::LongestChain;
+use std::sync::Arc;
 
 pub use self::block_builder_ext::BlockBuilderExt;
 
-use pezsp_core::storage::ChildInfo;
 use bizinikiwi_test_runtime::genesismap::GenesisStorageBuilder;
+use pezsp_core::storage::ChildInfo;
 
 /// A prelude to import in tests.
 pub mod prelude {
@@ -185,7 +185,10 @@ pub trait TestClientBuilderExt<B>: Sized {
 }
 
 impl<B> TestClientBuilderExt<B>
-	for TestClientBuilder<client::LocalCallExecutor<bizinikiwi_test_runtime::Block, B, WasmExecutor>, B>
+	for TestClientBuilder<
+		client::LocalCallExecutor<bizinikiwi_test_runtime::Block, B, WasmExecutor>,
+		B,
+	>
 where
 	B: pezsc_client_api::backend::Backend<bizinikiwi_test_runtime::Block> + 'static,
 {

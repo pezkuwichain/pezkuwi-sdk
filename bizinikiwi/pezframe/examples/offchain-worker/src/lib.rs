@@ -55,6 +55,7 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
+use lite_json::json::JsonValue;
 use pezframe_support::traits::Get;
 use pezframe_system::{
 	self as system,
@@ -64,7 +65,6 @@ use pezframe_system::{
 	},
 	pezpallet_prelude::BlockNumberFor,
 };
-use lite_json::json::JsonValue;
 use pezsp_core::crypto::KeyTypeId;
 use pezsp_runtime::{
 	offchain::{
@@ -111,7 +111,8 @@ pub mod crypto {
 	}
 
 	// implemented for mock runtime in test
-	impl pezframe_system::offchain::AppCrypto<<Sr25519Signature as Verify>::Signer, Sr25519Signature>
+	impl
+		pezframe_system::offchain::AppCrypto<<Sr25519Signature as Verify>::Signer, Sr25519Signature>
 		for TestAuthId
 	{
 		type RuntimeAppPublic = Public;

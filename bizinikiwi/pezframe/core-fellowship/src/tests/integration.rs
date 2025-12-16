@@ -21,8 +21,8 @@
 
 use pezframe_support::{
 	assert_noop, assert_ok, derive_impl, hypothetically, hypothetically_ok, ord_parameter_types,
-	pezpallet_prelude::Weight,
 	parameter_types,
+	pezpallet_prelude::Weight,
 	traits::{ConstU16, EitherOf, IsInVec, MapSuccess, NoOpPoll, TryMapSuccess},
 };
 use pezframe_system::{pezpallet_prelude::BlockNumberFor, EnsureSignedBy};

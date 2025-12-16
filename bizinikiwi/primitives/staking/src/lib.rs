@@ -26,11 +26,11 @@ use crate::currency_to_vote::CurrencyToVote;
 use alloc::{collections::btree_map::BTreeMap, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, FullCodec, HasCompact, MaxEncodedLen};
 use core::ops::{Add, AddAssign, Sub, SubAssign};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AtLeast32BitUnsigned, Zero},
 	DispatchError, DispatchResult, Perbill, RuntimeDebug, Saturating,
 };
+use scale_info::TypeInfo;
 
 pub mod offence;
 
@@ -330,8 +330,8 @@ pub trait StakingUnchecked: StakingInterface {
 	/// Book-keep a new bond for `keyless_who` without applying any locks (hence virtual).
 	///
 	/// It is important that `keyless_who` is a keyless account and therefore cannot interact with
-	/// staking pezpallet directly. Caller is responsible for ensuring the passed amount is locked and
-	/// valid.
+	/// staking pezpallet directly. Caller is responsible for ensuring the passed amount is locked
+	/// and valid.
 	fn virtual_bond(
 		keyless_who: &Self::AccountId,
 		value: Self::Balance,

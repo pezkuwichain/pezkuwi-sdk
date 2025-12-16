@@ -53,10 +53,10 @@
 //! Within this pezpallet, we need to talk to the staking-async pezpallet in AH. This is done via
 //! [`AHStakingInterface`] trait.
 //!
-//! The staking pezpallet in AH has no communication with session pezpallet whatsoever, therefore its
-//! implementation of `SessionManager`, and it associated type `SessionInterface` no longer exists.
-//! Moreover, pezpallet-staking-async no longer has a notion of timestamp locally, and only relies in
-//! the timestamp passed in in the `SessionReport`.
+//! The staking pezpallet in AH has no communication with session pezpallet whatsoever, therefore
+//! its implementation of `SessionManager`, and it associated type `SessionInterface` no longer
+//! exists. Moreover, pezpallet-staking-async no longer has a notion of timestamp locally, and only
+//! relies in the timestamp passed in in the `SessionReport`.
 //!
 //! ## Shared Types
 //!
@@ -98,8 +98,8 @@
 //!
 //! ### Asynchronous Model
 //!
-//! Now, if staking lives in AH and the session pezpallet lives in the relay chain, how will this look
-//! like?
+//! Now, if staking lives in AH and the session pezpallet lives in the relay chain, how will this
+//! look like?
 //!
 //! Staking knows that by the time the relay-chain session index `3` (and later on `6` and so on) is
 //! _planned_, it must have already returned a validator set via XCM.
@@ -144,8 +144,8 @@ macro_rules! log {
 /// This trait should only encapsulate our _outgoing_ communication to the RC. Any incoming
 /// communication comes it directly via our calls.
 ///
-/// In a real runtime, this is implemented via XCM calls, much like how the core-time pezpallet works.
-/// In a test runtime, it can be wired to direct function calls.
+/// In a real runtime, this is implemented via XCM calls, much like how the core-time pezpallet
+/// works. In a test runtime, it can be wired to direct function calls.
 pub trait SendToRelayChain {
 	/// The validator account ids.
 	type AccountId;
@@ -168,8 +168,8 @@ impl SendToRelayChain for () {
 /// This trait should only encapsulate our outgoing communications. Any incoming message is handled
 /// with `Call`s.
 ///
-/// In a real runtime, this is implemented via XCM calls, much like how the coretime pezpallet works.
-/// In a test runtime, it can be wired to direct function call.
+/// In a real runtime, this is implemented via XCM calls, much like how the coretime pezpallet
+/// works. In a test runtime, it can be wired to direct function call.
 pub trait SendToAssetHub {
 	/// The validator account ids.
 	type AccountId;

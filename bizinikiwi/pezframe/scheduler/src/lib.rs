@@ -57,8 +57,8 @@
 //!
 //! ## Warning
 //!
-//! This Pezpallet executes all scheduled runtime calls in the [`on_initialize`] hook. Do not execute
-//! any runtime calls which should not be considered mandatory.
+//! This Pezpallet executes all scheduled runtime calls in the [`on_initialize`] hook. Do not
+//! execute any runtime calls which should not be considered mandatory.
 //!
 //! Please be aware that any scheduled runtime calls executed in a future block may __fail__ or may
 //! result in __undefined behavior__ since the runtime could have upgraded between the time of
@@ -101,12 +101,12 @@ use pezframe_support::{
 	weights::{Weight, WeightMeter},
 };
 use pezframe_system::{self as system};
-use scale_info::TypeInfo;
 use pezsp_io::hashing::blake2_256;
 use pezsp_runtime::{
 	traits::{BadOrigin, BlockNumberProvider, Dispatchable, One, Saturating, Zero},
 	BoundedVec, DispatchError, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 pub use pezpallet::*;
 pub use weights::WeightInfo;
@@ -265,7 +265,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The aggregated origin which the dispatch will take.
 		type RuntimeOrigin: OriginTrait<PalletsOrigin = Self::PalletsOrigin>
@@ -297,8 +298,8 @@ pub mod pezpallet {
 		/// This will be used when canceling a task, to ensure that the origin that tries
 		/// to cancel has greater or equal privileges as the origin that created the scheduled task.
 		///
-		/// For simplicity the [`EqualPrivilegeOnly`](pezframe_support::traits::EqualPrivilegeOnly) can
-		/// be used. This will only check if two given origins are equal.
+		/// For simplicity the [`EqualPrivilegeOnly`](pezframe_support::traits::EqualPrivilegeOnly)
+		/// can be used. This will only check if two given origins are equal.
 		type OriginPrivilegeCmp: PrivilegeCmp<Self::PalletsOrigin>;
 
 		/// The maximum number of scheduled calls in the queue for a single block.
@@ -330,13 +331,13 @@ pub mod pezpallet {
 		/// - an arbitrary value through a custom implementation of the trait
 		///
 		/// Suggested values:
-		/// - Solo- and Relay-chains should use `pezframe_system::Pezpallet`. There are no concerns with
-		///   this configuration.
-		/// - Teyrchains should also use `pezframe_system::Pezpallet` for the time being. The scheduler
-		///   pezpallet is not yet ready for the case that big numbers of blocks are skipped. In an
-		///   *Agile Coretime* chain with relay chain number provider configured, it could otherwise
-		///   happen that the scheduler will not be able to catch up to its agendas, since too many
-		///   relay blocks are missing if the teyrchain only produces blocks rarely.
+		/// - Solo- and Relay-chains should use `pezframe_system::Pezpallet`. There are no concerns
+		///   with this configuration.
+		/// - Teyrchains should also use `pezframe_system::Pezpallet` for the time being. The
+		///   scheduler pezpallet is not yet ready for the case that big numbers of blocks are
+		///   skipped. In an *Agile Coretime* chain with relay chain number provider configured, it
+		///   could otherwise happen that the scheduler will not be able to catch up to its agendas,
+		///   since too many relay blocks are missing if the teyrchain only produces blocks rarely.
 		///
 		/// There is currently no migration provided to "hot-swap" block number providers and it is
 		/// therefore highly advised to stay with the default (local) values. If you still want to

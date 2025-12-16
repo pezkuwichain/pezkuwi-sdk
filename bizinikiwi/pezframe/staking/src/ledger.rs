@@ -36,7 +36,7 @@ use pezsp_runtime::DispatchResult;
 use pezsp_staking::{StakingAccount, StakingInterface};
 
 use crate::{
-	asset, BalanceOf, Bonded, Config, Error, Ledger, Pezpallet, Payee, RewardDestination,
+	asset, BalanceOf, Bonded, Config, Error, Ledger, Payee, Pezpallet, RewardDestination,
 	StakingLedger, VirtualStakers,
 };
 
@@ -289,7 +289,8 @@ pub struct StakingLedgerInspect<T: Config> {
 	#[codec(compact)]
 	pub active: BalanceOf<T>,
 	pub unlocking: pezframe_support::BoundedVec<UnlockChunk<BalanceOf<T>>, T::MaxUnlockingChunks>,
-	pub legacy_claimed_rewards: pezframe_support::BoundedVec<pezsp_staking::EraIndex, T::HistoryDepth>,
+	pub legacy_claimed_rewards:
+		pezframe_support::BoundedVec<pezsp_staking::EraIndex, T::HistoryDepth>,
 }
 
 #[cfg(test)]

@@ -15,8 +15,8 @@
 // See the License for the specific language governsing permissions and
 // limitations under the License.
 
-use pezframe_support_procedural_tools::get_doc_literals;
 use inflector::Inflector;
+use pezframe_support_procedural_tools::get_doc_literals;
 use syn::spanned::Spanned;
 
 /// Parsed representation of an impl block annotated with `pezpallet::view_functions`.

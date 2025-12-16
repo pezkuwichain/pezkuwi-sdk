@@ -45,11 +45,11 @@ use std::collections::HashSet;
 #[doc(hidden)]
 pub use alloc::borrow::Cow;
 use codec::{Decode, Encode, Input};
-use scale_info::TypeInfo;
 #[allow(deprecated)]
 pub use pezsp_runtime::{create_runtime_str, StateVersion};
 #[doc(hidden)]
 pub use pezsp_std;
+use scale_info::TypeInfo;
 
 #[cfg(feature = "std")]
 use pezsp_runtime::traits::Block as BlockT;
@@ -208,18 +208,18 @@ pub struct RuntimeVersion {
 	///
 	/// This number must change when an existing call (pezpallet index, call index) is changed,
 	/// either through an alteration in its user-level semantics, a parameter
-	/// added/removed, a parameter type changed, or a call/pezpallet changing its index. An alteration
-	/// of the user level semantics is for example when the call was before `transfer` and now is
-	/// `transfer_all`, the semantics of the call changed completely.
+	/// added/removed, a parameter type changed, or a call/pezpallet changing its index. An
+	/// alteration of the user level semantics is for example when the call was before `transfer`
+	/// and now is `transfer_all`, the semantics of the call changed completely.
 	///
-	/// Removing a pezpallet or a call doesn't require a *bump* as long as no pezpallet or call is put at
-	/// the same index. Removing doesn't require a bump as the chain will reject a transaction
-	/// referencing this removed call/pezpallet while decoding and thus, the user isn't at risk to
-	/// execute any unknown call. FRAME runtime devs have control over the index of a call/pezpallet
-	/// to prevent that an index gets reused.
+	/// Removing a pezpallet or a call doesn't require a *bump* as long as no pezpallet or call is
+	/// put at the same index. Removing doesn't require a bump as the chain will reject a
+	/// transaction referencing this removed call/pezpallet while decoding and thus, the user
+	/// isn't at risk to execute any unknown call. FRAME runtime devs have control over the index
+	/// of a call/pezpallet to prevent that an index gets reused.
 	///
-	/// Adding a new pezpallet or call also doesn't require a *bump* as long as they also don't reuse
-	/// any previously used index.
+	/// Adding a new pezpallet or call also doesn't require a *bump* as long as they also don't
+	/// reuse any previously used index.
 	///
 	/// This number should never decrease.
 	pub transaction_version: u32,

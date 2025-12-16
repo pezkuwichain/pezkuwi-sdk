@@ -308,12 +308,12 @@ mod tests {
 		StoredAuthoritySet, WeightInfo,
 	};
 	use bp_header_pez_chain::{ChainWithGrandpa, SubmitFinalityProofInfo};
-	use pezbp_runtime::{BasicOperatingMode, HeaderId};
 	use bp_test_utils::{
 		make_default_justification, make_justification_for_header, JustificationGeneratorParams,
 		TEST_GRANDPA_SET_ID,
 	};
 	use codec::Encode;
+	use pezbp_runtime::{BasicOperatingMode, HeaderId};
 	use pezframe_support::weights::Weight;
 	use pezsp_runtime::{testing::DigestItem, traits::Header as _, SaturatedConversion};
 
@@ -518,12 +518,13 @@ mod tests {
 
 			// when `improved_by` is less than the free interval BUT it is a mandatory header
 			let mut mandatory_header = test_header(100);
-			let consensus_log = pezsp_consensus_grandpa::ConsensusLog::<TestNumber>::ScheduledChange(
-				pezsp_consensus_grandpa::ScheduledChange {
-					next_authorities: bp_test_utils::authority_list(),
-					delay: 0,
-				},
-			);
+			let consensus_log =
+				pezsp_consensus_grandpa::ConsensusLog::<TestNumber>::ScheduledChange(
+					pezsp_consensus_grandpa::ScheduledChange {
+						next_authorities: bp_test_utils::authority_list(),
+						delay: 0,
+					},
+				);
 			mandatory_header.digest = pezsp_runtime::Digest {
 				logs: vec![DigestItem::Consensus(
 					pezsp_consensus_grandpa::GRANDPA_ENGINE_ID,
@@ -711,8 +712,9 @@ mod tests {
 	#[test]
 	fn check_obsolete_submit_finality_proof_ignores_other_calls() {
 		run_test(|| {
-			let call =
-				RuntimeCall::System(pezframe_system::Call::<TestRuntime>::remark { remark: vec![42] });
+			let call = RuntimeCall::System(pezframe_system::Call::<TestRuntime>::remark {
+				remark: vec![42],
+			});
 
 			assert_eq!(RuntimeCall::check_obsolete_submit_finality_proof(&call), Ok(None));
 		})

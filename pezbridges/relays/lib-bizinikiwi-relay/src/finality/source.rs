@@ -17,7 +17,7 @@
 //! Default generic implementation of finality source for basic Bizinikiwi client.
 
 use crate::{
-	finality::{FinalitySyncPipelineAdapter, BizinikiwiFinalitySyncPipeline},
+	finality::{BizinikiwiFinalitySyncPipeline, FinalitySyncPipelineAdapter},
 	finality_base::{
 		engine::Engine, finality_proofs, BizinikiwiFinalityProof, BizinikiwiFinalityProofsStream,
 	},
@@ -27,12 +27,12 @@ use async_std::sync::{Arc, Mutex};
 use async_trait::async_trait;
 use bp_header_pez_chain::FinalityProof;
 use codec::Decode;
-use pez_finality_relay::{SourceClient, SourceClientBase};
 use futures::{
 	select,
 	stream::{try_unfold, Stream, StreamExt, TryStreamExt},
 };
 use num_traits::One;
+use pez_finality_relay::{SourceClient, SourceClientBase};
 use relay_bizinikiwi_client::{BlockNumberOf, BlockWithJustification, Client, Error, HeaderOf};
 use relay_utils::{relay_loop::Client as RelayClient, UniqueSaturatedInto};
 

@@ -28,10 +28,8 @@ mod imports {
 	pub(crate) use zagros_system_emulated_network::{
 		self,
 		asset_hub_zagros_emulated_chain::AssetHubZagrosParaPallet as AssetHubZagrosPallet,
-		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		collectives_zagros_emulated_chain::CollectivesZagrosParaPallet as CollectivesZagrosPallet,
 		coretime_zagros_emulated_chain::CoretimeZagrosParaPallet as CoretimeZagrosPallet,
-		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
 		people_zagros_emulated_chain::{
 			people_zagros_runtime::{
 				self, xcm_config::XcmConfig as PeopleZagrosXcmConfig,
@@ -39,6 +37,8 @@ mod imports {
 			},
 			PeopleZagrosParaPallet as PeopleZagrosPallet,
 		},
+		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPallet as PenpalBPallet},
+		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPallet as BridgeHubZagrosPallet,
 		zagros_emulated_chain::{genesis::ED as ZAGROS_ED, ZagrosRelayPallet as ZagrosPallet},
 		AssetHubZagrosPara as AssetHubZagros, AssetHubZagrosParaReceiver as AssetHubZagrosReceiver,
 		BridgeHubZagrosPara as BridgeHubZagros, CollectivesZagrosPara as CollectivesZagros,

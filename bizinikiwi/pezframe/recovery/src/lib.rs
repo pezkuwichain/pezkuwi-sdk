@@ -237,7 +237,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
@@ -267,8 +268,8 @@ pub mod pezpallet {
 		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
 		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
-		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
-		///     providers can be used. Relay provider can be a bit better in cases where the
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and
+		///     remote providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider;
 
@@ -645,7 +646,8 @@ pub mod pezpallet {
 				recovery_config.threshold as usize <= active_recovery.friends.len(),
 				Error::<T>::Threshold
 			);
-			pezframe_system::Pezpallet::<T>::inc_consumers(&who).map_err(|_| Error::<T>::BadState)?;
+			pezframe_system::Pezpallet::<T>::inc_consumers(&who)
+				.map_err(|_| Error::<T>::BadState)?;
 			// Create the recovery storage item
 			Proxy::<T>::insert(&who, &account);
 			Self::deposit_event(Event::<T>::AccountRecovered {

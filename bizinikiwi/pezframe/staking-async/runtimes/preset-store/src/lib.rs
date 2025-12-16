@@ -15,7 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Simple pezpallet that stores the preset that was used to generate the genesis state in the state.
+//! Simple pezpallet that stores the preset that was used to generate the genesis state in the
+//! state.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 

@@ -26,12 +26,12 @@ use bp_messages::{
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages, LaneState,
 	UnrewardedRelayersState, Weight,
 };
-use pezbp_runtime::{
-	AccountIdOf, BlockNumberOf, Chain, HeaderOf, Teyrchain, UnverifiedStorageProofParams,
-};
 use bp_test_utils::prepare_teyrchain_heads_proof;
 use bp_teyrchains::{RelayBlockHash, RelayBlockNumber};
 use codec::Encode;
+use pezbp_runtime::{
+	AccountIdOf, BlockNumberOf, Chain, HeaderOf, Teyrchain, UnverifiedStorageProofParams,
+};
 use pezpallet_bridge_grandpa::BridgedHeader;
 use pezsp_runtime::traits::Header as HeaderT;
 use xcm::latest::prelude::*;
@@ -82,14 +82,15 @@ where
 		finality_target: Box::new(relay_chain_header),
 		justification: grandpa_justification,
 	};
-	let submit_para_head = pezpallet_bridge_teyrchains::Call::<Runtime, PPI>::submit_teyrchain_heads {
-		at_relay_block: (
-			relay_chain_header_number.saturated_into(),
-			relay_chain_header_hash.into(),
-		),
-		teyrchains: teyrchain_heads,
-		teyrchain_heads_proof: para_heads_proof,
-	};
+	let submit_para_head =
+		pezpallet_bridge_teyrchains::Call::<Runtime, PPI>::submit_teyrchain_heads {
+			at_relay_block: (
+				relay_chain_header_number.saturated_into(),
+				relay_chain_header_hash.into(),
+			),
+			teyrchains: teyrchain_heads,
+			teyrchain_heads_proof: para_heads_proof,
+		};
 	let submit_message = pezpallet_bridge_messages::Call::<Runtime, MPI>::receive_messages_proof {
 		relayer_id_at_bridged_chain: relayer_id_at_bridged_chain.into(),
 		proof: Box::new(message_proof),
@@ -119,8 +120,8 @@ where
 	GPI: 'static,
 	PPI: 'static,
 	MPI: 'static,
-	<Runtime as pezpallet_bridge_grandpa::Config<GPI>>::BridgedChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+	<Runtime as pezpallet_bridge_grandpa::Config<GPI>>::BridgedChain: pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+		+ ChainWithGrandpa,
 	BridgedChainOf<Runtime, MPI>: Chain<Hash = ParaHash> + Teyrchain,
 	<Runtime as pezpallet_utility::Config>::RuntimeCall: From<pezpallet_bridge_grandpa::Call<Runtime, GPI>>
 		+ From<pezpallet_bridge_teyrchains::Call<Runtime, PPI>>
@@ -132,14 +133,15 @@ where
 		finality_target: Box::new(relay_chain_header),
 		justification: grandpa_justification,
 	};
-	let submit_para_head = pezpallet_bridge_teyrchains::Call::<Runtime, PPI>::submit_teyrchain_heads {
-		at_relay_block: (
-			relay_chain_header_number.saturated_into(),
-			relay_chain_header_hash.into(),
-		),
-		teyrchains: teyrchain_heads,
-		teyrchain_heads_proof: para_heads_proof,
-	};
+	let submit_para_head =
+		pezpallet_bridge_teyrchains::Call::<Runtime, PPI>::submit_teyrchain_heads {
+			at_relay_block: (
+				relay_chain_header_number.saturated_into(),
+				relay_chain_header_hash.into(),
+			),
+			teyrchains: teyrchain_heads,
+			teyrchain_heads_proof: para_heads_proof,
+		};
 	let submit_message_delivery_proof =
 		pezpallet_bridge_messages::Call::<Runtime, MPI>::receive_messages_delivery_proof {
 			proof: message_delivery_proof,
@@ -216,8 +218,8 @@ pub fn make_complex_relayer_delivery_proofs<
 	FromBridgedChainMessagesProof<ParaHash, LaneId>,
 )
 where
-	BridgedRelayChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+	BridgedRelayChain: pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+		+ ChainWithGrandpa,
 	BridgedTeyrchain: pezbp_runtime::Chain<Hash = ParaHash> + Teyrchain,
 	ThisChainWithMessages: ChainWithMessages,
 	LaneId: Copy + Encode,
@@ -287,8 +289,8 @@ pub fn make_complex_relayer_confirmation_proofs<
 	FromBridgedChainMessagesDeliveryProof<ParaHash, LaneId>,
 )
 where
-	BridgedRelayChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+	BridgedRelayChain: pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+		+ ChainWithGrandpa,
 	BridgedTeyrchain: pezbp_runtime::Chain<Hash = ParaHash> + Teyrchain,
 	ThisChainWithMessages: ChainWithMessages,
 	LaneId: Copy + Encode,
@@ -352,8 +354,8 @@ pub fn make_complex_bridged_teyrchain_heads_proof<BridgedRelayChain, BridgedTeyr
 	ParaHeadsProof,
 )
 where
-	BridgedRelayChain:
-		pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber> + ChainWithGrandpa,
+	BridgedRelayChain: pezbp_runtime::Chain<Hash = RelayBlockHash, BlockNumber = RelayBlockNumber>
+		+ ChainWithGrandpa,
 	BridgedTeyrchain: pezbp_runtime::Chain<Hash = ParaHash> + Teyrchain,
 {
 	let bridged_para_head = ParaHead(

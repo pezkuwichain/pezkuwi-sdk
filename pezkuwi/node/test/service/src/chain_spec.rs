@@ -16,13 +16,13 @@
 
 //! Chain specifications for the test runtime.
 
-use pezpallet_staking::Forcing;
 use pezkuwi_primitives::{
 	node_features, AccountId, AssignmentId, NodeFeatures, SchedulerParams, ValidatorId,
 	MAX_CODE_SIZE, MAX_POV_SIZE,
 };
 use pezkuwi_service::chain_spec::Extensions;
 use pezkuwi_test_runtime::BABE_GENESIS_EPOCH_CONFIG;
+use pezpallet_staking::Forcing;
 use pezsc_chain_spec::{ChainSpec, ChainType};
 use pezsc_consensus_grandpa::AuthorityId as GrandpaId;
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;

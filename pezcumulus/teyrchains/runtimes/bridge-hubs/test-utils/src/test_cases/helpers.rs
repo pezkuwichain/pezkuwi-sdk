@@ -21,9 +21,9 @@ use crate::test_cases::{bridges_prelude::*, run_test, RuntimeHelper};
 use asset_test_pezutils::BasicTeyrchainRuntime;
 use bp_messages::MessageNonce;
 use bp_pezkuwi_core::teyrchains::{ParaHash, ParaId};
-use pezbp_runtime::Chain;
 use codec::Decode;
 use core::marker::PhantomData;
+use pezbp_runtime::Chain;
 use pezframe_support::{
 	assert_ok,
 	dispatch::GetDispatchInfo,
@@ -93,7 +93,8 @@ where
 	}
 }
 
-/// Checks that the best teyrchain header hash in the bridge teyrchains pezpallet equals to given one.
+/// Checks that the best teyrchain header hash in the bridge teyrchains pezpallet equals to given
+/// one.
 pub struct VerifySubmitTeyrchainHeaderProofOutcome<Runtime, PPI> {
 	bridged_para_id: u32,
 	expected_best_hash: ParaHash,
@@ -122,8 +123,10 @@ where
 {
 	fn verify_outcome(&self) {
 		assert_eq!(
-			pezpallet_bridge_teyrchains::ParasInfo::<Runtime, PPI>::get(ParaId(self.bridged_para_id))
-				.map(|info| info.best_head_hash.head_hash),
+			pezpallet_bridge_teyrchains::ParasInfo::<Runtime, PPI>::get(ParaId(
+				self.bridged_para_id
+			))
+			.map(|info| info.best_head_hash.head_hash),
 			Some(self.expected_best_hash),
 		);
 	}
@@ -222,7 +225,10 @@ where
 	Runtime: pezpallet_balances::Config,
 {
 	fn verify_outcome(&self) {
-		assert_eq!(pezpallet_balances::Pezpallet::<Runtime>::free_balance(&self.relayer), self.balance,);
+		assert_eq!(
+			pezpallet_balances::Pezpallet::<Runtime>::free_balance(&self.relayer),
+			self.balance,
+		);
 	}
 }
 
@@ -274,7 +280,8 @@ pub fn relayed_incoming_message_works<Runtime, AllPalletsWithoutSystem, MPI>(
 		pezbp_runtime::ChainId,
 	) -> CallsAndVerifiers<Runtime>,
 ) where
-	Runtime: BasicTeyrchainRuntime + pezcumulus_pezpallet_xcmp_queue::Config + BridgeMessagesConfig<MPI>,
+	Runtime:
+		BasicTeyrchainRuntime + pezcumulus_pezpallet_xcmp_queue::Config + BridgeMessagesConfig<MPI>,
 	AllPalletsWithoutSystem:
 		OnInitialize<BlockNumberFor<Runtime>> + OnFinalize<BlockNumberFor<Runtime>>,
 	MPI: 'static,
@@ -307,7 +314,10 @@ pub fn relayed_incoming_message_works<Runtime, AllPalletsWithoutSystem, MPI>(
 				2,
 				AccountId::from(alice).into(),
 			);
-			mock_open_hrmp_channel::<Runtime, pezcumulus_pezpallet_teyrchain_system::Pezpallet<Runtime>>(
+			mock_open_hrmp_channel::<
+				Runtime,
+				pezcumulus_pezpallet_teyrchain_system::Pezpallet<Runtime>,
+			>(
 				runtime_para_id.into(),
 				sibling_teyrchain_id.into(),
 				included_head,
@@ -439,9 +449,11 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 				buy_execution_fee_amount.into();
 			let source_account_id =
 				LocationToAccountId::convert_location(&source).expect("valid location");
-			let _ =
-				<pezpallet_balances::Pezpallet<Runtime>>::mint_into(&source_account_id, balance_needed)
-					.expect("mint_into passes");
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::mint_into(
+				&source_account_id,
+				balance_needed,
+			)
+			.expect("mint_into passes");
 			Some(buy_execution_fee)
 		} else {
 			None
@@ -451,10 +463,11 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 		bridge_opener(*locations.clone(), maybe_paid_execution);
 
 		// check opened bridge
-		let bridge = pezpallet_xcm_bridge_hub::Bridges::<Runtime, XcmOverBridgePalletInstance>::get(
-			locations.bridge_id(),
-		)
-		.expect("opened bridge");
+		let bridge =
+			pezpallet_xcm_bridge_hub::Bridges::<Runtime, XcmOverBridgePalletInstance>::get(
+				locations.bridge_id(),
+			)
+			.expect("opened bridge");
 
 		// check state
 		assert_ok!(
@@ -498,8 +511,8 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 		.ensure_complete());
 	}
 
-	/// Utility for opening bridge directly inserting data to the `pezpallet_xcm_bridge_hub`'s storage
-	/// (used only for legacy purposes).
+	/// Utility for opening bridge directly inserting data to the `pezpallet_xcm_bridge_hub`'s
+	/// storage (used only for legacy purposes).
 	pub fn open_bridge_with_storage<Runtime, XcmOverBridgePalletInstance>(
 		locations: pezpallet_xcm_bridge_hub::BridgeLocations,
 		lane_id: pezpallet_xcm_bridge_hub::LaneIdOf<Runtime, XcmOverBridgePalletInstance>,
@@ -554,9 +567,11 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 				buy_execution_fee_amount.into();
 			let source_account_id =
 				LocationToAccountId::convert_location(&expected_source).expect("valid location");
-			let _ =
-				<pezpallet_balances::Pezpallet<Runtime>>::mint_into(&source_account_id, balance_needed)
-					.expect("mint_into passes");
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::mint_into(
+				&source_account_id,
+				balance_needed,
+			)
+			.expect("mint_into passes");
 			Some(buy_execution_fee)
 		} else {
 			None

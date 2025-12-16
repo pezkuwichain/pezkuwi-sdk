@@ -20,8 +20,8 @@ use crate::{Chain, ConnectionParams};
 
 use caching::CachingClient;
 use num_traits::Saturating;
-use rpc::RpcClient;
 use pezsp_version::RuntimeVersion;
+use rpc::RpcClient;
 
 pub mod caching;
 pub mod rpc;

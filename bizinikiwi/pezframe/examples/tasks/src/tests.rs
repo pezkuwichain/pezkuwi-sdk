@@ -55,7 +55,9 @@ fn runtime_task_enumerate_works_via_pezframe_system_config() {
 		Numbers::<Runtime>::insert(0, 1);
 		Numbers::<Runtime>::insert(1, 4);
 		assert_eq!(
-			<Runtime as pezframe_system::Config>::RuntimeTask::iter().collect::<Vec<_>>().len(),
+			<Runtime as pezframe_system::Config>::RuntimeTask::iter()
+				.collect::<Vec<_>>()
+				.len(),
 			2
 		);
 	});
@@ -77,7 +79,10 @@ fn runtime_task_enumerate_works_via_pallet_config() {
 #[test]
 fn task_index_works_at_pallet_level() {
 	new_test_ext().execute_with(|| {
-		assert_eq!(crate::pezpallet::Task::<Runtime>::AddNumberIntoTotal { i: 2u32 }.task_index(), 0);
+		assert_eq!(
+			crate::pezpallet::Task::<Runtime>::AddNumberIntoTotal { i: 2u32 }.task_index(),
+			0
+		);
 	});
 }
 
@@ -85,11 +90,9 @@ fn task_index_works_at_pallet_level() {
 fn task_index_works_at_runtime_level() {
 	new_test_ext().execute_with(|| {
 		assert_eq!(
-			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(crate::pezpallet::Task::<
-				Runtime,
-			>::AddNumberIntoTotal {
-				i: 1u32
-			})
+			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(
+				crate::pezpallet::Task::<Runtime>::AddNumberIntoTotal { i: 1u32 }
+			)
 			.task_index(),
 			0
 		);
@@ -104,12 +107,9 @@ fn task_execution_works() {
 		Numbers::<Runtime>::insert(0, 1);
 		Numbers::<Runtime>::insert(1, 4);
 
-		let task =
-			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(crate::pezpallet::Task::<
-				Runtime,
-			>::AddNumberIntoTotal {
-				i: 1u32,
-			});
+		let task = <Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(
+			crate::pezpallet::Task::<Runtime>::AddNumberIntoTotal { i: 1u32 },
+		);
 		assert_ok!(System::do_task(RuntimeOrigin::signed(1), task.clone(),));
 		assert_eq!(Numbers::<Runtime>::get(0), Some(1));
 		assert_eq!(Numbers::<Runtime>::get(1), None);

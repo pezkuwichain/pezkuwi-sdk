@@ -17,6 +17,10 @@
 
 //! Integration tests for sr25519
 
+use bizinikiwi_test_runtime_client::{
+	runtime::{TestAPI, TEST_OWNER},
+	DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
+};
 use pezsp_api::{ApiExt, ProvideRuntimeApi};
 use pezsp_application_crypto::{sr25519::AppPair, RuntimePublic};
 use pezsp_core::{
@@ -27,10 +31,6 @@ use pezsp_core::{
 };
 use pezsp_keystore::{testing::MemoryKeystore, Keystore, KeystoreExt};
 use std::sync::Arc;
-use bizinikiwi_test_runtime_client::{
-	runtime::{TestAPI, TEST_OWNER},
-	DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
-};
 
 #[test]
 fn sr25519_works_in_runtime() {

@@ -20,11 +20,11 @@
 use crate::{Conviction, Delegations, ReferendumIndex};
 use codec::{Decode, DecodeWithMemTracking, Encode, EncodeLike, Input, MaxEncodedLen, Output};
 use pezframe_support::traits::Get;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Saturating, Zero},
 	BoundedVec, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// A number of lock periods, plus a vote, one way or the other.
 #[derive(DecodeWithMemTracking, Copy, Clone, Eq, PartialEq, Default, RuntimeDebug)]

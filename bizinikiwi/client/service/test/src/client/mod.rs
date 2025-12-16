@@ -17,6 +17,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use async_channel::TryRecvError;
+use bizinikiwi_test_runtime::TestAPI;
+use bizinikiwi_test_runtime_client::{
+	runtime::{
+		currency::DOLLARS,
+		genesismap::{insert_genesis_block, GenesisStorageBuilder},
+		Block, BlockNumber, Digest, Hash, Header, RuntimeApi, Transfer,
+	},
+	BlockBuilderExt, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt, Sr25519Keyring,
+	TestClientBuilder, TestClientBuilderExt,
+};
 use codec::{Decode, Encode, Joiner};
 use futures::executor::block_on;
 use pezsc_block_builder::BlockBuilderBuilder;
@@ -41,16 +51,6 @@ use pezsp_runtime::{
 use pezsp_state_machine::{backend::Backend as _, InMemoryBackend, OverlayedChanges, StateMachine};
 use pezsp_storage::{ChildInfo, StorageKey};
 use std::{collections::HashSet, sync::Arc};
-use bizinikiwi_test_runtime::TestAPI;
-use bizinikiwi_test_runtime_client::{
-	runtime::{
-		currency::DOLLARS,
-		genesismap::{insert_genesis_block, GenesisStorageBuilder},
-		Block, BlockNumber, Digest, Hash, Header, RuntimeApi, Transfer,
-	},
-	BlockBuilderExt, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt, Sr25519Keyring,
-	TestClientBuilder, TestClientBuilderExt,
-};
 
 mod db;
 
@@ -2257,11 +2257,12 @@ fn use_dalek_ext_works() {
 
 	let client = TestClientBuilder::new().build();
 
-	client.execution_extensions().set_extensions_factory(
-		pezsc_client_api::execution_extensions::ExtensionBeforeBlock::<Block, pezsp_io::UseDalekExt>::new(
-			1,
-		),
-	);
+	client
+		.execution_extensions()
+		.set_extensions_factory(pezsc_client_api::execution_extensions::ExtensionBeforeBlock::<
+		Block,
+		pezsp_io::UseDalekExt,
+	>::new(1));
 
 	let a1 = BlockBuilderBuilder::new(&client)
 		.on_parent_block(client.chain_info().genesis_hash)

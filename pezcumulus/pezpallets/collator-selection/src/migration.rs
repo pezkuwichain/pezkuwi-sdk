@@ -19,8 +19,8 @@
 use super::*;
 #[cfg(feature = "try-runtime")]
 use alloc::vec::Vec;
-use pezframe_support::traits::{OnRuntimeUpgrade, UncheckedOnRuntimeUpgrade};
 use log;
+use pezframe_support::traits::{OnRuntimeUpgrade, UncheckedOnRuntimeUpgrade};
 
 /// Migrate to v2. Should have been part of <https://github.com/pezkuwichain/kurdistan-sdk/issues/104>.
 pub mod v2 {
@@ -44,15 +44,26 @@ pub mod v2 {
 	>;
 
 	#[storage_alias]
-	pub type Candidates<T: Config> = StorageValue<
-		Pezpallet<T>,
-		BoundedVec<CandidateInfo<<T as pezframe_system::Config>::AccountId, <<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance>, <T as Config>::MaxCandidates>,
-		ValueQuery,
-	>;
+	pub type Candidates<T: Config> =
+		StorageValue<
+			Pezpallet<T>,
+			BoundedVec<
+				CandidateInfo<
+					<T as pezframe_system::Config>::AccountId,
+					<<T as Config>::Currency as Currency<
+						<T as pezframe_system::Config>::AccountId,
+					>>::Balance,
+				>,
+				<T as Config>::MaxCandidates,
+			>,
+			ValueQuery,
+		>;
 
 	/// Migrate to V2.
 	pub struct UncheckedMigrationToV2<T>(PhantomData<T>);
-	impl<T: Config + pezpallet_balances::Config> UncheckedOnRuntimeUpgrade for UncheckedMigrationToV2<T> {
+	impl<T: Config + pezpallet_balances::Config> UncheckedOnRuntimeUpgrade
+		for UncheckedMigrationToV2<T>
+	{
 		fn on_runtime_upgrade() -> Weight {
 			let mut weight = Weight::zero();
 			let mut count: u64 = 0;
@@ -107,7 +118,9 @@ pub mod v2 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(_number_of_candidates: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
+		fn post_upgrade(
+			_number_of_candidates: Vec<u8>,
+		) -> Result<(), pezsp_runtime::DispatchError> {
 			let new_number_of_candidates = Candidates::<T>::get().to_vec().len();
 			assert_eq!(
 				new_number_of_candidates, 0 as usize,
@@ -160,7 +173,9 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(number_of_invulnerables: Vec<u8>) -> Result<(), pezsp_runtime::DispatchError> {
+		fn post_upgrade(
+			number_of_invulnerables: Vec<u8>,
+		) -> Result<(), pezsp_runtime::DispatchError> {
 			let stored_invulnerables = Invulnerables::<T>::get().to_vec();
 			let mut sorted_invulnerables = stored_invulnerables.clone();
 			sorted_invulnerables.sort();

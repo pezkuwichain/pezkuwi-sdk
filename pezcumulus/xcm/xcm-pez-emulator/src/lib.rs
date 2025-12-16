@@ -76,10 +76,10 @@ pub use pezcumulus_primitives_core::{
 };
 pub use pezcumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
 pub use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-pub use pezpallet_aura;
-pub use pezpallet_message_queue::{Config as MessageQueueConfig, Pezpallet as MessageQueuePallet};
 pub use pezkuwi_primitives;
 pub use pezkuwi_runtime_teyrchains::inclusion::{AggregateMessageOrigin, UmpQueueId};
+pub use pezpallet_aura;
+pub use pezpallet_message_queue::{Config as MessageQueueConfig, Pezpallet as MessageQueuePallet};
 pub use teyrchains_common::{AccountId, Balance};
 
 // Pezkuwi

@@ -25,8 +25,8 @@
 //!
 //! # Sudo Pezpallet
 //!
-//! A pezpallet to provide a way to execute privileged runtime calls using a specified sudo ("superuser
-//! do") account.
+//! A pezpallet to provide a way to execute privileged runtime calls using a specified sudo
+//! ("superuser do") account.
 //!
 //! ## Pezpallet API
 //!
@@ -85,7 +85,8 @@
 //! meant to be used by constructing runtime calls from outside the runtime.
 //! </pre></div>
 //!
-//! This pezpallet also defines a [`TransactionExtension`](pezsp_runtime::traits::TransactionExtension)
+//! This pezpallet also defines a
+//! [`TransactionExtension`](pezsp_runtime::traits::TransactionExtension)
 //! called [`CheckOnlySudoAccount`] to ensure that only signed transactions by the sudo account are
 //! accepted by the transaction pool. The intended use of this signed extension is to prevent other
 //! accounts from spamming the transaction pool for the initial phase of a chain, during which
@@ -108,11 +109,11 @@
 //!
 //! ## Low Level / Implementation Details
 //!
-//! This pezpallet checks that the caller of its dispatchables is a signed account and ensures that the
-//! caller matches the sudo key in storage.
-//! A caller of this pezpallet's dispatchables does not pay any fees to dispatch a call. If the account
-//! making one of these calls is not the sudo key, the pezpallet returns a [`Error::RequireSudo`]
-//! error.
+//! This pezpallet checks that the caller of its dispatchables is a signed account and ensures that
+//! the caller matches the sudo key in storage.
+//! A caller of this pezpallet's dispatchables does not pay any fees to dispatch a call. If the
+//! account making one of these calls is not the sudo key, the pezpallet returns a
+//! [`Error::RequireSudo`] error.
 //!
 //! Once an origin is verified, sudo calls use `dispatch_bypass_filter` from the
 //! [`UnfilteredDispatchable`](pezframe_support::traits::UnfilteredDispatchable) trait to allow call
@@ -176,7 +177,8 @@ pub mod pezpallet {
 		/// The overarching event type.
 		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A sudo-able call.
 		#[pezpallet::no_default_bounds]

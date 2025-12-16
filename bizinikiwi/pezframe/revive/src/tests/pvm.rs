@@ -59,12 +59,12 @@ use pezframe_support::{
 use pezframe_system::{EventRecord, Phase};
 use pezpallet_revive_fixtures::compile_module;
 use pezpallet_revive_uapi::{ReturnErrorCode as RuntimeReturnCode, ReturnFlags};
-use pretty_assertions::{assert_eq, assert_ne};
 use pezsp_core::U256;
 use pezsp_io::hashing::blake2_256;
 use pezsp_runtime::{
 	testing::H256, AccountId32, BoundedVec, DispatchError, SaturatedConversion, TokenError,
 };
+use pretty_assertions::{assert_eq, assert_ne};
 
 #[test]
 fn eth_call_transfer_with_dust_works() {
@@ -76,8 +76,9 @@ fn eth_call_transfer_with_dust_works() {
 
 		<Test as Config>::FeeInfo::deposit_txfee(<Test as Config>::Currency::issue(5_000_000_000));
 
-		let balance =
-			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+		let balance = Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<
+			Test,
+		>(100, 10));
 		assert_ok!(builder::eth_call(addr)
 			.origin(Origin::EthTransaction(ALICE).into())
 			.value(balance)
@@ -127,8 +128,9 @@ fn contract_call_transfer_with_dust_works() {
 		let Contract { addr: addr_callee, .. } =
 			builder::bare_instantiate(Code::Upload(binary_callee)).build_and_unwrap_contract();
 
-		let balance =
-			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+		let balance = Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<
+			Test,
+		>(100, 10));
 		assert_ok!(builder::call(addr_caller).data((balance, addr_callee).encode()).build());
 
 		assert_eq!(Pezpallet::<Test>::evm_balance(&addr_callee), balance);
@@ -3296,7 +3298,8 @@ fn read_only_call_cannot_transfer() {
 		assert_err_ignore_postinfo!(
 			builder::call(addr_caller)
 				.data(
-					(addr_callee, pezpallet_revive_uapi::CallFlags::READ_ONLY.bits(), 100u64).encode()
+					(addr_callee, pezpallet_revive_uapi::CallFlags::READ_ONLY.bits(), 100u64)
+						.encode()
 				)
 				.build(),
 			<Error<Test>>::StateChangeDenied
@@ -5203,7 +5206,8 @@ fn get_set_immutables_works() {
 
 		let new_data = [0xdeu8; 8].to_vec();
 
-		Pezpallet::<Test>::set_immutables(addr, BoundedVec::truncate_from(new_data.clone())).unwrap();
+		Pezpallet::<Test>::set_immutables(addr, BoundedVec::truncate_from(new_data.clone()))
+			.unwrap();
 		let immutable_data = Pezpallet::<Test>::get_immutables(addr).unwrap();
 		assert_eq!(immutable_data, new_data);
 	});

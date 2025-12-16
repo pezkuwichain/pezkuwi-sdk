@@ -16,10 +16,10 @@
 
 //! Utilities used by different relays.
 
-pub use pezbp_runtime::HeaderId;
 pub use error::Error;
-pub use relay_loop::{relay_loop, relay_metrics};
+pub use pezbp_runtime::HeaderId;
 pub use pezsp_runtime::traits::{UniqueSaturatedFrom, UniqueSaturatedInto};
+pub use relay_loop::{relay_loop, relay_metrics};
 use std::fmt::Debug;
 
 use async_trait::async_trait;

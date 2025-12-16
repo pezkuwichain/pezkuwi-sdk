@@ -20,9 +20,8 @@ use pezframe_support::{
 	derive_impl,
 	dispatch::DispatchClass,
 	instances::Instance2,
-	ord_parameter_types,
+	ord_parameter_types, parameter_types,
 	pezpallet_prelude::*,
-	parameter_types,
 	traits::{
 		fungible, fungibles,
 		tokens::{
@@ -157,7 +156,10 @@ pub struct DealWithFungiblesFees;
 impl OnUnbalanced<fungibles::Credit<AccountId, NativeAndAssets>> for DealWithFungiblesFees {
 	fn on_unbalanceds(
 		mut fees_then_tips: impl Iterator<
-			Item = fungibles::Credit<<Runtime as pezframe_system::Config>::AccountId, NativeAndAssets>,
+			Item = fungibles::Credit<
+				<Runtime as pezframe_system::Config>::AccountId,
+				NativeAndAssets,
+			>,
 		>,
 	) {
 		if let Some(fees) = fees_then_tips.next() {

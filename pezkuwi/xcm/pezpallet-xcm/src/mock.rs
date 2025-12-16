@@ -68,7 +68,8 @@ pub mod pezpallet_test_notifier {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + crate::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent> + From<Event<Self>>;
+		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent>
+			+ From<Event<Self>>;
 		type RuntimeOrigin: IsType<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<Result<crate::Origin, <Self as Config>::RuntimeOrigin>>;
 		type RuntimeCall: IsType<<Self as crate::Config>::RuntimeCall> + From<Call<Self>>;
@@ -741,9 +742,13 @@ pub(crate) fn new_test_ext_with_balances_and_xcm_version(
 		.assimilate_storage(&mut t)
 		.unwrap();
 
-	pezpallet_xcm::GenesisConfig::<Test> { safe_xcm_version, supported_version, ..Default::default() }
-		.assimilate_storage(&mut t)
-		.unwrap();
+	pezpallet_xcm::GenesisConfig::<Test> {
+		safe_xcm_version,
+		supported_version,
+		..Default::default()
+	}
+	.assimilate_storage(&mut t)
+	.unwrap();
 
 	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));

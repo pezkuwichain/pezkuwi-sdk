@@ -22,11 +22,11 @@
 
 mod logging;
 
+use bizinikiwi_rpc_client::{rpc_params, BatchRequestBuilder, ChainApi, ClientT, StateApi};
 use codec::{Compact, Decode, Encode};
 use indicatif::{ProgressBar, ProgressStyle};
 use jsonrpsee::{core::params::ArrayParams, http_client::HttpClient};
 use log::*;
-use serde::de::DeserializeOwned;
 use pezsp_core::{
 	hexdisplay::HexDisplay,
 	storage::{
@@ -39,6 +39,7 @@ use pezsp_runtime::{
 	StateVersion,
 };
 use pezsp_state_machine::TestExternalities;
+use serde::de::DeserializeOwned;
 use std::{
 	cmp::{max, min},
 	fs,
@@ -47,7 +48,6 @@ use std::{
 	sync::Arc,
 	time::{Duration, Instant},
 };
-use bizinikiwi_rpc_client::{rpc_params, BatchRequestBuilder, ChainApi, ClientT, StateApi};
 use tokio_retry::{strategy::FixedInterval, Retry};
 
 type Result<T, E = &'static str> = std::result::Result<T, E>;
@@ -105,8 +105,8 @@ impl<B: BlockT> Snapshot<B> {
 	}
 }
 
-/// An externalities that acts exactly the same as [`pezsp_io::TestExternalities`] but has a few extra
-/// bits and pieces to it, and can be loaded remotely.
+/// An externalities that acts exactly the same as [`pezsp_io::TestExternalities`] but has a few
+/// extra bits and pieces to it, and can be loaded remotely.
 pub struct RemoteExternalities<B: BlockT> {
 	/// The inner externalities.
 	pub inner_ext: TestExternalities<HashingFor<B>>,

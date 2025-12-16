@@ -24,7 +24,6 @@ use std::{cmp::Ordering, collections::HashSet, fmt, hash, sync::Arc, time::Insta
 
 use crate::LOG_TARGET;
 use pezsc_transaction_pool_api::{error, InPoolTransaction, PoolStatus};
-use serde::Serialize;
 use pezsp_core::hexdisplay::HexDisplay;
 use pezsp_runtime::{
 	traits::Member,
@@ -33,6 +32,7 @@ use pezsp_runtime::{
 		TransactionTag as Tag,
 	},
 };
+use serde::Serialize;
 use tracing::{trace, warn};
 
 use super::{

@@ -688,9 +688,9 @@ mod tests {
 	use super::*;
 	use async_std::sync::{Arc, Mutex};
 	use futures::{SinkExt, StreamExt};
+	use pezsp_core::H256;
 	use relay_bizinikiwi_client::test_chain::{TestChain, TestTeyrchain};
 	use relay_utils::{HeaderId, MaybeConnectionError};
-	use pezsp_core::H256;
 	use std::collections::HashMap;
 
 	const PARA_10_HASH: ParaHash = H256([10u8; 32]);

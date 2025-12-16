@@ -143,7 +143,12 @@ where
 	/// Insert key/value into backend.
 	///
 	/// This only supports inserting keys in child tries.
-	pub fn insert_child(&mut self, c: pezsp_core::storage::ChildInfo, k: StorageKey, v: StorageValue) {
+	pub fn insert_child(
+		&mut self,
+		c: pezsp_core::storage::ChildInfo,
+		k: StorageKey,
+		v: StorageValue,
+	) {
 		self.backend.insert(vec![(Some(c), vec![(k, Some(v))])], self.state_version);
 	}
 
@@ -260,7 +265,8 @@ where
 		let mut proving_ext =
 			Ext::new(&mut self.overlay, &proving_backend, Some(&mut self.extensions));
 
-		let outcome = pezsp_externalities::set_and_run_with_externalities(&mut proving_ext, execute);
+		let outcome =
+			pezsp_externalities::set_and_run_with_externalities(&mut proving_ext, execute);
 		let proof = proving_backend.extract_proof().expect("Failed to extract storage proof");
 
 		(outcome, proof)
@@ -394,7 +400,10 @@ where
 		self.extension_by_type_id(TypeId::of::<T>()).and_then(<dyn Any>::downcast_mut)
 	}
 
-	fn register_extension<T: Extension>(&mut self, ext: T) -> Result<(), pezsp_externalities::Error> {
+	fn register_extension<T: Extension>(
+		&mut self,
+		ext: T,
+	) -> Result<(), pezsp_externalities::Error> {
 		self.register_extension_with_type_id(TypeId::of::<T>(), Box::new(ext))
 	}
 

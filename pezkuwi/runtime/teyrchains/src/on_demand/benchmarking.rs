@@ -21,7 +21,7 @@
 use super::{Pezpallet, *};
 use crate::{
 	configuration::{HostConfiguration, Pezpallet as ConfigurationPallet},
-	paras::{Pezpallet as ParasPallet, ParaGenesisArgs, ParaKind, TeyrchainsCache},
+	paras::{ParaGenesisArgs, ParaKind, Pezpallet as ParasPallet, TeyrchainsCache},
 	shared::Pezpallet as ParasShared,
 };
 

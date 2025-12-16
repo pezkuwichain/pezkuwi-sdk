@@ -23,8 +23,8 @@ use crate::{
 	Error, RuntimeCosts,
 };
 use core::ops::ControlFlow;
-use revm::interpreter::gas::BASE;
 use pezsp_core::U256;
+use revm::interpreter::gas::BASE;
 
 /// EIP-1344: ChainID opcode
 pub fn chainid<E: Ext>(interpreter: &mut Interpreter<E>) -> ControlFlow<Halt> {

@@ -137,7 +137,10 @@ where
 }
 
 /// Helper function to convert `Balance` with Location` to `Asset`
-pub fn convert_balance<T: pezframe_support::pezpallet_prelude::Get<Location>, Balance: TryInto<u128>>(
+pub fn convert_balance<
+	T: pezframe_support::pezpallet_prelude::Get<Location>,
+	Balance: TryInto<u128>,
+>(
 	balance: Balance,
 ) -> Result<Asset, FungiblesAccessError> {
 	match balance.try_into() {

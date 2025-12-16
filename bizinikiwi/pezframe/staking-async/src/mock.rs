@@ -624,7 +624,8 @@ impl ExtBuilder {
 	}
 	fn build(self) -> pezsp_io::TestExternalities {
 		pezsp_tracing::try_init_simple();
-		let mut storage = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
+		let mut storage =
+			pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 		let ed = ExistentialDeposit::get();
 
 		let mut maybe_stakers = vec![];

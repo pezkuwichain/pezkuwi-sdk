@@ -356,8 +356,11 @@ fn fund_child_bounty_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>)
-				.unwrap(),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			)
+			.unwrap(),
 			consideration(s.value)
 		);
 		assert_eq!(
@@ -526,7 +529,10 @@ fn check_status_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 
@@ -576,8 +582,11 @@ fn check_status_works() {
 		assert_eq!(Balances::free_balance(s.curator), Balances::minimum_balance());
 		assert_eq!(Balances::reserved_balance(s.curator), s.curator_deposit);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>)
-				.unwrap(),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			)
+			.unwrap(),
 			consideration(s.value)
 		);
 
@@ -607,7 +616,10 @@ fn check_status_works() {
 			Balances::minimum_balance() + s.curator_deposit
 		); // initial
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 
@@ -636,8 +648,11 @@ fn check_status_works() {
 		assert!(Preimage::is_requested(&s.metadata));
 		assert_eq!(Balances::free_balance(s.curator), Balances::minimum_balance());
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>)
-				.unwrap(),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			)
+			.unwrap(),
 			consideration(s.value)
 		);
 
@@ -666,7 +681,10 @@ fn check_status_works() {
 		);
 		assert!(!Preimage::is_requested(&s.metadata));
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 		assert_eq!(
@@ -1046,7 +1064,10 @@ fn retry_payment_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 
@@ -1338,8 +1359,11 @@ fn accept_curator_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>)
-				.unwrap(),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			)
+			.unwrap(),
 			consideration(s.value)
 		);
 		assert_eq!(Balances::reserved_balance(&s.curator), s.curator_deposit);
@@ -1596,7 +1620,10 @@ fn unassign_curator_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 		assert_eq!(
@@ -1816,7 +1843,10 @@ fn propose_curator_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 
@@ -2001,8 +2031,11 @@ fn award_bounty_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>)
-				.unwrap(),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			)
+			.unwrap(),
 			consideration(s.value)
 		);
 
@@ -2147,7 +2180,10 @@ fn close_bounty_works() {
 			}
 		);
 		assert_eq!(
-			pezpallet_bounties::CuratorDeposit::<Test>::get(s.parent_bounty_id, None::<BountyIndex>),
+			pezpallet_bounties::CuratorDeposit::<Test>::get(
+				s.parent_bounty_id,
+				None::<BountyIndex>
+			),
 			None
 		);
 

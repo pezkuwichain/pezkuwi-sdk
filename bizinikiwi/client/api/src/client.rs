@@ -137,19 +137,27 @@ pub trait BlockBackend<Block: BlockT> {
 	///
 	/// Note that this will only fetch transactions
 	/// that are indexed by the runtime with `storage_index_transaction`.
-	fn block_indexed_body(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Vec<Vec<u8>>>>;
+	fn block_indexed_body(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<Option<Vec<Vec<u8>>>>;
 
 	/// Get full block by hash.
 	fn block(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<SignedBlock<Block>>>;
 
 	/// Get block status by block hash.
-	fn block_status(&self, hash: Block::Hash) -> pezsp_blockchain::Result<pezsp_consensus::BlockStatus>;
+	fn block_status(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<pezsp_consensus::BlockStatus>;
 
 	/// Get block justifications for the block with the given hash.
-	fn justifications(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Justifications>>;
+	fn justifications(&self, hash: Block::Hash)
+		-> pezsp_blockchain::Result<Option<Justifications>>;
 
 	/// Get block hash by number.
-	fn block_hash(&self, number: NumberFor<Block>) -> pezsp_blockchain::Result<Option<Block::Hash>>;
+	fn block_hash(&self, number: NumberFor<Block>)
+		-> pezsp_blockchain::Result<Option<Block::Hash>>;
 
 	/// Get single indexed transaction by content hash.
 	///

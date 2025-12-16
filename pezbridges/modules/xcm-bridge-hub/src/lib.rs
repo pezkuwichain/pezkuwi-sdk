@@ -18,9 +18,9 @@
 //! open and close bridges between local (to this pezpallet location) and remote XCM
 //! destinations.
 //!
-//! The `pezpallet_xcm_bridge_hub` pezpallet is used to manage (open, close) bridges between chains from
-//! different consensuses. The new extrinsics `fn open_bridge` and `fn close_bridge` are introduced.
-//! Other chains can manage channels with different bridged global consensuses.
+//! The `pezpallet_xcm_bridge_hub` pezpallet is used to manage (open, close) bridges between chains
+//! from different consensuses. The new extrinsics `fn open_bridge` and `fn close_bridge` are
+//! introduced. Other chains can manage channels with different bridged global consensuses.
 //!
 //! # Concept of `lane` and `LaneId`
 //!
@@ -48,8 +48,8 @@
 //!
 //! # Concept of `bridge` and `BridgeId`
 //!
-//! The `pezpallet_xcm_bridge_hub` pezpallet needs to store some metadata about opened bridges. The bridge
-//! (or bridge metadata) is stored under the `BridgeId` key.
+//! The `pezpallet_xcm_bridge_hub` pezpallet needs to store some metadata about opened bridges. The
+//! bridge (or bridge metadata) is stored under the `BridgeId` key.
 //!
 //! `BridgeId` is generated from `bridge_origin_relative_location` and
 //! `bridge_origin_universal_location` using the `latest` XCM structs. `BridgeId` is not transferred
@@ -62,8 +62,8 @@
 //!
 //! # Migrations and State
 //!
-//! This pezpallet implements `try_state`, ensuring compatibility and checking everything so we know if
-//! any migration is needed. `do_try_state` checks for `BridgeId` compatibility, which is
+//! This pezpallet implements `try_state`, ensuring compatibility and checking everything so we know
+//! if any migration is needed. `do_try_state` checks for `BridgeId` compatibility, which is
 //! recalculated on runtime upgrade. Upgrading to a new XCM version should not break anything,
 //! except removing older XCM versions. In such cases, we need to add migration for `BridgeId` and
 //! stored `Versioned*` structs and update `LaneToBridge` mapping, but this won't affect `LaneId`
@@ -144,11 +144,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use bp_messages::{LaneState, MessageNonce};
-use pezbp_runtime::{AccountIdOf, BalanceOf, RangeInclusiveExt};
 use bp_xcm_bridge_hub::BridgeLocationsError;
 pub use bp_xcm_bridge_hub::{
 	Bridge, BridgeId, BridgeLocations, BridgeState, LocalXcmChannelManager,
 };
+use pezbp_runtime::{AccountIdOf, BalanceOf, RangeInclusiveExt};
 use pezframe_support::{traits::fungible::MutateHold, DefaultNoBound};
 use pezframe_system::Config as SystemConfig;
 use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, LanesManagerError};
@@ -215,8 +215,8 @@ pub mod pezpallet {
 		/// Checks the XCM version for the destination.
 		type DestinationVersion: GetVersion;
 
-		/// The origin that is allowed to call privileged operations on the pezpallet, e.g. open/close
-		/// bridge for locations.
+		/// The origin that is allowed to call privileged operations on the pezpallet, e.g.
+		/// open/close bridge for locations.
 		type ForceOrigin: EnsureOrigin<<Self as SystemConfig>::RuntimeOrigin>;
 		/// A set of XCM locations within local consensus system that are allowed to open
 		/// bridges with remote destinations.
@@ -691,10 +691,15 @@ pub mod pezpallet {
 			Ok(bridge.lane_id)
 		}
 
-		/// Ensure the correctness of the state of the connected `pezpallet_bridge_messages` instance.
+		/// Ensure the correctness of the state of the connected `pezpallet_bridge_messages`
+		/// instance.
 		pub fn do_try_state_for_messages() -> Result<(), pezsp_runtime::TryRuntimeError> {
 			// check that all `InboundLanes` laneIds have mapping to some bridge.
-			for lane_id in pezpallet_bridge_messages::InboundLanes::<T, T::BridgeMessagesPalletInstance>::iter_keys() {
+			for lane_id in pezpallet_bridge_messages::InboundLanes::<
+				T,
+				T::BridgeMessagesPalletInstance,
+			>::iter_keys()
+			{
 				tracing::info!(target: LOG_TARGET, ?lane_id, "Checking `do_try_state_for_messages` for `InboundLanes`...");
 				ensure!(
 					LaneToBridge::<T, I>::get(lane_id).is_some(),
@@ -703,7 +708,11 @@ pub mod pezpallet {
 			}
 
 			// check that all `OutboundLanes` laneIds have mapping to some bridge.
-			for lane_id in pezpallet_bridge_messages::OutboundLanes::<T, T::BridgeMessagesPalletInstance>::iter_keys() {
+			for lane_id in pezpallet_bridge_messages::OutboundLanes::<
+				T,
+				T::BridgeMessagesPalletInstance,
+			>::iter_keys()
+			{
 				tracing::info!(target: LOG_TARGET, ?lane_id, "Checking `do_try_state_for_messages` for `OutboundLanes`");
 				ensure!(
 					LaneToBridge::<T, I>::get(lane_id).is_some(),
@@ -839,7 +848,9 @@ mod tests {
 	use bp_messages::LaneIdType;
 	use mock::*;
 
-	use pezframe_support::{assert_err, assert_noop, assert_ok, traits::fungible::Mutate, BoundedVec};
+	use pezframe_support::{
+		assert_err, assert_noop, assert_ok, traits::fungible::Mutate, BoundedVec,
+	};
 	use pezframe_system::{EventRecord, Phase};
 	use pezsp_runtime::TryRuntimeError;
 

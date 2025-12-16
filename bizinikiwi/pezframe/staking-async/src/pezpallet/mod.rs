@@ -25,6 +25,7 @@ use crate::{
 };
 use alloc::{format, vec::Vec};
 use codec::Codec;
+pub use impls::*;
 use pezframe_election_provider_support::{ElectionProvider, SortedListProvider, VoteWeight};
 use pezframe_support::{
 	assert_ok,
@@ -41,12 +42,6 @@ use pezframe_support::{
 	BoundedBTreeSet, BoundedVec,
 };
 use pezframe_system::{ensure_root, ensure_signed, pezpallet_prelude::*};
-pub use impls::*;
-use rand::seq::SliceRandom;
-use rand_chacha::{
-	rand_core::{RngCore, SeedableRng},
-	ChaChaRng,
-};
 use pezsp_core::{sr25519::Pair as SrPair, Pair};
 use pezsp_runtime::{
 	traits::{StaticLookup, Zero},
@@ -56,6 +51,11 @@ use pezsp_staking::{
 	EraIndex, Page, SessionIndex,
 	StakingAccount::{self, Controller, Stash},
 	StakingInterface,
+};
+use rand::seq::SliceRandom;
+use rand_chacha::{
+	rand_core::{RngCore, SeedableRng},
+	ChaChaRng,
 };
 
 mod impls;
@@ -148,8 +148,8 @@ pub mod pezpallet {
 
 		/// Convert a balance into a number used for election calculation. This must fit into a
 		/// `u64` but is allowed to be sensibly lossy. The `u64` is used to communicate with the
-		/// [`pezframe_election_provider_support`] crate which accepts u64 numbers and does operations
-		/// in 128.
+		/// [`pezframe_election_provider_support`] crate which accepts u64 numbers and does
+		/// operations in 128.
 		/// Consequently, the backward convert is used convert the u128s from sp-elections back to a
 		/// [`BalanceOf`].
 		#[pezpallet::no_default_bounds]
@@ -502,10 +502,10 @@ pub mod pezpallet {
 
 	/// Stakers whose funds are managed by other pallets.
 	///
-	/// This pezpallet does not apply any locks on them, therefore they are only virtually bonded. They
-	/// are expected to be keyless accounts and hence should not be allowed to mutate their ledger
-	/// directly via this pezpallet. Instead, these accounts are managed by other pallets and accessed
-	/// via low level apis. We keep track of them to do minimal integrity checks.
+	/// This pezpallet does not apply any locks on them, therefore they are only virtually bonded.
+	/// They are expected to be keyless accounts and hence should not be allowed to mutate their
+	/// ledger directly via this pezpallet. Instead, these accounts are managed by other pallets
+	/// and accessed via low level apis. We keep track of them to do minimal integrity checks.
 	#[pezpallet::storage]
 	pub type VirtualStakers<T: Config> = CountedStorageMap<_, Twox64Concat, T::AccountId, ()>;
 
@@ -575,8 +575,8 @@ pub mod pezpallet {
 	/// A bounded wrapper for [`pezsp_staking::ExposurePage`].
 	///
 	/// It has `Deref` and `DerefMut` impls that map it back [`pezsp_staking::ExposurePage`] for all
-	/// purposes. This is done in such a way because we prefer to keep the types in [`pezsp_staking`]
-	/// pure, and not polluted by pezpallet-specific bounding logic.
+	/// purposes. This is done in such a way because we prefer to keep the types in
+	/// [`pezsp_staking`] pure, and not polluted by pezpallet-specific bounding logic.
 	///
 	/// It encoded and decodes exactly the same as [`pezsp_staking::ExposurePage`], and provides a
 	/// manual `MaxEncodedLen` implementation, to be used in benchmarking
@@ -2084,7 +2084,9 @@ pub mod pezpallet {
 		///
 		/// If all pages are claimed, it returns an error `InvalidPage`.
 		#[pezpallet::call_index(18)]
-		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(T::MaxExposurePageSize::get()))]
+		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(
+			T::MaxExposurePageSize::get()
+		))]
 		pub fn payout_stakers(
 			origin: OriginFor<T>,
 			validator_stash: T::AccountId,
@@ -2420,7 +2422,9 @@ pub mod pezpallet {
 		/// and so it should not be assumed the highest staker would be on the topmost page and vice
 		/// versa. If rewards are not claimed in [`Config::HistoryDepth`] eras, they are lost.
 		#[pezpallet::call_index(26)]
-		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(T::MaxExposurePageSize::get()))]
+		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(
+			T::MaxExposurePageSize::get()
+		))]
 		pub fn payout_stakers_by_page(
 			origin: OriginFor<T>,
 			validator_stash: T::AccountId,
@@ -2626,8 +2630,8 @@ pub mod pezpallet {
 		/// Manually and permissionlessly applies a deferred slash for a given era.
 		///
 		/// Normally, slashes are automatically applied shortly after the start of the `slash_era`.
-		/// The automatic application of slashes is handled by the pezpallet's internal logic, and it
-		/// tries to apply one slash page per block of the era.
+		/// The automatic application of slashes is handled by the pezpallet's internal logic, and
+		/// it tries to apply one slash page per block of the era.
 		/// If for some reason, one era is not enough for applying all slash pages, the remaining
 		/// slashes need to be manually (permissionlessly) applied.
 		///

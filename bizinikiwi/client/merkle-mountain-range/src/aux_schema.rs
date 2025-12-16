@@ -101,11 +101,13 @@ where
 #[cfg(test)]
 pub(crate) mod tests {
 	use super::*;
-	use crate::test_utils::{run_test_with_pezmmr_gadget_pre_post_using_client, MmrBlock, MockClient};
+	use crate::test_utils::{
+		run_test_with_pezmmr_gadget_pre_post_using_client, MmrBlock, MockClient,
+	};
+	use bizinikiwi_test_runtime_client::{runtime::Block, Backend};
 	use parking_lot::Mutex;
 	use pezsp_runtime::generic::BlockId;
 	use std::{sync::Arc, time::Duration};
-	use bizinikiwi_test_runtime_client::{runtime::Block, Backend};
 
 	#[test]
 	fn should_load_persistent_sanity_checks() {

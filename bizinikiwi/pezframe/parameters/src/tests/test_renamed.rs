@@ -34,7 +34,8 @@ use RuntimeParametersRenamed::*;
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 impl pezframe_system::Config for Runtime {
 	type Block = pezframe_system::mocking::MockBlock<Runtime>;
-	type AccountData = pezpallet_balances::AccountData<<Self as pezpallet_balances::Config>::Balance>;
+	type AccountData =
+		pezpallet_balances::AccountData<<Self as pezpallet_balances::Config>::Balance>;
 }
 
 #[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]

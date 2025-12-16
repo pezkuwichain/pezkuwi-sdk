@@ -28,7 +28,9 @@ use jsonrpsee::{
 		ErrorObjectOwned,
 	},
 };
-use pezpallet_transaction_payment_rpc_runtime_api::{FeeDetails, InclusionFee, RuntimeDispatchInfo};
+use pezpallet_transaction_payment_rpc_runtime_api::{
+	FeeDetails, InclusionFee, RuntimeDispatchInfo,
+};
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_blockchain::HeaderBackend;
 use pezsp_core::Bytes;

@@ -18,11 +18,11 @@
 //! The conviction datatype.
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Bounded, CheckedDiv, CheckedMul, Zero},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 use crate::types::Delegations;
 

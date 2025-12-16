@@ -18,8 +18,8 @@
 
 //! Bizinikiwi state API helpers.
 
-use serde::{Deserialize, Serialize};
 use pezsp_core::Bytes;
+use serde::{Deserialize, Serialize};
 
 /// ReadProof struct returned by the RPC
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

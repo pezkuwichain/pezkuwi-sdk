@@ -21,6 +21,7 @@
 use super::*;
 use assert_matches::assert_matches;
 use async_trait::async_trait;
+use bizinikiwi_test_runtime_client::{runtime::BlockNumber, BlockBuilderExt};
 use environment::HasVoted;
 use futures_timer::Delay;
 use parking_lot::{Mutex, RwLock};
@@ -49,7 +50,6 @@ use pezsp_runtime::{
 	Justifications,
 };
 use std::{collections::HashSet, pin::Pin};
-use bizinikiwi_test_runtime_client::{runtime::BlockNumber, BlockBuilderExt};
 use tokio::runtime::Handle;
 
 use authorities::AuthoritySet;

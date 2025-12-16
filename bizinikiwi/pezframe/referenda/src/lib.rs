@@ -82,11 +82,11 @@ use pezframe_support::{
 	},
 	BoundedVec,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AtLeast32BitUnsigned, Bounded, Dispatchable, One, Saturating, Zero},
 	DispatchError, Perbill,
 };
+use scale_info::TypeInfo;
 
 mod branch;
 pub mod migration;
@@ -814,9 +814,10 @@ impl<T: Config<I>, I: 'static> Polling<T::Tally> for Pezpallet<T, I> {
 			r
 		});
 		let now = T::BlockNumberProvider::current_block_number();
-		let dummy_account_id =
-			codec::Decode::decode(&mut pezsp_runtime::traits::TrailingZeroInput::new(&b"dummy"[..]))
-				.expect("infinite length input; no invalid inputs for type; qed");
+		let dummy_account_id = codec::Decode::decode(
+			&mut pezsp_runtime::traits::TrailingZeroInput::new(&b"dummy"[..]),
+		)
+		.expect("infinite length input; no invalid inputs for type; qed");
 		let mut status = ReferendumStatusOf::<T, I> {
 			track: class,
 			origin: pezframe_support::dispatch::RawOrigin::Root.into(),

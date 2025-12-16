@@ -78,12 +78,16 @@ where
 	/// Returns the `:code` for the given `block`.
 	///
 	/// This takes into account potential overrides/substitutes.
-	pub fn code_at_ignoring_overrides(&self, block: Block::Hash) -> pezsp_blockchain::Result<Vec<u8>> {
+	pub fn code_at_ignoring_overrides(
+		&self,
+		block: Block::Hash,
+	) -> pezsp_blockchain::Result<Vec<u8>> {
 		let state = self.backend.state_at(block, TrieCacheContext::Untrusted)?;
 
 		let state_runtime_code = pezsp_state_machine::backend::BackendRuntimeCode::new(&state);
-		let runtime_code =
-			state_runtime_code.runtime_code().map_err(pezsp_blockchain::Error::RuntimeCode)?;
+		let runtime_code = state_runtime_code
+			.runtime_code()
+			.map_err(pezsp_blockchain::Error::RuntimeCode)?;
 
 		self.maybe_override_code_internal(runtime_code, &state, block, true)
 			.and_then(|r| {
@@ -167,6 +171,7 @@ where
 mod tests {
 	use super::*;
 	use backend::Backend;
+	use bizinikiwi_test_runtime_client::{runtime, GenesisInit};
 	use pezsc_client_api::{in_mem, HeaderBackend};
 	use pezsc_executor::WasmExecutor;
 	use pezsp_core::{
@@ -174,7 +179,6 @@ mod tests {
 		traits::{FetchRuntimeCode, WrappedRuntimeCode},
 	};
 	use std::collections::HashMap;
-	use bizinikiwi_test_runtime_client::{runtime, GenesisInit};
 
 	#[test]
 	fn no_override_no_substitutes_work() {

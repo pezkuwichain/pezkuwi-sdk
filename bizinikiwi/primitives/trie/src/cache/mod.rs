@@ -856,8 +856,8 @@ impl<'a, H: Hasher> trie_db::TrieCache<NodeCodec<H>> for TrieCache<'a, H> {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use rand::{thread_rng, Rng};
 	use pezsp_core::H256;
+	use rand::{thread_rng, Rng};
 	use trie_db::{Bytes, Trie, TrieDBBuilder, TrieDBMutBuilder, TrieHash, TrieMut};
 
 	type MemoryDB = crate::MemoryDB<pezsp_core::Blake2Hasher>;

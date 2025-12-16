@@ -24,9 +24,9 @@ use bp_messages::{
 	ChainWithMessages, HashedLaneId, LaneIdType, MessageNonce,
 };
 use bp_relayers::{PayRewardFromAccount, RewardsAccountParams};
-use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, Teyrchain};
 use bp_teyrchains::SingleParaStoredHeaderDataBuilder;
 use codec::Encode;
+use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, Teyrchain};
 use pezframe_support::{
 	derive_impl, parameter_types,
 	weights::{ConstantMultiplier, IdentityFee, RuntimeDbWeight, Weight},
@@ -197,12 +197,13 @@ impl pezpallet_bridge_messages::Config for TestRuntime {
 	type LaneId = TestLaneIdType;
 
 	type DeliveryPayments = ();
-	type DeliveryConfirmationPayments = pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
-		TestRuntime,
-		(),
-		(),
-		ConstU32<100_000>,
-	>;
+	type DeliveryConfirmationPayments =
+		pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
+			TestRuntime,
+			(),
+			(),
+			ConstU32<100_000>,
+		>;
 	type OnMessagesDelivered = ();
 
 	type MessageDispatch = DummyMessageDispatch;

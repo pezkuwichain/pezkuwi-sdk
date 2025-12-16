@@ -18,11 +18,11 @@
 
 //! Block import helpers.
 
-use serde::{Deserialize, Serialize};
 use pezsp_runtime::{
 	traits::{Block as BlockT, HashingFor, Header as HeaderT, NumberFor},
 	DigestItem, Justification, Justifications,
 };
+use serde::{Deserialize, Serialize};
 use std::{any::Any, borrow::Cow, collections::HashMap, sync::Arc};
 
 use pezsp_consensus::{BlockOrigin, Error};

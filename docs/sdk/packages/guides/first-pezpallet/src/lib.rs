@@ -295,7 +295,11 @@ pub mod pezpallet {
 		fn mint_works() {
 			StateBuilder::default().build_and_execute(|| {
 				// given the initial state, when:
-				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(RuntimeOrigin::signed(ALICE), BOB, 100));
+				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(
+					RuntimeOrigin::signed(ALICE),
+					BOB,
+					100
+				));
 
 				// then:
 				assert_eq!(Balances::<Runtime>::get(&BOB), Some(200));

@@ -323,6 +323,7 @@ mod tests {
 	use super::*;
 	use crate::collators::{can_build_upon, BackingGroupConnectionHelper};
 	use codec::Encode;
+	use futures::StreamExt;
 	use pezcumulus_primitives_aura::Slot;
 	use pezcumulus_primitives_core::BlockT;
 	use pezcumulus_relay_chain_interface::PHash;
@@ -332,7 +333,6 @@ mod tests {
 		TestClientBuilderExt,
 	};
 	use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
-	use futures::StreamExt;
 	use pezkuwi_overseer::{Event, Handle};
 	use pezkuwi_primitives::HeadData;
 	use pezsc_consensus::{BlockImport, BlockImportParams, ForkChoiceStrategy};

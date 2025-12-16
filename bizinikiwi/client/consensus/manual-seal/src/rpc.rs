@@ -25,8 +25,8 @@ use futures::{
 };
 use jsonrpsee::{core::async_trait, proc_macros::rpc};
 use pezsc_consensus::ImportedAux;
-use serde::{Deserialize, Serialize};
 use pezsp_runtime::EncodedJustification;
+use serde::{Deserialize, Serialize};
 
 /// Sender passed to the authorship task to report errors or successes.
 pub type Sender<T> = Option<oneshot::Sender<std::result::Result<T, Error>>>;

@@ -34,8 +34,8 @@ use pezframe_benchmarking::v2::*;
 use pezframe_support::pezpallet_prelude::TransactionSource;
 use pezframe_system::RawOrigin;
 
-// To actually run this benchmark on pezpallet-example-kitchensink, we need to put this pezpallet into the
-//   runtime and compile it with `runtime-benchmarks` feature. The detail procedures are
+// To actually run this benchmark on pezpallet-example-kitchensink, we need to put this pezpallet
+// into the   runtime and compile it with `runtime-benchmarks` feature. The detail procedures are
 //   documented at:
 //   https://docs.pezkuwichain.io/reference/how-to-guides/weights/add-benchmarks/
 //
@@ -98,8 +98,8 @@ mod benchmarks {
 	}
 
 	// This line generates test cases for benchmarking, and could be run by:
-	//   `cargo test -p pezpallet-example-kitchensink --all-features`, you will see one line per case:
-	//   `test benchmarking::bench_set_foo_benchmark ... ok`
+	//   `cargo test -p pezpallet-example-kitchensink --all-features`, you will see one line per
+	// case:   `test benchmarking::bench_set_foo_benchmark ... ok`
 	//   `test benchmarking::bench_set_foo_using_authorize_benchmark ... ok` in the result.
 	//   `test benchmarking::bench_authorize_set_foo_using_authorize_benchmark ... ok` in the
 	// result.

@@ -21,7 +21,6 @@
 use codec::{Decode, Encode};
 pub use pezsc_executor::pezsp_wasm_interface::HostFunctions;
 use pezsc_executor::{error::Result, WasmExecutor};
-use serde_json::{from_slice, Value};
 use pezsp_core::{
 	storage::Storage,
 	traits::{CallContext, CodeExecutor, Externalities, FetchRuntimeCode, RuntimeCode},
@@ -29,6 +28,7 @@ use pezsp_core::{
 use pezsp_genesis_builder::{PresetId, Result as BuildResult};
 pub use pezsp_genesis_builder::{DEV_RUNTIME_PRESET, LOCAL_TESTNET_RUNTIME_PRESET};
 use pezsp_state_machine::BasicExternalities;
+use serde_json::{from_slice, Value};
 use std::borrow::Cow;
 
 /// A utility that facilitates calling the GenesisBuilder API from the runtime wasm code blob.
@@ -85,8 +85,8 @@ where
 	/// Returns a json representation of the default `RuntimeGenesisConfig` provided by the
 	/// `runtime`.
 	///
-	/// Calls [`GenesisBuilder::get_preset`](pezsp_genesis_builder::GenesisBuilder::get_preset) in the
-	/// `runtime` with `None` argument.
+	/// Calls [`GenesisBuilder::get_preset`](pezsp_genesis_builder::GenesisBuilder::get_preset) in
+	/// the `runtime` with `None` argument.
 	pub fn get_default_config(&self) -> core::result::Result<Value, String> {
 		self.get_named_preset(None)
 	}
@@ -176,9 +176,9 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use serde_json::{from_str, json};
 	pub use pezsp_consensus_babe::{AllowedSlots, BabeEpochConfiguration};
 	pub use pezsp_genesis_builder::PresetId;
+	use serde_json::{from_str, json};
 
 	#[test]
 	fn list_presets_works() {

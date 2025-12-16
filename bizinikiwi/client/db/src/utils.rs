@@ -478,7 +478,10 @@ pub fn read_header<Block: BlockT>(
 pub fn read_meta<Block>(
 	db: &dyn Database<DbHash>,
 	col_header: u32,
-) -> Result<Meta<<<Block as BlockT>::Header as HeaderT>::Number, Block::Hash>, pezsp_blockchain::Error>
+) -> Result<
+	Meta<<<Block as BlockT>::Header as HeaderT>::Number, Block::Hash>,
+	pezsp_blockchain::Error,
+>
 where
 	Block: BlockT,
 {
@@ -569,8 +572,10 @@ pub fn read_genesis_hash<Hash: Decode>(
 	match db.get(COLUMN_META, meta_keys::GENESIS_HASH) {
 		Some(h) => match Decode::decode(&mut &h[..]) {
 			Ok(h) => Ok(Some(h)),
-			Err(err) =>
-				Err(pezsp_blockchain::Error::Backend(format!("Error decoding genesis hash: {}", err))),
+			Err(err) => Err(pezsp_blockchain::Error::Backend(format!(
+				"Error decoding genesis hash: {}",
+				err
+			))),
 		},
 		None => Ok(None),
 	}

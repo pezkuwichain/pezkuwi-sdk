@@ -25,8 +25,8 @@ use alloc::collections::btree_map::BTreeMap;
 use codec::{Decode, Encode};
 use core::marker::PhantomData;
 use pezcumulus_primitives_core::{relay_chain, ParaId};
-use scale_info::TypeInfo;
 use pezsp_runtime::RuntimeDebug;
+use scale_info::TypeInfo;
 
 /// Constraints on outbound HRMP channel.
 #[derive(Clone, RuntimeDebug)]

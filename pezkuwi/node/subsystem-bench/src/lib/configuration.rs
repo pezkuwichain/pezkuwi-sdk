@@ -20,13 +20,13 @@ use crate::keyring::Keyring;
 use itertools::Itertools;
 use pezkuwi_node_network_protocol::authority_discovery::AuthorityDiscovery;
 use pezkuwi_primitives::{AssignmentId, AuthorityDiscoveryId, ValidatorId, ValidatorPair};
-use rand::thread_rng;
-use rand_distr::{Distribution, Normal, Uniform};
 use pezsc_network::Multiaddr;
 use pezsc_network_types::PeerId;
-use serde::{Deserialize, Serialize};
 use pezsp_consensus_babe::AuthorityId;
 use pezsp_core::Pair;
+use rand::thread_rng;
+use rand_distr::{Distribution, Normal, Uniform};
+use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 
 /// Peer networking latency configuration.

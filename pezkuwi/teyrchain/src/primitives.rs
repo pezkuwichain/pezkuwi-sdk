@@ -21,11 +21,11 @@ use alloc::vec::Vec;
 
 use bounded_collections::{BoundedVec, ConstU32};
 use codec::{CompactAs, Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
-use serde::{Deserialize, Serialize};
 use pezsp_core::{bytes, RuntimeDebug, TypeId};
 use pezsp_runtime::traits::Hash as _;
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
+use serde::{Deserialize, Serialize};
 
 use pezkuwi_core_primitives::{Hash, OutboundHrmpMessage};
 

@@ -19,6 +19,11 @@
 //! Test utilities.
 
 use crate::MmrGadget;
+use bizinikiwi_test_runtime_client::{
+	runtime::{Block, BlockNumber, Hash, Header},
+	Backend, BlockBuilderExt, Client, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt,
+	TestClientBuilder, TestClientBuilderExt,
+};
 use parking_lot::Mutex;
 use pezsc_block_builder::BlockBuilderBuilder;
 use pezsc_client_api::{
@@ -40,11 +45,6 @@ use pezsp_runtime::{
 	traits::{Block as BlockT, Header as HeaderT},
 };
 use std::{future::Future, sync::Arc, time::Duration};
-use bizinikiwi_test_runtime_client::{
-	runtime::{Block, BlockNumber, Hash, Header},
-	Backend, BlockBuilderExt, Client, ClientBlockImportExt, ClientExt, DefaultTestClientBuilderExt,
-	TestClientBuilder, TestClientBuilderExt,
-};
 use tokio::runtime::Runtime;
 
 type MmrHash = H256;

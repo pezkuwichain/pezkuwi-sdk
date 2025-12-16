@@ -17,6 +17,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use async_trait::async_trait;
+use bizinikiwi_test_runtime::{AccountId, Block, Extrinsic, ExtrinsicBuilder, TransferData, H256};
 use codec::Encode;
 use criterion::{criterion_group, criterion_main, Criterion};
 use futures::executor::block_on;
@@ -32,7 +33,6 @@ use pezsp_runtime::{
 	},
 };
 use std::sync::Arc;
-use bizinikiwi_test_runtime::{AccountId, Block, Extrinsic, ExtrinsicBuilder, TransferData, H256};
 
 #[derive(Clone, Debug, Default)]
 struct TestApi {

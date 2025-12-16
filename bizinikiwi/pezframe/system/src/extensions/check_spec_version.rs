@@ -17,11 +17,11 @@
 
 use crate::{Config, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default, traits::TransactionExtension,
 	transaction_validity::TransactionValidityError,
 };
+use scale_info::TypeInfo;
 
 /// Ensure the runtime version registered in the transaction is the same as at present.
 ///

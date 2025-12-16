@@ -26,7 +26,9 @@ use pezsp_trie::proof_size_extension::ProofSizeExt;
 
 type Test = pezcumulus_test_runtime::Runtime;
 const CALL: &<Test as Config>::RuntimeCall =
-	&pezcumulus_test_runtime::RuntimeCall::System(pezframe_system::Call::set_heap_pages { pages: 0u64 });
+	&pezcumulus_test_runtime::RuntimeCall::System(pezframe_system::Call::set_heap_pages {
+		pages: 0u64,
+	});
 const ALICE: AccountId32 = AccountId32::new([1u8; 32]);
 const LEN: usize = 150;
 

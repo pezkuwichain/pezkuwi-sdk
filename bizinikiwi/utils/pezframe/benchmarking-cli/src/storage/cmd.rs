@@ -28,9 +28,9 @@ use pezsp_storage::{ChildInfo, ChildType, PrefixedStorageKey, StateVersion};
 
 use clap::{Args, Parser, ValueEnum};
 use log::info;
+use pezsp_runtime::generic::BlockId;
 use rand::prelude::*;
 use serde::Serialize;
-use pezsp_runtime::generic::BlockId;
 use std::{fmt::Debug, path::PathBuf, sync::Arc};
 
 use super::template::TemplateData;

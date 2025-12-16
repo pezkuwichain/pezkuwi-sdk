@@ -21,8 +21,8 @@ use crate as pezpallet_assets_holder;
 pub use crate::*;
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::{derive_impl, traits::AsEnsureOriginWithArg};
-use scale_info::TypeInfo;
 use pezsp_runtime::BuildStorage;
+use scale_info::TypeInfo;
 
 pub type AccountId = <Test as pezframe_system::Config>::AccountId;
 pub type Balance = <Test as pezpallet_balances::Config>::Balance;

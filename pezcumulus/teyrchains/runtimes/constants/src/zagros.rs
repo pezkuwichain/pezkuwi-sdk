@@ -17,8 +17,8 @@
 pub mod account {
 	use pezframe_support::PalletId;
 
-	/// Zagros treasury pezpallet id, used to convert into AccountId - in Zagros as a destination for
-	/// slashed funds.
+	/// Zagros treasury pezpallet id, used to convert into AccountId - in Zagros as a destination
+	/// for slashed funds.
 	pub const ZAGROS_TREASURY_PALLET_ID: PalletId = PalletId(*b"py/trsry");
 	/// Alliance pezpallet ID - used as a temporary place to deposit a slashed imbalance before the
 	/// teleport to the Treasury.
@@ -62,8 +62,8 @@ pub mod fee {
 		},
 	};
 	use pezkuwi_core_primitives::Balance;
-	use smallvec::smallvec;
 	pub use pezsp_runtime::Perbill;
+	use smallvec::smallvec;
 
 	/// The block saturation level. Fees will be updated based on this value.
 	pub const TARGET_BLOCK_FULLNESS: Perbill = Perbill::from_percent(25);

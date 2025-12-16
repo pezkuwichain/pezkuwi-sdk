@@ -298,7 +298,8 @@ impl CallDef {
 						return Err(syn::Error::new(method.sig.span(), msg));
 					},
 					Some(syn::FnArg::Receiver(_)) => {
-						let msg = "Invalid pezpallet::call, first argument must be a typed argument, \
+						let msg =
+							"Invalid pezpallet::call, first argument must be a typed argument, \
 							e.g. `origin: OriginFor<T>`";
 						return Err(syn::Error::new(method.sig.span(), msg));
 					},
@@ -329,7 +330,8 @@ impl CallDef {
 						},
 						FunctionAttr::Weight(w) => {
 							if weight.is_some() {
-								let msg = "Invalid pezpallet::call, too many weight attributes given";
+								let msg =
+									"Invalid pezpallet::call, too many weight attributes given";
 								return Err(syn::Error::new(method.sig.span(), msg));
 							}
 							weight = Some(w);

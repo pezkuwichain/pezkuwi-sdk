@@ -94,8 +94,9 @@ impl<
 	}
 }
 
-/// [`VersionUncheckedMigrateToV2`] wrapped in a [`pezframe_support::migrations::VersionedMigration`],
-/// ensuring the migration is only performed when on-chain version is 0.
+/// [`VersionUncheckedMigrateToV2`] wrapped in a
+/// [`pezframe_support::migrations::VersionedMigration`], ensuring the migration is only performed
+/// when on-chain version is 0.
 pub type MigrateToV2<T, I, PastPayouts> = pezframe_support::migrations::VersionedMigration<
 	0,
 	2,

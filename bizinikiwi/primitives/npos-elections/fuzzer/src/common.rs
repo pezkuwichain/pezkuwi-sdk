@@ -20,9 +20,9 @@
 // Each function will be used based on which fuzzer binary is being used.
 #![allow(dead_code)]
 
-use rand::{self, seq::SliceRandom, Rng, RngCore};
 use pezsp_npos_elections::{phragmms, seq_phragmen, BalancingConfig, ElectionResult, VoteWeight};
 use pezsp_runtime::Perbill;
+use rand::{self, seq::SliceRandom, Rng, RngCore};
 use std::collections::{BTreeMap, HashSet};
 
 /// converts x into the range [a, b] in a pseudo-fair way.

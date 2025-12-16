@@ -34,12 +34,12 @@ use frame::{
 	},
 	prelude::*,
 };
-use serde::{Deserialize, Serialize};
 use pezsp_application_crypto::RuntimeAppPublic;
 use pezsp_mixnet::types::{
 	AuthorityId, AuthoritySignature, KxPublic, Mixnode, MixnodesErr, PeerId, SessionIndex,
 	SessionPhase, SessionStatus, KX_PUBLIC_SIZE,
 };
+use serde::{Deserialize, Serialize};
 
 const LOG_TARGET: &str = "runtime::mixnet";
 

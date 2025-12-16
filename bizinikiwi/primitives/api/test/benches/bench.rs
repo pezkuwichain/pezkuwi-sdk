@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use criterion::{criterion_group, criterion_main, Criterion};
-use pezsp_api::ProvideRuntimeApi;
 use bizinikiwi_test_runtime_client::{
 	runtime::TestAPI, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
 };
+use criterion::{criterion_group, criterion_main, Criterion};
+use pezsp_api::ProvideRuntimeApi;
 
 fn pezsp_api_benchmark(c: &mut Criterion) {
 	c.bench_function("add one with same runtime api", |b| {

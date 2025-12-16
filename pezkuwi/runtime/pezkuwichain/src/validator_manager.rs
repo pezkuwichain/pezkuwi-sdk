@@ -38,7 +38,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config + pezpallet_session::Config {
 		/// The overreaching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Privileged origin that can add or remove validators.
 		type PrivilegedOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;

@@ -48,8 +48,8 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
 };
-use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_runtime_common::{identity_migrator, BlockHashCount, SlowAdjustingFeeUpdate};
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezsp_api::impl_runtime_apis;
 pub use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -359,7 +359,8 @@ pub type RootOrFellows = EitherOfDiverse<
 
 /// Root VEYA Serok (Cumhurbaşkanı) yetkisi
 /// Kullanım: Yüksek düzey yönetim kararları, atamalar
-pub type RootOrSerok = EitherOfDiverse<EnsureRoot<AccountId>, pezpallet_welati::EnsureSerok<Runtime>>;
+pub type RootOrSerok =
+	EitherOfDiverse<EnsureRoot<AccountId>, pezpallet_welati::EnsureSerok<Runtime>>;
 
 /// Root VEYA Parlamento üyesi yetkisi
 /// Kullanım: Yasama işlemleri, bütçe onayları
@@ -368,7 +369,8 @@ pub type RootOrParliament =
 
 /// Root VEYA Divan (Anayasa Mahkemesi) yetkisi
 /// Kullanım: Anayasal kararlar, vatandaşlık işlemleri
-pub type RootOrDiwan = EitherOfDiverse<EnsureRoot<AccountId>, pezpallet_welati::EnsureDiwan<Runtime>>;
+pub type RootOrDiwan =
+	EitherOfDiverse<EnsureRoot<AccountId>, pezpallet_welati::EnsureDiwan<Runtime>>;
 
 /// Root VEYA Council (Genel Konsey) yetkisi
 /// Kullanım: Genel yönetişim kararları
@@ -446,7 +448,8 @@ impl pezpallet_session::Config for Runtime {
 	// we don't have stash and controller, thus we don't need the convert as well.
 	type ValidatorIdOf = pezpallet_collator_selection::IdentityCollator;
 	type ShouldEndSession = pezpallet_session::PeriodicSessions<ConstU32<PERIOD>, ConstU32<OFFSET>>;
-	type NextSessionRotation = pezpallet_session::PeriodicSessions<ConstU32<PERIOD>, ConstU32<OFFSET>>;
+	type NextSessionRotation =
+		pezpallet_session::PeriodicSessions<ConstU32<PERIOD>, ConstU32<OFFSET>>;
 	type SessionManager = CollatorSelection;
 	// Essentially just Aura, but let's be pedantic.
 	type SessionHandler = <SessionKeys as pezsp_runtime::traits::OpaqueKeys>::KeyTypeIdProviders;

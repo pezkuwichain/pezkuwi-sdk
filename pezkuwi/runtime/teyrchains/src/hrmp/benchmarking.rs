@@ -19,7 +19,7 @@
 use crate::{
 	configuration::Pezpallet as Configuration,
 	hrmp::{Pezpallet as Hrmp, *},
-	paras::{Pezpallet as Paras, ParaKind, TeyrchainsCache},
+	paras::{ParaKind, Pezpallet as Paras, TeyrchainsCache},
 	shared::Pezpallet as Shared,
 };
 use pezframe_benchmarking::{v2::*, whitelisted_caller};

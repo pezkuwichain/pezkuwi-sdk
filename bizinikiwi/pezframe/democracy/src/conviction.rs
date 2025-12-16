@@ -20,11 +20,11 @@
 use crate::types::Delegations;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::result::Result;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Bounded, CheckedDiv, CheckedMul, Zero},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// A value denoting the strength of conviction of a vote.
 #[derive(

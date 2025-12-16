@@ -134,12 +134,11 @@ where
 	B: BlockT,
 	C: HeaderBackend<B> + 'static,
 {
-	let genesis_hash =
-		client
-			.hash(Zero::zero())?
-			.ok_or(pezsc_cli::Error::Client(pezsp_blockchain::Error::Backend(
-				"Failed to lookup genesis block hash when exporting genesis head data.".into(),
-			)))?;
+	let genesis_hash = client.hash(Zero::zero())?.ok_or(pezsc_cli::Error::Client(
+		pezsp_blockchain::Error::Backend(
+			"Failed to lookup genesis block hash when exporting genesis head data.".into(),
+		),
+	))?;
 	let genesis_header = client.header(genesis_hash)?.ok_or(pezsc_cli::Error::Client(
 		pezsp_blockchain::Error::Backend(
 			"Failed to lookup genesis header by hash when exporting genesis head data.".into(),
@@ -456,7 +455,9 @@ impl pezsc_cli::CliConfiguration for NormalizedRunCmd {
 		Ok(self.base.rpc_params.rpc_rate_limit)
 	}
 
-	fn rpc_rate_limit_whitelisted_ips(&self) -> pezsc_cli::Result<Vec<pezsc_service::config::IpNetwork>> {
+	fn rpc_rate_limit_whitelisted_ips(
+		&self,
+	) -> pezsc_cli::Result<Vec<pezsc_service::config::IpNetwork>> {
 		Ok(self.base.rpc_params.rpc_rate_limit_whitelisted_ips.clone())
 	}
 

@@ -45,8 +45,8 @@ use libp2p::{
 };
 use log::{debug, error, trace, warn};
 use parking_lot::RwLock;
-use rand::distributions::{Distribution as _, Uniform};
 use pezsc_utils::mpsc::TracingUnboundedReceiver;
+use rand::distributions::{Distribution as _, Uniform};
 use smallvec::SmallVec;
 use tokio::sync::oneshot::error::RecvError;
 use tokio_stream::StreamMap;

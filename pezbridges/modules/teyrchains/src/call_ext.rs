@@ -16,8 +16,8 @@
 
 use crate::{Config, GrandpaPalletOf, Pezpallet, RelayBlockNumber};
 use bp_header_pez_chain::HeaderChain;
-use pezbp_runtime::{HeaderId, OwnedBridgeModule};
 use bp_teyrchains::{BestParaHeadHash, SubmitTeyrchainHeadsInfo};
+use pezbp_runtime::{HeaderId, OwnedBridgeModule};
 use pezframe_support::{
 	dispatch::CallableCallFor,
 	traits::{Get, IsSubType},
@@ -260,8 +260,8 @@ mod tests {
 	};
 	use bp_header_pez_chain::StoredHeaderData;
 	use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHeadsProof, ParaId};
-	use pezbp_runtime::BasicOperatingMode;
 	use bp_teyrchains::BestParaHeadHash;
+	use pezbp_runtime::BasicOperatingMode;
 
 	fn validate_submit_teyrchain_heads(
 		num: RelayBlockNumber,

@@ -37,8 +37,8 @@ use pezframe_support::{
 	traits::{Defensive, DefensiveOption, Get},
 	CloneNoBound, DefaultNoBound, EqNoBound, PalletError, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::traits::{Bounded, Zero};
+use scale_info::TypeInfo;
 
 #[cfg(any(
 	test,
@@ -595,7 +595,10 @@ impl<T: Config<I>, I: 'static> List<T, I> {
 			let expected_bag = bags_map
 				.get(&node.bag_upper)
 				.ok_or("bag not found for the node in active bags")?;
-			pezframe_support::ensure!(expected_bag.contains(node.id()), "node not found in the bag");
+			pezframe_support::ensure!(
+				expected_bag.contains(node.id()),
+				"node not found in the bag"
+			);
 
 			// verify node state
 			node.do_try_state()?

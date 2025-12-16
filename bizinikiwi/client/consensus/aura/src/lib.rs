@@ -546,6 +546,10 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use bizinikiwi_test_runtime_client::{
+		runtime::{Header, H256},
+		TestClient,
+	};
 	use parking_lot::Mutex;
 	use pezsc_block_builder::BlockBuilderBuilder;
 	use pezsc_client_api::BlockchainEvents;
@@ -567,10 +571,6 @@ mod tests {
 	use std::{
 		task::Poll,
 		time::{Duration, Instant},
-	};
-	use bizinikiwi_test_runtime_client::{
-		runtime::{Header, H256},
-		TestClient,
 	};
 
 	const SLOT_DURATION_MS: u64 = 1000;

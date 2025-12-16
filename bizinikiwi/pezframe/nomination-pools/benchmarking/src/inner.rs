@@ -198,10 +198,11 @@ impl<T: Config> ListScenario<T> {
 		)?;
 
 		// Find a destination weight that will trigger the worst case scenario
-		let dest_weight_as_vote = <T as pezpallet_staking::Config>::VoterList::score_update_worst_case(
-			&pool_origin1,
-			is_increase,
-		);
+		let dest_weight_as_vote =
+			<T as pezpallet_staking::Config>::VoterList::score_update_worst_case(
+				&pool_origin1,
+				is_increase,
+			);
 
 		let dest_weight: BalanceOf<T> =
 			dest_weight_as_vote.try_into().map_err(|_| "could not convert u64 to Balance")?;
@@ -992,8 +993,8 @@ mod benchmarks {
 				Some(deposit_amount),
 		);
 
-		// ugly type conversion between balances of pezpallet staking and pools (which really are same
-		// type). Maybe there is a better way?
+		// ugly type conversion between balances of pezpallet staking and pools (which really are
+		// same type). Maybe there is a better way?
 		let slash_amount: u128 = deposit_amount.into() / 2;
 
 		// slash pool by half

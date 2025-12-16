@@ -17,9 +17,9 @@
 
 //! Block Builder extensions for tests.
 
+use bizinikiwi_test_runtime::*;
 use pezsc_block_builder::BlockBuilderApi;
 use pezsp_api::{ApiExt, ProvideRuntimeApi};
-use bizinikiwi_test_runtime::*;
 
 /// Extension trait for test block builder.
 pub trait BlockBuilderExt {
@@ -43,12 +43,14 @@ pub trait BlockBuilderExt {
 	) -> Result<(), pezsp_blockchain::Error>;
 }
 
-impl<'a, A> BlockBuilderExt for pezsc_block_builder::BlockBuilder<'a, bizinikiwi_test_runtime::Block, A>
+impl<'a, A> BlockBuilderExt
+	for pezsc_block_builder::BlockBuilder<'a, bizinikiwi_test_runtime::Block, A>
 where
 	A: ProvideRuntimeApi<bizinikiwi_test_runtime::Block>
 		+ pezsp_api::CallApiAt<bizinikiwi_test_runtime::Block>
 		+ 'a,
-	A::Api: BlockBuilderApi<bizinikiwi_test_runtime::Block> + ApiExt<bizinikiwi_test_runtime::Block>,
+	A::Api:
+		BlockBuilderApi<bizinikiwi_test_runtime::Block> + ApiExt<bizinikiwi_test_runtime::Block>,
 {
 	fn push_transfer(
 		&mut self,

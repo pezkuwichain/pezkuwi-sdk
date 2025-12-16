@@ -351,7 +351,10 @@ mod benchmarks {
 				Pezpallet::<Test>::test_benchmark_override_benchmark(),
 				Err(BenchmarkError::Override(_)),
 			));
-			assert_eq!(Pezpallet::<Test>::test_benchmark_skip_benchmark(), Err(BenchmarkError::Skip),);
+			assert_eq!(
+				Pezpallet::<Test>::test_benchmark_skip_benchmark(),
+				Err(BenchmarkError::Skip),
+			);
 		});
 	}
 
@@ -367,7 +370,10 @@ mod benchmarks {
 			assert_eq!(Value::<Test>::get(), None);
 
 			// It resets when the error happens in the call:
-			assert_err!(Pezpallet::<Test>::test_benchmark_modify_in_call_then_error(), "Should error");
+			assert_err!(
+				Pezpallet::<Test>::test_benchmark_modify_in_call_then_error(),
+				"Should error"
+			);
 			assert_eq!(Value::<Test>::get(), None);
 
 			// It resets when the error happens in the verify:

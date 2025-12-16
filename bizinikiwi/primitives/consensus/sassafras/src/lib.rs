@@ -25,9 +25,9 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_core::crypto::KeyTypeId;
 use pezsp_runtime::{ConsensusEngineId, RuntimeDebug};
+use scale_info::TypeInfo;
 
 pub use pezsp_consensus_slots::{Slot, SlotDuration};
 

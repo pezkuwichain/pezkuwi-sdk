@@ -42,7 +42,9 @@ use pezframe_support::{
 use pezsp_core::{H160, U256};
 use pezsp_runtime::{traits::AccountIdConversion, DispatchError};
 
-use super::{address::AddressMapper, pezpallet, Config, ContractResult, ExecConfig, Pezpallet, Weight};
+use super::{
+	address::AddressMapper, pezpallet, Config, ContractResult, ExecConfig, Pezpallet, Weight,
+};
 use pez_ethereum_standards::IERC20;
 
 const GAS_LIMIT: Weight = Weight::from_parts(500_000_000_000, 10 * 1024 * 1024);

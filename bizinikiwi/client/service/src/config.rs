@@ -19,7 +19,6 @@
 //! Service configuration.
 
 pub use jsonrpsee::server::BatchRequestConfig as RpcBatchRequestConfig;
-use prometheus_endpoint::Registry;
 use pezsc_chain_spec::ChainSpec;
 pub use pezsc_client_db::{BlocksPruning, Database, DatabaseSource, PruningMode};
 pub use pezsc_executor::{WasmExecutionMethod, WasmtimeInstantiationStrategy};
@@ -39,6 +38,7 @@ pub use pezsc_rpc_server::{
 pub use pezsc_telemetry::TelemetryEndpoints;
 pub use pezsc_transaction_pool::TransactionPoolOptions;
 use pezsp_core::crypto::SecretString;
+use prometheus_endpoint::Registry;
 use std::{
 	io, iter,
 	net::SocketAddr,

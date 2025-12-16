@@ -49,8 +49,8 @@ pub fn genesis() -> Storage {
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
-						acc.clone(),                                     // account id
-						acc,                                             // validator id
+						acc.clone(),                                        // account id
+						acc,                                                // validator id
 						pezbridge_hub_zagros_runtime::SessionKeys { aura }, // session keys
 					)
 				})
@@ -61,14 +61,16 @@ pub fn genesis() -> Storage {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},
-		bridge_pezkuwichain_grandpa: pezbridge_hub_zagros_runtime::BridgePezkuwichainGrandpaConfig {
-			owner: Some(Keyring::Bob.to_account_id()),
-			..Default::default()
-		},
-		bridge_pezkuwichain_messages: pezbridge_hub_zagros_runtime::BridgePezkuwichainMessagesConfig {
-			owner: Some(Keyring::Bob.to_account_id()),
-			..Default::default()
-		},
+		bridge_pezkuwichain_grandpa:
+			pezbridge_hub_zagros_runtime::BridgePezkuwichainGrandpaConfig {
+				owner: Some(Keyring::Bob.to_account_id()),
+				..Default::default()
+			},
+		bridge_pezkuwichain_messages:
+			pezbridge_hub_zagros_runtime::BridgePezkuwichainMessagesConfig {
+				owner: Some(Keyring::Bob.to_account_id()),
+				..Default::default()
+			},
 		xcm_over_bridge_hub_pezkuwichain:
 			pezbridge_hub_zagros_runtime::XcmOverBridgeHubPezkuwichainConfig {
 				opened_bridges: vec![

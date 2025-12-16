@@ -17,13 +17,13 @@
 #![cfg(test)]
 
 use bp_pezkuwi_core::Signature;
+use codec::{Decode, Encode};
 use pezbridge_hub_pezkuwichain_runtime::{
 	bridge_to_zagros_config::OnBridgeHubPezkuwichainRefundBridgeHubZagrosMessages,
 	xcm_config::XcmConfig, AllPalletsWithoutSystem, BridgeRejectObsoleteHeadersAndMessages,
 	Executive, MessageQueueServiceWeight, Runtime, RuntimeCall, RuntimeEvent, SessionKeys,
 	TxExtension, UncheckedExtrinsic,
 };
-use codec::{Decode, Encode};
 use pezcumulus_primitives_core::XcmError::FailedToTransactAsset;
 use pezframe_support::parameter_types;
 use pezsnowbridge_pezpallet_ethereum_client::WeightInfo;
@@ -97,7 +97,8 @@ pub fn transfer_token_to_ethereum_insufficient_fund() {
 fn max_message_queue_service_weight_is_more_than_beacon_extrinsic_weights() {
 	let max_message_queue_weight = MessageQueueServiceWeight::get();
 	let force_checkpoint =
-		<Runtime as pezsnowbridge_pezpallet_ethereum_client::Config>::WeightInfo::force_checkpoint();
+		<Runtime as pezsnowbridge_pezpallet_ethereum_client::Config>::WeightInfo::force_checkpoint(
+		);
 	let submit_checkpoint =
 		<Runtime as pezsnowbridge_pezpallet_ethereum_client::Config>::WeightInfo::submit();
 	max_message_queue_weight.all_gt(force_checkpoint);
@@ -123,9 +124,9 @@ fn ethereum_to_pezkuwi_message_extrinsics_work() {
 }
 
 /// Tests that the digest items are as expected when a Ethereum Outbound message is received.
-/// If the MessageQueue pezpallet is configured before (i.e. the MessageQueue pezpallet is listed before
-/// the EthereumOutboundQueue in the construct_runtime macro) the EthereumOutboundQueue, this test
-/// will fail.
+/// If the MessageQueue pezpallet is configured before (i.e. the MessageQueue pezpallet is listed
+/// before the EthereumOutboundQueue in the construct_runtime macro) the EthereumOutboundQueue, this
+/// test will fail.
 #[test]
 pub fn ethereum_outbound_queue_processes_messages_before_message_queue_works() {
 	pezsnowbridge_runtime_test_common::ethereum_outbound_queue_processes_messages_before_message_queue_works::<

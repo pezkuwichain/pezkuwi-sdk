@@ -92,7 +92,10 @@ fn create_asset_works() {
 		let res = xt.apply::<Runtime>(&uxt_info, uxt_len).unwrap();
 
 		// Asserting the results.
-		assert_eq!(pezframe_system::Account::<Runtime>::get(&alice_account).nonce, initial_nonce + 1);
+		assert_eq!(
+			pezframe_system::Account::<Runtime>::get(&alice_account).nonce,
+			initial_nonce + 1
+		);
 		assert_eq!(
 			pezpallet_assets::AssetOwners::<Runtime>::get(42),
 			Some(pezpallet_assets::Owner::<AccountId>::Single(alice_account))
@@ -184,7 +187,10 @@ fn create_coowned_asset_works() {
 
 		// Asserting the results.
 		assert!(res.is_ok());
-		assert_eq!(pezframe_system::Account::<Runtime>::get(charlie_account).nonce, initial_nonce + 1);
+		assert_eq!(
+			pezframe_system::Account::<Runtime>::get(charlie_account).nonce,
+			initial_nonce + 1
+		);
 		assert_eq!(
 			pezpallet_assets::AssetOwners::<Runtime>::get(42),
 			Some(pezpallet_assets::Owner::<AccountId>::Double(alice_account, bob_account))

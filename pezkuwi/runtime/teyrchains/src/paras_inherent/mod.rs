@@ -47,7 +47,6 @@ use pezframe_support::{
 };
 
 use pezframe_system::pezpallet_prelude::*;
-use pezpallet_babe::{self, ParentBlockRandomness};
 use pezkuwi_primitives::{
 	effective_minimum_backing_votes, node_features::FeatureIndex, BackedCandidate,
 	CandidateDescriptorVersion, CandidateHash, CandidateReceiptV2 as CandidateReceipt,
@@ -57,9 +56,10 @@ use pezkuwi_primitives::{
 	UncheckedSignedAvailabilityBitfield, UncheckedSignedAvailabilityBitfields, ValidatorId,
 	ValidatorIndex, ValidityAttestation, TEYRCHAINS_INHERENT_IDENTIFIER,
 };
+use pezpallet_babe::{self, ParentBlockRandomness};
+use pezsp_runtime::traits::{Header as HeaderT, One};
 use rand::{seq::SliceRandom, SeedableRng};
 use scale_info::TypeInfo;
-use pezsp_runtime::traits::{Header as HeaderT, One};
 
 mod misc;
 mod weights;
@@ -1372,11 +1372,13 @@ fn filter_unchained_candidates<T: inclusion::Config + paras::Config + inclusion:
 ) {
 	let mut para_latest_context: BTreeMap<ParaId, (HeadData, BlockNumberFor<T>)> = BTreeMap::new();
 	for para_id in candidates.keys() {
-		let Some(latest_head_data) = inclusion::Pezpallet::<T>::para_latest_head_data(&para_id) else {
+		let Some(latest_head_data) = inclusion::Pezpallet::<T>::para_latest_head_data(&para_id)
+		else {
 			defensive!("Latest included head data for paraid {:?} is None", para_id);
 			continue;
 		};
-		let Some(latest_relay_parent) = inclusion::Pezpallet::<T>::para_most_recent_context(&para_id)
+		let Some(latest_relay_parent) =
+			inclusion::Pezpallet::<T>::para_most_recent_context(&para_id)
 		else {
 			defensive!("Latest relay parent for paraid {:?} is None", para_id);
 			continue;

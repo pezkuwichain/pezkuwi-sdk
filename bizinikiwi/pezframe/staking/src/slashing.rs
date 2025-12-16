@@ -50,8 +50,8 @@
 //! Based on research at <https://research.web3.foundation/en/latest/polkadot/slashing/npos.html>
 
 use crate::{
-	asset, BalanceOf, Config, Error, Exposure, NegativeImbalanceOf, NominatorSlashInEra, Pezpallet,
-	Perbill, SpanSlash, UnappliedSlash, ValidatorSlashInEra,
+	asset, BalanceOf, Config, Error, Exposure, NegativeImbalanceOf, NominatorSlashInEra, Perbill,
+	Pezpallet, SpanSlash, UnappliedSlash, ValidatorSlashInEra,
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode, MaxEncodedLen};
@@ -60,12 +60,12 @@ use pezframe_support::{
 	pezpallet_prelude::DecodeWithMemTracking,
 	traits::{Defensive, DefensiveSaturating, Imbalance, OnUnbalanced},
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Saturating, Zero},
 	DispatchResult, RuntimeDebug,
 };
 use pezsp_staking::{EraIndex, StakingInterface};
+use scale_info::TypeInfo;
 
 /// The proportion of the slashing reward to be paid out on the first slashing detection.
 /// This is f_1 in the paper.
@@ -559,7 +559,9 @@ pub fn do_slash<T: Config>(
 	slash_era: EraIndex,
 ) {
 	let mut ledger =
-		match Pezpallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone())).defensive() {
+		match Pezpallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone()))
+			.defensive()
+		{
 			Ok(ledger) => ledger,
 			Err(_) => return, // nothing to do.
 		};
@@ -586,7 +588,10 @@ pub fn do_slash<T: Config>(
 		.defensive_proof("ledger fetched from storage so it exists in storage; qed.");
 
 	// trigger the event
-	<Pezpallet<T>>::deposit_event(super::Event::<T>::Slashed { staker: stash.clone(), amount: value });
+	<Pezpallet<T>>::deposit_event(super::Event::<T>::Slashed {
+		staker: stash.clone(),
+		amount: value,
+	});
 }
 
 /// Apply a previously-unapplied slash.

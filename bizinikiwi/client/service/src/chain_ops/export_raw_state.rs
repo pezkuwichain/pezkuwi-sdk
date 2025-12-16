@@ -18,7 +18,9 @@
 
 use crate::error::Error;
 use pezsc_client_api::{StorageProvider, UsageProvider};
-use pezsp_core::storage::{well_known_keys, ChildInfo, Storage, StorageChild, StorageKey, StorageMap};
+use pezsp_core::storage::{
+	well_known_keys, ChildInfo, Storage, StorageChild, StorageKey, StorageMap,
+};
 use pezsp_runtime::traits::Block as BlockT;
 
 use std::{

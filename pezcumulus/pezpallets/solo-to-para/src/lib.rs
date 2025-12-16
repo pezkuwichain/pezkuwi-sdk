@@ -22,8 +22,8 @@ use alloc::vec::Vec;
 use pezcumulus_pezpallet_teyrchain_system as teyrchain_system;
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::pezpallet_prelude::*;
-pub use pezpallet::*;
 use pezkuwi_primitives::PersistedValidationData;
+pub use pezpallet::*;
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {

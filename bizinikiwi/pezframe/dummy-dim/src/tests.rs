@@ -107,7 +107,9 @@ fn personhood_recognition_and_suspension_works() {
 		}
 
 		assert_ok!(DummyDim::end_mutation_session(RuntimeOrigin::root()));
-		pezpallet_people::RingsState::<Test>::mutate(|s| *s = s.clone().end_key_migration().unwrap());
+		pezpallet_people::RingsState::<Test>::mutate(|s| {
+			*s = s.clone().end_key_migration().unwrap()
+		});
 		assert_ok!(DummyDim::start_mutation_session(RuntimeOrigin::root()));
 
 		for id in 50..100 {

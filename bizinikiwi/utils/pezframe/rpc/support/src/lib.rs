@@ -15,18 +15,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Combines [pezsc_rpc_api::state::StateApiClient] with [pezframe_support::storage::generator] traits
-//! to provide strongly typed chain state queries over rpc.
+//! Combines [pezsc_rpc_api::state::StateApiClient] with [pezframe_support::storage::generator]
+//! traits to provide strongly typed chain state queries over rpc.
 
 #![warn(missing_docs)]
 
 use codec::{DecodeAll, FullCodec, FullEncode};
 use core::marker::PhantomData;
-use pezframe_support::storage::generator::{StorageDoubleMap, StorageMap, StorageValue};
 use jsonrpsee::core::ClientError as RpcError;
+use pezframe_support::storage::generator::{StorageDoubleMap, StorageMap, StorageValue};
 use pezsc_rpc_api::state::StateApiClient;
-use serde::{de::DeserializeOwned, Serialize};
 use pezsp_storage::{StorageData, StorageKey};
+use serde::{de::DeserializeOwned, Serialize};
 
 /// A typed query on chain state usable from an RPC client.
 ///

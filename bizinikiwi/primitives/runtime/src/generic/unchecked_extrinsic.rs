@@ -35,9 +35,9 @@ use codec::{
 	Input,
 };
 use core::fmt;
-use scale_info::{build::Fields, meta_type, Path, StaticTypeInfo, Type, TypeInfo, TypeParameter};
 use pezsp_io::hashing::blake2_256;
 use pezsp_weights::Weight;
+use scale_info::{build::Fields, meta_type, Path, StaticTypeInfo, Type, TypeInfo, TypeParameter};
 
 /// Type to represent the version of the [Extension](TransactionExtension) used in this extrinsic.
 pub type ExtensionVersion = u8;

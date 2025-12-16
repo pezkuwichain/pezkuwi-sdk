@@ -188,7 +188,8 @@ macro_rules! benchmarks {
 
 /// Same as [`benchmarks`] but for instantiable module.
 ///
-/// NOTE: For pezpallet declared with [`pezframe_support::pezpallet`], use [`benchmarks_instance_pallet`].
+/// NOTE: For pezpallet declared with [`pezframe_support::pezpallet`], use
+/// [`benchmarks_instance_pallet`].
 #[macro_export]
 macro_rules! benchmarks_instance {
 	(
@@ -1799,9 +1800,9 @@ pub fn show_benchmark_debug_info(
 ///
 /// At the end of `dispatch_benchmark`, you should return this batches object.
 ///
-/// In the case where you have multiple instances of a pezpallet that you need to separately benchmark,
-/// the name of your module struct will be used as a suffix to your outputted weight file. For
-/// example:
+/// In the case where you have multiple instances of a pezpallet that you need to separately
+/// benchmark, the name of your module struct will be used as a suffix to your outputted weight
+/// file. For example:
 ///
 /// ```ignore
 /// add_benchmark!(params, batches, pezpallet_balances, Balances); // pezpallet_balances.rs

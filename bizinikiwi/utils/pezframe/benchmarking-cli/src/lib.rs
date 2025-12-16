@@ -29,14 +29,16 @@ pub use block::BlockCmd;
 pub use extrinsic::{ExtrinsicBuilder, ExtrinsicCmd, ExtrinsicFactory};
 pub use machine::{MachineCmd, BIZINIKIWI_REFERENCE_HARDWARE};
 pub use overhead::{
-	remark_builder::{DynamicRemarkBuilder, BizinikiwiRemarkBuilder},
+	remark_builder::{BizinikiwiRemarkBuilder, DynamicRemarkBuilder},
 	OpaqueBlock, OverheadCmd,
 };
 pub use pezpallet::PalletCmd;
 pub use pezsc_service::BasePath;
 pub use storage::StorageCmd;
 
-use pezsc_cli::{CliConfiguration, DatabaseParams, ImportParams, PruningParams, Result, SharedParams};
+use pezsc_cli::{
+	CliConfiguration, DatabaseParams, ImportParams, PruningParams, Result, SharedParams,
+};
 
 /// The root `benchmarking` command.
 ///

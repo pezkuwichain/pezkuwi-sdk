@@ -19,11 +19,11 @@
 
 use crate::{AccountVote, Conviction, Vote, VoteThreshold};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Bounded, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Saturating, Zero},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// A proposal index.
 pub type PropIndex = u32;

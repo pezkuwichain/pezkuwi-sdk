@@ -36,6 +36,7 @@ use crate::{
 	worker::PersistedState,
 	BeefyRPCLinks, BeefyVoterLinks, BeefyWorkerBuilder, KnownPeers, UnpinnedFinalityNotification,
 };
+use bizinikiwi_test_runtime_client::{BlockBuilderExt, ClientExt};
 use futures::{
 	future,
 	stream::{Fuse, FuturesUnordered},
@@ -43,7 +44,9 @@ use futures::{
 };
 use parking_lot::Mutex;
 use pezsc_block_builder::BlockBuilderBuilder;
-use pezsc_client_api::{Backend as BackendT, BlockchainEvents, FinalityNotifications, HeaderBackend};
+use pezsc_client_api::{
+	Backend as BackendT, BlockchainEvents, FinalityNotifications, HeaderBackend,
+};
 use pezsc_consensus::{
 	BlockImport, BlockImportParams, BoxJustificationImport, ForkChoiceStrategy, ImportResult,
 	ImportedAux,
@@ -54,7 +57,6 @@ use pezsc_network_test::{
 	PeersFullClient, TestNetFactory,
 };
 use pezsc_utils::{mpsc::TracingUnboundedReceiver, notification::NotificationReceiver};
-use serde::{Deserialize, Serialize};
 use pezsp_api::{ApiRef, ProvideRuntimeApi};
 use pezsp_application_crypto::key_types::BEEFY as BEEFY_KEY_TYPE;
 use pezsp_consensus::BlockOrigin;
@@ -76,8 +78,8 @@ use pezsp_runtime::{
 	traits::{Header as HeaderT, NumberFor},
 	BuildStorage, DigestItem, EncodedJustification, Justifications, Storage,
 };
+use serde::{Deserialize, Serialize};
 use std::{marker::PhantomData, sync::Arc, task::Poll};
-use bizinikiwi_test_runtime_client::{BlockBuilderExt, ClientExt};
 use tokio::time::Duration;
 
 const GENESIS_HASH: H256 = H256::zero();
@@ -1395,7 +1397,8 @@ async fn beefy_finalizing_after_pallet_genesis() {
 
 	// Minimum BEEFY block delta is 1.
 
-	// GRANDPA finalize blocks leading up to BEEFY pezpallet genesis -> BEEFY should finalize nothing.
+	// GRANDPA finalize blocks leading up to BEEFY pezpallet genesis -> BEEFY should finalize
+	// nothing.
 	finalize_block_and_wait_for_beefy(&net, peers.clone(), &hashes[14], &[]).await;
 
 	// GRANDPA finalize block #16 -> BEEFY should finalize #15 (genesis mandatory) and #16.

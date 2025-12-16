@@ -1,13 +1,13 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over bizinikiwi service.
 
 use futures::FutureExt;
+use pez_solochain_template_runtime::{self, apis::RuntimeApi, opaque::Block};
 use pezsc_client_api::{Backend, BlockBackend};
 use pezsc_consensus_aura::{ImportQueueParams, SlotProportion, StartAuraParams};
 use pezsc_consensus_grandpa::SharedVoterState;
 use pezsc_service::{error::Error as ServiceError, Configuration, TaskManager, WarpSyncConfig};
 use pezsc_telemetry::{Telemetry, TelemetryWorker};
 use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
-use pez_solochain_template_runtime::{self, apis::RuntimeApi, opaque::Block};
 use pezsp_consensus_aura::sr25519::AuthorityPair as AuraPair;
 use std::{sync::Arc, time::Duration};
 
@@ -30,7 +30,12 @@ pub type Service = pezsc_service::PartialComponents<
 	pezsc_consensus::DefaultImportQueue<Block>,
 	pezsc_transaction_pool::TransactionPoolHandle<Block, FullClient>,
 	(
-		pezsc_consensus_grandpa::GrandpaBlockImport<FullBackend, Block, FullClient, FullSelectChain>,
+		pezsc_consensus_grandpa::GrandpaBlockImport<
+			FullBackend,
+			Block,
+			FullClient,
+			FullSelectChain,
+		>,
 		pezsc_consensus_grandpa::LinkHalf<Block, FullClient, FullSelectChain>,
 		Option<Telemetry>,
 	),
@@ -48,7 +53,8 @@ pub fn new_partial(config: &Configuration) -> Result<Service, ServiceError> {
 		})
 		.transpose()?;
 
-	let executor = pezsc_service::new_wasm_executor::<pezsp_io::BizinikiwiHostFunctions>(&config.executor);
+	let executor =
+		pezsc_service::new_wasm_executor::<pezsp_io::BizinikiwiHostFunctions>(&config.executor);
 	let (client, backend, keystore_container, task_manager) =
 		pezsc_service::new_full_parts::<Block, RuntimeApi, _>(
 			config,

@@ -59,7 +59,7 @@ where
 	) -> Result<
 		<pezpallet_assets::Pezpallet<Runtime, AssetInstance> as Inspect<AccountIdOf<Runtime>>>::Balance,
 		XcmError,
-	> {
+	>{
 		let amount = WeightToFee::weight_to_fee(&weight);
 		// If the amount gotten is not at least the ED, then make it be the ED of the asset
 		// This is to avoid burning assets and decreasing the supply

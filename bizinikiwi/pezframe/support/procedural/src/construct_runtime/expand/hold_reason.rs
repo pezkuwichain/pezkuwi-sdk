@@ -20,7 +20,10 @@ use crate::construct_runtime::Pezpallet;
 use proc_macro2::TokenStream;
 use quote::quote;
 
-pub fn expand_outer_hold_reason(pezpallet_decls: &[Pezpallet], scrate: &TokenStream) -> TokenStream {
+pub fn expand_outer_hold_reason(
+	pezpallet_decls: &[Pezpallet],
+	scrate: &TokenStream,
+) -> TokenStream {
 	let mut conversion_fns = Vec::new();
 	let mut hold_reason_variants = Vec::new();
 	let mut hold_reason_variants_count = Vec::new();

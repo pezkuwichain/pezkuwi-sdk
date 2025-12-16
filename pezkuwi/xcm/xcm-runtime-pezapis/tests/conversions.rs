@@ -16,6 +16,7 @@
 
 mod mock;
 
+use mock::*;
 use pezframe_support::{
 	assert_err, assert_ok,
 	pezsp_runtime::{
@@ -24,7 +25,6 @@ use pezframe_support::{
 		AccountId32, MultiSignature,
 	},
 };
-use mock::*;
 use pezsp_api::ProvideRuntimeApi;
 use xcm::prelude::*;
 use xcm_runtime_pezapis::conversions::{

@@ -22,8 +22,8 @@ use crate::{
 	RuntimeDebug,
 };
 use alloc::{vec, vec::Vec};
-use scale_info::TypeInfo;
 use pezsp_weights::Weight;
+use scale_info::TypeInfo;
 
 /// Priority for a transaction. Additive. Higher is better.
 pub type TransactionPriority = u64;

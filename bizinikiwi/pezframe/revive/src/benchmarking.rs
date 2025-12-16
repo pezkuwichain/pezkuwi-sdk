@@ -46,6 +46,7 @@ use crate::{
 use alloc::{vec, vec::Vec};
 use alloy_core::sol_types::{SolInterface, SolValue};
 use codec::{Encode, MaxEncodedLen};
+use k256::ecdsa::SigningKey;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{
 	self, assert_ok,
@@ -55,13 +56,11 @@ use pezframe_support::{
 	weights::{Weight, WeightMeter},
 };
 use pezframe_system::RawOrigin;
-use k256::ecdsa::SigningKey;
 use pezpallet_revive_uapi::{
 	pack_hi_lo,
 	precompiles::{storage::IStorage, system::ISystem},
 	CallFlags, ReturnErrorCode, StorageFlags,
 };
-use revm::bytecode::Bytecode;
 use pezsp_consensus_aura::AURA_ENGINE_ID;
 use pezsp_consensus_babe::{
 	digests::{PreDigest, PrimaryPreDigest},
@@ -69,6 +68,7 @@ use pezsp_consensus_babe::{
 };
 use pezsp_consensus_slots::Slot;
 use pezsp_runtime::{generic::DigestItem, traits::Zero};
+use revm::bytecode::Bytecode;
 
 /// How many runs we do per API benchmark.
 ///
@@ -938,7 +938,8 @@ mod benchmarks {
 				input_bytes,
 			);
 		}
-		let min: U256 = crate::Pezpallet::<T>::convert_native_to_evm(T::Currency::minimum_balance());
+		let min: U256 =
+			crate::Pezpallet::<T>::convert_native_to_evm(T::Currency::minimum_balance());
 		let min =
 			crate::precompiles::alloy::primitives::aliases::U256::abi_decode(&min.to_big_endian())
 				.unwrap();
@@ -1042,7 +1043,10 @@ mod benchmarks {
 				[i, i, i, i],
 				vec![i; 128],
 			));
-			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal([i, i, i, i], vec![i; 128]));
+			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal(
+				[i, i, i, i],
+				vec![i; 128],
+			));
 			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Other(vec![i; 128]));
 		}
 
@@ -1069,7 +1073,10 @@ mod benchmarks {
 			AURA_ENGINE_ID,
 			slot.encode(),
 		));
-		pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal(AURA_ENGINE_ID, slot.encode()));
+		pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal(
+			AURA_ENGINE_ID,
+			slot.encode(),
+		));
 
 		let result;
 		#[block]
@@ -1225,7 +1232,10 @@ mod benchmarks {
 
 		assert!(PristineCode::<T>::get(code_hash).is_some());
 
-		T::Currency::set_balance(&instance.account_id, Pezpallet::<T>::min_balance() * 10u32.into());
+		T::Currency::set_balance(
+			&instance.account_id,
+			Pezpallet::<T>::min_balance() * 10u32.into(),
+		);
 
 		let result;
 		#[block]
@@ -1248,7 +1258,10 @@ mod benchmarks {
 
 		// Check that the beneficiary received the balance
 		let balance = <T as Config>::Currency::balance(&beneficiary);
-		assert_eq!(balance, Pezpallet::<T>::min_balance() + Pezpallet::<T>::min_balance() * 9u32.into());
+		assert_eq!(
+			balance,
+			Pezpallet::<T>::min_balance() + Pezpallet::<T>::min_balance() * 9u32.into()
+		);
 
 		Ok(())
 	}
@@ -2274,8 +2287,8 @@ mod benchmarks {
 
 		let key_type = pezsp_core::crypto::KeyTypeId(*b"code");
 		let pub_key = pezsp_io::crypto::sr25519_generate(key_type, None);
-		let sig =
-			pezsp_io::crypto::sr25519_sign(key_type, &pub_key, &message).expect("Generates signature");
+		let sig = pezsp_io::crypto::sr25519_sign(key_type, &pub_key, &message)
+			.expect("Generates signature");
 		let sig = AsRef::<[u8; 64]>::as_ref(&sig).to_vec();
 		let sig_len = sig.len() as u32;
 

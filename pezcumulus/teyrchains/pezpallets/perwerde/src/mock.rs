@@ -140,8 +140,8 @@ impl pezpallet_collective::Config<Instance1> for Test {
 
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
 	let t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	// `pezpallet-collective`'in genesis'ini de kurmamıza gerek kalmadı çünkü artık testimiz ona bağlı
-	// değil.
+	// `pezpallet-collective`'in genesis'ini de kurmamıza gerek kalmadı çünkü artık testimiz ona
+	// bağlı değil.
 	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext

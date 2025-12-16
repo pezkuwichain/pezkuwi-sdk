@@ -33,9 +33,9 @@ use futures::{
 	prelude::*,
 };
 use log::trace;
-use prometheus_endpoint::Registry;
 use pezsc_network_types::PeerId;
 use pezsp_runtime::traits::Block as BlockT;
+use prometheus_endpoint::Registry;
 use std::{
 	collections::{HashMap, VecDeque},
 	pin::Pin,
@@ -347,13 +347,13 @@ impl<B: BlockT> futures::future::FusedFuture for GossipEngine<B> {
 mod tests {
 	use super::*;
 	use crate::{ValidationResult, ValidatorContext};
+	use bizinikiwi_test_runtime_client::runtime::Block;
 	use codec::{DecodeAll, Encode};
 	use futures::{
 		channel::mpsc::{unbounded, UnboundedReceiver, UnboundedSender},
 		executor::{block_on, block_on_stream},
 		future::poll_fn,
 	};
-	use quickcheck::{Arbitrary, Gen, QuickCheck};
 	use pezsc_network::{
 		config::MultiaddrWithPeerId,
 		service::traits::{Direction, MessageSink, NotificationEvent},
@@ -366,11 +366,11 @@ mod tests {
 		testing::H256,
 		traits::{Block as BlockT, NumberFor},
 	};
+	use quickcheck::{Arbitrary, Gen, QuickCheck};
 	use std::{
 		collections::HashSet,
 		sync::{Arc, Mutex},
 	};
-	use bizinikiwi_test_runtime_client::runtime::Block;
 
 	#[derive(Clone, Default)]
 	struct TestNetwork {}

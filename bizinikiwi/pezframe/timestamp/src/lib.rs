@@ -34,8 +34,8 @@
 //!
 //! ## Overview
 //!
-//! The Timestamp pezpallet is designed to create a consensus-based time source. This helps ensure that
-//! nodes maintain a synchronized view of time that all network participants can agree on.
+//! The Timestamp pezpallet is designed to create a consensus-based time source. This helps ensure
+//! that nodes maintain a synchronized view of time that all network participants can agree on.
 //!
 //! It defines an _acceptable range_ using a configurable constant to specify how much time must
 //! pass before setting the new timestamp. Validator nodes in the network must verify that the
@@ -88,13 +88,13 @@
 //! included in a block.
 //!
 //! To provide inherent data to the runtime, this pezpallet implements
-//! [`ProvideInherent`](pezframe_support::inherent::ProvideInherent). It will only create an inherent
-//! if the [`Call::set`] dispatchable is called, using the
-//! [`inherent`](pezframe_support::pezpallet_macros::inherent) macro which enables validator nodes to call
-//! into the runtime to check that the timestamp provided is valid.
-//! The implementation of [`ProvideInherent`](pezframe_support::inherent::ProvideInherent) specifies a
-//! constant called `MAX_TIMESTAMP_DRIFT_MILLIS` which is used to determine the acceptable range for
-//! a valid timestamp. If a block author sets a timestamp to anything that is more than this
+//! [`ProvideInherent`](pezframe_support::inherent::ProvideInherent). It will only create an
+//! inherent if the [`Call::set`] dispatchable is called, using the
+//! [`inherent`](pezframe_support::pezpallet_macros::inherent) macro which enables validator nodes
+//! to call into the runtime to check that the timestamp provided is valid.
+//! The implementation of [`ProvideInherent`](pezframe_support::inherent::ProvideInherent) specifies
+//! a constant called `MAX_TIMESTAMP_DRIFT_MILLIS` which is used to determine the acceptable range
+//! for a valid timestamp. If a block author sets a timestamp to anything that is more than this
 //! constant, a validator node will reject the block.
 //!
 //! The pezpallet also ensures that a timestamp is set at the start of each block by running an
@@ -188,8 +188,8 @@ pub mod pezpallet {
 		///
 		/// Be aware that this is different to the *expected* period that the block production
 		/// apparatus provides. Your chosen consensus system will generally work with this to
-		/// determine a sensible block time. For example, in the Aura pezpallet it will be double this
-		/// period on default settings.
+		/// determine a sensible block time. For example, in the Aura pezpallet it will be double
+		/// this period on default settings.
 		#[pezpallet::constant]
 		type MinimumPeriod: Get<Self::Moment>;
 

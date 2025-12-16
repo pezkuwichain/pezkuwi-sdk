@@ -127,7 +127,9 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: pezsp_std::vec::Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
+		fn post_upgrade(
+			state: pezsp_std::vec::Vec<u8>,
+		) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			use codec::Decode;
 
 			let (
@@ -339,7 +341,9 @@ pub mod v2 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(_state: pezsp_std::vec::Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
+		fn post_upgrade(
+			_state: pezsp_std::vec::Vec<u8>,
+		) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::info!("✅ Post-upgrade check passed for pezpallet-welati v2");
 			Ok(())
 		}

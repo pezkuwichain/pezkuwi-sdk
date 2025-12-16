@@ -29,11 +29,11 @@ use pezsp_runtime::{
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
 
+pub use genesis_config_presets::TEYRCHAIN_ID;
 use pezframe_support::weights::{
 	constants::WEIGHT_REF_TIME_PER_SECOND, Weight, WeightToFeeCoefficient, WeightToFeeCoefficients,
 	WeightToFeePolynomial,
 };
-pub use genesis_config_presets::TEYRCHAIN_ID;
 pub use pezsp_consensus_aura::sr25519::AuthorityId as AuraId;
 pub use pezsp_runtime::{MultiAddress, Perbill, Permill};
 

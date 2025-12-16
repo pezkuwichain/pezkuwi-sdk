@@ -22,12 +22,14 @@ use super::*;
 use pezframe_support::{
 	assert_err, assert_ok, derive_impl,
 	migrations::MultiStepMigrator,
-	pezpallet_prelude::*,
 	parameter_types,
+	pezpallet_prelude::*,
 	traits::{fungible, ConstU8, Currency, IsInherent, VariantCount, VariantCountOf},
 	weights::{ConstantMultiplier, IdentityFee, RuntimeDbWeight, Weight, WeightMeter, WeightToFee},
 };
-use pezframe_system::{pezpallet_prelude::*, ChainContext, LastRuntimeUpgrade, LastRuntimeUpgradeInfo};
+use pezframe_system::{
+	pezpallet_prelude::*, ChainContext, LastRuntimeUpgrade, LastRuntimeUpgradeInfo,
+};
 use pezpallet_balances::Call as BalancesCall;
 use pezpallet_transaction_payment::FungibleAdapter;
 use pezsp_core::H256;
@@ -757,7 +759,10 @@ fn block_weight_limit_enforced() {
 	t.execute_with(|| {
 		Executive::initialize_block(&Header::new_from_number(1));
 		// Base block execution weight + `on_initialize` weight from the custom module.
-		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::block_weight().total(), base_block_weight);
+		assert_eq!(
+			<pezframe_system::Pezpallet<Runtime>>::block_weight().total(),
+			base_block_weight
+		);
 
 		for nonce in 0..=num_to_exhaust_block {
 			let xt = UncheckedXt::new_signed(
@@ -828,7 +833,10 @@ fn block_weight_and_size_is_stored_per_tx() {
 
 		Executive::initialize_block(&Header::new_from_number(1));
 
-		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::block_weight().total(), base_block_weight);
+		assert_eq!(
+			<pezframe_system::Pezpallet<Runtime>>::block_weight().total(),
+			base_block_weight
+		);
 		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::all_extrinsics_len(), 0);
 
 		assert!(Executive::apply_extrinsic(xt.clone()).unwrap().is_ok());
@@ -856,7 +864,10 @@ fn block_weight_and_size_is_stored_per_tx() {
 		Executive::initialize_block(&Header::new_from_number(2));
 
 		// Block weight cleaned up on `System::initialize`
-		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::block_weight().total(), base_block_weight);
+		assert_eq!(
+			<pezframe_system::Pezpallet<Runtime>>::block_weight().total(),
+			base_block_weight
+		);
 	});
 }
 
@@ -1099,7 +1110,8 @@ fn all_weights_are_recorded_correctly() {
 		let runtime_upgrade_weight = Executive::execute_on_runtime_upgrade();
 		let on_initialize_weight =
 			<AllPalletsWithSystem as OnInitialize<u64>>::on_initialize(block_number);
-		let base_block_weight = <Runtime as pezframe_system::Config>::BlockWeights::get().base_block;
+		let base_block_weight =
+			<Runtime as pezframe_system::Config>::BlockWeights::get().base_block;
 
 		// Weights are recorded correctly
 		assert_eq!(

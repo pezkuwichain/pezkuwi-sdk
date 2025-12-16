@@ -108,8 +108,10 @@ impl<T: Config> SteppedMigration for Migration<T> {
 		}
 
 		if !pezframe_system::Pezpallet::<T>::account_exists(&Pezpallet::<T>::account_id()) {
-			let _ =
-				T::Currency::mint_into(&Pezpallet::<T>::account_id(), T::Currency::minimum_balance());
+			let _ = T::Currency::mint_into(
+				&Pezpallet::<T>::account_id(),
+				T::Currency::minimum_balance(),
+			);
 		}
 
 		loop {

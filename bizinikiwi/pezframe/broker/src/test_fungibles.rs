@@ -26,10 +26,10 @@ use pezframe_support::{
 		},
 	},
 };
-use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::Zero;
 use pezsp_core::{Get, TypedGet};
 use pezsp_runtime::{DispatchError, DispatchResult};
+use scale_info::TypeInfo;
 
 parameter_types! {
 	static TestAssetOf: BTreeMap<(u32, Vec<u8>), Vec<u8>> = Default::default();

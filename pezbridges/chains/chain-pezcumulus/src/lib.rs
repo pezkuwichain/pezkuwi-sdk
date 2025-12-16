@@ -124,9 +124,9 @@ pub type Address = MultiAddress<AccountId, ()>;
 // `75% * WEIGHT_REF_TIME_PER_SECOND * 1 / 2 * 50% = 0.75 * 1_000_000_000_000 / 2 * 0.5 =
 // 187_500_000_000`
 //
-// According to (preliminary) weights of messages pezpallet, cost of additional message is zero and the
-// cost of additional relayer is `8_000_000 + db read + db write`. Let's say we want no more than
-// 4096 unconfirmed messages (no any scientific justification for that - it just looks large
+// According to (preliminary) weights of messages pezpallet, cost of additional message is zero and
+// the cost of additional relayer is `8_000_000 + db read + db write`. Let's say we want no more
+// than 4096 unconfirmed messages (no any scientific justification for that - it just looks large
 // enough). And then we can't have more than 4096 relayers. E.g. for 1024 relayers is (using
 // `RocksDbWeight`):
 //

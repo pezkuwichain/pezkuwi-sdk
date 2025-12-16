@@ -20,9 +20,9 @@ use crate::error::Error;
 use log::{info, warn};
 use pezsc_network::{multiaddr::Protocol, Multiaddr};
 use pezsc_network_types::PeerId;
-use serde::{Deserialize, Serialize};
 use pezsp_authority_discovery::AuthorityId;
 use pezsp_runtime::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 use std::{
 	collections::{hash_map::Entry, HashMap, HashSet},
 	fs::File,
@@ -300,8 +300,8 @@ mod tests {
 
 	use super::*;
 
-	use quickcheck::{Arbitrary, Gen, QuickCheck, TestResult};
 	use pezsc_network_types::multihash::{Code, Multihash};
+	use quickcheck::{Arbitrary, Gen, QuickCheck, TestResult};
 
 	use pezsp_authority_discovery::{AuthorityId, AuthorityPair};
 	use pezsp_core::crypto::Pair;

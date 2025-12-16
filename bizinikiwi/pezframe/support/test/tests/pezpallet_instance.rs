@@ -19,8 +19,8 @@ use core::any::TypeId;
 use pezframe_support::{
 	derive_impl,
 	dispatch::{DispatchClass, DispatchInfo, GetDispatchInfo, Pays},
-	pezpallet_prelude::ValueQuery,
 	parameter_types,
+	pezpallet_prelude::ValueQuery,
 	storage::unhashed,
 	traits::{
 		ConstU32, GetCallName, OnFinalize, OnGenesis, OnInitialize, OnRuntimeUpgrade,
@@ -409,7 +409,10 @@ fn error_expand() {
 	);
 
 	assert_eq!(
-		format!("{:?}", pezpallet::Error::<Runtime, pezpallet::Instance1>::InsufficientProposersBalance),
+		format!(
+			"{:?}",
+			pezpallet::Error::<Runtime, pezpallet::Instance1>::InsufficientProposersBalance
+		),
 		String::from("InsufficientProposersBalance"),
 	);
 	assert_eq!(
@@ -613,21 +616,30 @@ fn storage_expand() {
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		k.extend(2u16.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u32>(&k), Some(3u32));
-		assert_eq!(&k[..32], &<pezpallet::DoubleMap<Runtime, pezpallet::Instance1>>::final_prefix());
+		assert_eq!(
+			&k[..32],
+			&<pezpallet::DoubleMap<Runtime, pezpallet::Instance1>>::final_prefix()
+		);
 
 		<pezpallet::DoubleMap2<Runtime, pezpallet::Instance1>>::insert(&1, &2, &3);
 		let mut k = [twox_128(b"Instance1Example"), twox_128(b"DoubleMap2")].concat();
 		k.extend(1u16.using_encoded(twox_64_concat));
 		k.extend(2u32.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u64>(&k), Some(3u64));
-		assert_eq!(&k[..32], &<pezpallet::DoubleMap2<Runtime, pezpallet::Instance1>>::final_prefix());
+		assert_eq!(
+			&k[..32],
+			&<pezpallet::DoubleMap2<Runtime, pezpallet::Instance1>>::final_prefix()
+		);
 
 		<pezpallet::DoubleMap3<Runtime, pezpallet::Instance1>>::insert(&1, &2, &3);
 		let mut k = [twox_128(b"Instance1Example"), twox_128(b"DoubleMap3")].concat();
 		k.extend(1u32.using_encoded(blake2_128_concat));
 		k.extend(2u64.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u128>(&k), Some(3u128));
-		assert_eq!(&k[..32], &<pezpallet::DoubleMap3<Runtime, pezpallet::Instance1>>::final_prefix());
+		assert_eq!(
+			&k[..32],
+			&<pezpallet::DoubleMap3<Runtime, pezpallet::Instance1>>::final_prefix()
+		);
 		assert_eq!(
 			<pezpallet::DoubleMap3<Runtime, pezpallet::Instance1>>::get(2, 3),
 			Err(pezpallet::Error::<Runtime, pezpallet::Instance1>::NonExistentStorageValue),
@@ -902,14 +914,18 @@ fn metadata() {
 			],
 		}),
 		calls: Some(scale_info::meta_type::<pezpallet::Call<Runtime>>().into()),
-		event: Some(PalletEventMetadata { ty: scale_info::meta_type::<pezpallet::Event<Runtime>>() }),
+		event: Some(PalletEventMetadata {
+			ty: scale_info::meta_type::<pezpallet::Event<Runtime>>(),
+		}),
 		constants: vec![PalletConstantMetadata {
 			name: "MyGetParam",
 			ty: scale_info::meta_type::<u32>(),
 			value: vec![10, 0, 0, 0],
 			docs: vec![],
 		}],
-		error: Some(PalletErrorMetadata { ty: scale_info::meta_type::<pezpallet::Error<Runtime>>() }),
+		error: Some(PalletErrorMetadata {
+			ty: scale_info::meta_type::<pezpallet::Error<Runtime>>(),
+		}),
 	};
 
 	let mut example_pallet_instance1_metadata = example_pallet_metadata.clone();
@@ -917,19 +933,22 @@ fn metadata() {
 	example_pallet_instance1_metadata.index = 2;
 	match example_pallet_instance1_metadata.calls {
 		Some(ref mut calls_meta) => {
-			calls_meta.ty = scale_info::meta_type::<pezpallet::Call<Runtime, pezpallet::Instance1>>();
+			calls_meta.ty =
+				scale_info::meta_type::<pezpallet::Call<Runtime, pezpallet::Instance1>>();
 		},
 		_ => unreachable!(),
 	}
 	match example_pallet_instance1_metadata.event {
 		Some(ref mut event_meta) => {
-			event_meta.ty = scale_info::meta_type::<pezpallet::Event<Runtime, pezpallet::Instance1>>();
+			event_meta.ty =
+				scale_info::meta_type::<pezpallet::Event<Runtime, pezpallet::Instance1>>();
 		},
 		_ => unreachable!(),
 	}
 	match example_pallet_instance1_metadata.error {
 		Some(ref mut error_meta) => {
-			error_meta.ty = scale_info::meta_type::<pezpallet::Error<Runtime, pezpallet::Instance1>>();
+			error_meta.ty =
+				scale_info::meta_type::<pezpallet::Error<Runtime, pezpallet::Instance1>>();
 		},
 		_ => unreachable!(),
 	}

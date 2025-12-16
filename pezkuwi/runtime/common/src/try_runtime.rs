@@ -26,7 +26,9 @@ use pezpallet_staking::*;
 
 /// register all inactive nominators for fast-unstake, and progress until they have all been
 /// processed.
-pub fn migrate_all_inactive_nominators<T: pezpallet_fast_unstake::Config + pezpallet_staking::Config>()
+pub fn migrate_all_inactive_nominators<
+	T: pezpallet_fast_unstake::Config + pezpallet_staking::Config,
+>()
 where
 	<T as pezframe_system::Config>::RuntimeEvent: TryInto<pezpallet_fast_unstake::Event<T>>,
 {

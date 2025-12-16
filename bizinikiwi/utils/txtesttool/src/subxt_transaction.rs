@@ -356,10 +356,7 @@ where
 		}
 	}
 
-	async fn submit(
-		&self,
-		tx: &dyn Transaction<HashType = HashOf<C>>,
-	) -> Result<HashOf<C>, Error> {
+	async fn submit(&self, tx: &dyn Transaction<HashType = HashOf<C>>) -> Result<HashOf<C>, Error> {
 		let tx = tx.as_any().downcast_ref::<SubxtTransaction<C>>().unwrap();
 		tx.transaction.submit().await.map_err(|e| e.into())
 	}
@@ -382,9 +379,7 @@ where
 	}
 
 	fn transaction_monitor(&self) -> Option<&dyn TransactionMonitor<HashOf<C>>> {
-		self.block_monitor
-			.as_ref()
-			.map(|m| m as &dyn TransactionMonitor<HashOf<C>>)
+		self.block_monitor.as_ref().map(|m| m as &dyn TransactionMonitor<HashOf<C>>)
 	}
 }
 

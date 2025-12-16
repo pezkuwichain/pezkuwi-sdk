@@ -16,11 +16,11 @@
 
 //! Common traits and types used by the scheduler and assignment providers.
 
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	codec::{Decode, Encode},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 use pezkuwi_primitives::{CoreIndex, Id as ParaId};
 

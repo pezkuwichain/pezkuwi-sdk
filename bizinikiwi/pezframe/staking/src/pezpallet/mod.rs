@@ -134,8 +134,8 @@ pub mod pezpallet {
 
 		/// Convert a balance into a number used for election calculation. This must fit into a
 		/// `u64` but is allowed to be sensibly lossy. The `u64` is used to communicate with the
-		/// [`pezframe_election_provider_support`] crate which accepts u64 numbers and does operations
-		/// in 128.
+		/// [`pezframe_election_provider_support`] crate which accepts u64 numbers and does
+		/// operations in 128.
 		/// Consequently, the backward convert is used convert the u128s from sp-elections back to a
 		/// [`BalanceOf`].
 		#[pezpallet::no_default_bounds]
@@ -192,7 +192,8 @@ pub mod pezpallet {
 		/// The overarching event type.
 		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Handler for the unbalanced reduction when slashing a staker.
 		#[pezpallet::no_default_bounds]
@@ -478,10 +479,10 @@ pub mod pezpallet {
 
 	/// Stakers whose funds are managed by other pallets.
 	///
-	/// This pezpallet does not apply any locks on them, therefore they are only virtually bonded. They
-	/// are expected to be keyless accounts and hence should not be allowed to mutate their ledger
-	/// directly via this pezpallet. Instead, these accounts are managed by other pallets and accessed
-	/// via low level apis. We keep track of them to do minimal integrity checks.
+	/// This pezpallet does not apply any locks on them, therefore they are only virtually bonded.
+	/// They are expected to be keyless accounts and hence should not be allowed to mutate their
+	/// ledger directly via this pezpallet. Instead, these accounts are managed by other pallets
+	/// and accessed via low level apis. We keep track of them to do minimal integrity checks.
 	#[pezpallet::storage]
 	pub type VirtualStakers<T: Config> = CountedStorageMap<_, Twox64Concat, T::AccountId, ()>;
 
@@ -732,7 +733,8 @@ pub mod pezpallet {
 
 	/// The last planned session scheduled by the session pezpallet.
 	///
-	/// This is basically in sync with the call to [`pezpallet_session::SessionManager::new_session`].
+	/// This is basically in sync with the call to
+	/// [`pezpallet_session::SessionManager::new_session`].
 	#[pezpallet::storage]
 	pub type CurrentPlannedSession<T> = StorageValue<_, SessionIndex, ValueQuery>;
 
@@ -1727,7 +1729,9 @@ pub mod pezpallet {
 		///
 		/// If all pages are claimed, it returns an error `InvalidPage`.
 		#[pezpallet::call_index(18)]
-		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(T::MaxExposurePageSize::get()))]
+		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(
+			T::MaxExposurePageSize::get()
+		))]
 		pub fn payout_stakers(
 			origin: OriginFor<T>,
 			validator_stash: T::AccountId,
@@ -2069,7 +2073,9 @@ pub mod pezpallet {
 		/// and so it should not be assumed the highest staker would be on the topmost page and vice
 		/// versa. If rewards are not claimed in [`Config::HistoryDepth`] eras, they are lost.
 		#[pezpallet::call_index(26)]
-		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(T::MaxExposurePageSize::get()))]
+		#[pezpallet::weight(T::WeightInfo::payout_stakers_alive_staked(
+			T::MaxExposurePageSize::get()
+		))]
 		pub fn payout_stakers_by_page(
 			origin: OriginFor<T>,
 			validator_stash: T::AccountId,

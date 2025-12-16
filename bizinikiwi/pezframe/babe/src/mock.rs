@@ -279,7 +279,11 @@ pub fn make_secondary_vrf_pre_digest(
 	vrf_signature: VrfSignature,
 ) -> Digest {
 	let digest_data = pezsp_consensus_babe::digests::PreDigest::SecondaryVRF(
-		pezsp_consensus_babe::digests::SecondaryVRFPreDigest { authority_index, slot, vrf_signature },
+		pezsp_consensus_babe::digests::SecondaryVRFPreDigest {
+			authority_index,
+			slot,
+			vrf_signature,
+		},
 	);
 	let log = DigestItem::PreRuntime(pezsp_consensus_babe::BABE_ENGINE_ID, digest_data.encode());
 	Digest { logs: vec![log] }
@@ -289,11 +293,15 @@ pub fn make_vrf_signature_and_randomness(
 	slot: Slot,
 	pair: &pezsp_consensus_babe::AuthorityPair,
 ) -> (VrfSignature, Randomness) {
-	let transcript =
-		pezsp_consensus_babe::make_vrf_transcript(&pezpallet_babe::Randomness::<Test>::get(), slot, 0);
+	let transcript = pezsp_consensus_babe::make_vrf_transcript(
+		&pezpallet_babe::Randomness::<Test>::get(),
+		slot,
+		0,
+	);
 
-	let randomness =
-		pair.as_ref().make_bytes(pezsp_consensus_babe::RANDOMNESS_VRF_CONTEXT, &transcript);
+	let randomness = pair
+		.as_ref()
+		.make_bytes(pezsp_consensus_babe::RANDOMNESS_VRF_CONTEXT, &transcript);
 
 	let signature = pair.as_ref().vrf_sign(&transcript.into());
 

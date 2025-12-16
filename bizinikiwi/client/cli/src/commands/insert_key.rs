@@ -19,7 +19,7 @@
 //! Implementation of the `insert` subcommand
 
 use crate::{
-	utils, with_crypto_scheme, CryptoScheme, Error, KeystoreParams, SharedParams, BizinikiwiCli,
+	utils, with_crypto_scheme, BizinikiwiCli, CryptoScheme, Error, KeystoreParams, SharedParams,
 };
 use clap::Parser;
 use pezsc_keystore::LocalKeystore;

@@ -96,11 +96,11 @@ use pezframe_support::{
 use pezframe_system::pezpallet_prelude::{
 	ensure_signed, BlockNumberFor as SystemBlockNumberFor, OriginFor,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{AccountIdConversion, BadOrigin, Convert, Saturating, StaticLookup, TryConvert, Zero},
 	Permill, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 pub type BalanceOf<T, I = ()> = <<T as Config<I>>::Paymaster as PayWithSource>::Balance;
 pub type BeneficiaryLookupOf<T, I> = <<T as Config<I>>::BeneficiaryLookup as StaticLookup>::Source;
@@ -515,8 +515,8 @@ pub mod pezpallet {
 
 	/// The consideration cost incurred by the child-/bounty curator for committing to the role.
 	///
-	/// Determined by [`pezpallet::Config::Consideration`]. It is created when the curator accepts the
-	/// role, and is either burned if the curator misbehaves or consumed upon successful
+	/// Determined by [`pezpallet::Config::Consideration`]. It is created when the curator accepts
+	/// the role, and is either burned if the curator misbehaves or consumed upon successful
 	/// completion of the child-/bounty.
 	///
 	/// Note: If the parent curator is also assigned to the child-bounty,  

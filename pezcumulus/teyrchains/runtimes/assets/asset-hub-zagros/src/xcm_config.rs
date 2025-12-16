@@ -38,9 +38,9 @@ use pezframe_support::{
 	PalletId,
 };
 use pezframe_system::EnsureRoot;
-use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
+use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezsnowbridge_outbound_queue_primitives::v2::exporter::PausableExporter;
 use pezsp_runtime::traits::{AccountIdConversion, TryConvertInto};
 use testnet_teyrchains_constants::zagros::locations::AssetHubParaId;
@@ -325,8 +325,8 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet and
-					// sibling teyrchains get free execution.
+					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet
+					// and sibling teyrchains get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
 						Equals<RelayTreasuryLocation>,

@@ -18,9 +18,9 @@
 use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, Error, Input};
 use core::cmp;
-use scale_info::TypeInfo;
 use pezsp_application_crypto::RuntimeAppPublic;
 use pezsp_runtime::traits::Hash;
+use scale_info::TypeInfo;
 
 use crate::{BeefyAuthorityId, Payload, ValidatorSet, ValidatorSetId};
 

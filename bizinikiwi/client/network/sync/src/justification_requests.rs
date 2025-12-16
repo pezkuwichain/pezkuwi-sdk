@@ -24,14 +24,14 @@ use crate::{
 	strategy::chain_sync::{PeerSync, PeerSyncState},
 	LOG_TARGET,
 };
-use pez_fork_tree::ForkTree;
 use log::{debug, trace, warn};
-use prometheus_endpoint::{
-	prometheus::core::GenericGauge, register, GaugeVec, Opts, PrometheusError, Registry, U64,
-};
+use pez_fork_tree::ForkTree;
 use pezsc_network_types::PeerId;
 use pezsp_blockchain::Error as ClientError;
 use pezsp_runtime::traits::{Block as BlockT, NumberFor, Zero};
+use prometheus_endpoint::{
+	prometheus::core::GenericGauge, register, GaugeVec, Opts, PrometheusError, Registry, U64,
+};
 use std::{
 	collections::{HashMap, HashSet, VecDeque},
 	time::{Duration, Instant},
@@ -441,9 +441,9 @@ impl<'a, B: BlockT> Matcher<'a, B> {
 mod tests {
 	use super::*;
 	use crate::strategy::chain_sync::PeerSync;
-	use quickcheck::{Arbitrary, Gen, QuickCheck};
 	use pezsp_blockchain::Error as ClientError;
 	use pezsp_test_primitives::{Block, BlockNumber, Hash};
+	use quickcheck::{Arbitrary, Gen, QuickCheck};
 	use std::collections::{HashMap, HashSet};
 
 	#[test]

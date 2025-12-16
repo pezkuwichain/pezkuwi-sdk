@@ -53,7 +53,10 @@ pub mod v1 {
 
 				weight
 			} else {
-				log::info!("👌 pezpallet-tiki migration not needed, current version is {:?}", current);
+				log::info!(
+					"👌 pezpallet-tiki migration not needed, current version is {:?}",
+					current
+				);
 				T::DbWeight::get().reads(1)
 			}
 		}
@@ -80,7 +83,9 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: pezsp_std::vec::Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
+		fn post_upgrade(
+			state: pezsp_std::vec::Vec<u8>,
+		) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			use codec::Decode;
 
 			let (pre_citizen_count, pre_user_tikis_count, pre_tiki_holder_count): (u32, u32, u32) =

@@ -22,7 +22,6 @@ use util::availability_chunks::availability_chunk_index;
 
 use self::test_helpers::mock::new_leaf;
 use parking_lot::Mutex;
-use pezkuwi_pez_node_primitives::{AvailableData, BlockData, PoV, Proof};
 use pezkuwi_node_subsystem::{
 	errors::RuntimeApiError,
 	messages::{AllMessages, RuntimeApiMessage, RuntimeApiRequest},
@@ -30,6 +29,7 @@ use pezkuwi_node_subsystem::{
 };
 use pezkuwi_node_subsystem_test_helpers as test_helpers;
 use pezkuwi_node_subsystem_util::{database::Database, TimeoutExt};
+use pezkuwi_pez_node_primitives::{AvailableData, BlockData, PoV, Proof};
 use pezkuwi_primitives::{
 	node_features, CandidateHash, CandidateReceiptV2 as CandidateReceipt, CoreIndex, GroupIndex,
 	HeadData, Header, PersistedValidationData, ValidatorId,

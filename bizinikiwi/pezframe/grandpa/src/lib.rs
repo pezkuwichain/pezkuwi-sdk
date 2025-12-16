@@ -45,7 +45,6 @@ use pezframe_support::{
 	WeakBoundedVec,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-use scale_info::TypeInfo;
 use pezsp_consensus_grandpa::{
 	ConsensusLog, EquivocationProof, ScheduledChange, SetId, GRANDPA_ENGINE_ID,
 	RUNTIME_LOG_TARGET as LOG_TARGET,
@@ -53,6 +52,7 @@ use pezsp_consensus_grandpa::{
 use pezsp_runtime::{generic::DigestItem, traits::Zero, DispatchResult};
 use pezsp_session::{GetSessionNumber, GetValidatorCount};
 use pezsp_staking::{offence::OffenceReportSystem, SessionIndex};
+use scale_info::TypeInfo;
 
 mod default_weights;
 mod equivocation;

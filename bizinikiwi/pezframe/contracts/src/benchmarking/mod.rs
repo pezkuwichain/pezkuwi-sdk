@@ -417,7 +417,8 @@ mod benchmarks {
 		StorageVersion::new(latest_version).put::<Pezpallet<T>>();
 		#[block]
 		{
-			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade();
+			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade(
+			);
 		}
 		assert!(MigrationInProgress::<T>::get().is_none());
 	}
@@ -432,7 +433,8 @@ mod benchmarks {
 		MigrationInProgress::<T>::set(v.clone());
 		#[block]
 		{
-			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade();
+			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade(
+			);
 		}
 		assert!(MigrationInProgress::<T>::get().is_some());
 		assert_eq!(MigrationInProgress::<T>::get(), v);
@@ -446,7 +448,8 @@ mod benchmarks {
 		StorageVersion::new(latest_version - 2).put::<Pezpallet<T>>();
 		#[block]
 		{
-			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade();
+			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade(
+			);
 		}
 		assert!(MigrationInProgress::<T>::get().is_some());
 	}
@@ -565,7 +568,10 @@ mod benchmarks {
 		// value and value transferred via call should be removed from the caller
 		assert_eq!(
 			T::Currency::balance(&instance.caller),
-			caller_funding::<T>() - instance.value - value - deposit - Pezpallet::<T>::min_balance(),
+			caller_funding::<T>() -
+				instance.value -
+				value - deposit -
+				Pezpallet::<T>::min_balance(),
 		);
 		// contract should have received the value
 		assert_eq!(T::Currency::balance(&instance.account_id), before + value);
@@ -1830,8 +1836,8 @@ mod benchmarks {
 
 		let key_type = pezsp_core::crypto::KeyTypeId(*b"code");
 		let pub_key = pezsp_io::crypto::sr25519_generate(key_type, None);
-		let sig =
-			pezsp_io::crypto::sr25519_sign(key_type, &pub_key, &message).expect("Generates signature");
+		let sig = pezsp_io::crypto::sr25519_sign(key_type, &pub_key, &message)
+			.expect("Generates signature");
 		let sig = AsRef::<[u8; 64]>::as_ref(&sig).to_vec();
 		let sig_len = sig.len() as u32;
 

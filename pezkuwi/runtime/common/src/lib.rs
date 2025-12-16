@@ -124,11 +124,11 @@ macro_rules! impl_runtime_weights {
 	($runtime:ident) => {
 		use pezframe_support::{dispatch::DispatchClass, weights::Weight};
 		use pezframe_system::limits;
-		use pezpallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
 		pub use pezkuwi_runtime_common::{
 			impl_elections_weights, AVERAGE_ON_INITIALIZE_RATIO, MAXIMUM_BLOCK_WEIGHT,
 			NORMAL_DISPATCH_RATIO,
 		};
+		use pezpallet_transaction_payment::{Multiplier, TargetedFeeAdjustment};
 		use pezsp_runtime::{FixedPointNumber, Perquintill};
 
 		// Implement the weight types of the elections module.

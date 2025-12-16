@@ -24,10 +24,10 @@
 //! The People pezpallet stores and manages identifiers of individuals who have proven their
 //! personhood. It tracks their personal IDs, organizes their cryptographic keys into rings, and
 //! allows them to use contextual aliases through authentication in extensions. When transactions
-//! include cryptographic proofs of belonging to the people set, the pezpallet's transaction extension
-//! verifies these proofs before allowing the transaction to proceed. This enables other pallets to
-//! check if actions come from unique persons while preserving privacy through the ring-based
-//! structure.
+//! include cryptographic proofs of belonging to the people set, the pezpallet's transaction
+//! extension verifies these proofs before allowing the transaction to proceed. This enables other
+//! pallets to check if actions come from unique persons while preserving privacy through the
+//! ring-based structure.
 //!
 //! The pezpallet accepts new persons after they prove their uniqueness elsewhere, stores their
 //! information, and supports removing persons via suspensions. While other systems (e.g., wallets)
@@ -152,11 +152,11 @@ use pezframe_support::{
 	transactional,
 	weights::WeightMeter,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{BadOrigin, Dispatchable},
 	ArithmeticError, RuntimeDebug, SaturatedConversion, Saturating,
 };
+use scale_info::TypeInfo;
 use verifiable::{Alias, GenerateVerifiable};
 
 #[cfg(feature = "runtime-benchmarks")]
@@ -200,7 +200,8 @@ pub mod pezpallet {
 
 		/// The runtime event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Trait allowing cryptographic proof of membership without exposing the underlying member.
 		/// Normally a Ring-VRF.
@@ -337,8 +338,8 @@ pub mod pezpallet {
 	#[pezpallet::storage]
 	pub type NextPersonalId<T> = StorageValue<_, PersonalId, ValueQuery>;
 
-	/// The state of the pezpallet regarding the actions that are currently allowed to be performed on
-	/// all existing rings.
+	/// The state of the pezpallet regarding the actions that are currently allowed to be performed
+	/// on all existing rings.
 	#[pezpallet::storage]
 	pub type RingsState<T> = StorageValue<_, RingMembersState, ValueQuery>;
 
@@ -653,9 +654,9 @@ pub mod pezpallet {
 	impl<T: Config> Pezpallet<T> {
 		/// Build a ring root by including registered people.
 		///
-		/// This task is performed automatically by the pezpallet through the `on_idle` hook whenever
-		/// there is leftover weight in a block. This call is meant to be a backup in case of
-		/// extreme congestion and should be submitted by signed origins.
+		/// This task is performed automatically by the pezpallet through the `on_idle` hook
+		/// whenever there is leftover weight in a block. This call is meant to be a backup in
+		/// case of extreme congestion and should be submitted by signed origins.
 		#[pezpallet::weight(
 			T::WeightInfo::should_build_ring(
 				limit.unwrap_or_else(T::MaxRingSize::get)
@@ -715,9 +716,9 @@ pub mod pezpallet {
 		/// registering them into the ring. This does not compute the root, that is done using
 		/// `build_ring`.
 		///
-		/// This task is performed automatically by the pezpallet through the `on_idle` hook whenever
-		/// there is leftover weight in a block. This call is meant to be a backup in case of
-		/// extreme congestion and should be submitted by signed origins.
+		/// This task is performed automatically by the pezpallet through the `on_idle` hook
+		/// whenever there is leftover weight in a block. This call is meant to be a backup in
+		/// case of extreme congestion and should be submitted by signed origins.
 		#[pezpallet::weight(T::WeightInfo::onboard_people())]
 		#[pezpallet::call_index(101)]
 		pub fn onboard_people_manual(origin: OriginFor<T>) -> DispatchResultWithPostInfo {

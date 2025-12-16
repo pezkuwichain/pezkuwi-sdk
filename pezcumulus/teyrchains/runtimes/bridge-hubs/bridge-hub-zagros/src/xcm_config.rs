@@ -29,10 +29,10 @@ use pezframe_support::{
 	},
 };
 use pezframe_system::EnsureRoot;
-use pezpallet_collator_selection::StakingPotAccountId;
-use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
+use pezpallet_collator_selection::StakingPotAccountId;
+use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezsp_runtime::traits::AccountIdConversion;
 use testnet_teyrchains_constants::zagros::{
 	locations::AssetHubLocation, snowbridge::EthereumNetwork,
@@ -161,8 +161,8 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies) and relay treasury pezpallet
-					// get free execution.
+					// Parent, its pluralities (i.e. governance bodies) and relay treasury
+					// pezpallet get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
 						Equals<RelayTreasuryLocation>,

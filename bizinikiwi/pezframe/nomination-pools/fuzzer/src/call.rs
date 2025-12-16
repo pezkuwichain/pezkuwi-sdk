@@ -23,11 +23,11 @@
 //! Once a panic is found, it can be debugged with
 //! `cargo hfuzz run-debug per_thing_rational hfuzz_workspace/call/*.fuzz`.
 
+use honggfuzz::fuzz;
 use pezframe_support::{
 	assert_ok,
 	traits::{Currency, GetCallName, UnfilteredDispatchable},
 };
-use honggfuzz::fuzz;
 use pezpallet_nomination_pools::{
 	log,
 	mock::*,
@@ -36,8 +36,8 @@ use pezpallet_nomination_pools::{
 	BondExtra, BondedPool, GlobalMaxCommission, LastPoolId, MaxPoolMembers, MaxPoolMembersPerPool,
 	MaxPools, MinCreateBond, MinJoinBond, PoolId,
 };
-use rand::{seq::SliceRandom, Rng};
 use pezsp_runtime::{assert_eq_error_rate, Perbill, Perquintill};
+use rand::{seq::SliceRandom, Rng};
 
 const ERA: BlockNumber = 1000;
 const MAX_ED_MULTIPLE: Balance = 10_000;

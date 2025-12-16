@@ -16,11 +16,11 @@
 
 use bitvec::{bitvec, prelude::Lsb0};
 use pezframe_benchmarking::v2::*;
-use pezpallet_message_queue as mq;
 use pezkuwi_primitives::{
 	CandidateCommitments, CommittedCandidateReceiptV2 as CommittedCandidateReceipt, HrmpChannelId,
 	OutboundHrmpMessage, SessionIndex,
 };
+use pezpallet_message_queue as mq;
 
 use super::*;
 use crate::{

@@ -517,7 +517,10 @@ pub mod pezpallet {
 				acc.consumers = 0;
 			});
 			// We dont handle sufficients and there should be none
-			ensure!(pezframe_system::Pezpallet::<T>::sufficients(from) == 0, Error::<T>::InternalError);
+			ensure!(
+				pezframe_system::Pezpallet::<T>::sufficients(from) == 0,
+				Error::<T>::InternalError
+			);
 
 			// Sanity check
 			let total = <T as Config>::Currency::total_balance(from);

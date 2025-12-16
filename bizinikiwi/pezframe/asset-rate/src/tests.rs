@@ -19,8 +19,8 @@
 
 use super::*;
 use crate::pezpallet as pezpallet_asset_rate;
-use pezframe_support::{assert_noop, assert_ok};
 use mock::{new_test_ext, AssetRate, RuntimeOrigin, Test};
+use pezframe_support::{assert_noop, assert_ok};
 use pezsp_runtime::FixedU128;
 
 const ASSET_ID: u32 = 42;

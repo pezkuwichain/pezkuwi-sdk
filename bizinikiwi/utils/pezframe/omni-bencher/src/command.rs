@@ -23,10 +23,10 @@ use pezsp_runtime::traits::BlakeTwo256;
 /// # Pezkuwi Omni Benchmarking CLI
 ///
 /// The Pezkuwi Omni benchmarker allows to benchmark the extrinsics of any Pezkuwi runtime. It is
-/// meant to replace the current manual integration of the `benchmark pezpallet` into every teyrchain
-/// node. This reduces duplicate code and makes maintenance for builders easier. The CLI is
-/// currently only able to benchmark extrinsics. In the future it is planned to extend this to some
-/// other areas.
+/// meant to replace the current manual integration of the `benchmark pezpallet` into every
+/// teyrchain node. This reduces duplicate code and makes maintenance for builders easier. The CLI
+/// is currently only able to benchmark extrinsics. In the future it is planned to extend this to
+/// some other areas.
 ///
 /// General FRAME runtimes could also be used with this benchmarker, as long as they don't utilize
 /// any host functions that are not part of the Pezkuwi host specification.
@@ -78,8 +78,8 @@ use pezsp_runtime::traits::BlakeTwo256;
 ///
 /// ## Backwards Compatibility
 ///
-/// The exposed pezpallet sub-command is identical as the node-integrated CLI. The only difference is
-/// that it needs to be prefixed with a `v1` to ensure drop-in compatibility.
+/// The exposed pezpallet sub-command is identical as the node-integrated CLI. The only difference
+/// is that it needs to be prefixed with a `v1` to ensure drop-in compatibility.
 #[derive(Parser, Debug)]
 #[clap(author, version, about, verbatim_doc_comment)]
 pub struct Command {

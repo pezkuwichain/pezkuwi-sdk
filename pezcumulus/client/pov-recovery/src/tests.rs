@@ -18,6 +18,7 @@
 use super::*;
 use assert_matches::assert_matches;
 use codec::{Decode, Encode};
+use futures::{channel::mpsc, SinkExt, Stream};
 use pezcumulus_primitives_core::relay_chain::{
 	BlockId, CandidateCommitments, CandidateDescriptorV2, CoreIndex, CoreState,
 };
@@ -26,14 +27,12 @@ use pezcumulus_relay_chain_interface::{
 	PersistedValidationData, RelayChainResult, StorageValue, ValidationCodeHash, ValidatorId,
 };
 use pezcumulus_test_client::runtime::{Block, Header};
-use futures::{channel::mpsc, SinkExt, Stream};
-use pezkuwi_pez_node_primitives::AvailableData;
 use pezkuwi_node_subsystem::{
 	messages::{AvailabilityRecoveryMessage, RuntimeApiRequest},
 	RecoveryError, TimeoutExt,
 };
+use pezkuwi_pez_node_primitives::AvailableData;
 use pezkuwi_primitives::CandidateEvent;
-use rstest::rstest;
 use pezsc_client_api::{
 	BlockImportNotification, ClientInfo, CompactProof, FinalityNotification, FinalityNotifications,
 	FinalizeSummary, ImportNotifications, StorageEventStream, StorageKey,
@@ -44,6 +43,7 @@ use pezsp_api::RuntimeApiInfo;
 use pezsp_blockchain::Info;
 use pezsp_runtime::{generic::SignedBlock, Justifications};
 use pezsp_version::RuntimeVersion;
+use rstest::rstest;
 use std::{
 	borrow::Cow,
 	collections::{BTreeMap, VecDeque},
@@ -177,7 +177,10 @@ impl<Block: BlockT> BlockBackend<Block> for TeyrchainClient<Block> {
 		unimplemented!()
 	}
 
-	fn block_status(&self, hash: Block::Hash) -> pezsp_blockchain::Result<pezsp_consensus::BlockStatus> {
+	fn block_status(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<pezsp_consensus::BlockStatus> {
 		Ok(self
 			.inner
 			.lock()
@@ -1320,7 +1323,8 @@ async fn chained_recovery_success() {
 			.expect("Poisoned lock")
 			.insert(header.hash(), BlockStatus::InChainWithState);
 
-		let (unpin_sender, _unpin_receiver) = pezsc_utils::mpsc::tracing_unbounded("test_unpin", 10);
+		let (unpin_sender, _unpin_receiver) =
+			pezsc_utils::mpsc::tracing_unbounded("test_unpin", 10);
 		import_notifications_tx
 			.unbounded_send(BlockImportNotification::new(
 				header.hash(),

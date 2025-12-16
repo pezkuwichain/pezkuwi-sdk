@@ -32,7 +32,6 @@ use crate::cli::AuthoringPolicy;
 use pezcumulus_primitives_core::{CollectCollationInfo, GetTeyrchainInfo, RelayParentOffsetApi};
 use pezsc_client_db::DbHash;
 use pezsc_offchain::OffchainWorkerApi;
-use serde::de::DeserializeOwned;
 use pezsp_api::{ApiExt, CallApiAt, ConstructRuntimeApi, Metadata};
 use pezsp_block_builder::BlockBuilder;
 use pezsp_runtime::{
@@ -42,6 +41,7 @@ use pezsp_runtime::{
 use pezsp_session::SessionKeys;
 use pezsp_statement_store::runtime_api::ValidateStatement;
 use pezsp_transaction_pool::runtime_api::TaggedTransactionQueue;
+use serde::de::DeserializeOwned;
 use std::{fmt::Debug, path::PathBuf, str::FromStr};
 
 pub trait NodeBlock:

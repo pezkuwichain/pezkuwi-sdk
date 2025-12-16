@@ -970,9 +970,9 @@ where
 
 #[cfg(test)]
 mod tx_mem_pool_tests {
-	use futures::future::join_all;
 	use bizinikiwi_test_runtime::{AccountId, Extrinsic, ExtrinsicBuilder, Transfer, H256};
 	use bizinikiwi_test_runtime_client::Sr25519Keyring::*;
+	use futures::future::join_all;
 
 	use crate::{
 		common::tests::TestApi, fork_aware_txpool::view_store::ViewStoreSubmitOutcome,

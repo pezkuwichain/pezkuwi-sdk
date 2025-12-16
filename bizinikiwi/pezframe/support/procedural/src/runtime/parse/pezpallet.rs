@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::{
-	construct_runtime::parse::{Pezpallet, PalletPart, PalletPartKeyword, PalletPath},
+	construct_runtime::parse::{PalletPart, PalletPartKeyword, PalletPath, Pezpallet},
 	runtime::parse::PalletDeclaration,
 };
 use pezframe_support_procedural_tools::get_doc_literals;

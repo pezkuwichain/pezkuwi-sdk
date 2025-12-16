@@ -265,9 +265,11 @@ pub fn set_status<T: Config<I>, I: 'static>(
 	child_bounty_id: Option<BountyIndex>,
 	new_payment_status: PaymentState<PaymentIdOf<T, I>>,
 ) -> Result<(), BenchmarkError> {
-	let bounty =
-		pezpallet_bounties::Pezpallet::<T, I>::get_bounty_details(parent_bounty_id, child_bounty_id)
-			.expect("no bounty");
+	let bounty = pezpallet_bounties::Pezpallet::<T, I>::get_bounty_details(
+		parent_bounty_id,
+		child_bounty_id,
+	)
+	.expect("no bounty");
 
 	let new_status = match bounty.3 {
 		BountyStatus::FundingAttempted { curator, .. } =>
@@ -448,7 +450,10 @@ mod benchmarks {
 		let s = create_funded_child_bounty::<T, I>()?;
 		let caller = s.child_curator.clone();
 
-		<T as pezpallet_bounties::Config<I>>::Consideration::ensure_successful(&caller, s.child_value);
+		<T as pezpallet_bounties::Config<I>>::Consideration::ensure_successful(
+			&caller,
+			s.child_value,
+		);
 
 		#[block]
 		{

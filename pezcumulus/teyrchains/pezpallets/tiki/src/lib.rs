@@ -105,9 +105,9 @@ pub use pezpallet::*;
 
 use alloc::{format, vec::Vec};
 use pezframe_support::pezpallet_prelude::{MaybeSerializeDeserialize, Parameter, RuntimeDebug};
+use pezsp_runtime::DispatchError;
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
-use pezsp_runtime::DispatchError;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -133,9 +133,12 @@ pub mod pezpallet {
 
 	#[pezpallet::config]
 	pub trait Config:
-		pezframe_system::Config + pezpallet_nfts::Config<ItemId = u32> + pezpallet_identity_kyc::Config
+		pezframe_system::Config
+		+ pezpallet_nfts::Config<ItemId = u32>
+		+ pezpallet_identity_kyc::Config
 	{
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 		type WeightInfo: weights::WeightInfo;
 

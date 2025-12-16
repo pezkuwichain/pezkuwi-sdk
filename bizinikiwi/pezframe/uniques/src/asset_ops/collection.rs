@@ -124,11 +124,14 @@ impl<T: Config<I>, I: 'static> Create<CheckOrigin<T::RuntimeOrigin, WithCollecti
 	}
 }
 
-impl<T: Config<I>, I: 'static> Destroy<WithWitness<DestroyWitness>> for Collection<Pezpallet<T, I>> {
+impl<T: Config<I>, I: 'static> Destroy<WithWitness<DestroyWitness>>
+	for Collection<Pezpallet<T, I>>
+{
 	fn destroy(collection: &Self::Id, strategy: WithWitness<DestroyWitness>) -> DispatchResult {
 		let CheckState(witness, _) = strategy;
 
-		<Pezpallet<T, I>>::do_destroy_collection(collection.clone(), witness, None).map(|_witness| ())
+		<Pezpallet<T, I>>::do_destroy_collection(collection.clone(), witness, None)
+			.map(|_witness| ())
 	}
 }
 

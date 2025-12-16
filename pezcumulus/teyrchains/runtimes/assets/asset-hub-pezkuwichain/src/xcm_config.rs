@@ -35,10 +35,10 @@ use pezframe_support::{
 	},
 };
 use pezframe_system::EnsureRoot;
-use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezkuwichain_runtime_constants::system_teyrchain::ASSET_HUB_ID;
+use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezsp_runtime::traits::{AccountIdConversion, TryConvertInto};
 use testnet_teyrchains_constants::pezkuwichain::snowbridge::{
 	EthereumNetwork, INBOUND_QUEUE_PALLET_INDEX,
@@ -271,8 +271,8 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet and
-					// BridgeHub get free execution.
+					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet
+					// and BridgeHub get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
 						Equals<RelayTreasuryLocation>,

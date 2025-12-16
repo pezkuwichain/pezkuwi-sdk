@@ -43,7 +43,9 @@ use assets_common::{
 	AssetIdForPoolAssets, AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
 };
 use bp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
-use pezcumulus_pezpallet_teyrchain_system::{RelayNumberMonotonicallyIncreases, RelaychainDataProvider};
+use pezcumulus_pezpallet_teyrchain_system::{
+	RelayNumberMonotonicallyIncreases, RelaychainDataProvider,
+};
 use pezcumulus_primitives_core::AggregateMessageOrigin;
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -104,8 +106,8 @@ mod tests;
 pub use pezsp_runtime::BuildStorage;
 
 // Pezkuwi imports
-use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
+use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 #[cfg(feature = "runtime-benchmarks")]
 use xcm::latest::prelude::{
 	Asset, Assets as XcmAssets, Fungible, Here, InteriorLocation, Junction, Junction::*, Location,
@@ -658,8 +660,9 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_metadata { .. }) |
 					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_metadata { .. }) |
 					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_attribute { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_collection_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
+					RuntimeCall::Uniques(
+						pezpallet_uniques::Call::clear_collection_metadata { .. }
+					) | RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
 					RuntimeCall::Utility { .. } |
 					RuntimeCall::Multisig { .. }
 			),
@@ -1151,7 +1154,8 @@ impl pezpallet_treasury::Config for Runtime {
 	type AssetKind = ();
 	type Beneficiary = AccountId;
 	type BeneficiaryLookup = pezsp_runtime::traits::IdentityLookup<Self::Beneficiary>;
-	type Paymaster = pezframe_support::traits::tokens::pay::PayFromAccount<Balances, TreasuryAccount>;
+	type Paymaster =
+		pezframe_support::traits::tokens::pay::PayFromAccount<Balances, TreasuryAccount>;
 	type BalanceConverter = pezframe_support::traits::tokens::UnityAssetBalanceConversion;
 	type PayoutPeriod = PayoutSpendPeriod;
 	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;

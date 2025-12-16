@@ -30,12 +30,12 @@ pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 pub mod v0 {
 	use crate::{Config, Pezpallet};
 	use bp_relayers::RewardsAccountOwner;
-	use pezbp_runtime::{ChainId, StorageDoubleMapKeyProvider};
 	use codec::{Codec, Decode, Encode, EncodeLike, MaxEncodedLen};
 	use core::marker::PhantomData;
+	use pezbp_runtime::{ChainId, StorageDoubleMapKeyProvider};
 	use pezframe_support::{pezpallet_prelude::OptionQuery, Blake2_128Concat, Identity};
-	use scale_info::TypeInfo;
 	use pezsp_runtime::traits::AccountIdConversion;
+	use scale_info::TypeInfo;
 
 	/// Structure used to identify the account that pays a reward to the relayer.
 	#[derive(Copy, Clone, Debug, Decode, Encode, Eq, PartialEq, TypeInfo, MaxEncodedLen)]
@@ -122,11 +122,12 @@ pub mod v1 {
 	use crate::{Config, Pezpallet};
 	use bp_messages::LaneIdType;
 	use bp_relayers::RewardsAccountParams;
-	use pezbp_runtime::StorageDoubleMapKeyProvider;
 	use codec::{Codec, EncodeLike};
 	use core::marker::PhantomData;
+	use pezbp_runtime::StorageDoubleMapKeyProvider;
 	use pezframe_support::{
-		pezpallet_prelude::OptionQuery, traits::UncheckedOnRuntimeUpgrade, Blake2_128Concat, Identity,
+		pezpallet_prelude::OptionQuery, traits::UncheckedOnRuntimeUpgrade, Blake2_128Concat,
+		Identity,
 	};
 	use pezsp_arithmetic::traits::Zero;
 

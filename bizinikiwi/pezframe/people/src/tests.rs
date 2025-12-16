@@ -2750,7 +2750,8 @@ fn test_under_alias_revision_check() {
 		setup_alias_account(&pk, &sk, MOCK_CONTEXT, alias_account);
 
 		// The account can now use `under_alias` successfully
-		let dummy_call = Box::new(RuntimeCall::from(pezframe_system::Call::remark { remark: vec![] }));
+		let dummy_call =
+			Box::new(RuntimeCall::from(pezframe_system::Call::remark { remark: vec![] }));
 		assert_ok!(PeoplePallet::under_alias(
 			RuntimeOrigin::signed(alias_account),
 			dummy_call.clone()

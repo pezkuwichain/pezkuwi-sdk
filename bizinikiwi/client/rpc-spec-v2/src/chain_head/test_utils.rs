@@ -18,6 +18,7 @@
 
 //! Test utilities.
 
+use bizinikiwi_test_runtime::{Block, Hash, Header, H256};
 use parking_lot::Mutex;
 use pezsc_client_api::{
 	execution_extensions::ExecutionExtensions, BlockBackend, BlockImportNotification,
@@ -36,7 +37,6 @@ use pezsp_runtime::{
 };
 use pezsp_version::RuntimeVersion;
 use std::sync::Arc;
-use bizinikiwi_test_runtime::{Block, Hash, Header, H256};
 
 /// A mock client used for testing.
 pub struct ChainHeadMockClient<Client> {
@@ -272,15 +272,24 @@ impl<Block: BlockT, Client: BlockBackend<Block>> BlockBackend<Block>
 		self.client.block(hash)
 	}
 
-	fn block_status(&self, hash: Block::Hash) -> pezsp_blockchain::Result<pezsp_consensus::BlockStatus> {
+	fn block_status(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<pezsp_consensus::BlockStatus> {
 		self.client.block_status(hash)
 	}
 
-	fn justifications(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Justifications>> {
+	fn justifications(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<Option<Justifications>> {
 		self.client.justifications(hash)
 	}
 
-	fn block_hash(&self, number: NumberFor<Block>) -> pezsp_blockchain::Result<Option<Block::Hash>> {
+	fn block_hash(
+		&self,
+		number: NumberFor<Block>,
+	) -> pezsp_blockchain::Result<Option<Block::Hash>> {
 		self.client.block_hash(number)
 	}
 
@@ -292,7 +301,10 @@ impl<Block: BlockT, Client: BlockBackend<Block>> BlockBackend<Block>
 		self.client.has_indexed_transaction(hash)
 	}
 
-	fn block_indexed_body(&self, hash: Block::Hash) -> pezsp_blockchain::Result<Option<Vec<Vec<u8>>>> {
+	fn block_indexed_body(
+		&self,
+		hash: Block::Hash,
+	) -> pezsp_blockchain::Result<Option<Vec<Vec<u8>>>> {
 		self.client.block_indexed_body(hash)
 	}
 

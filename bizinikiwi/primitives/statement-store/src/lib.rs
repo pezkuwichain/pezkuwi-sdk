@@ -24,10 +24,10 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use scale_info::TypeInfo;
 use pezsp_application_crypto::RuntimeAppPublic;
 #[cfg(feature = "std")]
 use pezsp_core::Pair;
+use scale_info::TypeInfo;
 
 /// Statement topic.
 pub type Topic = [u8; 32];
@@ -175,7 +175,9 @@ impl Field {
 }
 
 /// Statement structure.
-#[derive(DecodeWithMemTracking, TypeInfo, pezsp_core::RuntimeDebug, Clone, PartialEq, Eq, Default)]
+#[derive(
+	DecodeWithMemTracking, TypeInfo, pezsp_core::RuntimeDebug, Clone, PartialEq, Eq, Default,
+)]
 pub struct Statement {
 	proof: Option<Proof>,
 	decryption_key: Option<DecryptionKey>,

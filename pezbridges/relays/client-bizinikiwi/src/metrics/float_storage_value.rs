@@ -20,12 +20,12 @@ use async_std::sync::{Arc, RwLock};
 use async_trait::async_trait;
 use codec::Decode;
 use num_traits::One;
+use pezsp_core::storage::{StorageData, StorageKey};
+use pezsp_runtime::{traits::UniqueSaturatedInto, FixedPointNumber, FixedU128};
 use relay_utils::metrics::{
 	metric_name, register, F64SharedRef, Gauge, Metric, PrometheusError, Registry,
 	StandaloneMetric, F64,
 };
-use pezsp_core::storage::{StorageData, StorageKey};
-use pezsp_runtime::{traits::UniqueSaturatedInto, FixedPointNumber, FixedU128};
 use std::{marker::PhantomData, time::Duration};
 
 /// Storage value update interval (in blocks).

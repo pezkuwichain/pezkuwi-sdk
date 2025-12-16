@@ -27,13 +27,13 @@ pub use registration::{ExplicitOrAccountParams, Registration, StakeAndSlash};
 
 use pezbp_runtime::{ChainId, StorageDoubleMapKeyProvider};
 use pezframe_support::{traits::tokens::Preservation, Blake2_128Concat, Identity};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	codec::{Codec, Decode, DecodeWithMemTracking, Encode, EncodeLike, MaxEncodedLen},
 	traits::AccountIdConversion,
 	TypeId,
 };
 use pezsp_std::{fmt::Debug, marker::PhantomData};
+use scale_info::TypeInfo;
 
 mod extension;
 mod registration;

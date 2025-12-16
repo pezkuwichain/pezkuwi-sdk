@@ -1,7 +1,7 @@
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::pezpallet_prelude::{BoundedVec, Get, RuntimeDebug};
-use scale_info::TypeInfo;
 use pezsp_core::H256;
+use scale_info::TypeInfo;
 
 /// Citizenship status levels
 /// PRIVACY: No personal data stored on-chain, only status and hash

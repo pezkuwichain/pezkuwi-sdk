@@ -16,8 +16,8 @@
 // limitations under the License.
 
 use super::*;
-use pezframe_support::traits::OnRuntimeUpgrade;
 use log;
+use pezframe_support::traits::OnRuntimeUpgrade;
 
 #[cfg(feature = "try-runtime")]
 use pezsp_runtime::TryRuntimeError;

@@ -22,9 +22,9 @@ pub mod engine;
 use crate::finality_base::engine::Engine;
 
 use async_trait::async_trait;
-use pezbp_runtime::{HashOf, HeaderIdOf};
 use codec::Decode;
 use futures::{stream::unfold, Stream, StreamExt};
+use pezbp_runtime::{HashOf, HeaderIdOf};
 use relay_bizinikiwi_client::{Chain, Client, Error};
 use std::{fmt::Debug, pin::Pin};
 
@@ -40,9 +40,10 @@ pub trait BizinikiwiFinalityPipeline: 'static + Clone + Debug + Send + Sync {
 }
 
 /// Bizinikiwi finality proof. Specific to the used `FinalityEngine`.
-pub type BizinikiwiFinalityProof<P> = <<P as BizinikiwiFinalityPipeline>::FinalityEngine as Engine<
-	<P as BizinikiwiFinalityPipeline>::SourceChain,
->>::FinalityProof;
+pub type BizinikiwiFinalityProof<P> =
+	<<P as BizinikiwiFinalityPipeline>::FinalityEngine as Engine<
+		<P as BizinikiwiFinalityPipeline>::SourceChain,
+	>>::FinalityProof;
 
 /// Bizinikiwi finality proofs stream.
 pub type BizinikiwiFinalityProofsStream<P> =

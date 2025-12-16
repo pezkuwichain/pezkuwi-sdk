@@ -400,7 +400,10 @@ impl Metrics {
 	) -> Result<Self, PrometheusError> {
 		Ok(Self {
 			finality_grandpa_round: register(
-				Gauge::new("bizinikiwi_finality_grandpa_round", "Highest completed GRANDPA round.")?,
+				Gauge::new(
+					"bizinikiwi_finality_grandpa_round",
+					"Highest completed GRANDPA round.",
+				)?,
 				registry,
 			)?,
 			finality_grandpa_prevotes: register(

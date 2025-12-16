@@ -407,9 +407,9 @@ impl From<WeightLimit> for Option<Weight> {
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum OriginKind {
 	/// Origin should just be the native dispatch origin representation for the sender in the
-	/// local runtime framework. For Pezcumulus/Frame chains this is the `Teyrchain` or `Relay` origin
-	/// if coming from a chain, though there may be others if the `MultiLocation` XCM origin has a
-	/// primary/native dispatch origin form.
+	/// local runtime framework. For Pezcumulus/Frame chains this is the `Teyrchain` or `Relay`
+	/// origin if coming from a chain, though there may be others if the `MultiLocation` XCM
+	/// origin has a primary/native dispatch origin form.
 	Native,
 
 	/// Origin should just be the standard account-based origin with the sovereign account of
@@ -421,8 +421,8 @@ pub enum OriginKind {
 	Superuser,
 
 	/// Origin should be interpreted as an XCM native origin and the `MultiLocation` should be
-	/// encoded directly in the dispatch origin unchanged. For Pezcumulus/Frame chains, this will be
-	/// the `pezpallet_xcm::Origin::Xcm` type.
+	/// encoded directly in the dispatch origin unchanged. For Pezcumulus/Frame chains, this will
+	/// be the `pezpallet_xcm::Origin::Xcm` type.
 	Xcm,
 }
 
@@ -938,8 +938,8 @@ pub enum Instruction<Call> {
 
 	/// Ensure that a particular pezpallet with a particular version exists.
 	///
-	/// - `index: Compact`: The index which identifies the pezpallet. An error if no pezpallet exists at
-	///   this index.
+	/// - `index: Compact`: The index which identifies the pezpallet. An error if no pezpallet
+	///   exists at this index.
 	/// - `name: Vec<u8>`: Name which must be equal to the name of the pezpallet.
 	/// - `module_name: Vec<u8>`: Module name which must be equal to the name of the module in
 	///   which the pezpallet exists.

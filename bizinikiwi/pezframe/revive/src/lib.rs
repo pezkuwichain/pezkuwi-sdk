@@ -84,11 +84,11 @@ use pezframe_system::{
 	pezpallet_prelude::{BlockNumberFor, OriginFor},
 	Pezpallet as System,
 };
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{BadOrigin, Bounded, Convert, Dispatchable, Saturating, UniqueSaturatedInto, Zero},
 	AccountId32, DispatchError, FixedPointNumber, FixedU128,
 };
+use scale_info::TypeInfo;
 
 pub use crate::{
 	address::{
@@ -107,9 +107,9 @@ pub use crate::{
 pub use codec;
 pub use pezframe_support::{self, dispatch::DispatchInfo, traits::Time, weights::Weight};
 pub use pezframe_system::{self, limits::BlockWeights};
-pub use primitives::*;
 pub use pezsp_core::{keccak_256, H160, H256, U256};
 pub use pezsp_runtime;
+pub use primitives::*;
 pub use weights::WeightInfo;
 
 #[cfg(doc)]
@@ -171,7 +171,8 @@ pub mod pezpallet {
 		/// The overarching event type.
 		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The overarching call type.
 		#[pezpallet::no_default_bounds]
@@ -950,8 +951,8 @@ pub mod pezpallet {
 			// for transactions. Transactions are bounded to `MAX_TRANSACTION_PAYLOAD_SIZE`.
 			//
 			// To determine the maximum size of the receipts, we know the following:
-			// - (I) first receipt is stored into pezpallet storage and not given to the hasher until
-			//   finalization.
+			// - (I) first receipt is stored into pezpallet storage and not given to the hasher
+			//   until finalization.
 			// - (II) the hasher will not consume more memory than the receipts we are giving it.
 			// - (III) the hasher is capped by 3 x maximum entry for 3 or more transactions.
 			//
@@ -1042,8 +1043,8 @@ pub mod pezpallet {
 		///
 		/// This call cannot be dispatched directly; attempting to do so will result in a failed
 		/// transaction. It serves as a wrapper for an Ethereum transaction. When submitted, the
-		/// runtime converts it into a [`pezsp_runtime::generic::CheckedExtrinsic`] by recovering the
-		/// signer and validating the transaction.
+		/// runtime converts it into a [`pezsp_runtime::generic::CheckedExtrinsic`] by recovering
+		/// the signer and validating the transaction.
 		#[allow(unused_variables)]
 		#[pezpallet::call_index(0)]
 		#[pezpallet::weight(Weight::MAX)]
@@ -2597,8 +2598,8 @@ pezsp_api::decl_runtime_apis! {
 	}
 }
 
-/// This macro wraps bizinikiwi's `impl_runtime_apis!` and implements `pezpallet_revive` runtime APIs
-/// and other required traits.
+/// This macro wraps bizinikiwi's `impl_runtime_apis!` and implements `pezpallet_revive` runtime
+/// APIs and other required traits.
 ///
 /// # Note
 ///

@@ -17,8 +17,8 @@
 
 //! Some instance placeholder to be used in [`pezframe_support::pezpallet`] attribute macro.
 //!
-//! [`pezframe_support::pezpallet`] attribute macro does only requires the instance generic `I` to be
-//! static (contrary to `decl_*` macro which requires instance generic to implement
+//! [`pezframe_support::pezpallet`] attribute macro does only requires the instance generic `I` to
+//! be static (contrary to `decl_*` macro which requires instance generic to implement
 //! [`pezframe_support::traits::Instance`]).
 //!
 //! Thus support provides some instance types to be used, This allow some instantiable pezpallet to
@@ -28,12 +28,12 @@
 //! pub trait Config<I: 'static = ()>: another_pallet::Config<I> {}
 //! ```
 //!
-//! NOTE: [`pezframe_support::pezpallet`] will reexport them inside the module, in order to make them
-//! accessible to [`pezframe_support::construct_runtime`].
+//! NOTE: [`pezframe_support::pezpallet`] will reexport them inside the module, in order to make
+//! them accessible to [`pezframe_support::construct_runtime`].
 
 /// `Instance1` to be used for instantiable pallets defined with the
-/// [`#[pezpallet]`](`pezframe_support::pezpallet`) macro. Instances 2-16 are also available but are hidden
-/// from docs.
+/// [`#[pezpallet]`](`pezframe_support::pezpallet`) macro. Instances 2-16 are also available but are
+/// hidden from docs.
 #[derive(Clone, Copy, PartialEq, Eq, crate::RuntimeDebugNoBound)]
 pub struct Instance1;
 

@@ -29,11 +29,11 @@ use pezframe_support::{
 	pezpallet_prelude::*, storage_alias, traits::ReservableCurrency, weights::WeightMeter,
 	DefaultNoBound, Identity,
 };
-use scale_info::prelude::format;
 use pezsp_core::hexdisplay::HexDisplay;
 #[cfg(feature = "try-runtime")]
 use pezsp_runtime::TryRuntimeError;
 use pezsp_runtime::{traits::Zero, FixedPointNumber, FixedU128, Saturating};
+use scale_info::prelude::format;
 
 mod v11 {
 	use super::*;

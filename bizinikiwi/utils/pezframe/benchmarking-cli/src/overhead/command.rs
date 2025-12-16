@@ -37,11 +37,11 @@ use crate::{
 };
 use clap::{error::ErrorKind, Args, CommandFactory, Parser};
 use codec::{Decode, Encode};
-use pezcumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
 use fake_runtime_api::RuntimeApi as FakeRuntimeApi;
-use pezframe_support::Deserialize;
 use genesis_state::WARN_SPEC_GENESIS_CTOR;
 use log::info;
+use pezcumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
+use pezframe_support::Deserialize;
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
 use pezsc_block_builder::BlockBuilderApi;
 use pezsc_chain_spec::{ChainSpec, ChainSpecExtension, GenesisBlockBuilder};
@@ -51,8 +51,6 @@ use pezsc_client_db::{BlocksPruning, DatabaseSettings};
 use pezsc_executor::WasmExecutor;
 use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
 use pezsc_service::{new_client, new_db_backend, BasePath, ClientConfig, TFullClient, TaskManager};
-use serde::Serialize;
-use serde_json::{json, Value};
 use pezsp_api::{ApiExt, CallApiAt, Core, ProvideRuntimeApi};
 use pezsp_blockchain::HeaderBackend;
 use pezsp_core::H256;
@@ -64,6 +62,8 @@ use pezsp_runtime::{
 };
 use pezsp_storage::Storage;
 use pezsp_wasm_interface::HostFunctions;
+use serde::Serialize;
+use serde_json::{json, Value};
 use std::{
 	fmt::{Debug, Display, Formatter},
 	fs,
@@ -225,7 +225,8 @@ fn create_inherent_data<Client: UsageProvider<Block> + HeaderBackend<Block>, Blo
 	};
 
 	// Timestamp inherent that is very common in bizinikiwi chains.
-	let timestamp = pezsp_timestamp::InherentDataProvider::new(std::time::Duration::default().into());
+	let timestamp =
+		pezsp_timestamp::InherentDataProvider::new(std::time::Duration::default().into());
 
 	let _ = futures::executor::block_on(timestamp.provide_inherent_data(&mut inherent_data));
 	let _ =

@@ -20,7 +20,10 @@ use crate::construct_runtime::Pezpallet;
 use proc_macro2::TokenStream;
 use quote::quote;
 
-pub fn expand_outer_slash_reason(pezpallet_decls: &[Pezpallet], scrate: &TokenStream) -> TokenStream {
+pub fn expand_outer_slash_reason(
+	pezpallet_decls: &[Pezpallet],
+	scrate: &TokenStream,
+) -> TokenStream {
 	let mut conversion_fns = Vec::new();
 	let mut slash_reason_variants = Vec::new();
 	for decl in pezpallet_decls {

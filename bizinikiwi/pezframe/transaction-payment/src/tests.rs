@@ -27,6 +27,7 @@ use pezsp_runtime::{
 	BuildStorage,
 };
 
+use mock::*;
 use pezframe_support::{
 	assert_ok,
 	dispatch::{DispatchClass, DispatchInfo, GetDispatchInfo, PostDispatchInfo},
@@ -34,7 +35,6 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system as system;
-use mock::*;
 use pezpallet_balances::Call as BalancesCall;
 
 pub struct ExtBuilder {

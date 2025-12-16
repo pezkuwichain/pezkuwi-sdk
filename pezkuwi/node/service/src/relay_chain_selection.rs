@@ -37,13 +37,13 @@
 
 use super::{HeaderProvider, HeaderProviderProvider};
 use futures::channel::oneshot;
-use pezkuwi_pez_node_primitives::MAX_FINALITY_LAG as PRIMITIVES_MAX_FINALITY_LAG;
 use pezkuwi_node_subsystem::messages::{
 	ApprovalVotingParallelMessage, ChainSelectionMessage, DisputeCoordinatorMessage,
 	HighestApprovedAncestorBlock,
 };
 use pezkuwi_node_subsystem_util::metrics::{self, prometheus};
 use pezkuwi_overseer::{AllMessages, Handle, PriorityLevel};
+use pezkuwi_pez_node_primitives::MAX_FINALITY_LAG as PRIMITIVES_MAX_FINALITY_LAG;
 use pezkuwi_primitives::{Block as PezkuwiBlock, BlockNumber, Hash, Header as PezkuwiHeader};
 use pezsp_consensus::{Error as ConsensusError, SelectChain};
 use std::sync::Arc;

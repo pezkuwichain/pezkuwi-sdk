@@ -46,8 +46,6 @@ use crate::{
 
 use futures::{channel::oneshot, FutureExt};
 use log::{debug, error, info, trace, warn};
-use prometheus_endpoint::{register, Gauge, PrometheusError, Registry, U64};
-use prost::Message;
 use pezsc_client_api::{blockchain::BlockGap, BlockBackend, ProofProvider};
 use pezsc_consensus::{BlockImportError, BlockImportStatus, IncomingBlock};
 use pezsc_network::{IfDisconnected, ProtocolName};
@@ -64,6 +62,8 @@ use pezsp_runtime::{
 	},
 	EncodedJustification, Justifications,
 };
+use prometheus_endpoint::{register, Gauge, PrometheusError, Registry, U64};
+use prost::Message;
 
 use std::{
 	any::Any,
@@ -142,8 +142,10 @@ impl Metrics {
 	fn register(r: &Registry) -> Result<Self, PrometheusError> {
 		Ok(Self {
 			queued_blocks: {
-				let g =
-					Gauge::new("bizinikiwi_sync_queued_blocks", "Number of blocks in import queue")?;
+				let g = Gauge::new(
+					"bizinikiwi_sync_queued_blocks",
+					"Number of blocks in import queue",
+				)?;
 				register(g, r)?
 			},
 			fork_targets: {

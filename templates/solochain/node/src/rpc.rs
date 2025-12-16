@@ -8,8 +8,8 @@
 use std::sync::Arc;
 
 use jsonrpsee::RpcModule;
-use pezsc_transaction_pool_api::TransactionPool;
 use pez_solochain_template_runtime::{opaque::Block, AccountId, Balance, Nonce};
+use pezsc_transaction_pool_api::TransactionPool;
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_block_builder::BlockBuilder;
 use pezsp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
@@ -35,8 +35,8 @@ where
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + 'static,
 {
-	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 	use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
+	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 
 	let mut module = RpcModule::new(());
 	let FullDeps { client, pool } = deps;

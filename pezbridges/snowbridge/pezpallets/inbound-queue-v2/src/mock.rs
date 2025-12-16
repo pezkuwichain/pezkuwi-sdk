@@ -3,8 +3,8 @@
 use super::*;
 
 use crate::{self as inbound_queue_v2};
-use pezframe_support::{derive_impl, parameter_types, traits::ConstU32};
 use hex_literal::hex;
+use pezframe_support::{derive_impl, parameter_types, traits::ConstU32};
 use pezsnowbridge_beacon_primitives::{
 	types::deneb, BeaconHeader, ExecutionProof, VersionedExecutionPayloadHeader,
 };

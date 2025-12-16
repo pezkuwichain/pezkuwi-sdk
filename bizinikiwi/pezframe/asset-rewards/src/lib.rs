@@ -93,13 +93,13 @@ use pezframe_support::{
 	},
 	PalletId,
 };
-use scale_info::TypeInfo;
 use pezsp_core::Get;
 use pezsp_runtime::{
 	traits::{BadOrigin, BlockNumberProvider, EnsureAdd, MaybeDisplay, Zero},
 	DispatchError, DispatchResult,
 };
 use pezsp_std::boxed::Box;
+use scale_info::TypeInfo;
 
 #[cfg(feature = "runtime-benchmarks")]
 pub mod benchmarking;
@@ -221,7 +221,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The pezpallet's unique identifier, used to derive the pool's account ID.
 		///
@@ -271,10 +272,10 @@ pub mod pezpallet {
 		/// This provider is used to determine the current block number for the pezpallet.
 		/// It must return monotonically increasing values when called from consecutive blocks.
 		///
-		/// It can be configured to use the local block number (via `pezframe_system::Pezpallet`) or a
-		/// remote block number (e.g., from a relay chain). However, note that using a remote
-		/// block number might have implications for the behavior of the pezpallet, especially if the
-		/// remote block number advances faster than the local block number.
+		/// It can be configured to use the local block number (via `pezframe_system::Pezpallet`) or
+		/// a remote block number (e.g., from a relay chain). However, note that using a remote
+		/// block number might have implications for the behavior of the pezpallet, especially if
+		/// the remote block number advances faster than the local block number.
 		///
 		/// It is recommended to use the local block number for solo chains and relay chains.
 		type BlockNumberProvider: BlockNumberProvider;

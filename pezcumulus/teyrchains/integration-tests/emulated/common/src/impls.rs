@@ -65,7 +65,9 @@ use bp_messages::{
 	MessageKey, OutboundLaneData,
 };
 pub use bp_xcm_bridge_hub::XcmBridgeHubCall;
-use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, LaneIdOf, OutboundLanes, Pezpallet};
+use pezpallet_bridge_messages::{
+	Config as BridgeMessagesConfig, LaneIdOf, OutboundLanes, Pezpallet,
+};
 pub use pezpallet_bridge_messages::{
 	Instance1 as BridgeMessagesInstance1, Instance2 as BridgeMessagesInstance2,
 	Instance3 as BridgeMessagesInstance3,
@@ -112,9 +114,10 @@ where
 				OutboundLanes::<S, SI>::get(lane).unwrap().latest_received_nonce;
 
 			(latest_received_nonce + 1..=latest_generated_nonce).for_each(|nonce| {
-				let encoded_payload: Vec<u8> = Pezpallet::<S, SI>::outbound_message_data(lane, nonce)
-					.expect("Bridge message does not exist")
-					.into();
+				let encoded_payload: Vec<u8> =
+					Pezpallet::<S, SI>::outbound_message_data(lane, nonce)
+						.expect("Bridge message does not exist")
+						.into();
 				let payload = Vec::<u8>::decode(&mut &encoded_payload[..])
 					.expect("Decoding XCM message failed");
 				let message = BridgeMessage { lane_id: LaneIdWrapper(lane).into(), nonce, payload };

@@ -130,7 +130,8 @@ impl PalletStructDef {
 		}
 
 		if item.generics.where_clause.is_some() {
-			let msg = "Invalid pezpallet::pezpallet, where clause not supported on Pezpallet declaration";
+			let msg =
+				"Invalid pezpallet::pezpallet, where clause not supported on Pezpallet declaration";
 			return Err(syn::Error::new(item.generics.where_clause.span(), msg));
 		}
 

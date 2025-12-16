@@ -19,11 +19,11 @@ mod imports {
 	pub(crate) use codec::Encode;
 	pub(crate) use emulated_integration_tests_common::{
 		impls::{assert_expected_events, bx, TestExt},
-		xcm_pez_emulator::Chain,
 		xcm_helpers::{
 			build_xcm_send_authorize_upgrade_call, call_hash_of,
 			dispatch_whitelisted_call_with_preimage,
 		},
+		xcm_pez_emulator::Chain,
 	};
 	pub(crate) use pezframe_support::{assert_err, assert_ok};
 	pub(crate) use pezsp_runtime::{traits::Dispatchable, DispatchError};

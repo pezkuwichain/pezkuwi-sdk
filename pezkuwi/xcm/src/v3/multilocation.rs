@@ -32,8 +32,8 @@ use scale_info::TypeInfo;
 /// - A (normal, layer-1) block chain, e.g. the Bitcoin mainnet or a teyrchain.
 /// - A layer-0 super-chain, e.g. the Pezkuwi Relay chain.
 /// - A layer-2 smart contract, e.g. an ERC-20 on Ethereum.
-/// - A logical functional component of a chain, e.g. a single instance of a pezpallet on a Frame-based
-///   Bizinikiwi chain.
+/// - A logical functional component of a chain, e.g. a single instance of a pezpallet on a
+///   Frame-based Bizinikiwi chain.
 /// - An account.
 ///
 /// A `MultiLocation` is a *relative identifier*, meaning that it can only be used to define the

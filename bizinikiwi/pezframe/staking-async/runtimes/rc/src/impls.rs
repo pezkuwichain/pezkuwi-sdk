@@ -20,9 +20,9 @@ use codec::{Decode, Encode};
 use core::marker::PhantomData;
 use pezframe_support::pezpallet_prelude::DispatchResult;
 use pezframe_system::RawOrigin;
-use pezpallet_staking_async_rc_runtime_constants::currency::*;
 use pezkuwi_primitives::Balance;
 use pezkuwi_runtime_common::identity_migrator::{OnReapIdentity, WeightInfo};
+use pezpallet_staking_async_rc_runtime_constants::currency::*;
 use xcm::{latest::prelude::*, VersionedLocation, VersionedXcm};
 use xcm_executor::traits::TransactAsset;
 

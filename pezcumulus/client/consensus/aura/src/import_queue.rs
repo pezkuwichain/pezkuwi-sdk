@@ -19,7 +19,6 @@
 
 use codec::Codec;
 use pezcumulus_client_consensus_common::TeyrchainBlockImportMarker;
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{backend::AuxStore, BlockOf, UsageProvider};
 use pezsc_consensus::{import_queue::DefaultImportQueue, BlockImport};
 use pezsc_consensus_aura::{AuraVerifier, CompatibilityMode};
@@ -33,6 +32,7 @@ use pezsp_consensus_aura::AuraApi;
 use pezsp_core::crypto::Pair;
 use pezsp_inherents::CreateInherentDataProviders;
 use pezsp_runtime::traits::Block as BlockT;
+use prometheus_endpoint::Registry;
 use std::{fmt::Debug, sync::Arc};
 
 /// Parameters for [`import_queue`].
@@ -86,17 +86,19 @@ where
 	CIDP: CreateInherentDataProviders<Block, ()> + Sync + Send + 'static,
 	CIDP::InherentDataProviders: InherentDataProviderExt + Send + Sync,
 {
-	pezsc_consensus_aura::import_queue::<P, _, _, _, _, _>(pezsc_consensus_aura::ImportQueueParams {
-		block_import,
-		justification_import: None,
-		client,
-		create_inherent_data_providers,
-		spawner,
-		registry,
-		check_for_equivocation: pezsc_consensus_aura::CheckForEquivocation::No,
-		telemetry,
-		compatibility_mode: CompatibilityMode::None,
-	})
+	pezsc_consensus_aura::import_queue::<P, _, _, _, _, _>(
+		pezsc_consensus_aura::ImportQueueParams {
+			block_import,
+			justification_import: None,
+			client,
+			create_inherent_data_providers,
+			spawner,
+			registry,
+			check_for_equivocation: pezsc_consensus_aura::CheckForEquivocation::No,
+			telemetry,
+			compatibility_mode: CompatibilityMode::None,
+		},
+	)
 }
 
 /// Parameters of [`build_verifier`].

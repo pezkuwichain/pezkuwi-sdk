@@ -110,15 +110,16 @@ fn fellowship_treasury_spend() {
 		let asset_hub_location: Location = [Teyrchain(1000)].into();
 		let native_asset = Location::parent();
 
-		let treasury_spend_call = RuntimeCall::Treasury(pezpallet_treasury::Call::<Runtime>::spend {
-			asset_kind: bx!(VersionedLocatableAsset::from((
-				asset_hub_location.clone(),
-				native_asset.into()
-			))),
-			amount: fellowship_treasury_balance,
-			beneficiary: bx!(VersionedLocation::from(fellowship_treasury_location)),
-			valid_from: None,
-		});
+		let treasury_spend_call =
+			RuntimeCall::Treasury(pezpallet_treasury::Call::<Runtime>::spend {
+				asset_kind: bx!(VersionedLocatableAsset::from((
+					asset_hub_location.clone(),
+					native_asset.into()
+				))),
+				amount: fellowship_treasury_balance,
+				beneficiary: bx!(VersionedLocation::from(fellowship_treasury_location)),
+				valid_from: None,
+			});
 
 		assert_ok!(treasury_spend_call.dispatch(treasury_origin));
 
@@ -187,8 +188,8 @@ fn fellowship_treasury_spend() {
 		}]
 		.into();
 
-		let fellowship_treasury_spend_call =
-			RuntimeCall::FellowshipTreasury(pezpallet_treasury::Call::<Runtime, Instance1>::spend {
+		let fellowship_treasury_spend_call = RuntimeCall::FellowshipTreasury(
+			pezpallet_treasury::Call::<Runtime, Instance1>::spend {
 				asset_kind: bx!(VersionedLocatableAsset::from((
 					asset_hub_location,
 					native_asset.into()
@@ -196,7 +197,8 @@ fn fellowship_treasury_spend() {
 				amount: fellowship_spend_balance,
 				beneficiary: bx!(VersionedLocation::from(alice_location)),
 				valid_from: None,
-			});
+			},
+		);
 
 		assert_ok!(fellowship_treasury_spend_call.dispatch(fellows_origin));
 

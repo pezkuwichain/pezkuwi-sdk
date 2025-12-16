@@ -22,8 +22,8 @@ use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::{
 	traits::Currency, BoundedVec, CloneNoBound, EqNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use scale_info::TypeInfo;
 use pezsp_staking::{EraIndex, StakingInterface};
+use scale_info::TypeInfo;
 
 /// Maximum number of eras that we might check for a single staker.
 ///

@@ -558,9 +558,9 @@ where
 	///
 	/// This method initializes an `ExternalWatcherContext` for the provided transaction hash, sets
 	/// up the necessary communication channel with listener's task, and unfolds an external
-	/// (meaning that it can be exposed to [`pezsc_transaction_pool_api::TransactionPool`] API client
-	/// e.g. rpc) stream of transaction status events. If an external watcher is already present for
-	/// the given transaction, it returns `None`.
+	/// (meaning that it can be exposed to [`pezsc_transaction_pool_api::TransactionPool`] API
+	/// client e.g. rpc) stream of transaction status events. If an external watcher is already
+	/// present for the given transaction, it returns `None`.
 	///
 	/// The `submit_timestamp` indicates the time at which a transaction is submitted.
 	/// It is primarily used to calculate event timings for metric collection.

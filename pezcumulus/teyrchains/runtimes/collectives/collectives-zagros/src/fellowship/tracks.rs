@@ -83,16 +83,18 @@ const RETAIN_PREPARE_PERIOD: BlockNumber = 0;
 const RETAIN_DECISION_PERIOD: BlockNumber = 14 * DAYS;
 const RETAIN_CONFIRM_PERIOD: BlockNumber = 1 * HOURS;
 const RETAIN_MIN_ENACTMENT_PERIOD: BlockNumber = 0;
-const RETAIN_MIN_APPROVAL: pezpallet_referenda::Curve = pezpallet_referenda::Curve::LinearDecreasing {
-	length: Perbill::from_percent(100),
-	floor: Perbill::from_percent(60),
-	ceil: Perbill::from_percent(100),
-};
-const RETAIN_MIN_SUPPORT: pezpallet_referenda::Curve = pezpallet_referenda::Curve::LinearDecreasing {
-	length: Perbill::from_percent(100),
-	floor: Perbill::from_percent(10),
-	ceil: Perbill::from_percent(100),
-};
+const RETAIN_MIN_APPROVAL: pezpallet_referenda::Curve =
+	pezpallet_referenda::Curve::LinearDecreasing {
+		length: Perbill::from_percent(100),
+		floor: Perbill::from_percent(60),
+		ceil: Perbill::from_percent(100),
+	};
+const RETAIN_MIN_SUPPORT: pezpallet_referenda::Curve =
+	pezpallet_referenda::Curve::LinearDecreasing {
+		length: Perbill::from_percent(100),
+		floor: Perbill::from_percent(10),
+		ceil: Perbill::from_percent(100),
+	};
 
 const PROMOTE_MAX_DECIDING: u32 = 10;
 const PROMOTE_DECISION_DEPOSIT: Balance = 5 * DOLLARS;
@@ -100,16 +102,18 @@ const PROMOTE_PREPARE_PERIOD: BlockNumber = 0;
 const PROMOTE_DECISION_PERIOD: BlockNumber = 30 * DAYS;
 const PROMOTE_CONFIRM_PERIOD: BlockNumber = 1 * HOURS;
 const PROMOTE_MIN_ENACTMENT_PERIOD: BlockNumber = 0;
-const PROMOTE_MIN_APPROVAL: pezpallet_referenda::Curve = pezpallet_referenda::Curve::LinearDecreasing {
-	length: Perbill::from_percent(100),
-	floor: Perbill::from_percent(60),
-	ceil: Perbill::from_percent(100),
-};
-const PROMOTE_MIN_SUPPORT: pezpallet_referenda::Curve = pezpallet_referenda::Curve::LinearDecreasing {
-	length: Perbill::from_percent(100),
-	floor: Perbill::from_percent(10),
-	ceil: Perbill::from_percent(100),
-};
+const PROMOTE_MIN_APPROVAL: pezpallet_referenda::Curve =
+	pezpallet_referenda::Curve::LinearDecreasing {
+		length: Perbill::from_percent(100),
+		floor: Perbill::from_percent(60),
+		ceil: Perbill::from_percent(100),
+	};
+const PROMOTE_MIN_SUPPORT: pezpallet_referenda::Curve =
+	pezpallet_referenda::Curve::LinearDecreasing {
+		length: Perbill::from_percent(100),
+		floor: Perbill::from_percent(10),
+		ceil: Perbill::from_percent(100),
+	};
 
 pub struct TracksInfo;
 impl pezpallet_referenda::TracksInfo<Balance, BlockNumber> for TracksInfo {

@@ -18,12 +18,12 @@
 //! Consensus extension module tests for BABE consensus.
 
 use super::{Call, *};
+use mock::*;
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::{GetDispatchInfo, Pays},
 	traits::{Currency, EstimateNextSessionRotation, KeyOwnerProofSystem, OnFinalize},
 };
-use mock::*;
 use pezpallet_session::ShouldEndSession;
 use pezsp_consensus_babe::{
 	AllowedSlots, BabeEpochConfiguration, Slot, VrfSignature, RANDOMNESS_LENGTH,

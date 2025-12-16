@@ -24,13 +24,13 @@ use crate::{
 };
 use pezsc_network::config::MultiaddrWithPeerId;
 use pezsc_telemetry::TelemetryEndpoints;
-use serde::{Deserialize, Serialize};
-use serde_json as json;
 use pezsp_core::{
 	storage::{ChildInfo, Storage, StorageChild, StorageData, StorageKey},
 	Bytes,
 };
 use pezsp_runtime::BuildStorage;
+use serde::{Deserialize, Serialize};
+use serde_json as json;
 use std::{
 	borrow::Cow,
 	collections::{BTreeMap, VecDeque},
@@ -166,8 +166,8 @@ where
 				});
 			},
 			// The `StateRootHash` variant exists as a way to keep note that other clients support
-			// it, but Bizinikiwi itself isn't capable of loading chain specs with just a hash at the
-			// moment.
+			// it, but Bizinikiwi itself isn't capable of loading chain specs with just a hash at
+			// the moment.
 			Genesis::StateRootHash(_) =>
 				return Err("Genesis storage in hash format not supported".into()),
 			Genesis::RuntimeGenesis(RuntimeGenesisInner {
@@ -795,11 +795,11 @@ pub fn set_code_substitute_in_json_chain_spec(
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pretty_assertions::assert_eq;
-	use serde_json::{from_str, json, Value};
 	use pezsp_application_crypto::Ss58Codec;
 	use pezsp_core::storage::well_known_keys;
 	use pezsp_keyring::Sr25519Keyring;
+	use pretty_assertions::assert_eq;
+	use serde_json::{from_str, json, Value};
 
 	type TestSpec = ChainSpec;
 
@@ -966,9 +966,10 @@ mod tests {
 		.build();
 
 		let actual = output.as_json(false).unwrap();
-		let expected =
-			from_str::<Value>(include_str!("../res/bizinikiwi_test_runtime_from_named_preset.json"))
-				.unwrap();
+		let expected = from_str::<Value>(include_str!(
+			"../res/bizinikiwi_test_runtime_from_named_preset.json"
+		))
+		.unwrap();
 
 		//wasm blob may change overtime so let's zero it. Also ensure it is there:
 		let actual = zeroize_code_key_in_json(false, actual.as_str());

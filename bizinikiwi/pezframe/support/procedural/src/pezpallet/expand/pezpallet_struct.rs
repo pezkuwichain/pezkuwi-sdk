@@ -35,12 +35,13 @@ pub fn expand_pallet_struct(def: &mut Def) -> proc_macro2::TokenStream {
 	let type_decl_gen = &def.type_decl_generics(def.pezpallet_struct.attr_span);
 	let pezpallet_ident = &def.pezpallet_struct.pezpallet;
 	let config_where_clause = &def.config.where_clause;
-	let deprecation_status =
-		match crate::deprecation::get_deprecation(&quote::quote! {#pezframe_support}, &def.item.attrs)
-		{
-			Ok(deprecation) => deprecation,
-			Err(e) => return e.into_compile_error(),
-		};
+	let deprecation_status = match crate::deprecation::get_deprecation(
+		&quote::quote! {#pezframe_support},
+		&def.item.attrs,
+	) {
+		Ok(deprecation) => deprecation,
+		Err(e) => return e.into_compile_error(),
+	};
 
 	let mut storages_where_clauses = vec![&def.config.where_clause];
 	storages_where_clauses.extend(def.storages.iter().map(|storage| &storage.where_clause));
@@ -105,8 +106,10 @@ pub fn expand_pallet_struct(def: &mut Def) -> proc_macro2::TokenStream {
 		)
 	};
 
-	let storage_info_span =
-		def.pezpallet_struct.without_storage_info.unwrap_or(def.pezpallet_struct.attr_span);
+	let storage_info_span = def
+		.pezpallet_struct
+		.without_storage_info
+		.unwrap_or(def.pezpallet_struct.attr_span);
 
 	let storage_names = &def.storages.iter().map(|storage| &storage.ident).collect::<Vec<_>>();
 	let storage_cfg_attrs =

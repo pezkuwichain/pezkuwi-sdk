@@ -38,8 +38,8 @@ use crate::xcm_config::RelayNetwork;
 #[cfg(feature = "runtime-benchmarks")]
 use benchmark_helpers::DoNothingRouter;
 use bp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
-use pezframe_support::{parameter_types, weights::ConstantMultiplier};
 use hex_literal::hex;
+use pezframe_support::{parameter_types, weights::ConstantMultiplier};
 use pezpallet_xcm::EnsureXcm;
 use pezsp_runtime::{
 	traits::{ConstU32, ConstU8, Keccak256},
@@ -186,7 +186,8 @@ parameter_types! {
 	};
 }
 
-pub const SLOTS_PER_EPOCH: u32 = pezsnowbridge_pezpallet_ethereum_client::config::SLOTS_PER_EPOCH as u32;
+pub const SLOTS_PER_EPOCH: u32 =
+	pezsnowbridge_pezpallet_ethereum_client::config::SLOTS_PER_EPOCH as u32;
 
 impl pezsnowbridge_pezpallet_ethereum_client::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;

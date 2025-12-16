@@ -36,7 +36,9 @@ pub mod governance;
 mod migrations;
 mod staking;
 
-use governance::{pezpallet_custom_origins, FellowshipAdmin, GeneralAdmin, StakingAdmin, Treasurer};
+use governance::{
+	pezpallet_custom_origins, FellowshipAdmin, GeneralAdmin, StakingAdmin, Treasurer,
+};
 
 extern crate alloc;
 
@@ -48,7 +50,9 @@ use assets_common::{
 };
 use bp_asset_hub_zagros::CreateForeignAssetDeposit;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use pezcumulus_pezpallet_teyrchain_system::{RelayNumberMonotonicallyIncreases, RelaychainDataProvider};
+use pezcumulus_pezpallet_teyrchain_system::{
+	RelayNumberMonotonicallyIncreases, RelaychainDataProvider,
+};
 use pezcumulus_primitives_core::{relay_chain::AccountIndex, AggregateMessageOrigin, ParaId};
 use pezframe_support::{
 	construct_runtime, derive_impl,
@@ -783,8 +787,9 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_metadata { .. }) |
 					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_metadata { .. }) |
 					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_attribute { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_collection_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
+					RuntimeCall::Uniques(
+						pezpallet_uniques::Call::clear_collection_metadata { .. }
+					) | RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
 					RuntimeCall::Utility { .. } |
 					RuntimeCall::Multisig { .. }
 			),
@@ -1521,7 +1526,8 @@ impl pezframe_support::traits::OnRuntimeUpgrade for DeleteUndecodableStorage {
 			},
 			Err(e) => {
 				tracing::error!(target: "bridges::on_runtime_upgrade", error=?e, "Failed to destroy undecodable NFT item");
-				return <Runtime as pezframe_system::Config>::DbWeight::get().reads_writes(0, writes);
+				return <Runtime as pezframe_system::Config>::DbWeight::get()
+					.reads_writes(0, writes);
 			},
 		}
 
@@ -1533,7 +1539,8 @@ impl pezframe_support::traits::OnRuntimeUpgrade for DeleteUndecodableStorage {
 			},
 			Err(e) => {
 				tracing::error!(target: "bridges::on_runtime_upgrade", error=?e, "Failed to destroy undecodable NFT item");
-				return <Runtime as pezframe_system::Config>::DbWeight::get().reads_writes(0, writes);
+				return <Runtime as pezframe_system::Config>::DbWeight::get()
+					.reads_writes(0, writes);
 			},
 		}
 

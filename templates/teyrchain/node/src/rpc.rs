@@ -43,8 +43,8 @@ where
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + Sync + Send + 'static,
 {
-	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 	use bizinikiwi_frame_rpc_system::{System, SystemApiServer};
+	use pezpallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 
 	let mut module = RpcExtension::new(());
 	let FullDeps { client, pool } = deps;

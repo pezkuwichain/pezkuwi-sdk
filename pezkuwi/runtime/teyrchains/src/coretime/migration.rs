@@ -36,9 +36,9 @@ mod v_coretime {
 		weights::Weight,
 	};
 	use pezframe_system::pezpallet_prelude::BlockNumberFor;
-	use pezpallet_broker::{CoreAssignment, CoreMask, ScheduleItem};
 	use pezkuwi_primitives::{CoreIndex, Id as ParaId};
 	use pezkuwi_teyrchain_primitives::primitives::IsSystem;
+	use pezpallet_broker::{CoreAssignment, CoreMask, ScheduleItem};
 	use pezsp_arithmetic::traits::SaturatedConversion;
 	use pezsp_core::Get;
 	use pezsp_runtime::BoundedVec;
@@ -74,7 +74,8 @@ mod v_coretime {
 			// storage data. But both pallets are introduced at the same time, so this is fine.
 			let name_hash = assigner_coretime::Pezpallet::<T>::name_hash();
 			let mut next_key = name_hash.to_vec();
-			let storage_version_key = StorageVersion::storage_key::<assigner_coretime::Pezpallet<T>>();
+			let storage_version_key =
+				StorageVersion::storage_key::<assigner_coretime::Pezpallet<T>>();
 
 			loop {
 				match pezsp_io::storage::next_key(&next_key) {

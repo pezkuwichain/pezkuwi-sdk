@@ -34,11 +34,11 @@ use pezframe_support::{
 	traits::{ConstU32, PalletInfoAccess},
 };
 use pezframe_system::{EnsureNever, EnsureRoot};
+use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezpallet_bridge_messages::LaneIdOf;
 use pezpallet_bridge_relayers::extension::{
 	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
 };
-use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use testnet_teyrchains_constants::zagros::currency::UNITS as ZGR;
 use teyrchains_common::xcm_config::{AllSiblingSystemTeyrchains, RelayOrOtherSystemTeyrchains};
 use xcm::{
@@ -151,12 +151,13 @@ impl pezpallet_bridge_messages::Config<WithBridgeHubPezkuwichainMessagesInstance
 	type LaneId = LegacyLaneId;
 
 	type DeliveryPayments = ();
-	type DeliveryConfirmationPayments = pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
-		Runtime,
-		WithBridgeHubPezkuwichainMessagesInstance,
-		BridgeRelayersInstance,
-		DeliveryRewardInBalance,
-	>;
+	type DeliveryConfirmationPayments =
+		pezpallet_bridge_relayers::DeliveryConfirmationPaymentsAdapter<
+			Runtime,
+			WithBridgeHubPezkuwichainMessagesInstance,
+			BridgeRelayersInstance,
+			DeliveryRewardInBalance,
+		>;
 
 	type MessageDispatch = XcmOverBridgeHubPezkuwichain;
 	type OnMessagesDelivered = XcmOverBridgeHubPezkuwichain;
@@ -381,8 +382,8 @@ pub mod migration {
 
 	mod v1_wrong {
 		use bp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
-		use pezbp_runtime::AccountIdOf;
 		use codec::{Decode, Encode};
+		use pezbp_runtime::AccountIdOf;
 		use pezpallet_bridge_messages::BridgedChainOf;
 		use pezsp_std::collections::vec_deque::VecDeque;
 
@@ -414,8 +415,8 @@ pub mod migration {
 	/// for Pezkuwichain/Zagros).
 	pub struct FixMessagesV1Migration<T, I>(pezsp_std::marker::PhantomData<(T, I)>);
 
-	impl<T: pezpallet_bridge_messages::Config<I>, I: 'static> pezframe_support::traits::OnRuntimeUpgrade
-		for FixMessagesV1Migration<T, I>
+	impl<T: pezpallet_bridge_messages::Config<I>, I: 'static>
+		pezframe_support::traits::OnRuntimeUpgrade for FixMessagesV1Migration<T, I>
 	{
 		fn on_runtime_upgrade() -> Weight {
 			use pezsp_core::Get;

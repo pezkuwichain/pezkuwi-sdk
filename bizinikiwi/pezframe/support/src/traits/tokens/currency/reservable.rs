@@ -17,8 +17,8 @@
 
 //! The reservable currency trait.
 
-use scale_info::TypeInfo;
 use pezsp_core::Get;
+use scale_info::TypeInfo;
 
 use super::{super::misc::BalanceStatus, Currency};
 use crate::{

@@ -21,8 +21,8 @@ use crate::{Config, CreditOf, Event, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::ops::BitOr;
 use pezframe_support::traits::{Imbalance, LockIdentifier, OnUnbalanced, WithdrawReasons};
-use scale_info::TypeInfo;
 use pezsp_runtime::{RuntimeDebug, Saturating};
+use scale_info::TypeInfo;
 
 /// Simplified reasons for withdrawing balance.
 #[derive(

@@ -50,6 +50,7 @@
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 
+pub use payment::*;
 use pezframe_support::{
 	dispatch::{
 		DispatchClass, DispatchInfo, DispatchResult, GetDispatchInfo, Pays, PostDispatchInfo,
@@ -60,7 +61,6 @@ use pezframe_support::{
 	RuntimeDebugNoBound,
 };
 pub use pezpallet::*;
-pub use payment::*;
 use pezsp_runtime::{
 	traits::{
 		Convert, DispatchInfoOf, Dispatchable, One, PostDispatchInfoOf, SaturatedConversion,
@@ -352,7 +352,8 @@ pub mod pezpallet {
 		/// The overarching event type.
 		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Handler for withdrawing, refunding and depositing the transaction fee.
 		/// Transaction fees are withdrawn before the transaction is executed.
@@ -521,9 +522,9 @@ impl<T: Config> Pezpallet<T> {
 
 	/// Query the data that we know about the fee of a given `call`.
 	///
-	/// This pezpallet is not and cannot be aware of the internals of a signed extension, for example
-	/// a tip. It only interprets the extrinsic as some encoded value and accounts for its weight
-	/// and length, the runtime's extrinsic base weight, and the current fee multiplier.
+	/// This pezpallet is not and cannot be aware of the internals of a signed extension, for
+	/// example a tip. It only interprets the extrinsic as some encoded value and accounts for its
+	/// weight and length, the runtime's extrinsic base weight, and the current fee multiplier.
 	///
 	/// All dispatchables must be annotated with weight and will have some fee info. This function
 	/// always returns.

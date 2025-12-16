@@ -25,9 +25,9 @@ use pezframe_support::{
 	traits::{schedule::v3::Anon, Bounded},
 	Parameter,
 };
-use scale_info::{Type, TypeInfo};
 use pezsp_arithmetic::{Rounding::*, SignedRounding::*};
 use pezsp_runtime::{FixedI64, PerThing, RuntimeDebug};
+use scale_info::{Type, TypeInfo};
 
 pub type BalanceOf<T, I = ()> =
 	<<T as Config<I>>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;

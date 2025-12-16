@@ -146,7 +146,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The overarching call type.
 		type RuntimeCall: Parameter
@@ -198,8 +199,8 @@ pub mod pezpallet {
 		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
 		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
-		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
-		///     providers can be used. Relay provider can be a bit better in cases where the
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and
+		///     remote providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider;
 	}

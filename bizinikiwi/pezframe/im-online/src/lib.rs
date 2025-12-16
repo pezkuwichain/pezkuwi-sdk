@@ -99,7 +99,6 @@ use pezframe_system::{
 	pezpallet_prelude::*,
 };
 pub use pezpallet::*;
-use scale_info::TypeInfo;
 use pezsp_application_crypto::RuntimeAppPublic;
 use pezsp_runtime::{
 	offchain::storage::{MutateStorageError, StorageRetrievalError, StorageValueRef},
@@ -110,6 +109,7 @@ use pezsp_staking::{
 	offence::{Kind, Offence, ReportOffence},
 	SessionIndex,
 };
+use scale_info::TypeInfo;
 pub use weights::WeightInfo;
 
 pub mod sr25519 {
@@ -278,7 +278,8 @@ pub mod pezpallet {
 
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A type for retrieving the validators supposed to be online in a session.
 		type ValidatorSet: ValidatorSetWithIdentification<Self::AccountId>;

@@ -34,7 +34,8 @@ impl InherentDef {
 		};
 
 		if item.trait_.is_none() {
-			let msg = "Invalid pezpallet::inherent, expected impl<..> ProvideInherent for Pezpallet<..>";
+			let msg =
+				"Invalid pezpallet::inherent, expected impl<..> ProvideInherent for Pezpallet<..>";
 			return Err(syn::Error::new(item.span(), msg));
 		}
 
@@ -44,7 +45,8 @@ impl InherentDef {
 				return Err(syn::Error::new(last.span(), msg));
 			}
 		} else {
-			let msg = "Invalid pezpallet::inherent, expected impl<..> ProvideInherent for Pezpallet<..>";
+			let msg =
+				"Invalid pezpallet::inherent, expected impl<..> ProvideInherent for Pezpallet<..>";
 			return Err(syn::Error::new(item.span(), msg));
 		}
 

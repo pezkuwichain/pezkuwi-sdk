@@ -63,9 +63,9 @@
 //!
 //! By using environment variables, you can configure which Wasm binaries are built and how:
 //!
-//! - `BIZINIKIWI_RUNTIME_TARGET` - Sets the target for building runtime. Supported values are `wasm`
-//!   or `riscv` (experimental, do not use it in production!). By default the target is equal to
-//!   `wasm`.
+//! - `BIZINIKIWI_RUNTIME_TARGET` - Sets the target for building runtime. Supported values are
+//!   `wasm` or `riscv` (experimental, do not use it in production!). By default the target is equal
+//!   to `wasm`.
 //! - `SKIP_WASM_BUILD` - Skips building any Wasm binary. This is useful when only native should be
 //!   recompiled. If this is the first run and there doesn't exist a Wasm binary, this will set both
 //!   variables to `None`.

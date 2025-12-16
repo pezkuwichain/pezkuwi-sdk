@@ -190,11 +190,11 @@ where
 #[cfg(test)]
 mod enactment_state_tests {
 	use super::{EnactmentAction, EnactmentState};
+	use bizinikiwi_test_runtime_client::runtime::{Block, Hash};
 	use pezsc_transaction_pool_api::ChainEvent;
 	use pezsp_blockchain::{HashAndNumber, TreeRoute};
 	use pezsp_runtime::traits::NumberFor;
 	use std::sync::Arc;
-	use bizinikiwi_test_runtime_client::runtime::{Block, Hash};
 
 	// some helpers for convenient blocks' hash naming
 	fn a() -> HashAndNumber<Block> {

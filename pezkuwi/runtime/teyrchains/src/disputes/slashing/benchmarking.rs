@@ -21,8 +21,8 @@ use codec::Decode;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::{OnFinalize, OnInitialize};
 use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
-use pezpallet_staking::testing_utils::create_validators;
 use pezkuwi_primitives::{Hash, TEYRCHAIN_KEY_TYPE_ID};
+use pezpallet_staking::testing_utils::create_validators;
 use pezsp_runtime::traits::{One, OpaqueKeys, StaticLookup};
 use pezsp_session::MembershipProof;
 
@@ -77,8 +77,12 @@ where
 
 		whitelist_account!(controller);
 		pezpallet_session::Pezpallet::<T>::ensure_can_pay_key_deposit(&controller).unwrap();
-		pezpallet_session::Pezpallet::<T>::set_keys(RawOrigin::Signed(controller).into(), keys, proof)
-			.expect("session::set_keys should work");
+		pezpallet_session::Pezpallet::<T>::set_keys(
+			RawOrigin::Signed(controller).into(),
+			keys,
+			proof,
+		)
+		.expect("session::set_keys should work");
 	}
 
 	pezpallet_session::Pezpallet::<T>::on_initialize(BlockNumberFor::<T>::one());

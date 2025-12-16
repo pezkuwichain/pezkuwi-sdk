@@ -118,7 +118,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {
 		/// The runtime's definition of an event.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The runtime's definition of a Currency.
 		type Currency: Currency<Self::AccountId>;
@@ -490,8 +491,8 @@ where
 						existence_requirement,
 					)?;
 
-					// Consume the negative imbalance and deposit it into the pezpallet account. Make
-					// sure the account preserves even without the existential deposit.
+					// Consume the negative imbalance and deposit it into the pezpallet account.
+					// Make sure the account preserves even without the existential deposit.
 					let pot = Self::account_id();
 					if !System::<T>::account_exists(&pot) {
 						System::<T>::inc_providers(&pot);
@@ -759,7 +760,8 @@ where
 		amount
 	}
 
-	/// Account of the pezpallet pot, where the funds from instantaneous coretime sale are accumulated.
+	/// Account of the pezpallet pot, where the funds from instantaneous coretime sale are
+	/// accumulated.
 	pub fn account_id() -> T::AccountId {
 		T::PalletId::get().into_account_truncating()
 	}
@@ -786,7 +788,11 @@ where
 	pub fn populate_queue(para_id: ParaId, num: u32) {
 		QueueStatus::<T>::mutate(|queue_status| {
 			for _ in 0..num {
-				Pezpallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Back);
+				Pezpallet::<T>::add_on_demand_order(
+					queue_status,
+					para_id,
+					QueuePushDirection::Back,
+				);
 			}
 		});
 	}

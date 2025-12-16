@@ -60,7 +60,6 @@ use codec::Decode;
 use futures::{prelude::*, StreamExt};
 use log::{debug, error, info};
 use parking_lot::RwLock;
-use prometheus_endpoint::{PrometheusError, Registry};
 use pezsc_client_api::{
 	backend::{AuxStore, Backend},
 	utils::is_descendent_of,
@@ -73,7 +72,9 @@ use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
 use pezsc_utils::mpsc::{tracing_unbounded, TracingUnboundedReceiver};
 use pezsp_api::ProvideRuntimeApi;
 use pezsp_application_crypto::AppCrypto;
-use pezsp_blockchain::{Error as ClientError, HeaderBackend, HeaderMetadata, Result as ClientResult};
+use pezsp_blockchain::{
+	Error as ClientError, HeaderBackend, HeaderMetadata, Result as ClientResult,
+};
 use pezsp_consensus::SelectChain;
 use pezsp_consensus_grandpa::{
 	AuthorityList, AuthoritySignature, SetId, CLIENT_LOG_TARGET as LOG_TARGET,
@@ -84,6 +85,7 @@ use pezsp_runtime::{
 	generic::BlockId,
 	traits::{Block as BlockT, NumberFor, Zero},
 };
+use prometheus_endpoint::{PrometheusError, Registry};
 
 pub use finality_grandpa::BlockNumberOps;
 use finality_grandpa::{voter, voter_set::VoterSet, Error as GrandpaError};
@@ -682,8 +684,8 @@ pub struct GrandpaParams<Block: BlockT, C, N, S, SC, VR> {
 	/// The Network instance.
 	///
 	/// It is assumed that this network will feed us Grandpa notifications. When using the
-	/// `pezsc_network` crate, it is assumed that the Grandpa notifications protocol has been passed
-	/// to the configuration of the networking. See [`grandpa_peers_set_config`].
+	/// `pezsc_network` crate, it is assumed that the Grandpa notifications protocol has been
+	/// passed to the configuration of the networking. See [`grandpa_peers_set_config`].
 	pub network: N,
 	/// Event stream for syncing-related events.
 	pub sync: S,

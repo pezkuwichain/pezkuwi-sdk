@@ -27,8 +27,12 @@ mod benchmarks {
 		T::Currency::make_free_balance_be(&pezpallet_account, funding);
 
 		// Create asset
-		let _ =
-			T::Assets::create(T::WrapperAssetId::get(), pezpallet_account.clone(), true, 1u32.into());
+		let _ = T::Assets::create(
+			T::WrapperAssetId::get(),
+			pezpallet_account.clone(),
+			true,
+			1u32.into(),
+		);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), amount);
@@ -51,8 +55,12 @@ mod benchmarks {
 		T::Currency::make_free_balance_be(&pezpallet_account, funding);
 
 		// Create asset
-		let _ =
-			T::Assets::create(T::WrapperAssetId::get(), pezpallet_account.clone(), true, 1u32.into());
+		let _ = T::Assets::create(
+			T::WrapperAssetId::get(),
+			pezpallet_account.clone(),
+			true,
+			1u32.into(),
+		);
 
 		// Wrap first
 		let _ = Pezpallet::<T>::wrap(RawOrigin::Signed(caller.clone()).into(), amount);

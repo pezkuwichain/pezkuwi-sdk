@@ -18,22 +18,22 @@
 
 use crate::{
 	finality::{
-		FinalitySyncPipelineAdapter, SubmitFinalityProofCallBuilder, BizinikiwiFinalitySyncPipeline,
+		BizinikiwiFinalitySyncPipeline, FinalitySyncPipelineAdapter, SubmitFinalityProofCallBuilder,
 	},
 	finality_base::{best_synced_header_id, engine::Engine, BizinikiwiFinalityProof},
 	TransactionParams,
 };
 
 use async_trait::async_trait;
-use pezbp_runtime::BlockNumberOf;
 use pez_finality_relay::TargetClient;
+use pezbp_runtime::BlockNumberOf;
+use pezsp_core::Pair;
+use pezsp_runtime::traits::Header;
 use relay_bizinikiwi_client::{
 	AccountIdOf, AccountKeyPairOf, Chain, Client, Error, HeaderIdOf, HeaderOf, SyncHeader,
 	TransactionEra, TransactionTracker, UnsignedTransaction,
 };
 use relay_utils::relay_loop::Client as RelayClient;
-use pezsp_core::Pair;
-use pezsp_runtime::traits::Header;
 
 /// Bizinikiwi client as Bizinikiwi finality target.
 pub struct BizinikiwiFinalityTarget<P: BizinikiwiFinalitySyncPipeline, TargetClnt> {

@@ -26,13 +26,13 @@ use serde::Serialize;
 
 use alloc::vec::Vec;
 use codec::{Codec, Decode, DecodeWithMemTracking, Encode};
-use scale_info::TypeInfo;
 #[cfg(feature = "std")]
 use pezsp_keystore::KeystorePtr;
 use pezsp_runtime::{
 	traits::{Header as HeaderT, NumberFor},
 	ConsensusEngineId, OpaqueValue, RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// The log target to be used by client code.
 pub const CLIENT_LOG_TARGET: &str = "grandpa";

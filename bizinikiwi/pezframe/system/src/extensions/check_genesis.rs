@@ -17,12 +17,12 @@
 
 use crate::{pezpallet_prelude::BlockNumberFor, Config, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::{TransactionExtension, Zero},
 	transaction_validity::TransactionValidityError,
 };
+use scale_info::TypeInfo;
 
 /// Genesis hash check to provide replay protection between different networks.
 ///

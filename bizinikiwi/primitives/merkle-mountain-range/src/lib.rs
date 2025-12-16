@@ -28,9 +28,9 @@ pub use mmr_lib;
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use core::fmt;
-use scale_info::TypeInfo;
 use pezsp_debug_derive::RuntimeDebug;
 use pezsp_runtime::traits;
+use scale_info::TypeInfo;
 
 pub mod utils;
 

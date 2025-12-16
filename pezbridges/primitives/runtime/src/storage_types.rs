@@ -19,9 +19,9 @@
 
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezframe_support::traits::Get;
-use scale_info::{Type, TypeInfo};
 use pezsp_runtime::RuntimeDebug;
 use pezsp_std::{marker::PhantomData, ops::Deref};
+use scale_info::{Type, TypeInfo};
 
 /// Error that is returned when the value size exceeds maximal configured size.
 #[derive(RuntimeDebug)]

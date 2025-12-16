@@ -48,8 +48,8 @@
 //! - a username without setting an identity
 //! - an identity and a username
 //!
-//! The username functionality implemented in this pezpallet is meant to be a user friendly lookup of
-//! accounts. There are mappings in both directions, "account -> username" and "username ->
+//! The username functionality implemented in this pezpallet is meant to be a user friendly lookup
+//! of accounts. There are mappings in both directions, "account -> username" and "username ->
 //! account".
 //!
 //! Usernames are granted by authorities and grouped by suffix, with each suffix being administered
@@ -156,7 +156,9 @@ pub mod pezpallet {
 	}
 	#[cfg(feature = "runtime-benchmarks")]
 	impl BenchmarkHelper<pezsp_runtime::MultiSigner, pezsp_runtime::MultiSignature> for () {
-		fn sign_message(message: &[u8]) -> (pezsp_runtime::MultiSigner, pezsp_runtime::MultiSignature) {
+		fn sign_message(
+			message: &[u8],
+		) -> (pezsp_runtime::MultiSigner, pezsp_runtime::MultiSignature) {
 			let public = pezsp_io::crypto::sr25519_generate(0.into(), None);
 			let signature = pezsp_runtime::MultiSignature::Sr25519(
 				pezsp_io::crypto::sr25519_sign(
@@ -174,7 +176,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency trait.
 		type Currency: ReservableCurrency<Self::AccountId>;

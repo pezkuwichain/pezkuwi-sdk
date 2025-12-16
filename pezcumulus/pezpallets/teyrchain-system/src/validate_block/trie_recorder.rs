@@ -144,11 +144,11 @@ unsafe impl<H: Hasher> Sync for SizeOnlyRecorderProvider<H> {}
 
 #[cfg(test)]
 mod tests {
-	use rand::Rng;
 	use pezsp_trie::{
 		cache::{CacheSize, SharedTrieCache},
 		MemoryDB, ProofSizeProvider, TrieRecorderProvider,
 	};
+	use rand::Rng;
 	use trie_db::{Trie, TrieDBBuilder, TrieDBMutBuilder, TrieHash, TrieMut, TrieRecorder};
 	use trie_standardmap::{Alphabet, StandardMap, ValueMode};
 
@@ -213,19 +213,23 @@ mod tests {
 				let mut trie_cache_for_reference = local_cache.as_trie_db_cache(root);
 				let mut reference_trie_recorder = reference_recorder.as_trie_recorder(root);
 				let reference_trie =
-					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(&db, &root)
-						.with_recorder(&mut reference_trie_recorder)
-						.with_cache(&mut trie_cache_for_reference)
-						.build();
+					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(
+						&db, &root,
+					)
+					.with_recorder(&mut reference_trie_recorder)
+					.with_cache(&mut trie_cache_for_reference)
+					.build();
 
 				let local_cache_for_test = reference_cache.local_cache_untrusted();
 				let mut trie_cache_for_test = local_cache_for_test.as_trie_db_cache(root);
 				let mut trie_recorder_under_test = recorder_for_test.as_trie_recorder(root);
 				let test_trie =
-					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(&db, &root)
-						.with_recorder(&mut trie_recorder_under_test)
-						.with_cache(&mut trie_cache_for_test)
-						.build();
+					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(
+						&db, &root,
+					)
+					.with_recorder(&mut trie_recorder_under_test)
+					.with_cache(&mut trie_cache_for_test)
+					.build();
 
 				// Access random values from the test data
 				for _ in 0..100 {
@@ -262,15 +266,19 @@ mod tests {
 			{
 				let mut reference_trie_recorder = reference_recorder.as_trie_recorder(root);
 				let reference_trie =
-					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(&db, &root)
-						.with_recorder(&mut reference_trie_recorder)
-						.build();
+					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(
+						&db, &root,
+					)
+					.with_recorder(&mut reference_trie_recorder)
+					.build();
 
 				let mut trie_recorder_under_test = recorder_for_test.as_trie_recorder(root);
 				let test_trie =
-					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(&db, &root)
-						.with_recorder(&mut trie_recorder_under_test)
-						.build();
+					TrieDBBuilder::<pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>>::new(
+						&db, &root,
+					)
+					.with_recorder(&mut trie_recorder_under_test)
+					.build();
 
 				for _ in 0..200 {
 					let index: usize = rng.gen_range(0..test_data.len());

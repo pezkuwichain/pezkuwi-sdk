@@ -1035,6 +1035,10 @@ pub(crate) mod tests {
 		},
 		BeefyRPCLinks, KnownPeers,
 	};
+	use bizinikiwi_test_runtime_client::{
+		runtime::{Block, Digest, DigestItem, Header},
+		Backend,
+	};
 	use futures::{future::poll_fn, task::Poll};
 	use parking_lot::Mutex;
 	use pezsc_client_api::{Backend as BackendT, HeaderBackend};
@@ -1050,10 +1054,6 @@ pub(crate) mod tests {
 		ConsensusLog, Payload, SignedCommitment,
 	};
 	use pezsp_runtime::traits::{Header as HeaderT, One};
-	use bizinikiwi_test_runtime_client::{
-		runtime::{Block, Digest, DigestItem, Header},
-		Backend,
-	};
 
 	impl<B: super::Block, AuthorityId: AuthorityIdBound> PersistedState<B, AuthorityId> {
 		pub fn active_round(&self) -> Result<&Rounds<B, AuthorityId>, Error> {

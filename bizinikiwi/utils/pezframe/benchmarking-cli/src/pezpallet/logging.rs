@@ -56,7 +56,8 @@ pub fn init(arg: Option<String>) {
 	});
 }
 
-/// Alternative implementation to `pezsp_runtime_interface::logging::HostFunctions` for benchmarking.
+/// Alternative implementation to `pezsp_runtime_interface::logging::HostFunctions` for
+/// benchmarking.
 #[runtime_interface]
 pub trait Logging {
 	#[allow(dead_code)]

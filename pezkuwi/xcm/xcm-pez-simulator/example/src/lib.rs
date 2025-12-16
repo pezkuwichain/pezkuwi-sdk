@@ -84,12 +84,18 @@ pub fn child_account_id(para: u32) -> relay_chain::AccountId {
 	relay_chain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }
 
-pub fn child_account_account_id(para: u32, who: pezsp_runtime::AccountId32) -> relay_chain::AccountId {
+pub fn child_account_account_id(
+	para: u32,
+	who: pezsp_runtime::AccountId32,
+) -> relay_chain::AccountId {
 	let location = (Teyrchain(para), AccountId32 { network: None, id: who.into() });
 	relay_chain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }
 
-pub fn sibling_account_account_id(para: u32, who: pezsp_runtime::AccountId32) -> teyrchain::AccountId {
+pub fn sibling_account_account_id(
+	para: u32,
+	who: pezsp_runtime::AccountId32,
+) -> teyrchain::AccountId {
 	let location = (Parent, Teyrchain(para), AccountId32 { network: None, id: who.into() });
 	teyrchain::location_converter::LocationConverter::convert_location(&location.into()).unwrap()
 }

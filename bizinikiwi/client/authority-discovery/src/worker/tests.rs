@@ -26,6 +26,7 @@ use std::{
 use crate::tests::{create_spawner, test_config};
 
 use super::*;
+use bizinikiwi_test_runtime_client::runtime::Block;
 use futures::{
 	channel::mpsc::{self, channel},
 	executor::{block_on, LocalPool},
@@ -33,7 +34,6 @@ use futures::{
 	sink::SinkExt,
 	task::LocalSpawn,
 };
-use prometheus_endpoint::prometheus::default_registry;
 use pezsc_client_api::HeaderBackend;
 use pezsc_network::{
 	service::signature::{Keypair, SigningError},
@@ -47,7 +47,7 @@ use pezsc_network_types::{
 use pezsp_api::{ApiRef, ProvideRuntimeApi};
 use pezsp_keystore::{testing::MemoryKeystore, Keystore};
 use pezsp_runtime::traits::{Block as BlockT, NumberFor, Zero};
-use bizinikiwi_test_runtime_client::runtime::Block;
+use prometheus_endpoint::prometheus::default_registry;
 
 #[derive(Clone)]
 pub(crate) struct TestApi {
@@ -135,8 +135,9 @@ pub struct TestNetwork {
 	pub put_value_call: Arc<Mutex<Vec<(KademliaKey, Vec<u8>)>>>,
 	pub put_value_to_call: Arc<Mutex<Vec<(Record, HashSet<pezsc_network_types::PeerId>, bool)>>>,
 	pub get_value_call: Arc<Mutex<Vec<KademliaKey>>>,
-	pub store_value_call:
-		Arc<Mutex<Vec<(KademliaKey, Vec<u8>, Option<pezsc_network_types::PeerId>, Option<Instant>)>>>,
+	pub store_value_call: Arc<
+		Mutex<Vec<(KademliaKey, Vec<u8>, Option<pezsc_network_types::PeerId>, Option<Instant>)>>,
+	>,
 
 	event_sender: mpsc::UnboundedSender<TestNetworkEvent>,
 	event_receiver: Option<mpsc::UnboundedReceiver<TestNetworkEvent>>,

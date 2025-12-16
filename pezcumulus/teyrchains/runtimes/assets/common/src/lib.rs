@@ -74,8 +74,8 @@ pub type TrustBackedAssetsConvertedConcreteId<
 pub type UniquesConvertedConcreteId<UniquesPalletLocation> = MatchedConvertedConcreteId<
 	CollectionId,
 	ItemId,
-	// The asset starts with the uniques pezpallet. The `CollectionId` of the asset is specified as a
-	// junction within the pezpallet itself.
+	// The asset starts with the uniques pezpallet. The `CollectionId` of the asset is specified as
+	// a junction within the pezpallet itself.
 	StartsWith<UniquesPalletLocation>,
 	CollectionIdForUniquesConvert<UniquesPalletLocation>,
 	TryConvertInto,
@@ -175,8 +175,8 @@ pub type PoolAssetsConvertedConcreteId<PoolAssetsPalletLocation, Balance> =
 		TryConvertInto,
 	>;
 
-/// Adapter implementation for accessing pools (`pezpallet_asset_conversion`) that uses `AssetKind` as
-/// a `xcm::v*` which could be different from the `xcm::latest`.
+/// Adapter implementation for accessing pools (`pezpallet_asset_conversion`) that uses `AssetKind`
+/// as a `xcm::v*` which could be different from the `xcm::latest`.
 pub struct PoolAdapter<Runtime>(PhantomData<Runtime>);
 impl<
 		Runtime: pezpallet_asset_conversion::Config<PoolId = (L, L), AssetKind = L>,
@@ -230,15 +230,17 @@ impl<
 
 	/// Helper function for filtering pool.
 	pub fn iter_assets_in_pool_with(asset: &L) -> impl Iterator<Item = L> + '_ {
-		pezpallet_asset_conversion::Pools::<Runtime>::iter_keys().filter_map(|(asset_1, asset_2)| {
-			if asset_1 == *asset {
-				Some(asset_2)
-			} else if asset_2 == *asset {
-				Some(asset_1)
-			} else {
-				None
-			}
-		})
+		pezpallet_asset_conversion::Pools::<Runtime>::iter_keys().filter_map(
+			|(asset_1, asset_2)| {
+				if asset_1 == *asset {
+					Some(asset_2)
+				} else if asset_2 == *asset {
+					Some(asset_1)
+				} else {
+					None
+				}
+			},
+		)
 	}
 }
 

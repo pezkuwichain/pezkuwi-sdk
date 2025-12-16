@@ -41,12 +41,12 @@ extern crate self as pezframe_metadata_hash_extension;
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{pezpallet_prelude::Weight, DebugNoBound};
 use pezframe_system::Config;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	impl_tx_ext_default,
 	traits::TransactionExtension,
 	transaction_validity::{TransactionValidityError, UnknownTransaction},
 };
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod tests;

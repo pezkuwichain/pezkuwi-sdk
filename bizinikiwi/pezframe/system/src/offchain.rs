@@ -26,8 +26,8 @@
 //!
 //! ## Usage
 //!
-//! Please refer to [`example-offchain-worker`](../../pezpallet_example_offchain_worker/index.html) for
-//! a concrete example usage of this crate.
+//! Please refer to [`example-offchain-worker`](../../pezpallet_example_offchain_worker/index.html)
+//! for a concrete example usage of this crate.
 //!
 //! ### Submit a raw unsigned transaction
 //!
@@ -58,12 +58,12 @@
 
 use alloc::{boxed::Box, collections::btree_set::BTreeSet, vec::Vec};
 use codec::Encode;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	app_crypto::RuntimeAppPublic,
 	traits::{ExtrinsicLike, IdentifyAccount, One},
 	RuntimeDebug,
 };
+use scale_info::TypeInfo;
 
 /// Marker struct used to flag using all supported keys to sign a payload.
 pub struct ForAll {}
@@ -542,12 +542,14 @@ pub trait SignMessage<T: SigningTypes> {
 pub trait CreateAuthorizedTransaction<LocalCall>: CreateTransaction<LocalCall> {
 	/// Create the transaction extension to be used alongside an authorized call.
 	///
-	/// For more information about authorized call see [`pezframe_support::pezpallet_prelude::authorize`].
+	/// For more information about authorized call see
+	/// [`pezframe_support::pezpallet_prelude::authorize`].
 	fn create_extension() -> Self::Extension;
 
 	/// Create a new transaction for an authorized call.
 	///
-	/// For more information about authorized call see [`pezframe_support::pezpallet_prelude::authorize`].
+	/// For more information about authorized call see
+	/// [`pezframe_support::pezpallet_prelude::authorize`].
 	fn create_authorized_transaction(call: Self::RuntimeCall) -> Self::Extrinsic {
 		Self::create_transaction(call, Self::create_extension())
 	}

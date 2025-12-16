@@ -15,8 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test that `construct_runtime!` also works when `pezframe-support` or `pezframe-system` are renamed in
-//! the `Cargo.toml`.
+//! Test that `construct_runtime!` also works when `pezframe-support` or `pezframe-system` are
+//! renamed in the `Cargo.toml`.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -35,7 +35,9 @@ use pezsp_version::RuntimeVersion;
 
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezframe-support-test-compile-pass"),
-	impl_name: alloc::borrow::Cow::Borrowed("bizinikiwi-pezframe-support-test-compile-pass-runtime"),
+	impl_name: alloc::borrow::Cow::Borrowed(
+		"bizinikiwi-pezframe-support-test-compile-pass-runtime",
+	),
 	authoring_version: 0,
 	spec_version: 0,
 	impl_version: 0,

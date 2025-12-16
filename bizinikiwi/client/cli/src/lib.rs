@@ -42,11 +42,11 @@ pub use commands::*;
 pub use config::*;
 pub use error::*;
 pub use params::*;
-pub use runner::*;
 pub use pezsc_service::{ChainSpec, Role};
 pub use pezsc_tracing::logging::LoggerBuilder;
-pub use signals::Signals;
 pub use pezsp_version::RuntimeVersion;
+pub use runner::*;
+pub use signals::Signals;
 
 /// Bizinikiwi client CLI
 ///

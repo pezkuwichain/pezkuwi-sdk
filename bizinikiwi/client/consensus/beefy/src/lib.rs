@@ -34,7 +34,6 @@ use crate::{
 use futures::{stream::Fuse, FutureExt, StreamExt};
 use log::{debug, error, info, trace, warn};
 use parking_lot::Mutex;
-use prometheus_endpoint::Registry;
 use pezsc_client_api::{Backend, BlockBackend, BlockchainEvents, FinalityNotification, Finalizer};
 use pezsc_consensus::BlockImport;
 use pezsc_network::{NetworkRequest, NotificationService, ProtocolName};
@@ -48,6 +47,7 @@ use pezsp_consensus_beefy::{
 };
 use pezsp_keystore::KeystorePtr;
 use pezsp_runtime::traits::{Block, Header as HeaderT, NumberFor, Zero};
+use prometheus_endpoint::Registry;
 use std::{
 	collections::{BTreeMap, VecDeque},
 	future::Future,
@@ -557,8 +557,9 @@ pub async fn start_beefy_gadget<B, BE, C, N, P, R, S, AuthorityId>(
 
 	let mut block_import_justif = links.from_block_import_justif_stream.subscribe(100_000).fuse();
 
-	// Subscribe to finality notifications and justifications before waiting for runtime pezpallet and
-	// reuse the streams, so we don't miss notifications while waiting for pezpallet to be available.
+	// Subscribe to finality notifications and justifications before waiting for runtime pezpallet
+	// and reuse the streams, so we don't miss notifications while waiting for pezpallet to be
+	// available.
 	let finality_notifications = client.finality_notification_stream();
 	let (mut transformer, mut finality_notifications) =
 		finality_notification_transformer_future(finality_notifications);

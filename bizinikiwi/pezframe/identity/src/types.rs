@@ -23,13 +23,13 @@ use pezframe_support::{
 	traits::{ConstU32, Get},
 	BoundedVec, CloneNoBound, PartialEqNoBound, RuntimeDebugNoBound,
 };
-use scale_info::{
-	build::{Fields, Variants},
-	Path, Type, TypeInfo,
-};
 use pezsp_runtime::{
 	traits::{Member, Zero},
 	RuntimeDebug,
+};
+use scale_info::{
+	build::{Fields, Variants},
+	Path, Type, TypeInfo,
 };
 
 /// An identifier for a single name registrar/identity verification service.

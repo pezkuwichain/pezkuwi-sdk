@@ -18,8 +18,8 @@
 //! 3. The underlying message queue is implemented by [`Config::MessageQueue`]
 //! 4. The message queue delivers messages back to this pezpallet via the implementation for
 //!    [`pezframe_support::traits::ProcessMessage::process_message`]
-//! 5. The message is processed in `Pezpallet::do_process_message`: a. Assigned a nonce b. ABI-encoded,
-//!    hashed, and stored in the `MessageLeaves` vector
+//! 5. The message is processed in `Pezpallet::do_process_message`: a. Assigned a nonce b.
+//!    ABI-encoded, hashed, and stored in the `MessageLeaves` vector
 //! 6. At the end of the block, a merkle root is constructed from all the leaves in `MessageLeaves`.
 //! 7. This merkle root is inserted into the teyrchain header as a digest item
 //! 8. Offchain relayers are able to relay the message to Ethereum after: a. Generating a merkle
@@ -140,7 +140,8 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		type Hashing: Hash<Output = H256>;
 

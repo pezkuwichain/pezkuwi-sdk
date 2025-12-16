@@ -25,9 +25,9 @@
 //!
 //! # Fast Unstake Pezpallet
 //!
-//! A pezpallet to allow participants of the staking system (represented by [`Config::Staking`], being
-//! [`StakingInterface`]) to unstake quicker, if and only if they meet the condition of not being
-//! exposed to any slashes.
+//! A pezpallet to allow participants of the staking system (represented by [`Config::Staking`],
+//! being [`StakingInterface`]) to unstake quicker, if and only if they meet the condition of not
+//! being exposed to any slashes.
 //!
 //! ## Overview
 //!
@@ -46,8 +46,8 @@
 //! in the queue to be checked.
 //!
 //! A successful registration implies being fully unbonded and chilled in the staking system. These
-//! effects persist even if the fast-unstake registration is retracted (see [`Pezpallet::deregister`]
-//! and further).
+//! effects persist even if the fast-unstake registration is retracted (see
+//! [`Pezpallet::deregister`] and further).
 //!
 //! Once registered as a fast-unstaker, the staker will be queued and checked by the system. This
 //! can take a variable number of blocks based on demand, but will almost certainly be "faster" (as
@@ -83,8 +83,8 @@
 //!
 //! ## Low Level / Implementation Details
 //!
-//! This pezpallet works off the basis of `on_idle`, meaning that it provides no guarantee about when
-//! it will succeed, if at all. Moreover, the queue implementation is unordered. In case of
+//! This pezpallet works off the basis of `on_idle`, meaning that it provides no guarantee about
+//! when it will succeed, if at all. Moreover, the queue implementation is unordered. In case of
 //! congestion, no FIFO ordering is provided.
 //!
 //! A few important considerations can be concluded based on the `on_idle`-based implementation:
@@ -187,7 +187,8 @@ pub mod pezpallet {
 		#[pezpallet::constant]
 		type Deposit: Get<BalanceOf<Self>>;
 
-		/// The origin that can control this pezpallet, in other words invoke [`Pezpallet::control`].
+		/// The origin that can control this pezpallet, in other words invoke
+		/// [`Pezpallet::control`].
 		type ControlOrigin: pezframe_support::traits::EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Batch size.
@@ -364,8 +365,8 @@ pub mod pezpallet {
 		/// This is useful if one is registered, they are still waiting, and they change their mind.
 		///
 		/// Note that the associated stash is still fully unbonded and chilled as a consequence of
-		/// calling [`Pezpallet::register_fast_unstake`]. Therefore, this should probably be followed
-		/// by a call to `rebond` in the staking system.
+		/// calling [`Pezpallet::register_fast_unstake`]. Therefore, this should probably be
+		/// followed by a call to `rebond` in the staking system.
 		///
 		/// ## Events
 		///
@@ -617,7 +618,8 @@ pub mod pezpallet {
 							});
 						},
 					Err(_) => {
-						// don't put the head back in -- there is an internal error in the pezpallet.
+						// don't put the head back in -- there is an internal error in the
+						// pezpallet.
 						Self::halt("checked is pruned via retain above")
 					},
 				}

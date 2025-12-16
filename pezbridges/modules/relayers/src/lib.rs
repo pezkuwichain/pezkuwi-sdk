@@ -23,8 +23,8 @@ extern crate alloc;
 
 pub use bp_relayers::RewardLedger;
 use bp_relayers::{PaymentProcedure, Registration, RelayerRewardsKeyProvider, StakeAndSlash};
-use pezbp_runtime::StorageDoubleMapKeyProvider;
 use core::marker::PhantomData;
+use pezbp_runtime::StorageDoubleMapKeyProvider;
 use pezframe_support::{fail, traits::tokens::Balance};
 use pezsp_arithmetic::traits::{AtLeast32BitUnsigned, Zero};
 use pezsp_runtime::{
@@ -32,8 +32,8 @@ use pezsp_runtime::{
 	Saturating,
 };
 
-pub use pezpallet::*;
 pub use payment_adapter::{DeliveryConfirmationPaymentsAdapter, PayRewardFromAccount};
+pub use pezpallet::*;
 pub use stake_adapter::StakeAndSlashNamed;
 pub use weights::WeightInfo;
 pub use weights_ext::WeightInfoExt;
@@ -1000,7 +1000,9 @@ mod tests {
 
 			let reserved_balance = Balances::reserved_balance(REGISTER_RELAYER);
 			let free_balance = Balances::free_balance(REGISTER_RELAYER);
-			assert_ok!(Pezpallet::<TestRuntime>::deregister(RuntimeOrigin::signed(REGISTER_RELAYER)));
+			assert_ok!(Pezpallet::<TestRuntime>::deregister(RuntimeOrigin::signed(
+				REGISTER_RELAYER
+			)));
 			assert_eq!(
 				Balances::reserved_balance(REGISTER_RELAYER),
 				reserved_balance - Stake::get()

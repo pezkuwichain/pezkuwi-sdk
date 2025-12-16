@@ -32,10 +32,10 @@ use pezkuwi_pez_node_primitives::approval::{
 use pezkuwi_primitives::{
 	AssignmentPair, CandidateHash, CoreIndex, GroupIndex, IndexedVec, ValidatorIndex,
 };
-use rand::{seq::SliceRandom, SeedableRng};
-use rand_chacha::ChaCha20Rng;
 use pezsc_keystore::LocalKeystore;
 use pezsp_application_crypto::ByteArray;
+use rand::{seq::SliceRandom, SeedableRng};
+use rand_chacha::ChaCha20Rng;
 
 use merlin::Transcript;
 use schnorrkel::vrf::VRFInOut;
@@ -262,7 +262,8 @@ pub fn compute_assignments(
 				Ok(Some(pair)) => Some((ValidatorIndex(i as _), pair)),
 				Ok(None) => None,
 				Err(pezsc_keystore::Error::Unavailable) => None,
-				Err(pezsc_keystore::Error::Io(e)) if e.kind() == std::io::ErrorKind::NotFound => None,
+				Err(pezsc_keystore::Error::Io(e)) if e.kind() == std::io::ErrorKind::NotFound =>
+					None,
 				Err(e) => {
 					gum::warn!(target: LOG_TARGET, "Encountered keystore error: {:?}", e);
 					None

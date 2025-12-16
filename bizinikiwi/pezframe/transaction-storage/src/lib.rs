@@ -113,7 +113,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// A dispatchable call.
 		type RuntimeCall: Parameter
 			+ Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
@@ -234,7 +235,8 @@ pub mod pezpallet {
 			// Chunk data and compute storage root
 			let chunk_count = num_chunks(data.len() as u32);
 			let chunks = data.chunks(CHUNK_SIZE).map(|c| c.to_vec()).collect();
-			let root = pezsp_io::trie::blake2_256_ordered_root(chunks, pezsp_runtime::StateVersion::V1);
+			let root =
+				pezsp_io::trie::blake2_256_ordered_root(chunks, pezsp_runtime::StateVersion::V1);
 
 			let content_hash = pezsp_io::hashing::blake2_256(&data);
 			let extrinsic_index =
@@ -368,8 +370,8 @@ pub mod pezpallet {
 	/// Storage fee per transaction.
 	pub type EntryFee<T: Config> = StorageValue<_, BalanceOf<T>>;
 
-	/// Storage period for data in blocks. Should match `pezsp_storage_proof::DEFAULT_STORAGE_PERIOD`
-	/// for block authoring.
+	/// Storage period for data in blocks. Should match
+	/// `pezsp_storage_proof::DEFAULT_STORAGE_PERIOD` for block authoring.
 	#[pezpallet::storage]
 	pub type StoragePeriod<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 

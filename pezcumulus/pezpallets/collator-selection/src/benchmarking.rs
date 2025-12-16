@@ -166,7 +166,10 @@ mod benchmarks {
 		// ... and register them.
 		for (who, _) in candidates.iter() {
 			let deposit = CandidacyBond::<T>::get();
-			<T as pezpallet::Config>::Currency::make_free_balance_be(who, deposit * 1000_u32.into());
+			<T as pezpallet::Config>::Currency::make_free_balance_be(
+				who,
+				deposit * 1000_u32.into(),
+			);
 			CandidateList::<T>::try_mutate(|list| {
 				list.try_push(CandidateInfo { who: who.clone(), deposit }).unwrap();
 				Ok::<(), BenchmarkError>(())
@@ -242,7 +245,8 @@ mod benchmarks {
 		let bond_amount = if k > 0 {
 			CandidateList::<T>::mutate(|candidates| {
 				for info in candidates.iter_mut().skip(kicked as usize) {
-					info.deposit = <T as pezpallet::Config>::Currency::minimum_balance() * 3u32.into();
+					info.deposit =
+						<T as pezpallet::Config>::Currency::minimum_balance() * 3u32.into();
 				}
 			});
 			<T as pezpallet::Config>::Currency::minimum_balance() * 3u32.into()
@@ -297,7 +301,8 @@ mod benchmarks {
 		register_candidates::<T>(c);
 
 		let caller: T::AccountId = whitelisted_caller();
-		let bond: BalanceOf<T> = <T as pezpallet::Config>::Currency::minimum_balance() * 2u32.into();
+		let bond: BalanceOf<T> =
+			<T as pezpallet::Config>::Currency::minimum_balance() * 2u32.into();
 		<T as pezpallet::Config>::Currency::make_free_balance_be(&caller, bond);
 
 		<session::Pezpallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
@@ -325,7 +330,8 @@ mod benchmarks {
 		register_candidates::<T>(c);
 
 		let caller: T::AccountId = whitelisted_caller();
-		let bond: BalanceOf<T> = <T as pezpallet::Config>::Currency::minimum_balance() * 10u32.into();
+		let bond: BalanceOf<T> =
+			<T as pezpallet::Config>::Currency::minimum_balance() * 10u32.into();
 		<T as pezpallet::Config>::Currency::make_free_balance_be(&caller, bond);
 
 		<session::Pezpallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();

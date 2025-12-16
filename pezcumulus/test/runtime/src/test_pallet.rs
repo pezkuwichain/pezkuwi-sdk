@@ -32,7 +32,10 @@ pub mod pezpallet {
 	pub struct Pezpallet<T>(_);
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config + pezcumulus_pezpallet_teyrchain_system::Config {}
+	pub trait Config:
+		pezframe_system::Config + pezcumulus_pezpallet_teyrchain_system::Config
+	{
+	}
 
 	/// A simple storage map for testing purposes.
 	#[pezpallet::storage]

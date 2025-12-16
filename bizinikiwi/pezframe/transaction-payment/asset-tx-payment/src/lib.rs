@@ -22,15 +22,15 @@
 
 //! It does this by extending transactions to include an optional `AssetId` that specifies the asset
 //! to be used for payment (defaulting to the native token on `None`). It expects an
-//! [`OnChargeAssetTransaction`] implementation analogously to [`pezpallet-transaction-payment`]. The
-//! included [`FungiblesAdapter`] (implementing [`OnChargeAssetTransaction`]) determines the fee
+//! [`OnChargeAssetTransaction`] implementation analogously to [`pezpallet-transaction-payment`].
+//! The included [`FungiblesAdapter`] (implementing [`OnChargeAssetTransaction`]) determines the fee
 //! amount by converting the fee calculated by [`pezpallet-transaction-payment`] into the desired
 //! asset.
 //!
 //! ## Integration
 
-//! This pezpallet wraps FRAME's transaction payment pezpallet and functions as a replacement. This means
-//! you should include both pallets in your `construct_runtime` macro, but only include this
+//! This pezpallet wraps FRAME's transaction payment pezpallet and functions as a replacement. This
+//! means you should include both pallets in your `construct_runtime` macro, but only include this
 //! pezpallet's [`TransactionExtension`] ([`ChargeAssetTxPayment`]).
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -49,7 +49,6 @@ use pezframe_support::{
 	DefaultNoBound,
 };
 use pezpallet_transaction_payment::OnChargeTransaction;
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{
 		AsSystemOriginSigner, DispatchInfoOf, Dispatchable, PostDispatchInfoOf, RefundWeight,
@@ -57,6 +56,7 @@ use pezsp_runtime::{
 	},
 	transaction_validity::{InvalidTransaction, TransactionValidityError, ValidTransaction},
 };
+use scale_info::TypeInfo;
 
 #[cfg(test)]
 mod mock;
@@ -122,7 +122,8 @@ pub mod pezpallet {
 	pub trait Config: pezframe_system::Config + pezpallet_transaction_payment::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The fungibles instance used to pay for transactions in assets.
 		type Fungibles: Balanced<Self::AccountId>;
 		/// The actual transaction charging logic that charges the fees.
@@ -335,7 +336,8 @@ where
 			return Ok((ValidTransaction::default(), Val::NoCharge, origin));
 		};
 		// Non-mutating call of `compute_fee` to calculate the fee used in the transaction priority.
-		let fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_fee(len as u32, info, self.tip);
+		let fee =
+			pezpallet_transaction_payment::Pezpallet::<T>::compute_fee(len as u32, info, self.tip);
 		self.can_withdraw_fee(&who, call, info, fee)?;
 		let priority = ChargeTransactionPayment::<T>::get_priority(info, len, self.tip, fee);
 		let val = Val::Charge { tip: self.tip, who: who.clone(), fee };

@@ -19,17 +19,17 @@
 //! Testing block import logic.
 
 use super::*;
+use bizinikiwi_test_runtime_client::{
+	self,
+	prelude::*,
+	runtime::{Block, Hash},
+};
 use futures::executor::block_on;
 use pezsc_consensus::{
 	import_single_block, BasicQueue, BlockImportError, BlockImportStatus, ImportedAux,
 	IncomingBlock,
 };
 use pezsp_consensus::BlockOrigin;
-use bizinikiwi_test_runtime_client::{
-	self,
-	prelude::*,
-	runtime::{Block, Hash},
-};
 
 fn prepare_good_block() -> (TestClient, Hash, u64, PeerId, IncomingBlock<Block>) {
 	let client = bizinikiwi_test_runtime_client::new();

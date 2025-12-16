@@ -23,9 +23,9 @@ use crate::{
 	scale_info::TypeInfo,
 	traits::{self, AtLeast32BitUnsigned, BlockNumber, Hash as HashT, MaybeDisplay, Member},
 };
+use pezsp_core::U256;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-use pezsp_core::U256;
 
 /// Abstraction over a block header for a bizinikiwi chain.
 #[derive(

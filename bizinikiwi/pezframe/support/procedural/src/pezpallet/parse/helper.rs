@@ -48,7 +48,8 @@ pub trait MutItemAttrs {
 	fn mut_item_attrs(&mut self) -> Option<&mut Vec<syn::Attribute>>;
 }
 
-/// Take the first pezpallet attribute (e.g. attribute like `#[pezpallet..]`) and decode it to `Attr`
+/// Take the first pezpallet attribute (e.g. attribute like `#[pezpallet..]`) and decode it to
+/// `Attr`
 pub(crate) fn take_first_item_pallet_attr<Attr>(
 	item: &mut impl MutItemAttrs,
 ) -> syn::Result<Option<Attr>>
@@ -58,7 +59,10 @@ where
 	let Some(attrs) = item.mut_item_attrs() else { return Ok(None) };
 
 	let Some(index) = attrs.iter().position(|attr| {
-		attr.path().segments.first().map_or(false, |segment| segment.ident == "pezpallet")
+		attr.path()
+			.segments
+			.first()
+			.map_or(false, |segment| segment.ident == "pezpallet")
 	}) else {
 		return Ok(None);
 	};
@@ -67,7 +71,8 @@ where
 	Ok(Some(syn::parse2(pezpallet_attr.into_token_stream())?))
 }
 
-/// Take all the pezpallet attributes (e.g. attribute like `#[pezpallet..]`) and decode them to `Attr`
+/// Take all the pezpallet attributes (e.g. attribute like `#[pezpallet..]`) and decode them to
+/// `Attr`
 pub(crate) fn take_item_pallet_attrs<Attr>(item: &mut impl MutItemAttrs) -> syn::Result<Vec<Attr>>
 where
 	Attr: syn::parse::Parse,

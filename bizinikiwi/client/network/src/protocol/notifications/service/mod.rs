@@ -232,7 +232,11 @@ impl NotificationService for NotificationHandle {
 	}
 
 	/// Send synchronous `notification` to `peer`.
-	fn send_sync_notification(&mut self, peer: &pezsc_network_types::PeerId, notification: Vec<u8>) {
+	fn send_sync_notification(
+		&mut self,
+		peer: &pezsc_network_types::PeerId,
+		notification: Vec<u8>,
+	) {
 		if let Some(info) = self.peers.get(&((*peer).into())) {
 			metrics::register_notification_sent(
 				info.sink.metrics(),

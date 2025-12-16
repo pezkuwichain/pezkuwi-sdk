@@ -4,14 +4,14 @@
 
 use crate::service::FullClient;
 
-use runtime::{AccountId, Balance, BalancesCall, SystemCall};
+use pez_solochain_template_runtime as runtime;
 use pezsc_cli::Result;
 use pezsc_client_api::BlockBackend;
-use pez_solochain_template_runtime as runtime;
 use pezsp_core::{Encode, Pair};
 use pezsp_inherents::{InherentData, InherentDataProvider};
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_runtime::{OpaqueExtrinsic, SaturatedConversion};
+use runtime::{AccountId, Balance, BalancesCall, SystemCall};
 
 use std::{sync::Arc, time::Duration};
 

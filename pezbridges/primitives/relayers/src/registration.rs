@@ -40,11 +40,11 @@
 use crate::{PayRewardFromAccount, RewardsAccountParams};
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use pezsp_runtime::{
 	traits::{Get, IdentifyAccount, Zero},
 	DispatchError, DispatchResult,
 };
+use scale_info::TypeInfo;
 
 /// Either explicit account reference or `RewardsAccountParams`.
 #[derive(Clone, Debug)]

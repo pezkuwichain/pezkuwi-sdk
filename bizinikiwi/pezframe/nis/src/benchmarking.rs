@@ -42,7 +42,11 @@ fn fill_queues<T: Config>() -> Result<(), DispatchError> {
 		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
 	}
 	for d in 1..queues {
-		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1 + d)?;
+		Pezpallet::<T>::place_bid(
+			RawOrigin::Signed(caller.clone()).into(),
+			T::MinBid::get(),
+			1 + d,
+		)?;
 	}
 	Ok(())
 }
@@ -58,7 +62,11 @@ mod benchmarks {
 		let bid = T::MinBid::get();
 		T::Currency::set_balance(&caller, (ed + bid) * BalanceOf::<T>::from(l + 1) + bid);
 		for _ in 0..l {
-			Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+			Pezpallet::<T>::place_bid(
+				RawOrigin::Signed(caller.clone()).into(),
+				T::MinBid::get(),
+				1,
+			)?;
 		}
 
 		#[extrinsic_call]
@@ -81,7 +89,11 @@ mod benchmarks {
 		let ql = T::MaxQueueLen::get();
 		T::Currency::set_balance(&caller, (ed + bid) * BalanceOf::<T>::from(ql + 1) + bid);
 		for _ in 0..T::MaxQueueLen::get() {
-			Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+			Pezpallet::<T>::place_bid(
+				RawOrigin::Signed(caller.clone()).into(),
+				T::MinBid::get(),
+				1,
+			)?;
 		}
 
 		#[extrinsic_call]
@@ -105,7 +117,11 @@ mod benchmarks {
 		let bid = T::MinBid::get();
 		T::Currency::set_balance(&caller, (ed + bid) * BalanceOf::<T>::from(l + 1) + bid);
 		for _ in 0..l {
-			Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+			Pezpallet::<T>::place_bid(
+				RawOrigin::Signed(caller.clone()).into(),
+				T::MinBid::get(),
+				1,
+			)?;
 		}
 
 		#[extrinsic_call]
@@ -138,9 +154,11 @@ mod benchmarks {
 		_(origin as T::RuntimeOrigin);
 
 		// Must fund at least 99.999% of the required amount.
-		let missing =
-			Perquintill::from_rational(T::Currency::balance(&Pezpallet::<T>::account_id()), original)
-				.left_from_one();
+		let missing = Perquintill::from_rational(
+			T::Currency::balance(&Pezpallet::<T>::account_id()),
+			original,
+		)
+		.left_from_one();
 		assert!(missing <= Perquintill::one() / 100_000);
 
 		Ok(())

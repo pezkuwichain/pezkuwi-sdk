@@ -176,11 +176,15 @@ fn block_with_size(time: u64, nonce: u32, size: usize) -> (Vec<u8>, Hash) {
 		vec![
 			CheckedExtrinsic {
 				format: pezsp_runtime::generic::ExtrinsicFormat::Bare,
-				function: RuntimeCall::Timestamp(pezpallet_timestamp::Call::set { now: time * 1000 }),
+				function: RuntimeCall::Timestamp(pezpallet_timestamp::Call::set {
+					now: time * 1000,
+				}),
 			},
 			CheckedExtrinsic {
 				format: pezsp_runtime::generic::ExtrinsicFormat::Signed(alice(), tx_ext(nonce, 0)),
-				function: RuntimeCall::System(pezframe_system::Call::remark { remark: vec![0; size] }),
+				function: RuntimeCall::System(pezframe_system::Call::remark {
+					remark: vec![0; size],
+				}),
 			},
 		],
 		(time * 1000 / SLOT_DURATION).into(),
@@ -700,8 +704,12 @@ fn deploying_wasm_contract_should_work() {
 	let transfer_code = wat::parse_str(CODE_TRANSFER).unwrap();
 	let transfer_ch = <Runtime as pezframe_system::Config>::Hashing::hash(&transfer_code);
 
-	let addr =
-		pezpallet_contracts::Pezpallet::<Runtime>::contract_address(&charlie(), &transfer_ch, &[], &[]);
+	let addr = pezpallet_contracts::Pezpallet::<Runtime>::contract_address(
+		&charlie(),
+		&transfer_ch,
+		&[],
+		&[],
+	);
 
 	let time = 42 * 1000;
 	let b = construct_block(
@@ -715,16 +723,16 @@ fn deploying_wasm_contract_should_work() {
 			},
 			CheckedExtrinsic {
 				format: pezsp_runtime::generic::ExtrinsicFormat::Signed(charlie(), tx_ext(0, 0)),
-				function: RuntimeCall::Contracts(pezpallet_contracts::Call::instantiate_with_code::<
-					Runtime,
-				> {
-					value: 0,
-					gas_limit: Weight::from_parts(500_000_000, 0),
-					storage_deposit_limit: None,
-					code: transfer_code,
-					data: Vec::new(),
-					salt: Vec::new(),
-				}),
+				function: RuntimeCall::Contracts(
+					pezpallet_contracts::Call::instantiate_with_code::<Runtime> {
+						value: 0,
+						gas_limit: Weight::from_parts(500_000_000, 0),
+						storage_deposit_limit: None,
+						code: transfer_code,
+						data: Vec::new(),
+						salt: Vec::new(),
+					},
+				),
 			},
 			CheckedExtrinsic {
 				format: pezsp_runtime::generic::ExtrinsicFormat::Signed(charlie(), tx_ext(1, 0)),

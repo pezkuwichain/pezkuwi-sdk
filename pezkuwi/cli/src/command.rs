@@ -15,22 +15,22 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::cli::{Cli, Subcommand, NODE_VERSION};
-use pezframe_benchmarking_cli::{
-	BenchmarkCmd, ExtrinsicFactory, BizinikiwiRemarkBuilder, BIZINIKIWI_REFERENCE_HARDWARE,
-};
 use futures::future::TryFutureExt;
 use log::{info, warn};
+use pezframe_benchmarking_cli::{
+	BenchmarkCmd, BizinikiwiRemarkBuilder, ExtrinsicFactory, BIZINIKIWI_REFERENCE_HARDWARE,
+};
 use pezkuwi_service::{
 	self,
 	benchmarking::{benchmark_inherent_data, TransferKeepAliveBuilder},
 	HeaderBackend, IdentifyVariant,
 };
-#[cfg(feature = "pyroscope")]
-use pyroscope_pprofrs::{pprof_backend, PprofConfig};
 use pezsc_cli::BizinikiwiCli;
 use pezsc_network_types::PeerId;
 use pezsp_core::crypto::Ss58AddressFormatRegistry;
 use pezsp_keyring::Sr25519Keyring;
+#[cfg(feature = "pyroscope")]
+use pyroscope_pprofrs::{pprof_backend, PprofConfig};
 
 pub use crate::error::Error;
 #[cfg(feature = "pyroscope")]
@@ -125,7 +125,10 @@ impl BizinikiwiCli for Cli {
 		"pezkuwi".into()
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
+	fn load_spec(
+		&self,
+		id: &str,
+	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		let id = if id == "" {
 			let n = get_exec_name().unwrap_or_default();
 			["pezkuwi", "kusama", "zagros", "pezkuwichain", "versi"]
@@ -263,7 +266,10 @@ where
 			.then(|| {
 				config.database.path().map(|database_path| {
 					let _ = std::fs::create_dir_all(&database_path);
-					pezsc_sysinfo::gather_hwbench(Some(database_path), &BIZINIKIWI_REFERENCE_HARDWARE)
+					pezsc_sysinfo::gather_hwbench(
+						Some(database_path),
+						&BIZINIKIWI_REFERENCE_HARDWARE,
+					)
 				})
 			})
 			.flatten();

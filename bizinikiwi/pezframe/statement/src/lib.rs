@@ -21,7 +21,8 @@
 //!
 //! ## Overview
 //!
-//! The Statement pezpallet provides means to create and validate statements for the statement store.
+//! The Statement pezpallet provides means to create and validate statements for the statement
+//! store.
 //!
 //! For each statement validation function calculates the following three values based on the
 //! statement author balance:
@@ -71,7 +72,8 @@ pub mod pezpallet {
 	{
 		/// The overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The currency which is used to calculate account limits.
 		type Currency: Inspect<Self::AccountId>;
 		/// Min balance for priority statements.
@@ -141,7 +143,8 @@ where
 		log::debug!(target: LOG_TARGET, "Validating statement {:?}", statement);
 		let account: T::AccountId = match statement.proof() {
 			Some(Proof::OnChain { who, block_hash, event_index }) => {
-				if pezframe_system::Pezpallet::<T>::parent_hash().as_ref() != block_hash.as_slice() {
+				if pezframe_system::Pezpallet::<T>::parent_hash().as_ref() != block_hash.as_slice()
+				{
 					log::debug!(target: LOG_TARGET, "Bad block hash.");
 					return Err(InvalidStatement::BadProof);
 				}
@@ -207,7 +210,9 @@ where
 
 	fn collect_statements() {
 		// Find `NewStatement` events and submit them to the store
-		for (index, event) in pezframe_system::Pezpallet::<T>::read_events_no_consensus().enumerate() {
+		for (index, event) in
+			pezframe_system::Pezpallet::<T>::read_events_no_consensus().enumerate()
+		{
 			if let Ok(Event::<T>::NewStatement { account, mut statement }) = event.event.try_into()
 			{
 				if statement.proof().is_none() {

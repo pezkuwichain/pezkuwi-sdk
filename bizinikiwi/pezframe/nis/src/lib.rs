@@ -44,8 +44,8 @@
 //! funds are unreserved.
 //!
 //! There's a target proportion of effective total issuance (i.e. accounting for existing receipts)
-//! which the pezpallet attempts to have frozen at any one time. It will likely be gradually increased
-//! over time by governance.
+//! which the pezpallet attempts to have frozen at any one time. It will likely be gradually
+//! increased over time by governance.
 //!
 //! As the proportion of effective total issuance represented by outstanding receipts drops below
 //! `FrozenFraction`, then bids are taken from queues and consolidated into receipts, with the queue
@@ -195,7 +195,8 @@ pub mod pezpallet {
 
 		/// Overarching event type.
 		#[allow(deprecated)]
-		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+		type RuntimeEvent: From<Event<Self>>
+			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The treasury's pezpallet id, used for deriving its sovereign account ID.
 		#[pezpallet::constant]
@@ -917,8 +918,9 @@ pub mod pezpallet {
 		/// The effective total issuance, hypothetically if all outstanding receipts were thawed at
 		/// present.
 		pub effective: Balance,
-		/// The amount needed to be accessible to this pezpallet in case all outstanding receipts were
-		/// thawed at present. If it is more than `holdings`, then the pezpallet will need funding.
+		/// The amount needed to be accessible to this pezpallet in case all outstanding receipts
+		/// were thawed at present. If it is more than `holdings`, then the pezpallet will need
+		/// funding.
 		pub required: Balance,
 	}
 

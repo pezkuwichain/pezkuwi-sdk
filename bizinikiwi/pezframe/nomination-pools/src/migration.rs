@@ -36,8 +36,8 @@ pub mod versioned {
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 
-	/// Migration V6 to V7 wrapped in a [`pezframe_support::migrations::VersionedMigration`], ensuring
-	/// the migration is only performed when on-chain version is 6.
+	/// Migration V6 to V7 wrapped in a [`pezframe_support::migrations::VersionedMigration`],
+	/// ensuring the migration is only performed when on-chain version is 6.
 	pub type V6ToV7<T> = pezframe_support::migrations::VersionedMigration<
 		6,
 		7,
@@ -621,9 +621,7 @@ pub mod v4 {
 	///
 	/// This migration adds a `commission` field to every `BondedPoolInner`, if
 	/// any.
-	#[deprecated(
-		note = "To avoid mangled storage please use `MigrateV3ToV5` instead."
-	)]
+	#[deprecated(note = "To avoid mangled storage please use `MigrateV3ToV5` instead.")]
 	pub struct MigrateToV4<T, U>(core::marker::PhantomData<(T, U)>);
 	#[allow(deprecated)]
 	impl<T: Config, U: Get<Perbill>> OnRuntimeUpgrade for MigrateToV4<T, U> {
@@ -1155,7 +1153,9 @@ mod helpers {
 	pub(crate) fn calculate_tvl_by_total_stake<T: Config>() -> BalanceOf<T> {
 		BondedPools::<T>::iter_keys()
 			.map(|id| {
-				T::StakeAdapter::total_stake(Pool::from(Pezpallet::<T>::generate_bonded_account(id)))
+				T::StakeAdapter::total_stake(Pool::from(Pezpallet::<T>::generate_bonded_account(
+					id,
+				)))
 			})
 			.reduce(|acc, total_balance| acc + total_balance)
 			.unwrap_or_default()

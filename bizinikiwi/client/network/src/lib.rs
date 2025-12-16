@@ -265,8 +265,6 @@ pub mod utils;
 
 pub use crate::litep2p::Litep2pNetworkBackend;
 pub use event::{DhtEvent, Event};
-#[doc(inline)]
-pub use request_responses::{Config, IfDisconnected, RequestFailure};
 pub use pezsc_network_common::{
 	role::{ObservedRole, Roles},
 	types::ReputationChange,
@@ -275,6 +273,8 @@ pub use pezsc_network_types::{
 	multiaddr::{self, Multiaddr},
 	PeerId,
 };
+#[doc(inline)]
+pub use request_responses::{Config, IfDisconnected, RequestFailure};
 pub use service::{
 	metrics::NotificationMetrics,
 	signature::Signature,

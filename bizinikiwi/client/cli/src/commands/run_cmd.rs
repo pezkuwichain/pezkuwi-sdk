@@ -25,7 +25,6 @@ use crate::{
 	CliConfiguration, PrometheusParams, RpcParams, RuntimeParams, TelemetryParams,
 };
 use clap::Parser;
-use regex::Regex;
 use pezsc_service::{
 	config::{
 		BasePath, IpNetwork, PrometheusConfig, RpcBatchRequestConfig, TransactionPoolOptions,
@@ -33,6 +32,7 @@ use pezsc_service::{
 	ChainSpec, Role,
 };
 use pezsc_telemetry::TelemetryEndpoints;
+use regex::Regex;
 use std::num::NonZeroU32;
 
 /// The `run` command used to run a node.

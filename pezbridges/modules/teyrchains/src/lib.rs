@@ -29,22 +29,22 @@ pub use weights_ext::WeightInfoExt;
 
 use bp_header_pez_chain::{HeaderChain, HeaderChainError};
 use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
-use pezbp_runtime::{Chain, HashOf, HeaderId, HeaderIdOf, Teyrchain};
 use bp_teyrchains::{
 	ParaInfo, ParaStoredHeaderData, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 	SubmitTeyrchainHeadsInfo,
 };
+use pezbp_runtime::{Chain, HashOf, HeaderId, HeaderIdOf, Teyrchain};
 use pezframe_support::{dispatch::PostDispatchInfo, DefaultNoBound};
 use pezpallet_bridge_grandpa::SubmitFinalityProofHelper;
-use proofs::{StorageProofAdapter, TeyrchainsStorageProofAdapter};
 use pezsp_std::{marker::PhantomData, vec::Vec};
+use proofs::{StorageProofAdapter, TeyrchainsStorageProofAdapter};
 
-#[cfg(feature = "runtime-benchmarks")]
-use pezbp_runtime::HeaderOf;
 #[cfg(feature = "runtime-benchmarks")]
 use bp_teyrchains::ParaStoredHeaderDataBuilder;
 #[cfg(feature = "runtime-benchmarks")]
 use codec::Encode;
+#[cfg(feature = "runtime-benchmarks")]
+use pezbp_runtime::HeaderOf;
 
 // Re-export in crate namespace for `construct_runtime!`.
 pub use call_ext::*;
@@ -75,13 +75,13 @@ struct UpdateTeyrchainHeadArtifacts {
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
 	use super::*;
-	use pezbp_runtime::{
-		BasicOperatingMode, BoundedStorageValue, OwnedBridgeModule, StorageDoubleMapKeyProvider,
-		StorageMapKeyProvider,
-	};
 	use bp_teyrchains::{
 		BestParaHeadHash, ImportedParaHeadsKeyProvider, OnNewHead, ParaStoredHeaderDataBuilder,
 		ParasInfoKeyProvider,
+	};
+	use pezbp_runtime::{
+		BasicOperatingMode, BoundedStorageValue, OwnedBridgeModule, StorageDoubleMapKeyProvider,
+		StorageMapKeyProvider,
 	};
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -98,7 +98,8 @@ pub mod pezpallet {
 	#[pezpallet::event]
 	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
-		/// The caller has provided head of teyrchain that the pezpallet is not configured to track.
+		/// The caller has provided head of teyrchain that the pezpallet is not configured to
+		/// track.
 		UntrackedTeyrchainRejected {
 			/// Identifier of the teyrchain that is not tracked by the pezpallet.
 			teyrchain: ParaId,
@@ -119,7 +120,8 @@ pub mod pezpallet {
 			/// Actual teyrchain head hash.
 			actual_teyrchain_head_hash: ParaHash,
 		},
-		/// The caller has provided obsolete teyrchain head, which is already known to the pezpallet.
+		/// The caller has provided obsolete teyrchain head, which is already known to the
+		/// pezpallet.
 		RejectedObsoleteTeyrchainHead {
 			/// Identifier of the teyrchain with obsolete head.
 			teyrchain: ParaId,
@@ -189,7 +191,8 @@ pub mod pezpallet {
 		/// Benchmarks results from runtime we're plugged into.
 		type WeightInfo: WeightInfoExt;
 
-		/// Instance of bridges GRANDPA pezpallet (within this runtime) that this pezpallet is linked to.
+		/// Instance of bridges GRANDPA pezpallet (within this runtime) that this pezpallet is
+		/// linked to.
 		///
 		/// The GRANDPA pezpallet instance must be configured to import headers of relay chain that
 		/// we're interested in.
@@ -583,8 +586,10 @@ pub mod pezpallet {
 				&& SubmitFinalityProofHelper::<T, T::BridgesGrandpaPalletInstance>::has_free_header_slots();
 			let pays_fee = if is_free {
 				tracing::trace!(target: LOG_TARGET, "Teyrchain heads update transaction is free");
-				pezpallet_bridge_grandpa::on_free_header_imported::<T, T::BridgesGrandpaPalletInstance>(
-				);
+				pezpallet_bridge_grandpa::on_free_header_imported::<
+					T,
+					T::BridgesGrandpaPalletInstance,
+				>();
 				Pays::No
 			} else {
 				tracing::trace!(target: LOG_TARGET, "Teyrchain heads update transaction is paid");
@@ -791,7 +796,8 @@ impl<T: Config<I>, I: 'static, C: Teyrchain<Hash = ParaHash>> HeaderChain<C>
 	}
 }
 
-/// (Re)initialize pezpallet with given header for using it in `pezpallet-bridge-messages` benchmarks.
+/// (Re)initialize pezpallet with given header for using it in `pezpallet-bridge-messages`
+/// benchmarks.
 #[cfg(feature = "runtime-benchmarks")]
 pub fn initialize_for_benchmarks<T: Config<I>, I: 'static, PC: Teyrchain<Hash = ParaHash>>(
 	header: HeaderOf<PC>,
@@ -839,16 +845,16 @@ pub(crate) mod tests {
 
 	use bp_header_pez_chain::{justification::GrandpaJustification, StoredHeaderGrandpaInfo};
 	use bp_pezkuwi_core::teyrchains::ParaHead;
-	use pezbp_runtime::{
-		BasicOperatingMode, OwnedBridgeModuleError, StorageDoubleMapKeyProvider,
-		StorageMapKeyProvider, StorageProofError,
-	};
 	use bp_test_utils::{
 		authority_list, generate_owned_bridge_module_tests, make_default_justification,
 		TEST_GRANDPA_SET_ID,
 	};
 	use bp_teyrchains::{
 		BestParaHeadHash, BridgeTeyrchainCall, ImportedParaHeadsKeyProvider, ParasInfoKeyProvider,
+	};
+	use pezbp_runtime::{
+		BasicOperatingMode, OwnedBridgeModuleError, StorageDoubleMapKeyProvider,
+		StorageMapKeyProvider, StorageProofError,
 	};
 	use pezframe_support::{
 		assert_noop, assert_ok,
@@ -1842,9 +1848,10 @@ pub(crate) mod tests {
 			initialize(Default::default());
 			// set free headers limit to `4`
 			let mut free_headers_remaining = 4;
-			pezpallet_bridge_grandpa::FreeHeadersRemaining::<TestRuntime, BridgesGrandpaPalletInstance>::set(
-				Some(free_headers_remaining),
-			);
+			pezpallet_bridge_grandpa::FreeHeadersRemaining::<
+				TestRuntime,
+				BridgesGrandpaPalletInstance,
+			>::set(Some(free_headers_remaining));
 			// import free GRANDPA and teyrchain headers
 			let mut relay_block_number = 0;
 			for i in 0..2 {
@@ -1882,7 +1889,10 @@ pub(crate) mod tests {
 			let (state_root, proof, teyrchains) =
 				prepare_teyrchain_heads_proof::<RegularTeyrchainHeader>(vec![(2, head_data(2, 7))]);
 			relay_block_number = relay_block_number + FreeHeadersInterval::get();
-			let result = pezpallet_bridge_grandpa::Pezpallet::<TestRuntime, BridgesGrandpaPalletInstance>::submit_finality_proof_ex(
+			let result = pezpallet_bridge_grandpa::Pezpallet::<
+				TestRuntime,
+				BridgesGrandpaPalletInstance,
+			>::submit_finality_proof_ex(
 				RuntimeOrigin::signed(1),
 				Box::new(test_relay_header(relay_block_number, state_root)),
 				make_default_justification(&test_relay_header(relay_block_number, state_root)),
