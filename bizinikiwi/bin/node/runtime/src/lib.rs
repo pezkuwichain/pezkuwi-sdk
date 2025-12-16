@@ -2866,6 +2866,9 @@ mod runtime {
 	pub type MultiAssetBounties = pezpallet_multi_asset_bounties::Pezpallet<Runtime>;
 }
 
+// Re-export all pallet types from the runtime module
+pub use runtime::*;
+
 /// The address format for describing accounts.
 pub type Address = pezsp_runtime::MultiAddress<AccountId, AccountIndex>;
 /// Block header type as expected by this runtime.

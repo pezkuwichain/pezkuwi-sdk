@@ -10277,6 +10277,7 @@ dependencies = [
  "pezpallet-example-mbm",
  "pezpallet-example-tasks",
  "pezsp-debug-derive",
+ "pezsp-runtime",
  "primitive-types 0.13.1",
  "rand 0.8.5",
  "rand_pcg",
